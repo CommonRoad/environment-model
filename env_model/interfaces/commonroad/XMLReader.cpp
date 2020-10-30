@@ -3,10 +3,10 @@
 //
 
 #include "XMLReader.h"
-//#include "../geometry/circle.h"
-//#include "../geometry/rectangle.h"
+#include "../../geometry/circle.h"
+#include "../../geometry/rectangle.h"
 #include "pugi_xml/pugixml.hpp"
-//#include "../world/obstacle/obstacle.h"
+#include "../../obstacle/obstacle.h"
 //#include "../world/obstacle/vehicle.h"
 #include "CommonRoadFactory2018b.h"
 #include "CommonRoadFactory2020a.h"
@@ -26,11 +26,11 @@ std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xm
         throw std::runtime_error("This CommonRoad version is not supported.");
 };
 
-//std::vector<std::shared_ptr<obstacle>> XMLReader::createObstacleFromXML(const std::string &xmlFile, double timeStamp,
-//                                                                        const obstacleParameters *param) {
-//    const auto factory = createCommonRoadFactory(xmlFile);
-//    return factory->createObstacles(timeStamp, param);
-//}
+std::vector<std::shared_ptr<obstacle>> XMLReader::createObstacleFromXML(const std::string &xmlFile, double timeStamp,
+                                                                        const obstacleParameters *param) {
+    const auto factory = createCommonRoadFactory(xmlFile);
+    return factory->createObstacles(timeStamp, param);
+}
 
 std::vector<std::shared_ptr<Lanelet>> XMLReader::createLaneletFromXML(const std::string &xmlFile) {
 

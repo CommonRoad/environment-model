@@ -19,7 +19,7 @@ class Lanelet {
         /*
          * setter functions
          */
-        void setId(const size_t num);
+        void setId(size_t num);
         void addLeftVertice(vertice left);
         void addRightVertice(vertice right);
         void addCenterVertice(vertice center);

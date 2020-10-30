@@ -10,7 +10,7 @@
 #include "../../road_network/lanelet/lanelet.h"
 //#include "../../world/Journal.h"
 //#include "../../world/lanelets/lanelet_operations.h"
-//#include "../../world/obstacle/obstacle_operations.h"
+#include "../../obstacle/obstacle_operations.h"
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
@@ -64,37 +64,10 @@ int main(int argc, char **argv) {
 
     std::vector<std::shared_ptr<Lanelet>> lanelets = XMLReader::createLaneletFromXML(xmlFilePath);
 
-//    std::vector<std::shared_ptr<obstacle>> obstacleVector{};
-//    int timeStamp = 0;
-//    obstacleVector = XMLReader::createObstacleFromXML(xmlFilePath, timeStamp);
-//
-//    std::shared_ptr<EgoVehicle> tempEgo =
-//            std::make_shared<EgoVehicle>(); // empty ego vehicle with default values from constructor
-//
-//    Spot *SpotInterface = Spot::getInstance();
-    int ScenarioID = 1;
+    std::vector<std::shared_ptr<obstacle>> obstacleVector{};
+    int timeStamp = 0;
+    obstacleVector = XMLReader::createObstacleFromXML(xmlFilePath, timeStamp);
 
-//    uint8_t returnValue =
-//            SpotInterface->registerScenario(ScenarioID, std::move(lanelets), std::move(obstacleVector), std::move(tempEgo));
-//    if (returnValue) {
-//        std::cout << "Creation of Scenario terminated with error: " << returnValue << std::endl;
-//        return 1;
-//    }
-//
-//    returnValue = SpotInterface->triggerOccupancyPrediction(ScenarioID, timeHorizon.startingTime, timeHorizon.timeStep,
-//                                                            timeHorizon.ending, num_threads);
-//    if (returnValue) {
-//        std::cout << "Prediction of Scenario terminated with error: " << returnValue << std::endl;
-//        return 2;
-//    }
-//
-//    SpotInterface->writeScenarioToXML(ScenarioID, xmlFileName);
-//
-//    returnValue = SpotInterface->removeScenario(ScenarioID);
-//    if (returnValue) {
-//        std::cout << "Removal of Scenario terminated with error: " << returnValue << std::endl;
-//        return 3;
-//    }
 
     return 0;
 }
