@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
         desc.add_options()("help", "produce help message")(
                 "timestep,s", po::value<float>(&timeStep)->default_value(0.1), "set time step for prediction")(
                 "input-file",
-                po::value<std::string>(&xmlFilePath)->default_value("unittest_data/DEU_Muc-3_1_T-1.xml")->required(),
+                po::value<std::string>(&xmlFilePath)->default_value("../test_scenarios/DEU_Muc-3_1_T-1.xml")->required(),
                 "Input file")("threads,t", po::value<int>(&num_threads)->default_value(4),
                                              "set number of threads to run with");
         po::positional_options_description p;

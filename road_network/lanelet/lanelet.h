@@ -19,6 +19,7 @@ class Lanelet {
         /*
          * setter functions
          */
+        void setId(const size_t num);
         void addLeftVertice(vertice left);
         void addRightVertice(vertice right);
         void addCenterVertice(vertice center);
@@ -33,9 +34,14 @@ class Lanelet {
         void moveCenterVertices(std::vector<vertice> &&center);
         void createCenterVertices();
 
+        void addPredecessor(Lanelet *pre);
+        void addSuccessor(Lanelet *suc);
+        void setLeftAdjacent(Lanelet *left, std::string dir);
+        void setRightAdjacent(Lanelet *right, std::string dir);
         /*
          * getter functions
          */
+        [[nodiscard]] size_t getId() const;
         [[nodiscard]] std::vector<vertice> getLeftBorderVerticesDirect() const;
         [[nodiscard]] std::vector<vertice> getRightBorderVerticesDirect() const;
         [[nodiscard]] std::vector<vertice> getCenterVerticesDirect() const;
@@ -44,6 +50,13 @@ class Lanelet {
         [[nodiscard]] const std::vector<vertice> &getLeftBorderVertices() const;
         [[nodiscard]] const std::vector<vertice> &getRightBorderVertices() const;
 
+        struct adjacent {
+            std::vector<Lanelet *> adj;
+            std::string dir;
+        };
+
+        void constructOuterPolygon(); // construct outer shape from borders
+
     private:
         size_t id;
         polygon_type outerPolygon; // outer shape of the lanelets as Boost polyon
@@ -51,6 +64,10 @@ class Lanelet {
         std::vector<vertice> centerVertices;
         std::vector<vertice> leftBorder;  // vertices of left border
         std::vector<vertice> rightBorder; // vertices of right border
+        std::vector<Lanelet *> predecessorLanelets; // previous lanelets
+        std::vector<Lanelet *> successorLanelets;   // longitudinally adjacent lanelets
+        adjacent adjacentLeft;                               // left adjacent lanelet with driving tag
+        adjacent adjacentRight;                              // right adjacent lanelet with driving tag
 
 };
 

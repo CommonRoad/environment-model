@@ -4,6 +4,12 @@
 
 #include "lanelet.h"
 
+namespace bg = boost::geometry;
+
+void Lanelet::setId(const size_t num) { id = num; }
+
+size_t Lanelet::getId() const { return id; }
+
 void Lanelet::setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices) { leftBorder = leftBorderVertices; }
 
 void Lanelet::setRightBorderVertices(const std::vector<vertice> &rightBorderVertices) {
@@ -52,3 +58,44 @@ std::vector<vertice> Lanelet::getCenterVerticesDirect() const { return centerVer
 const std::vector<vertice> &Lanelet::getCenterVertices() const { return centerVertices; }
 const std::vector<vertice> &Lanelet::getLeftBorderVertices() const { return leftBorder; }
 const std::vector<vertice> &Lanelet::getRightBorderVertices() const { return rightBorder; }
+
+void Lanelet::addPredecessor(Lanelet *pre) { predecessorLanelets.push_back(pre); }
+void Lanelet::addSuccessor(Lanelet *suc) { successorLanelets.push_back(suc); }
+
+void Lanelet::setLeftAdjacent(Lanelet *left, std::string dir) {
+    adjacentLeft.adj.push_back(left);
+    adjacentLeft.dir = dir;
+}
+
+void Lanelet::setRightAdjacent(Lanelet *right, std::string dir) {
+    adjacentRight.adj.push_back(right);
+    adjacentRight.dir = dir;
+}
+
+void Lanelet::constructOuterPolygon() {
+    const std::vector<vertice> &leftBorderTemp = this->getLeftBorderVertices();
+    const std::vector<vertice> &rightBorderTemp = this->getRightBorderVertices();
+
+    if (!leftBorderTemp.empty()) {
+
+        size_t idx = 0;
+        polygon_type polygon;
+        polygon.outer().resize(leftBorderTemp.size() + rightBorderTemp.size() + 1);
+
+        for (auto &it : leftBorderTemp) {
+            polygon.outer()[idx] = point_type{it.x, it.y};
+            idx++;
+        }
+        for (auto &it : boost::adaptors::reverse(rightBorderTemp)) {
+            polygon.outer()[idx] = point_type{it.x, it.y};
+            idx++;
+        }
+        polygon.outer().back() = point_type{leftBorderTemp[0].x, leftBorderTemp[0].y};
+
+        bg::simplify(polygon, outerPolygon, 0.01);
+        bg::unique(outerPolygon);
+        bg::correct(outerPolygon);
+
+        bg::envelope(outerPolygon, boundingBox); // set bounding box
+    }
+}

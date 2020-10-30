@@ -2,6 +2,7 @@
 
 #include "pugi_xml/pugixml.hpp"
 //#include "../world/obstacle/obstacle.h"
+#include "../../road_network/lanelet/lanelet.h"
 #include <stdexcept>
 
 #include <vector>

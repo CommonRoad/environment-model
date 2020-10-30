@@ -107,7 +107,7 @@
 //	return obstacleList;
 //}
 std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets() {
-	std::vector<std::shared_ptr<vehicularLanelet>> tempLaneletContainer{};
+	std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer{};
 
 	pugi::xml_node commonRoad = doc->child("commonRoad");
 	// get the number of lanelets
@@ -121,10 +121,10 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets() {
 	 */
 
 	for (size_t i = 0; i < n; i++) {
-		vehicularLanelet newLanelet;
+        Lanelet newLanelet;
 
 		// make_shared is faster than (new vehicularLanelet());
-		std::shared_ptr<vehicularLanelet> tempLanelet = std::make_shared<vehicularLanelet>();
+		std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>();
 		tempLaneletContainer.emplace_back(tempLanelet);
 	}
 
@@ -216,10 +216,10 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets() {
 					continue;
 				}
 				// set speed limit
-				if (!(strcmp(child.name(), "speedLimit"))) {
-					tempLaneletContainer[arrayIndex]->setSpeedLimit(child.text().as_double());
-					continue;
-				}
+//				if (!(strcmp(child.name(), "speedLimit"))) {
+//					tempLaneletContainer[arrayIndex]->setSpeedLimit(child.text().as_double());
+//					continue;
+//				}
 			}
 			tempLaneletContainer[arrayIndex]->createCenterVertices();
 			tempLaneletContainer[arrayIndex]->constructOuterPolygon();

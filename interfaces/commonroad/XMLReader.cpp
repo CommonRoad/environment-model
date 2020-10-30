@@ -32,7 +32,7 @@ std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xm
 //    return factory->createObstacles(timeStamp, param);
 //}
 
-std::vector<std::shared_ptr<vehicularLanelet>> XMLReader::createLaneletFromXML(const std::string &xmlFile) {
+std::vector<std::shared_ptr<Lanelet>> XMLReader::createLaneletFromXML(const std::string &xmlFile) {
 
     const auto factory = createCommonRoadFactory(xmlFile);
     return factory->createLanelets();

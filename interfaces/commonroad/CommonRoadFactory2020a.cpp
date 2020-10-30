@@ -105,10 +105,10 @@
 //	}
 //
 //	return obstacleList;
-}
-std::vector<std::shared_ptr<vehicularLanelet>> CommonRoadFactory2020a::createLanelets() {
+//}
+std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets() {
 
-	std::vector<std::shared_ptr<vehicularLanelet>> tempLaneletContainer{};
+	std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer{};
 
 	pugi::xml_node commonRoad = doc->child("commonRoad");
 	// get the number of lanelets
@@ -122,10 +122,10 @@ std::vector<std::shared_ptr<vehicularLanelet>> CommonRoadFactory2020a::createLan
 	 */
 
 	for (size_t i = 0; i < n; i++) {
-		vehicularLanelet newLanelet;
+        Lanelet newLanelet;
 
 		// make_shared is faster than (new vehicularLanelet());
-		std::shared_ptr<vehicularLanelet> tempLanelet = std::make_shared<vehicularLanelet>();
+		std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>();
 		tempLaneletContainer.emplace_back(tempLanelet);
 	}
 
@@ -160,7 +160,7 @@ std::vector<std::shared_ptr<vehicularLanelet>> CommonRoadFactory2020a::createLan
 				if (!(strcmp(child.name(), "leftBound"))) {
 					for (pugi::xml_node points = child.first_child(); points; points = points.next_sibling()) {
 						if (!(strcmp(points.name(), "point"))) {
-							vertice newVertice;
+							vertice newVertice{};
 							newVertice.x = points.child("x").text().as_double();
 							newVertice.y = points.child("y").text().as_double();
 							tempLaneletContainer[arrayIndex]->addLeftVertice(newVertice);
@@ -172,7 +172,7 @@ std::vector<std::shared_ptr<vehicularLanelet>> CommonRoadFactory2020a::createLan
 				if (!(strcmp(child.name(), "rightBound"))) {
 					for (pugi::xml_node points = child.first_child(); points; points = points.next_sibling()) {
 						if (!(strcmp(points.name(), "point"))) {
-							vertice newVertice;
+							vertice newVertice{};
 							newVertice.x = points.child("x").text().as_double();
 							newVertice.y = points.child("y").text().as_double();
 							tempLaneletContainer[arrayIndex]->addRightVertice(newVertice);
@@ -232,9 +232,9 @@ std::vector<std::shared_ptr<vehicularLanelet>> CommonRoadFactory2020a::createLan
 					const auto trafficSignRef = child.attribute("ref").as_ullong();
 
 					const auto trafficSign = speedLimits.find(trafficSignRef);
-					if (trafficSign != speedLimits.end())
-						tempLaneletContainer[arrayIndex]->setSpeedLimit(trafficSign->second);
-					continue;
+//					if (trafficSign != speedLimits.end())
+//						tempLaneletContainer[arrayIndex]->setSpeedLimit(trafficSign->second);
+//					continue;
 				}
 			}
 			tempLaneletContainer[arrayIndex]->createCenterVertices();
