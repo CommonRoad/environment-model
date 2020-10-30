@@ -5,26 +5,27 @@
 #ifndef ENVIRONMENT_MODEL_LANELET_H
 #define ENVIRONMENT_MODEL_LANELET_H
 
+#include "../../auxiliaryDefs/structs.h"
 
 class Lanelet {
     public:
-        lanelet() { id = 0; }
-        lanelet(const lanelet &) = default;            // copy constructor
-        lanelet &operator=(const lanelet &) = default; // copy assignment
-        lanelet(lanelet &&) = default;                 // move constructor
-        lanelet &operator=(lanelet &&) = default;      // move assignment
-        virtual ~lanelet() = default;                  // virtual destructor
+        Lanelet() { id = 0; }
+        Lanelet(const Lanelet &) = default;            // copy constructor
+        Lanelet &operator=(const Lanelet &) = default; // copy assignment
+        Lanelet(Lanelet &&) = default;                 // move constructor
+        Lanelet &operator=(Lanelet &&) = default;      // move assignment
+        virtual ~Lanelet() = default;                  // virtual destructor
 
         /*
          * setter functions
          */
-        void addLeftVertice(const vertice left);
-        void addRightVertice(const vertice right);
-        void addCenterVertice(const vertice center);
+        void addLeftVertice(vertice left);
+        void addRightVertice(vertice right);
+        void addCenterVertice(vertice center);
 
-        void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices) override;
-        void setRightBorderVertices(const std::vector<vertice> &rightBorderVertices) override;
-        void setCenterVertices(const std::vector<vertice> &center) override;
+        void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices);
+        void setRightBorderVertices(const std::vector<vertice> &rightBorderVertices);
+        void setCenterVertices(const std::vector<vertice> &center);
 
         // Takes rvalue and moves the data
         void moveLeftBorder(std::vector<vertice> &&leftBorderVertices);
@@ -35,17 +36,22 @@ class Lanelet {
         /*
          * getter functions
          */
-        std::vector<vertice> getLeftBorderVerticesDirect() const;
-        std::vector<vertice> getRightBorderVerticesDirect() const;
-        std::vector<vertice> getCenterVerticesDirect() const;
+        [[nodiscard]] std::vector<vertice> getLeftBorderVerticesDirect() const;
+        [[nodiscard]] std::vector<vertice> getRightBorderVerticesDirect() const;
+        [[nodiscard]] std::vector<vertice> getCenterVerticesDirect() const;
 
-        const std::vector<vertice> &getCenterVertices() const override;
-        const std::vector<vertice> &getLeftBorderVertices() const override;
-        const std::vector<vertice> &getRightBorderVertices() const override;
+        [[nodiscard]] const std::vector<vertice> &getCenterVertices() const;
+        [[nodiscard]] const std::vector<vertice> &getLeftBorderVertices() const;
+        [[nodiscard]] const std::vector<vertice> &getRightBorderVertices() const;
 
     private:
+        size_t id;
+        polygon_type outerPolygon; // outer shape of the lanelets as Boost polyon
+        box boundingBox;           // Boost bounding box of the lanelet
+        std::vector<vertice> centerVertices;
         std::vector<vertice> leftBorder;  // vertices of left border
         std::vector<vertice> rightBorder; // vertices of right border
+
 };
 
 

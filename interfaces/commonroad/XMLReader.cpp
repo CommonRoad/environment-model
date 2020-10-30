@@ -1,0 +1,39 @@
+//
+// Created by sebastian on 30.10.20.
+//
+
+#include "XMLReader.h"
+//#include "../geometry/circle.h"
+//#include "../geometry/rectangle.h"
+#include "pugi_xml/pugixml.hpp"
+//#include "../world/obstacle/obstacle.h"
+//#include "../world/obstacle/vehicle.h"
+#include "CommonRoadFactory2018b.h"
+#include "CommonRoadFactory2020a.h"
+
+std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xmlFile) {
+    std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
+    // pugi::xml_document doc;
+    if (!doc->load_file(xmlFile.c_str()))
+        throw std::runtime_error("Couldn't load XML-File");
+
+    const auto version = doc->child("commonRoad").attribute("commonRoadVersion").value();
+    if (!strcmp(version, "2017a") || !strcmp(version, "2018b"))
+        return std::make_unique<CommonRoadFactory2018b>(std::move(doc));
+    else if (!strcmp(version, "2020a"))
+        return std::make_unique<CommonRoadFactory2020a>(std::move(doc));
+    else
+        throw std::runtime_error("This CommonRoad version is not supported.");
+};
+
+//std::vector<std::shared_ptr<obstacle>> XMLReader::createObstacleFromXML(const std::string &xmlFile, double timeStamp,
+//                                                                        const obstacleParameters *param) {
+//    const auto factory = createCommonRoadFactory(xmlFile);
+//    return factory->createObstacles(timeStamp, param);
+//}
+
+std::vector<std::shared_ptr<vehicularLanelet>> XMLReader::createLaneletFromXML(const std::string &xmlFile) {
+
+    const auto factory = createCommonRoadFactory(xmlFile);
+    return factory->createLanelets();
+}

@@ -4,31 +4,31 @@
 
 #include "lanelet.h"
 
-void lanelet::setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices) { leftBorder = leftBorderVertices; }
+void Lanelet::setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices) { leftBorder = leftBorderVertices; }
 
-void lanelet::setRightBorderVertices(const std::vector<vertice> &rightBorderVertices) {
+void Lanelet::setRightBorderVertices(const std::vector<vertice> &rightBorderVertices) {
     rightBorder = rightBorderVertices;
 }
 
-void lanelet::setCenterVertices(const std::vector<vertice> &center) { centerVertices = center; }
+void Lanelet::setCenterVertices(const std::vector<vertice> &center) { centerVertices = center; }
 
 // Newly added functions which potentiall make setLeftBorder,... obsolete
 // Move the information instead of a copy
-void lanelet::moveLeftBorder(std::vector<vertice> &&leftBorderVertices) { leftBorder = std::move(leftBorderVertices); }
+void Lanelet::moveLeftBorder(std::vector<vertice> &&leftBorderVertices) { leftBorder = std::move(leftBorderVertices); }
 
-void lanelet::moveRightBorder(std::vector<vertice> &&rightBorderVertices) {
+void Lanelet::moveRightBorder(std::vector<vertice> &&rightBorderVertices) {
     rightBorder = std::move(rightBorderVertices);
 }
 
-void lanelet::moveCenterVertices(std::vector<vertice> &&center) { centerVertices = std::move(center); }
+void Lanelet::moveCenterVertices(std::vector<vertice> &&center) { centerVertices = std::move(center); }
 
-void lanelet::addLeftVertice(const vertice left) { leftBorder.push_back(left); }
+void Lanelet::addLeftVertice(const vertice left) { leftBorder.push_back(left); }
 
-void lanelet::addRightVertice(const vertice right) { rightBorder.push_back(right); }
+void Lanelet::addRightVertice(const vertice right) { rightBorder.push_back(right); }
 
-void lanelet::addCenterVertice(const vertice center) { centerVertices.push_back(center); }
+void Lanelet::addCenterVertice(const vertice center) { centerVertices.push_back(center); }
 
-void lanelet::createCenterVertices() {
+void Lanelet::createCenterVertices() {
     // initialise
     size_t numVertices = leftBorder.size();
 
@@ -45,10 +45,10 @@ void lanelet::createCenterVertices() {
     }
 }
 
-std::vector<vertice> lanelet::getLeftBorderVerticesDirect() const { return leftBorder; }
-std::vector<vertice> lanelet::getRightBorderVerticesDirect() const { return rightBorder; }
-std::vector<vertice> lanelet::getCenterVerticesDirect() const { return centerVertices; }
+std::vector<vertice> Lanelet::getLeftBorderVerticesDirect() const { return leftBorder; }
+std::vector<vertice> Lanelet::getRightBorderVerticesDirect() const { return rightBorder; }
+std::vector<vertice> Lanelet::getCenterVerticesDirect() const { return centerVertices; }
 
-const std::vector<vertice> &lanelet::getCenterVertices() const { return centerVertices; }
-const std::vector<vertice> &lanelet::getLeftBorderVertices() const { return leftBorder; }
-const std::vector<vertice> &lanelet::getRightBorderVertices() const { return rightBorder; }
+const std::vector<vertice> &Lanelet::getCenterVertices() const { return centerVertices; }
+const std::vector<vertice> &Lanelet::getLeftBorderVertices() const { return leftBorder; }
+const std::vector<vertice> &Lanelet::getRightBorderVertices() const { return rightBorder; }
