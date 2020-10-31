@@ -1,30 +1,30 @@
 #include "CommonRoadFactory2018b.h"
-//#include "../world/obstacle/vehicle.h"
+//#include "../world/Obstacle/vehicle.h"
 
-std::vector<std::shared_ptr<obstacle>> CommonRoadFactory2018b::createObstacles(double timeStamp,
-																			   const obstacleParameters *param) {
+std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles(double timeStamp,
+                                                                               const obstacleParameters *param) {
 
-	std::vector<std::shared_ptr<obstacle>> obstacleList{};
+	std::vector<std::shared_ptr<Obstacle>> obstacleList{};
 
 	pugi::xml_node commonRoad = doc->child("commonRoad");
 	for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
 		 roadElements = roadElements.next_sibling()) {
-		if (!(strcmp(roadElements.name(), "obstacle"))) {
+		if (!(strcmp(roadElements.name(), "Obstacle"))) {
 			if (!(strcmp(roadElements.first_child().text().as_string(), "dynamic")) &&
 				!(strcmp(roadElements.first_child().next_sibling().text().as_string(), "car")))
 
 			{
 				bool timeStampAvailable = false;
 
-				std::shared_ptr<obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
-				// depending on obstacle type)
+				std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
+				// depending on Obstacle type)
 //				if (param)
-//					tempObstacle = std::make_shared<obstacle>(
+//					tempObstacle = std::make_shared<Obstacle>(
 //						param->a_max_vehicles, param->v_max_vehicles, param->v_s_vehicles, param->speedingFactor,
 //						param->occM1_vehicles, param->occM2_vehicles, param->occM3_vehicles);
 //				else
 
-				tempObstacle = std::make_shared<obstacle>();
+				tempObstacle = std::make_shared<Obstacle>();
 
 				tempObstacle->setId(roadElements.first_attribute().as_int());
 				for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
@@ -38,8 +38,6 @@ std::vector<std::shared_ptr<obstacle>> CommonRoadFactory2018b::createObstacles(d
 					}
 					if (timeStamp == 0 && !(strcmp(child.name(), "initialState"))) {
 						pugi::xml_node states = child;
-						tempObstacle->setTimeStamp(timeStamp / 10.0);
-						tempObstacle->setOffset(0.0);
 						tempObstacle->setPosition(
 							states.child("position").child("point").child("x").text().as_double(),
 							states.child("position").child("point").child("y").text().as_double());
@@ -50,8 +48,6 @@ std::vector<std::shared_ptr<obstacle>> CommonRoadFactory2018b::createObstacles(d
 					} else if (!(strcmp(child.name(), "trajectory"))) {
 						for (pugi::xml_node states = child.first_child(); states; states = states.next_sibling()) {
 							if ((int)states.child("time").child("exact").text().as_double() == timeStamp) {
-								tempObstacle->setTimeStamp(timeStamp / 10.0);
-								tempObstacle->setOffset(0.0);
 								tempObstacle->setPosition(
 									states.child("position").child("point").child("x").text().as_double(),
 									states.child("position").child("point").child("y").text().as_double());
@@ -75,9 +71,9 @@ std::vector<std::shared_ptr<obstacle>> CommonRoadFactory2018b::createObstacles(d
 			}
 			// Todo Add other obstacles than cars
 			else if (!(strcmp(roadElements.first_child().text().as_string(), "static"))) {
-				std::shared_ptr<obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
-				// depending on obstacle type)
-				tempObstacle = std::make_shared<obstacle>(true);
+				std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
+				// depending on Obstacle type)
+				tempObstacle = std::make_shared<Obstacle>(true);
 				tempObstacle->setId(roadElements.first_attribute().as_int());
 				for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
 					if (!(strcmp(child.name(), "shape"))) {
@@ -227,4 +223,10 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets() {
 		}
 	}
 	return tempLaneletContainer;
+}
+
+std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2018b::createTrafficSigns() {
+
+    std::vector<std::shared_ptr<TrafficSign>> tempLaneletContainer{};
+    return tempLaneletContainer;
 }

@@ -51,6 +51,9 @@ void Lanelet::createCenterVertices() {
     }
 }
 
+void Lanelet::setTrafficLight(TrafficLight *light) { trafficLightPtr = light; }
+void Lanelet::addTrafficSign(TrafficSign *sign) { trafficSigns.push_back(sign); }
+
 std::vector<vertice> Lanelet::getLeftBorderVerticesDirect() const { return leftBorder; }
 std::vector<vertice> Lanelet::getRightBorderVerticesDirect() const { return rightBorder; }
 std::vector<vertice> Lanelet::getCenterVerticesDirect() const { return centerVertices; }
@@ -58,6 +61,9 @@ std::vector<vertice> Lanelet::getCenterVerticesDirect() const { return centerVer
 const std::vector<vertice> &Lanelet::getCenterVertices() const { return centerVertices; }
 const std::vector<vertice> &Lanelet::getLeftBorderVertices() const { return leftBorder; }
 const std::vector<vertice> &Lanelet::getRightBorderVertices() const { return rightBorder; }
+
+std::vector<Lanelet *> Lanelet::getPredecessors() const { return predecessorLanelets; }
+std::vector<Lanelet *> Lanelet::getSuccessors() const { return successorLanelets; }
 
 void Lanelet::addPredecessor(Lanelet *pre) { predecessorLanelets.push_back(pre); }
 void Lanelet::addSuccessor(Lanelet *suc) { successorLanelets.push_back(suc); }
@@ -71,6 +77,9 @@ void Lanelet::setRightAdjacent(Lanelet *right, std::string dir) {
     adjacentRight.adj.push_back(right);
     adjacentRight.dir = dir;
 }
+
+TrafficLight *Lanelet::getTrafficLight() const { return trafficLightPtr; }
+std::vector<TrafficSign *> Lanelet::getTrafficSigns() const { return trafficSigns; }
 
 void Lanelet::constructOuterPolygon() {
     const std::vector<vertice> &leftBorderTemp = this->getLeftBorderVertices();
@@ -99,3 +108,5 @@ void Lanelet::constructOuterPolygon() {
         bg::envelope(outerPolygon, boundingBox); // set bounding box
     }
 }
+
+Lanelet::Lanelet() { id = 0; }

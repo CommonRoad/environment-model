@@ -7,18 +7,17 @@
 
 #include "obstacle.h"
 
-// find obstacle by id
-obstacle *getObstacleById(std::vector<obstacle *> *obstacleList, size_t id);
+// find Obstacle by id
+Obstacle *getObstacleById(std::vector<Obstacle *> *obstacleList, size_t id);
 
-// find obstacle by id and set pointer to zero
-obstacle *getObstacleByIdAndRemove(std::vector<obstacle *> *obstacleList, size_t id);
+// find Obstacle by id and set pointer to zero
+Obstacle *getObstacleByIdAndRemove(std::vector<Obstacle *> *obstacleList, size_t id);
 
-// returns true if obstacle id is already present in previous obstacles
-bool obstacleInPreviousObstacles(std::vector<obstacle *> *obstacleList, size_t id);
+// returns true if Obstacle id is already present in previous obstacles
+bool obstacleInPreviousObstacles(std::vector<Obstacle *> *obstacleList, size_t id);
 
-bool isObstacleTypeOfClass(const std::shared_ptr<obstacle> &Obstacle, const std::string &ClassName);
+//bool isObstacleTypeOfClass(const std::shared_ptr<Obstacle> &Obstacle, const std::string &ClassName);
 
-// not implemented yet
-void obstacleInteraction(std::vector<obstacle *> obstacles);
+
 
 #endif

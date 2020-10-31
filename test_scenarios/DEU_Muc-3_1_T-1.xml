@@ -2927,7 +2927,7 @@
       <adjacentLeft drivingDir="opposite" ref="508"/>
       <speedLimit>13.89</speedLimit>
    </lanelet>
-   <obstacle id="1">
+   <Obstacle id="1">
       <role>dynamic</role>
       <type>car</type>
       <shape>
@@ -3958,8 +3958,8 @@
             </acceleration>
          </state>
       </trajectory>
-   </obstacle>
-   <obstacle id="2">
+   </Obstacle>
+   <Obstacle id="2">
       <role>dynamic</role>
       <type>car</type>
       <shape>
@@ -4990,8 +4990,8 @@
             </acceleration>
          </state>
       </trajectory>
-   </obstacle>
-   <obstacle id="3">
+   </Obstacle>
+   <Obstacle id="3">
       <role>dynamic</role>
       <type>car</type>
       <shape>
@@ -6022,7 +6022,7 @@
             </acceleration>
          </state>
       </trajectory>
-   </obstacle>
+   </Obstacle>
    <planningProblem id="10">
       <initialState>
          <position>

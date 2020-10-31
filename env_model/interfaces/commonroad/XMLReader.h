@@ -18,18 +18,21 @@
 
 namespace XMLReader {
 
- //creates all obstacles objects (currently only vehicles) from the XML input
- //std::vector<std::shared_ptr<obstacle>> createObstacleFromXML(const std::string &xmlFile,
- //                                                             const obstacleParameters *param, const double
- //                                                             &timeStamp);
+    //creates all obstacles objects (currently only vehicles) from the XML input
+    //std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &xmlFile,
+    //                                                             const obstacleParameters *param, const double
+    //                                                             &timeStamp);
 
- std::vector<std::shared_ptr<obstacle>> createObstacleFromXML(const std::string &xmlFile, double timeStamp,
+    std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &xmlFile, double timeStamp,
                                                               const obstacleParameters *param = NULL);
 
-// std::vector<std::shared_ptr<obstacle>> createObstacleFromXML(const std::string &xmlFile, const double &timeStamp);
+    // std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &xmlFile, const double &timeStamp);
 
-// creates all vehicular lanelet objects from the XML input
- std::vector<std::shared_ptr<Lanelet>> createLaneletFromXML(const std::string &xmlFile);
+    // creates all vehicular lanelet objects from the XML input
+    std::vector<std::shared_ptr<Lanelet>> createLaneletFromXML(const std::string &xmlFile);
+
+    // creates all vehicular lanelet objects from the XML input
+    std::vector<std::shared_ptr<TrafficSign>> createTrafficSignFromXML(const std::string &xmlFile);
 
 }; // namespace XMLReader
 

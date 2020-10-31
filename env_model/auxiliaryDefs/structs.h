@@ -110,4 +110,13 @@ struct trajLane {
     double projectedDist; // projected distance to closest center vertice
 };
 
+/*
+ * trajectory
+ */
+struct init {
+    float timeStep;
+    int num_threads;
+    std::string xmlFilePath;
+};
+
 #endif //ENV_MODEL_STRUCTS_H

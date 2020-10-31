@@ -1,11 +1,12 @@
 #include "CommonRoadFactory2020a.h"
-//#include "../world/obstacle/vehicle.h"
+//#include "../world/Obstacle/vehicle.h"
 
 #include <stdlib.h>
+#include "../../road_network/regulatory_elements/traffic_sign_element.h"
 
-std::vector<std::shared_ptr<obstacle>> CommonRoadFactory2020a::createObstacles(double timeStamp,
-																			   const obstacleParameters *param) {
-	std::vector<std::shared_ptr<obstacle>> obstacleList{};
+std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles(double timeStamp,
+                                                                               const obstacleParameters *param) {
+	std::vector<std::shared_ptr<Obstacle>> obstacleList{};
 
 	pugi::xml_node commonRoad = doc->child("commonRoad");
 	for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
@@ -16,15 +17,9 @@ std::vector<std::shared_ptr<obstacle>> CommonRoadFactory2020a::createObstacles(d
 			{
 				bool timeStampAvailable = false;
 
-				std::shared_ptr<obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
-				// depending on obstacle type)
-//				if (param)
-//					tempObstacle = std::make_shared<vehicle>(
-//						param->a_max_vehicles, param->v_max_vehicles, param->v_s_vehicles, param->speedingFactor,
-//						param->occM1_vehicles, param->occM2_vehicles, param->occM3_vehicles);
-//				else
+				std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
 
-                tempObstacle = std::make_shared<obstacle>();
+                tempObstacle = std::make_shared<Obstacle>();
 
 				tempObstacle->setId(roadElements.first_attribute().as_int());
 				for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
@@ -38,8 +33,6 @@ std::vector<std::shared_ptr<obstacle>> CommonRoadFactory2020a::createObstacles(d
 					}
 					if (timeStamp == 0 && !(strcmp(child.name(), "initialState"))) {
 						pugi::xml_node states = child;
-						tempObstacle->setTimeStamp(timeStamp / 10.0);
-						tempObstacle->setOffset(0.0);
 						tempObstacle->setPosition(
 							states.child("position").child("point").child("x").text().as_double(),
 							states.child("position").child("point").child("y").text().as_double());
@@ -50,8 +43,6 @@ std::vector<std::shared_ptr<obstacle>> CommonRoadFactory2020a::createObstacles(d
 					} else if (!(strcmp(child.name(), "trajectory"))) {
 						for (pugi::xml_node states = child.first_child(); states; states = states.next_sibling()) {
 							if ((int)states.child("time").child("exact").text().as_double() == timeStamp) {
-								tempObstacle->setTimeStamp(timeStamp / 10.0);
-								tempObstacle->setOffset(0.0);
 								tempObstacle->setPosition(
 									states.child("position").child("point").child("x").text().as_double(),
 									states.child("position").child("point").child("y").text().as_double());
@@ -77,9 +68,9 @@ std::vector<std::shared_ptr<obstacle>> CommonRoadFactory2020a::createObstacles(d
 		// Todo Add other obstacles than cars
 		else if (!(strcmp(roadElements.name(), "dynamicObstacle"))) {
 			// else if (!(strcmp(roadElements.first_child().text().as_string(), "static"))) {
-			std::shared_ptr<obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
-			// depending on obstacle type)
-			tempObstacle = std::make_shared<obstacle>(true);
+			std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
+			// depending on Obstacle type)
+			tempObstacle = std::make_shared<Obstacle>(true);
 			tempObstacle->setId(roadElements.first_attribute().as_int());
 			for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
 				if (!(strcmp(child.name(), "shape"))) {
@@ -228,14 +219,14 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets() {
 					continue;
 				}
 				// set speed limit
-				if (!(strcmp(child.name(), "trafficSignRef"))) {
-					const auto trafficSignRef = child.attribute("ref").as_ullong();
-
-					const auto trafficSign = speedLimits.find(trafficSignRef);
+//				if (!(strcmp(child.name(), "trafficSignRef"))) {
+//					const auto trafficSignRef = child.attribute("ref").as_ullong();
+//
+//					const auto trafficSign = speedLimits.find(trafficSignRef);
 //					if (trafficSign != speedLimits.end())
 //						tempLaneletContainer[arrayIndex]->setSpeedLimit(trafficSign->second);
 //					continue;
-				}
+//				}
 			}
 			tempLaneletContainer[arrayIndex]->createCenterVertices();
 			tempLaneletContainer[arrayIndex]->constructOuterPolygon();
@@ -243,4 +234,55 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets() {
 		}
 	}
 	return tempLaneletContainer;
+}
+
+std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficSigns() {
+
+    std::vector<std::shared_ptr<TrafficSign>> tempLaneletContainer{};
+
+    pugi::xml_node commonRoad = doc->child("commonRoad");
+    // get the number of lanelets
+    size_t n = std::distance(commonRoad.children("trafficSign").begin(), commonRoad.children("trafficSign").end());
+    tempLaneletContainer.clear();
+    tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
+
+    /*
+     * all lanelets must be initialized first because they are referencing
+     * each other
+     */
+
+    for (size_t i = 0; i < n; i++) {
+        Lanelet newLanelet;
+
+        // make_shared is faster than (new vehicularLanelet());
+        std::shared_ptr<TrafficSign> tempLanelet = std::make_shared<TrafficSign>();
+        tempLaneletContainer.emplace_back(tempLanelet);
+    }
+
+    size_t arrayIndex = 0;
+
+    std::map<unsigned long long, double> speedLimits;
+    // set id of the lanelets
+    for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
+         roadElements = roadElements.next_sibling()) {
+             if (!(strcmp(roadElements.name(), "trafficSign"))) {
+                 tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
+                for (pugi::xml_node trafficSignElement = roadElements.first_child(); trafficSignElement;
+                trafficSignElement = trafficSignElement.next_sibling()) {
+                    std::string trafficSignId = trafficSignElement.attribute("trafficSignId").as_string();
+                    TrafficSignElement newTrafficSignElement = TrafficSignElement(trafficSignId);
+                    std::vector<std::string > additionalValuesList;
+                    for (pugi::xml_node child = trafficSignElement.first_child(); child; child = child.next_sibling()) {
+                        if (!(strcmp(child.name(), "additionalValue"))) {
+                            newTrafficSignElement.addAdditionalValue(child.attribute("additionalValue").as_string());
+                        }
+                    }
+                    tempLaneletContainer[arrayIndex]->addTrafficSignElement(&newTrafficSignElement);
+
+                }
+            }
+        arrayIndex++;
+    }
+
+    return tempLaneletContainer;
 }
