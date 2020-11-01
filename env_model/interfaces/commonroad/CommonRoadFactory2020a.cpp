@@ -251,13 +251,13 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
      * each other
      */
 
-    for (size_t i = 0; i < n; i++) {
-        Lanelet newLanelet;
-
-        // make_shared is faster than (new vehicularLanelet());
-        std::shared_ptr<TrafficSign> tempLanelet = std::make_shared<TrafficSign>();
-        tempLaneletContainer.emplace_back(tempLanelet);
-    }
+//    for (size_t i = 0; i < n; i++) {
+//        Lanelet newLanelet;
+//
+//        // make_shared is faster than (new vehicularLanelet());
+//        std::shared_ptr<TrafficSign> tempLanelet = std::make_shared<TrafficSign>();
+//        tempLaneletContainer.emplace_back(tempLanelet);
+//    }
 
     size_t arrayIndex = 0;
 
@@ -266,22 +266,35 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
          roadElements = roadElements.next_sibling()) {
              if (!(strcmp(roadElements.name(), "trafficSign"))) {
+                 TrafficSign newTrafficSign;
+                 std::shared_ptr<TrafficSign> tempTrafficSign = std::make_shared<TrafficSign>();
+                 tempLaneletContainer.emplace_back(tempTrafficSign);
                  tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
-                for (pugi::xml_node trafficSignElement = roadElements.first_child(); trafficSignElement;
-                trafficSignElement = trafficSignElement.next_sibling()) {
-                    std::string trafficSignId = trafficSignElement.attribute("trafficSignId").as_string();
-                    TrafficSignElement newTrafficSignElement = TrafficSignElement(trafficSignId);
-                    std::vector<std::string > additionalValuesList;
-                    for (pugi::xml_node child = trafficSignElement.first_child(); child; child = child.next_sibling()) {
-                        if (!(strcmp(child.name(), "additionalValue"))) {
-                            newTrafficSignElement.addAdditionalValue(child.attribute("additionalValue").as_string());
+                for (pugi::xml_node trafficSignChildElement = roadElements.first_child(); trafficSignChildElement;
+                     trafficSignChildElement = trafficSignChildElement.next_sibling()) {
+                    if (!(strcmp(trafficSignChildElement.name(), "trafficSignElement"))) {
+                        std::string trafficSignId = trafficSignChildElement.first_child().first_child().value();
+                        TrafficSignElement newTrafficSignElement = TrafficSignElement(trafficSignId);
+                        std::vector<std::string > additionalValuesList;
+                        for (pugi::xml_node trafficSignChildElementChild = trafficSignChildElement.first_child(); trafficSignChildElementChild;
+                             trafficSignChildElementChild = trafficSignChildElementChild.next_sibling()) {
+                            if (!(strcmp(trafficSignChildElementChild.name(), "additionalValue"))) {
+                                newTrafficSignElement.addAdditionalValue(trafficSignChildElementChild.first_child().value());
+                            }
                         }
+                        tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElement); #TODO pass by reference
                     }
-                    tempLaneletContainer[arrayIndex]->addTrafficSignElement(&newTrafficSignElement);
-
+                    if (!(strcmp(trafficSignChildElement.name(), "position"))) {
+                        vertice p {trafficSignChildElement.first_attribute().as_double(), trafficSignChildElement.last_attribute().as_double() };
+                        tempLaneletContainer[arrayIndex]->setPosition(p);
+                    }
+                    if (!(strcmp(trafficSignChildElement.name(), "virtual"))) {
+                        tempLaneletContainer[arrayIndex]->setVirtualElement(trafficSignChildElement.first_attribute().as_bool());
+                    }
                 }
+                 ++arrayIndex;
             }
-        arrayIndex++;
+
     }
 
     return tempLaneletContainer;

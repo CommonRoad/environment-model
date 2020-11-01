@@ -20,17 +20,17 @@ public:
      * setter functions*
      */
     void setId(size_t num);
-    void addTrafficSignElement(TrafficSignElement* sign_element);
+    void addTrafficSignElement(TrafficSignElement sign_element);
     void setVirtualElement(bool virtualElement);
     void setPosition(vertice position);
-    void setTrafficSignElement(const std::vector<TrafficSignElement*>& trafficSignElement);
+    void setTrafficSignElement(std::vector<TrafficSignElement> trafficSignElement);
     /*
      * getter functions
      */
     [[nodiscard]] size_t getId() const;
     [[nodiscard]] bool isVirtualElement() const;
     [[nodiscard]] const vertice &getPosition() const;
-    [[nodiscard]] const std::vector<TrafficSignElement *> & getTrafficSignElement() const;
+    [[nodiscard]] const std::vector<TrafficSignElement> getTrafficSignElement() const;
 
 
 
@@ -42,7 +42,7 @@ private:
     size_t id;                                  //unique id
     vertice position{};              //position (x/y) of traffic sign
     bool virtualElement;                       //artificially added element
-    std::vector<TrafficSignElement *> trafficSignElement;
+    std::vector<TrafficSignElement> trafficSignElement;
 };
 
 
