@@ -230,3 +230,9 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2018b::createTrafficS
     std::vector<std::shared_ptr<TrafficSign>> tempLaneletContainer{};
     return tempLaneletContainer;
 }
+
+std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2018b::createTrafficLights() {
+
+    std::vector<std::shared_ptr<TrafficLight>> tempLaneletContainer{};
+    return tempLaneletContainer;
+}

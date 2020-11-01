@@ -24,7 +24,7 @@ namespace XMLReader {
     //                                                             &timeStamp);
 
     std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &xmlFile, double timeStamp,
-                                                              const obstacleParameters *param = NULL);
+                                                              const obstacleParameters *param = nullptr);
 
     // std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &xmlFile, const double &timeStamp);
 
@@ -33,6 +33,8 @@ namespace XMLReader {
 
     // creates all vehicular lanelet objects from the XML input
     std::vector<std::shared_ptr<TrafficSign>> createTrafficSignFromXML(const std::string &xmlFile);
+
+    std::vector<std::shared_ptr<TrafficLight>> createTrafficLightFromXML(const std::string &xmlFile);
 
 }; // namespace XMLReader
 

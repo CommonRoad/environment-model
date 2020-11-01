@@ -1,7 +1,5 @@
 #include "obstacle.h"
 #include "../geometry/geometricOperations.h"
-//#include "../../geometry/rectangle.h"
-//#include "../Journal.h"
 //#include "../lanelets/lanelet_operations.h"
 #include <chrono>
 #include <cmath>
@@ -11,14 +9,14 @@
 #endif
 
 
-void Obstacle::setId(const size_t &num) { id = num; }
+void Obstacle::setId(const size_t num) { id = num; }
 
-void Obstacle::setPosition(const double &x, const double &y) {
+void Obstacle::setPosition(const double x, const double y) {
     xPosition = x;
     yPosition = y;
 }
 
-void Obstacle::setOrientation(const double &value) { orientation = wrapToPi(value); }
+void Obstacle::setOrientation(const double value) { orientation = wrapToPi(value); }
 
 //
 //void Obstacle::addInLane(lane *l) { inLanes.emplace_back(l); }
@@ -39,7 +37,6 @@ void Obstacle::setOrientation(const double &value) { orientation = wrapToPi(valu
 //    }
 //}
 
-void Obstacle::setOccType(const size_t type) { occType = type; }
 
 //void Obstacle::useShapeAsRef(const bool val) { useShape = val; }
 
@@ -132,9 +129,9 @@ const polygon_type Obstacle::getOccupancyPolygonShape() {
     return polygonShape;
 }
 
-void Obstacle::setIsStatic(const bool isStatic) {
-    this->isStatic = isStatic;
-    if (isStatic) {
+void Obstacle::setIsStatic(bool st) {
+    isStatic = st;
+    if (st) {
         velocity = 0.0;
         acceleration = 0.0;
         v_max = 0.0;

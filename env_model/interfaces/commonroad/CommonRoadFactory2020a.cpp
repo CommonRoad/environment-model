@@ -246,19 +246,6 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
     tempLaneletContainer.clear();
     tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
 
-    /*
-     * all lanelets must be initialized first because they are referencing
-     * each other
-     */
-
-//    for (size_t i = 0; i < n; i++) {
-//        Lanelet newLanelet;
-//
-//        // make_shared is faster than (new vehicularLanelet());
-//        std::shared_ptr<TrafficSign> tempLanelet = std::make_shared<TrafficSign>();
-//        tempLaneletContainer.emplace_back(tempLanelet);
-//    }
-
     size_t arrayIndex = 0;
 
     std::map<unsigned long long, double> speedLimits;
@@ -282,11 +269,7 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                                 newTrafficSignElement.addAdditionalValue(trafficSignChildElementChild.first_child().value());
                             }
                         }
-                        tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElement); #TODO pass by reference
-                    }
-                    if (!(strcmp(trafficSignChildElement.name(), "position"))) {
-                        vertice p {trafficSignChildElement.first_attribute().as_double(), trafficSignChildElement.last_attribute().as_double() };
-                        tempLaneletContainer[arrayIndex]->setPosition(p);
+                        tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElement); //TODO pass by reference
                     }
                     if (!(strcmp(trafficSignChildElement.name(), "virtual"))) {
                         tempLaneletContainer[arrayIndex]->setVirtualElement(trafficSignChildElement.first_attribute().as_bool());
@@ -294,6 +277,80 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                 }
                  ++arrayIndex;
             }
+
+    }
+
+    return tempLaneletContainer;
+}
+
+std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTrafficLights() {
+
+    std::vector<std::shared_ptr<TrafficLight>> tempLaneletContainer{};
+
+    pugi::xml_node commonRoad = doc->child("commonRoad");
+    // get the number of lanelets
+    size_t n = std::distance(commonRoad.children("trafficLight").begin(), commonRoad.children("trafficLight").end());
+    tempLaneletContainer.clear();
+    tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
+
+    size_t arrayIndex = 0;
+
+    std::map<unsigned long long, double> speedLimits;
+    // set id of the lanelets
+    for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
+         roadElements = roadElements.next_sibling()) {
+        if (!(strcmp(roadElements.name(), "trafficLight"))) {
+            TrafficLight newTrafficLight;
+            std::shared_ptr<TrafficLight> tempTrafficLight = std::make_shared<TrafficLight>();
+            tempLaneletContainer.emplace_back(tempTrafficLight);
+            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
+            for (pugi::xml_node trafficLightChildElement = roadElements.first_child(); trafficLightChildElement;
+                 trafficLightChildElement = trafficLightChildElement.next_sibling()) {
+                if (!(strcmp(trafficLightChildElement.name(), "cycle"))) {
+                    for (pugi::xml_node trafficLightCycleChildElement = trafficLightChildElement.first_child(); trafficLightCycleChildElement;
+                         trafficLightCycleChildElement = trafficLightCycleChildElement.next_sibling()) {
+                        if (!(strcmp(trafficLightCycleChildElement.name(), "cycleElement"))) {
+                            std::string duration = trafficLightCycleChildElement.first_child().first_child().value();
+                            std::string color = trafficLightCycleChildElement.first_child().next_sibling().first_child().value();
+                            CycleElement cycle{};
+                            if (color == "red")
+                                cycle = CycleElement{red, std::stof(duration) };
+                            if (color == "green")
+                                cycle = CycleElement{green, std::stof(duration) };
+                            if (color == "yellow")
+                                cycle = CycleElement{yellow, std::stof(duration) };
+                            if (color == "red_yellow")
+                                cycle = CycleElement{red_yellow, std::stof(duration) };
+
+                            tempLaneletContainer[arrayIndex]->addCycleElement(cycle); //TODO pass by reference
+                        }
+                        if (!(strcmp(trafficLightCycleChildElement.name(), "timeOffset"))) {
+                            tempLaneletContainer[arrayIndex]->setOffset(std::stoi(trafficLightCycleChildElement.first_child().value()));
+                        }
+                    }
+                }
+                if (!(strcmp(trafficLightChildElement.name(), "direction"))) {
+                    TrafficLightDirection dir;
+                    if (!(strcmp(trafficLightChildElement.first_child().value(), "right")))
+                        dir = right;
+                    if (!(strcmp(trafficLightChildElement.first_child().value(), "straight")))
+                        dir = straight;
+                    if (!(strcmp(trafficLightChildElement.first_child().value(), "left")))
+                        dir = left;
+                    if (!(strcmp(trafficLightChildElement.first_child().value(), "leftStraight")))
+                        dir = leftStraight;
+                    if (!(strcmp(trafficLightChildElement.first_child().value(), "leftRight")))
+                        dir = leftRight;
+                    if (!(strcmp(trafficLightChildElement.first_child().value(), "all")))
+                        dir = all;
+                    tempLaneletContainer[arrayIndex]->setDirection(dir);
+                }
+                if (!(strcmp(trafficLightChildElement.name(), "active"))) {
+                    tempLaneletContainer[arrayIndex]->setActive(strcasecmp("true", trafficLightChildElement.first_child().value()) == 0);
+                }
+            }
+            ++arrayIndex;
+        }
 
     }
 

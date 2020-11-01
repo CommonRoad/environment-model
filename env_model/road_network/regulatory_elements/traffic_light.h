@@ -8,6 +8,7 @@
 #include "../../auxiliaryDefs/structs.h"
 
 enum CycleElementType{red, green, yellow, red_yellow };
+enum TrafficLightDirection{right, straight, left, leftStraight, straightRight, leftRight, all };
 
 struct CycleElement{
     CycleElementType color;
@@ -25,28 +26,32 @@ class TrafficLight {
         /*
          * setter functions
          */
-        void setId(const size_t num);
+        void setId(size_t num);
         void setCycle(const std::vector<CycleElement>& light_cycle);
-        void setOffset(const float of);
-
+        void setOffset(int of);
+        void setDirection(TrafficLightDirection dir);
+        void setActive(bool ac);
+        void addCycleElement(CycleElement ce);
         /*
          * getter functions
          */
-        size_t getId() const;
-        std::vector<CycleElement> getCycle() const;
-        float getOffset() const;
+        [[nodiscard]] size_t getId() const;
+        [[nodiscard]] std::vector<CycleElement> getCycle() const;
+        [[nodiscard]] float getOffset() const;
+        [[nodiscard]] TrafficLightDirection getDirection() const;
+        [[nodiscard]] bool isActive() const;
 
         /*
          * functions
          */
-        int getPedestrianPriorityAtTime(float time);
         CycleElement getElementAtTime(float time);
 
     private:
         size_t id;                          //unique id
         std::vector<CycleElement> cycle;    //cycle of the traffic light
         float offset;                       //the offset for the cycle
+        TrafficLightDirection direction;
+        bool active{};
 };
-
 
 #endif //ENV_MODEL_TRAFFICLIGHT_H

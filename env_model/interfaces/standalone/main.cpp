@@ -7,10 +7,6 @@
 
 #include "../../auxiliaryDefs/structs.h"
 #include "../commonroad/XMLReader.h"
-#include "../../road_network/lanelet/lanelet.h"
-//#include "../../world/Journal.h"
-//#include "../../world/lanelets/lanelet_operations.h"
-#include "../../obstacle/obstacle_operations.h"
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
@@ -50,6 +46,7 @@ int main(int argc, char **argv) {
 //    timeStruct timeHorizon{0.0, timeStep, 1.0};
 
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
+    std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
 
     std::vector<std::shared_ptr<Lanelet>> lanelets = XMLReader::createLaneletFromXML(xmlFilePath);
 

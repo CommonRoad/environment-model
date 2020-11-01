@@ -43,3 +43,9 @@ std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(co
     const auto factory = createCommonRoadFactory(xmlFile);
     return factory->createTrafficSigns();
 }
+
+std::vector<std::shared_ptr<TrafficLight>> XMLReader::createTrafficLightFromXML(const std::string &xmlFile) {
+
+    const auto factory = createCommonRoadFactory(xmlFile);
+    return factory->createTrafficLights();
+}
