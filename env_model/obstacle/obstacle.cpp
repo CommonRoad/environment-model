@@ -11,13 +11,6 @@
 
 void Obstacle::setId(const size_t num) { id = num; }
 
-void Obstacle::setPosition(const double x, const double y) {
-    xPosition = x;
-    yPosition = y;
-}
-
-void Obstacle::setOrientation(const double value) { orientation = wrapToPi(value); }
-
 //
 //void Obstacle::addInLane(lane *l) { inLanes.emplace_back(l); }
 //
@@ -42,11 +35,6 @@ void Obstacle::setOrientation(const double value) { orientation = wrapToPi(value
 
 size_t Obstacle::getId() const { return id; }
 
-double Obstacle::getXpos() const { return xPosition; }
-
-double Obstacle::getYpos() const { return yPosition; }
-
-double Obstacle::getOrientation() const { return orientation; }
 
 //const std::vector<lane *> &Obstacle::getInLane() const { return inLanes; }
 //
@@ -60,9 +48,6 @@ double Obstacle::getOrientation() const { return orientation; }
 
 //void Obstacle::setOccupancyMatrix(const std::vector<std::vector<occTypes>> &&occMatrix) { occupancyMatrix = occMatrix; }
 
-void Obstacle::setVelocity(const double velo) { velocity = isStatic ? 0.0 : velo; }
-
-void Obstacle::setAcceleration(const double acc) { acceleration = isStatic ? 0.0 : acc; }
 
 void Obstacle::setVmax(const double vmax) { v_max = isStatic ? 0.0 : vmax; }
 
@@ -80,10 +65,6 @@ void Obstacle::setAminLong(const double amin_long) { a_min_long = isStatic ? 0.0
 //}
 
 
-double Obstacle::getVelocity() const { return velocity; }
-
-double Obstacle::getAcceleration() const { return acceleration; }
-
 double Obstacle::getVmax() const { return v_max; }
 
 double Obstacle::getAmax() const { return a_max; }
@@ -92,7 +73,7 @@ double Obstacle::getAmaxLong() const { return a_max_long; }
 
 double Obstacle::getAminLong() const { return a_min_long; }
 
-const polygon_type Obstacle::getOccupancyPolygonShape() {
+polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
 
     std::vector<vertice> boundingRectangleVertices;
     polygon_type polygonShape;
@@ -110,7 +91,7 @@ const polygon_type Obstacle::getOccupancyPolygonShape() {
          * coordinates to the object's reference position and rotation
          */
         std::vector<vertice> adjustedBoundingRectangleVertices = rotateAndTranslateVertices(
-            boundingRectangleVertices, vertice{this->getXpos(), this->getYpos()}, this->getOrientation());
+            boundingRectangleVertices, vertice{this->trajectoryPrediction.at(timeStamp).getXPosition(), this->trajectoryPrediction.at(timeStamp).getYPosition()}, this->trajectoryPrediction.at(timeStamp).getOrientation());
 
         polygonShape.outer().resize(adjustedBoundingRectangleVertices.size() + 1);
 
@@ -121,7 +102,7 @@ const polygon_type Obstacle::getOccupancyPolygonShape() {
         }
 
         // add first point once again at the end
-        if (adjustedBoundingRectangleVertices.size() > 0) {
+        if (!adjustedBoundingRectangleVertices.empty()) {
             polygonShape.outer().back() =
                 point_type{adjustedBoundingRectangleVertices[0].x, adjustedBoundingRectangleVertices[0].y};
         }
@@ -132,13 +113,15 @@ const polygon_type Obstacle::getOccupancyPolygonShape() {
 void Obstacle::setIsStatic(bool st) {
     isStatic = st;
     if (st) {
-        velocity = 0.0;
-        acceleration = 0.0;
         v_max = 0.0;
         a_max = 0.0;
         a_min_long = 0.0;
         a_max_long = 0.0;
     }
+}
+
+void Obstacle::appendState(State state) {
+    trajectoryPrediction.insert(std::pair<int, State>(state.getTimeStep(), state));
 }
 
 bool Obstacle::getIsStatic() const { return isStatic; }

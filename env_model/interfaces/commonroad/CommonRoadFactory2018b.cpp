@@ -36,67 +36,63 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles(d
 						}
 						continue;
 					}
-					if (timeStamp == 0 && !(strcmp(child.name(), "initialState"))) {
-						pugi::xml_node states = child;
-						tempObstacle->setPosition(
-							states.child("position").child("point").child("x").text().as_double(),
-							states.child("position").child("point").child("y").text().as_double());
-						tempObstacle->setOrientation(states.child("orientation").child("exact").text().as_double());
-						tempObstacle->setVelocity(states.child("velocity").child("exact").text().as_double());
-						tempObstacle->setAcceleration(states.child("acceleration").child("exact").text().as_double());
-						timeStampAvailable = true;
-					} else if (!(strcmp(child.name(), "trajectory"))) {
-						for (pugi::xml_node states = child.first_child(); states; states = states.next_sibling()) {
-							if ((int)states.child("time").child("exact").text().as_double() == timeStamp) {
-								tempObstacle->setPosition(
-									states.child("position").child("point").child("x").text().as_double(),
-									states.child("position").child("point").child("y").text().as_double());
-								tempObstacle->setOrientation(
-									states.child("orientation").child("exact").text().as_double());
-								tempObstacle->setVelocity(states.child("velocity").child("exact").text().as_double());
-								tempObstacle->setAcceleration(
-									states.child("acceleration").child("exact").text().as_double());
-								timeStampAvailable = true;
-								break;
-							}
-						}
-						continue;
-					}
+                    if (!(strcmp(child.name(), "initialState"))) {
+                        pugi::xml_node states = child;
+                        State initialState;
+                        initialState.setTimeStep(0);
+                        initialState.setXPosition(states.child("position").child("point").child("x").text().as_double());
+                        initialState.setYPosition(states.child("position").child("point").child("y").text().as_double());
+                        initialState.setOrientation(states.child("orientation").child("exact").text().as_double());
+                        initialState.setVelocity(states.child("velocity").child("exact").text().as_double());
+                        initialState.setAcceleration(states.child("acceleration").child("exact").text().as_double());
+                        tempObstacle->appendState(initialState);
+                    } else if (!(strcmp(child.name(), "trajectory"))) {
+                        for (pugi::xml_node states = child.first_child(); states; states = states.next_sibling()) {
+                            State st;
+                            st.setTimeStep(states.child("time").child("exact").text().as_int());
+                            st.setXPosition(states.child("position").child("point").child("x").text().as_double());
+                            st.setYPosition(states.child("position").child("point").child("y").text().as_double());
+                            st.setOrientation(states.child("orientation").child("exact").text().as_double());
+                            st.setVelocity(states.child("velocity").child("exact").text().as_double());
+                            st.setAcceleration(states.child("acceleration").child("exact").text().as_double());
+                            tempObstacle->appendState(st);
+                        }
+                    }
 				}
-				if (timeStampAvailable) {
-					// if not true --> shared pointer deletes allocated maemory if out of scope
-					// obst->updateInLane(lanes);
-					obstacleList.emplace_back(tempObstacle);
-				}
+//				if (timeStampAvailable) {
+//					// if not true --> shared pointer deletes allocated maemory if out of scope
+//					// obst->updateInLane(lanes);
+//					obstacleList.emplace_back(tempObstacle);
+//				}
 			}
-			// Todo Add other obstacles than cars
-			else if (!(strcmp(roadElements.first_child().text().as_string(), "static"))) {
-				std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
-				// depending on Obstacle type)
-				tempObstacle = std::make_shared<Obstacle>(true);
-				tempObstacle->setId(roadElements.first_attribute().as_int());
-				for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
-					if (!(strcmp(child.name(), "shape"))) {
-						pugi::xml_node var = child.first_child();
-						// tempObstacle->setOrientation(var.child("orientation").text().as_double());
-						// tempObstacle->setPosition(var.child("center").child("x").text().as_double(),
-						//                         var.child("center").child("y").text().as_double());
-						tempObstacle->getGeoShape().setLength(var.child("length").text().as_double());
-						tempObstacle->getGeoShape().setWidth(var.child("width").text().as_double());
-
-					} else if (!(strcmp(child.name(), "initialState"))) {
-						pugi::xml_node states = child;
-						// tempObstacle->setTimeStamp(timeStamp / 10.0);
-						// tempObstacle->setOffset(0.0);
-						tempObstacle->setPosition(
-							states.child("position").child("point").child("x").text().as_double(),
-							states.child("position").child("point").child("y").text().as_double());
-						tempObstacle->setOrientation(states.child("orientation").child("exact").text().as_double());
-					}
-				}
-				// obst->updateInLane(lanes);
-				obstacleList.emplace_back(tempObstacle);
-			}
+//			// Todo Add other obstacles than cars
+//			else if (!(strcmp(roadElements.first_child().text().as_string(), "static"))) {
+//				std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned
+//				// depending on Obstacle type)
+//				tempObstacle = std::make_shared<Obstacle>(true);
+//				tempObstacle->setId(roadElements.first_attribute().as_int());
+//				for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
+//					if (!(strcmp(child.name(), "shape"))) {
+//						pugi::xml_node var = child.first_child();
+//						// tempObstacle->setOrientation(var.child("orientation").text().as_double());
+//						// tempObstacle->setPosition(var.child("center").child("x").text().as_double(),
+//						//                         var.child("center").child("y").text().as_double());
+//						tempObstacle->getGeoShape().setLength(var.child("length").text().as_double());
+//						tempObstacle->getGeoShape().setWidth(var.child("width").text().as_double());
+//
+//					} else if (!(strcmp(child.name(), "initialState"))) {
+//						pugi::xml_node states = child;
+//						// tempObstacle->setTimeStamp(timeStamp / 10.0);
+//						// tempObstacle->setOffset(0.0);
+//						tempObstacle->setPosition(
+//							states.child("position").child("point").child("x").text().as_double(),
+//							states.child("position").child("point").child("y").text().as_double());
+//						tempObstacle->setOrientation(states.child("orientation").child("exact").text().as_double());
+//					}
+//				}
+//				// obst->updateInLane(lanes);
+//				obstacleList.emplace_back(tempObstacle);
+//			}
 		}
 	}
 
