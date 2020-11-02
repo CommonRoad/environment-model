@@ -23,8 +23,7 @@ namespace XMLReader {
     //                                                             const obstacleParameters *param, const double
     //                                                             &timeStamp);
 
-    std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &xmlFile, double timeStamp,
-                                                              const obstacleParameters *param = nullptr);
+    std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &xmlFile);
 
     // std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &xmlFile, const double &timeStamp);
 

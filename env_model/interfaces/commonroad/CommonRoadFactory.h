@@ -14,7 +14,7 @@ class CommonRoadFactory {
   public:
 	explicit CommonRoadFactory(std::unique_ptr<pugi::xml_document> xmlDocument) { doc = std::move(xmlDocument); }
 
-	virtual vector<std::shared_ptr<Obstacle>> createObstacles(double timeStamp, const obstacleParameters *param) = 0;
+	virtual vector<std::shared_ptr<Obstacle>> createObstacles() = 0;
 
 	virtual vector<std::shared_ptr<Lanelet>> createLanelets() = 0;
 

@@ -1,8 +1,7 @@
 #include "CommonRoadFactory2020a.h"
 #include <cstdlib>
 
-std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles(double timeStamp,
-                                                                               const obstacleParameters *param) {
+std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles() {
 	std::vector<std::shared_ptr<Obstacle>> obstacleList{};
 
 	pugi::xml_node commonRoad = doc->child("commonRoad");

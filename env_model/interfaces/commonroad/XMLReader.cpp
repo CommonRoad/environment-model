@@ -26,10 +26,9 @@ std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xm
         throw std::runtime_error("This CommonRoad version is not supported.");
 };
 
-std::vector<std::shared_ptr<Obstacle>> XMLReader::createObstacleFromXML(const std::string &xmlFile, double timeStamp,
-                                                                        const obstacleParameters *param) {
+std::vector<std::shared_ptr<Obstacle>> XMLReader::createObstacleFromXML(const std::string &xmlFile) {
     const auto factory = createCommonRoadFactory(xmlFile);
-    return factory->createObstacles(timeStamp, param);
+    return factory->createObstacles();
 }
 
 std::vector<std::shared_ptr<Lanelet>> XMLReader::createLaneletFromXML(const std::string &xmlFile) {

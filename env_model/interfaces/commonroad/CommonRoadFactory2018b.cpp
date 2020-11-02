@@ -1,8 +1,7 @@
 #include "CommonRoadFactory2018b.h"
 //#include "../world/Obstacle/vehicle.h"
 
-std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles(double timeStamp,
-                                                                               const obstacleParameters *param) {
+std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles() {
 
 	std::vector<std::shared_ptr<Obstacle>> obstacleList{};
 
@@ -59,6 +58,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles(d
                         }
                     }
 				}
+                obstacleList.emplace_back(tempObstacle);
 //				if (timeStampAvailable) {
 //					// if not true --> shared pointer deletes allocated maemory if out of scope
 //					// obst->updateInLane(lanes);

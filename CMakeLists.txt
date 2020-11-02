@@ -18,6 +18,8 @@ file(GLOB_RECURSE env_files
         "env_model/interfaces/commonroad/*.cpp"
         "env_model/auxiliaryDefs/*.h"
         "env_model/auxiliaryDefs/*.cpp"
+        "env_model/interfaces/standalone/command_line_input.cpp"
+        "env_model/interfaces/standalone/command_line_input.h"
         )
 
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)

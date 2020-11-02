@@ -6,7 +6,7 @@
 #include "../geometry/rectangle.h"
 #include "../geometry/shape.h"
 #include "../road_network/lanelet/lanelet.h"
-#include <variant>
+//#include <variant>
 #include <map>
 
 enum ObstacleType{car, truck, pedestrian, bus};
@@ -69,16 +69,18 @@ class Obstacle {
 
   private:
     size_t id{}; // unique id
-    State currentState;
     bool isStatic{false}; // true if Obstacle is static
+    State currentState;
+    std::map<int, State> trajectoryPrediction{};
+    std::map<int, State> history{};
+    ObstacleType type;
     rectangle geoShape;
     double v_max{};      // maximum velocity of the Obstacle in m/s
     double a_max{};      // maximum absolute acceleration of the Obstacle in m/s^2
     double a_max_long{}; // maximal longitudinal acceleration
     double a_min_long{}; // minimal longitudinal acceleration
-    ObstacleType type;
-    std::map<int, State> trajectoryPrediction{};
-    std::map<int, State> history{};
+
+
 
 //    virtual void updateInLanelets();
 
