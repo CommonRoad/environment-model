@@ -10,16 +10,14 @@ namespace po = boost::program_options;
 namespace fs = boost::filesystem;
 
 
-int read_command_line_values(int argc, char *const *argv, float &timeStep, int &num_threads, std::string &xmlFilePath) {
+int CommandLine::readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath) {
     try{
         std::string xmlFileName;
         po::options_description desc;
         po::variables_map vm;
-        desc.add_options()("help", "produce help message")(
-                "timestep,s", po::value<float>(&timeStep)->default_value(0.1), "set time step for prediction")(
-                "input-file",
+        desc.add_options()("help", "produce help message")("input-file",
                 boost::program_options::value<std::string>(&xmlFilePath)->default_value("../test_scenarios/USA_Lanker-1_1_T-1.xml")->required(),
-                "Input file")("threads,t", po::value<int>(&num_threads)->default_value(4),
+                "Input file")("threads,t", po::value<int>(&num_threads)->default_value(1),
                               "set number of threads to run with");
         po::positional_options_description p;
         p.add("input-file", -1);
@@ -34,7 +32,6 @@ int read_command_line_values(int argc, char *const *argv, float &timeStep, int &
         xmlFileName = fs::path(xmlFilePath).stem().string();
 
         std::cout << "[*] Using file " << xmlFilePath << std::endl;
-        std::cout << "[*] Using timestep: " << timeStep << std::endl;
         std::cout << "[*] Using that many threads: " << num_threads << std::endl;
         return 0;
     } catch (std::exception &e) {

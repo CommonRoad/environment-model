@@ -7,6 +7,9 @@
 
 #include <iostream>
 
-int read_command_line_values(int argc, char *const *argv, float &timeStep, int &num_threads, std::string &xmlFilePath);
+namespace CommandLine{
+    int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath);
+}
+
 
 #endif //ENV_MODEL_COMMAND_LINE_INPUT_H

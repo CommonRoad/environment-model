@@ -34,6 +34,8 @@ class Lanelet {
         void setCenterVertices(const std::vector<vertice> &center);
         void setTrafficLight(TrafficLight *light);
         void addTrafficSign(TrafficSign *sign);
+        void setOuterPolygon(const polygon_type &outerPolygon);
+        void setBoundingBox(const box &boundingBox);
 
         // Takes rvalue and moves the data
         void moveLeftBorder(std::vector<vertice> &&leftBorderVertices);
@@ -55,6 +57,9 @@ class Lanelet {
         [[nodiscard]] const std::vector<vertice> &getRightBorderVertices() const;
         [[nodiscard]] TrafficLight *getTrafficLight() const;
         [[nodiscard]] std::vector<TrafficSign *> getTrafficSigns() const;
+        [[nodiscard]] const polygon_type &getOuterPolygon() const;
+        [[nodiscard]] const box &getBoundingBox() const;
+
 
         struct adjacent {
             std::vector<Lanelet *> adj;
@@ -62,6 +67,8 @@ class Lanelet {
         };
 
         void constructOuterPolygon(); // construct outer shape from borders
+        [[nodiscard]] bool applyIntersectionTesting(const polygon_type &intersection) const;
+        [[nodiscard]] bool checkIntersection(const polygon_type &intersecting, size_t intersection_flag) const;
 
     private:
         size_t id;                                          // unique ID of lanelet
@@ -74,12 +81,11 @@ class Lanelet {
         std::vector<Lanelet *> successorLanelets;           // longitudinally adjacent lanelets
         adjacent adjacentLeft;                              // left adjacent lanelet with driving tag
         adjacent adjacentRight;                             // right adjacent lanelet with driving tag
-
-        polygon_type outerPolygon;                          // outer shape of the lanelet as Boost polygon
-        box boundingBox;                                    // Boost bounding box of the lanelet
-
-        TrafficLight *trafficLightPtr;                      // traffic light assigned to lanelet
+        polygon_type outerPolygon;
+        box boundingBox{};                                  // Boost bounding box of the lanelet
+        TrafficLight *trafficLightPtr{};                      // traffic light assigned to lanelet
         std::vector<TrafficSign *> trafficSigns;            // traffic signs assigned to lanelet
+        TrafficLight * trafficLight{};            // traffic signs assigned to lanelet
 };
 
 #endif //ENVIRONMENT_MODEL_LANELET_H

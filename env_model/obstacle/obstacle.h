@@ -9,7 +9,7 @@
 //#include <variant>
 #include <map>
 
-enum ObstacleType{car, truck, pedestrian, bus};
+enum class ObstacleType{car, truck, pedestrian, bus, unknown};
 
 class Obstacle {
   public:
@@ -35,6 +35,8 @@ class Obstacle {
     void setAminLong(double amin_long);
     void setIsStatic(bool isStatic);
     void appendState(State state);
+    void setCurrentState(const State &currentState);
+    void setType(ObstacleType type);
 
     /*
      * getter functions
@@ -44,8 +46,10 @@ class Obstacle {
     [[nodiscard]] double getAmaxLong() const;
     [[nodiscard]] double getAminLong() const;
     [[nodiscard]] size_t getId() const;
+    [[nodiscard]] ObstacleType getType() const;
+    [[nodiscard]] const State &getCurrentState() const;
 //    const std::vector<lane *> &getInLane() const;
-//    const std::vector<vehicularLanelet *> &getInLanelets() const;
+    [[nodiscard]] std::vector<Lanelet *> getInLanelets(const std::vector<Lanelet> &lanelets, int timeStep);
 //    [[nodiscard]] bool getUseShape() const;
     polygon_type getOccupancyPolygonShape(int timeStamp);
     [[nodiscard]] bool getIsStatic() const;
@@ -87,5 +91,7 @@ class Obstacle {
 };
 
 //#include "Obstacle.ipp"
+
+ObstacleType matchObstacleTypeToString(const char *type);
 
 #endif

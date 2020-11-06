@@ -4,7 +4,15 @@
 
 #include "lanelet.h"
 
+#include <utility>
+#include "../../auxiliaryDefs/structs.h"
+#include "boost/geometry.hpp"
+
 namespace bg = boost::geometry;
+
+const size_t PARTIALLY_CONTAINED = 1;
+const size_t COMPLETELY_CONTAINED = 2;
+
 
 void Lanelet::setId(const size_t num) { id = num; }
 
@@ -44,7 +52,7 @@ void Lanelet::createCenterVertices() {
          * vertex on the left and right border
          * (calculate x and y values seperately in order to minimize error)
          */
-        vertice newVertice;
+        vertice newVertice{};
         newVertice.x = 0.5 * (leftBorder[i].x + rightBorder[i].x);
         newVertice.y = 0.5 * (leftBorder[i].y + rightBorder[i].y);
         addCenterVertice(newVertice);
@@ -70,12 +78,12 @@ void Lanelet::addSuccessor(Lanelet *suc) { successorLanelets.push_back(suc); }
 
 void Lanelet::setLeftAdjacent(Lanelet *left, std::string dir) {
     adjacentLeft.adj.push_back(left);
-    adjacentLeft.dir = dir;
+    adjacentLeft.dir = std::move(dir);
 }
 
 void Lanelet::setRightAdjacent(Lanelet *right, std::string dir) {
     adjacentRight.adj.push_back(right);
-    adjacentRight.dir = dir;
+    adjacentRight.dir = std::move(dir);
 }
 
 TrafficLight *Lanelet::getTrafficLight() const { return trafficLightPtr; }
@@ -110,3 +118,67 @@ void Lanelet::constructOuterPolygon() {
 }
 
 Lanelet::Lanelet() { id = 0; }
+
+bool Lanelet::applyIntersectionTesting(const polygon_type &intersecting) const {
+    return bg::intersects(intersecting, this->getBoundingBox()) &&
+           bg::intersects(intersecting, this->getOuterPolygon());
+}
+
+const polygon_type &Lanelet::getOuterPolygon() const {return outerPolygon;}
+
+void Lanelet::setOuterPolygon(const polygon_type &poly) {outerPolygon = poly;}
+
+const box &Lanelet::getBoundingBox() const {return boundingBox;}
+
+void Lanelet::setBoundingBox(const box &box) {
+    boundingBox = box;
+}
+
+bool Lanelet::checkIntersection(const polygon_type &intersecting, size_t intersection_flag) const {
+    switch (intersection_flag) {
+        case PARTIALLY_CONTAINED: {
+            return this->applyIntersectionTesting(intersecting);
+        }
+        case COMPLETELY_CONTAINED: {
+            return bg::within(intersecting, this->getOuterPolygon());
+        }
+        default:
+            return false;
+    }
+}
+
+
+
+
+
+std::vector<Lanelet> findLaneletsByShape(const std::vector<Lanelet> &lanelets, const polygon_type &polygonShape) {
+
+    std::vector<Lanelet> inLanelets;
+
+#pragma omp parallel for schedule(guided)
+    for (const auto & la : lanelets) {
+        if (la.checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
+#pragma omp critical
+            inLanelets.push_back(la);
+        }
+    }
+
+    return inLanelets;
+}
+
+std::vector<Lanelet> findLaneletsByPosition(const std::vector<Lanelet> &lanelets, double xPos, double yPos) {
+
+    std::vector<Lanelet> lanelet;
+    polygon_type polygonPos;
+    bg::append(polygonPos, point_type{xPos, yPos});
+
+    return findLaneletsByShape(lanelets, polygonPos);
+}
+
+Lanelet findLaneletsById(std::vector<Lanelet> lanelets, size_t id) {
+    auto it = std::find_if(std::begin(lanelets), std::end(lanelets), [id](auto val) { return val->getId() == id; });
+    if (it == std::end(lanelets)) {
+        throw std::domain_error(std::to_string(id));
+    }
+    return *it;
+}

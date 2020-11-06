@@ -8,14 +8,14 @@
 
 
 int main(int argc, char **argv) {
-    float timeStep;
+    //Read command line parameters; if none are provided, use default values (specified in read_command_line_values)
     int num_threads;
     std::string xmlFilePath;
-
-    int error_code = read_command_line_values(argc, argv, timeStep, num_threads, xmlFilePath);
+    int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     if (error_code != 0)
         return error_code;
 
+    //Read and parse CommonRoad scenario file
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
     std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
     std::vector<std::shared_ptr<Lanelet>> lanelets = XMLReader::createLaneletFromXML(xmlFilePath);
@@ -23,4 +23,3 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-

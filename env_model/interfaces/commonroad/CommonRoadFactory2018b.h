@@ -1,4 +1,4 @@
-#include "CommonRoadFactory.h"
+#include "commonroad_factory.h"
 
 class CommonRoadFactory2018b : public CommonRoadFactory {
 
