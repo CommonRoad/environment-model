@@ -195,6 +195,8 @@ ObstacleType matchObstacleTypeToString(const char *type){
         return ObstacleType::pedestrian;
     else if (!(strcmp(type, "bus")))
         return ObstacleType::bus;
+    else if (!(strcmp(type, "vehicle")))
+        return ObstacleType::vehicle;
     else
         return ObstacleType::unknown;
 }

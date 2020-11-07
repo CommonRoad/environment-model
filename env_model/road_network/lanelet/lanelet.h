@@ -5,9 +5,12 @@
 #ifndef ENVIRONMENT_MODEL_LANELET_H
 #define ENVIRONMENT_MODEL_LANELET_H
 
+
 #include "../../auxiliaryDefs/structs.h"
 #include "../regulatory_elements/traffic_light.h"
 #include "../regulatory_elements/traffic_sign.h"
+#include "../../auxiliaryDefs/types.h"
+
 
 class Lanelet {
     public:
@@ -32,10 +35,13 @@ class Lanelet {
         void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices);
         void setRightBorderVertices(const std::vector<vertice> &rightBorderVertices);
         void setCenterVertices(const std::vector<vertice> &center);
-        void setTrafficLight(TrafficLight *light);
-        void addTrafficSign(TrafficSign *sign);
+        void addTrafficLight(const std::shared_ptr<TrafficLight>& light);
+        void addTrafficSign(const std::shared_ptr<TrafficSign>& sign);
         void setOuterPolygon(const polygon_type &outerPolygon);
         void setBoundingBox(const box &boundingBox);
+        void setLaneletType(const std::vector<LaneletType>& laneletType);
+        void setUserOneWay(const std::vector<ObstacleType> &userOneWay);
+        void setUserBidirectional(const std::vector<ObstacleType> &userBidirectional);
 
         // Takes rvalue and moves the data
         void moveLeftBorder(std::vector<vertice> &&leftBorderVertices);
@@ -55,10 +61,15 @@ class Lanelet {
         [[nodiscard]] const std::vector<vertice> &getCenterVertices() const;
         [[nodiscard]] const std::vector<vertice> &getLeftBorderVertices() const;
         [[nodiscard]] const std::vector<vertice> &getRightBorderVertices() const;
-        [[nodiscard]] TrafficLight *getTrafficLight() const;
-        [[nodiscard]] std::vector<TrafficSign *> getTrafficSigns() const;
+        [[nodiscard]] std::vector<std::shared_ptr<TrafficLight>> getTrafficLight() const;
+        [[nodiscard]] std::vector<std::shared_ptr<TrafficSign>> getTrafficSigns() const;
         [[nodiscard]] const polygon_type &getOuterPolygon() const;
         [[nodiscard]] const box &getBoundingBox() const;
+        [[nodiscard]] const std::vector<LaneletType> &getLaneletType() const;
+        [[nodiscard]] const std::vector<ObstacleType> &getUserOneWay() const;
+        [[nodiscard]] const std::vector<ObstacleType> &getUserBidirectional() const;
+
+
 
 
         struct adjacent {
@@ -83,9 +94,16 @@ class Lanelet {
         adjacent adjacentRight;                             // right adjacent lanelet with driving tag
         polygon_type outerPolygon;
         box boundingBox{};                                  // Boost bounding box of the lanelet
-        TrafficLight *trafficLightPtr{};                      // traffic light assigned to lanelet
-        std::vector<TrafficSign *> trafficSigns;            // traffic signs assigned to lanelet
-        TrafficLight * trafficLight{};            // traffic signs assigned to lanelet
+        std::vector<std::shared_ptr<TrafficLight>> trafficLights;                  // traffic light assigned to lanelet
+        std::vector<std::shared_ptr<TrafficSign>> trafficSigns;            // traffic signs assigned to lanelet
+        TrafficLight * trafficLight{};                      // traffic signs assigned to lanelet
+        std::vector<LaneletType> laneletType;
+        std::vector<ObstacleType> userOneWay;
+        std::vector<ObstacleType> userBidirectional;
+
 };
+
+LaneletType matchLaneletTypeToString(const char *type);
+LineMarking matchLineMarkingToString(const char *type);
 
 #endif //ENVIRONMENT_MODEL_LANELET_H

@@ -3,6 +3,8 @@
 //
 
 #include "XMLReader.h"
+
+#include <utility>
 #include "pugi_xml/pugixml.hpp"
 #include "CommonRoadFactory2018b.h"
 #include "commonroad_factory_2020a.h"
@@ -27,9 +29,9 @@ std::vector<std::shared_ptr<Obstacle>> XMLReader::createObstacleFromXML(const st
     return factory->createObstacles();
 }
 
-std::vector<std::shared_ptr<Lanelet>> XMLReader::createLaneletFromXML(const std::string &xmlFile, std::vector<std::shared_ptr<TrafficSign>> sign, std::vector<std::shared_ptr<TrafficLight>> light) {
+std::vector<std::shared_ptr<Lanelet>> XMLReader::createLaneletFromXML(const std::string &xmlFile, std::vector<std::shared_ptr<TrafficSign>> trafficSigns, std::vector<std::shared_ptr<TrafficLight>> trafficLights) {
     const auto factory = createCommonRoadFactory(xmlFile);
-    return factory->createLanelets(sign, light);
+    return factory->createLanelets(std::move(trafficSigns), std::move(trafficLights));
 }
 
 std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(const std::string &xmlFile) {
@@ -40,4 +42,9 @@ std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(co
 std::vector<std::shared_ptr<TrafficLight>> XMLReader::createTrafficLightFromXML(const std::string &xmlFile) {
     const auto factory = createCommonRoadFactory(xmlFile);
     return factory->createTrafficLights();
+}
+
+std::vector<std::shared_ptr<Intersection>> XMLReader::createIntersectionFromXML(const std::string &xmlFile, std::vector<std::shared_ptr<Lanelet>> lanelets) {
+    const auto factory = createCommonRoadFactory(xmlFile);
+    return factory->createIntersections(lanelets);
 }

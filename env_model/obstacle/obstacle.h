@@ -3,13 +3,10 @@
 
 #include "state.h"
 #include "../auxiliaryDefs/structs.h"
+#include "../auxiliaryDefs/types.h"
 #include "../geometry/rectangle.h"
 #include "../geometry/shape.h"
-#include "../road_network/lanelet/lanelet.h"
-//#include <variant>
 #include <map>
-
-enum class ObstacleType{car, truck, pedestrian, bus, unknown};
 
 class Obstacle {
   public:
@@ -49,7 +46,7 @@ class Obstacle {
     [[nodiscard]] ObstacleType getType() const;
     [[nodiscard]] const State &getCurrentState() const;
 //    const std::vector<lane *> &getInLane() const;
-    [[nodiscard]] std::vector<Lanelet *> getInLanelets(const std::vector<Lanelet> &lanelets, int timeStep);
+//    [[nodiscard]] std::vector<Lanelet *> getInLanelets(const std::vector<Lanelet> &lanelets, int timeStep);
 //    [[nodiscard]] bool getUseShape() const;
     polygon_type getOccupancyPolygonShape(int timeStamp);
     [[nodiscard]] bool getIsStatic() const;

@@ -3,7 +3,6 @@
 //
 
 #include "lanelet.h"
-
 #include <utility>
 #include "../../auxiliaryDefs/structs.h"
 #include "boost/geometry.hpp"
@@ -59,8 +58,8 @@ void Lanelet::createCenterVertices() {
     }
 }
 
-void Lanelet::setTrafficLight(TrafficLight *light) { trafficLightPtr = light; }
-void Lanelet::addTrafficSign(TrafficSign *sign) { trafficSigns.push_back(sign); }
+void Lanelet::addTrafficLight(const std::shared_ptr<TrafficLight>& light) { trafficLights.push_back(light); }
+void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign>& sign) { trafficSigns.push_back(sign); }
 
 std::vector<vertice> Lanelet::getLeftBorderVerticesDirect() const { return leftBorder; }
 std::vector<vertice> Lanelet::getRightBorderVerticesDirect() const { return rightBorder; }
@@ -86,8 +85,8 @@ void Lanelet::setRightAdjacent(Lanelet *right, std::string dir) {
     adjacentRight.dir = std::move(dir);
 }
 
-TrafficLight *Lanelet::getTrafficLight() const { return trafficLightPtr; }
-std::vector<TrafficSign *> Lanelet::getTrafficSigns() const { return trafficSigns; }
+std::vector<std::shared_ptr<TrafficLight>> Lanelet::getTrafficLight() const { return trafficLights; }
+std::vector<std::shared_ptr<TrafficSign>> Lanelet::getTrafficSigns() const { return trafficSigns; }
 
 void Lanelet::constructOuterPolygon() {
     const std::vector<vertice> &leftBorderTemp = this->getLeftBorderVertices();
@@ -147,8 +146,29 @@ bool Lanelet::checkIntersection(const polygon_type &intersecting, size_t interse
     }
 }
 
+const std::vector<LaneletType> &Lanelet::getLaneletType() const {
+    return laneletType;
+}
 
+void Lanelet::setLaneletType(const std::vector<LaneletType>& laType) {
+    Lanelet::laneletType = laType;
+}
 
+const std::vector<ObstacleType> &Lanelet::getUserOneWay() const {
+    return userOneWay;
+}
+
+void Lanelet::setUserOneWay(const std::vector<ObstacleType> &user) {
+    Lanelet::userOneWay = user;
+}
+
+const std::vector<ObstacleType> &Lanelet::getUserBidirectional() const {
+    return userBidirectional;
+}
+
+void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) {
+    Lanelet::userBidirectional = user;
+}
 
 
 std::vector<Lanelet> findLaneletsByShape(const std::vector<Lanelet> &lanelets, const polygon_type &polygonShape) {
@@ -181,4 +201,52 @@ Lanelet findLaneletsById(std::vector<Lanelet> lanelets, size_t id) {
         throw std::domain_error(std::to_string(id));
     }
     return *it;
+}
+
+LaneletType matchLaneletTypeToString(const char *type){
+    if (!(strcmp(type, "interstate")))
+        return LaneletType::interstate;
+    else if (!(strcmp(type, "urban")))
+        return LaneletType::urban;
+    else if (!(strcmp(type, "crosswalk")))
+        return LaneletType::crosswalk;
+    else if (!(strcmp(type, "busStop")))
+        return LaneletType::busStop;
+    else if (!(strcmp(type, "country")))
+        return LaneletType::country;
+    else if (!(strcmp(type, "highway")))
+        return LaneletType::highway;
+    else if (!(strcmp(type, "driveWay")))
+        return LaneletType::driveWay;
+    else if (!(strcmp(type, "mainCarriageWay")))
+        return LaneletType::mainCarriageWay;
+    else if (!(strcmp(type, "accessRamp")))
+        return LaneletType::accessRamp;
+    else if (!(strcmp(type, "exitRamp")))
+        return LaneletType::exitRamp;
+    else if (!(strcmp(type, "shoulder")))
+        return LaneletType::shoulder;
+    else if (!(strcmp(type, "bikeLane")))
+        return LaneletType::bikeLane;
+    else if (!(strcmp(type, "sidewalk")))
+        return LaneletType::sidewalk;
+    else if (!(strcmp(type, "busLane")))
+        return LaneletType::busLane;
+    else
+        return LaneletType::unknown;
+}
+
+LineMarking matchLineMarkingToString(const char *type){
+    if (!(strcmp(type, "solid")))
+        return LineMarking::solid;
+    else if (!(strcmp(type, "dashed")))
+        return LineMarking::dashed;
+    else if (!(strcmp(type, "broad_solid")))
+        return LineMarking::broad_solid;
+    else if (!(strcmp(type, "broad_dashed")))
+        return LineMarking::broad_dashed;
+    else if (!(strcmp(type, "no_marking")))
+        return LineMarking::no_marking;
+    else
+        return LineMarking::unknown;
 }

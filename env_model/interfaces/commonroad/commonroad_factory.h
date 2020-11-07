@@ -9,8 +9,9 @@
 
 
 #include "pugi_xml/pugixml.hpp"
-#include "../../obstacle/obstacle.h"
 #include "../../road_network/lanelet/lanelet.h"
+#include "../../obstacle/obstacle.h"
+#include "../../road_network/intersection/intersection.h"
 #include <stdexcept>
 #include <vector>
 
@@ -26,6 +27,8 @@ public:
     virtual std::vector<std::shared_ptr<TrafficSign>> createTrafficSigns() = 0;
 
     virtual std::vector<std::shared_ptr<TrafficLight>> createTrafficLights() = 0;
+
+    virtual std::vector<std::shared_ptr<Intersection>> createIntersections(const std::vector<std::shared_ptr<Lanelet>>& lanelets) = 0;
 
 protected:
     std::unique_ptr<pugi::xml_document> doc;
