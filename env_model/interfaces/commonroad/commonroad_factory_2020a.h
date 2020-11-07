@@ -14,10 +14,9 @@ public:
             : CommonRoadFactory(std::move(xmlDocument)) {}
 
     std::vector<std::shared_ptr<Obstacle>> createObstacles() override;
-    std::vector<std::shared_ptr<Lanelet>> createLanelets() override;
+    std::vector<std::shared_ptr<Lanelet>> createLanelets(std::vector<std::shared_ptr<TrafficSign>> sign, std::vector<std::shared_ptr<TrafficLight>> light) override;
     std::vector<std::shared_ptr<TrafficSign>> createTrafficSigns() override;
     std::vector<std::shared_ptr<TrafficLight>> createTrafficLights() override;
 };
-
 
 #endif //ENV_MODEL_COMMONROAD_FACTORY_2020A_H

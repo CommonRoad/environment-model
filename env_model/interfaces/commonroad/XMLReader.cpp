@@ -27,9 +27,9 @@ std::vector<std::shared_ptr<Obstacle>> XMLReader::createObstacleFromXML(const st
     return factory->createObstacles();
 }
 
-std::vector<std::shared_ptr<Lanelet>> XMLReader::createLaneletFromXML(const std::string &xmlFile) {
+std::vector<std::shared_ptr<Lanelet>> XMLReader::createLaneletFromXML(const std::string &xmlFile, std::vector<std::shared_ptr<TrafficSign>> sign, std::vector<std::shared_ptr<TrafficLight>> light) {
     const auto factory = createCommonRoadFactory(xmlFile);
-    return factory->createLanelets();
+    return factory->createLanelets(sign, light);
 }
 
 std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(const std::string &xmlFile) {

@@ -98,7 +98,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles()
 
 	return obstacleList;
 }
-std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets() {
+std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(std::vector<std::shared_ptr<TrafficSign>> sign, std::vector<std::shared_ptr<TrafficLight>> light) {
 	std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer{};
 
 	pugi::xml_node commonRoad = doc->child("commonRoad");

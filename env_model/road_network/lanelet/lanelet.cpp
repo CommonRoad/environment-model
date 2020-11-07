@@ -176,7 +176,7 @@ std::vector<Lanelet> findLaneletsByPosition(const std::vector<Lanelet> &lanelets
 }
 
 Lanelet findLaneletsById(std::vector<Lanelet> lanelets, size_t id) {
-    auto it = std::find_if(std::begin(lanelets), std::end(lanelets), [id](auto val) { return val->getId() == id; });
+    auto it = std::find_if(std::begin(lanelets), std::end(lanelets), [id](auto val) { return val.getId() == id; });
     if (it == std::end(lanelets)) {
         throw std::domain_error(std::to_string(id));
     }

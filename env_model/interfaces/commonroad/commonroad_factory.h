@@ -21,7 +21,7 @@ public:
 
     virtual std::vector<std::shared_ptr<Obstacle>> createObstacles() = 0;
 
-    virtual std::vector<std::shared_ptr<Lanelet>> createLanelets() = 0;
+    virtual std::vector<std::shared_ptr<Lanelet>> createLanelets(std::vector<std::shared_ptr<TrafficSign>> sign, std::vector<std::shared_ptr<TrafficLight>> light) = 0;
 
     virtual std::vector<std::shared_ptr<TrafficSign>> createTrafficSigns() = 0;
 

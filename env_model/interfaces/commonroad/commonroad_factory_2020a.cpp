@@ -8,14 +8,16 @@
 
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles() {
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
-
     pugi::xml_node commonRoad = doc->child("commonRoad");
+
+    // iterate over all nodes and continue working with dynamic and static obstacles
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
          roadElements = roadElements.next_sibling()) {
         if (!(strcmp(roadElements.name(), "dynamicObstacle"))) {
-            std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer specific object gets assigned
+            std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned in the following)
             tempObstacle = std::make_shared<Obstacle>();
 
+            // extract ID, type, shape, initial state, and trajectory
             tempObstacle->setId(roadElements.first_attribute().as_int());
             tempObstacle->setType(matchObstacleTypeToString(roadElements.first_child().text().as_string()));
             for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
@@ -57,9 +59,10 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles()
             obstacleList.emplace_back(tempObstacle);
         }
 		if (!(strcmp(roadElements.name(), "staticObstacle"))) {
-			std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned)
+			std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned in the following)
 			tempObstacle = std::make_shared<Obstacle>(true);
 
+            // extract ID, type, shape, and initial state
 			tempObstacle->setId(roadElements.first_attribute().as_int());
             tempObstacle->setIsStatic(true);
             tempObstacle->setType(matchObstacleTypeToString(roadElements.first_child().text().as_string()));
@@ -92,47 +95,31 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles()
     return obstacleList;
 }
 
-std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets() {
-
+std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>> sign, std::vector<std::shared_ptr<TrafficLight>> light) {
     std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer{};
-
     pugi::xml_node commonRoad = doc->child("commonRoad");
+
     // get the number of lanelets
     size_t n = std::distance(commonRoad.children("lanelet").begin(), commonRoad.children("lanelet").end());
     tempLaneletContainer.clear();
     tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
 
-    /*
-     * all lanelets must be initialized first because they are referencing
-     * each other
-     */
-
+    // all lanelets must be initialized first because they are referencing each other
     for (size_t i = 0; i < n; i++) {
         Lanelet newLanelet;
-
-        // make_shared is faster than (new vehicularLanelet());
-        std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>();
+        std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>(); // make_shared is faster than (new vehicularLanelet());
         tempLaneletContainer.emplace_back(tempLanelet);
     }
 
     size_t arrayIndex = 0;
-
     std::map<unsigned long long, double> speedLimits;
-    // set id of the lanelets
+
+    // set id of lanelets
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
          roadElements = roadElements.next_sibling()) {
         if (!(strcmp(roadElements.name(), "lanelet"))) {
             tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
             arrayIndex++;
-        }
-        if (!(strcmp(roadElements.name(), "trafficSign"))) {
-            for (pugi::xml_node trafficSignElement = roadElements.first_child(); trafficSignElement;
-                 trafficSignElement = trafficSignElement.next_sibling()) {
-                const auto trafficSignID = trafficSignElement.first_child();
-                if (!strcmp(trafficSignID.child_value(), "274") || !strcmp(trafficSignID.child_value(), "R2-1"))
-                    speedLimits.insert(
-                            {roadElements.attribute("id").as_ullong(), trafficSignID.next_sibling().text().as_double()});
-            }
         }
     }
 
@@ -213,15 +200,60 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets() {
                     }
                     continue;
                 }
-                // set speed limit
-//				if (!(strcmp(child.name(), "trafficSignRef"))) {
-//					const auto trafficSignRef = child.attribute("ref").as_ullong();
-//
-//					const auto trafficSign = speedLimits.find(trafficSignRef);
-//					if (trafficSign != speedLimits.end())
-//						tempLaneletContainer[arrayIndex]->setSpeedLimit(trafficSign->second);
-//					continue;
-//				}
+                // set lanelet type
+                if (!(strcmp(roadElements.name(), "laneletType"))) {
+                    std::string laneletType = child.attribute("drivingDir").as_string();
+                }
+                // set user one way
+//                if (!(strcmp(roadElements.name(), "trafficSign"))) {
+//                    for (pugi::xml_node trafficSignElement = roadElements.first_child(); trafficSignElement;
+//                         trafficSignElement = trafficSignElement.next_sibling()) {
+//                        const auto trafficSignID = trafficSignElement.first_child();
+//                        if (!strcmp(trafficSignID.child_value(), "274") || !strcmp(trafficSignID.child_value(), "R2-1"))
+//                            speedLimits.insert(
+//                                    {roadElements.attribute("id").as_ullong(), trafficSignID.next_sibling().text().as_double()});
+//                    }
+//                }
+//                // set user bidirectional
+//                if (!(strcmp(roadElements.name(), "trafficSign"))) {
+//                    for (pugi::xml_node trafficSignElement = roadElements.first_child(); trafficSignElement;
+//                         trafficSignElement = trafficSignElement.next_sibling()) {
+//                        const auto trafficSignID = trafficSignElement.first_child();
+//                        if (!strcmp(trafficSignID.child_value(), "274") || !strcmp(trafficSignID.child_value(), "R2-1"))
+//                            speedLimits.insert(
+//                                    {roadElements.attribute("id").as_ullong(), trafficSignID.next_sibling().text().as_double()});
+//                    }
+//                }
+//                // set traffic signs
+//                if (!(strcmp(roadElements.name(), "trafficSign"))) {
+//                    for (pugi::xml_node trafficSignElement = roadElements.first_child(); trafficSignElement;
+//                         trafficSignElement = trafficSignElement.next_sibling()) {
+//                        const auto trafficSignID = trafficSignElement.first_child();
+//                        if (!strcmp(trafficSignID.child_value(), "274") || !strcmp(trafficSignID.child_value(), "R2-1"))
+//                            speedLimits.insert(
+//                                    {roadElements.attribute("id").as_ullong(), trafficSignID.next_sibling().text().as_double()});
+//                    }
+//                }
+//                // set traffic lights
+//                if (!(strcmp(roadElements.name(), "trafficSign"))) {
+//                    for (pugi::xml_node trafficSignElement = roadElements.first_child(); trafficSignElement;
+//                         trafficSignElement = trafficSignElement.next_sibling()) {
+//                        const auto trafficSignID = trafficSignElement.first_child();
+//                        if (!strcmp(trafficSignID.child_value(), "274") || !strcmp(trafficSignID.child_value(), "R2-1"))
+//                            speedLimits.insert(
+//                                    {roadElements.attribute("id").as_ullong(), trafficSignID.next_sibling().text().as_double()});
+//                    }
+//                }
+//                // set stop lines
+//                if (!(strcmp(roadElements.name(), "trafficSign"))) {
+//                    for (pugi::xml_node trafficSignElement = roadElements.first_child(); trafficSignElement;
+//                         trafficSignElement = trafficSignElement.next_sibling()) {
+//                        const auto trafficSignID = trafficSignElement.first_child();
+//                        if (!strcmp(trafficSignID.child_value(), "274") || !strcmp(trafficSignID.child_value(), "R2-1"))
+//                            speedLimits.insert(
+//                                    {roadElements.attribute("id").as_ullong(), trafficSignID.next_sibling().text().as_double()});
+//                    }
+//                }
             }
             tempLaneletContainer[arrayIndex]->createCenterVertices();
             tempLaneletContainer[arrayIndex]->constructOuterPolygon();

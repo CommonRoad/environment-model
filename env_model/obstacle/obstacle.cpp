@@ -19,16 +19,16 @@ void Obstacle::setId(const size_t num) { id = num; }
 //    this->updateInLanelets();
 //}
 
-void Obstacle::updateInLanelets() {
-
-    std::vector<Lanelet *> laneletsOfOneLane;
-
-    for (const auto &it : inLanes) {
-        laneletsOfOneLane.clear();
-        laneletsOfOneLane = this->getInTracks(it->getAssLanelets());
-        inLanelets.insert(std::end(inLanelets), std::begin(laneletsOfOneLane), std::end(laneletsOfOneLane));
-    }
-}
+//void Obstacle::updateInLanelets() {
+//
+//    std::vector<Lanelet *> laneletsOfOneLane;
+//
+//    for (const auto &it : inLanes) {
+//        laneletsOfOneLane.clear();
+//        laneletsOfOneLane = this->getInTracks(it->getAssLanelets());
+//        inLanelets.insert(std::end(inLanelets), std::begin(laneletsOfOneLane), std::end(laneletsOfOneLane));
+//    }
+//}
 
 
 //void Obstacle::useShapeAsRef(const bool val) { useShape = val; }
@@ -37,8 +37,6 @@ size_t Obstacle::getId() const { return id; }
 
 
 //const std::vector<lane *> &Obstacle::getInLane() const { return inLanes; }
-
-const std::vector<Lanelet *> &Obstacle::getInLanelets() const { return inLanelets; }
 
 //const std::vector<std::vector<occTypes>> &Obstacle::getOccupancyMatrix() const { return occupancyMatrix; }
 
@@ -200,54 +198,54 @@ ObstacleType matchObstacleTypeToString(const char *type){
     else
         return ObstacleType::unknown;
 }
-
-std::vector<Lanelet> Obstacle::tracksAtObjPositionOrShape(const std::vector<Lanelet> &lanelets) {
-    std::vector<Lanelet> trackCandidates;
-
-    // get lanelets which intersect with shape of ego vehicle
-    // polygon_type polygonShape = this->getOccupancyPolygonShape();
-    trackCandidates = findTracksByShape(lanelets, polygonShape);
-
-    return trackCandidates;
-}
-
-std::vector<Lanelet *> Obstacle::getInLanelets(const std::vector<Lanelet> &lanelets, int timeStep) {
-    std::vector<Lanelet> tracksAtObjPosition = this->tracksAtObjPositionOrShape(lanelets);
-    if (currentState.getTimeStep() == timeStep){
-        vertice objPos{currentState.getXPosition(), currentState.getYPosition()};
-        std::vector<std::optional<double>> tracksOrientation(tracksAtObjPosition.size());
-        size_t i;
-        std::vector<Lanelet> inLanelets;
-
-        /*
-         * assume that a traffic participant is only in a track, if its
-         * orientation differs less than +- pi/5 from the track orientation
-         */
-        //const auto validOrientations = config::getValidTrackOrientations();
-        //double trackOrientation;
-
-        for (i = 0; i < tracksAtObjPosition.size(); i++) {
-
-            trackOrientation = calcAngleOfVerticesAtPosition(tracksAtObjPosition[i]->getCenterVertices(), objPos);
-            tracksOrientation[i] = orientationToTrack(this->getOrientation(), trackOrientation, this->getOrientationError(),
-                                                      validOrientations);
-
-            if (tracksOrientation[i] && tracksOrientation[i].value() >= 0) {
-
-                inTracks.push_back(tracksAtObjPosition[i]);
-            }
-        }
-
-        // consider tracks with opposite direction, if there is no track with appropriate orientation
-        if (inTracks.size() == 0) {
-            for (i = 0; i < tracksAtObjPosition.size(); i++) {
-                if (tracksOrientation[i] && tracksOrientation[i].value() < 0) {
-                    inTracks.emplace_back(tracksAtObjPosition[i]);
-                }
-            }
-        }
-        return inTracks;
-    }
-
-
-}
+//
+//std::vector<Lanelet> Obstacle::tracksAtObjPositionOrShape(const std::vector<Lanelet> &lanelets) {
+//    std::vector<Lanelet> trackCandidates;
+//
+//    // get lanelets which intersect with shape of ego vehicle
+//    // polygon_type polygonShape = this->getOccupancyPolygonShape();
+//    trackCandidates = findTracksByShape(lanelets, polygonShape);
+//
+//    return trackCandidates;
+//}
+//
+//std::vector<Lanelet *> Obstacle::getInLanelets(const std::vector<Lanelet> &lanelets, int timeStep) {
+//    std::vector<Lanelet> tracksAtObjPosition = this->tracksAtObjPositionOrShape(lanelets);
+//    if (currentState.getTimeStep() == timeStep){
+//        vertice objPos{currentState.getXPosition(), currentState.getYPosition()};
+//        std::vector<std::optional<double>> tracksOrientation(tracksAtObjPosition.size());
+//        size_t i;
+//        std::vector<Lanelet> inLanelets;
+//
+//        /*
+//         * assume that a traffic participant is only in a track, if its
+//         * orientation differs less than +- pi/5 from the track orientation
+//         */
+//        //const auto validOrientations = config::getValidTrackOrientations();
+//        //double trackOrientation;
+//
+//        for (i = 0; i < tracksAtObjPosition.size(); i++) {
+//
+//            trackOrientation = calcAngleOfVerticesAtPosition(tracksAtObjPosition[i]->getCenterVertices(), objPos);
+//            tracksOrientation[i] = orientationToTrack(this->getOrientation(), trackOrientation, this->getOrientationError(),
+//                                                      validOrientations);
+//
+//            if (tracksOrientation[i] && tracksOrientation[i].value() >= 0) {
+//
+//                inTracks.push_back(tracksAtObjPosition[i]);
+//            }
+//        }
+//
+//        // consider tracks with opposite direction, if there is no track with appropriate orientation
+//        if (inTracks.size() == 0) {
+//            for (i = 0; i < tracksAtObjPosition.size(); i++) {
+//                if (tracksOrientation[i] && tracksOrientation[i].value() < 0) {
+//                    inTracks.emplace_back(tracksAtObjPosition[i]);
+//                }
+//            }
+//        }
+//        return inTracks;
+//    }
+//
+//
+//}

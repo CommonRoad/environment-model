@@ -18,7 +18,7 @@ namespace XMLReader {
     std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &xmlFile);
 
     // creates all lanelet objects from the XML input
-    std::vector<std::shared_ptr<Lanelet>> createLaneletFromXML(const std::string &xmlFile);
+    std::vector<std::shared_ptr<Lanelet>> createLaneletFromXML(const std::string &xmlFile, std::vector<std::shared_ptr<TrafficSign>> sign, std::vector<std::shared_ptr<TrafficLight>> light);
 
     // creates all traffic sign objects from the XML input
     std::vector<std::shared_ptr<TrafficSign>> createTrafficSignFromXML(const std::string &xmlFile);
