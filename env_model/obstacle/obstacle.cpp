@@ -1,5 +1,5 @@
 #include "obstacle.h"
-#include "../geometry/geometricOperations.h"
+#include "../geometry/geometric_operations.h"
 //#include "../lanelets/lanelet_operations.h"
 #include <chrono>
 #include <cmath>
@@ -77,7 +77,7 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
     polygon_type polygonShape;
     // size_t i;
 
-    if (this->getGeoShape().getType() == "Rectangle") {
+    if (this->getGeoShape().getType() == "rectangle") {
 
         // p are vertices of the bounding rectangle
         // vertices p represent the occupancy with vehicle dimensions (Theorem 1)
@@ -160,7 +160,7 @@ bool Obstacle::getIsStatic() const { return isStatic; }
 //    return false;
 //}
 
-shape &Obstacle::getGeoShape() { return geoShape; }
+Shape &Obstacle::getGeoShape() { return geoShape; }
 
 Obstacle::Obstacle(const bool isStatic) {
 //        occupancyMatrix = std::vector<std::vector<occTypes>>{};

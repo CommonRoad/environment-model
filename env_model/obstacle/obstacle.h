@@ -54,7 +54,7 @@ class Obstacle {
 
 //    virtual void updateInLane(std::vector<lane *> &lanes);
 
-    shape &getGeoShape();
+    Shape &getGeoShape();
 
 //  protected:
 
@@ -75,7 +75,7 @@ class Obstacle {
     std::map<int, State> trajectoryPrediction{};
     std::map<int, State> history{};
     ObstacleType type;
-    rectangle geoShape;
+    Rectangle geoShape;
     double v_max{};      // maximum velocity of the Obstacle in m/s
     double a_max{};      // maximum absolute acceleration of the Obstacle in m/s^2
     double a_max_long{}; // maximal longitudinal acceleration

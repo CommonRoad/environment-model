@@ -5899,12 +5899,12 @@
   </intersection>
   <dynamicObstacle id="1213">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>3.1699</length>
         <width>2.0726</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -6730,12 +6730,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1214">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>3.9624</length>
         <width>1.9812</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -7561,12 +7561,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1216">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>3.4138</length>
         <width>1.9812</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -8392,12 +8392,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1219">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.0234</length>
         <width>2.0422</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -9223,12 +9223,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1221">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.3282</length>
         <width>1.9812</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -10054,12 +10054,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1223">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>3.6576</length>
         <width>2.1336</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -10885,12 +10885,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1230">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>8.5344</length>
         <width>2.4384</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -11076,12 +11076,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1231">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.4501</length>
         <width>2.1031</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -11907,12 +11907,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1235">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.9073</length>
         <width>2.0422</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -12738,12 +12738,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1236">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.4806</length>
         <width>2.0726</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -13569,12 +13569,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1239">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.4196</length>
         <width>1.9812</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -14400,12 +14400,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1240">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>3.5052</length>
         <width>2.1336</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -14951,12 +14951,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1242">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.6025</length>
         <width>1.9812</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -15782,12 +15782,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1245">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.511</length>
         <width>1.9812</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -16613,12 +16613,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1247">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.8463</length>
         <width>2.0422</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -17444,12 +17444,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1253">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.6634</length>
         <width>1.9507</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -18275,12 +18275,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1254">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.0234</length>
         <width>1.9812</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -19106,12 +19106,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1255">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>5.7912</length>
         <width>2.1336</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -19937,12 +19937,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1257">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>6.7056</length>
         <width>2.5908</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -20768,12 +20768,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1261">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>7.62</length>
         <width>2.5908</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -21599,12 +21599,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1265">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>5.0292</length>
         <width>2.1336</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -22430,12 +22430,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1266">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>5.0292</length>
         <width>1.9812</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -23261,12 +23261,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1267">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.8768</length>
         <width>1.9812</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>
@@ -24092,12 +24092,12 @@
   </dynamicObstacle>
   <dynamicObstacle id="1270">
     <type>car</type>
-    <shape>
+    <Shape>
       <rectangle>
         <length>4.2672</length>
         <width>2.1336</width>
       </rectangle>
-    </shape>
+    </Shape>
     <initialState>
       <position>
         <point>

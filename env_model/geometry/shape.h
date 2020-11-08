@@ -1,15 +1,15 @@
-/*
- * parent class for shapes
- */
+//
+// Created by Sebastian Maierhofer on 08.11.20.
+//
 
-#ifndef HEADER_SHAPES
-#define HEADER_SHAPES
+#ifndef ENV_MODEL_SHAPE_H
+#define ENV_MODEL_SHAPE_H
 
 #include "../auxiliaryDefs/structs.h"
 #include <string>
 
-class shape {
-  public:
+class Shape {
+public:
     /*
      * setter functions
      */
@@ -23,12 +23,12 @@ class shape {
     /*
      * getter functions
      */
-    virtual double getLength() const { return 0.0; };
-    virtual double getWidth() const { return 0.0; };
-    virtual double getRawLength() const { return 0.0; };
-    virtual double getRawWidth() const { return 0.0; };
-    virtual double getRadius() const { return 0.0; };
-    virtual vertice getCenter() const {
+    [[nodiscard]] virtual double getLength() const { return 0.0; };
+    [[nodiscard]] virtual double getWidth() const { return 0.0; };
+    [[nodiscard]] virtual double getRawLength() const { return 0.0; };
+    [[nodiscard]] virtual double getRawWidth() const { return 0.0; };
+    [[nodiscard]] virtual double getRadius() const { return 0.0; };
+    [[nodiscard]] virtual vertice getCenter() const {
         struct vertice v = {0, 0};
         return v;
     };
@@ -38,4 +38,5 @@ class shape {
     virtual std::string getType() = 0;
 };
 
-#endif
+
+#endif //ENV_MODEL_SHAPE_H

@@ -1,51 +1,53 @@
-/*
- * geometry class for circles
- */
+//
+// Created by Sebastian Maierhofer on 08.11.20.
+//
 
-#ifndef HEADER_CIRCLE
-#define HEADER_CIRCLE
+#ifndef ENV_MODEL_CIRCLE_H
+#define ENV_MODEL_CIRCLE_H
+
 
 #include "../auxiliaryDefs/structs.h"
 #include "shape.h"
 
-class circle : public shape {
-  public:
-    circle() {
+class Circle : public Shape {
+public:
+    Circle() {
         radius = 0;
         center = vertice{.x = 0, .y = 0};
     }
-    circle(double &rad) {
+    explicit Circle(double &rad) {
         radius = rad;
         center = {0.0, 0.0};
     }
-    circle(double &rad, vertice &vert) {
+    Circle(double &rad, vertice &vert) {
         radius = rad;
         center = vert;
     }
-    circle(const circle &) = default;            // copy constructor
-    circle &operator=(const circle &) = default; // copy assignment
-    circle(circle &&) = default;                 // move constructor
-    circle &operator=(circle &&) = default;      // move assignment
-    ~circle() = default;                         // virtual destructor
+    Circle(const Circle &) = default;            // copy constructor
+    Circle &operator=(const Circle &) = default; // copy assignment
+    Circle(Circle &&) = default;                 // move constructor
+    Circle &operator=(Circle &&) = default;      // move assignment
+    ~Circle() = default;                         // virtual destructor
 
     /*
      * setter functions
      */
-    void setRadius(const double rad);
-    void setCenter(const double x, const double y);
+    void setRadius( double rad) override;
+    void setCenter( double x, double y) override;
 
     /*
      * getter functions
      */
-    double getRadius() const;
-    vertice getCenter() const;
+    [[nodiscard]] double getRadius() const override;
+    [[nodiscard]] vertice getCenter() const override;
 
-    void scaleShape(double factor);
+    void scaleShape(double factor) override;
     std::string getType() override;
 
-  private:
+private:
     double radius;
-    vertice center;
+    vertice center{};
 };
 
-#endif
+
+#endif //ENV_MODEL_CIRCLE_H

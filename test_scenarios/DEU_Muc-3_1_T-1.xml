@@ -2930,12 +2930,12 @@
    <Obstacle id="1">
       <role>dynamic</role>
       <type>car</type>
-      <shape>
+      <Shape>
          <rectangle>
             <length>4.8</length>
             <width>2</width>
          </rectangle>
-      </shape>
+      </Shape>
       <initialState>
          <position>
             <point>
@@ -3962,12 +3962,12 @@
    <Obstacle id="2">
       <role>dynamic</role>
       <type>car</type>
-      <shape>
+      <Shape>
          <rectangle>
             <length>4.8</length>
             <width>2</width>
          </rectangle>
-      </shape>
+      </Shape>
       <initialState>
          <position>
             <point>
@@ -4994,12 +4994,12 @@
    <Obstacle id="3">
       <role>dynamic</role>
       <type>car</type>
-      <shape>
+      <Shape>
          <rectangle>
             <length>4.8</length>
             <width>2</width>
          </rectangle>
-      </shape>
+      </Shape>
       <initialState>
          <position>
             <point>

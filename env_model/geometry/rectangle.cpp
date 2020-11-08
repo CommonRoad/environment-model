@@ -1,33 +1,37 @@
+//
+// Created by sebastian on 08.11.20.
+//
+
 #include "rectangle.h"
-#include <iostream>
 
-void rectangle::setLength(const double &l) { length = l; }
+void Rectangle::setLength(const double &l) { length = l; }
 
-void rectangle::setWidth(const double &w) { width = w; }
+void Rectangle::setWidth(const double &w) { width = w; }
 
-void rectangle::setLength_raw(const double &raw_l) { raw_length = raw_l; }
+void Rectangle::setLength_raw(const double &raw_l) { raw_length = raw_l; }
 
-void rectangle::setWidth_raw(const double &raw_w) { raw_width = raw_w; }
+void Rectangle::setWidth_raw(const double &raw_w) { raw_width = raw_w; }
 
-double rectangle::getLength() const { return length; }
+double Rectangle::getLength() const { return length; }
 
-double rectangle::getWidth() const { return width; }
+double Rectangle::getWidth() const { return width; }
 
-double rectangle::getRawLength() const { return raw_length; }
+double Rectangle::getRawLength() const { return raw_length; }
 
-double rectangle::getRawWidth() const { return raw_width; }
+double Rectangle::getRawWidth() const { return raw_width; }
 
-void rectangle::scaleShape(double factor) {
+void Rectangle::scaleShape(double factor) {
     this->setWidth(this->getWidth() * factor);
     this->setLength(this->getLength() * factor);
 }
 
-void rectangle::printParameters() {
-    std::cout << "--- rectangle shape ---" << std::endl;
+void Rectangle::printParameters() {
+    std::cout << "--- Rectangle Shape ---" << std::endl;
     std::cout << "length with errors: " << this->getLength() << std::endl;
     std::cout << "width with errors: " << this->getWidth() << std::endl;
     std::cout << "length: " << this->getRawLength() << std::endl;
     std::cout << "width: " << this->getRawWidth() << std::endl;
 }
 
-std::string rectangle::getType() { return "Rectangle"; }
+std::string Rectangle::getType() { return "Rectangle"; }
+
