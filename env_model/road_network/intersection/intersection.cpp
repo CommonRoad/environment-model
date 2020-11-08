@@ -12,12 +12,12 @@ void Intersection::setId(int index) {
     Intersection::id = index;
 }
 
-const Incoming &Intersection::getIncoming() const {
+const std::vector<std::shared_ptr<Incoming>> &Intersection::getIncoming() const {
     return incoming;
 }
 
-void Intersection::setIncoming(const Incoming &inc) {
-    Intersection::incoming = inc;
+void Intersection::addIncoming(const std::shared_ptr<Incoming>& inc) {
+    incoming.push_back(inc);
 }
 
 const std::vector<std::vector<std::shared_ptr<Lanelet>>> &Intersection::getCrossing() const {

@@ -6,7 +6,6 @@
 #include "../../road_network/regulatory_elements/stop_line.h"
 #include <cstdlib>
 
-
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles() {
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
@@ -393,13 +392,13 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
 
 std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<Lanelet>>& lanelets) {
 
-    std::vector<std::shared_ptr<Intersection>> tempLaneletContainer{};
+    std::vector<std::shared_ptr<Intersection>> tempIntersectionContainer{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
     // get the number of intersections
     size_t n = std::distance(commonRoad.children("intersection").begin(), commonRoad.children("intersection").end());
-    tempLaneletContainer.clear();
-    tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
+    tempIntersectionContainer.clear();
+    tempIntersectionContainer.reserve(n); // Already know the size --> Faster memory allocation
 
     size_t arrayIndex = 0;
 
@@ -408,14 +407,15 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
          roadElements = roadElements.next_sibling()) {
         if (!(strcmp(roadElements.name(), "intersection"))) {
             std::shared_ptr<Intersection> tempIntersection = std::make_shared<Intersection>();
-            tempLaneletContainer.emplace_back(tempIntersection);
-            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
+            tempIntersectionContainer.emplace_back(tempIntersection);
+            tempIntersectionContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
+            std::map<int, int> tmpLeftOf;
 
             for (pugi::xml_node intersectionChildElement = roadElements.first_child(); intersectionChildElement;
                  intersectionChildElement = intersectionChildElement.next_sibling()) {
                 if (!(strcmp(intersectionChildElement.name(), "incoming"))) {
-                    Incoming inc;
-                    inc.setId(intersectionChildElement.first_attribute().as_int());
+                    std::shared_ptr<Incoming> inc = std::make_shared<Incoming>();
+                    inc->setId(intersectionChildElement.first_attribute().as_int());
                     std::vector<std::shared_ptr<Lanelet>> incomingLanelet;
                     std::vector<std::shared_ptr<Lanelet>> successorRight;
                     std::vector<std::shared_ptr<Lanelet>> successorStraight;
@@ -428,38 +428,33 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
                                     incomingLanelet.push_back(la);
                                 }
                             }
+                            inc->setIncomingLanelet(incomingLanelet);
                         }
-                        if (!(strcmp(incomingChildElementChild.name(), "successorRight"))) {
-                            if (!(strcmp(incomingChildElementChild.name(), "successorRight"))) {
-                                for(const auto& la: lanelets){
-                                    if (incomingChildElementChild.attribute("ref").as_int() == la->getId()) {
-                                        incomingLanelet.push_back(la);
-                                    }
-                                }
+                        if (!(strcmp(incomingChildElementChild.name(), "successorsRight"))) {
+                            for(const auto& la: lanelets){
+                                if (incomingChildElementChild.attribute("ref").as_int() == la->getId())
+                                    successorRight.push_back(la);
                             }
+                            inc->setSuccessorsRight(successorRight);
                         }
-                        if (!(strcmp(incomingChildElementChild.name(), "successorStraight"))) {
-                            if (!(strcmp(incomingChildElementChild.name(), "successorStraight"))) {
-                                for(const auto& la: lanelets){
-                                    if (incomingChildElementChild.attribute("ref").as_int() == la->getId()) {
-                                        incomingLanelet.push_back(la);
-                                    }
-                                }
+                        if (!(strcmp(incomingChildElementChild.name(), "successorsStraight"))) {
+                            for(const auto& la: lanelets){
+                                if (incomingChildElementChild.attribute("ref").as_int() == la->getId())
+                                    successorStraight.push_back(la);
                             }
+                            inc->setSuccessorsStraight(successorStraight);
                         }
-                        if (!(strcmp(incomingChildElementChild.name(), "successorLeft"))) {
-                            if (!(strcmp(incomingChildElementChild.name(), "successorLeft"))) {
-                                for(const auto& la: lanelets){
-                                    if (incomingChildElementChild.attribute("ref").as_int() == la->getId()) {
-                                        incomingLanelet.push_back(la);
-                                    }
-                                }
+                        if (!(strcmp(incomingChildElementChild.name(), "successorsLeft"))) {
+                            for(const auto& la: lanelets){
+                                if (incomingChildElementChild.attribute("ref").as_int() == la->getId())
+                                    successorLeft.push_back(la);
                             }
+                            inc->setSuccessorsLeft(successorLeft);
                         }
-                        if (!(strcmp(incomingChildElementChild.name(), "isLeftOf"))) {
-                        // TODO
-                        }
+                        if (!(strcmp(incomingChildElementChild.name(), "isLeftOf")))
+                            tmpLeftOf.insert_or_assign(inc->getId(), incomingChildElementChild.attribute("ref").as_int());
                     }
+                    tempIntersectionContainer[arrayIndex]->addIncoming(inc);
                 }
                 if (!(strcmp(intersectionChildElement.name(), "crossing"))) {
                     for (pugi::xml_node crossingElement = intersectionChildElement.first_child(); crossingElement;
@@ -468,12 +463,17 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
                     }
                 }
             }
+            for(auto const& [key, val] : tmpLeftOf){
+                for(const auto& inc1 : tempIntersectionContainer[arrayIndex]->getIncoming()){
+                    if(inc1->getId() == key)
+                        for(const auto& inc2 : tempIntersectionContainer[arrayIndex]->getIncoming()) {
+                            if (inc2->getId() == val)
+                                inc1->setIsLeftOf(inc2);
+                        }
+                }
+            }
             ++arrayIndex;
         }
-
     }
-
-    return tempLaneletContainer;
+    return tempIntersectionContainer;
 }
-
-
