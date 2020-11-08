@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 28.10.20.
+// Created by Sebastian Maierhofer on 28.10.20.
 //
 
 #ifndef ENV_MODEL_STRUCTS_H

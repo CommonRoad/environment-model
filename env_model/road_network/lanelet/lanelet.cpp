@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 23.10.20.
+// Created by Sebastian Maierhofer on 23.10.20.
 //
 
 #include "lanelet.h"

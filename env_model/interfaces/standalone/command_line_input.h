@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 02.11.20.
+// Created by Sebastian Maierhofer on 02.11.20.
 //
 
 #ifndef ENV_MODEL_COMMAND_LINE_INPUT_H
@@ -10,6 +10,5 @@
 namespace CommandLine{
     int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath);
 }
-
 
 #endif //ENV_MODEL_COMMAND_LINE_INPUT_H

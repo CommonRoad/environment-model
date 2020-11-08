@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 02.11.20.
+// Created by Sebastian Maierhofer on 02.11.20.
 //
 
 #include <boost/filesystem.hpp>

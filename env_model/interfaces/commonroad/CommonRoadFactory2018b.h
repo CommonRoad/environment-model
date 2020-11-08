@@ -7,8 +7,11 @@ class CommonRoadFactory2018b : public CommonRoadFactory {
 		: CommonRoadFactory(std::move(xmlDocument)) {}
 
 	std::vector<std::shared_ptr<Obstacle>> createObstacles() override;
-	std::vector<std::shared_ptr<Lanelet>> createLanelets(std::vector<std::shared_ptr<TrafficSign>> trafficSigns, std::vector<std::shared_ptr<TrafficLight>> trafficLights) override;
+	std::vector<std::shared_ptr<Lanelet>> createLanelets(
+	        std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
+	        std::vector<std::shared_ptr<TrafficLight>> trafficLights) override;
     std::vector<std::shared_ptr<TrafficSign>> createTrafficSigns() override;
     std::vector<std::shared_ptr<TrafficLight>> createTrafficLights() override;
-    std::vector<std::shared_ptr<Intersection>> createIntersections(const std::vector<std::shared_ptr<Lanelet>>& lanelets) override;
+    std::vector<std::shared_ptr<Intersection>> createIntersections(
+            const std::vector<std::shared_ptr<Lanelet>>& lanelets) override;
 };

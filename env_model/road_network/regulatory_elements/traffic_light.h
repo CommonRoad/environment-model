@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 31.10.20.
+// Created by Sebastian Maierhofer on 31.10.20.
 //
 
 #ifndef ENV_MODEL_TRAFFICLIGHT_H

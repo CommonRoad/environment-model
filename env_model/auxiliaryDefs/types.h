@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 07.11.20.
+// Created by Sebastian Maierhofer on 07.11.20.
 //
 
 #ifndef ENV_MODEL_TYPES_H

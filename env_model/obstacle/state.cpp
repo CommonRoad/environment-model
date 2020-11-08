@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 01.11.20.
+// Created by Sebastian Maierhofer on 01.11.20.
 //
 
 #include "state.h"

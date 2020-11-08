@@ -1,15 +1,16 @@
 //
-// Created by sebastian on 30.10.20.
+// Created by Sebastian Maierhofer on 30.10.20.
 //
 #pragma once
 
-#ifndef ENV_MODEL_XMLREADER_H
-#define ENV_MODEL_XMLREADER_H
+#ifndef ENV_MODEL_XML_READER_H
+#define ENV_MODEL_XML_READER_H
 
 #include "../../road_network/lanelet/lanelet.h"
 #include "../../auxiliaryDefs/structs.h"
 #include "../../obstacle/obstacle.h"
 #include "../../road_network/intersection/intersection.h"
+#include "pugi_xml/pugixml.hpp"
 #include <cstddef>
 #include <vector>
 
@@ -27,7 +28,11 @@ namespace XMLReader {
     std::vector<std::shared_ptr<TrafficLight>> createTrafficLightFromXML(const std::string &xmlFile);
 
     // creates all intersection objects from the XML input
-    std::vector<std::shared_ptr<Intersection>> createIntersectionFromXML(const std::string &xmlFile, std::vector<std::shared_ptr<Lanelet>> lanelets);
+    std::vector<std::shared_ptr<Intersection>> createIntersectionFromXML(const std::string &xmlFile, const std::vector<std::shared_ptr<Lanelet>>& lanelets);
+
+    State extractInitialState(const pugi::xml_node &child);
+
+    State extractState(const pugi::xml_node &states);
 }
 
-#endif //ENV_MODEL_XMLREADER_H
+#endif //ENV_MODEL_XML_READER_H
