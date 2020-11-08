@@ -4,7 +4,7 @@
 
 #include "xml_reader.h"
 #include <utility>
-#include "CommonRoadFactory2018b.h"
+#include "commonroad_factory_2018b.h"
 #include "commonroad_factory_2020a.h"
 
 std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xmlFile) {
