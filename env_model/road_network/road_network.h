@@ -18,7 +18,7 @@ class RoadNetwork {
         void setLanes(const std::vector<std::shared_ptr<Lane>> &lanes);
 
     private:
-        void createLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
+        static void createLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
 
         std::vector<std::shared_ptr<Lanelet>> laneletNetwork;
         std::vector<std::shared_ptr<Lane>> lanes;
