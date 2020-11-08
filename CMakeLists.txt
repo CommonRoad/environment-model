@@ -17,6 +17,8 @@ set(LIB_ENV_MODEL_INCLUDE "." ${CRCCOSY_LIBRARY_DIR}/cpp)
 
 
 file(GLOB_RECURSE env_files
+        "env_model/road_network/*.h"
+        "env_model/road_network/*.cpp"
         "env_model/road_network/lanelet/*.h"
         "env_model/road_network/lanelet/*.cpp"
         "env_model/road_network/regulatory_elements/*.h"
