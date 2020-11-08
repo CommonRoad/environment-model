@@ -3,6 +3,7 @@
 //
 
 #include "commonroad_factory_2018b.h"
+#include "../../obstacle/obstacle_operations.h"
 #include "xml_reader.h"
 
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles() {
@@ -42,7 +43,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles()
             }
             else if (!(strcmp(roadElements.first_child().text().as_string(), "static"))) {
                 std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned in the following)
-                tempObstacle = std::make_shared<Obstacle>(true);
+                tempObstacle = std::make_shared<Obstacle>();
 
                 // extract ID, type, shape, and initial state
                 tempObstacle->setId(roadElements.first_attribute().as_int());

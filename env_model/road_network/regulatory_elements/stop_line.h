@@ -26,9 +26,6 @@ class StopLine {
         std::shared_ptr<TrafficSign> trafficSign;
         std::shared_ptr<TrafficLight> trafficLight;
         LineMarking lineMarking;
-
-
 };
-
 
 #endif //ENV_MODEL_STOP_LINE_H

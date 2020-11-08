@@ -3,7 +3,6 @@
 //
 
 #include "state.h"
-#include "stdlib.h"
 
 double State::getXPosition() const {
     return xPosition;

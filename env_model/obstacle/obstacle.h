@@ -1,5 +1,9 @@
-#ifndef HEADER_OBSTACLE
-#define HEADER_OBSTACLE
+//
+// Created by Sebastian Maierhofer on 01.11.20.
+//
+
+#ifndef ENV_MODEL_OBSTACLE_H
+#define ENV_MODEL_OBSTACLE_H
 
 #include "state.h"
 #include "../auxiliaryDefs/structs.h"
@@ -8,23 +12,16 @@
 #include "../geometry/shape.h"
 #include <map>
 
+typedef boost::geometry::model::d2::point_xy<double> point_type;
+typedef boost::geometry::model::polygon<point_type> polygon_type;
+typedef boost::geometry::model::box<point_type> box;
+
 class Obstacle {
   public:
-    // constructor
-    explicit Obstacle(bool isStatic = false);
-    Obstacle(const Obstacle &) = default;            // copy constructor
-    Obstacle &operator=(const Obstacle &) = default; // copy assignment
-    Obstacle(Obstacle &&) = default;                 // move constructor
-    Obstacle &operator=(Obstacle &&) = default;      // move assignment
-    virtual ~Obstacle() = default;                   // virtual destructor
-
     /*
      * setter functions
      */
     void setId(size_t num);
-//    void addInLane(lane *l);
-//    void setNewObst(bool val);
-//    void useShapeAsRef(bool val);
 
     void setVmax(double vmax);
     void setAmax(double amax);
@@ -45,28 +42,9 @@ class Obstacle {
     [[nodiscard]] size_t getId() const;
     [[nodiscard]] ObstacleType getType() const;
     [[nodiscard]] const State &getCurrentState() const;
-//    const std::vector<lane *> &getInLane() const;
-//    [[nodiscard]] std::vector<Lanelet *> getInLanelets(const std::vector<Lanelet> &lanelets, int timeStep);
-//    [[nodiscard]] bool getUseShape() const;
-    polygon_type getOccupancyPolygonShape(int timeStamp);
     [[nodiscard]] bool getIsStatic() const;
-
-
-//    virtual void updateInLane(std::vector<lane *> &lanes);
-
+    polygon_type getOccupancyPolygonShape(int timeStamp);
     Shape &getGeoShape();
-
-//  protected:
-
-//    bool findLaneletsCorrespondingToObstacle(const std::vector<vehicularLanelet *> &lanelets,
-//                                        std::vector<vehicularLanelet *> &inLanelet); // TODO: make return type clearer
-//
-//    std::vector<std::vector<occTypes>> occupancyMatrix; // occupancy
-//    std::vector<lane *> inLanes;                        // lane, in which the Obstacle is located in
-//    std::vector<vehicularLanelet *> inLanelets;         // lanelets, in which the Obstacle is located in
-
-    /* defined in subclass */
-
 
   private:
     size_t id{}; // unique id
@@ -80,15 +58,6 @@ class Obstacle {
     double a_max{};      // maximum absolute acceleration of the Obstacle in m/s^2
     double a_max_long{}; // maximal longitudinal acceleration
     double a_min_long{}; // minimal longitudinal acceleration
-
-
-
-//    virtual void updateInLanelets();
-
 };
 
-//#include "Obstacle.ipp"
-
-ObstacleType matchObstacleTypeToString(const char *type);
-
-#endif
+#endif //ENV_MODEL_OBSTACLE_H

@@ -9,32 +9,22 @@
 class State {
 public:
     [[nodiscard]] double getXPosition() const;
+    [[nodiscard]] double getYPosition() const;
+    [[nodiscard]] double getVelocity() const;
+    [[nodiscard]] double getAcceleration() const;
+    [[nodiscard]] double getLonPosition() const;
+    [[nodiscard]] double getLatPosition() const;
+    [[nodiscard]] double getOrientation() const;
+    [[nodiscard]] int getTimeStep() const;
 
     void setXPosition(double xPosition);
-
-    [[nodiscard]] double getYPosition() const;
-
     void setYPosition(double yPosition);
-
-    [[nodiscard]] double getVelocity() const;
-
     void setVelocity(double velocity);
-
-    [[nodiscard]] double getAcceleration() const;
-
     void setAcceleration(double acceleration);
-
-    [[nodiscard]] double getLonPosition() const;
-
     void setLonPosition(double lonPosition);
-
-    [[nodiscard]] double getLatPosition() const;
-
     void setLatPosition(double latPosition);
-
-    [[nodiscard]] double getOrientation() const;
-
     void setOrientation(double orientation);
+    void setTimeStep(int timeStep);
 
 private:
         double xPosition{0.0};
@@ -45,10 +35,6 @@ private:
         double latPosition{0.0};
         double orientation{0.0};
         int timeStep{0};
-public:
-    int getTimeStep() const;
-
-    void setTimeStep(int timeStep);
 };
 
 

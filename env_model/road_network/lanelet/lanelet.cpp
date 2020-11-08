@@ -4,7 +4,6 @@
 
 #include "lanelet.h"
 #include <utility>
-#include "../../auxiliaryDefs/structs.h"
 #include "boost/geometry.hpp"
 
 namespace bg = boost::geometry;

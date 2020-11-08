@@ -11,6 +11,10 @@
 #include "../regulatory_elements/traffic_sign.h"
 #include "../../auxiliaryDefs/types.h"
 
+typedef boost::geometry::model::d2::point_xy<double> point_type;
+typedef boost::geometry::model::polygon<point_type> polygon_type;
+typedef boost::geometry::model::box<point_type> box;
+
 
 class Lanelet {
     public:
@@ -47,7 +51,6 @@ class Lanelet {
         void moveLeftBorder(std::vector<vertice> &&leftBorderVertices);
         void moveRightBorder(std::vector<vertice> &&rightBorderVertices);
         void moveCenterVertices(std::vector<vertice> &&center);
-        void createCenterVertices();
 
         /*
          * getter functions
@@ -68,26 +71,22 @@ class Lanelet {
         [[nodiscard]] const std::vector<LaneletType> &getLaneletType() const;
         [[nodiscard]] const std::vector<ObstacleType> &getUserOneWay() const;
         [[nodiscard]] const std::vector<ObstacleType> &getUserBidirectional() const;
+        [[nodiscard]] bool applyIntersectionTesting(const polygon_type &intersection) const;
+        [[nodiscard]] bool checkIntersection(const polygon_type &intersecting, size_t intersection_flag) const;
 
-
-
-
+        void createCenterVertices();
+        void constructOuterPolygon(); // construct outer shape from borders
         struct adjacent {
             std::vector<Lanelet *> adj;
             std::string dir;
         };
 
-        void constructOuterPolygon(); // construct outer shape from borders
-        [[nodiscard]] bool applyIntersectionTesting(const polygon_type &intersection) const;
-        [[nodiscard]] bool checkIntersection(const polygon_type &intersecting, size_t intersection_flag) const;
 
     private:
         size_t id;                                          // unique ID of lanelet
-
         std::vector<vertice> centerVertices;                // vertices of center line of lanelet
         std::vector<vertice> leftBorder;                    // vertices of left border
         std::vector<vertice> rightBorder;                   // vertices of right border
-
         std::vector<Lanelet *> predecessorLanelets;         // previous lanelets
         std::vector<Lanelet *> successorLanelets;           // longitudinally adjacent lanelets
         adjacent adjacentLeft;                              // left adjacent lanelet with driving tag
@@ -100,7 +99,6 @@ class Lanelet {
         std::vector<LaneletType> laneletType;
         std::vector<ObstacleType> userOneWay;
         std::vector<ObstacleType> userBidirectional;
-
 };
 
 LaneletType matchLaneletTypeToString(const char *type);

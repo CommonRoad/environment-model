@@ -3,7 +3,6 @@
 //
 
 #include "traffic_sign_element.h"
-
 #include <utility>
 
 TrafficSignElement::TrafficSignElement(std::string el_id) : id(std::move(el_id)) {}

@@ -5,6 +5,7 @@
 #include "commonroad_factory_2020a.h"
 #include "xml_reader.h"
 #include "../../road_network/regulatory_elements/stop_line.h"
+#include "../../obstacle/obstacle_operations.h"
 #include <cstdlib>
 
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles() {
@@ -44,7 +45,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles()
         }
         else if  (!(strcmp(roadElements.name(), "staticObstacle"))) {
 			std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned in the following)
-			tempObstacle = std::make_shared<Obstacle>(true);
+			tempObstacle = std::make_shared<Obstacle>();
 
             // extract ID, type, shape, and initial state
 			tempObstacle->setId(roadElements.first_attribute().as_int());
@@ -315,13 +316,13 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                             std::string color = trafficLightCycleChildElement.first_child().next_sibling().first_child().value();
                             CycleElement cycle{};
                             if (color == "red")
-                                cycle = CycleElement{red, std::stof(duration) };
+                                cycle = CycleElement{CycleElementType::red, std::stof(duration) };
                             if (color == "green")
-                                cycle = CycleElement{green, std::stof(duration) };
+                                cycle = CycleElement{CycleElementType::green, std::stof(duration) };
                             if (color == "yellow")
-                                cycle = CycleElement{yellow, std::stof(duration) };
+                                cycle = CycleElement{CycleElementType::yellow, std::stof(duration) };
                             if (color == "red_yellow")
-                                cycle = CycleElement{red_yellow, std::stof(duration) };
+                                cycle = CycleElement{CycleElementType::red_yellow, std::stof(duration) };
 
                             tempLaneletContainer[arrayIndex]->addCycleElement(cycle); //TODO pass by reference
                         }
@@ -333,17 +334,19 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                 if (!(strcmp(trafficLightChildElement.name(), "direction"))) {
                     TrafficLightDirection dir;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "right")))
-                        dir = right;
+                        dir = TrafficLightDirection::right;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "straight")))
-                        dir = straight;
+                        dir = TrafficLightDirection::straight;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "left")))
-                        dir = left;
+                        dir = TrafficLightDirection::left;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "leftStraight")))
-                        dir = leftStraight;
+                        dir = TrafficLightDirection::leftStraight;
+                    if (!(strcmp(trafficLightChildElement.first_child().value(), "straightRight")))
+                        dir = TrafficLightDirection::straightRight;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "leftRight")))
-                        dir = leftRight;
+                        dir = TrafficLightDirection::leftRight;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "all")))
-                        dir = all;
+                        dir = TrafficLightDirection::all;
                     tempLaneletContainer[arrayIndex]->setDirection(dir);
                 }
                 if (!(strcmp(trafficLightChildElement.name(), "active"))) {

@@ -9,12 +9,12 @@
 
 class Incoming {
     public:
-        int getId() const;
-        const std::vector<std::shared_ptr<Lanelet>> &getIncomingLanelet() const;
-        const std::vector<std::shared_ptr<Lanelet>> &getSuccessorsRight() const;
-        const std::vector<std::shared_ptr<Lanelet>> &getSuccessorsStraight() const;
-        const std::vector<std::shared_ptr<Lanelet>> &getSuccessorsLeft() const;
-        const std::shared_ptr<Incoming> &getIsLeftOf() const;
+        [[nodiscard]] int getId() const;
+        [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getIncomingLanelet() const;
+        [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getSuccessorsRight() const;
+        [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getSuccessorsStraight() const;
+        [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getSuccessorsLeft() const;
+        [[nodiscard]] const std::shared_ptr<Incoming> &getIsLeftOf() const;
 
         void setId(int id);
         void setIncomingLanelet(const std::vector<std::shared_ptr<Lanelet>> &incomingLanelet);

@@ -9,8 +9,6 @@ TrafficSign::TrafficSign() {
     virtualElement = false;
 }
 
-
-
 // Setter
 void TrafficSign::setId(const size_t num) { id = num; }
 void TrafficSign::addTrafficSignElement(const TrafficSignElement& elem) { trafficSignElement.push_back(elem); }
@@ -18,7 +16,6 @@ void TrafficSign::addTrafficSignElement(const TrafficSignElement& elem) { traffi
 
 // Getter
 size_t TrafficSign::getId() const { return id; }
-
 
 
 void TrafficSign::setTrafficSignElement(const std::vector<TrafficSignElement>& newTrafficSignElement) {

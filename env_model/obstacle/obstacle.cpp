@@ -1,13 +1,11 @@
+//
+// Created by Sebastian Maierhofer on 01.11.20.
+//
+
 #include "obstacle.h"
 #include "../geometry/geometric_operations.h"
-//#include "../lanelets/lanelet_operations.h"
 #include <chrono>
 #include <cmath>
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846f
-#endif
-
 
 void Obstacle::setId(const size_t num) { id = num; }
 
@@ -30,22 +28,17 @@ void Obstacle::setId(const size_t num) { id = num; }
 //    }
 //}
 
-
-//void Obstacle::useShapeAsRef(const bool val) { useShape = val; }
+void Obstacle::setIsStatic(bool st) {
+    isStatic = st;
+    if (st) {
+        v_max = 0.0;
+        a_max = 0.0;
+        a_min_long = 0.0;
+        a_max_long = 0.0;
+    }
+}
 
 size_t Obstacle::getId() const { return id; }
-
-
-//const std::vector<lane *> &Obstacle::getInLane() const { return inLanes; }
-
-//const std::vector<std::vector<occTypes>> &Obstacle::getOccupancyMatrix() const { return occupancyMatrix; }
-
-//const std::vector<std::vector<occTypes>> *Obstacle::getOccupancyMatrixPtr() { return &occupancyMatrix; }
-
-//void Obstacle::setOccupancyMatrix(const std::vector<std::vector<occTypes>> &occMatrix) { occupancyMatrix = occMatrix; }
-
-//void Obstacle::setOccupancyMatrix(const std::vector<std::vector<occTypes>> &&occMatrix) { occupancyMatrix = occMatrix; }
-
 
 void Obstacle::setVmax(const double vmax) { v_max = isStatic ? 0.0 : vmax; }
 
@@ -55,14 +48,6 @@ void Obstacle::setAmaxLong(const double amax_long) { a_max_long = isStatic ? 0.0
 
 void Obstacle::setAminLong(const double amin_long) { a_min_long = isStatic ? 0.0 : amin_long; }
 
-//void Obstacle::setReachableLanes(std::vector<lane *> lanes) {
-//    reachableLanes.clear();
-//    for (size_t i = 0; i < lanes.size(); i++) {
-//        reachableLanes.emplace_back(lanes[i]->getId());
-//    }
-//}
-
-
 double Obstacle::getVmax() const { return v_max; }
 
 double Obstacle::getAmax() const { return a_max; }
@@ -70,6 +55,23 @@ double Obstacle::getAmax() const { return a_max; }
 double Obstacle::getAmaxLong() const { return a_max_long; }
 
 double Obstacle::getAminLong() const { return a_min_long; }
+
+Shape &Obstacle::getGeoShape() { return geoShape; }
+
+ObstacleType Obstacle::getType() const {return type;}
+
+void Obstacle::setType(ObstacleType ty) {type = ty;}
+
+const State &Obstacle::getCurrentState() const {return currentState;}
+
+void Obstacle::setCurrentState(const State &state) {currentState = state;}
+
+bool Obstacle::getIsStatic() const { return isStatic; }
+
+
+void Obstacle::appendState(State state) {
+    trajectoryPrediction.insert(std::pair<int, State>(state.getTimeStep(), state));
+}
 
 polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
 
@@ -108,22 +110,6 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
     return polygonShape;
 }
 
-void Obstacle::setIsStatic(bool st) {
-    isStatic = st;
-    if (st) {
-        v_max = 0.0;
-        a_max = 0.0;
-        a_min_long = 0.0;
-        a_max_long = 0.0;
-    }
-}
-
-void Obstacle::appendState(State state) {
-    trajectoryPrediction.insert(std::pair<int, State>(state.getTimeStep(), state));
-}
-
-bool Obstacle::getIsStatic() const { return isStatic; }
-
 //bool Obstacle::findLaneletsCorrespondingToObstacle(const std::vector<vehicularLanelet *> &intersectionLanelets,
 //                                                   std::vector<vehicularLanelet *> &inLanelet) {
 //
@@ -160,46 +146,7 @@ bool Obstacle::getIsStatic() const { return isStatic; }
 //    return false;
 //}
 
-Shape &Obstacle::getGeoShape() { return geoShape; }
 
-Obstacle::Obstacle(const bool isStatic) {
-//        occupancyMatrix = std::vector<std::vector<occTypes>>{};
-//        inLanes = std::vector<lane *>{};
-//
-//        reachableLanes = std::vector<size_t>{};
-    setIsStatic(isStatic);
-}
-
-ObstacleType Obstacle::getType() const {
-    return type;
-}
-
-void Obstacle::setType(ObstacleType type) {
-    Obstacle::type = type;
-}
-
-const State &Obstacle::getCurrentState() const {
-    return currentState;
-}
-
-void Obstacle::setCurrentState(const State &currentState) {
-    Obstacle::currentState = currentState;
-}
-
-ObstacleType matchObstacleTypeToString(const char *type){
-    if (!(strcmp(type, "car")))
-        return ObstacleType::car;
-    else if (!(strcmp(type, "truck")))
-        return ObstacleType::truck;
-    else if (!(strcmp(type, "pedestrian")))
-        return ObstacleType::pedestrian;
-    else if (!(strcmp(type, "bus")))
-        return ObstacleType::bus;
-    else if (!(strcmp(type, "vehicle")))
-        return ObstacleType::vehicle;
-    else
-        return ObstacleType::unknown;
-}
 //
 //std::vector<Lanelet> Obstacle::tracksAtObjPositionOrShape(const std::vector<Lanelet> &lanelets) {
 //    std::vector<Lanelet> trackCandidates;

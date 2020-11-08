@@ -8,10 +8,15 @@
 
 #include <iostream>
 #include <vector>
+#include "types.h"
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 
+struct CycleElement{
+    CycleElementType color;
+    float duration;
+};
 
 // 2d vertices
 struct vertice {

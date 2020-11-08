@@ -3,7 +3,6 @@
 //
 
 #include "stop_line.h"
-
 #include <utility>
 
 const std::vector<vertice> &StopLine::getPoints() const {return points;}
