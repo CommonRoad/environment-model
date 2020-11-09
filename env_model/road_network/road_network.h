@@ -22,6 +22,8 @@ class RoadNetwork {
 
         std::vector<std::shared_ptr<Lanelet>> laneletNetwork;
         std::vector<std::shared_ptr<Lane>> lanes;
+
+    static LaneletType extractClassifyingLaneletType(const std::shared_ptr<Lanelet> &la);
 };
 
 

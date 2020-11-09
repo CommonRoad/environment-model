@@ -9,7 +9,6 @@
 #include "../../auxiliaryDefs/structs.h"
 #include "../regulatory_elements/traffic_light.h"
 #include "../regulatory_elements/traffic_sign.h"
-#include "../../auxiliaryDefs/types.h"
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
@@ -100,8 +99,5 @@ class Lanelet {
         std::vector<ObstacleType> userOneWay;
         std::vector<ObstacleType> userBidirectional;
 };
-
-LaneletType matchLaneletTypeToString(const char *type);
-LineMarking matchLineMarkingToString(const char *type);
 
 #endif //ENVIRONMENT_MODEL_LANELET_H
