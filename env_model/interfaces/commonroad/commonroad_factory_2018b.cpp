@@ -130,7 +130,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(std
                     size_t successorId = child.first_attribute().as_int();
                     for (size_t i = 0; i < n; i++) {
                         if (tempLaneletContainer[i]->getId() == successorId) {
-                            tempLaneletContainer[arrayIndex]->addSuccessor(tempLaneletContainer[i].get());
+                            tempLaneletContainer[arrayIndex]->addSuccessor(tempLaneletContainer[i]);
                             break;
                         }
                     }
@@ -141,7 +141,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(std
                     size_t predecessorId = child.first_attribute().as_int();
                     for (size_t i = 0; i < n; i++) {
                         if (tempLaneletContainer[i]->getId() == predecessorId) {
-                            tempLaneletContainer[arrayIndex]->addPredecessor(tempLaneletContainer[i].get());
+                            tempLaneletContainer[arrayIndex]->addPredecessor(tempLaneletContainer[i]);
                             break;
                         }
                     }

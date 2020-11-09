@@ -31,8 +31,8 @@ class Lanelet {
         void addLeftVertice(vertice left);
         void addRightVertice(vertice right);
         void addCenterVertice(vertice center);
-        void addPredecessor(Lanelet *pre);
-        void addSuccessor(Lanelet *suc);
+        void addPredecessor(const std::shared_ptr<Lanelet>& pre);
+        void addSuccessor(const std::shared_ptr<Lanelet>& suc);
         void setLeftAdjacent(Lanelet *left, std::string dir);
         void setRightAdjacent(Lanelet *right, std::string dir);
         void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices);
@@ -58,8 +58,8 @@ class Lanelet {
         [[nodiscard]] std::vector<vertice> getLeftBorderVerticesDirect() const;
         [[nodiscard]] std::vector<vertice> getRightBorderVerticesDirect() const;
         [[nodiscard]] std::vector<vertice> getCenterVerticesDirect() const;
-        [[nodiscard]] std::vector<Lanelet *> getPredecessors() const;
-        [[nodiscard]] std::vector<Lanelet *> getSuccessors() const;
+        [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getPredecessors() const;
+        [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getSuccessors() const;
         [[nodiscard]] const std::vector<vertice> &getCenterVertices() const;
         [[nodiscard]] const std::vector<vertice> &getLeftBorderVertices() const;
         [[nodiscard]] const std::vector<vertice> &getRightBorderVertices() const;
@@ -86,8 +86,8 @@ class Lanelet {
         std::vector<vertice> centerVertices;                // vertices of center line of lanelet
         std::vector<vertice> leftBorder;                    // vertices of left border
         std::vector<vertice> rightBorder;                   // vertices of right border
-        std::vector<Lanelet *> predecessorLanelets;         // previous lanelets
-        std::vector<Lanelet *> successorLanelets;           // longitudinally adjacent lanelets
+        std::vector<std::shared_ptr<Lanelet>> predecessorLanelets;         // previous lanelets
+        std::vector<std::shared_ptr<Lanelet>> successorLanelets;           // longitudinally adjacent lanelets
         adjacent adjacentLeft;                              // left adjacent lanelet with driving tag
         adjacent adjacentRight;                             // right adjacent lanelet with driving tag
         polygon_type outerPolygon;

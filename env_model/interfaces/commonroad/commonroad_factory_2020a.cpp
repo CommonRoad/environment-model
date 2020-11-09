@@ -6,6 +6,7 @@
 #include "xml_reader.h"
 #include "../../road_network/regulatory_elements/stop_line.h"
 #include "../../obstacle/obstacle_operations.h"
+#include "../../road_network/lanelet/lanelet_operations.h"
 #include <cstdlib>
 
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles() {
@@ -137,7 +138,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(std
                     size_t successorId = child.first_attribute().as_int();
                     for (size_t i = 0; i < n; i++) {
                         if (tempLaneletContainer[i]->getId() == successorId) {
-                            tempLaneletContainer[arrayIndex]->addSuccessor(tempLaneletContainer[i].get());
+                            tempLaneletContainer[arrayIndex]->addSuccessor(tempLaneletContainer[i]);
                             break;
                         }
                     }
@@ -148,7 +149,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(std
                     size_t predecessorId = child.first_attribute().as_int();
                     for (size_t i = 0; i < n; i++) {
                         if (tempLaneletContainer[i]->getId() == predecessorId) {
-                            tempLaneletContainer[arrayIndex]->addPredecessor(tempLaneletContainer[i].get());
+                            tempLaneletContainer[arrayIndex]->addPredecessor(tempLaneletContainer[i]);
                             break;
                         }
                     }
@@ -180,7 +181,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(std
                 }
                 // set lanelet type
                 if (!(strcmp(child.name(), "laneletType")))
-                    laneletType.push_back(matchLaneletTypeToString(child.first_child().value()));
+                    laneletType.push_back(matchStringToLaneletType(child.first_child().value()));
                 // set user one way
                 if (!(strcmp(child.name(), "userOneWay")))
                     userOneWay.push_back(matchObstacleTypeToString(child.first_child().value()));
@@ -215,7 +216,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(std
                             points.push_back(newVertice);
                         }
                         if (!(strcmp(elem.name(), "lineMarking")))
-                            sl.setLineMarking(matchLineMarkingToString(elem.first_child().value()));
+                            sl.setLineMarking(matchStringToLineMarking(elem.first_child().value()));
                         if (!(strcmp(elem.name(), "trafficSignRef"))) {
                             for(const auto& sign: trafficSigns){
                                 if (child.attribute("ref").as_int() == sign->getId()) {

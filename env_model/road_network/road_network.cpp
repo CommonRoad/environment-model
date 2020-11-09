@@ -17,7 +17,7 @@ const std::vector<std::shared_ptr<Lane>> &RoadNetwork::getLanes() const {return 
 
 void RoadNetwork::setLanes(const std::vector<std::shared_ptr<Lane>> &la) {RoadNetwork::lanes = la;}
 
-void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>> &network) {
+void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>>& network) {
     std::vector<std::shared_ptr<Lane>> lanes;
     std::vector<std::shared_ptr<Lanelet>> startLanelets;
     std::vector<std::shared_ptr<Lanelet>> predecessors;

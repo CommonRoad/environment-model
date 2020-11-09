@@ -8,10 +8,10 @@
 #include "../../auxiliaryDefs/types.h"
 #include "lanelet.h"
 
-LaneletType matchLaneletTypeToString(const char *type);
+LaneletType matchStringToLaneletType(const char *type);
 
-LineMarking matchLineMarkingToString(const char *type);
+LineMarking matchStringToLineMarking(const char *type);
 
-void combineLaneletAndSuccessors(std::vector<Lanelet> *laneList, Lanelet *curLanelet, size_t k);
+Lanelet combineLaneletAndSuccessors(std::vector<Lanelet> *laneList, Lanelet *curLanelet, size_t k);
 
 #endif //ENV_MODEL_LANELET_OPERATIONS_H

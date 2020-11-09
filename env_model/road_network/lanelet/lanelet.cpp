@@ -68,11 +68,11 @@ const std::vector<vertice> &Lanelet::getCenterVertices() const { return centerVe
 const std::vector<vertice> &Lanelet::getLeftBorderVertices() const { return leftBorder; }
 const std::vector<vertice> &Lanelet::getRightBorderVertices() const { return rightBorder; }
 
-std::vector<Lanelet *> Lanelet::getPredecessors() const { return predecessorLanelets; }
-std::vector<Lanelet *> Lanelet::getSuccessors() const { return successorLanelets; }
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getPredecessors() const { return predecessorLanelets; }
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getSuccessors() const { return successorLanelets; }
 
-void Lanelet::addPredecessor(Lanelet *pre) { predecessorLanelets.push_back(pre); }
-void Lanelet::addSuccessor(Lanelet *suc) { successorLanelets.push_back(suc); }
+void Lanelet::addPredecessor(const std::shared_ptr<Lanelet>& pre) { predecessorLanelets.push_back(pre); }
+void Lanelet::addSuccessor(const std::shared_ptr<Lanelet>& suc) { successorLanelets.push_back(suc); }
 
 void Lanelet::setLeftAdjacent(Lanelet *left, std::string dir) {
     adjacentLeft.adj.push_back(left);
