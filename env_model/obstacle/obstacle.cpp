@@ -80,7 +80,7 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
     polygon_type polygonShape;
     // size_t i;
 
-    if (this->getGeoShape().getType() == "rectangle") {
+    if (this->getGeoShape().getType() == "Rectangle") {
 
         // p are vertices of the bounding rectangle
         // vertices p represent the occupancy with vehicle dimensions (Theorem 1)
@@ -109,4 +109,15 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
         }
     }
     return polygonShape;
+}
+
+std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::vector<std::shared_ptr<Lanelet>>& lanelets, int timeStep) {
+    if(occupiedLanelets.find(timeStep) != occupiedLanelets.end())
+        return occupiedLanelets.at(timeStep);
+    polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
+    std::vector<std::shared_ptr<Lanelet>> occupied{RoadNetwork::findOccupiedLaneletsByShape(lanelets, polygonShape)};
+    occupiedLanelets.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occupied));
+
+    return occupied;
+
 }

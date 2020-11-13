@@ -46,6 +46,7 @@ class Obstacle {
     [[nodiscard]] bool getIsStatic() const;
     polygon_type getOccupancyPolygonShape(int timeStamp);
     Shape &getGeoShape();
+    std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(const std::vector<std::shared_ptr<Lanelet>>& lanelets, int timeStep);
 
 private:
     size_t id{}; // unique id

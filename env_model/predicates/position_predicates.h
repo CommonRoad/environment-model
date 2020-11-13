@@ -10,7 +10,7 @@
 
 class PositionPredicates {
     public:
-        bool onMainCarriageWay(int timeStep, std::shared_ptr<Obstacle> obstacle, RoadNetwork roadNetwork);
+        static bool onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle>& obstacle, const RoadNetwork& roadNetwork);
 
 };
 

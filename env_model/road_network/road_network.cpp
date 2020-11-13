@@ -62,37 +62,28 @@ LaneletType RoadNetwork::extractClassifyingLaneletType(const std::shared_ptr<Lan
     return LaneletType::mainCarriageWay;
 }
 
-std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
+std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(std::vector<std::shared_ptr<Lanelet>> lanelets, const polygon_type &polygonShape) {
 
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
 
-#pragma omp parallel for schedule(guided)
-    for (size_t i = 0; i < laneletNetwork.size(); i++) {
-        if (laneletNetwork[i]->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
-#pragma omp critical
-            occupiedLanelets.push_back(laneletNetwork[i]);
+//#pragma omp parallel for schedule(guided)
+    for (size_t i = 0; i < lanelets.size(); i++) {
+        if (lanelets[i]->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
+//#pragma omp critical
+            occupiedLanelets.push_back(lanelets[i]);
         }
     }
 
     return occupiedLanelets;
 }
 
-std::vector<std::shared_ptr<Lanelet>> RoadNetwork::getOccupiedLanelets(const std::shared_ptr<Obstacle>& obstacle, int timeStep) {
-    // get lanelets which intersect with shape of ego vehicle
-    polygon_type polygonShape{obstacle->getOccupancyPolygonShape(timeStep)};
-    std::vector<std::shared_ptr<Lanelet>> occupied{RoadNetwork::findOccupiedLaneletsByShape(polygonShape)};
-
-    return occupied;
-
-}
-
-std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(const std::vector<Lanelet> &lanelets, double xPos, double yPos) {
+std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(const std::vector<std::shared_ptr<Lanelet>>& lanelets, double xPos, double yPos) {
 
     std::vector<Lanelet> lanelet;
     polygon_type polygonPos;
     bg::append(polygonPos, point_type{xPos, yPos});
 
-    return findOccupiedLaneletsByShape(polygonPos);
+    return RoadNetwork::findOccupiedLaneletsByShape(lanelets, polygonPos);
 }
 
 std::shared_ptr<Lanelet> findLaneletsById(std::vector<std::shared_ptr<Lanelet>> lanelets, size_t id) {

@@ -34,6 +34,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles()
                 if (!(strcmp(child.name(), "initialState"))) {
                     State initialState = XMLReader::extractInitialState(child);
                     tempObstacle->setCurrentState(initialState);
+                    tempObstacle->appendState(initialState);
                 }
                 if (!(strcmp(child.name(), "trajectory"))) {
                     for (pugi::xml_node states = child.first_child(); states; states = states.next_sibling()) {

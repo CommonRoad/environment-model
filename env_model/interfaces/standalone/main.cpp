@@ -7,6 +7,8 @@
 #include "command_line_input.h"
 #include "../../road_network/road_network.h"
 
+#include "../../predicates/position_predicates.h"
+
 
 int main(int argc, char **argv) {
     //Read command line parameters; if none are provided, use default values (specified in read_command_line_values)
@@ -19,9 +21,16 @@ int main(int argc, char **argv) {
     //Read and parse CommonRoad scenario file
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
     std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
-    std::vector<std::shared_ptr<Lanelet>> lanelets = XMLReader::createLaneletFromXML(xmlFilePath, trafficSigns, trafficLights);
+    std::vector<std::shared_ptr<Lanelet>> lanelets = XMLReader::createLaneletFromXML(xmlFilePath, trafficSigns,
+                                                                                     trafficLights);
     std::vector<std::shared_ptr<Obstacle>> obstacles = XMLReader::createObstacleFromXML(xmlFilePath);
-    std::vector<std::shared_ptr<Intersection>> intersections = XMLReader::createIntersectionFromXML(xmlFilePath, lanelets);
+    std::vector<std::shared_ptr<Intersection>> intersections = XMLReader::createIntersectionFromXML(xmlFilePath,
+                                                                                                    lanelets);
     RoadNetwork roadNetwork{RoadNetwork(lanelets)};
+
+    if(PositionPredicates::onMainCarriageWay(0, obstacles[2], roadNetwork))
+        std::cout << "true";
+    else
+        std::cout << "false";
     return 0;
 }

@@ -3,13 +3,13 @@
 //
 
 #include "position_predicates.h"
-#include "../auxiliaryDefs/types_and_definitions.h"
 
-bool onMainCarriageWay(int timeStep, std::shared_ptr<Obstacle> obstacle, RoadNetwork roadNetwork){
-    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = roadNetwork.getOccupiedLanelets(obstacle, 0);
+bool PositionPredicates::onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle>& obstacle, const RoadNetwork& roadNetwork){
+    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork.getLaneletNetwork(), timeStep);
     LaneletType type = LaneletType::mainCarriageWay;
-    for(auto la : occupiedLanelets){
+    for(const auto& la : occupiedLanelets){
         if(std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(), [type](LaneletType t){return t == type;}))
             return true;
     }
+    return false;
 }
