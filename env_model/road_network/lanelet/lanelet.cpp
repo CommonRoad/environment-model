@@ -74,12 +74,12 @@ std::vector<std::shared_ptr<Lanelet>> Lanelet::getSuccessors() const { return su
 void Lanelet::addPredecessor(const std::shared_ptr<Lanelet>& pre) { predecessorLanelets.push_back(pre); }
 void Lanelet::addSuccessor(const std::shared_ptr<Lanelet>& suc) { successorLanelets.push_back(suc); }
 
-void Lanelet::setLeftAdjacent(Lanelet *left, std::string dir) {
+void Lanelet::setLeftAdjacent(Lanelet *left, const std::string& dir) {
     adjacentLeft.adj.push_back(left);
     adjacentLeft.dir = std::move(dir);
 }
 
-void Lanelet::setRightAdjacent(Lanelet *right, std::string dir) {
+void Lanelet::setRightAdjacent(Lanelet *right, const std::string& dir) {
     adjacentRight.adj.push_back(right);
     adjacentRight.dir = std::move(dir);
 }
@@ -169,18 +169,30 @@ void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) {
     Lanelet::userBidirectional = user;
 }
 
+Lanelet::Lanelet(size_t id, std::vector<vertice> centerVertices, std::vector<vertice> leftBorder,
+                 std::vector<vertice> rightBorder,
+                 std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
+                 std::vector<std::shared_ptr<Lanelet>> successorLanelets,
+                 std::vector<LaneletType> type, std::vector<ObstacleType> oneWay,
+                 std::vector<ObstacleType> bidirectional) : id(id), centerVertices(std::move(centerVertices)),
+                 leftBorder(std::move(leftBorder)), rightBorder(std::move(rightBorder)),
+                 predecessorLanelets(std::move(predecessorLanelets)),
+                 successorLanelets(std::move(successorLanelets)),
+                               laneletType(std::move(type)), userOneWay(std::move(oneWay)),
+                               userBidirectional(std::move(bidirectional)) {}
+
 
 std::vector<Lanelet> findLaneletsByShape(const std::vector<Lanelet> &lanelets, const polygon_type &polygonShape) {
 
     std::vector<Lanelet> inLanelets;
 
-#pragma omp parallel for schedule(guided)
-    for (const auto & la : lanelets) {
-        if (la.checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
-#pragma omp critical
-            inLanelets.push_back(la);
-        }
-    }
+//#pragma omp parallel for schedule(guided)
+//    for (const auto & la : lanelets) {
+//        if (la.checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
+//#pragma omp critical
+//            inLanelets.push_back(la);
+//        }
+//    }
 
     return inLanelets;
 }

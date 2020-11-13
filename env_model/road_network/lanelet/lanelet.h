@@ -6,9 +6,9 @@
 #define ENVIRONMENT_MODEL_LANELET_H
 
 
-#include "../../auxiliaryDefs/structs.h"
 #include "../regulatory_elements/traffic_light.h"
 #include "../regulatory_elements/traffic_sign.h"
+#include "../../auxiliaryDefs/structs.h"
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
@@ -19,8 +19,17 @@ class Lanelet {
     public:
         Lanelet();                                     // default constructor
         Lanelet(const Lanelet &) = default;            // copy constructor
-        Lanelet &operator=(const Lanelet &) = default; // copy assignment
-        Lanelet(Lanelet &&) = default;                 // move constructor
+        Lanelet(size_t id, std::vector<vertice> centerVertices, std::vector<vertice> leftBorder,
+                std::vector<vertice> rightBorder, std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
+                std::vector<std::shared_ptr<Lanelet>> successorLanelets,
+                std::vector<LaneletType> laneletType, std::vector<ObstacleType> userOneWay,
+                std::vector<ObstacleType> userBidirectional);
+
+    Lanelet &operator=(const Lanelet &) = default; // copy assignment
+        Lanelet(Lanelet &&) = default;
+
+
+    // move constructor
         Lanelet &operator=(Lanelet &&) = default;      // move assignment
         virtual ~Lanelet() = default;                  // virtual destructor
 
@@ -33,8 +42,8 @@ class Lanelet {
         void addCenterVertice(vertice center);
         void addPredecessor(const std::shared_ptr<Lanelet>& pre);
         void addSuccessor(const std::shared_ptr<Lanelet>& suc);
-        void setLeftAdjacent(Lanelet *left, std::string dir);
-        void setRightAdjacent(Lanelet *right, std::string dir);
+        void setLeftAdjacent(Lanelet *left, const std::string& dir);
+        void setRightAdjacent(Lanelet *right, const std::string& dir);
         void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices);
         void setRightBorderVertices(const std::vector<vertice> &rightBorderVertices);
         void setCenterVertices(const std::vector<vertice> &center);
@@ -75,11 +84,11 @@ class Lanelet {
 
         void createCenterVertices();
         void constructOuterPolygon(); // construct outer shape from borders
-        struct adjacent {
-            std::vector<Lanelet *> adj;
-            std::string dir;
-        };
 
+    struct adjacent {
+        std::vector<Lanelet *> adj;
+        std::string dir;
+    };
 
     private:
         size_t id;                                          // unique ID of lanelet
@@ -87,17 +96,17 @@ class Lanelet {
         std::vector<vertice> leftBorder;                    // vertices of left border
         std::vector<vertice> rightBorder;                   // vertices of right border
         std::vector<std::shared_ptr<Lanelet>> predecessorLanelets;         // previous lanelets
-        std::vector<std::shared_ptr<Lanelet>> successorLanelets;           // longitudinally adjacent lanelets
+        std::vector<std::shared_ptr<Lanelet>> successorLanelets; // longitudinally adjacent lanelets
         adjacent adjacentLeft;                              // left adjacent lanelet with driving tag
         adjacent adjacentRight;                             // right adjacent lanelet with driving tag
         polygon_type outerPolygon;
         box boundingBox{};                                  // Boost bounding box of the lanelet
         std::vector<std::shared_ptr<TrafficLight>> trafficLights;                  // traffic light assigned to lanelet
         std::vector<std::shared_ptr<TrafficSign>> trafficSigns;            // traffic signs assigned to lanelet
-        TrafficLight * trafficLight{};                      // traffic signs assigned to lanelet
         std::vector<LaneletType> laneletType;
         std::vector<ObstacleType> userOneWay;
         std::vector<ObstacleType> userBidirectional;
 };
+
 
 #endif //ENVIRONMENT_MODEL_LANELET_H

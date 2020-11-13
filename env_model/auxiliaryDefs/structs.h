@@ -13,6 +13,7 @@
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 
+
 struct CycleElement{
     CycleElementType color;
     float duration;

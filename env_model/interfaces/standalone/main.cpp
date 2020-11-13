@@ -5,6 +5,7 @@
 #include "../../auxiliaryDefs/structs.h"
 #include "../commonroad/xml_reader.h"
 #include "command_line_input.h"
+#include "../../road_network/road_network.h"
 
 
 int main(int argc, char **argv) {
@@ -21,6 +22,6 @@ int main(int argc, char **argv) {
     std::vector<std::shared_ptr<Lanelet>> lanelets = XMLReader::createLaneletFromXML(xmlFilePath, trafficSigns, trafficLights);
     std::vector<std::shared_ptr<Obstacle>> obstacles = XMLReader::createObstacleFromXML(xmlFilePath);
     std::vector<std::shared_ptr<Intersection>> intersections = XMLReader::createIntersectionFromXML(xmlFilePath, lanelets);
-
+    RoadNetwork roadNetwork{RoadNetwork(lanelets)};
     return 0;
 }

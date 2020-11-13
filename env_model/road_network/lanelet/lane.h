@@ -11,7 +11,10 @@
 typedef geometry::CurvilinearCoordinateSystem CurvilinearCoordinateSystem;
 
 class Lane {
-    private:
+public:
+    Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet &lanelet, CurvilinearCoordinateSystem &ccs);
+
+private:
         std::vector<std::shared_ptr<Lanelet>> containedLanelets;
         Lanelet lanelet;
         CurvilinearCoordinateSystem curvilinearCoordinateSystem;

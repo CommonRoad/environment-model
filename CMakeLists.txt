@@ -15,6 +15,12 @@ find_package(Boost REQUIRED COMPONENTS filesystem program_options)
 set(CRCCOSY_LIBRARY ${CRCCOSY_LIBRARY_DIR}/libcrccosy.a)
 set(LIB_ENV_MODEL_INCLUDE "." ${CRCCOSY_LIBRARY_DIR}/cpp)
 
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif ()
 
 file(GLOB_RECURSE env_files
         "env_model/road_network/*.h"
