@@ -8,10 +8,6 @@
 
 namespace bg = boost::geometry;
 
-const size_t PARTIALLY_CONTAINED = 1;
-const size_t COMPLETELY_CONTAINED = 2;
-
-
 void Lanelet::setId(const size_t num) { id = num; }
 
 size_t Lanelet::getId() const { return id; }
@@ -76,12 +72,12 @@ void Lanelet::addSuccessor(const std::shared_ptr<Lanelet>& suc) { successorLanel
 
 void Lanelet::setLeftAdjacent(Lanelet *left, const std::string& dir) {
     adjacentLeft.adj.push_back(left);
-    adjacentLeft.dir = std::move(dir);
+    adjacentLeft.dir = dir;
 }
 
 void Lanelet::setRightAdjacent(Lanelet *right, const std::string& dir) {
     adjacentRight.adj.push_back(right);
-    adjacentRight.dir = std::move(dir);
+    adjacentRight.dir = dir;
 }
 
 std::vector<std::shared_ptr<TrafficLight>> Lanelet::getTrafficLight() const { return trafficLights; }
@@ -180,37 +176,4 @@ Lanelet::Lanelet(size_t id, std::vector<vertice> centerVertices, std::vector<ver
                  successorLanelets(std::move(successorLanelets)),
                                laneletType(std::move(type)), userOneWay(std::move(oneWay)),
                                userBidirectional(std::move(bidirectional)) {}
-
-
-std::vector<Lanelet> findLaneletsByShape(const std::vector<Lanelet> &lanelets, const polygon_type &polygonShape) {
-
-    std::vector<Lanelet> inLanelets;
-
-//#pragma omp parallel for schedule(guided)
-//    for (const auto & la : lanelets) {
-//        if (la.checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
-//#pragma omp critical
-//            inLanelets.push_back(la);
-//        }
-//    }
-
-    return inLanelets;
-}
-
-std::vector<Lanelet> findLaneletsByPosition(const std::vector<Lanelet> &lanelets, double xPos, double yPos) {
-
-    std::vector<Lanelet> lanelet;
-    polygon_type polygonPos;
-    bg::append(polygonPos, point_type{xPos, yPos});
-
-    return findLaneletsByShape(lanelets, polygonPos);
-}
-
-Lanelet findLaneletsById(std::vector<Lanelet> lanelets, size_t id) {
-    auto it = std::find_if(std::begin(lanelets), std::end(lanelets), [id](auto val) { return val.getId() == id; });
-    if (it == std::end(lanelets)) {
-        throw std::domain_error(std::to_string(id));
-    }
-    return *it;
-}
 

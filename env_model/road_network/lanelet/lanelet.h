@@ -9,6 +9,9 @@
 #include "../regulatory_elements/traffic_light.h"
 #include "../regulatory_elements/traffic_sign.h"
 #include "../../auxiliaryDefs/structs.h"
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
@@ -84,6 +87,7 @@ class Lanelet {
 
         void createCenterVertices();
         void constructOuterPolygon(); // construct outer shape from borders
+
 
     struct adjacent {
         std::vector<Lanelet *> adj;

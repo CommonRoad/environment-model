@@ -4,6 +4,9 @@
 
 #include "road_network.h"
 #include "lanelet/lanelet_operations.h"
+#include "boost/geometry.hpp"
+
+namespace bg = boost::geometry;
 
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network){
     laneletNetwork = network;
@@ -57,4 +60,45 @@ LaneletType RoadNetwork::extractClassifyingLaneletType(const std::shared_ptr<Lan
             return LaneletType::shoulder;
     }
     return LaneletType::mainCarriageWay;
+}
+
+std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
+
+    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
+
+#pragma omp parallel for schedule(guided)
+    for (size_t i = 0; i < laneletNetwork.size(); i++) {
+        if (laneletNetwork[i]->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
+#pragma omp critical
+            occupiedLanelets.push_back(laneletNetwork[i]);
+        }
+    }
+
+    return occupiedLanelets;
+}
+
+std::vector<std::shared_ptr<Lanelet>> RoadNetwork::getOccupiedLanelets(const std::shared_ptr<Obstacle>& obstacle, int timeStep) {
+    // get lanelets which intersect with shape of ego vehicle
+    polygon_type polygonShape{obstacle->getOccupancyPolygonShape(timeStep)};
+    std::vector<std::shared_ptr<Lanelet>> occupied{RoadNetwork::findOccupiedLaneletsByShape(polygonShape)};
+
+    return occupied;
+
+}
+
+std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(const std::vector<Lanelet> &lanelets, double xPos, double yPos) {
+
+    std::vector<Lanelet> lanelet;
+    polygon_type polygonPos;
+    bg::append(polygonPos, point_type{xPos, yPos});
+
+    return findOccupiedLaneletsByShape(polygonPos);
+}
+
+std::shared_ptr<Lanelet> findLaneletsById(std::vector<std::shared_ptr<Lanelet>> lanelets, size_t id) {
+    auto it = std::find_if(std::begin(lanelets), std::end(lanelets), [id](auto val) { return val->getId() == id; });
+    if (it == std::end(lanelets)) {
+        throw std::domain_error(std::to_string(id));
+    }
+    return *it;
 }

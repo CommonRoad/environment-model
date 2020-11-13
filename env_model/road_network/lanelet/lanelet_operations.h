@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_LANELET_OPERATIONS_H
 #define ENV_MODEL_LANELET_OPERATIONS_H
 
-#include "../../auxiliaryDefs/types.h"
+#include "../../auxiliaryDefs/types_and_definitions.h"
 #include "lanelet.h"
 #include "lane.h"
 

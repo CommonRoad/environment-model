@@ -5,14 +5,7 @@
 #ifndef ENV_MODEL_STRUCTS_H
 #define ENV_MODEL_STRUCTS_H
 
-
-#include <iostream>
-#include <vector>
-#include "types.h"
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
-
+#include "types_and_definitions.h"
 
 struct CycleElement{
     CycleElementType color;

@@ -6,6 +6,7 @@
 #define ENV_MODEL_ROAD_NETWORK_H
 
 #include "lanelet/lane.h"
+#include "../obstacle/obstacle.h"
 
 class RoadNetwork {
     public:
@@ -16,6 +17,9 @@ class RoadNetwork {
 
         void setLaneletNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
         void setLanes(const std::vector<std::shared_ptr<Lane>> &lanes);
+        std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(const polygon_type &polygonShape);
+        std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(const std::shared_ptr<Obstacle>& obstacle, int timeStep);
+        std::vector<std::shared_ptr<Lanelet>> findLaneletsByPosition(const std::vector<Lanelet> &lanelets, double xPos, double yPos);
 
     private:
         void createLanes(const std::vector<std::shared_ptr<Lanelet>>& laneletNetwork);

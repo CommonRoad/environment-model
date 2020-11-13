@@ -2,8 +2,12 @@
 // Created by Sebastian Maierhofer on 07.11.20.
 //
 
-#ifndef ENV_MODEL_TYPES_H
-#define ENV_MODEL_TYPES_H
+#ifndef ENV_MODEL_TYPES_AND_DEFINITIONS_H
+#define ENV_MODEL_TYPES_AND_DEFINITIONS_H
+
+#include <iostream>
+#include "vector"
+#include "memory"
 
 enum class ObstacleType{car, truck, pedestrian, bus, unknown, vehicle};
 
@@ -16,4 +20,7 @@ enum class CycleElementType{red, green, yellow, red_yellow };
 
 enum class TrafficLightDirection{right, straight, left, leftStraight, straightRight, leftRight, all };
 
-#endif //ENV_MODEL_TYPES_H
+const size_t PARTIALLY_CONTAINED = 1;
+const size_t COMPLETELY_CONTAINED = 2;
+
+#endif //ENV_MODEL_TYPES_AND_DEFINITIONS_H

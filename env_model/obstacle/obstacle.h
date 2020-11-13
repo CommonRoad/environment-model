@@ -7,10 +7,11 @@
 
 #include "state.h"
 #include "../auxiliaryDefs/structs.h"
-#include "../auxiliaryDefs/types.h"
+#include "../auxiliaryDefs/types_and_definitions.h"
 #include "../geometry/rectangle.h"
 #include "../geometry/shape.h"
 #include <map>
+#include "../road_network/lanelet/lanelet.h"
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
@@ -46,7 +47,7 @@ class Obstacle {
     polygon_type getOccupancyPolygonShape(int timeStamp);
     Shape &getGeoShape();
 
-  private:
+private:
     size_t id{}; // unique id
     bool isStatic{false}; // true if Obstacle is static
     State currentState;
@@ -58,6 +59,7 @@ class Obstacle {
     double a_max{};      // maximum absolute acceleration of the Obstacle in m/s^2
     double a_max_long{}; // maximal longitudinal acceleration
     double a_min_long{}; // minimal longitudinal acceleration
+    std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};
 };
 
 #endif //ENV_MODEL_OBSTACLE_H

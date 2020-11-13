@@ -4,7 +4,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_CXX_STANDARD 17)
 
 if(NOT EXISTS "${CRCCOSY_LIBRARY_DIR}")
-    message(SEND_ERROR "Can't find the CommonRoad-Curvilinear-Coordinatesystem library in ${CRCCOSY_LIBRARY_DIR}")
+    message(SEND_ERROR "Can't find the CommonRoad-Curvilinear-Coordinate System library in ${CRCCOSY_LIBRARY_DIR}")
 endif()
 
 find_package(Eigen3 REQUIRED)
@@ -43,6 +43,8 @@ file(GLOB_RECURSE env_files
         "env_model/auxiliaryDefs/*.cpp"
         "env_model/interfaces/standalone/command_line_input.cpp"
         "env_model/interfaces/standalone/command_line_input.h"
+        "env_model/predicates/*.h"
+        "env_model/predicates/*.cpp"
         )
 
 add_executable(env_model ${env_files} env_model/interfaces/standalone/main.cpp)

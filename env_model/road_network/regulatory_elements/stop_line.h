@@ -7,7 +7,7 @@
 
 #include "traffic_sign.h"
 #include "traffic_light.h"
-#include "../../auxiliaryDefs/types.h"
+#include "../../auxiliaryDefs/types_and_definitions.h"
 
 class StopLine {
     public:

@@ -6,6 +6,7 @@
 #include "../geometry/geometric_operations.h"
 #include <chrono>
 #include <cmath>
+#include "../road_network/road_network.h"
 
 void Obstacle::setId(const size_t num) { id = num; }
 
@@ -109,92 +110,3 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
     }
     return polygonShape;
 }
-
-//bool Obstacle::findLaneletsCorrespondingToObstacle(const std::vector<vehicularLanelet *> &intersectionLanelets,
-//                                                   std::vector<vehicularLanelet *> &inLanelet) {
-//
-//    size_t i;
-//    std::vector<vehicularLanelet *> oppositeLanelets;
-//
-//    double laneletOrientation; // orientation of lanelet at Obstacle position
-//    double obstacleOrientation = this->getOrientation();
-//    // if Obstacle intersects with any lanelet --> Obstacle is in road network
-//
-//    vertice pos = vertice{this->getXpos(), this->getYpos()};
-//    std::pair<double, double> validOrientations = config::getValidTrackOrientations();
-//    for (i = 0; i < intersectionLanelets.size(); i++) {
-//        // calculate orientation of lanelet at Obstacle position
-//        laneletOrientation = calcAngleOfVerticesAtPosition((intersectionLanelets)[i]->getCenterVertices(), pos);
-//
-//        auto relationToLanelet =
-//            orientationToTrack(obstacleOrientation, laneletOrientation, this->getOrientationError(), validOrientations);
-//        // Obstacle is only in a lanelet if it has approx. the same orientation
-//        if (relationToLanelet) {
-//            double orientationToLanelet = relationToLanelet.value();
-//            if (orientationToLanelet < 0) {
-//                oppositeLanelets.emplace_back(intersectionLanelets[i]);
-//            } else {
-//                inLanelet.emplace_back(intersectionLanelets[i]);
-//            }
-//        }
-//    }
-//
-//    if (inLanelet.empty()) {
-//        inLanelet = std::move(oppositeLanelets);
-//        return true; // lanelets with opposite direction
-//    }
-//    return false;
-//}
-
-
-//
-//std::vector<Lanelet> Obstacle::tracksAtObjPositionOrShape(const std::vector<Lanelet> &lanelets) {
-//    std::vector<Lanelet> trackCandidates;
-//
-//    // get lanelets which intersect with shape of ego vehicle
-//    // polygon_type polygonShape = this->getOccupancyPolygonShape();
-//    trackCandidates = findTracksByShape(lanelets, polygonShape);
-//
-//    return trackCandidates;
-//}
-//
-//std::vector<Lanelet *> Obstacle::getInLanelets(const std::vector<Lanelet> &lanelets, int timeStep) {
-//    std::vector<Lanelet> tracksAtObjPosition = this->tracksAtObjPositionOrShape(lanelets);
-//    if (currentState.getTimeStep() == timeStep){
-//        vertice objPos{currentState.getXPosition(), currentState.getYPosition()};
-//        std::vector<std::optional<double>> tracksOrientation(tracksAtObjPosition.size());
-//        size_t i;
-//        std::vector<Lanelet> inLanelets;
-//
-//        /*
-//         * assume that a traffic participant is only in a track, if its
-//         * orientation differs less than +- pi/5 from the track orientation
-//         */
-//        //const auto validOrientations = config::getValidTrackOrientations();
-//        //double trackOrientation;
-//
-//        for (i = 0; i < tracksAtObjPosition.size(); i++) {
-//
-//            trackOrientation = calcAngleOfVerticesAtPosition(tracksAtObjPosition[i]->getCenterVertices(), objPos);
-//            tracksOrientation[i] = orientationToTrack(this->getOrientation(), trackOrientation, this->getOrientationError(),
-//                                                      validOrientations);
-//
-//            if (tracksOrientation[i] && tracksOrientation[i].value() >= 0) {
-//
-//                inTracks.push_back(tracksAtObjPosition[i]);
-//            }
-//        }
-//
-//        // consider tracks with opposite direction, if there is no track with appropriate orientation
-//        if (inTracks.size() == 0) {
-//            for (i = 0; i < tracksAtObjPosition.size(); i++) {
-//                if (tracksOrientation[i] && tracksOrientation[i].value() < 0) {
-//                    inTracks.emplace_back(tracksAtObjPosition[i]);
-//                }
-//            }
-//        }
-//        return inTracks;
-//    }
-//
-//
-//}
