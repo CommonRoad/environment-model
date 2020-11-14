@@ -44,6 +44,8 @@ class Obstacle {
     [[nodiscard]] ObstacleType getType() const;
     [[nodiscard]] const State &getCurrentState() const;
     [[nodiscard]] bool getIsStatic() const;
+    [[nodiscard]] std::map<int, State> getTrajectoryPrediction() const;
+    int getTrajectoryLength();
     polygon_type getOccupancyPolygonShape(int timeStamp);
     Shape &getGeoShape();
     std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(const std::vector<std::shared_ptr<Lanelet>>& lanelets, int timeStep);

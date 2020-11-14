@@ -69,6 +69,10 @@ void Obstacle::setCurrentState(const State &state) {currentState = state;}
 
 bool Obstacle::getIsStatic() const { return isStatic; }
 
+std::map<int, State> Obstacle::getTrajectoryPrediction() const { return trajectoryPrediction; }
+
+int Obstacle::getTrajectoryLength() { return trajectoryPrediction.size(); }
+
 
 void Obstacle::appendState(State state) {
     trajectoryPrediction.insert(std::pair<int, State>(state.getTimeStep(), state));

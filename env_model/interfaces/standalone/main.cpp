@@ -28,9 +28,13 @@ int main(int argc, char **argv) {
                                                                                                     lanelets);
     RoadNetwork roadNetwork{RoadNetwork(lanelets)};
 
-    if(PositionPredicates::onMainCarriageWay(0, obstacles[2], roadNetwork))
-        std::cout << "true";
-    else
-        std::cout << "false";
+    for(const auto& obs : obstacles) {
+        std::cout << obs->getId() << '\n';
+        for (int i=0; i < obs->getTrajectoryLength(); ++i)
+            if (PositionPredicates::onMainCarriageWay(i, obs, roadNetwork))
+                std::cout << i << " true \n";
+            else
+                std::cout << i << " false \n";
+    }
     return 0;
 }
