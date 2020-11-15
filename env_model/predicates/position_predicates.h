@@ -10,7 +10,17 @@
 
 class PositionPredicates {
     public:
-        static bool onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle>& obstacle, const RoadNetwork& roadNetwork);
+        bool onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle>& obstacle);
+        bool onMainCarriageWayRightLane(int timeStep, const std::shared_ptr<Obstacle>& obstacle);
+        bool onAccessRamp(int timeStep, const std::shared_ptr<Obstacle>& obstacle);
+        bool inFrontOf(int timeStep, const std::shared_ptr<Obstacle>& obs1, const std::shared_ptr<Obstacle>& obs2);
+
+        void setRoadNetwork(const std::shared_ptr<RoadNetwork> &roadNetwork);
+
+    PositionPredicates(std::shared_ptr<RoadNetwork> roadNetwork);
+
+private:
+        std::shared_ptr<RoadNetwork> roadNetwork;
 
 };
 

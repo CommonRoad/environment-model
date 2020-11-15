@@ -4,8 +4,10 @@
 
 #include "position_predicates.h"
 
-bool PositionPredicates::onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle>& obstacle, const RoadNetwork& roadNetwork){
-    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork.getLaneletNetwork(), timeStep);
+#include <utility>
+
+bool PositionPredicates::onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle>& obstacle){
+    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork->getLaneletNetwork(), timeStep);
     LaneletType type = LaneletType::mainCarriageWay;
     for(const auto& la : occupiedLanelets){
         if(std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(), [type](LaneletType t){return t == type;}))
@@ -13,3 +15,30 @@ bool PositionPredicates::onMainCarriageWay(int timeStep, const std::shared_ptr<O
     }
     return false;
 }
+
+bool PositionPredicates::onMainCarriageWayRightLane(int timeStep, const std::shared_ptr<Obstacle>& obstacle){
+
+    return false;
+}
+
+bool PositionPredicates::onAccessRamp(int timeStep, const std::shared_ptr<Obstacle> &obstacle){
+    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork->getLaneletNetwork(), timeStep);
+    LaneletType type = LaneletType::accessRamp;
+    for(const auto& la : occupiedLanelets){
+        if(std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(), [type](LaneletType t){return t == type;}))
+            return true;
+    }
+    return false;
+}
+
+bool PositionPredicates::inFrontOf(int timeStep, const std::shared_ptr<Obstacle>& obsP, const std::shared_ptr<Obstacle>& obsK){
+    if obsP.frontS(timeStep) < obsK.rearS(timeStep)
+        return True;
+    else
+        return False;
+    return false;
+}
+
+void PositionPredicates::setRoadNetwork(const std::shared_ptr<RoadNetwork> &net) {roadNetwork = net;}
+
+PositionPredicates::PositionPredicates(std::shared_ptr<RoadNetwork> roadNetwork) : roadNetwork(std::move(roadNetwork)) {}

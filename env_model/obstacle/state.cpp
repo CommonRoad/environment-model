@@ -9,6 +9,7 @@ double State::getXPosition() const {
 }
 
 void State::setXPosition(double x) {
+    validStates.xPosition = true;
     xPosition = x;
 }
 
@@ -17,6 +18,7 @@ double State::getYPosition() const {
 }
 
 void State::setYPosition(double y) {
+    validStates.yPosition = true;
     yPosition = y;
 }
 
@@ -25,6 +27,7 @@ double State::getVelocity() const {
 }
 
 void State::setVelocity(double vel) {
+    validStates.velocity = true;
     State::velocity = vel;
 }
 
@@ -33,6 +36,7 @@ double State::getAcceleration() const {
 }
 
 void State::setAcceleration(double acc) {
+    validStates.acceleration = true;
     acceleration = acc;
 }
 
@@ -41,6 +45,7 @@ double State::getLonPosition() const {
 }
 
 void State::setLonPosition(double s) {
+    validStates.lonPosition = true;
     lonPosition = s;
 }
 
@@ -49,6 +54,7 @@ double State::getLatPosition() const {
 }
 
 void State::setLatPosition(double d) {
+    validStates.latPosition = true;
     latPosition = d;
 }
 
@@ -57,6 +63,7 @@ double State::getOrientation() const {
 }
 
 void State::setOrientation(double theta) {
+    validStates.orientation = true;
     orientation = theta;
 }
 
@@ -66,4 +73,18 @@ int State::getTimeStep() const {
 
 void State::setTimeStep(int time) {
     timeStep = time;
+}
+
+const ValidStates &State::getValidStates() const {
+    return validStates;
+}
+
+void State::setValidStates(const ValidStates &valid) {
+    State::validStates = valid;
+}
+
+void State::convertPointToCurvilinear(const CurvilinearCoordinateSystem& ccs){
+    Eigen::Vector2d convertedPoint = ccs.convertToCurvilinearCoords(getXPosition(), getYPosition());
+    setLonPosition(convertedPoint.x());
+    setLatPosition(convertedPoint.y());
 }

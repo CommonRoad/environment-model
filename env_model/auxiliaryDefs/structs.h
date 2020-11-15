@@ -18,5 +18,14 @@ struct vertice {
     double y;
 };
 
+struct ValidStates{
+    bool xPosition;
+    bool yPosition;
+    bool velocity;
+    bool acceleration;
+    bool lonPosition;
+    bool latPosition;
+    bool orientation;
+};
 
 #endif //ENV_MODEL_STRUCTS_H

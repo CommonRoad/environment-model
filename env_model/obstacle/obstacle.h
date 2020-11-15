@@ -11,7 +11,7 @@
 #include "../geometry/rectangle.h"
 #include "../geometry/shape.h"
 #include <map>
-#include "../road_network/lanelet/lanelet.h"
+#include "../road_network/lanelet/lane.h"
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
@@ -49,6 +49,12 @@ class Obstacle {
     polygon_type getOccupancyPolygonShape(int timeStamp);
     Shape &getGeoShape();
     std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(const std::vector<std::shared_ptr<Lanelet>>& lanelets, int timeStep);
+    void setLane(const std::shared_ptr<Lane>& lanes, int timeStep);
+    std::shared_ptr<Lane> getLane(int timeStep);
+    double frontS(int timeStep);
+    double rearS(int timeStep);
+    double getLonPosition(int timeStep);
+    double getLatPosition(int timeStep);
 
 private:
     size_t id{}; // unique id
@@ -63,6 +69,7 @@ private:
     double a_max_long{}; // maximal longitudinal acceleration
     double a_min_long{}; // minimal longitudinal acceleration
     std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};
+    std::map<int, std::shared_ptr<Lane>> occupiedLane{};
 };
 
 #endif //ENV_MODEL_OBSTACLE_H

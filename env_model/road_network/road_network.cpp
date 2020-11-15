@@ -77,18 +77,39 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(s
     return occupiedLanelets;
 }
 
-std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(const std::vector<std::shared_ptr<Lanelet>>& lanelets, double xPos, double yPos) {
+std::shared_ptr<Lane> RoadNetwork::findLaneByShape(std::shared_ptr<Lane> possibleLanes, const polygon_type &polygonShape) {
+
+//#pragma omp parallel for schedule(guided)
+    for (size_t i = 0; i < possibleLanes.size(); i++) {
+        if (possibleLanes[i]->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
+//#pragma omp critical
+            return possibleLanes[i];
+        }
+    }
+
+
+}
+
+std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double xPos, double yPos) {
 
     std::vector<Lanelet> lanelet;
     polygon_type polygonPos;
     bg::append(polygonPos, point_type{xPos, yPos});
 
-    return RoadNetwork::findOccupiedLaneletsByShape(lanelets, polygonPos);
+    return RoadNetwork::findOccupiedLaneletsByShape(laneletNetwork, polygonPos);
 }
 
-std::shared_ptr<Lanelet> findLaneletsById(std::vector<std::shared_ptr<Lanelet>> lanelets, size_t id) {
-    auto it = std::find_if(std::begin(lanelets), std::end(lanelets), [id](auto val) { return val->getId() == id; });
-    if (it == std::end(lanelets)) {
+std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
+    auto it = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork), [id](auto val) { return val->getId() == id; });
+    if (it == std::end(laneletNetwork)) {
+        throw std::domain_error(std::to_string(id));
+    }
+    return *it;
+}
+
+std::shared_ptr<Lane> RoadNetwork::findLaneById(size_t id) {
+    auto it = std::find_if(std::begin(lanes), std::end(lanes), [id](auto val) { return val->getId() == id; });
+    if (it == std::end(lanes)) {
         throw std::domain_error(std::to_string(id));
     }
     return *it;

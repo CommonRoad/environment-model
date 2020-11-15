@@ -26,15 +26,21 @@ int main(int argc, char **argv) {
     std::vector<std::shared_ptr<Obstacle>> obstacles = XMLReader::createObstacleFromXML(xmlFilePath);
     std::vector<std::shared_ptr<Intersection>> intersections = XMLReader::createIntersectionFromXML(xmlFilePath,
                                                                                                     lanelets);
-    RoadNetwork roadNetwork{RoadNetwork(lanelets)};
+    std::shared_ptr<RoadNetwork> roadNetwork{std::make_shared<RoadNetwork>(RoadNetwork(lanelets))};
 
+    PositionPredicates posPred{PositionPredicates(roadNetwork)};
     for(const auto& obs : obstacles) {
         std::cout << obs->getId() << '\n';
-        for (int i=0; i < obs->getTrajectoryLength(); ++i)
-            if (PositionPredicates::onMainCarriageWay(i, obs, roadNetwork))
-                std::cout << i << " true \n";
+        for (int i=0; i < obs->getTrajectoryLength(); ++i) {
+            if (posPred.onMainCarriageWay(i, obs))
+                std::cout << "time step " << i << ": onMainCarriageWay: true \n";
             else
-                std::cout << i << " false \n";
+                std::cout << "time step " << i << ": onMainCarriageWay: false \n";
+            if (posPred.onAccessRamp(i, obs))
+                std::cout << "time step " << i << ": onAccessRamp: true \n";
+            else
+                std::cout << "time step " << i << ": onAccessRamp: false \n";
+        }
     }
     return 0;
 }

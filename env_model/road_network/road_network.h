@@ -18,7 +18,10 @@ class RoadNetwork {
         void setLaneletNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
         void setLanes(const std::vector<std::shared_ptr<Lane>> &lanes);
         static std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(std::vector<std::shared_ptr<Lanelet>> lanelets, const polygon_type &polygonShape);
-        static std::vector<std::shared_ptr<Lanelet>> findLaneletsByPosition(const std::vector<std::shared_ptr<Lanelet>> &lanelets, double xPos, double yPos);
+        std::vector<std::shared_ptr<Lanelet>> findLaneletsByPosition(double xPos, double yPos);
+        std::shared_ptr<Lane> findLaneById(size_t id);
+        std::shared_ptr<Lanelet> findLaneletById(size_t id);
+        static std::shared_ptr<Lane> findLaneByShape(std::shared_ptr<Lane> possibleLanes, const polygon_type &polygonShape);
 
     private:
         void createLanes(const std::vector<std::shared_ptr<Lanelet>>& laneletNetwork);

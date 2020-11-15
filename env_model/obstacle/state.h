@@ -5,6 +5,10 @@
 #ifndef ENV_MODEL_STATE_H
 #define ENV_MODEL_STATE_H
 
+#include "../auxiliaryDefs/structs.h"
+#include "geometry/curvilinear_coordinate_system.h"
+
+typedef geometry::CurvilinearCoordinateSystem CurvilinearCoordinateSystem;
 
 class State {
 public:
@@ -16,6 +20,7 @@ public:
     [[nodiscard]] double getLatPosition() const;
     [[nodiscard]] double getOrientation() const;
     [[nodiscard]] int getTimeStep() const;
+    [[nodiscard]] const ValidStates &getValidStates() const;
 
     void setXPosition(double xPosition);
     void setYPosition(double yPosition);
@@ -25,6 +30,8 @@ public:
     void setLatPosition(double latPosition);
     void setOrientation(double orientation);
     void setTimeStep(int timeStep);
+    void setValidStates(const ValidStates &validStates);
+    void convertPointToCurvilinear(const CurvilinearCoordinateSystem& ccs);
 
 private:
         double xPosition{0.0};
@@ -34,6 +41,7 @@ private:
         double lonPosition{0.0};
         double latPosition{0.0};
         double orientation{0.0};
+        ValidStates validStates;
         int timeStep{0};
 };
 
