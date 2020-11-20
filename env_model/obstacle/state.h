@@ -41,7 +41,8 @@ private:
         double lonPosition{0.0};
         double latPosition{0.0};
         double orientation{0.0};
-        ValidStates validStates;
+        ValidStates validStates{false, false, false, false, false,
+                                false, false};
         int timeStep{0};
 };
 
