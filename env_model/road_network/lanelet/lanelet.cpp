@@ -177,3 +177,14 @@ Lanelet::Lanelet(size_t id, std::vector<vertice> centerVertices, std::vector<ver
                                laneletType(std::move(type)), userOneWay(std::move(oneWay)),
                                userBidirectional(std::move(bidirectional)) {}
 
+double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
+    std::vector<double> dif(centerVertices.size()-1);
+    for(int i = 0; i < centerVertices.size() - 1; ++i){
+        vertice vert{centerVertices[i]};
+        dif[i] = sqrt(pow(vert.x - positionX, 2) + pow(vert.y - positionY, 2));
+    }
+    int closestIndex{static_cast<int>(std::min_element(dif.begin(), dif.end()) - dif.begin())};
+    vertice vert1{centerVertices[closestIndex]};
+    vertice vert2{centerVertices[closestIndex + 1]};
+    return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
+}

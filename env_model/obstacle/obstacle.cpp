@@ -6,6 +6,7 @@
 #include "../geometry/geometric_operations.h"
 #include <chrono>
 #include <cmath>
+#include <utility>
 #include "../road_network/road_network.h"
 
 void Obstacle::setId(const size_t num) { id = num; }
@@ -106,14 +107,14 @@ std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::v
     return occupied;
 }
 
-void Obstacle::setLane(const std::shared_ptr<Lane>& lanes, int timeStep) {
+void Obstacle::setLane(std::vector<std::shared_ptr<Lane>> lanes, int timeStep) {
     if(occupiedLane.find(timeStep-1) != occupiedLane.end() and occupiedLane.at(timeStep-1)->checkIntersection(getOccupancyPolygonShape(timeStep), PARTIALLY_CONTAINED)) {
         occupiedLane.insert(std::pair<int, std::shared_ptr<Lane>>(timeStep, occupiedLane.at(timeStep - 1)));
     }
     // find new lane
     else {
         polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
-        std::shared_ptr<Lane> occupied{RoadNetwork::findLaneByShape(lanes, polygonShape)};
+        std::shared_ptr<Lane> occupied{RoadNetwork::findLaneByShape(std::move(lanes), polygonShape)};
         occupiedLane.insert(std::pair<int, std::shared_ptr<Lane>>(timeStep, occupied));
     }
 }
@@ -123,15 +124,25 @@ std::shared_ptr<Lane> Obstacle::getLane(int timeStep) {return occupiedLane.at(ti
 
 double Obstacle::frontS(int timeStep) {
     double s = getLonPosition(timeStep);
-    double d = getLatPosition(timeStep);
-    double w = geoShape.getWidth();
-    double l = geoShape.getLength();
-    double theta = trajectoryPrediction.at(timeStep).getOrientation() - getLane(timeStep)->getCurvilinearCoordinateSystem().4
+    double width = geoShape.getWidth();
+    double length = geoShape.getLength();
+    double theta = trajectoryPrediction.at(timeStep).getOrientation() - getLane(timeStep)->getLanelet().getOrientationAtPosition(getTrajectoryPrediction().at(timeStep).getXPosition(), getTrajectoryPrediction().at(timeStep).getYPosition());
+    return std::min({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
+              (length / 2) * cos(theta) - (-width / 2) * sin(theta) + s,
+              (-length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
+              (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + s});
 
 }
 
 double Obstacle::rearS(int timeStep) {
-
+    double s = getLonPosition(timeStep);
+    double width = geoShape.getWidth();
+    double length = geoShape.getLength();
+    double theta = trajectoryPrediction.at(timeStep).getOrientation() - getLane(timeStep)->getLanelet().getOrientationAtPosition(getTrajectoryPrediction().at(timeStep).getXPosition(), getTrajectoryPrediction().at(timeStep).getYPosition());
+    return std::max({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
+                     (length / 2) * cos(theta) - (-width / 2) * sin(theta) + s,
+                     (-length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
+                     (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + s});
 }
 
 double Obstacle::getLonPosition(int timeStep) {

@@ -3,6 +3,8 @@
 //
 
 #include "road_network.h"
+
+#include <utility>
 #include "lanelet/lanelet_operations.h"
 #include "boost/geometry.hpp"
 
@@ -17,9 +19,9 @@ const std::vector<std::shared_ptr<Lanelet>> &RoadNetwork::getLaneletNetwork() co
 
 void RoadNetwork::setLaneletNetwork(const std::vector<std::shared_ptr<Lanelet>> &network) {laneletNetwork = network;}
 
-const std::vector<std::shared_ptr<Lane>> &RoadNetwork::getLanes() const {return lanes;}
+std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() {return lanes;}
 
-void RoadNetwork::setLanes(const std::vector<std::shared_ptr<Lane>> &la) {RoadNetwork::lanes = la;}
+void RoadNetwork::setLanes(std::vector<std::shared_ptr<Lane>> la) {lanes = std::move(la);}
 
 void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>>& network) {
     std::vector<std::shared_ptr<Lanelet>> startLanelets;
@@ -44,7 +46,7 @@ void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>>& netwo
     }
     for(const auto& la : startLanelets){
         laneletType = extractClassifyingLaneletType(la);
-        lanes.push_back(std::make_shared<Lane>(combineLaneletAndSuccessorsWithSameTypeToLane(la, laneletType)));
+        lanes.push_back(combineLaneletAndSuccessorsWithSameTypeToLane(la, laneletType));
     }
 }
 
@@ -77,7 +79,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(s
     return occupiedLanelets;
 }
 
-std::shared_ptr<Lane> RoadNetwork::findLaneByShape(std::shared_ptr<Lane> possibleLanes, const polygon_type &polygonShape) {
+std::shared_ptr<Lane> RoadNetwork::findLaneByShape(std::vector<std::shared_ptr<Lane>> possibleLanes, const polygon_type &polygonShape) {
 
 //#pragma omp parallel for schedule(guided)
     for (size_t i = 0; i < possibleLanes.size(); i++) {
@@ -102,14 +104,6 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double
 std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
     auto it = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork), [id](auto val) { return val->getId() == id; });
     if (it == std::end(laneletNetwork)) {
-        throw std::domain_error(std::to_string(id));
-    }
-    return *it;
-}
-
-std::shared_ptr<Lane> RoadNetwork::findLaneById(size_t id) {
-    auto it = std::find_if(std::begin(lanes), std::end(lanes), [id](auto val) { return val->getId() == id; });
-    if (it == std::end(lanes)) {
         throw std::domain_error(std::to_string(id));
     }
     return *it;

@@ -28,6 +28,12 @@ int main(int argc, char **argv) {
                                                                                                     lanelets);
     std::shared_ptr<RoadNetwork> roadNetwork{std::make_shared<RoadNetwork>(RoadNetwork(lanelets))};
 
+    for(const auto& obs : obstacles) {
+        for (int i=0; i < obs->getTrajectoryLength(); ++i) {
+            obs->setLane(roadNetwork->getLanes(), i);
+        }
+    }
+
     PositionPredicates posPred{PositionPredicates(roadNetwork)};
     for(const auto& obs : obstacles) {
         std::cout << obs->getId() << '\n';
@@ -40,6 +46,14 @@ int main(int argc, char **argv) {
                 std::cout << "time step " << i << ": onAccessRamp: true \n";
             else
                 std::cout << "time step " << i << ": onAccessRamp: false \n";
+            for(const auto& obs2 : obstacles) {
+                if(obs->getId() == obs2->getId())
+                    continue;
+                if (PositionPredicates::inFrontOf(i, obs, obs2))
+                    std::cout << "time step " << i << ": obs " << obs2->getId() <<" inFrontOf: true \n";
+                else
+                    std::cout << "time step " << i << ": obs " << obs2->getId() <<" inFrontOf: false \n";
+            }
         }
     }
     return 0;

@@ -12,18 +12,23 @@ typedef geometry::CurvilinearCoordinateSystem CurvilinearCoordinateSystem;
 
 class Lane {
 public:
-    Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet &lanelet, CurvilinearCoordinateSystem &ccs);
+    Lane(std::vector<std::shared_ptr<Lanelet>>  containedLanelets, Lanelet lanelet, CurvilinearCoordinateSystem ccs);
+    ~Lane() = default;
+    Lane(const Lane &other) = default;
+    Lane& operator=(Lane const& other) { };
+    Lane& operator=(Lane && other) = default;
+
     [[nodiscard]] bool checkIntersection(const polygon_type &intersecting, size_t intersection_flag) const;
 
-    const std::vector<std::shared_ptr<Lanelet>> &getContainedLanelets() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getContainedLanelets() const;
 
     void setContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets);
 
-    const Lanelet &getLanelet() const;
+    [[nodiscard]] Lanelet getLanelet() const;
 
     void setLanelet(const Lanelet &lanelet);
 
-    const CurvilinearCoordinateSystem &getCurvilinearCoordinateSystem() const;
+    [[nodiscard]] const CurvilinearCoordinateSystem &getCurvilinearCoordinateSystem() const;
 
     void setCurvilinearCoordinateSystem(const CurvilinearCoordinateSystem &curvilinearCoordinateSystem);
 

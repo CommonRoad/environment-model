@@ -60,7 +60,7 @@ LineMarking matchStringToLineMarking(const char *type){
 
 
 
-Lane combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet, LaneletType type) {
+std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet, LaneletType type) {
     // assumption: all successors have different type
     size_t id = curLanelet->getId();
     std::vector<std::shared_ptr<Lanelet>> laneletList{curLanelet};
@@ -95,13 +95,16 @@ Lane combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curL
     std::vector<LaneletType> typeList{type};
     Lanelet newLanelet = Lanelet(id, centerVertices, leftBorderVertices, rightBorderVertices, predecessorLanelets,
                                  successorLanelets, typeList, userOneWay, userBidirectional);
+    newLanelet.createCenterVertices();
+    newLanelet.constructOuterPolygon();
 
     geometry::EigenPolyline reference_path;
     for(auto vert : centerVertices){
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     }
 
-    CurvilinearCoordinateSystem ccs = CurvilinearCoordinateSystem(reference_path);
+    //CurvilinearCoordinateSystem ccs = ;
+    std::shared_ptr<Lane> l = std::make_shared<Lane>(laneletList, newLanelet, CurvilinearCoordinateSystem(reference_path));
 
-    return Lane(laneletList, newLanelet, ccs);
+    return l;
 }

@@ -13,19 +13,17 @@ class RoadNetwork {
         explicit RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
 
         [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getLaneletNetwork() const;
-        [[nodiscard]] const std::vector<std::shared_ptr<Lane>> &getLanes() const;
+        std::vector<std::shared_ptr<Lane>> getLanes();
 
         void setLaneletNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
-        void setLanes(const std::vector<std::shared_ptr<Lane>> &lanes);
+        void setLanes(std::vector<std::shared_ptr<Lane>> lanes);
         static std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(std::vector<std::shared_ptr<Lanelet>> lanelets, const polygon_type &polygonShape);
         std::vector<std::shared_ptr<Lanelet>> findLaneletsByPosition(double xPos, double yPos);
-        std::shared_ptr<Lane> findLaneById(size_t id);
         std::shared_ptr<Lanelet> findLaneletById(size_t id);
-        static std::shared_ptr<Lane> findLaneByShape(std::shared_ptr<Lane> possibleLanes, const polygon_type &polygonShape);
+        static std::shared_ptr<Lane> findLaneByShape(std::vector<std::shared_ptr<Lane>> possibleLanes, const polygon_type &polygonShape);
 
     private:
         void createLanes(const std::vector<std::shared_ptr<Lanelet>>& laneletNetwork);
-
         std::vector<std::shared_ptr<Lanelet>> laneletNetwork;
         std::vector<std::shared_ptr<Lane>> lanes;
 

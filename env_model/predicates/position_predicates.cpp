@@ -32,11 +32,10 @@ bool PositionPredicates::onAccessRamp(int timeStep, const std::shared_ptr<Obstac
 }
 
 bool PositionPredicates::inFrontOf(int timeStep, const std::shared_ptr<Obstacle>& obsP, const std::shared_ptr<Obstacle>& obsK){
-    if obsP.frontS(timeStep) < obsK.rearS(timeStep)
-        return True;
+    if(obsP->frontS(timeStep) < obsK->rearS(timeStep))
+        return true;
     else
-        return False;
-    return false;
+        return false;
 }
 
 void PositionPredicates::setRoadNetwork(const std::shared_ptr<RoadNetwork> &net) {roadNetwork = net;}

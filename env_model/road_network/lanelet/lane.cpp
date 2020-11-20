@@ -8,8 +8,8 @@
 
 namespace bg = boost::geometry;
 
-Lane::Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet &lanelet, CurvilinearCoordinateSystem &ccs) : containedLanelets(std::move(containedLanelets)),
-                                                                             lanelet(lanelet), curvilinearCoordinateSystem(ccs) {}
+Lane::Lane(std::vector<std::shared_ptr<Lanelet>>  containedLanelets, Lanelet lanelet, CurvilinearCoordinateSystem ccs) : containedLanelets(std::move(containedLanelets)),
+                                                                                                                          lanelet(std::move(lanelet)), curvilinearCoordinateSystem(std::move(ccs)) {}
 
 bool Lane::checkIntersection(const polygon_type &intersecting, size_t intersection_flag) const {
     return lanelet.checkIntersection(intersecting, intersection_flag);
@@ -19,7 +19,7 @@ const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const 
 
 void Lane::setContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &lanelets) {containedLanelets = lanelets;}
 
-const Lanelet &Lane::getLanelet() const {return lanelet;}
+Lanelet Lane::getLanelet() const {return lanelet;}
 
 void Lane::setLanelet(const Lanelet &la) {lanelet = la;}
 

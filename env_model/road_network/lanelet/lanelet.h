@@ -28,7 +28,7 @@ class Lanelet {
                 std::vector<LaneletType> laneletType, std::vector<ObstacleType> userOneWay,
                 std::vector<ObstacleType> userBidirectional);
 
-    Lanelet &operator=(const Lanelet &) = default; // copy assignment
+        Lanelet &operator=(const Lanelet &) = default; // copy assignment
         Lanelet(Lanelet &&) = default;
 
 
@@ -87,6 +87,7 @@ class Lanelet {
 
         void createCenterVertices();
         void constructOuterPolygon(); // construct outer shape from borders
+        double getOrientationAtPosition(double positionX, double positionY);
 
 
     struct adjacent {
@@ -95,7 +96,7 @@ class Lanelet {
     };
 
     private:
-        size_t id;                                          // unique ID of lanelet
+        size_t id{};                                          // unique ID of lanelet
         std::vector<vertice> centerVertices;                // vertices of center line of lanelet
         std::vector<vertice> leftBorder;                    // vertices of left border
         std::vector<vertice> rightBorder;                   // vertices of right border

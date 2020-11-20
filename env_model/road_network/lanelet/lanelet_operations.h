@@ -13,6 +13,6 @@ LaneletType matchStringToLaneletType(const char *type);
 
 LineMarking matchStringToLineMarking(const char *type);
 
-Lane combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet, LaneletType type);
+std::shared_ptr<Lane> combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet, LaneletType type);
 
 #endif //ENV_MODEL_LANELET_OPERATIONS_H
