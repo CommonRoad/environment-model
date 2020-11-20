@@ -17,7 +17,12 @@ bool PositionPredicates::onMainCarriageWay(int timeStep, const std::shared_ptr<O
 }
 
 bool PositionPredicates::onMainCarriageWayRightLane(int timeStep, const std::shared_ptr<Obstacle>& obstacle){
-
+    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork->getLaneletNetwork(), timeStep);
+    LaneletType type = LaneletType::mainCarriageWay;
+    for(const auto& la : occupiedLanelets){
+        if(std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(), [type](LaneletType t){return t == type;}) and (!(la->getAdjacentRight().dir != DrivingDirection::same or !std::any_of(la->getAdjacentRight().adj->getLaneletType().begin(), la->getAdjacentRight().adj->getLaneletType().end(), [type](LaneletType t){return t == type;}))))
+            return true;
+    }
     return false;
 }
 

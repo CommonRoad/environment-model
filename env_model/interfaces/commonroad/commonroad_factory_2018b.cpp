@@ -151,10 +151,14 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(std
                 // set left adjacent lanelets
                 if (!(strcmp(child.name(), "adjacentLeft"))) {
                     size_t adjacentId = child.attribute("ref").as_int();
-                    std::string dir = child.attribute("drivingDir").as_string();
+                    DrivingDirection dir{DrivingDirection::invalid};
+                    if(!(strcmp(child.attribute("drivingDir").as_string(), "same")))
+                        dir = DrivingDirection::same;
+                    else if(!(strcmp(child.attribute("drivingDir").as_string(), "opposite")))
+                        dir = DrivingDirection::opposite;
                     for (size_t i = 0; i < n; i++) {
                         if (tempLaneletContainer[i]->getId() == adjacentId) {
-                            tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i].get(), dir);
+                            tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i], dir);
                             break;
                         }
                     }
@@ -163,10 +167,14 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(std
                 // set right adjacent lanelets
                 if (!(strcmp(child.name(), "adjacentRight"))) {
                     size_t adjacentId = child.attribute("ref").as_int();
-                    std::string dir = child.attribute("drivingDir").as_string();
+                    DrivingDirection dir{DrivingDirection::invalid};
+                    if(!(strcmp(child.attribute("drivingDir").as_string(), "same")))
+                        dir = DrivingDirection::same;
+                    else if(!(strcmp(child.attribute("drivingDir").as_string(), "opposite")))
+                        dir = DrivingDirection::opposite;
                     for (size_t i = 0; i < n; i++) {
                         if (tempLaneletContainer[i]->getId() == adjacentId) {
-                            tempLaneletContainer[arrayIndex]->setRightAdjacent(tempLaneletContainer[i].get(), dir);
+                            tempLaneletContainer[arrayIndex]->setRightAdjacent(tempLaneletContainer[i], dir);
                             break;
                         }
                     }

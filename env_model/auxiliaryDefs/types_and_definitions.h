@@ -20,6 +20,8 @@ enum class CycleElementType{red, green, yellow, red_yellow };
 
 enum class TrafficLightDirection{right, straight, left, leftStraight, straightRight, leftRight, all };
 
+enum class DrivingDirection{same, opposite, invalid};
+
 const size_t PARTIALLY_CONTAINED = 1;
 const size_t COMPLETELY_CONTAINED = 2;
 

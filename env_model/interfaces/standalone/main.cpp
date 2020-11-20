@@ -8,9 +8,12 @@
 #include "../../road_network/road_network.h"
 
 #include "../../predicates/position_predicates.h"
+#include <chrono>
 
 
 int main(int argc, char **argv) {
+    // Start measuring time
+    auto begin = std::chrono::high_resolution_clock::now();
     //Read command line parameters; if none are provided, use default values (specified in read_command_line_values)
     int num_threads;
     std::string xmlFilePath;
@@ -26,6 +29,7 @@ int main(int argc, char **argv) {
     std::vector<std::shared_ptr<Obstacle>> obstacles = XMLReader::createObstacleFromXML(xmlFilePath);
     std::vector<std::shared_ptr<Intersection>> intersections = XMLReader::createIntersectionFromXML(xmlFilePath,
                                                                                                     lanelets);
+
     std::shared_ptr<RoadNetwork> roadNetwork{std::make_shared<RoadNetwork>(RoadNetwork(lanelets))};
 
     for(const auto& obs : obstacles) {
@@ -42,6 +46,10 @@ int main(int argc, char **argv) {
                 std::cout << "time step " << i << ": onMainCarriageWay: true \n";
             else
                 std::cout << "time step " << i << ": onMainCarriageWay: false \n";
+            if (posPred.onMainCarriageWayRightLane(i, obs))
+                std::cout << "time step " << i << ": onMainCarriageWayRightLane: true \n";
+            else
+                std::cout << "time step " << i << ": onMainCarriageWayRightLane: false \n";
             if (posPred.onAccessRamp(i, obs))
                 std::cout << "time step " << i << ": onAccessRamp: true \n";
             else
@@ -56,5 +64,10 @@ int main(int argc, char **argv) {
             }
         }
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+
+    printf("Time measured: %.3f seconds.\n", elapsed.count() * 1e-9);
+
     return 0;
 }

@@ -70,13 +70,13 @@ std::vector<std::shared_ptr<Lanelet>> Lanelet::getSuccessors() const { return su
 void Lanelet::addPredecessor(const std::shared_ptr<Lanelet>& pre) { predecessorLanelets.push_back(pre); }
 void Lanelet::addSuccessor(const std::shared_ptr<Lanelet>& suc) { successorLanelets.push_back(suc); }
 
-void Lanelet::setLeftAdjacent(Lanelet *left, const std::string& dir) {
-    adjacentLeft.adj.push_back(left);
+void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet>& left, DrivingDirection dir) {
+    adjacentLeft.adj = left;
     adjacentLeft.dir = dir;
 }
 
-void Lanelet::setRightAdjacent(Lanelet *right, const std::string& dir) {
-    adjacentRight.adj.push_back(right);
+void Lanelet::setRightAdjacent(const std::shared_ptr<Lanelet>& right, DrivingDirection dir) {
+    adjacentRight.adj = right;
     adjacentRight.dir = dir;
 }
 
@@ -188,3 +188,11 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
     vertice vert2{centerVertices[closestIndex + 1]};
     return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
 }
+
+const Lanelet::adjacent &Lanelet::getAdjacentLeft() const {return adjacentLeft;}
+
+void Lanelet::setAdjacentLeft(const Lanelet::adjacent &adjLeft) {adjacentLeft = adjLeft;}
+
+const Lanelet::adjacent &Lanelet::getAdjacentRight() const {return adjacentRight;}
+
+void Lanelet::setAdjacentRight(const Lanelet::adjacent &adjRight) {adjacentRight = adjRight;}

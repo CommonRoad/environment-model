@@ -7,6 +7,7 @@
 #include "../../road_network/regulatory_elements/stop_line.h"
 #include "../../obstacle/obstacle_operations.h"
 #include "../../road_network/lanelet/lanelet_operations.h"
+#include "../../auxiliaryDefs/types_and_definitions.h"
 #include <cstdlib>
 
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles() {
@@ -159,10 +160,14 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(std
                 // set left adjacent lanelets
                 if (!(strcmp(child.name(), "adjacentLeft"))) {
                     size_t adjacentId = child.attribute("ref").as_int();
-                    std::string dir = child.attribute("drivingDir").as_string();
+                    DrivingDirection dir{DrivingDirection::invalid};
+                    if(!(strcmp(child.attribute("drivingDir").as_string(), "same")))
+                        dir = DrivingDirection::same;
+                    else if(!(strcmp(child.attribute("drivingDir").as_string(), "opposite")))
+                        dir = DrivingDirection::opposite;
                     for (size_t i = 0; i < n; i++) {
                         if (tempLaneletContainer[i]->getId() == adjacentId) {
-                            tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i].get(), dir);
+                            tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i], dir);
                             break;
                         }
                     }
@@ -171,10 +176,14 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(std
                 // set right adjacent lanelets
                 if (!(strcmp(child.name(), "adjacentRight"))) {
                     size_t adjacentId = child.attribute("ref").as_int();
-                    std::string dir = child.attribute("drivingDir").as_string();
-                    for (size_t i = 0; i < n; i++) {
+                    DrivingDirection dir{DrivingDirection::invalid};
+                    if(!(strcmp(child.attribute("drivingDir").as_string(), "same")))
+                        dir = DrivingDirection::same;
+                    else if(!(strcmp(child.attribute("drivingDir").as_string(), "opposite")))
+                        dir = DrivingDirection::opposite;
+                    for (size_t i = 0; i < n; i++){
                         if (tempLaneletContainer[i]->getId() == adjacentId) {
-                            tempLaneletContainer[arrayIndex]->setRightAdjacent(tempLaneletContainer[i].get(), dir);
+                            tempLaneletContainer[arrayIndex]->setRightAdjacent(tempLaneletContainer[i], dir);
                             break;
                         }
                     }

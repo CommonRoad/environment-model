@@ -36,6 +36,12 @@ class Lanelet {
         Lanelet &operator=(Lanelet &&) = default;      // move assignment
         virtual ~Lanelet() = default;                  // virtual destructor
 
+
+        struct adjacent {
+            std::shared_ptr<Lanelet> adj;
+            DrivingDirection dir;
+        };
+
         /*
          * setter functions
          */
@@ -45,8 +51,8 @@ class Lanelet {
         void addCenterVertice(vertice center);
         void addPredecessor(const std::shared_ptr<Lanelet>& pre);
         void addSuccessor(const std::shared_ptr<Lanelet>& suc);
-        void setLeftAdjacent(Lanelet *left, const std::string& dir);
-        void setRightAdjacent(Lanelet *right, const std::string& dir);
+        void setLeftAdjacent(const std::shared_ptr<Lanelet>& left, DrivingDirection dir);
+        void setRightAdjacent(const std::shared_ptr<Lanelet>& right, DrivingDirection dir);
         void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices);
         void setRightBorderVertices(const std::vector<vertice> &rightBorderVertices);
         void setCenterVertices(const std::vector<vertice> &center);
@@ -89,13 +95,16 @@ class Lanelet {
         void constructOuterPolygon(); // construct outer shape from borders
         double getOrientationAtPosition(double positionX, double positionY);
 
+        [[nodiscard]] const adjacent &getAdjacentLeft() const;
 
-    struct adjacent {
-        std::vector<Lanelet *> adj;
-        std::string dir;
-    };
+        void setAdjacentLeft(const adjacent &adjacentLeft);
 
-    private:
+        [[nodiscard]] const adjacent &getAdjacentRight() const;
+
+        void setAdjacentRight(const adjacent &adjacentRight);
+
+
+private:
         size_t id{};                                          // unique ID of lanelet
         std::vector<vertice> centerVertices;                // vertices of center line of lanelet
         std::vector<vertice> leftBorder;                    // vertices of left border
