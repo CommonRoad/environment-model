@@ -37,8 +37,7 @@ bool PositionPredicates::onAccessRamp(int timeStep, const std::shared_ptr<Obstac
 }
 
 bool PositionPredicates::inFrontOf(int timeStep, const std::shared_ptr<Obstacle>& obsP, const std::shared_ptr<Obstacle>& obsK){
-    if(obsP->frontS(timeStep) < obsK->rearS(timeStep)) {
-        std::cout << obsP->frontS(timeStep) << " - " << obsK->frontS(timeStep) << '\n';
+    if(obsP->frontS(timeStep) < obsK->rearS(timeStep)) {;
         return true;
     }
     else
