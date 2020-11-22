@@ -88,8 +88,6 @@ std::shared_ptr<Lane> RoadNetwork::findLaneByShape(std::vector<std::shared_ptr<L
             return possibleLanes[i];
         }
     }
-
-
 }
 
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double xPos, double yPos) {
