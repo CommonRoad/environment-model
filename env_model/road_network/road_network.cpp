@@ -6,12 +6,20 @@
 
 #include <utility>
 #include "lanelet/lanelet_operations.h"
-#include "boost/geometry.hpp"
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/point.hpp>
+#include <boost/geometry/geometries/box.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
 
 namespace bg = boost::geometry;
+namespace bgi = boost::geometry::index;
 
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network){
     laneletNetwork = network;
+    for(const std::shared_ptr<Lanelet>& la : network){
+        box b = bg::return_envelope<box>(la->getOuterPolygon());
+        rtree.insert(std::make_pair(b, la->getId()));
+    }
     createLanes(network);
 }
 
@@ -64,10 +72,15 @@ LaneletType RoadNetwork::extractClassifyingLaneletType(const std::shared_ptr<Lan
     return LaneletType::mainCarriageWay;
 }
 
-std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(std::vector<std::shared_ptr<Lanelet>> lanelets, const polygon_type &polygonShape) {
 
+std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
+    box query_box(point(0, 0), point(5, 5));
+    std::vector<value> relevantLanlets;
+    rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())), std::back_inserter(relevantLanlets));
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    for(auto la : relevantLanlets)
+        lanelets.push_back(findLaneletById(la.second));
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
-
 //#pragma omp parallel for schedule(guided)
     for (size_t i = 0; i < lanelets.size(); i++) {
         if (lanelets[i]->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
@@ -96,7 +109,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double
     polygon_type polygonPos;
     bg::append(polygonPos, point_type{xPos, yPos});
 
-    return RoadNetwork::findOccupiedLaneletsByShape(laneletNetwork, polygonPos);
+    return RoadNetwork::findOccupiedLaneletsByShape(polygonPos);
 }
 
 std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {

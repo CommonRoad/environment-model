@@ -10,7 +10,6 @@
 
 #include <chrono>
 
-
 int main(int argc, char **argv) {
     // Start measuring time
     auto begin = std::chrono::high_resolution_clock::now();

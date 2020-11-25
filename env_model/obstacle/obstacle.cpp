@@ -97,11 +97,11 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
     return polygonShape;
 }
 
-std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::vector<std::shared_ptr<Lanelet>>& lanelets, int timeStep) {
+std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::shared_ptr<RoadNetwork>& roadNetwork, int timeStep) {
     if(occupiedLanelets.find(timeStep) != occupiedLanelets.end())
         return occupiedLanelets.at(timeStep);
     polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
-    std::vector<std::shared_ptr<Lanelet>> occupied{RoadNetwork::findOccupiedLaneletsByShape(lanelets, polygonShape)};
+    std::vector<std::shared_ptr<Lanelet>> occupied{roadNetwork->findOccupiedLaneletsByShape(polygonShape)};
     occupiedLanelets.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occupied));
 
     return occupied;

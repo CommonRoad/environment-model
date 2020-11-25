@@ -12,6 +12,7 @@
 #include "../geometry/shape.h"
 #include <map>
 #include "../road_network/lanelet/lane.h"
+#include "../road_network/road_network.h"
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
@@ -48,7 +49,7 @@ class Obstacle {
     int getTrajectoryLength();
     polygon_type getOccupancyPolygonShape(int timeStamp);
     Shape &getGeoShape();
-    std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(const std::vector<std::shared_ptr<Lanelet>>& lanelets, int timeStep);
+    std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(const std::shared_ptr<RoadNetwork>& roadNetwork, int timeStep);
     void setLane(std::vector<std::shared_ptr<Lane>> lanes, int timeStep);
     std::shared_ptr<Lane> getLane(int timeStep);
     double frontS(int timeStep);
