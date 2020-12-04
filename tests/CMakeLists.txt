@@ -5,3 +5,4 @@ target_compile_features(unit_tests
 set_property(TARGET unit_tests PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_include_directories(unit_tests PUBLIC ${LIB_CR_ENV_MODEL_SRC})
 target_link_libraries(unit_tests PUBLIC gtest_main env_model)
+

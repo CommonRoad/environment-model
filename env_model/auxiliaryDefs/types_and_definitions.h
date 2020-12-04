@@ -22,7 +22,7 @@ enum class TrafficLightDirection{right, straight, left, leftStraight, straightRi
 
 enum class DrivingDirection{same, opposite, invalid};
 
-const size_t PARTIALLY_CONTAINED = 1;
-const size_t COMPLETELY_CONTAINED = 2;
+const int PARTIALLY_CONTAINED = 1;
+const int COMPLETELY_CONTAINED = 2;
 
 #endif //ENV_MODEL_TYPES_AND_DEFINITIONS_H

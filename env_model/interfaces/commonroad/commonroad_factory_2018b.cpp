@@ -109,7 +109,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(std
                             vertice newVertice{};
                             newVertice.x = points.child("x").text().as_double();
                             newVertice.y = points.child("y").text().as_double();
-                            tempLaneletContainer[arrayIndex]->addLeftVertice(newVertice);
+                            tempLaneletContainer[arrayIndex]->addLeftVertex(newVertice);
                         }
                     }
                     continue;
@@ -121,7 +121,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(std
                             vertice newVertice{};
                             newVertice.x = points.child("x").text().as_double();
                             newVertice.y = points.child("y").text().as_double();
-                            tempLaneletContainer[arrayIndex]->addRightVertice(newVertice);
+                            tempLaneletContainer[arrayIndex]->addRightVertex(newVertice);
                         }
                     }
                     continue;

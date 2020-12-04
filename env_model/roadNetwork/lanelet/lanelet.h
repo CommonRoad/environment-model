@@ -5,13 +5,14 @@
 #ifndef ENVIRONMENT_MODEL_LANELET_H
 #define ENVIRONMENT_MODEL_LANELET_H
 
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
 
 #include "../regulatory_elements/traffic_light.h"
 #include "../regulatory_elements/traffic_sign.h"
 #include "../../auxiliaryDefs/structs.h"
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
+
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
@@ -20,107 +21,118 @@ typedef boost::geometry::model::box<point_type> box;
 
 class Lanelet {
     public:
-        Lanelet();                                     // default constructor
-        Lanelet(const Lanelet &) = default;            // copy constructor
+        Lanelet() = default;
+        Lanelet(int id, std::vector<vertice> centerVertices, std::vector<vertice> leftBorder,
+                std::vector<vertice> rightBorder, std::vector<LaneletType> laneletType,
+                std::vector<ObstacleType> userOneWay, std::vector<ObstacleType> userBidirectional);
         Lanelet(size_t id, std::vector<vertice> centerVertices, std::vector<vertice> leftBorder,
                 std::vector<vertice> rightBorder, std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
                 std::vector<std::shared_ptr<Lanelet>> successorLanelets,
                 std::vector<LaneletType> laneletType, std::vector<ObstacleType> userOneWay,
                 std::vector<ObstacleType> userBidirectional);
-
-        Lanelet &operator=(const Lanelet &) = default; // copy assignment
+        Lanelet(const Lanelet &) = default;
+        Lanelet &operator=(const Lanelet &) = default;
         Lanelet(Lanelet &&) = default;
+        Lanelet &operator=(Lanelet &&) = default;
+        virtual ~Lanelet() = default;
 
-
-    // move constructor
-        Lanelet &operator=(Lanelet &&) = default;      // move assignment
-        virtual ~Lanelet() = default;                  // virtual destructor
-
-
+        /*
+        *   adjacency struct with pointer to adjacent lanelet and information about its driving direction
+        */
         struct adjacent {
             std::shared_ptr<Lanelet> adj;
             DrivingDirection dir;
         };
 
-        /*
-         * setter functions
-         */
-        void setId(size_t num);
-        void addLeftVertice(vertice left);
-        void addRightVertice(vertice right);
-        void addCenterVertice(vertice center);
-        void addPredecessor(const std::shared_ptr<Lanelet>& pre);
-        void addSuccessor(const std::shared_ptr<Lanelet>& suc);
+        void setId(int num);
         void setLeftAdjacent(const std::shared_ptr<Lanelet>& left, DrivingDirection dir);
         void setRightAdjacent(const std::shared_ptr<Lanelet>& right, DrivingDirection dir);
         void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices);
         void setRightBorderVertices(const std::vector<vertice> &rightBorderVertices);
-        void setCenterVertices(const std::vector<vertice> &center);
-        void addTrafficLight(const std::shared_ptr<TrafficLight>& light);
-        void addTrafficSign(const std::shared_ptr<TrafficSign>& sign);
-        void setOuterPolygon(const polygon_type &outerPolygon);
-        void setBoundingBox(const box &boundingBox);
+        void setAdjacentLeft(const adjacent &adjacentLeft);
+        void setAdjacentRight(const adjacent &adjacentRight);
         void setLaneletType(const std::vector<LaneletType>& laneletType);
         void setUserOneWay(const std::vector<ObstacleType> &userOneWay);
         void setUserBidirectional(const std::vector<ObstacleType> &userBidirectional);
 
-        // Takes rvalue and moves the data
-        void moveLeftBorder(std::vector<vertice> &&leftBorderVertices);
-        void moveRightBorder(std::vector<vertice> &&rightBorderVertices);
-        void moveCenterVertices(std::vector<vertice> &&center);
+        void addCenterVertex(vertice center);
+        void addLeftVertex(vertice left);
+        void addRightVertex(vertice right);
+        void addPredecessor(const std::shared_ptr<Lanelet>& pre);
+        void addSuccessor(const std::shared_ptr<Lanelet>& suc);
+        void addTrafficLight(const std::shared_ptr<TrafficLight>& light);
+        void addTrafficSign(const std::shared_ptr<TrafficSign>& sign);
 
-        /*
-         * getter functions
-         */
-        [[nodiscard]] size_t getId() const;
-        [[nodiscard]] std::vector<vertice> getLeftBorderVerticesDirect() const;
-        [[nodiscard]] std::vector<vertice> getRightBorderVerticesDirect() const;
-        [[nodiscard]] std::vector<vertice> getCenterVerticesDirect() const;
+        [[nodiscard]] int getId() const;
         [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getPredecessors() const;
         [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getSuccessors() const;
         [[nodiscard]] const std::vector<vertice> &getCenterVertices() const;
         [[nodiscard]] const std::vector<vertice> &getLeftBorderVertices() const;
         [[nodiscard]] const std::vector<vertice> &getRightBorderVertices() const;
-        [[nodiscard]] std::vector<std::shared_ptr<TrafficLight>> getTrafficLight() const;
+        [[nodiscard]] std::vector<std::shared_ptr<TrafficLight>> getTrafficLights() const;
         [[nodiscard]] std::vector<std::shared_ptr<TrafficSign>> getTrafficSigns() const;
         [[nodiscard]] const polygon_type &getOuterPolygon() const;
         [[nodiscard]] const box &getBoundingBox() const;
         [[nodiscard]] const std::vector<LaneletType> &getLaneletType() const;
         [[nodiscard]] const std::vector<ObstacleType> &getUserOneWay() const;
         [[nodiscard]] const std::vector<ObstacleType> &getUserBidirectional() const;
-        [[nodiscard]] bool applyIntersectionTesting(const polygon_type &intersection) const;
-        [[nodiscard]] bool checkIntersection(const polygon_type &intersecting, size_t intersection_flag) const;
-
-        void createCenterVertices();
-        void constructOuterPolygon(); // construct outer shape from borders
-        double getOrientationAtPosition(double positionX, double positionY);
-
         [[nodiscard]] const adjacent &getAdjacentLeft() const;
-
-        void setAdjacentLeft(const adjacent &adjacentLeft);
-
         [[nodiscard]] const adjacent &getAdjacentRight() const;
 
-        void setAdjacentRight(const adjacent &adjacentRight);
+        /**
+        * Given a polygon, checks whether the polygon intersects with the lanelet
+        *
+        * @param polygon_shape boost polygon
+        * @return boolean indicating whether lanelet is occupied
+        */
+        [[nodiscard]] bool applyIntersectionTesting(const polygon_type &polygon_shape) const;
+
+        /**
+        * Given a polygon, checks whether the polygon intersects with the lanelet given an intersection category
+        *
+        * @param polygon_shape boost polygon
+        * @param intersection_flag specifies whether shape can be partially occupied by lanelet
+         * or must be completely occupied
+        * @return boolean indicating whether lanelet is occupied
+        */
+        [[nodiscard]] bool checkIntersection(const polygon_type &polygon_shape, int intersection_flag) const;
+
+        /**
+        * Calculates center vertices as the arithmetic mean between the vertex on the left and right border
+        */
+        void createCenterVertices();
+
+        /**
+        * Constructs boost polygon representing shape of lanelet
+        */
+        void constructOuterPolygon();
+
+        /**
+        * Computes orientation of lanelet given a x- and y-position
+        *
+        * @param positionX x-position of point
+        * @param positionY y-position of point
+        * @return orientation in interval [-pi, pi]
+        */
+        double getOrientationAtPosition(double positionX, double positionY);
 
 
 private:
-        size_t id{};                                          // unique ID of lanelet
-        std::vector<vertice> centerVertices;                // vertices of center line of lanelet
-        std::vector<vertice> leftBorder;                    // vertices of left border
-        std::vector<vertice> rightBorder;                   // vertices of right border
-        std::vector<std::shared_ptr<Lanelet>> predecessorLanelets;         // previous lanelets
-        std::vector<std::shared_ptr<Lanelet>> successorLanelets; // longitudinally adjacent lanelets
-        adjacent adjacentLeft;                              // left adjacent lanelet with driving tag
-        adjacent adjacentRight;                             // right adjacent lanelet with driving tag
-        polygon_type outerPolygon;
-        box boundingBox{};                                  // Boost bounding box of the lanelet
-        std::vector<std::shared_ptr<TrafficLight>> trafficLights;                  // traffic light assigned to lanelet
-        std::vector<std::shared_ptr<TrafficSign>> trafficSigns;            // traffic signs assigned to lanelet
-        std::vector<LaneletType> laneletType;
-        std::vector<ObstacleType> userOneWay;
-        std::vector<ObstacleType> userBidirectional;
+        int id{};                                                   //**< unique ID of lanelet */
+        std::vector<vertice> centerVertices;                        //**< vertices of center line of lanelet */
+        std::vector<vertice> leftBorder;                            //**< vertices of left border */
+        std::vector<vertice> rightBorder;                           //**< vertices of right border */
+        std::vector<std::shared_ptr<Lanelet>> predecessorLanelets;  //**< list of pointers to predecessor lanelets */
+        std::vector<std::shared_ptr<Lanelet>> successorLanelets;    //**< list of pointers to successor lanelets */
+        adjacent adjacentLeft;                                      //**< pointer to left adjacent lanelet and info about its driving direction */
+        adjacent adjacentRight;                                     //**< pointer to right adjacent lanelet and info about its driving direction */
+        polygon_type outerPolygon;                                  //**< Boost polygon of the lanelet */
+        box boundingBox{};                                          //**< Boost bounding box of the lanelet */
+        std::vector<std::shared_ptr<TrafficLight>> trafficLights;   //**< list of pointers to traffic lights assigned to lanelet*/
+        std::vector<std::shared_ptr<TrafficSign>> trafficSigns;     //**< list of pointers to traffic signs assigned to lanelet*/
+        std::vector<LaneletType> laneletType;                       //**< list of relevant lanelet types*/
+        std::vector<ObstacleType> userOneWay;                       //**< list of relevant allowed users one way*/
+        std::vector<ObstacleType> userBidirectional;                //**< list of relevant allowed users bidirectional*/
 };
-
 
 #endif //ENVIRONMENT_MODEL_LANELET_H
