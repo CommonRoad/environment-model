@@ -1,14 +1,14 @@
 set(ENV_MODEL_SRC_FILES
-        road_network/road_network.cpp
-        road_network/lanelet/lanelet.cpp
-        road_network/lanelet/lane.cpp
-        road_network/lanelet/lanelet_operations.cpp
-        road_network/regulatory_elements/stop_line.cpp
-        road_network/regulatory_elements/traffic_light.cpp
-        road_network/regulatory_elements/traffic_sign.cpp
-        road_network/regulatory_elements/traffic_sign_element.cpp
-        road_network/intersection/incoming.cpp
-        road_network/intersection/intersection.cpp
+        roadNetwork/road_network.cpp
+        roadNetwork/lanelet/lanelet.cpp
+        roadNetwork/lanelet/lane.cpp
+        roadNetwork/lanelet/lanelet_operations.cpp
+        roadNetwork/regulatory_elements/stop_line.cpp
+        roadNetwork/regulatory_elements/traffic_light.cpp
+        roadNetwork/regulatory_elements/traffic_sign.cpp
+        roadNetwork/regulatory_elements/traffic_sign_element.cpp
+        roadNetwork/intersection/incoming.cpp
+        roadNetwork/intersection/intersection.cpp
         obstacle/obstacle.cpp
         obstacle/obstacle_operations.cpp
         obstacle/state.cpp

@@ -31,6 +31,7 @@ std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() {return lanes;}
 
 void RoadNetwork::setLanes(std::vector<std::shared_ptr<Lane>> la) {lanes = std::move(la);}
 
+
 void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>>& network) {
     std::vector<std::shared_ptr<Lanelet>> startLanelets;
 

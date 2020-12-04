@@ -6,10 +6,10 @@
 #ifndef ENV_MODEL_XML_READER_H
 #define ENV_MODEL_XML_READER_H
 
-#include "../../road_network/lanelet/lanelet.h"
+#include "../../roadNetwork/lanelet/lanelet.h"
 #include "../../auxiliaryDefs/structs.h"
 #include "../../obstacle/obstacle.h"
-#include "../../road_network/intersection/intersection.h"
+#include "../../roadNetwork/intersection/intersection.h"
 #include "pugi_xml/pugixml.hpp"
 #include <cstddef>
 #include <vector>

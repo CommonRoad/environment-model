@@ -8,9 +8,9 @@
 
 
 #include "pugi_xml/pugixml.hpp"
-#include "../../road_network/lanelet/lanelet.h"
+#include "../../roadNetwork/lanelet/lanelet.h"
 #include "../../obstacle/obstacle.h"
-#include "../../road_network/intersection/intersection.h"
+#include "../../roadNetwork/intersection/intersection.h"
 #include <stdexcept>
 #include <vector>
 

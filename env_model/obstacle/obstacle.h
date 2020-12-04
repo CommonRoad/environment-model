@@ -11,8 +11,8 @@
 #include "../geometry/rectangle.h"
 #include "../geometry/shape.h"
 #include <map>
-#include "../road_network/lanelet/lane.h"
-#include "../road_network/road_network.h"
+#include "../roadNetwork/lanelet/lane.h"
+#include "../roadNetwork/road_network.h"
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;

@@ -4,9 +4,9 @@
 
 #include "commonroad_factory_2020a.h"
 #include "xml_reader.h"
-#include "../../road_network/regulatory_elements/stop_line.h"
+#include "../../roadNetwork/regulatory_elements/stop_line.h"
 #include "../../obstacle/obstacle_operations.h"
-#include "../../road_network/lanelet/lanelet_operations.h"
+#include "../../roadNetwork/lanelet/lanelet_operations.h"
 #include "../../auxiliaryDefs/types_and_definitions.h"
 #include <cstdlib>
 

@@ -37,9 +37,17 @@ class RoadNetwork {
 
         void setLaneletNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
         void setLanes(std::vector<std::shared_ptr<Lane>> lanes);
+
+        /**
+        * Given a shape, finds the list of lanelets within the road network which intersect with the shape
+        *
+        * @param polygonShape boost polygon
+        * @return list of shared lanelet pointers
+        */
         std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(const polygon_type &polygonShape);
         std::vector<std::shared_ptr<Lanelet>> findLaneletsByPosition(double xPos, double yPos);
         std::shared_ptr<Lanelet> findLaneletById(size_t id);
+
         static std::shared_ptr<Lane> findLaneByShape(std::vector<std::shared_ptr<Lane>> possibleLanes, const polygon_type &polygonShape);
 
     private:

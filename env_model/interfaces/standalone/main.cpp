@@ -5,14 +5,12 @@
 #include "../../auxiliaryDefs/structs.h"
 #include "../commonroad/xml_reader.h"
 #include "command_line_input.h"
-#include "../../road_network/road_network.h"
 #include "../../predicates/position_predicates.h"
 
 #include <chrono>
 
 int main(int argc, char **argv) {
-    // Start measuring time
-    auto begin = std::chrono::high_resolution_clock::now();
+
     //Read command line parameters; if none are provided, use default values (specified in read_command_line_values)
     int num_threads;
     std::string xmlFilePath;
@@ -38,6 +36,10 @@ int main(int argc, char **argv) {
     }
 
     PositionPredicates posPred{PositionPredicates(roadNetwork)};
+
+    // Start measuring time
+    auto begin = std::chrono::high_resolution_clock::now();
+
     for(const auto& obs : obstacles) {
         std::cout << obs->getId() << '\n';
         for (int i=0; i < obs->getTrajectoryLength(); ++i) {

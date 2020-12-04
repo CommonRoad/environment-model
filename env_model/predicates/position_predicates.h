@@ -6,7 +6,7 @@
 #define ENV_MODEL_POSITION_PREDICATES_H
 
 #include "../obstacle/obstacle.h"
-#include "../road_network/road_network.h"
+#include "../roadNetwork/road_network.h"
 
 class PositionPredicates {
     public:
