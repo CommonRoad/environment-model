@@ -21,9 +21,9 @@ bool PositionPredicates::onMainCarriageWayRightLane(int timeStep, const std::sha
     LaneletType type = LaneletType::mainCarriageWay;
     for(const auto& la : occupiedLanelets){
         if(std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(), [type](LaneletType t){return t == type;})
-        and (!(la->getAdjacentRight().dir != DrivingDirection::same
+        and (la->getAdjacentRight().dir == DrivingDirection::invalid or la->getAdjacentRight().dir != DrivingDirection::same
         or !std::any_of(la->getAdjacentRight().adj->getLaneletType().begin(),
-                        la->getAdjacentRight().adj->getLaneletType().end(), [type](LaneletType t){return t == type;}))))
+                        la->getAdjacentRight().adj->getLaneletType().end(), [type](LaneletType t){return t == type;})))
             return true;
     }
     return false;

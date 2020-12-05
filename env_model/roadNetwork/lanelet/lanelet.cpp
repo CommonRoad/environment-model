@@ -9,21 +9,42 @@
 namespace bg = boost::geometry;
 
 
-Lanelet::Lanelet(int id, std::vector<vertice> centerVertices, std::vector<vertice> leftBorder,
-                 std::vector<vertice> rightBorder, std::vector<LaneletType> type,
-                 std::vector<ObstacleType> oneWay,std::vector<ObstacleType> userBidirectional) :
-                 id(id), centerVertices(std::move(centerVertices)), leftBorder(std::move(leftBorder)),
-                 rightBorder(std::move(rightBorder)), laneletType(std::move(type)), userOneWay(std::move(oneWay)),
-                 userBidirectional(std::move(userBidirectional)) {}
+Lanelet::Lanelet(int id,
+                 std::vector<vertice> leftBorder,
+                 std::vector<vertice> rightBorder,
+                 std::vector<LaneletType> type,
+                 std::vector<ObstacleType> oneWay,
+                 std::vector<ObstacleType> userBidirectional) :
+                 id{id},
+                 leftBorder{std::move(leftBorder)},
+                 rightBorder{std::move(rightBorder)},
+                 laneletType{std::move(type)},
+                 userOneWay{std::move(oneWay)},
+                 userBidirectional{std::move(userBidirectional)} {
+    createCenterVertices();
+    constructOuterPolygon();
+}
 
-Lanelet::Lanelet(size_t id, std::vector<vertice> centerVertices, std::vector<vertice> leftBorder,
-                 std::vector<vertice> rightBorder, std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
-                 std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::vector<LaneletType> type,
-                 std::vector<ObstacleType> oneWay, std::vector<ObstacleType> bidirectional) :
-                 id(id), centerVertices(std::move(centerVertices)), leftBorder(std::move(leftBorder)),
-                 rightBorder(std::move(rightBorder)), predecessorLanelets(std::move(predecessorLanelets)),
-                 successorLanelets(std::move(successorLanelets)), laneletType(std::move(type)),
-                 userOneWay(std::move(oneWay)), userBidirectional(std::move(bidirectional)) {}
+Lanelet::Lanelet(int id,
+                 std::vector<vertice> leftBorder,
+                 std::vector<vertice> rightBorder,
+                 std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
+                 std::vector<std::shared_ptr<Lanelet>> successorLanelets,
+                 std::vector<LaneletType> type,
+                 std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
+                 std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>()) :
+                 id{id},
+                 leftBorder{std::move(leftBorder)},
+                 rightBorder{std::move(rightBorder)},
+                 predecessorLanelets{std::move(predecessorLanelets)},
+                 successorLanelets{std::move(successorLanelets)},
+                 laneletType{std::move(type)},
+                 userOneWay{std::move(oneWay)},
+                 userBidirectional{std::move(userBidirectional)} {
+    createCenterVertices();
+    constructOuterPolygon();
+}
+
 
 void Lanelet::setId(const int num) { id = num; }
 

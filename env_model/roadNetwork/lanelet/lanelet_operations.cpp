@@ -93,7 +93,7 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
                 curLanelet = nullptr;
         }
     std::vector<LaneletType> typeList{type};
-    Lanelet newLanelet = Lanelet(id, centerVertices, leftBorderVertices, rightBorderVertices, predecessorLanelets,
+    Lanelet newLanelet = Lanelet(id, leftBorderVertices, rightBorderVertices, predecessorLanelets,
                                  successorLanelets, typeList, userOneWay, userBidirectional);
     newLanelet.createCenterVertices();
     newLanelet.constructOuterPolygon();
@@ -103,7 +103,6 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     }
 
-    //CurvilinearCoordinateSystem ccs = ;
     std::shared_ptr<Lane> l = std::make_shared<Lane>(laneletList, newLanelet, CurvilinearCoordinateSystem(reference_path));
 
     return l;

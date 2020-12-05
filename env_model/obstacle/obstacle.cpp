@@ -4,10 +4,8 @@
 
 #include "obstacle.h"
 #include "../geometry/geometric_operations.h"
-#include <chrono>
 #include <cmath>
 #include <utility>
-#include <chrono>
 
 void Obstacle::setId(const size_t num) { id = num; }
 
@@ -147,14 +145,10 @@ double Obstacle::rearS(int timeStep) {
 
 double Obstacle::getLonPosition(int timeStep) {
     // Start measuring time
-    auto begin = std::chrono::high_resolution_clock::now();
     if(trajectoryPrediction.at(timeStep).getValidStates().lonPosition)
         return trajectoryPrediction.at(timeStep).getLonPosition();
     trajectoryPrediction.at(timeStep).convertPointToCurvilinear(getLane(timeStep)->getCurvilinearCoordinateSystem());
-    auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
 
-    printf("Time measured: %.6f seconds.\n", elapsed.count() * 1e-9);
     return trajectoryPrediction.at(timeStep).getLonPosition();
 }
 

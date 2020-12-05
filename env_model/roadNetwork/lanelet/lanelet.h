@@ -22,13 +22,19 @@ typedef boost::geometry::model::box<point_type> box;
 class Lanelet {
     public:
         Lanelet() = default;
-        Lanelet(int id, std::vector<vertice> centerVertices, std::vector<vertice> leftBorder,
-                std::vector<vertice> rightBorder, std::vector<LaneletType> laneletType,
-                std::vector<ObstacleType> userOneWay, std::vector<ObstacleType> userBidirectional);
-        Lanelet(size_t id, std::vector<vertice> centerVertices, std::vector<vertice> leftBorder,
-                std::vector<vertice> rightBorder, std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
+        Lanelet(int id,
+                std::vector<vertice> leftBorder,
+                std::vector<vertice> rightBorder,
+                std::vector<LaneletType> type,
+                std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
+                std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>());
+        Lanelet(int id,
+                std::vector<vertice> leftBorder,
+                std::vector<vertice> rightBorder,
+                std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
                 std::vector<std::shared_ptr<Lanelet>> successorLanelets,
-                std::vector<LaneletType> laneletType, std::vector<ObstacleType> userOneWay,
+                std::vector<LaneletType> laneletType,
+                std::vector<ObstacleType> userOneWay,
                 std::vector<ObstacleType> userBidirectional);
         Lanelet(const Lanelet &) = default;
         Lanelet &operator=(const Lanelet &) = default;
@@ -40,6 +46,7 @@ class Lanelet {
         *   adjacency struct with pointer to adjacent lanelet and information about its driving direction
         */
         struct adjacent {
+            adjacent() : dir(DrivingDirection::invalid) {}
             std::shared_ptr<Lanelet> adj;
             DrivingDirection dir;
         };
