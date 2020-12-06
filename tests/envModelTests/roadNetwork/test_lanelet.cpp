@@ -9,8 +9,11 @@
 #include "roadNetwork/regulatory_elements/traffic_sign.h"
 #include "roadNetwork/regulatory_elements/traffic_light.h"
 
+namespace bg = boost::geometry;
+typedef boost::geometry::model::d2::point_xy<double> point_type;
+typedef boost::geometry::model::polygon<point_type> polygon_type;
 
-void compareVerticesVector(std::vector<vertice> verticesOne, std::vector<vertice> verticesTwo){
+void LaneletTest::compareVerticesVector(std::vector<vertice> verticesOne, std::vector<vertice> verticesTwo){
     for(int i=0; i<verticesOne.size(); ++i){
         EXPECT_EQ(verticesOne.at(i).x, verticesTwo.at(i).x);
         EXPECT_EQ(verticesOne.at(i).y, verticesTwo.at(i).y);
@@ -18,7 +21,7 @@ void compareVerticesVector(std::vector<vertice> verticesOne, std::vector<vertice
 }
 
 template <typename T>
-void evaluateTypes(std::vector<T> typeVectorOne, std::vector<T> typeVectorTwo) {
+void LaneletTest::evaluateTypes(std::vector<T> typeVectorOne, std::vector<T> typeVectorTwo) {
     for(auto ty : typeVectorOne){
         bool typeValid{ false };
         for(auto typeExpected : typeVectorTwo)
@@ -45,6 +48,7 @@ void LaneletTest::SetUp() {
     laneletOne = std::make_shared<Lanelet>(Lanelet(idOne, leftBorderOne, rightBorderOne,
                                                    laneletTypeOne, userOneWayOne,
                                                    userBidirectionalOne));
+
     //front lanelet
     laneletTwo = std::make_shared<Lanelet>(Lanelet());
     idTwo = 2;
@@ -65,6 +69,13 @@ void LaneletTest::SetUp() {
     laneletTwo->setUserOneWay(userOneWayTwo);
     laneletTwo->createCenterVertices();
     laneletTwo->constructOuterPolygon();
+    laneletTwo->addLeftVertex(vertice{12, 2.0});
+    laneletTwo->addRightVertex(vertice{12, 1.0});
+    laneletTwo->addCenterVertex(vertice{12, 1.5});
+    laneletTwo->constructOuterPolygon();
+    leftBorderTwo.push_back(vertice{12, 2.0});
+    rightBorderTwo.push_back(vertice{12, 1.0});
+    centerVerticesTwo.push_back(vertice{12, 1.5});
 
     //rear lanelet
     idThree = 3;
@@ -88,8 +99,8 @@ void LaneletTest::SetUp() {
     std::vector<LaneletType> laneletTypeFour{ std::vector<LaneletType>{LaneletType::highway} };
     std::vector<vertice> leftBorderFour{vertice{6, 0.0}, vertice{7, 0.0}, vertice{8, 0.0},
                                         vertice{9, 0.0}, vertice{10, 0.0}, vertice{11, 0.0}};
-    std::vector<vertice> rightBorderFour{vertice{6, -1.5}, vertice{7, -1.5}, vertice{8, -1.5},
-                                         vertice{9, -1.5}, vertice{10, -1.5}, vertice{11, -1.5}};
+    std::vector<vertice> rightBorderFour{vertice{6, -1.0}, vertice{7, -1.0}, vertice{8, -1.0},
+                                         vertice{9, -1.0}, vertice{10, -1.0}, vertice{11, -1.0}};
     laneletFour = std::make_shared<Lanelet>(Lanelet(idFour, leftBorderFour, rightBorderFour, laneletTypeFour));
 
     //left lanelet
@@ -113,7 +124,6 @@ void LaneletTest::SetUp() {
     std::vector<LaneletType> laneletTypeSeven{ std::vector<LaneletType>{LaneletType::urban, LaneletType::crosswalk} };
     std::vector<vertice> leftBorderSeven{vertice{-2, 1.5}, vertice{-1, 2}, vertice{0, 2}};
     std::vector<vertice> rightBorderSeven{vertice{-2, 0.0}, vertice{-1, 0.0}, vertice{0, 0.0}};
-
     laneletSeven = std::make_shared<Lanelet>(Lanelet(idSeven, leftBorderSeven, rightBorderSeven, laneletTypeSeven));
 
     //traffic sign, traffic light, and stop line for middle lanelet
@@ -137,6 +147,7 @@ void LaneletTest::SetUp() {
     sl.setTrafficSign(ts);
     sl.setTrafficLight(tl);
 
+    // add successors, predecessors, adjacent, traffic sign, traffic light, and stop line to lanelet one
     laneletOne->addSuccessor(laneletTwo);
     laneletOne->addSuccessor(laneletSix);
     laneletOne->addPredecessor(laneletThree);
@@ -146,6 +157,10 @@ void LaneletTest::SetUp() {
     laneletOne->addTrafficLight(tl);
     laneletOne->addTrafficSign(ts);
     laneletOne->setStopLine(sl);
+
+    polygonOne = polygon_type{{{0.0, 0.0}, {0.0, 0.5}, {0.5, 0.5}, {0.5, 0.0}, {0.0, 0.0}}};
+    polygonTwo = polygon_type{{{0.5, 0.5}, {0.5, 2.0}, {1.0, 2.0}, {1.0, 0.5}, {0.5, 0.5}}};
+    polygonThree = polygon_type{{{10.0, 10.0}, {10.0, 12.0}, {11.0, 12.0}, {11.0, 10.0}, {10.0, 10.0}}};
 };
 
 
@@ -190,17 +205,70 @@ TEST_F(LaneletTest, InitializationEnd){
 }
 
 TEST_F(LaneletTest, ApplyIntersectionTesting){
-
+    EXPECT_EQ(laneletOne->applyIntersectionTesting(polygonOne), true);
+    EXPECT_EQ(laneletOne->applyIntersectionTesting(polygonTwo), true);
+    EXPECT_EQ(laneletOne->applyIntersectionTesting(polygonThree), false);
 }
 
 TEST_F(LaneletTest, CheckIntersection){
-
+    EXPECT_EQ(laneletOne->checkIntersection(polygonOne, PARTIALLY_CONTAINED), true);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonTwo, PARTIALLY_CONTAINED), true);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonThree, PARTIALLY_CONTAINED), false);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonOne, COMPLETELY_CONTAINED), true);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonTwo, COMPLETELY_CONTAINED), false);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonThree, COMPLETELY_CONTAINED), false);
 }
 
 TEST_F(LaneletTest, ConstructOuterPolygon){
+    //evaluates whether in setUp creates outer polygon is valid
+    //lanelet one
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[0].x(), 0.0);
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[0].y(), 1.0);
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[1].x(), 5.0);
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[1].y(), 1.0);
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[2].x(), 5.0);
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[2].y(), 0.0);
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[3].x(), 0.0);
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[3].y(), 0.0);
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[4].x(), 0.0);
+    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[4].y(), 1.0);
 
+    //lanelet two
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[0].x(), 6.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[0].y(), 1.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[1].x(), 11.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[1].y(), 1.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[2].x(), 12.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[2].y(), 2.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[3].x(), 12.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[3].y(), 1.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[4].x(), 11.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[4].y(), 0.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[5].x(), 6.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[5].y(), 0.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[6].x(), 6.0);
+    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[6].y(), 1.0);
+}
+
+TEST_F(LaneletTest, GetBoundingBox){
+    //lanelet one
+    EXPECT_EQ(laneletOne->getBoundingBox().max_corner().x(), 5.0);
+    EXPECT_EQ(laneletOne->getBoundingBox().max_corner().y(), 1.0);
+    EXPECT_EQ(laneletOne->getBoundingBox().min_corner().x(), 0.0);
+    EXPECT_EQ(laneletOne->getBoundingBox().min_corner().y(), 0.0);
+
+    //lanelet two
+    EXPECT_EQ(laneletTwo->getBoundingBox().max_corner().x(), 12.0);
+    EXPECT_EQ(laneletTwo->getBoundingBox().max_corner().y(), 2.0);
+    EXPECT_EQ(laneletTwo->getBoundingBox().min_corner().x(), 6.0);
+    EXPECT_EQ(laneletTwo->getBoundingBox().min_corner().y(), 0.0);
 }
 
 TEST_F(LaneletTest, GetOrientationAtPosition){
-
+    EXPECT_EQ(laneletOne->getOrientationAtPosition(0.0, 0.0), 0.0);
+    EXPECT_EQ(laneletOne->getOrientationAtPosition(1.0, 0.0), 0.0);
+    EXPECT_EQ(laneletTwo->getOrientationAtPosition(10.0, 0.5), 0.0);
+    EXPECT_EQ(laneletTwo->getOrientationAtPosition(11.0, 0.5), 0.78539816339744828);
+    EXPECT_EQ(laneletTwo->getOrientationAtPosition(11.5, 0.75), 0.78539816339744828);
+    EXPECT_EQ(laneletTwo->getOrientationAtPosition(12.0, 1.5), 0.78539816339744828);
 }

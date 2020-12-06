@@ -43,7 +43,15 @@ class LaneletTest : public testing::Test{
         std::shared_ptr<Lanelet> laneletSix;
         std::shared_ptr<Lanelet> laneletSeven;
 
+        polygon_type polygonOne;
+        polygon_type polygonTwo;
+        polygon_type polygonThree;
+
         void SetUp() override;
+        static void compareVerticesVector(std::vector<vertice> verticesOne, std::vector<vertice> verticesTwo);
+        template <typename T>
+        void evaluateTypes(std::vector<T> typeVectorOne, std::vector<T> typeVectorTwo);
+
 };
 
 #endif //ENV_MODEL_TEST_LANELET_H

@@ -45,34 +45,7 @@ Lanelet::Lanelet(int id,
     constructOuterPolygon();
 }
 
-
 void Lanelet::setId(const int num) { id = num; }
-
-int Lanelet::getId() const { return id; }
-
-void Lanelet::setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices) { leftBorder = leftBorderVertices; }
-
-void Lanelet::setRightBorderVertices(const std::vector<vertice> &rightBorderVertices) {
-    rightBorder = rightBorderVertices;
-}
-
-void Lanelet::setStopLine(const StopLine& sl) { stopLine = sl; }
-
-const StopLine &Lanelet::getStopLine() const { return stopLine; }
-
-const std::vector<vertice> &Lanelet::getCenterVertices() const { return centerVertices; }
-
-const std::vector<vertice> &Lanelet::getLeftBorderVertices() const { return leftBorder; }
-
-const std::vector<vertice> &Lanelet::getRightBorderVertices() const { return rightBorder; }
-
-std::vector<std::shared_ptr<Lanelet>> Lanelet::getPredecessors() const { return predecessorLanelets; }
-
-std::vector<std::shared_ptr<Lanelet>> Lanelet::getSuccessors() const { return successorLanelets; }
-
-void Lanelet::addPredecessor(const std::shared_ptr<Lanelet>& pre) { predecessorLanelets.push_back(pre); }
-
-void Lanelet::addSuccessor(const std::shared_ptr<Lanelet>& suc) { successorLanelets.push_back(suc); }
 
 void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet>& left, DrivingDirection dir) {
     adjacentLeft.adj = left;
@@ -84,6 +57,46 @@ void Lanelet::setRightAdjacent(const std::shared_ptr<Lanelet>& right, DrivingDir
     adjacentRight.dir = dir;
 }
 
+void Lanelet::setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices) { leftBorder = leftBorderVertices; }
+
+void Lanelet::setRightBorderVertices(const std::vector<vertice> &rightBorderVertices) {
+    rightBorder = rightBorderVertices;
+}
+
+void Lanelet::setLaneletType(const std::vector<LaneletType>& laType) { laneletType = laType; }
+
+void Lanelet::setUserOneWay(const std::vector<ObstacleType> &user) { userOneWay = user; }
+
+void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) { userBidirectional = user;}
+
+void Lanelet::setStopLine(const StopLine& sl) { stopLine = sl; }
+
+void Lanelet::addLeftVertex(const vertice left) { leftBorder.push_back(left); }
+
+void Lanelet::addRightVertex(const vertice right) { rightBorder.push_back(right); }
+
+void Lanelet::addCenterVertex(const vertice center) { centerVertices.push_back(center); }
+
+void Lanelet::addPredecessor(const std::shared_ptr<Lanelet>& pre) { predecessorLanelets.push_back(pre); }
+
+void Lanelet::addSuccessor(const std::shared_ptr<Lanelet>& suc) { successorLanelets.push_back(suc); }
+
+void Lanelet::addTrafficLight(const std::shared_ptr<TrafficLight>& light) { trafficLights.push_back(light); }
+
+void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign>& sign) { trafficSigns.push_back(sign); }
+
+int Lanelet::getId() const { return id; }
+
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getPredecessors() const { return predecessorLanelets; }
+
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getSuccessors() const { return successorLanelets; }
+
+const std::vector<vertice> &Lanelet::getCenterVertices() const { return centerVertices; }
+
+const std::vector<vertice> &Lanelet::getLeftBorderVertices() const { return leftBorder; }
+
+const std::vector<vertice> &Lanelet::getRightBorderVertices() const { return rightBorder; }
+
 std::vector<std::shared_ptr<TrafficLight>> Lanelet::getTrafficLights() const { return trafficLights; }
 
 std::vector<std::shared_ptr<TrafficSign>> Lanelet::getTrafficSigns() const { return trafficSigns; }
@@ -94,29 +107,33 @@ const box &Lanelet::getBoundingBox() const {return boundingBox;}
 
 const std::vector<LaneletType> &Lanelet::getLaneletType() const { return laneletType; }
 
-void Lanelet::setLaneletType(const std::vector<LaneletType>& laType) { laneletType = laType; }
-
 const std::vector<ObstacleType> &Lanelet::getUserOneWay() const { return userOneWay; }
 
-void Lanelet::setUserOneWay(const std::vector<ObstacleType> &user) { userOneWay = user; }
-
 const std::vector<ObstacleType> &Lanelet::getUserBidirectional() const { return userBidirectional; }
-
-void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) { userBidirectional = user;}
 
 const Lanelet::adjacent &Lanelet::getAdjacentLeft() const {return adjacentLeft;}
 
 const Lanelet::adjacent &Lanelet::getAdjacentRight() const {return adjacentRight;}
 
-void Lanelet::addLeftVertex(const vertice left) { leftBorder.push_back(left); }
+const StopLine &Lanelet::getStopLine() const { return stopLine; }
 
-void Lanelet::addRightVertex(const vertice right) { rightBorder.push_back(right); }
+bool Lanelet::applyIntersectionTesting(const polygon_type &polygon_shape) const {
+    return bg::intersects(polygon_shape, this->getBoundingBox()) &&
+           bg::intersects(polygon_shape, this->getOuterPolygon());
+}
 
-void Lanelet::addCenterVertex(const vertice center) { centerVertices.push_back(center); }
-
-void Lanelet::addTrafficLight(const std::shared_ptr<TrafficLight>& light) { trafficLights.push_back(light); }
-
-void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign>& sign) { trafficSigns.push_back(sign); }
+bool Lanelet::checkIntersection(const polygon_type &polygon_shape, int intersection_flag) const {
+    switch (intersection_flag) {
+        case PARTIALLY_CONTAINED: {
+            return this->applyIntersectionTesting(polygon_shape);
+        }
+        case COMPLETELY_CONTAINED: {
+            return bg::within(polygon_shape, this->getOuterPolygon());
+        }
+        default:
+            return false;
+    }
+}
 
 void Lanelet::constructOuterPolygon() {
     const std::vector<vertice> &leftBorderTemp = this->getLeftBorderVertices();
@@ -162,25 +179,6 @@ void Lanelet::createCenterVertices() {
         addCenterVertex(newVertex);
     }
 }
-
-bool Lanelet::applyIntersectionTesting(const polygon_type &polygon_shape) const {
-    return bg::intersects(polygon_shape, this->getBoundingBox()) &&
-           bg::intersects(polygon_shape, this->getOuterPolygon());
-}
-
-bool Lanelet::checkIntersection(const polygon_type &polygon_shape, int intersection_flag) const {
-    switch (intersection_flag) {
-        case PARTIALLY_CONTAINED: {
-            return this->applyIntersectionTesting(polygon_shape);
-        }
-        case COMPLETELY_CONTAINED: {
-            return bg::within(polygon_shape, this->getOuterPolygon());
-        }
-        default:
-            return false;
-    }
-}
-
 
 double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
     std::vector<double> dif(centerVertices.size()-1);

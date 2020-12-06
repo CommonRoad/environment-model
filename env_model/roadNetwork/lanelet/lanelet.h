@@ -116,7 +116,7 @@ class Lanelet {
         void constructOuterPolygon();
 
         /**
-        * Computes orientation of lanelet given a x- and y-position
+        * Computes orientation of lanelet given x- and y-position
         *
         * @param positionX x-position of point
         * @param positionY y-position of point
