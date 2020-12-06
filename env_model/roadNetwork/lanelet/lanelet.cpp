@@ -56,6 +56,10 @@ void Lanelet::setRightBorderVertices(const std::vector<vertice> &rightBorderVert
     rightBorder = rightBorderVertices;
 }
 
+void Lanelet::setStopLine(const StopLine& sl) { stopLine = sl; }
+
+const StopLine &Lanelet::getStopLine() const { return stopLine; }
+
 const std::vector<vertice> &Lanelet::getCenterVertices() const { return centerVertices; }
 
 const std::vector<vertice> &Lanelet::getLeftBorderVertices() const { return leftBorder; }
@@ -102,11 +106,7 @@ void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) { user
 
 const Lanelet::adjacent &Lanelet::getAdjacentLeft() const {return adjacentLeft;}
 
-void Lanelet::setAdjacentLeft(const Lanelet::adjacent &adjLeft) {adjacentLeft = adjLeft;}
-
 const Lanelet::adjacent &Lanelet::getAdjacentRight() const {return adjacentRight;}
-
-void Lanelet::setAdjacentRight(const Lanelet::adjacent &adjRight) {adjacentRight = adjRight;}
 
 void Lanelet::addLeftVertex(const vertice left) { leftBorder.push_back(left); }
 
@@ -124,7 +124,7 @@ void Lanelet::constructOuterPolygon() {
 
     if (!leftBorderTemp.empty()) {
 
-        size_t idx = 0;
+        int idx = 0;
         polygon_type polygon;
         polygon.outer().resize(leftBorderTemp.size() + rightBorderTemp.size() + 1);
 
@@ -148,9 +148,9 @@ void Lanelet::constructOuterPolygon() {
 
 void Lanelet::createCenterVertices() {
     // initialise
-    size_t numVertices = leftBorder.size();
+    int numVertices = leftBorder.size();
 
-    for (size_t i = 0; i < numVertices; i++) {
+    for (int i = 0; i < numVertices; i++) {
         /*
          * calculate a center vertex as the arithmetic mean between the opposite
          * vertex on the left and right border

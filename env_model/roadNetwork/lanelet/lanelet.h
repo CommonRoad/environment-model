@@ -11,6 +11,7 @@
 
 #include "../regulatory_elements/traffic_light.h"
 #include "../regulatory_elements/traffic_sign.h"
+#include "../regulatory_elements/stop_line.h"
 #include "../../auxiliaryDefs/structs.h"
 
 
@@ -56,11 +57,10 @@ class Lanelet {
         void setRightAdjacent(const std::shared_ptr<Lanelet>& right, DrivingDirection dir);
         void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices);
         void setRightBorderVertices(const std::vector<vertice> &rightBorderVertices);
-        void setAdjacentLeft(const adjacent &adjacentLeft);
-        void setAdjacentRight(const adjacent &adjacentRight);
         void setLaneletType(const std::vector<LaneletType>& laneletType);
         void setUserOneWay(const std::vector<ObstacleType> &userOneWay);
         void setUserBidirectional(const std::vector<ObstacleType> &userBidirectional);
+        void setStopLine(const StopLine &sl);
 
         void addCenterVertex(vertice center);
         void addLeftVertex(vertice left);
@@ -85,6 +85,7 @@ class Lanelet {
         [[nodiscard]] const std::vector<ObstacleType> &getUserBidirectional() const;
         [[nodiscard]] const adjacent &getAdjacentLeft() const;
         [[nodiscard]] const adjacent &getAdjacentRight() const;
+        [[nodiscard]] const StopLine &getStopLine() const;
 
         /**
         * Given a polygon, checks whether the polygon intersects with the lanelet
@@ -99,7 +100,7 @@ class Lanelet {
         *
         * @param polygon_shape boost polygon
         * @param intersection_flag specifies whether shape can be partially occupied by lanelet
-         * or must be completely occupied
+        *  or must be completely occupied
         * @return boolean indicating whether lanelet is occupied
         */
         [[nodiscard]] bool checkIntersection(const polygon_type &polygon_shape, int intersection_flag) const;
@@ -140,6 +141,7 @@ private:
         std::vector<LaneletType> laneletType;                       //**< list of relevant lanelet types*/
         std::vector<ObstacleType> userOneWay;                       //**< list of relevant allowed users one way*/
         std::vector<ObstacleType> userBidirectional;                //**< list of relevant allowed users bidirectional*/
+        StopLine stopLine;                                          //**< stopLine assigned to lanelet*/
 };
 
 #endif //ENVIRONMENT_MODEL_LANELET_H

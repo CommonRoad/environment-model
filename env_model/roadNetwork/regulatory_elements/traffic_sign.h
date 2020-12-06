@@ -14,19 +14,19 @@ class TrafficSign {
         /*
          * setter functions*
          */
-        void setId(size_t num);
+        void setId(int num);
         void addTrafficSignElement(const TrafficSignElement& sign_element);
         void setVirtualElement(bool virtualElement);
         void setTrafficSignElement(const std::vector<TrafficSignElement>& trafficSignElement);
         /*
          * getter functions
          */
-        [[nodiscard]] size_t getId() const;
+        [[nodiscard]] int getId() const;
         [[nodiscard]] bool isVirtualElement() const;
         [[nodiscard]] std::vector<TrafficSignElement> getTrafficSignElement() const;
 
     private:
-        size_t id;                                  //unique id
+        int id;                                  //unique id
         bool virtualElement;                       //artificially added element
         std::vector<TrafficSignElement> trafficSignElement;
 };

@@ -13,14 +13,14 @@ TrafficLight::TrafficLight(){
 
 
 // Setter
-void TrafficLight::setId(const size_t num) { id = num; }
+void TrafficLight::setId(const int num) { id = num; }
 
 void TrafficLight::setCycle(const std::vector<CycleElement>& light_cycle) { cycle = light_cycle; }
 
 void TrafficLight::setOffset(const float ofst) { offset = ofst; }
 
 // Getter
-size_t TrafficLight::getId() const { return id; }
+int TrafficLight::getId() const { return id; }
 float TrafficLight::getOffset() const { return offset; }
 
 std::vector<CycleElement> TrafficLight::getCycle() const { return cycle; }
@@ -29,7 +29,7 @@ std::vector<CycleElement> TrafficLight::getCycle() const { return cycle; }
 CycleElement TrafficLight::getElementAtTime(float time) {
     time += offset;
     CycleElement current = cycle.front();
-    size_t i = 0;
+    int i = 0;
     while (time > 0) {
         if (i >= cycle.size()) {
             i = 0;

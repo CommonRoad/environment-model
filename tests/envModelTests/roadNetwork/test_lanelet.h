@@ -28,16 +28,20 @@ class LaneletTest : public testing::Test{
         std::vector<vertice> leftBorderTwo;
         std::vector<vertice> rightBorderTwo;
         std::shared_ptr<Lanelet> laneletTwo;
+        std::vector<ObstacleType> userOneWayTwo;
+        std::vector<ObstacleType> userBidirectionalTwo;
 
         int idThree;
         std::vector<LaneletType> laneletTypeThree;
         std::vector<vertice> centerVerticesThree;
         std::vector<vertice> leftBorderThree;
         std::vector<vertice> rightBorderThree;
-        Lanelet laneletThree;
+        std::shared_ptr<Lanelet> laneletThree;
 
-        Lanelet laneletFour;
-        Lanelet laneletFive;
+        std::shared_ptr<Lanelet> laneletFour;
+        std::shared_ptr<Lanelet> laneletFive;
+        std::shared_ptr<Lanelet> laneletSix;
+        std::shared_ptr<Lanelet> laneletSeven;
 
         void SetUp() override;
 };
