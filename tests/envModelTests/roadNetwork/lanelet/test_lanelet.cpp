@@ -33,7 +33,7 @@ void LaneletTest::evaluateTypes(std::vector<T> typeVectorOne, std::vector<T> typ
     }
 }
 
-void LaneletTest::SetUp() {
+void LaneletTest::setUpRoadNetwork(){
     //middle lanelet
     idOne = 1;
     laneletTypeOne = std::vector<LaneletType>{LaneletType::mainCarriageWay, LaneletType::urban};
@@ -137,9 +137,9 @@ void LaneletTest::SetUp() {
     tl->setOffset(0.0);
     tl->setDirection(TrafficLightDirection::straight);
     tl->setCycle(std::vector<CycleElement>{CycleElement{CycleElementType::green, 1.0},
-                                          CycleElement{CycleElementType::yellow, 1.0},
-                                          CycleElement{CycleElementType::red, 1.0},
-                                          CycleElement{CycleElementType::red_yellow, 1.0}});
+                                           CycleElement{CycleElementType::yellow, 1.0},
+                                           CycleElement{CycleElementType::red, 1.0},
+                                           CycleElement{CycleElementType::red_yellow, 1.0}});
 
     StopLine sl = StopLine();
     sl.setLineMarking(LineMarking::broad_solid);
@@ -161,8 +161,11 @@ void LaneletTest::SetUp() {
     polygonOne = polygon_type{{{0.0, 0.0}, {0.0, 0.5}, {0.5, 0.5}, {0.5, 0.0}, {0.0, 0.0}}};
     polygonTwo = polygon_type{{{0.5, 0.5}, {0.5, 2.0}, {1.0, 2.0}, {1.0, 0.5}, {0.5, 0.5}}};
     polygonThree = polygon_type{{{10.0, 10.0}, {10.0, 12.0}, {11.0, 12.0}, {11.0, 10.0}, {10.0, 10.0}}};
-};
+}
 
+void LaneletTest::SetUp() {
+    setUpRoadNetwork();
+}
 
 TEST_F(LaneletTest, InitializationComplete){
     //middle lanelet

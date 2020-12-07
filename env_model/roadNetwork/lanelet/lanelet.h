@@ -99,11 +99,11 @@ class Lanelet {
         * Given a polygon, checks whether the polygon intersects with the lanelet given an intersection category
         *
         * @param polygon_shape boost polygon
-        * @param intersection_flag specifies whether shape can be partially occupied by lanelet
+        * @param intersection_type specifies whether shape can be partially occupied by lanelet
         *  or must be completely occupied
         * @return boolean indicating whether lanelet is occupied
         */
-        [[nodiscard]] bool checkIntersection(const polygon_type &polygon_shape, int intersection_flag) const;
+        [[nodiscard]] bool checkIntersection(const polygon_type &polygon_shape, int intersection_type) const;
 
         /**
         * Calculates center vertices as the arithmetic mean between the vertex on the left and right border

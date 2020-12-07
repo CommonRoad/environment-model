@@ -122,8 +122,8 @@ bool Lanelet::applyIntersectionTesting(const polygon_type &polygon_shape) const 
            bg::intersects(polygon_shape, this->getOuterPolygon());
 }
 
-bool Lanelet::checkIntersection(const polygon_type &polygon_shape, int intersection_flag) const {
-    switch (intersection_flag) {
+bool Lanelet::checkIntersection(const polygon_type &polygon_shape, int intersection_type) const {
+    switch (intersection_type) {
         case PARTIALLY_CONTAINED: {
             return this->applyIntersectionTesting(polygon_shape);
         }

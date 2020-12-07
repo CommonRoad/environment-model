@@ -1,4 +1,7 @@
-add_executable(unit_tests envModelTests/allTests.cpp envModelTests/roadNetwork/test_lanelet.cpp)
+add_executable(unit_tests
+        envModelTests/allTests.cpp
+        envModelTests/roadNetwork/lanelet/test_lane.cpp
+        envModelTests/roadNetwork/lanelet/test_lanelet.cpp)
 target_compile_features(unit_tests
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)

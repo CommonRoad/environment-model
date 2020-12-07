@@ -17,16 +17,6 @@
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
-template <typename First, typename Second>
-struct pair_maker
-{
-    typedef std::pair<First, Second> result_type;
-    template<typename T>
-    inline result_type operator()(T const& v) const
-    {
-        return result_type(v.value(), v.index());
-    }
-};
 
 class RoadNetwork {
     public:
@@ -48,12 +38,13 @@ class RoadNetwork {
         std::vector<std::shared_ptr<Lanelet>> findLaneletsByPosition(double xPos, double yPos);
         std::shared_ptr<Lanelet> findLaneletById(size_t id);
 
-        static std::shared_ptr<Lane> findLaneByShape(std::vector<std::shared_ptr<Lane>> possibleLanes, const polygon_type &polygonShape);
+        static std::shared_ptr<Lane> findLaneByShape(std::vector<std::shared_ptr<Lane>> possibleLanes,
+                                                     const polygon_type &polygonShape);
 
     private:
         typedef bg::model::point<float, 2, bg::cs::cartesian> point;
         typedef bg::model::box<point> box;
-        typedef bg::model::polygon<point, false, false> polygon; // ccw, open polygon
+        typedef bg::model::polygon<point, false, false> polygon;
         typedef std::pair<box, unsigned> value;
 
         void createLanes(const std::vector<std::shared_ptr<Lanelet>>& laneletNetwork);
