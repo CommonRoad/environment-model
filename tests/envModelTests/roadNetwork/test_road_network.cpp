@@ -30,7 +30,7 @@ void RoadNetworkTest::setUpRoadNetwork(){
     //front lanelet
     laneletTwo = std::make_shared<Lanelet>(Lanelet());
     idTwo = 2;
-    laneletTypeTwo = std::vector<LaneletType>{LaneletType::interstate};
+    laneletTypeTwo = std::vector<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate};
     userOneWayTwo = std::vector<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     userBidirectionalTwo = std::vector<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
     centerVerticesTwo = std::vector<vertice>{vertice{6, 0.5}, vertice{7, 0.5}, vertice{8, 0.5},
@@ -57,7 +57,7 @@ void RoadNetworkTest::setUpRoadNetwork(){
 
     //rear lanelet
     idThree = 3;
-    laneletTypeThree = std::vector<LaneletType>{LaneletType::urban};
+    laneletTypeThree = std::vector<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate};
     centerVerticesThree = std::vector<vertice>{vertice{-5, 0.5}, vertice{-4, 0.5}, vertice{-3, 0.5},
                                                vertice{-2, 0.5}, vertice{-1, 0.5}, vertice{0, 0.5}};
     leftBorderThree = std::vector<vertice>{vertice{-5, 1}, vertice{-4, 1}, vertice{-3, 1},
@@ -66,6 +66,7 @@ void RoadNetworkTest::setUpRoadNetwork(){
                                             vertice{-2, 0.0}, vertice{-1, 0.0}, vertice{0, 0.0}};
     Lanelet laneletThreeTmp = Lanelet();
     laneletThreeTmp.setId(idThree);
+    laneletThreeTmp.setLaneletType(laneletTypeThree);
     laneletThreeTmp.setLeftBorderVertices(leftBorderThree);
     laneletThreeTmp.setRightBorderVertices(rightBorderThree);
     laneletThreeTmp.createCenterVertices();
@@ -74,7 +75,7 @@ void RoadNetworkTest::setUpRoadNetwork(){
 
     //right lanelet
     int idFour{ 4 };
-    std::vector<LaneletType> laneletTypeFour{ std::vector<LaneletType>{LaneletType::highway} };
+    std::vector<LaneletType> laneletTypeFour{ std::vector<LaneletType>{LaneletType::urban} };
     std::vector<vertice> leftBorderFour{vertice{6, 0.0}, vertice{7, 0.0}, vertice{8, 0.0},
                                         vertice{9, 0.0}, vertice{10, 0.0}, vertice{11, 0.0}};
     std::vector<vertice> rightBorderFour{vertice{6, -1.0}, vertice{7, -1.0}, vertice{8, -1.0},
@@ -83,7 +84,7 @@ void RoadNetworkTest::setUpRoadNetwork(){
 
     //left lanelet
     int idFive{ 5 };
-    std::vector<LaneletType> laneletTypeFive{ std::vector<LaneletType>{LaneletType::urban, LaneletType::crosswalk} };
+    std::vector<LaneletType> laneletTypeFive{ std::vector<LaneletType>{LaneletType::highway, LaneletType::crosswalk} };
     std::vector<vertice> leftBorderFive{vertice{6, 2.0}, vertice{7, 2.0}, vertice{8, 2.0},
                                         vertice{9, 2.0}, vertice{10, 2.0}, vertice{11, 2.0}};
     std::vector<vertice> rightBorderFive{vertice{6, 1.0}, vertice{7, 1.0}, vertice{8, 1.0},
@@ -92,8 +93,8 @@ void RoadNetworkTest::setUpRoadNetwork(){
 
     //second front lanelet
     int idSix{ 6 };
-    std::vector<LaneletType> laneletTypeSix{ std::vector<LaneletType>{LaneletType::mainCarriageWay,
-                                                                      LaneletType::interstate} };
+    std::vector<LaneletType> laneletTypeSix{ std::vector<LaneletType>{LaneletType::busLane,
+                                                                      LaneletType::urban} };
     std::vector<vertice> leftBorderSix = std::vector<vertice>{vertice{6, 1.0}, vertice{7, 1.0},
                                                               vertice{8, 1.0}};
     std::vector<vertice> rightBorderSix = std::vector<vertice>{vertice{6, 0}, vertice{7, 0},
@@ -102,7 +103,7 @@ void RoadNetworkTest::setUpRoadNetwork(){
 
     //second rear lanelet
     int idSeven{ 7 };
-    std::vector<LaneletType> laneletTypeSeven{ std::vector<LaneletType>{LaneletType::urban, LaneletType::crosswalk} };
+    std::vector<LaneletType> laneletTypeSeven{ std::vector<LaneletType>{LaneletType::urban, LaneletType::country} };
     std::vector<vertice> leftBorderSeven{vertice{-2, 1.5}, vertice{-1, 2}, vertice{0, 2}};
     std::vector<vertice> rightBorderSeven{vertice{-2, 0.0}, vertice{-1, 0.0}, vertice{0, 0.0}};
     laneletSeven = std::make_shared<Lanelet>(Lanelet(idSeven, leftBorderSeven, rightBorderSeven, laneletTypeSeven));
@@ -130,6 +131,7 @@ void RoadNetworkTest::setUpRoadNetwork(){
 
     // add successors, predecessors, adjacent, traffic sign, traffic light, and stop line to lanelet one
     laneletOne->addSuccessor(laneletTwo);
+    laneletTwo->addPredecessor(laneletOne);
     laneletOne->addSuccessor(laneletSix);
     laneletSix->addPredecessor(laneletOne);
     laneletOne->addPredecessor(laneletThree);
@@ -171,5 +173,33 @@ void RoadNetworkTest::SetUp(){
 }
 
 TEST_F(RoadNetworkTest, InitializationComplete){
+    EXPECT_EQ(roadNetwork->getLaneletNetwork().size(), 5);
+    EXPECT_EQ(roadNetwork->getLanes().size(), 3);
+    EXPECT_EQ(roadNetwork->getLanes().at(0)->getLanelet().getId(), 6);
+    EXPECT_EQ(roadNetwork->getLaneletNetwork().at(0)->getId(), 1);
+}
 
+TEST_F(RoadNetworkTest, FindOccupiedLaneletsByShape){
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonOne).at(0)->getId(), 1);
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonOne).size(), 2);
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonTwo).at(0)->getId(), 1);
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonThree).size(), 0);
+}
+
+TEST_F(RoadNetworkTest, FindLaneletsByPosition){
+    EXPECT_EQ(roadNetwork->findLaneletsByPosition(1, 0.5).at(0)->getId(), 1);
+    EXPECT_EQ(roadNetwork->findLaneletsByPosition(123, 123).size(), 0);
+}
+
+TEST_F(RoadNetworkTest, FindLaneletById){
+    EXPECT_EQ(roadNetwork->findLaneletById(1)->getId(), 1);
+    EXPECT_THROW(roadNetwork->findLaneletById(123)->getId(), std::domain_error);
+}
+
+TEST_F(RoadNetworkTest, FindLaneByShape){
+    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonOne)->getLanelet().getId(), 6);
+    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonOne)->getLanelet().getId(), 6);
+    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonTwo)->getLanelet().getId(), 6);
+    EXPECT_THROW(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonThree),
+                 std::domain_error);
 }

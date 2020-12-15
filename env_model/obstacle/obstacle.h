@@ -50,7 +50,7 @@ class Obstacle {
     polygon_type getOccupancyPolygonShape(int timeStamp);
     Shape &getGeoShape();
     std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(const std::shared_ptr<RoadNetwork>& roadNetwork, int timeStep);
-    void setLane(std::vector<std::shared_ptr<Lane>> lanes, int timeStep);
+    void setLane(const std::vector<std::shared_ptr<Lane>>& lanes, int timeStep);
     std::shared_ptr<Lane> getLane(int timeStep);
     double frontS(int timeStep);
     double rearS(int timeStep);

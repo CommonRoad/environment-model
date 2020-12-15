@@ -105,14 +105,14 @@ std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::s
     return occupied;
 }
 
-void Obstacle::setLane(std::vector<std::shared_ptr<Lane>> lanes, int timeStep) {
+void Obstacle::setLane(const std::vector<std::shared_ptr<Lane>>& lanes, int timeStep) {
     if(occupiedLane.find(timeStep-1) != occupiedLane.end() and occupiedLane.at(timeStep-1)->checkIntersection(getOccupancyPolygonShape(timeStep), PARTIALLY_CONTAINED)) {
         occupiedLane.insert(std::pair<int, std::shared_ptr<Lane>>(timeStep, occupiedLane.at(timeStep - 1)));
     }
     // find new lane
     else {
         polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
-        std::shared_ptr<Lane> occupied{RoadNetwork::findLaneByShape(std::move(lanes), polygonShape)};
+        std::shared_ptr<Lane> occupied{RoadNetwork::findLaneByShape(lanes, polygonShape)};
         occupiedLane.insert(std::pair<int, std::shared_ptr<Lane>>(timeStep, occupied));
     }
 }
