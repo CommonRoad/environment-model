@@ -5,9 +5,11 @@
 #ifndef ENV_MODEL_TEST_LANELET_OPERATIONS_H
 #define ENV_MODEL_TEST_LANELET_OPERATIONS_H
 
+#include "../test_road_network.h"
 
-class test_lanelet_operations {
-
+class LaneletOperationsTest : public::RoadNetworkTest {
+private:
+    void SetUp() override;
 };
 
 

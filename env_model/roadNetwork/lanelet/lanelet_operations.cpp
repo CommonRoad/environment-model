@@ -4,12 +4,6 @@
 
 #include "lanelet_operations.h"
 
-//typedef std::vector<Eigen::Vector2d, Eigen::aligned_allocator<Eigen::Vector2d>> EigenPolyline;
-
-Lanelet *matchLaneletType(Lanelet *curLanelet, const LaneletType &type, std::vector<vertice> &centerVertices,
-                          std::vector<vertice> &leftBorderVertices, std::vector<vertice> &rightBorderVertices,
-                          const std::shared_ptr<Lanelet> &la);
-
 LaneletType matchStringToLaneletType(const char *type){
     if (!(strcmp(type, "interstate")))
         return LaneletType::interstate;
@@ -58,12 +52,12 @@ LineMarking matchStringToLineMarking(const char *type){
         return LineMarking::unknown;
 }
 
-
-
 std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet,
                                                                      LaneletType type) {
-    // assumption: all successors have different type
-    size_t id = curLanelet->getId();
+    // assumption: successors of a single lanelet have different types
+
+    // initialize lanelet elements
+    int id = curLanelet->getId();
     std::vector<std::shared_ptr<Lanelet>> laneletList{curLanelet};
     std::vector<ObstacleType> userOneWay{curLanelet->getUserOneWay()};
     std::vector<ObstacleType> userBidirectional{curLanelet->getUserBidirectional()};
@@ -72,9 +66,11 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
     std::vector<vertice> rightBorderVertices = curLanelet->getRightBorderVertices();
     std::vector<std::shared_ptr<Lanelet>> predecessorLanelets = curLanelet->getPredecessors();
     std::vector<std::shared_ptr<Lanelet>> successorLanelets{nullptr};
+    std::vector<LaneletType> typeList{type};
 
     if(!curLanelet->getSuccessors().empty())
         while (curLanelet != nullptr){
+            // iterate through all successors and concatenate them
             for(const auto& la : curLanelet->getSuccessors()) {
                 if(std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(),
                                [type](LaneletType t){return t == type;})){
@@ -100,7 +96,8 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
             if(curLanelet and curLanelet->getSuccessors().empty())
                 curLanelet = nullptr;
         }
-    std::vector<LaneletType> typeList{type};
+
+    // create new lane
     Lanelet newLanelet = Lanelet(id, leftBorderVertices, rightBorderVertices, predecessorLanelets,
                                  successorLanelets, typeList, userOneWay, userBidirectional);
     newLanelet.createCenterVertices();
@@ -110,10 +107,8 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
     for(auto vert : centerVertices){
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     }
-
-    std::shared_ptr<Lane> l = std::make_shared<Lane>(laneletList,
-                                                     newLanelet,
-                                                     CurvilinearCoordinateSystem(reference_path));
-
-    return l;
+    std::shared_ptr<Lane> lane = std::make_shared<Lane>(laneletList,
+                                                        newLanelet,
+                                                        CurvilinearCoordinateSystem(reference_path));
+    return lane;
 }

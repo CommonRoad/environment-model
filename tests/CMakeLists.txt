@@ -1,6 +1,7 @@
 add_executable(unit_tests
         envModelTests/allTests.cpp
         envModelTests/roadNetwork/test_road_network.cpp
+        envModelTests/roadNetwork/lanelet/test_lanelet_operations.cpp
         envModelTests/roadNetwork/lanelet/test_lane.cpp
         envModelTests/roadNetwork/lanelet/test_lanelet.cpp)
 target_compile_features(unit_tests
