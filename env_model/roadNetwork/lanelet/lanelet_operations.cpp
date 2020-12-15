@@ -60,7 +60,8 @@ LineMarking matchStringToLineMarking(const char *type){
 
 
 
-std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet, LaneletType type) {
+std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet,
+                                                                     LaneletType type) {
     // assumption: all successors have different type
     size_t id = curLanelet->getId();
     std::vector<std::shared_ptr<Lanelet>> laneletList{curLanelet};
@@ -75,13 +76,20 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
     if(!curLanelet->getSuccessors().empty())
         while (curLanelet != nullptr){
             for(const auto& la : curLanelet->getSuccessors()) {
-                if(std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(), [type](LaneletType t){return t == type;})){
+                if(std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(),
+                               [type](LaneletType t){return t == type;})){
                     curLanelet = la;
                     laneletList.push_back(curLanelet);
                     id += curLanelet->getId();
-                    centerVertices.insert(centerVertices.end(), curLanelet->getCenterVertices().begin()+1, curLanelet->getCenterVertices().end());
-                    leftBorderVertices.insert(leftBorderVertices.end(), curLanelet->getLeftBorderVertices().begin()+1, curLanelet->getLeftBorderVertices().end());
-                    rightBorderVertices.insert(rightBorderVertices.end(), curLanelet->getRightBorderVertices().begin()+1, curLanelet->getRightBorderVertices().end());
+                    centerVertices.insert(centerVertices.end(),
+                                          curLanelet->getCenterVertices().begin()+1,
+                                          curLanelet->getCenterVertices().end());
+                    leftBorderVertices.insert(leftBorderVertices.end(),
+                                              curLanelet->getLeftBorderVertices().begin()+1,
+                                              curLanelet->getLeftBorderVertices().end());
+                    rightBorderVertices.insert(rightBorderVertices.end(),
+                                               curLanelet->getRightBorderVertices().begin()+1,
+                                               curLanelet->getRightBorderVertices().end());
                     successorLanelets = curLanelet->getSuccessors();
                     break;
                 }
@@ -89,7 +97,7 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
                     curLanelet = nullptr;
                 }
             }
-            if(curLanelet->getSuccessors().empty())
+            if(curLanelet and curLanelet->getSuccessors().empty())
                 curLanelet = nullptr;
         }
     std::vector<LaneletType> typeList{type};
@@ -103,7 +111,9 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     }
 
-    std::shared_ptr<Lane> l = std::make_shared<Lane>(laneletList, newLanelet, CurvilinearCoordinateSystem(reference_path));
+    std::shared_ptr<Lane> l = std::make_shared<Lane>(laneletList,
+                                                     newLanelet,
+                                                     CurvilinearCoordinateSystem(reference_path));
 
     return l;
 }

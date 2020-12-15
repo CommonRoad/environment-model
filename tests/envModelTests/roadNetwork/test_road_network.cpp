@@ -14,7 +14,7 @@ void RoadNetworkTest::compareVerticesVector(std::vector<vertice> verticesOne, st
 void RoadNetworkTest::setUpRoadNetwork(){
     //middle lanelet
     idOne = 1;
-    laneletTypeOne = std::vector<LaneletType>{LaneletType::mainCarriageWay, LaneletType::urban};
+    laneletTypeOne = std::vector<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate};
     userOneWayOne = std::vector<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     userBidirectionalOne = std::vector<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
     centerVerticesOne = std::vector<vertice>{vertice{0, 0.5}, vertice{1, 0.5}, vertice{2, 0.5},
@@ -92,9 +92,12 @@ void RoadNetworkTest::setUpRoadNetwork(){
 
     //second front lanelet
     int idSix{ 6 };
-    std::vector<LaneletType> laneletTypeSix{ std::vector<LaneletType>{LaneletType::highway} };
-    std::vector<vertice> leftBorderSix = std::vector<vertice>{vertice{6, 1.0}, vertice{7, 1.0}, vertice{8, 1.0}};
-    std::vector<vertice> rightBorderSix = std::vector<vertice>{vertice{6, 0}, vertice{7, 0}, vertice{8, 0}};
+    std::vector<LaneletType> laneletTypeSix{ std::vector<LaneletType>{LaneletType::mainCarriageWay,
+                                                                      LaneletType::interstate} };
+    std::vector<vertice> leftBorderSix = std::vector<vertice>{vertice{6, 1.0}, vertice{7, 1.0},
+                                                              vertice{8, 1.0}};
+    std::vector<vertice> rightBorderSix = std::vector<vertice>{vertice{6, 0}, vertice{7, 0},
+                                                               vertice{8, 0}};
     laneletSix = std::make_shared<Lanelet>(Lanelet(idSix, leftBorderSix, rightBorderSix, laneletTypeSix));
 
     //second rear lanelet
@@ -128,19 +131,45 @@ void RoadNetworkTest::setUpRoadNetwork(){
     // add successors, predecessors, adjacent, traffic sign, traffic light, and stop line to lanelet one
     laneletOne->addSuccessor(laneletTwo);
     laneletOne->addSuccessor(laneletSix);
+    laneletSix->addPredecessor(laneletOne);
     laneletOne->addPredecessor(laneletThree);
+    laneletThree->addSuccessor(laneletOne);
     laneletOne->addPredecessor(laneletSeven);
+    laneletSeven->addSuccessor(laneletOne);
     laneletOne->setLeftAdjacent(laneletFive, DrivingDirection::opposite);
+    laneletFive->setRightAdjacent(laneletOne, DrivingDirection::opposite);
     laneletOne->setRightAdjacent(laneletFour, DrivingDirection::same);
+    laneletFour->setLeftAdjacent(laneletOne, DrivingDirection::same);
     laneletOne->addTrafficLight(tl);
     laneletOne->addTrafficSign(ts);
     laneletOne->setStopLine(sl);
 
-    polygonOne = polygon_type{{{0.0, 0.0}, {0.0, 0.5}, {0.5, 0.5}, {0.5, 0.0}, {0.0, 0.0}}};
-    polygonTwo = polygon_type{{{0.5, 0.5}, {0.5, 2.0}, {1.0, 2.0}, {1.0, 0.5}, {0.5, 0.5}}};
-    polygonThree = polygon_type{{{10.0, 10.0}, {10.0, 12.0}, {11.0, 12.0}, {11.0, 10.0}, {10.0, 10.0}}};
+    polygonOne = polygon_type{{{0.0, 0.0}, {0.0, 0.5}, {0.5, 0.5}, {0.5, 0.0},
+                               {0.0, 0.0}}};
+    polygonTwo = polygon_type{{{0.5, 0.5}, {0.5, 2.0}, {1.0, 2.0}, {1.0, 0.5},
+                               {0.5, 0.5}}};
+    polygonThree = polygon_type{{{10.0, 10.0}, {10.0, 12.0}, {11.0, 12.0}, {11.0, 10.0},
+                                 {10.0, 10.0}}};
+
+    geometry::EigenPolyline reference_path;
+    for(auto vert : laneletOne->getCenterVertices()){
+        reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+    }
+
+    laneOne = std::make_shared<Lane>(Lane(std::vector<std::shared_ptr<Lanelet>>{laneletOne},
+                                          *laneletOne,
+                                          CurvilinearCoordinateSystem(reference_path)));
+
+    std::vector<std::shared_ptr<Lanelet>> lanelets{ laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive};
+
+    roadNetwork = std::make_shared<RoadNetwork>(RoadNetwork(lanelets));
+
 }
 
 void RoadNetworkTest::SetUp(){
     setUpRoadNetwork();
+}
+
+TEST_F(RoadNetworkTest, InitializationComplete){
+
 }

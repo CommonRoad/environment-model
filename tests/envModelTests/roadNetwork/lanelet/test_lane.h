@@ -10,8 +10,6 @@
 #include "roadNetwork/lanelet/lane.h"
 
 class LaneTest : public::RoadNetworkTest{
-protected:
-    std::shared_ptr<Lane> laneOne;
 private:
     void SetUp() override;
 };

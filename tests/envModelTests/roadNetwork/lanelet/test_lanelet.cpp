@@ -19,9 +19,9 @@ TEST_F(LaneletTest, InitializationComplete){
     compareVerticesVector(laneletOne->getLeftBorderVertices(), leftBorderOne);
     compareVerticesVector(laneletOne->getRightBorderVertices(), rightBorderOne);
     EXPECT_EQ(laneletOne->getId(), idOne);
-    RoadNetworkTest::evaluateTypes(laneletOne->getLaneletType(), laneletTypeOne);
-    RoadNetworkTest::evaluateTypes(laneletOne->getUserOneWay(), userOneWayOne);
-    RoadNetworkTest::evaluateTypes(laneletOne->getUserBidirectional(), userBidirectionalOne);
+    evaluateTypes(laneletOne->getLaneletType(), laneletTypeOne);
+    evaluateTypes(laneletOne->getUserOneWay(), userOneWayOne);
+    evaluateTypes(laneletOne->getUserBidirectional(), userBidirectionalOne);
     EXPECT_EQ(laneletOne->getSuccessors()[0]->getId(), 2);
     EXPECT_EQ(laneletOne->getSuccessors()[1]->getId(), 6);
     EXPECT_EQ(laneletOne->getPredecessors()[0]->getId(), 3);
@@ -36,9 +36,9 @@ TEST_F(LaneletTest, InitializationComplete){
 TEST_F(LaneletTest, InitializationManual){
     //front lanelet
     EXPECT_EQ(laneletTwo->getId(), idTwo);
-    RoadNetworkTest::evaluateTypes(laneletTwo->getLaneletType(), laneletTypeTwo);
-    RoadNetworkTest::evaluateTypes(laneletTwo->getUserOneWay(), userOneWayTwo);
-    RoadNetworkTest::evaluateTypes(laneletTwo->getUserBidirectional(), userBidirectionalTwo);
+    evaluateTypes(laneletTwo->getLaneletType(), laneletTypeTwo);
+    evaluateTypes(laneletTwo->getUserOneWay(), userOneWayTwo);
+    evaluateTypes(laneletTwo->getUserBidirectional(), userBidirectionalTwo);
     compareVerticesVector(laneletTwo->getCenterVertices(), centerVerticesTwo);
     compareVerticesVector(laneletTwo->getLeftBorderVertices(), leftBorderTwo);
     compareVerticesVector(laneletTwo->getRightBorderVertices(), rightBorderTwo);
@@ -47,7 +47,7 @@ TEST_F(LaneletTest, InitializationManual){
 TEST_F(LaneletTest, InitializationEnd){
     //rear lanelet
     EXPECT_EQ(laneletThree->getId(), idThree);
-    RoadNetworkTest::evaluateTypes(laneletThree->getLaneletType(), laneletTypeThree);
+    evaluateTypes(laneletThree->getLaneletType(), laneletTypeThree);
     compareVerticesVector(laneletThree->getCenterVertices(), centerVerticesThree);
     compareVerticesVector(laneletThree->getLeftBorderVertices(), leftBorderThree);
     compareVerticesVector(laneletThree->getRightBorderVertices(), rightBorderThree);

@@ -6,14 +6,6 @@
 
 void LaneTest::SetUp() {
     setUpRoadNetwork();
-    geometry::EigenPolyline reference_path;
-    for(auto vert : laneletOne->getCenterVertices()){
-        reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
-    }
-
-    laneOne = std::make_shared<Lane>(Lane(std::vector<std::shared_ptr<Lanelet>>{laneletOne},
-                   *laneletOne,
-                   CurvilinearCoordinateSystem(reference_path)));
 }
 
 TEST_F(LaneTest, Initialization){

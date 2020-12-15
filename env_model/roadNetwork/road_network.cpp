@@ -41,7 +41,8 @@ void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>>& netwo
             }
             laneletType = extractClassifyingLaneletType(la);
             for(const auto& pred : la->getPredecessors()){
-                if(!std::any_of(pred->getLaneletType().begin(), pred->getLaneletType().end(), [laneletType](LaneletType t){return t == laneletType;})){
+                if(!std::any_of(pred->getLaneletType().begin(), pred->getLaneletType().end(),
+                                [laneletType](LaneletType t){return t == laneletType;})){
                     startLanelets.push_back(la);
                     break;
                 }

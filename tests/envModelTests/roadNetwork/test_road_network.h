@@ -45,6 +45,10 @@ protected:
     polygon_type polygonTwo;
     polygon_type polygonThree;
 
+    std::shared_ptr<Lane> laneOne;
+
+    std::shared_ptr<RoadNetwork> roadNetwork;
+
     static void compareVerticesVector(std::vector<vertice> verticesOne, std::vector<vertice> verticesTwo);
     template <typename T>
     void evaluateTypes(std::vector<T> typeVectorOne, std::vector<T> typeVectorTwo);
