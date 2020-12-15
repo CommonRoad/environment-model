@@ -21,6 +21,7 @@ set(ENV_MODEL_SRC_FILES
         interfaces/commonroad/xml_reader.cpp
         interfaces/standalone/command_line_input.cpp
         predicates/position_predicates.cpp
+        predicates/braking_predicates.cpp
         )
 if(NOT EXISTS "${CRCCOSY_LIBRARY_DIR}")
     message(SEND_ERROR "Can't find the CommonRoad-Curvilinear-Coordinate System library in ${CRCCOSY_LIBRARY_DIR}")

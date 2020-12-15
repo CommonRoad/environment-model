@@ -27,8 +27,9 @@ class Obstacle {
 
     void setVmax(double vmax);
     void setAmax(double amax);
-    void setAmaxLong(double amax_long);
-    void setAminLong(double amin_long);
+    void setAmaxLong(double aMaxLong);
+    void setAminLong(double aMinLong);
+    void setReactionTime(double tReact);
     void setIsStatic(bool isStatic);
     void appendState(State state);
     void setCurrentState(const State &currentState);
@@ -42,6 +43,7 @@ class Obstacle {
     [[nodiscard]] double getAmaxLong() const;
     [[nodiscard]] double getAminLong() const;
     [[nodiscard]] size_t getId() const;
+    [[nodiscard]] double getReactionTime() const;
     [[nodiscard]] ObstacleType getType() const;
     [[nodiscard]] const State &getCurrentState() const;
     [[nodiscard]] bool getIsStatic() const;
@@ -71,6 +73,7 @@ private:
     double a_min_long{}; // minimal longitudinal acceleration
     std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};
     std::map<int, std::shared_ptr<Lane>> occupiedLane{};
+    double reactionTime;
 };
 
 #endif //ENV_MODEL_OBSTACLE_H

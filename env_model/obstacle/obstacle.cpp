@@ -23,15 +23,19 @@ size_t Obstacle::getId() const { return id; }
 
 void Obstacle::setVmax(const double vmax) { v_max = isStatic ? 0.0 : vmax; }
 
+void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 0.0 : tReact; }
+
 void Obstacle::setAmax(const double amax) { a_max = isStatic ? 0.0 : amax; }
 
-void Obstacle::setAmaxLong(const double amax_long) { a_max_long = isStatic ? 0.0 : amax_long; }
+void Obstacle::setAmaxLong(const double aMaxLong) { a_max_long = isStatic ? 0.0 : aMaxLong; }
 
-void Obstacle::setAminLong(const double amin_long) { a_min_long = isStatic ? 0.0 : amin_long; }
+void Obstacle::setAminLong(const double aMinLong) { a_min_long = isStatic ? 0.0 : aMinLong; }
 
 double Obstacle::getVmax() const { return v_max; }
 
 double Obstacle::getAmax() const { return a_max; }
+
+double Obstacle::getReactionTime() const { return reactionTime; }
 
 double Obstacle::getAmaxLong() const { return a_max_long; }
 
