@@ -14,10 +14,9 @@
 #include "../regulatory_elements/stop_line.h"
 #include "../../auxiliaryDefs/structs.h"
 
-
-typedef boost::geometry::model::d2::point_xy<double> point_type;
-typedef boost::geometry::model::polygon<point_type> polygon_type;
-typedef boost::geometry::model::box<point_type> box;
+using point_type = boost::geometry::model::d2::point_xy<double>;
+using polygon_type =  boost::geometry::model::polygon<point_type>;
+using box =  boost::geometry::model::box<point_type>;
 
 
 class Lanelet {

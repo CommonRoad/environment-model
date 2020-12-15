@@ -5,7 +5,7 @@
 #include "test_lane.h"
 
 void LaneTest::SetUp() {
-    LaneletTest::setUpRoadNetwork();
+    setUpRoadNetwork();
     geometry::EigenPolyline reference_path;
     for(auto vert : laneletOne->getCenterVertices()){
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));

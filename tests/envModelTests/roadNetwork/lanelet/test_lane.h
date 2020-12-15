@@ -6,10 +6,10 @@
 #define ENV_MODEL_TEST_LANE_H
 
 #include <gtest/gtest.h>
-#include "./test_lanelet.h"
+#include "../test_road_network.h"
 #include "roadNetwork/lanelet/lane.h"
 
-class LaneTest : public::LaneletTest{
+class LaneTest : public::RoadNetworkTest{
 protected:
     std::shared_ptr<Lane> laneOne;
 private:

@@ -3,9 +3,9 @@
 //
 
 #include "road_network.h"
+#include "lanelet/lanelet_operations.h"
 
 #include <utility>
-#include "lanelet/lanelet_operations.h"
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/box.hpp>
@@ -25,12 +25,7 @@ RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network){
 
 const std::vector<std::shared_ptr<Lanelet>> &RoadNetwork::getLaneletNetwork() const {return laneletNetwork;}
 
-void RoadNetwork::setLaneletNetwork(const std::vector<std::shared_ptr<Lanelet>> &network) {laneletNetwork = network;}
-
 std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() {return lanes;}
-
-void RoadNetwork::setLanes(std::vector<std::shared_ptr<Lane>> la) {lanes = std::move(la);}
-
 
 void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>>& network) {
     std::vector<std::shared_ptr<Lanelet>> startLanelets;
@@ -73,33 +68,31 @@ LaneletType RoadNetwork::extractClassifyingLaneletType(const std::shared_ptr<Lan
     return LaneletType::mainCarriageWay;
 }
 
-
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
-    box query_box(point(0, 0), point(5, 5));
+    box_road query_box(point(0, 0), point(5, 5));
     std::vector<value> relevantLanlets;
-    rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())), std::back_inserter(relevantLanlets));
+    rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())),
+                std::back_inserter(relevantLanlets));
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for(auto la : relevantLanlets)
         lanelets.push_back(findLaneletById(la.second));
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
 //#pragma omp parallel for schedule(guided)
-    for (size_t i = 0; i < lanelets.size(); i++) {
-        if (lanelets[i]->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
+    for (auto & lanelet : lanelets) {
+        if (lanelet->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
 //#pragma omp critical
-            occupiedLanelets.push_back(lanelets[i]);
+            occupiedLanelets.push_back(lanelet);
         }
     }
 
     return occupiedLanelets;
 }
 
-std::shared_ptr<Lane> RoadNetwork::findLaneByShape(std::vector<std::shared_ptr<Lane>> possibleLanes, const polygon_type &polygonShape) {
-
-//#pragma omp parallel for schedule(guided)
-    for (size_t i = 0; i < possibleLanes.size(); i++) {
-        if (possibleLanes[i]->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
-//#pragma omp critical
-            return possibleLanes[i];
+std::shared_ptr<Lane> RoadNetwork::findLaneByShape(const std::vector<std::shared_ptr<Lane>>& possibleLanes,
+                                                   const polygon_type &polygonShape) {
+    for (auto & possibleLane : possibleLanes) {
+        if (possibleLane->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
+            return possibleLane;
         }
     }
 }
@@ -114,7 +107,8 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double
 }
 
 std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
-    auto it = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork), [id](auto val) { return val->getId() == id; });
+    auto it = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork),
+                           [id](auto val) { return val->getId() == id; });
     if (it == std::end(laneletNetwork)) {
         throw std::domain_error(std::to_string(id));
     }
