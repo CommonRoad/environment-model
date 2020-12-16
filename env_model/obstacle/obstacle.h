@@ -5,14 +5,15 @@
 #ifndef ENV_MODEL_OBSTACLE_H
 #define ENV_MODEL_OBSTACLE_H
 
-#include "state.h"
+#include "../roadNetwork/lanelet/lane.h"
+#include "../roadNetwork/road_network.h"
 #include "../auxiliaryDefs/structs.h"
 #include "../auxiliaryDefs/types_and_definitions.h"
 #include "../geometry/rectangle.h"
 #include "../geometry/shape.h"
+
+#include "state.h"
 #include <map>
-#include "../roadNetwork/lanelet/lane.h"
-#include "../roadNetwork/road_network.h"
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
@@ -20,60 +21,84 @@ typedef boost::geometry::model::box<point_type> box;
 
 class Obstacle {
   public:
-    /*
-     * setter functions
-     */
-    void setId(size_t num);
-
+    void setId(int num);
+    void setIsStatic(bool isStatic);
+    void setCurrentState(const State &currentState);
+    void setObstacleType(ObstacleType type);
     void setVmax(double vmax);
     void setAmax(double amax);
-    void setAmaxLong(double aMaxLong);
-    void setAminLong(double aMinLong);
+    void setAmaxLong(double amax);
+    void setAminLong(double amin);
     void setReactionTime(double tReact);
-    void setIsStatic(bool isStatic);
-    void appendState(State state);
-    void setCurrentState(const State &currentState);
-    void setType(ObstacleType type);
+    void setOccupiedLane(const std::vector<std::shared_ptr<Lane>>& possibleLanes, int timeStep);
 
-    /*
-     * getter functions
-     */
+    void appendState(State state);
+
+    [[nodiscard]] int getId() const;
+    [[nodiscard]] bool getIsStatic() const;
+    [[nodiscard]] const State &getCurrentState() const;
+    [[nodiscard]] ObstacleType getObstacleType() const;
     [[nodiscard]] double getVmax() const;
     [[nodiscard]] double getAmax() const;
     [[nodiscard]] double getAmaxLong() const;
     [[nodiscard]] double getAminLong() const;
-    [[nodiscard]] size_t getId() const;
     [[nodiscard]] double getReactionTime() const;
-    [[nodiscard]] ObstacleType getType() const;
-    [[nodiscard]] const State &getCurrentState() const;
-    [[nodiscard]] bool getIsStatic() const;
+    [[nodiscard]] std::shared_ptr<Lane> getOccupiedLane(int timeStep) const;
     [[nodiscard]] std::map<int, State> getTrajectoryPrediction() const;
-    int getTrajectoryLength();
-    polygon_type getOccupancyPolygonShape(int timeStamp);
-    Shape &getGeoShape();
-    std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(const std::shared_ptr<RoadNetwork>& roadNetwork, int timeStep);
-    void setLane(const std::vector<std::shared_ptr<Lane>>& lanes, int timeStep);
-    std::shared_ptr<Lane> getLane(int timeStep);
+    [[nodiscard]] int getTrajectoryLength();
+    [[nodiscard]] polygon_type getOccupancyPolygonShape(int timeStamp);
+    [[nodiscard]] Shape &getGeoShape();
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(
+            const std::shared_ptr<RoadNetwork>& roadNetwork,
+            int timeStep);
+
+    /**
+    * Computes the maximum longitudinal front position of obstacle (for rectangle shapes)
+    *
+    * @param timeStep time step of interest
+    * @return longitudinal position of obstacle front
+    */
     double frontS(int timeStep);
+
+    /**
+    * Computes the minimum longitudinal rear position of obstacle (for rectangle shapes)
+    *
+    * @param timeStep time step of interest
+    * @return longitudinal position of obstacle front
+    */
     double rearS(int timeStep);
+
+    /**
+    * Computes the longitudinal position of obstacle based on Cartesian state and assigned lane
+    *
+    * @param timeStep time step of interest
+    * @return longitudinal position of obstacle state
+    */
     double getLonPosition(int timeStep);
+
+    /**
+    * Computes the lateral position of obstacle based on Cartesian state and assigned lane
+    *
+    * @param timeStep time step of interest
+    * @return lateral position of obstacle state
+    */
     double getLatPosition(int timeStep);
 
 private:
-    size_t id{}; // unique id
-    bool isStatic{false}; // true if Obstacle is static
-    State currentState;
-    std::map<int, State> trajectoryPrediction{};
-    std::map<int, State> history{};
-    ObstacleType type;
-    Rectangle geoShape;
-    double v_max{};      // maximum velocity of the Obstacle in m/s
-    double a_max{};      // maximum absolute acceleration of the Obstacle in m/s^2
-    double a_max_long{}; // maximal longitudinal acceleration
-    double a_min_long{}; // minimal longitudinal acceleration
-    std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};
-    std::map<int, std::shared_ptr<Lane>> occupiedLane{};
-    double reactionTime;
+    int id{};                                                                   //**< unique ID of lanelet */
+    bool isStatic{false};                                                       //**< true if Obstacle is static */
+    State currentState;                                                         //**< current state of obstacle */
+    ObstacleType obstacleType;                                                  //**< CommonRoad obstacle type */
+    double vMax{};                                                              //**< maximum velocity of obstacle in m/s */
+    double aMax{};                                                              //**< maximum absolute acceleration of obstacle in [m/s^2] */
+    double aMaxLong{};                                                          //**< maximal longitudinal acceleration of obstacle in [m/s^2] */
+    double aMinLong{};                                                          //**< minimal longitudinal acceleration of obstacle in [m/s^2] */
+    double reactionTime{};                                                      //**< reaction time of obstacle in [s] */
+    std::map<int, std::shared_ptr<Lane>> occupiedLane{};                        //**< lane the obstacle is assigned to */
+    std::map<int, State> trajectoryPrediction{};                                //**< trajectory prediction of the obstacle */
+    std::map<int, State> history{};                                             //**< previous states of the obstacle */
+    Rectangle geoShape;                                                         //**< shape of the obstacle */
+    std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};    //**< map of time steps to lanelets occupied by the obstacle */
 };
 
 #endif //ENV_MODEL_OBSTACLE_H
