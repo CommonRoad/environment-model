@@ -57,7 +57,7 @@ void StateTestInitialization::setUpStates(){
     latPositionStateFive = 9.0;
     orientationStateFive = 0.0;
     timeStepStateFive = 0;
-    validityStateFive = ValidStates{true, true, true, true,
+    validityStateFour = ValidStates{true, true, true, true,
                                     true, true, true};
 
     xPositionStateSix = 11.0;
@@ -68,7 +68,7 @@ void StateTestInitialization::setUpStates(){
     latPositionStateSix  = 1.0;
     orientationStateSix  = 0.0;
     timeStepStateSix  = 1;
-    validityStateSix  = ValidStates{true, true, true, true,
+    validityStateFour = ValidStates{true, true, true, true,
                                     true, true, true};
 
     stateOne = State();
@@ -105,6 +105,7 @@ void StateTestInitialization::setUpStates(){
 }
 
 void StateTest::SetUp() {
+    setUpLane();
     setUpStates();
 }
 
@@ -156,25 +157,17 @@ TEST_F(StateTest, InitializationComplete){
     EXPECT_EQ(stateThree.getValidStates().lonPosition, validityStateThree.lonPosition);
     EXPECT_EQ(stateThree.getValidStates().latPosition, validityStateThree.latPosition);
     EXPECT_EQ(stateThree.getValidStates().orientation, validityStateThree.orientation);
-
-    EXPECT_EQ(stateFour.getTimeStep(), timeStepStateFour);
-    EXPECT_EQ(stateFour.getXPosition(), xPositionStateFour);
-    EXPECT_EQ(stateFour.getYPosition(), yPositionStateFour);
-    EXPECT_EQ(stateFour.getVelocity(), velocityStateFour);
-    EXPECT_EQ(stateFour.getAcceleration(), accelerationStateFour);
-    EXPECT_EQ(stateFour.getLonPosition(), lonPositionStateFour);
-    EXPECT_EQ(stateFour.getLatPosition(), latPositionStateFour);
-    EXPECT_EQ(stateFour.getOrientation(), orientationStateFour);
-    EXPECT_EQ(stateFour.getValidStates().xPosition, validityStateFour.xPosition);
-    EXPECT_EQ(stateFour.getValidStates().yPosition, validityStateFour.yPosition);
-    EXPECT_EQ(stateFour.getValidStates().velocity, validityStateFour.velocity);
-    EXPECT_EQ(stateFour.getValidStates().acceleration, validityStateFour.acceleration);
-    EXPECT_EQ(stateFour.getValidStates().lonPosition, validityStateFour.lonPosition);
-    EXPECT_EQ(stateFour.getValidStates().latPosition, validityStateFour.latPosition);
-    EXPECT_EQ(stateFour.getValidStates().orientation, validityStateFour.orientation);
 }
 
 TEST_F(StateTest, ConvertPointToCurvilinear){
-
-
+    stateOne.setXPosition(3.0);
+    stateOne.setYPosition(0.5);
+    stateOne.convertPointToCurvilinear(laneOne->getCurvilinearCoordinateSystem());
+    EXPECT_EQ(stateOne.getLonPosition(), 3.0);
+    EXPECT_EQ(stateOne.getLatPosition(), 0.0);
+    stateOne.setXPosition(2.5);
+    stateOne.setYPosition(-0.75);
+    stateOne.convertPointToCurvilinear(laneOne->getCurvilinearCoordinateSystem());
+    EXPECT_EQ(stateOne.getLonPosition(), 2.5);
+    EXPECT_EQ(stateOne.getLatPosition(), -1.25);
 }

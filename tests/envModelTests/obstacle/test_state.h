@@ -5,12 +5,12 @@
 #ifndef ENV_MODEL_TEST_STATE_H
 #define ENV_MODEL_TEST_STATE_H
 
-#pragma once
 #include <gtest/gtest.h>
 
 #include "obstacle/state.h"
+#include "../roadNetwork/lanelet/test_lane.h"
 
-class StateTestInitialization {
+class StateTestInitialization: public LaneTestInitialization {
 protected:
     int timeStepStateOne;
     double xPositionStateOne;

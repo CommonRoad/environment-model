@@ -6,10 +6,9 @@
 #define ENV_MODEL_TEST_OBSTACLE_H
 
 #include "obstacle/obstacle.h"
-#include "../roadNetwork/lanelet/test_lane.h"
 #include "test_state.h"
 
-class ObstacleTest : public LaneTestInitialization, public StateTestInitialization, public testing::Test{
+class ObstacleTest : public StateTestInitialization, public testing::Test{
 protected:
     int idObstacleOne;
     bool isStaticObstacleOne;
