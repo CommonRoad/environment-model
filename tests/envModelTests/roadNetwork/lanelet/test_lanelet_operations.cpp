@@ -6,6 +6,7 @@
 #include "roadNetwork/lanelet/lanelet_operations.h"
 
 void LaneletOperationsTest::SetUp(){
+    setUpLane();
     setUpRoadNetwork();
 }
 

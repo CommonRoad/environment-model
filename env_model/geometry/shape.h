@@ -13,10 +13,10 @@ public:
     /*
      * setter functions
      */
-    virtual void setLength(const double &l){};
-    virtual void setWidth(const double &w){};
-    virtual void setLength_raw(const double &raw_l){};
-    virtual void setWidth_raw(const double &raw_w){};
+    virtual void setLength(const double l){};
+    virtual void setWidth(const double w){};
+    virtual void setLength_raw(const double raw_l){};
+    virtual void setWidth_raw(const double raw_w){};
     virtual void setRadius(const double rad){};
     virtual void setCenter(const double x, const double y){};
 

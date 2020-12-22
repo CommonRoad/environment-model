@@ -7,6 +7,31 @@
 #include <cmath>
 #include <utility>
 
+Obstacle::Obstacle(int id,
+                   bool isStatic,
+                   const State &currentState,
+                   ObstacleType obstacleType,
+                   double vMax,
+                   double aMax,
+                   double aMaxLong,
+                   double aMinLong,
+                   double reactionTime,
+                   std::map<int, State> trajectoryPrediction,
+                   double length,
+                   double width) :
+                   id(id),
+                   isStatic(isStatic),
+                   currentState(currentState),
+                   obstacleType(obstacleType),
+                   vMax(vMax),
+                   aMax(aMax),
+                   aMaxLong(aMaxLong),
+                   aMinLong(aMinLong),
+                   reactionTime(reactionTime),
+                   trajectoryPrediction(std::move(trajectoryPrediction)),
+                   geoShape(Rectangle(length, width)) {}
+
+
 void Obstacle::setId(const int num) { id = num; }
 
 void Obstacle::setIsStatic(bool st) {
@@ -46,8 +71,17 @@ void Obstacle::setOccupiedLane(const std::vector<std::shared_ptr<Lane>>& possibl
     }
 }
 
-void Obstacle::appendState(State state) {
+void Obstacle::setTrajectoryPrediction(const std::map<int, State> &trajPrediction) {
+    trajectoryPrediction = trajPrediction;
+}
+
+
+void Obstacle::appendStateToTrajectoryPrediction(State state) {
     trajectoryPrediction.insert(std::pair<int, State>(state.getTimeStep(), state));
+}
+
+void Obstacle::appendStateToHistory(State state) {
+    history.insert(std::pair<int, State>(state.getTimeStep(), state));
 }
 
 int Obstacle::getId() const { return id; }
@@ -55,6 +89,17 @@ int Obstacle::getId() const { return id; }
 bool Obstacle::getIsStatic() const { return isStatic; }
 
 const State &Obstacle::getCurrentState() const {return currentState;}
+
+State Obstacle::getStateByTimeStep(int timeStep) const {
+    if(trajectoryPrediction.count(timeStep) == 1)
+        return trajectoryPrediction.at(timeStep);
+    else if(currentState.getTimeStep() == timeStep)
+        return currentState;
+    else if(history.count(timeStep) == 1)
+        return history.at(timeStep);
+    else
+        throw std::logic_error("Time step does not exist");
+}
 
 ObstacleType Obstacle::getObstacleType() const {return obstacleType;}
 
@@ -74,11 +119,13 @@ std::map<int, State> Obstacle::getTrajectoryPrediction() const { return trajecto
 
 int Obstacle::getTrajectoryLength() { return trajectoryPrediction.size(); }
 
-polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
+polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
 
     std::vector<vertice> boundingRectangleVertices;
     polygon_type polygonShape;
     // size_t i;
+
+    State state { this->getStateByTimeStep(timeStep) };
 
     if (this->getGeoShape().getType() == "Rectangle") {
 
@@ -93,9 +140,9 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStamp) {
          * coordinates to the object's reference position and rotation
          */
         std::vector<vertice> adjustedBoundingRectangleVertices = rotateAndTranslateVertices(
-            boundingRectangleVertices, vertice{this->trajectoryPrediction.at(timeStamp).getXPosition(),
-                                               this->trajectoryPrediction.at(timeStamp).getYPosition()},
-                                               this->trajectoryPrediction.at(timeStamp).getOrientation());
+            boundingRectangleVertices, vertice{state.getXPosition(),
+                                               state.getYPosition()},
+            state.getOrientation());
 
         polygonShape.outer().resize(adjustedBoundingRectangleVertices.size() + 1);
 
@@ -155,22 +202,21 @@ double Obstacle::rearS(int timeStep) {
                      (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + s});
 }
 
-double Obstacle::getLonPosition(int timeStep) {
+double Obstacle::getLonPosition(int timeStep) const {
     // Start measuring time
-    if(trajectoryPrediction.at(timeStep).getValidStates().lonPosition)
-        return trajectoryPrediction.at(timeStep).getLonPosition();
-    trajectoryPrediction.at(timeStep).convertPointToCurvilinear(
+    if(getStateByTimeStep(timeStep).getValidStates().lonPosition)
+        return getStateByTimeStep(timeStep).getLonPosition();
+    getStateByTimeStep(timeStep).convertPointToCurvilinear(
             getOccupiedLane(timeStep)->getCurvilinearCoordinateSystem());
 
-    return trajectoryPrediction.at(timeStep).getLonPosition();
+    return getStateByTimeStep(timeStep).getLonPosition();
 }
 
-double Obstacle::getLatPosition(int timeStep) {
-    if(trajectoryPrediction.at(timeStep).getValidStates().latPosition)
-        return trajectoryPrediction.at(timeStep).getLatPosition();
-    trajectoryPrediction.at(timeStep).convertPointToCurvilinear(
+double Obstacle::getLatPosition(int timeStep) const {
+    if(getStateByTimeStep(timeStep).getValidStates().latPosition)
+        return getStateByTimeStep(timeStep).getLatPosition();
+    getStateByTimeStep(timeStep).convertPointToCurvilinear(
             getOccupiedLane(timeStep)->getCurvilinearCoordinateSystem());
 
-    return trajectoryPrediction.at(timeStep).getLatPosition();
+    return getStateByTimeStep(timeStep).getLatPosition();
 }
-

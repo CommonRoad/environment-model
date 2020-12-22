@@ -5,11 +5,16 @@
 #ifndef ENV_MODEL_TEST_LANE_H
 #define ENV_MODEL_TEST_LANE_H
 
-#include <gtest/gtest.h>
-#include "../test_road_network.h"
+#include "../lanelet/test_lanelet.h"
 #include "roadNetwork/lanelet/lane.h"
 
-class LaneTest : public::RoadNetworkTest{
+class LaneTestInitialization : public LaneletTestInitialization{
+protected:
+    std::shared_ptr<Lane> laneOne;
+    void setUpLane();
+};
+
+class LaneTest : public LaneTestInitialization, public testing::Test {
 private:
     void SetUp() override;
 };

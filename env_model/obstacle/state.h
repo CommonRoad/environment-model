@@ -12,6 +12,11 @@ typedef geometry::CurvilinearCoordinateSystem CurvilinearCoordinateSystem;
 
 class State {
 public:
+    State() = default;
+    State(int timeStep, double xPosition, double yPosition, double velocity, double acceleration, double orientation,
+          double lonPosition, double latPosition);
+    State(int timeStep, double xPosition, double yPosition, double velocity, double acceleration, double orientation);
+
     [[nodiscard]] double getXPosition() const;
     [[nodiscard]] double getYPosition() const;
     [[nodiscard]] double getVelocity() const;
@@ -30,20 +35,27 @@ public:
     void setLatPosition(double latPosition);
     void setOrientation(double orientation);
     void setTimeStep(int timeStep);
-    void setValidStates(const ValidStates &validStates);
+
+    /**
+    * Converts the x- and y-coordinate into the Curvilinear domain
+    *
+    * @param ccs Curvilinear coordinate system in which projection should happen
+    */
     void convertPointToCurvilinear(const CurvilinearCoordinateSystem& ccs);
 
 private:
-        double xPosition{0.0};
-        double yPosition{0.0};
-        double velocity{0.0};
-        double acceleration{0.0};
-        double lonPosition{0.0};
-        double latPosition{0.0};
-        double orientation{0.0};
-        ValidStates validStates{false, false, false, false, false,
-                                false, false};
-        int timeStep{0};
+        double xPosition{0.0};                                          //**< x-coordinate in Cartesian space [m] */
+        double yPosition{0.0};                                          //**< y-coordinate in Cartesian space */
+        double velocity{0.0};                                           //**< velocity [m/s] */
+        double acceleration{0.0};                                       //**< acceleration [m/s^2] */
+        double lonPosition{0.0};                                        //**< longitudinal position [m] */
+        double latPosition{0.0};                                        //**< lateral position [m] */
+        double orientation{0.0};                                        //**< orientation [rad] */
+        ValidStates validStates{false, false,         //**< set of states which are already set and therefore are valid [rad] */
+                                false,false,
+                                false,false,
+                                false};
+        int timeStep{0};                                                //**< time step of the state variables */
 };
 
 

@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 
     for(const auto& obs : obstacles) {
         for (int i=0; i < obs->getTrajectoryLength(); ++i) {
-            obs->setLane(roadNetwork->getLanes(), i);
+            obs->setOccupiedLane(roadNetwork->getLanes(), i);
         }
     }
 

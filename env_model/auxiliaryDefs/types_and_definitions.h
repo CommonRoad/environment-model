@@ -25,4 +25,6 @@ enum class DrivingDirection{same, opposite, invalid};
 const int PARTIALLY_CONTAINED = 1;
 const int COMPLETELY_CONTAINED = 2;
 
+const double reactionTimeObstacles = 0.5;
+
 #endif //ENV_MODEL_TYPES_AND_DEFINITIONS_H

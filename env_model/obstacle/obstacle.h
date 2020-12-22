@@ -15,12 +15,26 @@
 #include "state.h"
 #include <map>
 
-typedef boost::geometry::model::d2::point_xy<double> point_type;
+typedef boost::geometry::model::d2::point_xy<double> point_type; //TODO check if this can be reused
 typedef boost::geometry::model::polygon<point_type> polygon_type;
 typedef boost::geometry::model::box<point_type> box;
 
 class Obstacle {
   public:
+    Obstacle() = default;
+    Obstacle(int id,
+             bool isStatic,
+             const State &currentState,
+             ObstacleType obstacleType,
+             double vMax,
+             double aMax,
+             double aMaxLong,
+             double aMinLong,
+             double reactionTime,
+             std::map<int, State> trajectoryPrediction,
+             double length,
+             double width);
+
     void setId(int num);
     void setIsStatic(bool isStatic);
     void setCurrentState(const State &currentState);
@@ -31,12 +45,15 @@ class Obstacle {
     void setAminLong(double amin);
     void setReactionTime(double tReact);
     void setOccupiedLane(const std::vector<std::shared_ptr<Lane>>& possibleLanes, int timeStep);
+    void setTrajectoryPrediction(const std::map<int, State> &trajPrediction);
 
-    void appendState(State state);
+    void appendStateToTrajectoryPrediction(State state);
+    void appendStateToHistory(State state);
 
     [[nodiscard]] int getId() const;
     [[nodiscard]] bool getIsStatic() const;
     [[nodiscard]] const State &getCurrentState() const;
+    [[nodiscard]] State getStateByTimeStep(int timeStep) const;
     [[nodiscard]] ObstacleType getObstacleType() const;
     [[nodiscard]] double getVmax() const;
     [[nodiscard]] double getAmax() const;
@@ -74,7 +91,7 @@ class Obstacle {
     * @param timeStep time step of interest
     * @return longitudinal position of obstacle state
     */
-    double getLonPosition(int timeStep);
+    [[nodiscard]] double getLonPosition(int timeStep) const;
 
     /**
     * Computes the lateral position of obstacle based on Cartesian state and assigned lane
@@ -82,23 +99,23 @@ class Obstacle {
     * @param timeStep time step of interest
     * @return lateral position of obstacle state
     */
-    double getLatPosition(int timeStep);
+    [[nodiscard]] double getLatPosition(int timeStep) const;
 
 private:
     int id{};                                                                   //**< unique ID of lanelet */
     bool isStatic{false};                                                       //**< true if Obstacle is static */
     State currentState;                                                         //**< current state of obstacle */
-    ObstacleType obstacleType;                                                  //**< CommonRoad obstacle type */
+    ObstacleType obstacleType{ObstacleType::unknown};                           //**< CommonRoad obstacle type */
     double vMax{};                                                              //**< maximum velocity of obstacle in m/s */
     double aMax{};                                                              //**< maximum absolute acceleration of obstacle in [m/s^2] */
     double aMaxLong{};                                                          //**< maximal longitudinal acceleration of obstacle in [m/s^2] */
     double aMinLong{};                                                          //**< minimal longitudinal acceleration of obstacle in [m/s^2] */
     double reactionTime{};                                                      //**< reaction time of obstacle in [s] */
-    std::map<int, std::shared_ptr<Lane>> occupiedLane{};                        //**< lane the obstacle is assigned to */
     std::map<int, State> trajectoryPrediction{};                                //**< trajectory prediction of the obstacle */
     std::map<int, State> history{};                                             //**< previous states of the obstacle */
     Rectangle geoShape;                                                         //**< shape of the obstacle */
     std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};    //**< map of time steps to lanelets occupied by the obstacle */
+    std::map<int, std::shared_ptr<Lane>> occupiedLane{};                        //**< lane the obstacle is assigned to */
 };
 
 #endif //ENV_MODEL_OBSTACLE_H

@@ -7,7 +7,7 @@
 
 #include "../test_road_network.h"
 
-class LaneletOperationsTest : public::RoadNetworkTest {
+class LaneletOperationsTest : public::RoadNetworkTestInitialization, public testing::Test {
 private:
     void SetUp() override;
 };

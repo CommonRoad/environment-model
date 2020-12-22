@@ -4,6 +4,40 @@
 
 #include "state.h"
 
+State::State(int timeStep,
+             double xPosition,
+             double yPosition,
+             double velocity,
+             double acceleration,
+             double orientation,
+             double lonPosition,
+             double latPosition) :
+         timeStep(timeStep),
+         xPosition(xPosition),
+         yPosition(yPosition),
+         velocity(velocity),
+         acceleration(acceleration),
+         lonPosition(lonPosition),
+         latPosition(latPosition),
+         orientation(orientation),
+         validStates(ValidStates{true, true, true, true,
+                                 true, true, true}){}
+
+State::State(int timeStep,
+             double xPosition,
+             double yPosition,
+             double velocity,
+             double acceleration,
+             double orientation) :
+        timeStep(timeStep),
+        xPosition(xPosition),
+        yPosition(yPosition),
+        velocity(velocity),
+        acceleration(acceleration),
+        orientation(orientation),
+        validStates(ValidStates{true, true, true, true,
+                                false, false, true}){}
+
 double State::getXPosition() const {
     return xPosition;
 }
@@ -79,12 +113,10 @@ const ValidStates &State::getValidStates() const {
     return validStates;
 }
 
-void State::setValidStates(const ValidStates &valid) {
-    State::validStates = valid;
-}
-
 void State::convertPointToCurvilinear(const CurvilinearCoordinateSystem& ccs){
     Eigen::Vector2d convertedPoint = ccs.convertToCurvilinearCoords(getXPosition(), getYPosition());
     setLonPosition(convertedPoint.x());
     setLatPosition(convertedPoint.y());
 }
+
+

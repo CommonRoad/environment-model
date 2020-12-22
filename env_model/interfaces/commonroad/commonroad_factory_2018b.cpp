@@ -19,7 +19,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles()
 
                 // extract ID, type, shape, initial state, and trajectory
                 tempObstacle->setId(roadElements.first_attribute().as_int());
-                tempObstacle->setType(matchObstacleTypeToString(roadElements.first_child().text().as_string()));
+                tempObstacle->setObstacleType(matchObstacleTypeToString(roadElements.first_child().text().as_string()));
                 for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
                     if (!(strcmp(child.name(), "shape"))) {
                         if (!(strcmp(child.first_child().name(), "rectangle"))) {
@@ -32,11 +32,11 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles()
                     if (!(strcmp(child.name(), "initialState"))) {
                         State initialState = XMLReader::extractInitialState(child);
                         tempObstacle->setCurrentState(initialState);
-                        tempObstacle->appendState(initialState);
+                        tempObstacle->appendStateToTrajectoryPrediction(initialState);
                     } else if (!(strcmp(child.name(), "trajectory"))) {
                         for (pugi::xml_node states = child.first_child(); states; states = states.next_sibling()) {
                             State st = XMLReader::extractState(states);
-                            tempObstacle->appendState(st);
+                            tempObstacle->appendStateToTrajectoryPrediction(st);
                         }
                     }
                 }
@@ -49,7 +49,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles()
                 // extract ID, type, shape, and initial state
                 tempObstacle->setId(roadElements.first_attribute().as_int());
                 tempObstacle->setIsStatic(true);
-                tempObstacle->setType(matchObstacleTypeToString(roadElements.first_child().text().as_string()));
+                tempObstacle->setObstacleType(matchObstacleTypeToString(roadElements.first_child().text().as_string()));
                 for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
                     if (!(strcmp(child.name(), "shape"))) {
                         if (!(strcmp(child.first_child().name(), "rectangle"))) {
