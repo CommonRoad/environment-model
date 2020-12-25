@@ -149,7 +149,7 @@ private:
         double lonPosition{0.0};                                        //**< longitudinal position [m] */
         double latPosition{0.0};                                        //**< lateral position [m] */
         double orientation{0.0};                                        //**< orientation [rad] */
-        ValidStates validStates{false, false,         //**< set of states which are already set and therefore are valid [rad] */
+        ValidStates validStates{false, false,         //**< set of states which are already set and therefore are valid */
                                 false,false,
                                 false,false,
                                 false};

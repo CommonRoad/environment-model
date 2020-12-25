@@ -8,7 +8,7 @@
 #include "obstacle.h"
 
 // find Obstacle by id
-Obstacle *getObstacleById(std::vector<Obstacle *> *obstacleList, size_t id);
+std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>>& obstacleList, int id);
 
 ObstacleType matchObstacleTypeToString(const char *type);
 

@@ -7,7 +7,13 @@
 void LaneTestInitialization::setUpLane(){
     setUpLanelets();
     geometry::EigenPolyline reference_path;
+    for(auto vert : laneletThree->getCenterVertices()){
+        reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+    }
     for(auto vert : laneletOne->getCenterVertices()){
+        reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+    }
+    for(auto vert : laneletTwo->getCenterVertices()){
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     }
 

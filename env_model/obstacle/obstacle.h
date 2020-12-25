@@ -44,8 +44,9 @@ class Obstacle {
     void setAmaxLong(double amax);
     void setAminLong(double amin);
     void setReactionTime(double tReact);
-    void setOccupiedLane(const std::vector<std::shared_ptr<Lane>>& possibleLanes, int timeStep);
+    void setReferenceLane(const std::vector<std::shared_ptr<Lane>>& possibleLanes, int timeStep);
     void setTrajectoryPrediction(const std::map<int, State> &trajPrediction);
+    void setRectangleShape(double length, double width);
 
     void appendStateToTrajectoryPrediction(State state);
     void appendStateToHistory(State state);
@@ -60,7 +61,7 @@ class Obstacle {
     [[nodiscard]] double getAmaxLong() const;
     [[nodiscard]] double getAminLong() const;
     [[nodiscard]] double getReactionTime() const;
-    [[nodiscard]] std::shared_ptr<Lane> getOccupiedLane(int timeStep) const;
+    [[nodiscard]] std::shared_ptr<Lane> getReferenceLane() const;
     [[nodiscard]] std::map<int, State> getTrajectoryPrediction() const;
     [[nodiscard]] int getTrajectoryLength();
     [[nodiscard]] polygon_type getOccupancyPolygonShape(int timeStamp);
@@ -115,7 +116,7 @@ private:
     std::map<int, State> history{};                                             //**< previous states of the obstacle */
     Rectangle geoShape;                                                         //**< shape of the obstacle */
     std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};    //**< map of time steps to lanelets occupied by the obstacle */
-    std::map<int, std::shared_ptr<Lane>> occupiedLane{};                        //**< lane the obstacle is assigned to */
+    std::shared_ptr<Lane> referenceLane{nullptr};                                      //**< lane which is used as reference for curvilinear projection */
 };
 
 #endif //ENV_MODEL_OBSTACLE_H

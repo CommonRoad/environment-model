@@ -29,7 +29,10 @@ Obstacle::Obstacle(int id,
                    aMinLong(aMinLong),
                    reactionTime(reactionTime),
                    trajectoryPrediction(std::move(trajectoryPrediction)),
-                   geoShape(Rectangle(length, width)) {}
+                   geoShape(Rectangle(length, width)) {
+    if(isStatic)
+        setIsStatic(isStatic);
+}
 
 
 void Obstacle::setId(const int num) { id = num; }
@@ -58,16 +61,15 @@ void Obstacle::setAminLong(const double amin) { aMinLong = isStatic ? 0.0 : amin
 
 void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 0.0 : tReact; }
 
-void Obstacle::setOccupiedLane(const std::vector<std::shared_ptr<Lane>>& possibleLanes, int timeStep) {
-    if(occupiedLane.find(timeStep-1) != occupiedLane.end() and occupiedLane.at(timeStep-1)->
-            checkIntersection(getOccupancyPolygonShape(timeStep), PARTIALLY_CONTAINED)) {
-        occupiedLane.insert(std::pair<int, std::shared_ptr<Lane>>(timeStep, occupiedLane.at(timeStep - 1)));
+void Obstacle::setReferenceLane(const std::vector<std::shared_ptr<Lane>>& possibleLanes, int timeStep) {
+    if(referenceLane != nullptr
+    and referenceLane->checkIntersection(getOccupancyPolygonShape(timeStep), PARTIALLY_CONTAINED)) {
+        return;
     }
-        // find new lane
+    // assign new reference lane
     else {
         polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
-        std::shared_ptr<Lane> occupied{RoadNetwork::findLaneByShape(possibleLanes, polygonShape)};
-        occupiedLane.insert(std::pair<int, std::shared_ptr<Lane>>(timeStep, occupied));
+        referenceLane = RoadNetwork::findLaneByShape(possibleLanes, polygonShape);
     }
 }
 
@@ -75,6 +77,9 @@ void Obstacle::setTrajectoryPrediction(const std::map<int, State> &trajPredictio
     trajectoryPrediction = trajPrediction;
 }
 
+void Obstacle::setRectangleShape(double length, double width) {
+    geoShape = Rectangle(length, width);
+}
 
 void Obstacle::appendStateToTrajectoryPrediction(State state) {
     trajectoryPrediction.insert(std::pair<int, State>(state.getTimeStep(), state));
@@ -113,7 +118,7 @@ double Obstacle::getAminLong() const { return aMinLong; }
 
 double Obstacle::getReactionTime() const { return reactionTime; }
 
-std::shared_ptr<Lane> Obstacle::getOccupiedLane(int timeStep) const {return occupiedLane.at(timeStep);}
+std::shared_ptr<Lane> Obstacle::getReferenceLane() const { return referenceLane; }
 
 std::map<int, State> Obstacle::getTrajectoryPrediction() const { return trajectoryPrediction; }
 
@@ -174,29 +179,27 @@ std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::s
     return occupied;
 }
 
-
 double Obstacle::frontS(int timeStep) {
     double s = getLonPosition(timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
-    double theta = trajectoryPrediction.at(timeStep).getOrientation() - getOccupiedLane(timeStep)->
-            getLanelet().getOrientationAtPosition(getTrajectoryPrediction().at(timeStep).getXPosition(),
-                                                  getTrajectoryPrediction().at(timeStep).getYPosition());
-    return std::min({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
+    double theta = getStateByTimeStep(timeStep).getOrientation() - getReferenceLane()->
+            getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep).getXPosition(),
+                                                  getStateByTimeStep(timeStep).getYPosition());
+    return std::max({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
               (length / 2) * cos(theta) - (-width / 2) * sin(theta) + s,
               (-length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
               (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + s});
-
 }
 
 double Obstacle::rearS(int timeStep) {
     double s = getLonPosition(timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
-    double theta = trajectoryPrediction.at(timeStep).getOrientation() - getOccupiedLane(timeStep)->
-            getLanelet().getOrientationAtPosition(getTrajectoryPrediction().at(timeStep).getXPosition(),
-                                                  getTrajectoryPrediction().at(timeStep).getYPosition());
-    return std::max({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
+    double theta = getStateByTimeStep(timeStep).getOrientation() - getReferenceLane()->
+            getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep).getXPosition(),
+                                                  getStateByTimeStep(timeStep).getYPosition());
+    return std::min({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
                      (length / 2) * cos(theta) - (-width / 2) * sin(theta) + s,
                      (-length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
                      (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + s});
@@ -206,8 +209,7 @@ double Obstacle::getLonPosition(int timeStep) const {
     // Start measuring time
     if(getStateByTimeStep(timeStep).getValidStates().lonPosition)
         return getStateByTimeStep(timeStep).getLonPosition();
-    getStateByTimeStep(timeStep).convertPointToCurvilinear(
-            getOccupiedLane(timeStep)->getCurvilinearCoordinateSystem());
+    getStateByTimeStep(timeStep).convertPointToCurvilinear(getReferenceLane()->getCurvilinearCoordinateSystem());
 
     return getStateByTimeStep(timeStep).getLonPosition();
 }
@@ -215,8 +217,7 @@ double Obstacle::getLonPosition(int timeStep) const {
 double Obstacle::getLatPosition(int timeStep) const {
     if(getStateByTimeStep(timeStep).getValidStates().latPosition)
         return getStateByTimeStep(timeStep).getLatPosition();
-    getStateByTimeStep(timeStep).convertPointToCurvilinear(
-            getOccupiedLane(timeStep)->getCurvilinearCoordinateSystem());
+    getStateByTimeStep(timeStep).convertPointToCurvilinear(getReferenceLane()->getCurvilinearCoordinateSystem());
 
     return getStateByTimeStep(timeStep).getLatPosition();
 }

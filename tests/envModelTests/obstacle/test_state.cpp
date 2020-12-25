@@ -9,9 +9,9 @@ void StateTestInitialization::setUpStates(){
     yPositionStateOne = 0.5;
     velocityStateOne = 2;
     accelerationStateOne = 1.0;
-    lonPositionStateOne = 2.5;
+    lonPositionStateOne = 7.5;
     latPositionStateOne = 0.5;
-    orientationStateOne = 0.01;
+    orientationStateOne = 0.0;
     timeStepStateOne = 0;
     validityStateOne = ValidStates{true, true, true, true,
                                    true, true, true};
@@ -20,9 +20,9 @@ void StateTestInitialization::setUpStates(){
     yPositionStateTwo = 2;
     velocityStateTwo = 20.0;
     accelerationStateTwo = 0.0;
-    lonPositionStateTwo = 3.5;
+    lonPositionStateTwo = 8.5;
     latPositionStateTwo = 2.0;
-    orientationStateTwo = -0.01;
+    orientationStateTwo = M_PI/2;
     timeStepStateTwo = 1;
     validityStateTwo = ValidStates{true, true, true, true,
                                    true, true, true};
@@ -31,9 +31,9 @@ void StateTestInitialization::setUpStates(){
     yPositionStateThree = -0.5;
     velocityStateThree = 0.0;
     accelerationStateThree = -0.6;
-    lonPositionStateThree = 3.5;
+    lonPositionStateThree = 9.0;
     latPositionStateThree = -0.5;
-    orientationStateThree = 0.0;
+    orientationStateThree = 0.01;
     timeStepStateThree = 2;
     validityStateThree = ValidStates{true, true, true, true,
                                    true, true, true};
@@ -42,9 +42,9 @@ void StateTestInitialization::setUpStates(){
     yPositionStateFour = -0.0;
     velocityStateFour = 50.0;
     accelerationStateFour = 0.0;
-    lonPositionStateFour = 5;
+    lonPositionStateFour = 10;
     latPositionStateFour = 0;
-    orientationStateFour = 0.0;
+    orientationStateFour = -0.01;
     timeStepStateFour = 3;
     validityStateFour = ValidStates{true, true, true, true,
                                      true, true, true};
@@ -53,10 +53,10 @@ void StateTestInitialization::setUpStates(){
     yPositionStateFive = 9.0;
     velocityStateFive = 20.0;
     accelerationStateFive = 1.0;
-    lonPositionStateFive = 4.0;
+    lonPositionStateFive = 9.0;
     latPositionStateFive = 9.0;
-    orientationStateFive = 0.0;
-    timeStepStateFive = 0;
+    orientationStateFive = 0.00;
+    timeStepStateFive = 4;
     validityStateFour = ValidStates{true, true, true, true,
                                     true, true, true};
 
@@ -64,10 +64,10 @@ void StateTestInitialization::setUpStates(){
     yPositionStateSix  = 1.0;
     velocityStateSix  = 40.0;
     accelerationStateSix  = -1.0;
-    lonPositionStateSix  = 11.0;
+    lonPositionStateSix  = 16.0;
     latPositionStateSix  = 1.0;
     orientationStateSix  = 0.0;
-    timeStepStateSix  = 1;
+    timeStepStateSix  = 5;
     validityStateFour = ValidStates{true, true, true, true,
                                     true, true, true};
 
@@ -160,14 +160,14 @@ TEST_F(StateTest, InitializationComplete){
 }
 
 TEST_F(StateTest, ConvertPointToCurvilinear){
-    stateOne.setXPosition(3.0);
+    stateOne.setXPosition(2.5);
     stateOne.setYPosition(0.5);
     stateOne.convertPointToCurvilinear(laneOne->getCurvilinearCoordinateSystem());
-    EXPECT_EQ(stateOne.getLonPosition(), 3.0);
+    EXPECT_EQ(stateOne.getLonPosition(), 7.5);
     EXPECT_EQ(stateOne.getLatPosition(), 0.0);
     stateOne.setXPosition(2.5);
     stateOne.setYPosition(-0.75);
     stateOne.convertPointToCurvilinear(laneOne->getCurvilinearCoordinateSystem());
-    EXPECT_EQ(stateOne.getLonPosition(), 2.5);
+    EXPECT_EQ(stateOne.getLonPosition(), 7.5);
     EXPECT_EQ(stateOne.getLatPosition(), -1.25);
 }

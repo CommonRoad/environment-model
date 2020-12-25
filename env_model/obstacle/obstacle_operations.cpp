@@ -5,9 +5,9 @@
 #include "obstacle_operations.h"
 #include "../interfaces/commonroad/pugi_xml/pugixml.hpp"
 
-Obstacle *getObstacleById(std::vector<Obstacle *> *obstacleList, size_t id) {
-    Obstacle *temp = nullptr;
-    for (auto & i : *obstacleList) {
+std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>>& obstacleList, int id) {
+    std::shared_ptr<Obstacle> temp { nullptr };
+    for (auto &i : obstacleList) {
         if (i->getId() == id) {
             temp = i;
             break;

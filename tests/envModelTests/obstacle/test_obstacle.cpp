@@ -3,9 +3,11 @@
 //
 
 #include "test_obstacle.h"
+
+#include <cmath>
 #include <map>
 
-void ObstacleTest::setUpObstacles(){
+void ObstacleTestInitialization::setUpObstacles(){
     obstacleOne = std::make_shared<Obstacle>(Obstacle());
     idObstacleOne = 1;
     isStaticObstacleOne = false;
@@ -41,11 +43,12 @@ void ObstacleTest::setUpObstacles(){
     obstacleOne->setReactionTime(reactionTimeObstacleOne);
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
-    obstacleOne->setOccupiedLane(std::vector<std::shared_ptr<Lane>>{laneOne}, 0);
+    obstacleOne->setReferenceLane(std::vector<std::shared_ptr<Lane>>{laneOne}, 0);
+    obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);
 
     idObstacleTwo = 2;
     isStaticObstacleTwo = true;
-    trajectoryPredictionObstacleTwo.insert(std::pair<int, State>(1, stateSix));
+    trajectoryPredictionObstacleTwo.insert(std::pair<int, State>(stateSix.getTimeStep(), stateSix));
     obstacleTypeObstacleTwo = ObstacleType::bus;
     vMaxObstacleTwo = 30.0;
     aMaxObstacleTwo = 2.5;
@@ -61,14 +64,22 @@ void ObstacleTest::setUpObstacles(){
                                                       reactionTimeObstacleTwo,
                                                       trajectoryPredictionObstacleTwo,
                                                       lengthObstacleTwo, widthObstacleTwo));
+    obstacleTwo->setReferenceLane(std::vector<std::shared_ptr<Lane>>{roadNetwork->getLanes().at(0)},
+                                  5);
+
+     obstacleList.push_back(obstacleOne);
+     obstacleList.push_back(obstacleTwo);
 }
 
 void ObstacleTest::SetUp(){
+    setUpLanelets();
     setUpLane();
+    setUpRoadNetwork();
+    setUpStates();
     setUpObstacles();
 }
 
-void ObstacleTest::compareStates(State stateOne, State stateTwo){
+void ObstacleTestInitialization::compareStates(State stateOne, State stateTwo){
     EXPECT_EQ(stateOne.getTimeStep(), stateTwo.getTimeStep());
     EXPECT_EQ(stateOne.getVelocity(), stateTwo.getVelocity());
     EXPECT_EQ(stateOne.getAcceleration(), stateTwo.getAcceleration());
@@ -98,55 +109,77 @@ TEST_F(ObstacleTest, InitializationComplete){
     EXPECT_EQ(obstacleOne->getObstacleType(), obstacleTypeObstacleOne);
     EXPECT_EQ(obstacleTwo->getObstacleType(), obstacleTypeObstacleTwo);
     EXPECT_EQ(obstacleOne->getVmax(), vMaxObstacleOne);
-    EXPECT_EQ(obstacleTwo->getVmax(), vMaxObstacleTwo);
+    EXPECT_EQ(obstacleTwo->getVmax(), 0.0);
     EXPECT_EQ(obstacleOne->getAmax(), aMaxObstacleOne);
-    EXPECT_EQ(obstacleTwo->getAmax(), aMaxObstacleTwo);
+    EXPECT_EQ(obstacleTwo->getAmax(), 0.0);
     EXPECT_EQ(obstacleOne->getAmaxLong(), aMaxLongObstacleOne);
-    EXPECT_EQ(obstacleTwo->getAmaxLong(), aMaxLongObstacleTwo);
+    EXPECT_EQ(obstacleTwo->getAmaxLong(), 0.0);
     EXPECT_EQ(obstacleOne->getAminLong(), aMinLongObstacleOne);
-    EXPECT_EQ(obstacleTwo->getAminLong(), aMinLongObstacleTwo);
+    EXPECT_EQ(obstacleTwo->getAminLong(), 0.0);
     EXPECT_EQ(obstacleOne->getReactionTime(), reactionTimeObstacleOne);
     EXPECT_EQ(obstacleTwo->getReactionTime(), reactionTimeObstacleTwo);
-    //compareLane(obstacleOne->getOccupiedLane(0), laneOne);
-
+    EXPECT_EQ(obstacleOne->getReferenceLane()->getLanelet().getId(), laneOne->getLanelet().getId());
+    compareVerticesVector(obstacleOne->getReferenceLane()->getLanelet().getCenterVertices(),
+                          laneOne->getLanelet().getCenterVertices());
     for(int i = 2; i <= 3; ++i)
         compareStates(trajectoryPredictionObstacleOne.at(i),
                       obstacleOne->getTrajectoryPrediction().at(i));
-    compareStates(trajectoryPredictionObstacleTwo.at(1),
-                  obstacleTwo->getTrajectoryPrediction().at(1));
+    compareStates(trajectoryPredictionObstacleTwo.at(5),
+                  obstacleTwo->getTrajectoryPrediction().at(5));
     EXPECT_EQ(obstacleOne->getTrajectoryLength(), 2);
     EXPECT_EQ(obstacleTwo->getTrajectoryLength(), 1);
-
 }
 
-//TEST_F(ObstacleTest, SetOccupiedLane){
-//
-//}
-//
-//TEST_F(ObstacleTest, AppendStateToPrediction){
-//
-//}
-//
-//TEST_F(ObstacleTest, GetOccupancyPolygonShape){
-//
-//}
-//
-//TEST_F(ObstacleTest, GetOccupiedLanelets){
-//
-//}
-//
-//TEST_F(ObstacleTest, FrontS){
-//
-//}
-//
-//TEST_F(ObstacleTest, RearS){
-//
-//}
-//
-//TEST_F(ObstacleTest, GetLonPosition){
-//
-//}
-//
-//TEST_F(ObstacleTest, GetLatPosition){
-//
-//}
+TEST_F(ObstacleTest, SetIsStatic){
+    obstacleOne->setIsStatic(true);
+    EXPECT_EQ(obstacleOne->getVmax(), 0.0);
+    EXPECT_EQ(obstacleOne->getAmax(), 0.0);
+    EXPECT_EQ(obstacleOne->getAmaxLong(), 0.0);
+    EXPECT_EQ(obstacleOne->getAminLong(), 0.0);
+}
+
+TEST_F(ObstacleTest, AppendStateToPrediction){
+    obstacleOne->appendStateToTrajectoryPrediction(stateFive);
+    compareStates(obstacleOne->getStateByTimeStep(stateFive.getTimeStep()), stateFive);
+}
+
+TEST_F(ObstacleTest, GetOccupancyPolygonShape){
+    EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(0).outer().at(0).x(), 0.5);
+    EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(0).outer().at(0).y(), 2);
+    EXPECT_DOUBLE_EQ(obstacleOne->getOccupancyPolygonShape(1).outer().at(0).x(), 2);
+    EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(1).outer().at(0).y(), 0.0);
+}
+
+TEST_F(ObstacleTest, GetOccupiedLanelets){
+    EXPECT_EQ(obstacleOne->getOccupiedLanelets(roadNetwork, 0).size(), 1);
+    EXPECT_EQ(obstacleOne->getOccupiedLanelets(roadNetwork, 1).size(), 1);
+    EXPECT_EQ(obstacleTwo->getOccupiedLanelets(roadNetwork, 4).size(), 0);
+}
+
+TEST_F(ObstacleTest, FrontS){
+    EXPECT_EQ(obstacleOne->frontS(0), lonPositionStateOne + lengthObstacleOne/2);
+    EXPECT_EQ(obstacleOne->frontS(1), lonPositionStateTwo + widthObstacleOne/2);
+}
+
+TEST_F(ObstacleTest, RearS){
+    EXPECT_EQ(obstacleOne->rearS(0), lonPositionStateOne - lengthObstacleOne/2);
+    EXPECT_EQ(obstacleOne->rearS(1), lonPositionStateTwo - widthObstacleOne/2);
+}
+
+TEST_F(ObstacleTest, GetLonPosition){
+    EXPECT_EQ(obstacleOne->getLonPosition(0), lonPositionStateOne);
+    EXPECT_EQ(obstacleOne->getLonPosition(1), lonPositionStateTwo);
+    EXPECT_EQ(obstacleOne->getLonPosition(2), lonPositionStateThree);
+}
+
+TEST_F(ObstacleTest, GetLatPosition){
+    EXPECT_EQ(obstacleOne->getLatPosition(0), latPositionStateOne);
+    EXPECT_EQ(obstacleOne->getLatPosition(1), latPositionStateTwo);
+    EXPECT_EQ(obstacleOne->getLatPosition(2), latPositionStateThree);
+}
+
+TEST_F(ObstacleTest, GetStateByTimeStep){
+    EXPECT_EQ(obstacleOne->getStateByTimeStep(0).getTimeStep(), 0);
+    EXPECT_EQ(obstacleOne->getStateByTimeStep(1).getTimeStep(), 1);
+    EXPECT_EQ(obstacleOne->getStateByTimeStep(2).getTimeStep(), 2);
+}

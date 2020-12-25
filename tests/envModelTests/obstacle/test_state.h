@@ -8,9 +8,9 @@
 #include <gtest/gtest.h>
 
 #include "obstacle/state.h"
-#include "../roadNetwork/lanelet/test_lane.h"
+#include "../roadNetwork/test_road_network.h"
 
-class StateTestInitialization: public LaneTestInitialization {
+class StateTestInitialization: public RoadNetworkTestInitialization {
 protected:
     int timeStepStateOne;
     double xPositionStateOne;

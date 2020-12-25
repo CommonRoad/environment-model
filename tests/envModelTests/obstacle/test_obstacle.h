@@ -8,7 +8,7 @@
 #include "obstacle/obstacle.h"
 #include "test_state.h"
 
-class ObstacleTest : public StateTestInitialization, public testing::Test{
+class ObstacleTestInitialization : public StateTestInitialization {
 protected:
     int idObstacleOne;
     bool isStaticObstacleOne;
@@ -37,15 +37,17 @@ protected:
     double reactionTimeObstacleTwo;
     double lengthObstacleTwo;
     double widthObstacleTwo;
-    std::map<int, std::shared_ptr<Lane>> occupiedLaneObstacleTwo{};
     std::map<int, State> trajectoryPredictionObstacleTwo{};
-    Rectangle geoShapeObstacleTwo;
-    std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLaneletsObstacleTwo{};
     std::shared_ptr<Obstacle> obstacleTwo;
 
-    void setUpObstacles();
-    static void compareStates(State stateOne, State stateTwo);
+    std::vector<std::shared_ptr<Obstacle>> obstacleList{};
 
+    void setUpObstacles();
+
+    static void compareStates(State stateOne, State stateTwo);
+};
+
+class ObstacleTest : public ObstacleTestInitialization, public testing::Test{
 private:
     void SetUp() override;
 };
