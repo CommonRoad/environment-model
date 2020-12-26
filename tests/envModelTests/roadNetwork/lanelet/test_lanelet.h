@@ -4,7 +4,7 @@
 
 #ifndef ENV_MODEL_TEST_LANELET_H
 #define ENV_MODEL_TEST_LANELET_H
-#pragma once
+
 #include <gtest/gtest.h>
 
 #include "roadNetwork/lanelet/lanelet.h"
