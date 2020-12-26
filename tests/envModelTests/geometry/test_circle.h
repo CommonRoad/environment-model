@@ -7,7 +7,27 @@
 
 #include <gtest/gtest.h>
 
-class CircleTest : public testing::Test {
+#include "geometry/circle.h"
+
+class CircleTestInitialization {
+protected:
+    Circle circleOne;
+    double circleOneRadius{ 0.0 };
+    vertice circleOneCenter{ 0.0, 0.0 };
+    Circle circleTwo;
+    double circleTwoRadius{ 1.0 };
+    vertice circleTwoCenter{ 0.0, 0.0 };
+    Circle circleThree;
+    double circleThreeRadius{ 1.0 };
+    vertice circleThreeCenter{ 1.0, 1.0 };
+    Circle circleFour;
+    double circleFourRadius{ -1.0 };
+    vertice circleFourCenter{ -1.0, -1.0 };
+
+    void setUpCircle();
+};
+
+class CircleTest : public testing::Test, public CircleTestInitialization {
 private:
     void SetUp() override;
 };

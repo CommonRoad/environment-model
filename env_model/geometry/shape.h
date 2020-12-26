@@ -31,7 +31,7 @@ public:
 
     virtual void scaleShape(double factor) {}
     virtual void printParameters(){};
-    virtual std::string getType() = 0;
+    virtual ShapeType getType() = 0;
 };
 
 

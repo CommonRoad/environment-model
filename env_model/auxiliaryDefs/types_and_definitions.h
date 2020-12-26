@@ -22,6 +22,8 @@ enum class TrafficLightDirection{right, straight, left, leftStraight, straightRi
 
 enum class DrivingDirection{same, opposite, invalid};
 
+enum class ShapeType{rectangle, circle};
+
 const int PARTIALLY_CONTAINED = 1;
 const int COMPLETELY_CONTAINED = 2;
 

@@ -19,4 +19,4 @@ vertice Circle::getCenter() const { return center; }
 
 void Circle::scaleShape(double factor) { this->setRadius(this->getRadius() * factor); }
 
-std::string Circle::getType() { return "Circle"; }
+ShapeType Circle::getType() { return ShapeType::circle; }

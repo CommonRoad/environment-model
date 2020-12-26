@@ -19,9 +19,9 @@ void Rectangle::scaleShape(double factor) {
 
 void Rectangle::printParameters() {
     std::cout << "--- Rectangle Shape ---" << std::endl;
-    std::cout << "length with errors: " << this->getLength() << std::endl;
-    std::cout << "width with errors: " << this->getWidth() << std::endl;
+    std::cout << "length: " << this->getLength() << std::endl;
+    std::cout << "width: " << this->getWidth() << std::endl;
 }
 
-std::string Rectangle::getType() { return "Rectangle"; }
+ShapeType Rectangle::getType() { return ShapeType::rectangle; }
 

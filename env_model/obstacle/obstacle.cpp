@@ -132,7 +132,7 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
 
     State state { this->getStateByTimeStep(timeStep) };
 
-    if (this->getGeoShape().getType() == "Rectangle") {
+    if (this->getGeoShape().getType() == ShapeType::rectangle) {
 
         // p are vertices of the bounding rectangle
         // vertices p represent the occupancy with vehicle dimensions (Theorem 1)
@@ -151,7 +151,7 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
 
         polygonShape.outer().resize(adjustedBoundingRectangleVertices.size() + 1);
 
-        // make polygonshape from previously created vertices
+        // make polygon shape from previously created vertices
         for (size_t i = 0; i < adjustedBoundingRectangleVertices.size(); i++) {
             polygonShape.outer()[i] =
                 point_type{adjustedBoundingRectangleVertices[i].x, adjustedBoundingRectangleVertices[i].y};

@@ -25,7 +25,7 @@ public:
 
     void scaleShape(double factor)  override;
     void printParameters()  override;
-    std::string getType() override;
+    ShapeType getType() override;
 
 private:
     double length{};
