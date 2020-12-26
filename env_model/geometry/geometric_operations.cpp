@@ -10,7 +10,7 @@ typedef boost::geometry::model::polygon<point_type> polygon_type;
 using boost::geometry::get;
 
 
-std::vector<vertice> addObjectDimensions(std::vector<vertice> &&q, double length, double width) {
+std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, double width) {
     std::vector<vertice> p;
 
     // check for special cases
@@ -132,7 +132,8 @@ std::vector<vertice> addObjectDimensions(std::vector<vertice> &&q, double length
     return p;
 }
 
-std::vector<vertice> rotateAndTranslateVertices(std::vector<vertice> &vertices, vertice refPosition,
+std::vector<vertice> rotateAndTranslateVertices(std::vector<vertice> &vertices,
+                                                vertice refPosition,
                                                 double refOrientation) {
     double cosine = cos(refOrientation);
     double sinus = sin(refOrientation);

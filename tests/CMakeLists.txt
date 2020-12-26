@@ -6,7 +6,10 @@ add_executable(unit_tests
         envModelTests/roadNetwork/lanelet/test_lanelet.cpp
         envModelTests/obstacle/test_obstacle.cpp
         envModelTests/obstacle/test_state.cpp
-        envModelTests/obstacle/test_obstacle_operations.cpp)
+        envModelTests/obstacle/test_obstacle_operations.cpp
+        envModelTests/geometry/test_rectangle.cpp
+        envModelTests/geometry/test_circle.cpp
+        envModelTests/geometry/test_geometric_operations.cpp)
 target_compile_features(unit_tests
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
