@@ -13,7 +13,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles()
     // iterate over all nodes and continue working with dynamic and static obstacles
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
          roadElements = roadElements.next_sibling()) {
-        if (!(strcmp(roadElements.name(), "Obstacle"))) {
+        if (!(strcmp(roadElements.name(), "obstacle"))) {
             if (!(strcmp(roadElements.first_child().text().as_string(), "dynamic"))){
                 XMLReader::createDynamicObstacle(obstacleList, roadElements);
             }

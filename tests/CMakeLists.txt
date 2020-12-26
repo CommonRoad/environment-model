@@ -10,7 +10,8 @@ add_executable(unit_tests
         envModelTests/geometry/test_rectangle.cpp
         envModelTests/geometry/test_circle.cpp
         envModelTests/geometry/test_geometric_operations.cpp
-        envModelTests/interfaces/standalone/test_command_line_input.cpp)
+        envModelTests/interfaces/test_command_line_input.cpp
+        envModelTests/interfaces/test_reading_commonroad.cpp)
 target_compile_features(unit_tests
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
