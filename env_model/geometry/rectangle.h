@@ -9,13 +9,13 @@
 
 class Rectangle : public Shape {
 public:
-    explicit Rectangle(double l = 4.5, double w = 1.8) : length(l), width(w) {}
+    explicit Rectangle(double len = 4.5, double wid = 1.8) : length(len), width(wid) {}
 
     /*
      * setter functions
      */
-    void setLength(const double l) override;
-    void setWidth(const double w) override;
+    void setLength(double len) override;
+    void setWidth(double wid) override;
 
     /*
      * getter functions

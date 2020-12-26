@@ -22,6 +22,7 @@ public:
     std::vector<std::shared_ptr<TrafficLight>> createTrafficLights() override;
     std::vector<std::shared_ptr<Intersection>> createIntersections(
             const std::vector<std::shared_ptr<Lanelet>>& lanelets) override;
+
 };
 
 

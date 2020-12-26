@@ -15,8 +15,6 @@ public:
      */
     virtual void setLength(const double l){};
     virtual void setWidth(const double w){};
-    virtual void setLength_raw(const double raw_l){};
-    virtual void setWidth_raw(const double raw_w){};
     virtual void setRadius(const double rad){};
     virtual void setCenter(const double x, const double y){};
 
@@ -25,8 +23,6 @@ public:
      */
     [[nodiscard]] virtual double getLength() const { return 0.0; };
     [[nodiscard]] virtual double getWidth() const { return 0.0; };
-    [[nodiscard]] virtual double getRawLength() const { return 0.0; };
-    [[nodiscard]] virtual double getRawWidth() const { return 0.0; };
     [[nodiscard]] virtual double getRadius() const { return 0.0; };
     [[nodiscard]] virtual vertice getCenter() const {
         struct vertice v = {0, 0};

@@ -21,6 +21,7 @@ public:
     std::vector<std::shared_ptr<TrafficLight>> createTrafficLights() override;
     std::vector<std::shared_ptr<Intersection>> createIntersections(
             const std::vector<std::shared_ptr<Lanelet>>& lanelets) override;
+
 };
 
 #endif //ENV_MODEL_COMMONROAD_FACTORY_2020A_H
