@@ -2,8 +2,6 @@
 // Created by sebastian on 08.11.20.
 //
 #include <utility>
-#include "boost/geometry.hpp"
-
 #include "lane.h"
 
 namespace bg = boost::geometry;

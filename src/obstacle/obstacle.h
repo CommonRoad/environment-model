@@ -15,10 +15,6 @@
 #include "state.h"
 #include <map>
 
-typedef boost::geometry::model::d2::point_xy<double> point_type; //TODO check if this can be reused
-typedef boost::geometry::model::polygon<point_type> polygon_type;
-typedef boost::geometry::model::box<point_type> box;
-
 class Obstacle {
   public:
     Obstacle() = default;
@@ -116,7 +112,7 @@ private:
     std::map<int, State> history{};                                             //**< previous states of the obstacle */
     Rectangle geoShape;                                                         //**< shape of the obstacle */
     std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};    //**< map of time steps to lanelets occupied by the obstacle */
-    std::shared_ptr<Lane> referenceLane{nullptr};                                      //**< lane which is used as reference for curvilinear projection */
+    std::shared_ptr<Lane> referenceLane{nullptr};                               //**< lane which is used as reference for curvilinear projection */
 };
 
 #endif //ENV_MODEL_OBSTACLE_H

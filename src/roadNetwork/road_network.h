@@ -18,9 +18,8 @@
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
-using point =  bg::model::point<float, 2, bg::cs::cartesian>;
+using point = bg::model::point<float, 2, bg::cs::cartesian>;
 using value = std::pair<box, unsigned>;
-using box_road =  bg::model::box<point>; //TODO: check whether this box and the box defined in lanelet.h can be combined
 
 class RoadNetwork {
     public:
