@@ -27,18 +27,17 @@ target_link_libraries(unit_tests PUBLIC gtest_main env_model)
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     if (CodeCoverage MATCHES ON)
         include(../cmake/CodeCoverage.cmake )
-        setup_target_for_coverage(${PROJECT_NAME}_coverage poptests coverage)
-        setup_target_for_coverage_cobertura(${PROJECT_NAME}_cobertura poptests coverage --gtest_output=xml:coverage.junit.xml)
+        setup_target_for_coverage_gcovr_html(${PROJECT_NAME}_coverage env_model_cov coverage)
 
         set(COVERAGE_GCOVR_EXCLUDES
                 ../src/interfaces/commonroad/pugi_xml/*
-                ../src/tests/*
-                ../src/external/*
-                ../src/docs/*
-                ../src/cmake/*
+                ../tests/*
+                ../external/*
+                ../docs/*
+                ../cmake/*
                 )
-        add_executable(poptests ${UNIT_TEST_FILES} ${LIB_CR_ENV_MODEL_SRC})
-        target_link_libraries(poptests gtest_main env_model)
+        add_executable(env_model_cov ${UNIT_TEST_FILES} ${LIB_CR_ENV_MODEL_SRC})
+        target_link_libraries(env_model_cov gtest_main env_model)
     endif()
 endif()
 
