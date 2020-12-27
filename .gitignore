@@ -1,7 +1,9 @@
+# Exclude buiild directories
 /cmake-build-debug/
 /cmake-build-release/
 /cmake-build-debug-coverage/
 /cmake-build-release-coverage/
+/build*
 
 *.a
 

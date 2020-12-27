@@ -31,7 +31,7 @@ if not hasattr(builtins, 'set'):
 
 
 TYPES = set('bool char int long short double float void wchar_t unsigned signed'.split())
-TYPE_MODIFIERS = set('auto register const inline extern static virtual volatile mutable'.split())
+TYPE_MODIFIERS = set('auto register const inline external static virtual volatile mutable'.split())
 ACCESS = set('public protected private friend'.split())
 
 CASTS = set('static_cast const_cast dynamic_cast reinterpret_cast'.split())

@@ -1,4 +1,4 @@
-add_executable(unit_tests
+set(UNIT_TEST_FILES
         envModelTests/allTests.cpp
         envModelTests/roadNetwork/test_road_network.cpp
         envModelTests/roadNetwork/lanelet/test_lanelet_operations.cpp
@@ -12,6 +12,10 @@ add_executable(unit_tests
         envModelTests/geometry/test_geometric_operations.cpp
         envModelTests/interfaces/test_command_line_input.cpp
         envModelTests/interfaces/test_reading_commonroad.cpp)
+
+# https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html
+
+add_executable(unit_tests ${UNIT_TEST_FILES})
 target_compile_features(unit_tests
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)

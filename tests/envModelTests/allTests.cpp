@@ -7,5 +7,6 @@ int main(int argc, char **argv) {
     // set the gtest death test style to threadsafe
     testing::FLAGS_gtest_death_test_style = "threadsafe";
 
-    return RUN_ALL_TESTS();
+    RUN_ALL_TESTS();
+    return 0;
 }
