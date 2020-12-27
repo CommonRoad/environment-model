@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 08.11.20.
+// Created by Sebastian Maierhofer on 08.11.20.
 //
 
 #ifndef ENV_MODEL_ROAD_NETWORK_H
@@ -21,15 +21,36 @@ namespace bgi = boost::geometry::index;
 using point = bg::model::point<float, 2, bg::cs::cartesian>;
 using value = std::pair<box, unsigned>;
 
+/**
+ * Class representing a road network.
+ */
 class RoadNetwork {
     public:
-        explicit RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
+        /**
+        * Constructor for RoadNetwork. Takes a lanelet network and automatically generates lanes out of them.
+         * Additionally, creates and Rtree from the lanelets for faster access of lanelets and faster
+         * occupancy computations of obstacles.
+        *
+        * @param list of pointers to lanelets
+        */
+        RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
 
+        /**
+        * Getter for lanelet network.
+        *
+        * @return list of pointers to lanelets
+        */
         [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getLaneletNetwork() const;
+
+        /**
+        * Getter for lanes.
+        *
+        * @return list of pointers to lanes
+        */
         std::vector<std::shared_ptr<Lane>> getLanes();
 
         /**
-        * Given a polygon shape, finds the list of lanelets within the road network which intersect with the shape
+        * Given a polygon shape, finds the list of lanelets within the road network which intersect with the shape.
         *
         * @param polygonShape boost polygon
         * @return list of lanelet pointers
@@ -37,7 +58,7 @@ class RoadNetwork {
         std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(const polygon_type &polygonShape);
 
         /**
-        * Given a position, finds the list of lanelets within the road network which contain the point
+        * Given a position, finds the list of lanelets within the road network which contain the point.
         *
         * @param xPos x-coordinate of point
         * @param yPos y-coordinate of point

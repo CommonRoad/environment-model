@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 08.11.20.
+// Created by Sebastian Maierhofer on 08.11.20.
 //
 
 #include "road_network.h"
@@ -16,6 +16,7 @@ namespace bgi = boost::geometry::index;
 
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network){
     laneletNetwork = network;
+    // construct Rtree out of lanelets
     for(const std::shared_ptr<Lanelet>& la : network){
         box b = bg::return_envelope<box>(la->getOuterPolygon());
         rtree.insert(std::make_pair(b, la->getId()));
@@ -41,7 +42,7 @@ void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>>& netwo
             }
             laneletType = extractClassifyingLaneletType(la);
 
-            // if no predecessor with same classifying type exist -> use as start lanelet
+            // if no predecessor with same classifying type exist -> use this lanelet as start lanelet
             for(const auto& pred : la->getPredecessors()){
                 if(!std::any_of(pred->getLaneletType().begin(), pred->getLaneletType().end(),
                                 [laneletType](LaneletType t){return t == laneletType;})){
@@ -84,7 +85,6 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
 
     // check intersection with relevant lanelets
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
-
 #pragma omp parallel for schedule(guided) shared(lanelets, occupiedLanelets, polygonShape) default(none)
     for (int i = 0; i < lanelets.size(); ++i) {
         std::shared_ptr<Lanelet> la{ lanelets.at(i) };

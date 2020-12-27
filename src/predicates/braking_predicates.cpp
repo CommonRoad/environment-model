@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 15.12.20.
+// Created by Sebastian Maierhofer on 15.12.20.
 //
 
 #include "braking_predicates.h"

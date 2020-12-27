@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 13.11.20.
+// Created by Sebastian Maierhofer on 13.11.20.
 //
 
 #ifndef ENV_MODEL_POSITION_PREDICATES_H

@@ -23,114 +23,148 @@ public:
 
     /**
      * Constructor initializing all variables.
+     *
+     * @param timeStep time step.
+     * @param xPosition x-position in Cartesian space.
+     * @param yPosition y-position in Cartesian space.
+     * @param velocity velocity in [m/s].
+     * @param acceleration acceleration in [m/s^2].
+     * @param orientation orientation in [rad].
+     * @param lonPosition longitudinal position in Curvilinear domain.
+     * @param latPosition lateral position in Curvilinear domain.
      */
     State(int timeStep, double xPosition, double yPosition, double velocity, double acceleration, double orientation,
           double lonPosition, double latPosition);
 
     /**
      * Constructor initializing all variables except longitudinal and lateral position.
+     *
+     * @param timeStep time step.
+     * @param xPosition x-position in Cartesian space.
+     * @param yPosition y-position in Cartesian space.
+     * @param velocity velocity in [m/s].
+     * @param acceleration acceleration in [m/s^2].
+     * @param orientation orientation in [rad].
+     *
      */
     State(int timeStep, double xPosition, double yPosition, double velocity, double acceleration, double orientation);
 
     /**
      * Getter for x-position.
+     *
      * @return x-position of the state in the Cartesian space.
      */
     [[nodiscard]] double getXPosition() const;
 
     /**
      * Getter for x-position.
+     *
      * @return x-position in Cartesian space.
      */
     [[nodiscard]] double getYPosition() const;
 
     /**
      * Getter for velocity.
+     *
      * @return velocity.
      */
     [[nodiscard]] double getVelocity() const;
 
     /**
      * Getter for acceleration.
+     *
      * @return acceleration.
      */
     [[nodiscard]] double getAcceleration() const;
 
     /**
      * Getter for longitudinal position.
+     *
      * @return longitudinal position in Curvilinear domain.
      */
     [[nodiscard]] double getLonPosition() const;
 
     /**
      * Getter for lateral position.
+     *
      * @return lateral position in Curvilinear domain.
      */
     [[nodiscard]] double getLatPosition() const;
 
     /**
      * Getter for orientation.
+     *
      * @return orientation.
      */
     [[nodiscard]] double getOrientation() const;
 
     /**
      * Getter for time step.
+     *
      * @return time step.
      */
     [[nodiscard]] int getTimeStep() const;
 
     /**
      * Getter for list of valid states elements.
+     *
      * @return validity struct.
      */
     [[nodiscard]] const ValidStates &getValidStates() const;
 
     /**
      * Setter for x-position in Cartesian space.
-     * @param x-position in Cartesian space.
+     *
+     * @param xPosition x-position in Cartesian space.
      */
     void setXPosition(double xPosition);
 
     /**
      * Setter for y-position in Cartesian space.
-     * @param y-position in Cartesian space.
+     *
+     * @param yPosition y-position in Cartesian space.
      */
     void setYPosition(double yPosition);
 
     /**
      * Setter for velocity.
-     * @param velocity.
+     *
+     * @param velocity velocity in [m/s].
      */
     void setVelocity(double velocity);
 
     /**
      * Setter for acceleration.
-     * @param acceleration.
+     *
+     * @param acceleration acceleration in [m/s^2].
      */
     void setAcceleration(double acceleration);
 
     /**
      * Setter for longitudinal position in Curvilinear domain.
-     * @param longitudinal position in Curvilinear domain.
+     *
+     * @param lonPosition longitudinal position in Curvilinear domain.
      */
     void setLonPosition(double lonPosition);
 
     /**
      * Setter for lateral position in Curvilinear domain.
-     * @param lateral position in Curvilinear domain.
+     *
+     * @param latPosition lateral position in Curvilinear domain.
      */
     void setLatPosition(double latPosition);
 
     /**
      * Setter for orientation.
-     * @param orientation.
+     *
+     * @param orientation orientation in [rad].
      */
     void setOrientation(double orientation);
 
     /**
      * Setter for time step.
-     * @param time step.
+     *
+     * @param timeStep time step.
      */
     void setTimeStep(int timeStep);
 

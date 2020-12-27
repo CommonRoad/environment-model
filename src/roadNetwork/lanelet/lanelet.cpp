@@ -45,7 +45,7 @@ Lanelet::Lanelet(int id,
     constructOuterPolygon();
 }
 
-void Lanelet::setId(const int num) { id = num; }
+void Lanelet::setId(const int laneletId) { id = laneletId; }
 
 void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet>& left, DrivingDirection dir) {
     adjacentLeft.adj = left;

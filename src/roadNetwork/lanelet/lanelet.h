@@ -18,16 +18,45 @@ using point_type = boost::geometry::model::d2::point_xy<double>;
 using polygon_type =  boost::geometry::model::polygon<point_type>;
 using box =  boost::geometry::model::box<point_type>;
 
-
+/**
+ * Class representing a lanelet.
+ */
 class Lanelet {
     public:
+        /**
+        * Default Constructor for a lanelet without parameters.
+        */
         Lanelet() = default;
+
+        /**
+        * Constructor initializing borders, lanelet typ, and road users.
+         * Creates automatically center vertices and polygon shape.
+         *
+         * @param leftBorder Vector of vertices of left lanelet border.
+         * @param rightBorder Vector of vertices of right lanelet border.
+         * @param type List of types classifying lanelet.
+         * @param oneWay List of road users one way.
+         * @param userBidirectional List of road users bidirectional.
+        */
         Lanelet(int id,
                 std::vector<vertice> leftBorder,
                 std::vector<vertice> rightBorder,
                 std::vector<LaneletType> type,
                 std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
                 std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>());
+
+        /**
+         * Constructor initializing borders, lanelet typ, road users, predecessor lanelets, and successor lanelets.
+         * Creates automatically center vertices and polygon shape.
+         *
+         * @param leftBorder Vector of vertices of left lanelet border.
+         * @param rightBorder Vector of vertices of right lanelet border.
+         * @param predecessorLanelets List of pointers to predecessor lanelets.
+         * @param successorLanelets List of pointers to successor lanelets.
+         * @param type List of types classifying lanelet.
+         * @param oneWay List of road users one way.
+         * @param userBidirectional List of road users bidirectional.
+        */
         Lanelet(int id,
                 std::vector<vertice> leftBorder,
                 std::vector<vertice> rightBorder,
@@ -36,14 +65,9 @@ class Lanelet {
                 std::vector<LaneletType> laneletType,
                 std::vector<ObstacleType> userOneWay,
                 std::vector<ObstacleType> userBidirectional);
-        Lanelet(const Lanelet &) = default;
-        Lanelet &operator=(const Lanelet &) = default;
-        Lanelet(Lanelet &&) = default;
-        Lanelet &operator=(Lanelet &&) = default;
-        virtual ~Lanelet() = default;
 
         /*
-        *   adjacency struct with pointer to adjacent lanelet and information about its driving direction
+        *   Adjacency struct containing a pointer to the adjacent lanelet and information about its driving direction.
         */
         struct adjacent {
             adjacent() : dir(DrivingDirection::invalid) {}
@@ -51,29 +75,160 @@ class Lanelet {
             DrivingDirection dir;
         };
 
-        void setId(int num);
+        /**
+         * Setter for ID of lanelet.
+         *
+         * @param laneletId Lanelet ID.
+         */
+        void setId(int laneletId);
+
+        /**
+         * Setter for adjacent left lanelet.
+         *
+         * @param left pointer to left lanelet.
+         * @param dir driving direction of adjacent left lanelet.
+        */
         void setLeftAdjacent(const std::shared_ptr<Lanelet>& left, DrivingDirection dir);
+
+        /**
+         * Setter for adjacent right lanelet.
+         *
+         * @param right pointer to right lanelet.
+         * @param dir driving direction of adjacent right lanelet.
+        */
         void setRightAdjacent(const std::shared_ptr<Lanelet>& right, DrivingDirection dir);
+
+        /**
+         * Setter for left lanelet border vertices.
+         *
+         * @param leftBorderVertices Vector of vertices of left lanelet border.
+        */
         void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices);
+
+        /**
+         * Setter for right lanelet border vertices.
+         *
+         * @param rightBorderVertices Vector of vertices of right lanelet border.
+        */
         void setRightBorderVertices(const std::vector<vertice> &rightBorderVertices);
+
+        /**
+         * Setter for lanelet type.
+         *
+         * @param laneletType list of types classifying lanelet.
+        */
         void setLaneletType(const std::vector<LaneletType>& laneletType);
+
+        /**
+         * Setter for road users one way.
+         *
+         * @param userOneWay List of road users one way.
+        */
         void setUserOneWay(const std::vector<ObstacleType> &userOneWay);
+
+        /**
+         * Setter for road users bidirectional.
+         *
+         * @param userBidirectional List of road users bidirectional.
+        */
         void setUserBidirectional(const std::vector<ObstacleType> &userBidirectional);
+
+        /**
+         * Setter for stop line.
+         *
+         * @param sl Stop line belonging to lanelet.
+        */
         void setStopLine(const StopLine &sl);
 
+        /**
+         * Appends a center vertex.
+         *
+         * @param center Vertex which should be appended.
+        */
         void addCenterVertex(vertice center);
+
+        /**
+         * Appends a vertex to the left border.
+         *
+         * @param right Vertex which should be appended.
+        */
         void addLeftVertex(vertice left);
+
+        /**
+         * Appends a vertex to the right border.
+         *
+         * @param right Vertex which should be appended.
+        */
         void addRightVertex(vertice right);
+
+        /**
+         * Add a predecessor lanelet.
+         *
+         * @param pre Pointer to lanelet which should be added as predecessor.
+        */
         void addPredecessor(const std::shared_ptr<Lanelet>& pre);
+
+        /**
+         * Add a successor lanelet.
+         *
+         * @param suc Pointer to lanelet which should be added as successor.
+        */
         void addSuccessor(const std::shared_ptr<Lanelet>& suc);
+
+        /**
+         * Add a traffic light to lanelet.
+         *
+         * @param light Pointer to traffic light which should be added to lanelet.
+        */
         void addTrafficLight(const std::shared_ptr<TrafficLight>& light);
+
+        /**
+         * Add a traffic sign to lanelet.
+         *
+         * @param sign Pointer to traffic sign which should be added to lanelet.
+        */
         void addTrafficSign(const std::shared_ptr<TrafficSign>& sign);
 
+        /**
+         * Getter for lanelet ID.
+         *
+         * @return Lanelet ID.
+        */
         [[nodiscard]] int getId() const;
+
+        /**
+         * Getter for predecessor lanelets.
+         *
+         * @return List of pointers to predecessor lanelets.
+        */
         [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getPredecessors() const;
+
+        /**
+         * Getter for successor lanelets.
+         *
+         * @return List of pointers to successor lanelets.
+        */
         [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getSuccessors() const;
+
+        /**
+         * Getter for center vertices of lanelet.
+         *
+         * @return Vector containing center vertices.
+        */
         [[nodiscard]] const std::vector<vertice> &getCenterVertices() const;
+
+        /**
+         * Getter for left border vertices of lanelet.
+         *
+         * @return Vector containing vertices of left border.
+        */
         [[nodiscard]] const std::vector<vertice> &getLeftBorderVertices() const;
+
+        /**
+         * Getter for right border vertices of lanelet.
+         *
+         * @return Vector containing vertices of right border.
+        */
         [[nodiscard]] const std::vector<vertice> &getRightBorderVertices() const;
         [[nodiscard]] std::vector<std::shared_ptr<TrafficLight>> getTrafficLights() const;
         [[nodiscard]] std::vector<std::shared_ptr<TrafficSign>> getTrafficSigns() const;
@@ -87,39 +242,39 @@ class Lanelet {
         [[nodiscard]] const StopLine &getStopLine() const;
 
         /**
-        * Given a polygon, checks whether the polygon intersects with the lanelet
-        *
-        * @param polygon_shape boost polygon
-        * @return boolean indicating whether lanelet is occupied
+         * Given a polygon, checks whether the polygon intersects with the lanelet
+         *
+         * @param polygon_shape boost polygon
+         * @return boolean indicating whether lanelet is occupied
         */
         [[nodiscard]] bool applyIntersectionTesting(const polygon_type &polygon_shape) const;
 
         /**
-        * Given a polygon, checks whether the polygon intersects with the lanelet given an intersection category
-        *
-        * @param polygon_shape boost polygon
-        * @param intersection_type specifies whether shape can be partially occupied by lanelet
-        *  or must be completely occupied
-        * @return boolean indicating whether lanelet is occupied
+         * Given a polygon, checks whether the polygon intersects with the lanelet given an intersection category
+         *
+         * @param polygon_shape boost polygon
+         * @param intersection_type specifies whether shape can be partially occupied by lanelet
+         *  or must be completely occupied
+         * @return boolean indicating whether lanelet is occupied
         */
         [[nodiscard]] bool checkIntersection(const polygon_type &polygon_shape, int intersection_type) const;
 
         /**
-        * Calculates center vertices as the arithmetic mean between the vertex on the left and right border
+         * Calculates center vertices as the arithmetic mean between the vertex on the left and right border
         */
         void createCenterVertices();
 
         /**
-        * Constructs boost polygon representing shape of lanelet
+         * Constructs boost polygon representing shape of lanelet
         */
         void constructOuterPolygon();
 
         /**
-        * Computes orientation of lanelet given x- and y-position
-        *
-        * @param positionX x-position of point
-        * @param positionY y-position of point
-        * @return orientation in interval [-pi, pi]
+         * Computes orientation of lanelet given x- and y-position
+         *
+         * @param positionX x-position of point
+         * @param positionY y-position of point
+         * @return orientation in interval [-pi, pi]
         */
         double getOrientationAtPosition(double positionX, double positionY);
 

@@ -1,5 +1,5 @@
 //
-// Created by sebastian on 15.12.20.
+// Created by Sebastian Maierhofer on 15.12.20.
 //
 
 #ifndef ENV_MODEL_BRAKING_PREDICATES_H
