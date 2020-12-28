@@ -35,7 +35,7 @@ include(GoogleTest)
 # cross compiling, make sure to properly set CMAKE_CROSSCOMPILING_EMULATOR.
 gtest_discover_tests(
         env_model_test TEST_PREFIX "./"
-        # increase the discovery timeout for `runTests --gtest_list_tests`
+        # increase the discovery timeout for `env_model_test --gtest_list_tests`
         DISCOVERY_TIMEOUT 60
 )
 
