@@ -2,7 +2,7 @@ stages:
   - build
   - test
 
-image: $CI_REGISTRY/maierhofer/environment-model
+image: $CI_REGISTRY/maierhofer/environment-model:v0.2
 
 before_script:
   - conda create -n commonroad python=3.8
