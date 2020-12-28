@@ -2,12 +2,7 @@
 // Created by Sebastian Maierhofer on 23.10.20.
 //
 #include "lanelet.h"
-
 #include <utility>
-#include "boost/geometry.hpp"
-
-namespace bg = boost::geometry;
-
 
 Lanelet::Lanelet(int id,
                  std::vector<vertice> leftBorder,
@@ -118,16 +113,17 @@ const Lanelet::adjacent &Lanelet::getAdjacentRight() const {return adjacentRight
 const StopLine &Lanelet::getStopLine() const { return stopLine; }
 
 bool Lanelet::applyIntersectionTesting(const polygon_type &polygon_shape) const {
+    // check first if shape intersects with bounding box since this evaluation is faster
     return bg::intersects(polygon_shape, this->getBoundingBox()) &&
            bg::intersects(polygon_shape, this->getOuterPolygon());
 }
 
-bool Lanelet::checkIntersection(const polygon_type &polygon_shape, int intersection_type) const {
+bool Lanelet::checkIntersection(const polygon_type &polygon_shape, ContainmentType intersection_type) const {
     switch (intersection_type) {
-        case PARTIALLY_CONTAINED: {
+        case ContainmentType::PARTIALLY_CONTAINED: {
             return this->applyIntersectionTesting(polygon_shape);
         }
-        case COMPLETELY_CONTAINED: {
+        case ContainmentType::COMPLETELY_CONTAINED: {
             return bg::within(polygon_shape, this->getOuterPolygon());
         }
         default:
@@ -140,7 +136,6 @@ void Lanelet::constructOuterPolygon() {
     const std::vector<vertice> &rightBorderTemp = this->getRightBorderVertices();
 
     if (!leftBorderTemp.empty()) {
-
         int idx = 0;
         polygon_type polygon;
         polygon.outer().resize(leftBorderTemp.size() + rightBorderTemp.size() + 1);
@@ -155,6 +150,7 @@ void Lanelet::constructOuterPolygon() {
         }
         polygon.outer().back() = point_type{leftBorderTemp[0].x, leftBorderTemp[0].y};
 
+        // Improve polygon (remove duplicated vertices, close vertices, order)
         bg::simplify(polygon, outerPolygon, 0.01);
         bg::unique(outerPolygon);
         bg::correct(outerPolygon);
@@ -164,16 +160,10 @@ void Lanelet::constructOuterPolygon() {
 }
 
 void Lanelet::createCenterVertices() {
-    // initialise
     int numVertices = leftBorder.size();
-
     for (int i = 0; i < numVertices; i++) {
-        /*
-         * calculate a center vertex as the arithmetic mean between the opposite
-         * vertex on the left and right border
-         * (calculate x and y values separately in order to minimize error)
-         */
         vertice newVertex{};
+        // calculate x and y values separately in order to minimize error
         newVertex.x = 0.5 * (leftBorder[i].x + rightBorder[i].x);
         newVertex.y = 0.5 * (leftBorder[i].y + rightBorder[i].y);
         addCenterVertex(newVertex);
@@ -181,12 +171,15 @@ void Lanelet::createCenterVertices() {
 }
 
 double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
+    // find closest vertex to the given position
     std::vector<double> dif(centerVertices.size()-1);
     for(int i = 0; i < centerVertices.size() - 1; ++i){
         vertice vert{centerVertices[i]};
         dif[i] = sqrt(pow(vert.x - positionX, 2) + pow(vert.y - positionY, 2));
     }
     int closestIndex{static_cast<int>(std::min_element(dif.begin(), dif.end()) - dif.begin())};
+
+    // calculate orientation at vertex using its successor vertex
     vertice vert1{centerVertices[closestIndex]};
     vertice vert2{centerVertices[closestIndex + 1]};
     return atan2(vert2.y - vert1.y, vert2.x - vert1.x);

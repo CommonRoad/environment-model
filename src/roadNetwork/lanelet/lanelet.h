@@ -14,9 +14,10 @@
 #include "../regulatory_elements/stop_line.h"
 #include "../../auxiliaryDefs/structs.h"
 
-using point_type = boost::geometry::model::d2::point_xy<double>;
-using polygon_type =  boost::geometry::model::polygon<point_type>;
-using box =  boost::geometry::model::box<point_type>;
+namespace bg = boost::geometry;
+using point_type = bg::model::d2::point_xy<double>;
+using polygon_type =  bg::model::polygon<point_type>;
+using box =  bg::model::box<point_type>;
 
 /**
  * Class representing a lanelet.
@@ -230,19 +231,79 @@ class Lanelet {
          * @return Vector containing vertices of right border.
         */
         [[nodiscard]] const std::vector<vertice> &getRightBorderVertices() const;
+
+        /**
+         * Getter for traffic lights referenced to lanelet.
+         *
+         * @return List of pointers to traffic lights.
+        */
         [[nodiscard]] std::vector<std::shared_ptr<TrafficLight>> getTrafficLights() const;
+
+        /**
+         * Getter for traffic signs referenced to lanelet.
+         *
+         * @return List of pointers to traffic signs.
+        */
         [[nodiscard]] std::vector<std::shared_ptr<TrafficSign>> getTrafficSigns() const;
+
+        /**
+         * Getter for polygon spanning the lanelet.
+         *
+         * @return Boost polygon.
+        */
         [[nodiscard]] const polygon_type &getOuterPolygon() const;
+
+        /**
+         * Getter for bounding box of lanelet.
+         *
+         * @return Boost box.
+        */
         [[nodiscard]] const box &getBoundingBox() const;
+
+        /**
+         * Getter for lanelet types.
+         *
+         * @return List of lanelet types.
+        */
         [[nodiscard]] const std::vector<LaneletType> &getLaneletType() const;
+
+        /**
+         * Getter for road users one way.
+         *
+         * @return List of road users one way.
+        */
         [[nodiscard]] const std::vector<ObstacleType> &getUserOneWay() const;
+
+        /**
+         * Getter for road users bidirectional.
+         *
+         * @return List of road users bidirectional.
+        */
         [[nodiscard]] const std::vector<ObstacleType> &getUserBidirectional() const;
+
+        /**
+         * Getter for adjacent left lanelet.
+         *
+         * @return Adjacent left lanelet struct.
+        */
         [[nodiscard]] const adjacent &getAdjacentLeft() const;
+
+        /**
+         * Getter for adjacent right lanelet.
+         *
+         * @return Adjacent right lanelet struct.
+        */
         [[nodiscard]] const adjacent &getAdjacentRight() const;
+
+        /**
+         * Getter for stop line assigned to lanelet.
+         *
+         * @return Stop line.
+        */
         [[nodiscard]] const StopLine &getStopLine() const;
 
         /**
-         * Given a polygon, checks whether the polygon intersects with the lanelet
+         * Given a polygon, checks whether the polygon intersects with the lanelet.
          *
          * @param polygon_shape boost polygon
          * @return boolean indicating whether lanelet is occupied
@@ -250,27 +311,28 @@ class Lanelet {
         [[nodiscard]] bool applyIntersectionTesting(const polygon_type &polygon_shape) const;
 
         /**
-         * Given a polygon, checks whether the polygon intersects with the lanelet given an intersection category
+         * Given a polygon, checks whether the polygon intersects with the lanelet given an intersection category.
          *
          * @param polygon_shape boost polygon
          * @param intersection_type specifies whether shape can be partially occupied by lanelet
          *  or must be completely occupied
          * @return boolean indicating whether lanelet is occupied
         */
-        [[nodiscard]] bool checkIntersection(const polygon_type &polygon_shape, int intersection_type) const;
+        [[nodiscard]] bool checkIntersection(const polygon_type &polygon_shape,
+                                             ContainmentType intersection_type) const;
 
         /**
-         * Calculates center vertices as the arithmetic mean between the vertex on the left and right border
+         * Calculates center vertices as the arithmetic mean between the vertex on the left and right border.
         */
         void createCenterVertices();
 
         /**
-         * Constructs boost polygon representing shape of lanelet
+         * Constructs boost polygon representing shape of lanelet based on left and right border vertices.
         */
         void constructOuterPolygon();
 
         /**
-         * Computes orientation of lanelet given x- and y-position
+         * Computes orientation of lanelet given a x- and y-position of center vertices.
          *
          * @param positionX x-position of point
          * @param positionY y-position of point

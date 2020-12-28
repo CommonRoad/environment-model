@@ -1,10 +1,7 @@
 //
 // Created by Sebastian Maierhofer on 08.11.20.
 //
-#include <utility>
 #include "lane.h"
-
-namespace bg = boost::geometry;
 
 Lane::Lane(std::vector<std::shared_ptr<Lanelet>>containedLanelets,
            Lanelet lanelet,
@@ -13,12 +10,12 @@ Lane::Lane(std::vector<std::shared_ptr<Lanelet>>containedLanelets,
            lanelet(std::move(lanelet)),
            curvilinearCoordinateSystem(std::move(ccs)) {}
 
-Lanelet Lane::getLanelet() const {return lanelet;}
+Lanelet Lane::getLanelet() const { return lanelet; }
 
-const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const {return containedLanelets;}
+const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const { return containedLanelets; }
 
-const CurvilinearCoordinateSystem &Lane::getCurvilinearCoordinateSystem() const {return curvilinearCoordinateSystem;}
+const CurvilinearCoordinateSystem &Lane::getCurvilinearCoordinateSystem() const { return curvilinearCoordinateSystem; }
 
-bool Lane::checkIntersection(const polygon_type &polygon_shape, int intersection_type) const {
+bool Lane::checkIntersection(const polygon_type &polygon_shape, ContainmentType intersection_type) const {
     return lanelet.checkIntersection(polygon_shape, intersection_type);
 }

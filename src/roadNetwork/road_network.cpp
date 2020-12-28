@@ -17,10 +17,9 @@ namespace bgi = boost::geometry::index;
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network){
     laneletNetwork = network;
     // construct Rtree out of lanelets
-    for(const std::shared_ptr<Lanelet>& la : network){
-        box b = bg::return_envelope<box>(la->getOuterPolygon());
-        rtree.insert(std::make_pair(b, la->getId()));
-    }
+    for(const std::shared_ptr<Lanelet>& la : network)
+        rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
+
     createLanes(network);
 }
 
@@ -88,7 +87,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
 #pragma omp parallel for schedule(guided) shared(lanelets, occupiedLanelets, polygonShape) default(none)
     for (int i = 0; i < lanelets.size(); ++i) {
         std::shared_ptr<Lanelet> la{ lanelets.at(i) };
-        if (la->checkIntersection(polygonShape, PARTIALLY_CONTAINED)) {
+        if (la->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED)) {
 #pragma omp critical
             occupiedLanelets.push_back(la);
         }
@@ -99,7 +98,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
 std::shared_ptr<Lane> RoadNetwork::findLaneByShape(const std::vector<std::shared_ptr<Lane>>& possibleLanes,
                                                    const polygon_type &polygonShape) {
     for (auto & possibleLane : possibleLanes)
-        if (possibleLane->checkIntersection(polygonShape, PARTIALLY_CONTAINED))
+        if (possibleLane->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED))
             return possibleLane;
     throw std::domain_error("shape does not occupy any of the provided lanes");
 }

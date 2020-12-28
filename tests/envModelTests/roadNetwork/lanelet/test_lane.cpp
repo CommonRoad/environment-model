@@ -46,22 +46,22 @@ TEST_F(LaneTest, ConvertPoint){
 
 TEST_F(LaneTest, CheckIntersection){
     EXPECT_EQ(laneOne->getContainedLanelets().at(0)->checkIntersection(polygonOne,
-                                                                       PARTIALLY_CONTAINED), true);
+                                                                       ContainmentType::PARTIALLY_CONTAINED), true);
     EXPECT_EQ(laneOne->getContainedLanelets().at(0)->checkIntersection(polygonTwo,
-                                                                       PARTIALLY_CONTAINED), true);
+                                                                       ContainmentType::PARTIALLY_CONTAINED), true);
     EXPECT_EQ(laneOne->getContainedLanelets().at(0)->checkIntersection(polygonThree,
-                                                                       PARTIALLY_CONTAINED), false);
+                                                                       ContainmentType::PARTIALLY_CONTAINED), false);
     EXPECT_EQ(laneOne->getContainedLanelets().at(0)->checkIntersection(polygonOne,
-                                                                       COMPLETELY_CONTAINED), true);
+                                                                       ContainmentType::COMPLETELY_CONTAINED), true);
     EXPECT_EQ(laneOne->getContainedLanelets().at(0)->checkIntersection(polygonTwo,
-                                                                       COMPLETELY_CONTAINED), false);
+                                                                       ContainmentType::COMPLETELY_CONTAINED), false);
     EXPECT_EQ(laneOne->getContainedLanelets().at(0)->checkIntersection(polygonThree,
-                                                                       COMPLETELY_CONTAINED), false);
+                                                                       ContainmentType::COMPLETELY_CONTAINED), false);
 
-    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonOne, PARTIALLY_CONTAINED), true);
-    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonTwo, PARTIALLY_CONTAINED), true);
-    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonThree, PARTIALLY_CONTAINED), false);
-    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonOne, COMPLETELY_CONTAINED), true);
-    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonTwo, COMPLETELY_CONTAINED), false);
-    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonThree, COMPLETELY_CONTAINED), false);
+    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonOne, ContainmentType::PARTIALLY_CONTAINED), true);
+    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonTwo, ContainmentType::PARTIALLY_CONTAINED), true);
+    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonThree, ContainmentType::PARTIALLY_CONTAINED), false);
+    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonOne, ContainmentType::COMPLETELY_CONTAINED), true);
+    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonTwo, ContainmentType::COMPLETELY_CONTAINED), false);
+    EXPECT_EQ(laneOne->getLanelet().checkIntersection(polygonThree, ContainmentType::COMPLETELY_CONTAINED), false);
 }

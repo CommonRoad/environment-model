@@ -212,12 +212,12 @@ TEST_F(LaneletTest, ApplyIntersectionTesting){
 }
 
 TEST_F(LaneletTest, CheckIntersection){
-    EXPECT_EQ(laneletOne->checkIntersection(polygonOne, PARTIALLY_CONTAINED), true);
-    EXPECT_EQ(laneletOne->checkIntersection(polygonTwo, PARTIALLY_CONTAINED), true);
-    EXPECT_EQ(laneletOne->checkIntersection(polygonThree, PARTIALLY_CONTAINED), false);
-    EXPECT_EQ(laneletOne->checkIntersection(polygonOne, COMPLETELY_CONTAINED), true);
-    EXPECT_EQ(laneletOne->checkIntersection(polygonTwo, COMPLETELY_CONTAINED), false);
-    EXPECT_EQ(laneletOne->checkIntersection(polygonThree, COMPLETELY_CONTAINED), false);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonOne, ContainmentType::PARTIALLY_CONTAINED), true);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonTwo, ContainmentType::PARTIALLY_CONTAINED), true);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonThree, ContainmentType::PARTIALLY_CONTAINED), false);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonOne, ContainmentType::COMPLETELY_CONTAINED), true);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonTwo, ContainmentType::COMPLETELY_CONTAINED), false);
+    EXPECT_EQ(laneletOne->checkIntersection(polygonThree, ContainmentType::COMPLETELY_CONTAINED), false);
 }
 
 TEST_F(LaneletTest, ConstructOuterPolygon){

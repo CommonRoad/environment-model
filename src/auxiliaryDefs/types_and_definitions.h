@@ -24,8 +24,7 @@ enum class DrivingDirection{same, opposite, invalid};
 
 enum class ShapeType{rectangle, circle};
 
-const int PARTIALLY_CONTAINED = 1;
-const int COMPLETELY_CONTAINED = 2;
+enum class ContainmentType{PARTIALLY_CONTAINED, COMPLETELY_CONTAINED};
 
 const double reactionTimeObstacles = 0.5;
 

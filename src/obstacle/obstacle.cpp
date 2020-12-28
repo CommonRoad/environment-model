@@ -63,7 +63,8 @@ void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 
 
 void Obstacle::setReferenceLane(const std::vector<std::shared_ptr<Lane>>& possibleLanes, int timeStep) {
     if(referenceLane != nullptr
-    and referenceLane->checkIntersection(getOccupancyPolygonShape(timeStep), PARTIALLY_CONTAINED)) {
+    and referenceLane->checkIntersection(getOccupancyPolygonShape(timeStep),
+                                         ContainmentType::PARTIALLY_CONTAINED)) {
         return;
     }
     // assign new reference lane
