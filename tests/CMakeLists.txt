@@ -1,4 +1,4 @@
-set(UNIT_TEST_FILES
+set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/allTests.cpp
         envModelTests/roadNetwork/test_road_network.cpp
         envModelTests/roadNetwork/lanelet/test_lanelet_operations.cpp
@@ -13,31 +13,30 @@ set(UNIT_TEST_FILES
         envModelTests/interfaces/test_command_line_input.cpp
         envModelTests/interfaces/test_reading_commonroad.cpp)
 
-# https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html
-
-add_executable(unit_tests ${UNIT_TEST_FILES})
-target_compile_features(unit_tests
+# Tests
+add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
+target_compile_features(env_model_test
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
-set_property(TARGET unit_tests PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(unit_tests PUBLIC ${LIB_CR_ENV_MODEL_SRC})
-target_link_libraries(unit_tests PUBLIC gtest_main env_model)
+target_include_directories(env_model_test PUBLIC ${LIB_CR_ENV_MODEL_SRC})
+target_link_libraries(env_model_test PUBLIC gtest_main env_model_lib)
 
-# Code coverage
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-    if (CodeCoverage MATCHES ON)
-        include(../cmake/CodeCoverage.cmake )
-        setup_target_for_coverage_gcovr_html(${PROJECT_NAME}_coverage env_model_cov coverage)
-
-        set(COVERAGE_GCOVR_EXCLUDES
-                ../src/interfaces/commonroad/pugi_xml/*
-                ../tests/*
-                ../external/*
-                ../docs/*
-                ../cmake/*
-                )
-        add_executable(env_model_cov ${UNIT_TEST_FILES} ${LIB_CR_ENV_MODEL_SRC})
-        target_link_libraries(env_model_cov gtest_main env_model)
-    endif()
-endif()
-
+## Code coverage
+#set(COVERAGE_GCOVR_EXCLUDES
+#        ../src/interfaces/commonroad/pugi_xml/*
+#        ../tests/*
+#        ../external/*
+#        ../docs/*
+#        ../cmake/*
+#        )
+#add_executable(env_model_cov ${UNIT_TEST_FILES} ${LIB_CR_ENV_MODEL_SRC})
+#target_link_libraries(env_model_cov gtest_main env_model)
+#include(../cmake/CodeCoverage.cmake )
+#setup_target_for_coverage_gcovr_html(NAME ${PROJECT_NAME}_coverage
+#        EXECUTABLE env_model_cov
+#        DEPENDENCIES env_model_cov)
+#
+#
+#
+#
+# https://dr-kino.github.io/2019/12/22/test-coverage-using-gtest-gcov-and-lcov/
