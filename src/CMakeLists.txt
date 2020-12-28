@@ -41,14 +41,14 @@ endif()
 
 # Create environment model library
 set(LIB_CR_ENV_MODEL_SRC ${ENV_MODEL_SRC_FILES})
-add_library(env_model_lib ${LIB_CR_ENV_MODEL_SRC})
-target_compile_features(env_model_lib
+add_library(env_model ${LIB_CR_ENV_MODEL_SRC})
+target_compile_features(env_model
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
-set_property(TARGET env_model_lib PROPERTY POSITION_INDEPENDENT_CODE ON)
-set_property(TARGET env_model_lib PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
-target_include_directories(env_model_lib PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
-target_link_libraries (env_model_lib
+set_property(TARGET env_model PROPERTY POSITION_INDEPENDENT_CODE ON)
+set_property(TARGET env_model PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
+target_include_directories(env_model PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
+target_link_libraries (env_model
         ${CRCCOSY_LIBRARY}
         Boost::filesystem
         Boost::program_options

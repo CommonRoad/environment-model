@@ -1,0 +1,31 @@
+stages:
+  - build
+  - test
+
+image: registry.gitlag.lrz.com/
+
+build-standalone:
+  stage: build
+  script:
+    - cmake -DCMAKE_BUILD_TYPE=Release .
+    - make env_model_lib -j4
+
+build-test:
+  stage: build
+  script:
+    - cmake -DCMAKE_BUILD_TYPE=Debug .
+    - make env_model_test -j4
+  artifacts:
+    paths:
+      - env_model_test
+    expire_in: 20 minutes
+
+test:
+  stage: test
+  script:
+    - ./env_model_test --gtest_output="xml:report.xml"
+  dependencies:
+    - build-test
+  artifacts:
+    reports:
+      junit: report.xml
