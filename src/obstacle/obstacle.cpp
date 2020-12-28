@@ -4,6 +4,7 @@
 
 #include "obstacle.h"
 #include "../geometry/geometric_operations.h"
+
 #include <cmath>
 #include <utility>
 
@@ -34,8 +35,7 @@ Obstacle::Obstacle(int id,
         setIsStatic(isStatic);
 }
 
-
-void Obstacle::setId(const int num) { id = num; }
+void Obstacle::setId(const int obstacleId) { id = obstacleId; }
 
 void Obstacle::setIsStatic(bool st) {
     isStatic = st;
@@ -65,7 +65,7 @@ void Obstacle::setReferenceLane(const std::vector<std::shared_ptr<Lane>>& possib
     if(referenceLane != nullptr
     and referenceLane->checkIntersection(getOccupancyPolygonShape(timeStep),
                                          ContainmentType::PARTIALLY_CONTAINED)) {
-        return;
+        return; // old reference lane is still valid
     }
     // assign new reference lane
     else {
@@ -94,7 +94,7 @@ int Obstacle::getId() const { return id; }
 
 bool Obstacle::getIsStatic() const { return isStatic; }
 
-const State &Obstacle::getCurrentState() const {return currentState;}
+const State &Obstacle::getCurrentState() const { return currentState; }
 
 State Obstacle::getStateByTimeStep(int timeStep) const {
     if(trajectoryPrediction.count(timeStep) == 1)
@@ -107,7 +107,7 @@ State Obstacle::getStateByTimeStep(int timeStep) const {
         throw std::logic_error("Time step does not exist");
 }
 
-ObstacleType Obstacle::getObstacleType() const {return obstacleType;}
+ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
 
 double Obstacle::getVmax() const { return vMax; }
 
@@ -126,17 +126,13 @@ std::map<int, State> Obstacle::getTrajectoryPrediction() const { return trajecto
 int Obstacle::getTrajectoryLength() { return trajectoryPrediction.size(); }
 
 polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
-
     std::vector<vertice> boundingRectangleVertices;
     polygon_type polygonShape;
-    // size_t i;
-
     State state { this->getStateByTimeStep(timeStep) };
 
     if (this->getGeoShape().getType() == ShapeType::rectangle) {
-
         // p are vertices of the bounding rectangle
-        // vertices p represent the occupancy with vehicle dimensions (Theorem 1)
+        // vertices p represent the occupancy with vehicle dimensions (Theorem 1 in SPOT paper)
         boundingRectangleVertices = addObjectDimensions(
             std::vector<vertice>{vertice{0.0, 0.0}}, this->getGeoShape().getLength(),
             this->getGeoShape().getWidth());
@@ -146,8 +142,8 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
          * coordinates to the object's reference position and rotation
          */
         std::vector<vertice> adjustedBoundingRectangleVertices = rotateAndTranslateVertices(
-            boundingRectangleVertices, vertice{state.getXPosition(),
-                                               state.getYPosition()},
+            boundingRectangleVertices,
+            vertice{state.getXPosition(), state.getYPosition()},
             state.getOrientation());
 
         polygonShape.outer().resize(adjustedBoundingRectangleVertices.size() + 1);
@@ -187,6 +183,8 @@ double Obstacle::frontS(int timeStep) {
     double theta = getStateByTimeStep(timeStep).getOrientation() - getReferenceLane()->
             getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep).getXPosition(),
                                                   getStateByTimeStep(timeStep).getYPosition());
+
+    // use maximum of all corners
     return std::max({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
               (length / 2) * cos(theta) - (-width / 2) * sin(theta) + s,
               (-length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
@@ -200,6 +198,8 @@ double Obstacle::rearS(int timeStep) {
     double theta = getStateByTimeStep(timeStep).getOrientation() - getReferenceLane()->
             getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep).getXPosition(),
                                                   getStateByTimeStep(timeStep).getYPosition());
+
+    // use minimum of all corners
     return std::min({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
                      (length / 2) * cos(theta) - (-width / 2) * sin(theta) + s,
                      (-length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
@@ -207,7 +207,6 @@ double Obstacle::rearS(int timeStep) {
 }
 
 double Obstacle::getLonPosition(int timeStep) const {
-    // Start measuring time
     if(getStateByTimeStep(timeStep).getValidStates().lonPosition)
         return getStateByTimeStep(timeStep).getLonPosition();
     getStateByTimeStep(timeStep).convertPointToCurvilinear(getReferenceLane()->getCurvilinearCoordinateSystem());

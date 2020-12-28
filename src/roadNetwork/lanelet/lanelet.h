@@ -25,7 +25,7 @@ using box =  bg::model::box<point_type>;
 class Lanelet {
     public:
         /**
-        * Default Constructor for a lanelet without parameters.
+        * Default Constructor without parameters for a lanelet.
         */
         Lanelet() = default;
 
@@ -79,7 +79,7 @@ class Lanelet {
         /**
          * Setter for ID of lanelet.
          *
-         * @param laneletId Lanelet ID.
+         * @param laneletId ID of lanelet.
          */
         void setId(int laneletId);
 

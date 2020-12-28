@@ -3,7 +3,6 @@
 //
 
 #include "obstacle_operations.h"
-#include "../interfaces/commonroad/pugi_xml/pugixml.hpp"
 
 std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>>& obstacleList, int id) {
     std::shared_ptr<Obstacle> temp { nullptr };
