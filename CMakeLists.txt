@@ -35,7 +35,7 @@ include(doxygen)
 # add unit testing
 enable_testing()
 add_subdirectory(tests)
-add_subdirectory(external/googletest)
+#add_subdirectory(external/googletest)
 
 
 

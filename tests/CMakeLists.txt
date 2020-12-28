@@ -13,14 +13,32 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/interfaces/test_command_line_input.cpp
         envModelTests/interfaces/test_reading_commonroad.cpp)
 
-# Tests
+add_subdirectory("${PROJECT_SOURCE_DIR}/external/googletest" "external/googletest")
+
+mark_as_advanced(
+        BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
+        gmock_build_tests gtest_build_samples gtest_build_tests
+        gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
+)
+set_target_properties(gtest PROPERTIES FOLDER extern)
+set_target_properties(gtest_main PROPERTIES FOLDER extern)
+set_target_properties(gmock PROPERTIES FOLDER extern)
+set_target_properties(gmock_main PROPERTIES FOLDER extern)
+
 add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
-target_compile_features(env_model_test
-        PUBLIC cxx_lambdas cxx_auto_type
-        PRIVATE cxx_lambdas cxx_auto_type)
-set_property(TARGET env_model_test PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(env_model_test PUBLIC ${LIB_CR_ENV_MODEL_SRC})
-target_link_libraries(env_model_test PUBLIC gtest_main env_model ${LIB_CRCCOSY_INCLUDE})
+target_compile_definitions(env_model_test PRIVATE)
+target_include_directories(env_model_test PRIVATE ${PROJECT_SOURCE_DIR}/src)
+target_link_libraries(env_model_test PUBLIC env_model gtest)
+
+include(GoogleTest)
+# queries the compiled executable for tests, this requires the executable to be runnable. if you are
+# cross compiling, make sure to properly set CMAKE_CROSSCOMPILING_EMULATOR.
+gtest_discover_tests(
+        env_model_test TEST_PREFIX "./"
+        # increase the discovery timeout for `runTests --gtest_list_tests`
+        DISCOVERY_TIMEOUT 60
+)
+
 
 ## Code coverage
 #set(COVERAGE_GCOVR_EXCLUDES
