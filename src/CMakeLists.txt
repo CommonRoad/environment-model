@@ -56,10 +56,16 @@ target_link_libraries (env_model
         Eigen3::Eigen)
 
 # Create environment model test node
-add_executable(env_model_example_node interfaces/standalone/main.cpp)
+add_executable(env_model_example_node interfaces/standalone/main.cpp ${LIB_CR_ENV_MODEL_SRC})
 target_compile_features(env_model_example_node
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
 set_property(TARGET env_model_example_node PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET env_model_example_node PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
-target_link_libraries(env_model_example_node PUBLIC env_model)
+target_include_directories(env_model_example_node PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
+target_link_libraries (env_model_example_node
+        ${CRCCOSY_LIBRARY}
+        Boost::filesystem
+        Boost::program_options
+        OpenMP::OpenMP_CXX
+        Eigen3::Eigen)
