@@ -2,18 +2,25 @@ stages:
   - build
   - test
 
-image: gcc:latest
+image: continuumio/anaconda3:latest
+
+before_script:
+  - bash ./ci/install_third_party_software.sh
+  - conda create -n commonroad python=3.6
+  - source activate commonroad
+  - bash ./ci/install_cps_software.sh
+
 
 build-standalone:
   stage: build
   script:
-    - cmake -DCMAKE_BUILD_TYPE=Release .
+    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCMAKE_BUILD_TYPE=Release .
     - make env_model_lib -j4
 
 build-test:
   stage: build
   script:
-    - cmake -DCMAKE_BUILD_TYPE=Debug .
+    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCMAKE_BUILD_TYPE=Debug .
     - make env_model_test -j4
   artifacts:
     paths:
