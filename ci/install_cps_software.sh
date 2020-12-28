@@ -11,4 +11,6 @@ cmake -DADD_PYTHON_BINDINGS=TRUE -DPATH_TO_PYTHON_ENVIRONMENT="/opt/conda/envs/c
 make
 cd ..
 python setup.py install
+pwd
 cd "$CI_PROJECT_DIR" || exit
+pwd
