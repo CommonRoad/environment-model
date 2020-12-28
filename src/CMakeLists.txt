@@ -23,7 +23,7 @@ endif()
 
 # Create environment model library
 #set(LIB_CR_ENV_MODEL_SRC ${ENV_MODEL_SRC_FILES})
-add_library(env_model STATIC ${SRC_GEN})
+add_library(env_model SHARED ${SRC_GEN})
 target_compile_features(env_model
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
