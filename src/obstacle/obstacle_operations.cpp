@@ -7,9 +7,9 @@
 
 std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>>& obstacleList, int id) {
     std::shared_ptr<Obstacle> temp { nullptr };
-    for (auto &i : obstacleList) {
-        if (i->getId() == id) {
-            temp = i;
+    for (auto &obs : obstacleList) {
+        if (obs->getId() == id) {
+            temp = obs;
             break;
         }
     }
