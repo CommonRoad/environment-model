@@ -17,10 +17,10 @@ build-library:
     - make env_model -j4
 
 #build-standalone:
-#  stage: build
-#  script:
-#    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCMAKE_BUILD_TYPE=Release .
-#    - make env_model_example_node -j4
+  stage: build
+  script:
+    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCMAKE_BUILD_TYPE=Release .
+    - make env_model_example_node -j4
 
 #build-test:
 #  stage: build
