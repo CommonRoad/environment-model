@@ -14,7 +14,7 @@ build-standalone:
   stage: build
   script:
     - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCMAKE_BUILD_TYPE=Release .
-    - make env_model_lib -j4
+    - make env_model -j4
 
 build-test:
   stage: build
