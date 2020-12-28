@@ -2,10 +2,9 @@ stages:
   - build
   - test
 
-image: continuumio/anaconda3:latest
+image: maierhofer/environment-model
 
 before_script:
-  - bash ./ci/install_third_party_software.sh
   - conda create -n commonroad python=3.8
   - source activate commonroad
   - bash ./ci/install_cps_software.sh
