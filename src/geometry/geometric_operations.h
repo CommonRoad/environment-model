@@ -8,16 +8,24 @@
 #include "../auxiliaryDefs/structs.h"
 #include "circle.h"
 
-/*
- * add the dimensions of the object (length and width)
- * to the polygon vertices q in the object's coordinate frame
+/**
+ * Add the dimensions of the object (length and width) to the polygon vertices q in the object's coordinate frame.
+ *
+ * @param q Vertices for which the dimension should be adapted.
+ * @param length Length to add.
+ * @param width Width to add.
+ * @return Vertices of polygon.
  */
 std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, double width);
 
-/*
- * rotateAndTranslateVertices - rotate and translate the vertices from
- * the special relative coordinates to the reference position and orientation
+/**
+ * Rotate and translate the vertices from the special relative coordinates to the reference position and orientation
  * (transfer local coordinates to global coordinates)
+ *
+ * @param vertices Vertices which should be rotated and translated.
+ * @param refPosition Translation factor.
+ * @param refOrientation Rotation factor.
+ * @return Vertices of shape.
  */
 std::vector<vertice> rotateAndTranslateVertices(std::vector<vertice> &vertices, vertice refPosition,
                                                 double refOrientation);

@@ -13,10 +13,33 @@
  */
 class Shape {
     public:
-
+        /**
+         * Virtual setter for shape length. Function can only be used for rectangles.
+         *
+         * @param l Length of shape [m].
+        */
         virtual void setLength(const double l){};
+
+        /**
+         * Virtual setter for shape width. Function can only be used for rectangles.
+         *
+         * @param w Width of shape [m].
+        */
         virtual void setWidth(const double w){};
+
+        /**
+         * Virtual setter for shape radius. Function can only be used for circles.
+         *
+         * @param rad Radius of shape [m].
+        */
         virtual void setRadius(const double rad){};
+
+        /**
+         * Virtual setter for shape center. Function can only be used for circles.
+         *
+         * @param x x-coordinate of center [m].
+         * @param y y-coordinate of center [m].
+        */
         virtual void setCenter(const double x, const double y){};
 
         /**
@@ -43,7 +66,7 @@ class Shape {
         /**
          * Virtual getter for shape center. Function can only be used for circles.
          *
-         * @return Shape center [m].
+         * @return Shape center.
         */
         [[nodiscard]] virtual vertice getCenter() const {
             struct vertice v = {0, 0};
@@ -51,25 +74,23 @@ class Shape {
         };
 
         /**
-         * Virtual getter for shape center. Function can only be used for circles.
+         * Virtual getter for shape type.
          *
-         * @return Shape center [m].
+         * @return Shape type, e.g. circle or rectangle.
+        */
+        [[nodiscard]] virtual ShapeType getType() = 0;
+
+        /**
+         * Virtual function for scaling a shape.
+         *
+         * @param factor Scaling factor.
         */
         virtual void scaleShape(double factor) {}
 
-    /**
-* Virtual getter for shape center. Function can only be used for circles.
-*
-* @return Shape center [m].
-*/
-        virtual void printParameters() {};
-
         /**
-         * Virtual getter for shape center. Function can only be used for circles.
-         *
-         * @return Shape center [m].
+         * Virtual print function. Prints general information about shape.
         */
-        virtual ShapeType getType() = 0;
+        virtual void printParameters() {};
 };
 
 
