@@ -16,3 +16,4 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.19.0/cmake-3.19.0
       && rm /tmp/cmake-install.sh
 ENV PATH="/usr/bin/cmake/bin:${PATH}"
 RUN apt-get install -y gcovr > /dev/null
+RUN apt-get install -y doxygen > /dev/null

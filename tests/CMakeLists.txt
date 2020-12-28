@@ -18,7 +18,7 @@ add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
 target_compile_features(env_model_test
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
-target_include_directories(env_model_test PUBLIC ${LIB_CR_ENV_MODEL_SRC})
+target_include_directories(env_model_test PUBLIC)
 target_link_libraries(env_model_test PUBLIC gtest_main env_model)
 
 ## Code coverage
