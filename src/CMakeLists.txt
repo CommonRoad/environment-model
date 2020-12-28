@@ -63,4 +63,4 @@ target_compile_features(env_model_example_node
 set_property(TARGET env_model_example_node PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET env_model_example_node PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
 target_include_directories(env_model_example_node PUBLIC)
-target_link_libraries(env_model_example_node PUBLIC ${CRCCOSY_LIBRARY} env_model)
+target_link_libraries(env_model_example_node PUBLIC env_model)
