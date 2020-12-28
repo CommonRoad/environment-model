@@ -25,10 +25,11 @@ set_target_properties(gtest_main PROPERTIES FOLDER extern)
 set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
-add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
+add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES} ${LIB_CR_ENV_MODEL_SRC})
 target_compile_definitions(env_model_test PRIVATE)
 target_include_directories(env_model_test PRIVATE ${PROJECT_SOURCE_DIR}/src ${LIB_CRCCOSY_INCLUDE})
 target_link_libraries(env_model_test PUBLIC ${CRCCOSY_LIBRARY} env_model gtest)
+
 
 include(GoogleTest)
 # queries the compiled executable for tests, this requires the executable to be runnable. if you are
