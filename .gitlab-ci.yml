@@ -30,6 +30,7 @@ build-test:
   artifacts:
     paths:
       - ./tests/env_model_test
+      - ./tests/testScenarios/*
     expire_in: 20 minutes
 
 test:
