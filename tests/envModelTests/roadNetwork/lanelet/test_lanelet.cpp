@@ -123,10 +123,10 @@ void LaneletTestInitialization::setUpLanelets(){
     tl->setActive(true);
     tl->setOffset(0.0);
     tl->setDirection(TrafficLightDirection::straight);
-    tl->setCycle(std::vector<CycleElement>{CycleElement{CycleElementType::green, 1.0},
-                                           CycleElement{CycleElementType::yellow, 1.0},
-                                           CycleElement{CycleElementType::red, 1.0},
-                                           CycleElement{CycleElementType::red_yellow, 1.0}});
+    tl->setCycle(std::vector<CycleElement>{CycleElement{CycleElementType::green, 1},
+                                           CycleElement{CycleElementType::yellow, 1},
+                                           CycleElement{CycleElementType::red, 1},
+                                           CycleElement{CycleElementType::red_yellow, 1}});
 
     StopLine sl = StopLine();
     sl.setLineMarking(LineMarking::broad_solid);
