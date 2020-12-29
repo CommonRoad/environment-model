@@ -223,32 +223,36 @@ TEST_F(LaneletTest, CheckIntersection){
 TEST_F(LaneletTest, ConstructOuterPolygon){
     //evaluates whether in setUp creates outer polygon is valid
     //lanelet one
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[0].x(), 0.0);
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[0].y(), 1.0);
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[1].x(), 5.0);
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[1].y(), 1.0);
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[2].x(), 5.0);
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[2].y(), 0.0);
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[3].x(), 0.0);
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[3].y(), 0.0);
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[4].x(), 0.0);
-    EXPECT_EQ(laneletOne->getOuterPolygon().outer()[4].y(), 1.0);
+    std::vector<double> expXVerticesLaneletOne {0.0, 0.0, 0.0, 5.0, 5.0};
+    std::vector<double> expYVerticesLaneletOne {0.0, 0.0, 1.0, 1.0, 1.0};
+    std::vector<double> expXVerticesLaneletTwo {6.0, 6.0, 6.0, 11.0, 11.0, 12.0, 12.0};
+    std::vector<double> expYVerticesLaneletTwo {0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 2.0};
+    std::vector<double> xVerticesResultLaneletOne;
+    std::vector<double> yVerticesResultLaneletOne;
+    std::vector<double> xVerticesResultLaneletTwo;
+    std::vector<double> yVerticesResultLaneletTwo;
 
-    //lanelet two
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[0].x(), 6.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[0].y(), 1.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[1].x(), 11.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[1].y(), 1.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[2].x(), 12.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[2].y(), 2.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[3].x(), 12.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[3].y(), 1.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[4].x(), 11.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[4].y(), 0.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[5].x(), 6.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[5].y(), 0.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[6].x(), 6.0);
-    EXPECT_EQ(laneletTwo->getOuterPolygon().outer()[6].y(), 1.0);
+    for(int i = 0; i < expXVerticesLaneletOne.size(); ++i){
+        xVerticesResultLaneletOne.push_back(laneletOne->getOuterPolygon().outer()[i].x());
+        yVerticesResultLaneletOne.push_back(laneletOne->getOuterPolygon().outer()[i].y());
+    }
+    std::sort(xVerticesResultLaneletOne.begin(), xVerticesResultLaneletOne.end());
+    std::sort(yVerticesResultLaneletOne.begin(), yVerticesResultLaneletOne.end());
+    for(int i = 0; i < expXVerticesLaneletOne.size(); ++i){
+        EXPECT_EQ(xVerticesResultLaneletOne.at(i), expXVerticesLaneletOne.at(i));
+        EXPECT_EQ(yVerticesResultLaneletOne.at(i), expYVerticesLaneletOne.at(i));
+    }
+
+    for(int i = 0; i < expXVerticesLaneletTwo.size(); ++i){
+        xVerticesResultLaneletTwo.push_back(laneletTwo->getOuterPolygon().outer()[i].x());
+        yVerticesResultLaneletTwo.push_back(laneletTwo->getOuterPolygon().outer()[i].y());
+    }
+    std::sort(xVerticesResultLaneletTwo.begin(), xVerticesResultLaneletTwo.end());
+    std::sort(yVerticesResultLaneletTwo.begin(), yVerticesResultLaneletTwo.end());
+    for(int i = 0; i < expXVerticesLaneletTwo.size(); ++i){
+        EXPECT_EQ(xVerticesResultLaneletTwo.at(i), expXVerticesLaneletTwo.at(i));
+        EXPECT_EQ(yVerticesResultLaneletTwo.at(i), expYVerticesLaneletTwo.at(i));
+    }
 }
 
 TEST_F(LaneletTest, GetBoundingBox){
