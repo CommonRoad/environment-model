@@ -7,7 +7,7 @@ cd "$HOME"/commonroad-curvilinear-coordinate-system/ || exit
 mkdir -p build
 cd build || exit
 which python
-cmake -DADD_PYTHON_BINDINGS=TRUE -DPATH_TO_PYTHON_ENVIRONMENT="/opt/conda/envs/commonroad/" -DPYTHON_VERSION="3.8" -DCMAKE_BUILD_TYPE=Release ..
+cmake -DADD_PYTHON_BINDINGS=TRUE -DPATH_TO_PYTHON_ENVIRONMENT="/opt/conda/envs/commonroad" -DPYTHON_VERSION="3.8" -DCMAKE_BUILD_TYPE=Release ..
 make
 cd ..
 python setup.py install
