@@ -31,7 +31,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(
 
     std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
-    int n { XMLReader::initializeLanelets(tempLaneletContainer, commonRoad) };
+    XMLReader::initializeLanelets(tempLaneletContainer, commonRoad);
 
     // get the other values of the lanelets
     int arrayIndex { 0 };
@@ -51,22 +51,22 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(
                 }
                 // set successor lanelets
                 if (!(strcmp(child.name(), "successor"))) {
-                    XMLReader::extractLaneletPreSuc(tempLaneletContainer, n, arrayIndex, child, "successor");
+                    XMLReader::extractLaneletPreSuc(tempLaneletContainer, arrayIndex, child, "successor");
                     continue;
                 }
                 // set predecessor lanelets
                 if (!(strcmp(child.name(), "predecessor"))) {
-                    XMLReader::extractLaneletPreSuc(tempLaneletContainer, n, arrayIndex, child, "predecessor");
+                    XMLReader::extractLaneletPreSuc(tempLaneletContainer, arrayIndex, child, "predecessor");
                     continue;
                 }
                 // set left adjacent lanelets
                 if (!(strcmp(child.name(), "adjacentLeft"))) {
-                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, n, arrayIndex, child, "adjacentLeft");
+                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, arrayIndex, child, "adjacentLeft");
                     continue;
                 }
                 // set right adjacent lanelets
                 if (!(strcmp(child.name(), "adjacentRight"))) {
-                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, n, arrayIndex, child,"adjacentRight");
+                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, arrayIndex, child,"adjacentRight");
                     continue;
                 }
             }
@@ -79,7 +79,6 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(
 }
 
 std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2018b::createTrafficSigns() {
-
     std::vector<std::shared_ptr<TrafficSign>> tempLaneletContainer{};
     return tempLaneletContainer;
 }
@@ -90,8 +89,8 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2018b::createTraffic
     return tempLaneletContainer;
 }
 
-std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2018b::createIntersections(const std::vector<std::shared_ptr<Lanelet>>& lanelets) {
-
+std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2018b::createIntersections(
+        const std::vector<std::shared_ptr<Lanelet>>& lanelets) {
     std::vector<std::shared_ptr<Intersection>> tempLaneletContainer{};
     return tempLaneletContainer;
 }

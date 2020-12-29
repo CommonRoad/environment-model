@@ -78,8 +78,8 @@ public:
 
 
 private:
-    double radius;
-    vertice center{};
+    double radius;          //**< Radius of shape. */
+    vertice center{};       //**< Center of shape. */
 };
 
 #endif //ENV_MODEL_CIRCLE_H

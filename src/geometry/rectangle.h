@@ -69,8 +69,8 @@ public:
 
 
 private:
-    double length{};
-    double width{};
+    double length{};    //**< Length of shape. */
+    double width{};     //**< Width of shape. */
 };
 
 

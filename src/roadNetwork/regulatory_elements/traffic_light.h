@@ -15,7 +15,7 @@ class TrafficLight {
          */
         void setId(int num);
         void setCycle(const std::vector<CycleElement>& light_cycle);
-        void setOffset(float of);
+        void setOffset(int ofst);
         void setDirection(TrafficLightDirection dir);
         void setActive(bool ac);
         void addCycleElement(CycleElement ce);
@@ -25,16 +25,16 @@ class TrafficLight {
          */
         [[nodiscard]] int getId() const;
         [[nodiscard]] std::vector<CycleElement> getCycle() const;
-        [[nodiscard]] float getOffset() const;
+        [[nodiscard]] int getOffset() const;
         [[nodiscard]] TrafficLightDirection getDirection() const;
         [[nodiscard]] bool isActive() const;
 
-        CycleElement getElementAtTime(float time);
+        CycleElement getElementAtTime(int time);
 
     private:
         int id;                          //unique id
         std::vector<CycleElement> cycle;    //cycle of the traffic light
-        float offset;                       //the offset for the cycle
+        int offset;                       //the offset for the cycle
         TrafficLightDirection direction;
         bool active{};
 };

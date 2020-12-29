@@ -161,9 +161,9 @@ int XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLan
 }
 
 void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
-                                                    int arrayIndex,
-                                                    const pugi::xml_node &child,
-                                                    const char* side) {
+                                       int arrayIndex,
+                                       const pugi::xml_node &child,
+                                       const char* side) {
     for (pugi::xml_node points = child.first_child(); points; points = points.next_sibling()) {
         if (!(strcmp(points.name(), "point"))) {
             vertice newVertice{};
@@ -178,11 +178,11 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
 }
 
 void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
-                                     int n, int arrayIndex,
+                                     int arrayIndex,
                                      const pugi::xml_node &child,
                                      const char* type) {
     int id = child.first_attribute().as_int();
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < tempLaneletContainer.size(); i++) {
         if (tempLaneletContainer[i]->getId() == id) {
             if (!(strcmp(type, "successor")))
                 tempLaneletContainer[arrayIndex]->addSuccessor(tempLaneletContainer[i]);
@@ -194,7 +194,6 @@ void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>>
 }
 
 void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
-                                        int n,
                                         int arrayIndex,
                                         const pugi::xml_node &child,
                                         const char* type) {
@@ -204,7 +203,7 @@ void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanele
         dir = DrivingDirection::same;
     else if(!(strcmp(child.attribute("drivingDir").as_string(), "opposite")))
         dir = DrivingDirection::opposite;
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < tempLaneletContainer.size(); i++){
         if (tempLaneletContainer[i]->getId() == adjacentId) {
             if (!(strcmp(type, "adjacentLeft")))
                 tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i], dir);

@@ -9,10 +9,9 @@
 
 struct CycleElement{
     CycleElementType color;
-    float duration;
+    int duration;
 };
 
-// 2d vertices
 struct vertice {
     double x;
     double y;

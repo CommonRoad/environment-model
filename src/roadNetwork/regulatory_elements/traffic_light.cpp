@@ -17,16 +17,16 @@ void TrafficLight::setId(const int num) { id = num; }
 
 void TrafficLight::setCycle(const std::vector<CycleElement>& light_cycle) { cycle = light_cycle; }
 
-void TrafficLight::setOffset(const float ofst) { offset = ofst; }
+void TrafficLight::setOffset(const int ofst) { offset = ofst; }
 
 // Getter
 int TrafficLight::getId() const { return id; }
-float TrafficLight::getOffset() const { return offset; }
+int TrafficLight::getOffset() const { return offset; }
 
 std::vector<CycleElement> TrafficLight::getCycle() const { return cycle; }
 
 // functions
-CycleElement TrafficLight::getElementAtTime(float time) {
+CycleElement TrafficLight::getElementAtTime(int time) {
     time += offset;
     CycleElement current = cycle.front();
     int i = 0;

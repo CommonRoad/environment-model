@@ -32,7 +32,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
 
     std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
-    int n { XMLReader::initializeLanelets(tempLaneletContainer, commonRoad) };
+    XMLReader::initializeLanelets(tempLaneletContainer, commonRoad);
 
     // get the other values of the lanelets
     int arrayIndex { 0 };
@@ -57,22 +57,22 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
                 }
                 // set successor lanelets
                 if (!(strcmp(child.name(), "successor"))) {
-                    XMLReader::extractLaneletPreSuc(tempLaneletContainer, n, arrayIndex, child, "successor");
+                    XMLReader::extractLaneletPreSuc(tempLaneletContainer, arrayIndex, child, "successor");
                     continue;
                 }
                 // set predecessor lanelets
                 if (!(strcmp(child.name(), "predecessor"))) {
-                    XMLReader::extractLaneletPreSuc(tempLaneletContainer, n, arrayIndex, child, "predecessor");
+                    XMLReader::extractLaneletPreSuc(tempLaneletContainer, arrayIndex, child, "predecessor");
                     continue;
                 }
                 // set left adjacent lanelets
                 if (!(strcmp(child.name(), "adjacentLeft"))) {
-                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, n, arrayIndex, child, "adjacentLeft");
+                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, arrayIndex, child, "adjacentLeft");
                     continue;
                 }
                 // set right adjacent lanelets
                 if (!(strcmp(child.name(), "adjacentRight"))) {
-                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, n, arrayIndex, child,"adjacentRight");
+                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, arrayIndex, child,"adjacentRight");
                     continue;
                 }
                 // set lanelet type
@@ -147,10 +147,11 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
     std::vector<std::shared_ptr<TrafficSign>> tempLaneletContainer{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
-    // get the number of traffic signs
-    int n = std::distance(commonRoad.children("trafficSign").begin(), commonRoad.children("trafficSign").end());
+    // get the number of traffic signs in scenario
+    int n = std::distance(commonRoad.children("trafficSign").begin(),
+                          commonRoad.children("trafficSign").end());
     tempLaneletContainer.clear();
-    tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
+    tempLaneletContainer.reserve(n); // Size already known --> Faster memory allocation
 
     int arrayIndex = 0;
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
@@ -167,16 +168,19 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                     std::string trafficSignId = trafficSignChildElement.first_child().first_child().value();
                     TrafficSignElement newTrafficSignElement = TrafficSignElement(trafficSignId);
                     std::vector<std::string > additionalValuesList;
-                    for (pugi::xml_node trafficSignChildElementChild = trafficSignChildElement.first_child(); trafficSignChildElementChild;
-                         trafficSignChildElementChild = trafficSignChildElementChild.next_sibling()) {
+                    for (pugi::xml_node trafficSignChildElementChild = trafficSignChildElement.first_child();
+                    trafficSignChildElementChild;
+                    trafficSignChildElementChild = trafficSignChildElementChild.next_sibling()) {
                         if (!(strcmp(trafficSignChildElementChild.name(), "additionalValue"))) {
-                            newTrafficSignElement.addAdditionalValue(trafficSignChildElementChild.first_child().value());
+                            newTrafficSignElement.addAdditionalValue(
+                                    trafficSignChildElementChild.first_child().value());
                         }
                     }
-                    tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElement); //TODO pass by reference
+                    tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElement);
                 }
                 if (!(strcmp(trafficSignChildElement.name(), "virtual"))) {
-                    tempLaneletContainer[arrayIndex]->setVirtualElement(trafficSignChildElement.first_attribute().as_bool());
+                    tempLaneletContainer[arrayIndex]->setVirtualElement(
+                            trafficSignChildElement.first_attribute().as_bool());
                 }
             }
             ++arrayIndex;
@@ -190,7 +194,8 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
     // get the number of traffic lights
-    int n = std::distance(commonRoad.children("trafficLight").begin(), commonRoad.children("trafficLight").end());
+    int n = std::distance(commonRoad.children("trafficLight").begin(),
+                          commonRoad.children("trafficLight").end());
     tempLaneletContainer.clear();
     tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
 
@@ -207,25 +212,28 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                  trafficLightChildElement = trafficLightChildElement.next_sibling()) {
                 // get traffic light cycle
                 if (!(strcmp(trafficLightChildElement.name(), "cycle"))) {
-                    for (pugi::xml_node trafficLightCycleChildElement = trafficLightChildElement.first_child(); trafficLightCycleChildElement;
-                         trafficLightCycleChildElement = trafficLightCycleChildElement.next_sibling()) {
+                    for (pugi::xml_node trafficLightCycleChildElement = trafficLightChildElement.first_child();
+                    trafficLightCycleChildElement;
+                    trafficLightCycleChildElement = trafficLightCycleChildElement.next_sibling()) {
                         if (!(strcmp(trafficLightCycleChildElement.name(), "cycleElement"))) {
                             std::string duration = trafficLightCycleChildElement.first_child().first_child().value();
-                            std::string color = trafficLightCycleChildElement.first_child().next_sibling().first_child().value();
+                            std::string color =
+                                    trafficLightCycleChildElement.first_child().next_sibling().first_child().value();
                             CycleElement cycle{};
                             if (color == "red")
-                                cycle = CycleElement{CycleElementType::red, std::stof(duration) };
+                                cycle = CycleElement{CycleElementType::red, std::stoi(duration) };
                             if (color == "green")
-                                cycle = CycleElement{CycleElementType::green, std::stof(duration) };
+                                cycle = CycleElement{CycleElementType::green, std::stoi(duration) };
                             if (color == "yellow")
-                                cycle = CycleElement{CycleElementType::yellow, std::stof(duration) };
+                                cycle = CycleElement{CycleElementType::yellow, std::stoi(duration) };
                             if (color == "red_yellow")
-                                cycle = CycleElement{CycleElementType::red_yellow, std::stof(duration) };
+                                cycle = CycleElement{CycleElementType::red_yellow, std::stoi(duration) };
 
-                            tempLaneletContainer[arrayIndex]->addCycleElement(cycle); //TODO pass by reference
+                            tempLaneletContainer[arrayIndex]->addCycleElement(cycle);
                         }
                         if (!(strcmp(trafficLightCycleChildElement.name(), "timeOffset"))) {
-                            tempLaneletContainer[arrayIndex]->setOffset(std::stoi(trafficLightCycleChildElement.first_child().value()));
+                            tempLaneletContainer[arrayIndex]->setOffset(
+                                    std::stoi(trafficLightCycleChildElement.first_child().value()));
                         }
                     }
                 }
@@ -248,7 +256,8 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                     tempLaneletContainer[arrayIndex]->setDirection(dir);
                 }
                 if (!(strcmp(trafficLightChildElement.name(), "active"))) {
-                    tempLaneletContainer[arrayIndex]->setActive(strcasecmp("true", trafficLightChildElement.first_child().value()) == 0);
+                    tempLaneletContainer[arrayIndex]->setActive(
+                            strcasecmp("true", trafficLightChildElement.first_child().value()) == 0);
                 }
             }
             ++arrayIndex;
@@ -257,12 +266,14 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
     return tempLaneletContainer;
 }
 
-std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<Lanelet>>& lanelets) {
+std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createIntersections(
+        const std::vector<std::shared_ptr<Lanelet>>& lanelets) {
     std::vector<std::shared_ptr<Intersection>> tempIntersectionContainer{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
     // get the number of intersections
-    int n = std::distance(commonRoad.children("intersection").begin(), commonRoad.children("intersection").end());
+    int n = std::distance(commonRoad.children("intersection").begin(),
+                          commonRoad.children("intersection").end());
     tempIntersectionContainer.clear();
     tempIntersectionContainer.reserve(n); // Already know the size --> Faster memory allocation
 
@@ -277,7 +288,7 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
 
             for (pugi::xml_node intersectionChildElement = roadElements.first_child(); intersectionChildElement;
                  intersectionChildElement = intersectionChildElement.next_sibling()) {
-                // get incomings
+                // get incoming
                 if (!(strcmp(intersectionChildElement.name(), "incoming"))) {
                     std::shared_ptr<Incoming> inc = std::make_shared<Incoming>();
                     inc->setId(intersectionChildElement.first_attribute().as_int());
@@ -285,8 +296,9 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
                     std::vector<std::shared_ptr<Lanelet>> successorRight;
                     std::vector<std::shared_ptr<Lanelet>> successorStraight;
                     std::vector<std::shared_ptr<Lanelet>> successorLeft;
-                    for (pugi::xml_node incomingChildElementChild = intersectionChildElement.first_child(); incomingChildElementChild;
-                         incomingChildElementChild = incomingChildElementChild.next_sibling()) {
+                    for (pugi::xml_node incomingChildElementChild = intersectionChildElement.first_child();
+                    incomingChildElementChild;
+                    incomingChildElementChild = incomingChildElementChild.next_sibling()) {
                         if (!(strcmp(incomingChildElementChild.name(), "incomingLanelet"))) {
                             for(const auto& la: lanelets){
                                 if (incomingChildElementChild.attribute("ref").as_int() == la->getId())
@@ -316,7 +328,8 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
                             inc->setSuccessorsLeft(successorLeft);
                         }
                         if (!(strcmp(incomingChildElementChild.name(), "isLeftOf")))
-                            tmpLeftOf.insert_or_assign(inc->getId(), incomingChildElementChild.attribute("ref").as_int());
+                            tmpLeftOf.insert_or_assign(inc->getId(),
+                                                       incomingChildElementChild.attribute("ref").as_int());
                     }
                     tempIntersectionContainer[arrayIndex]->addIncoming(inc);
                 }

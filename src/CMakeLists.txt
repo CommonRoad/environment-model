@@ -29,7 +29,7 @@ target_compile_features(env_model
         PRIVATE cxx_lambdas cxx_auto_type)
 set_property(TARGET env_model PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET env_model PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
-target_include_directories(env_model PUBLIC ".")
+target_include_directories(env_model PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
 target_link_libraries (env_model
         ${CRCCOSY_LIBRARY}
         Boost::filesystem

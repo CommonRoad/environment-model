@@ -32,9 +32,9 @@ int CommandLine::readCommandLineValues(int argc, char *const *argv, int &num_thr
         }
 
         xmlFileName = fs::path(xmlFilePath).stem().string();
-
-        std::cout << "[*] Using file " << xmlFilePath << std::endl;
+        std::cout << "[*] Using file " << xmlFileName << std::endl;
         std::cout << "[*] Using that many threads: " << num_threads << std::endl;
+
         return 0;
     } catch (std::exception &e) {
         std::cerr << "error: " << e.what() << "\n";
