@@ -7,6 +7,7 @@ image: $CI_REGISTRY/maierhofer/environment-model:v0.2.1
 before_script:
   - conda create -n commonroad python=3.8
   - source activate commonroad
+  - pip install pybind11
   - bash ./ci/install_cps_software.sh
 
 
