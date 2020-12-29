@@ -223,8 +223,8 @@ TEST_F(LaneletTest, CheckIntersection){
 TEST_F(LaneletTest, ConstructOuterPolygon){
     //evaluates whether in setUp creates outer polygon is valid
     //lanelet one
-    std::vector<double> expXVerticesLaneletOne {0.0, 0.0, 0.0, 5.0, 5.0};
-    std::vector<double> expYVerticesLaneletOne {0.0, 0.0, 1.0, 1.0, 1.0};
+    std::vector<double> expXVerticesLaneletOne {0.0, 0.0, 5.0, 5.0};
+    std::vector<double> expYVerticesLaneletOne {0.0, 0.0, 1.0, 1.0};
     std::vector<double> expXVerticesLaneletTwo {6.0, 6.0, 6.0, 11.0, 11.0, 12.0, 12.0};
     std::vector<double> expYVerticesLaneletTwo {0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 2.0};
     std::vector<double> xVerticesResultLaneletOne;
