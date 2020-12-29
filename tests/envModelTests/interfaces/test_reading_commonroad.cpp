@@ -37,7 +37,7 @@ TEST_F(ReadingCommonRoadTest, Read2018bFileMultiThread){
     int num_threads;
     std::string xmlFilePath;
     int argc { 5 };
-    const char *array[5] {"myprogram", "--input-file", ".tests/testScenarios/DEU_Muc-2_1_T-1.xml", "--t", "4" };
+    const char *array[5] {"myprogram", "--input-file", "./tests/testScenarios/DEU_Muc-2_1_T-1.xml", "--t", "4" };
     char **argv {const_cast<char **>(array)};
     int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);
@@ -63,7 +63,7 @@ TEST_F(ReadingCommonRoadTest, Read2020aFileSingleThread){
     int num_threads;
     std::string xmlFilePath;
     int argc { 5 };
-    const char *array[5] {"myprogram", "--input-file", ".tests/testScenarios/USA_Lanker-1_1_T-1.xml", "--t", "1" };
+    const char *array[5] {"myprogram", "--input-file", "./tests/testScenarios/USA_Lanker-1_1_T-1.xml", "--t", "1" };
     char **argv {const_cast<char **>(array)};
     int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);
