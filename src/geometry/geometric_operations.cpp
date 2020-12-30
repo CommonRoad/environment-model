@@ -152,3 +152,4 @@ std::vector<vertice> rotateAndTranslateVertices(std::vector<vertice> &vertices,
 
     return transVertices;
 }
+

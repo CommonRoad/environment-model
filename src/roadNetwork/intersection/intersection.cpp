@@ -27,3 +27,4 @@ const std::vector<std::vector<std::shared_ptr<Lanelet>>> &Intersection::getCross
 void Intersection::setCrossing(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &cr) {
     Intersection::crossing = cr;
 }
+

@@ -355,3 +355,5 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
     }
     return tempIntersectionContainer;
 }
+
+

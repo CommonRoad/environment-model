@@ -213,3 +213,4 @@ void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanele
         }
     }
 }
+

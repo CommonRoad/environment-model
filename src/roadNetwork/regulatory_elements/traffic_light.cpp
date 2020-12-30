@@ -60,3 +60,4 @@ void TrafficLight::setActive(bool ac) {
 void TrafficLight::addCycleElement(CycleElement ce){
     cycle.push_back(ce);
 }
+

@@ -20,3 +20,4 @@ namespace CommandLine{
 }
 
 #endif //ENV_MODEL_COMMAND_LINE_INPUT_H
+

@@ -27,3 +27,4 @@ void Incoming::setSuccessorsLeft(const std::vector<std::shared_ptr<Lanelet>> &su
 const std::shared_ptr<Incoming> &Incoming::getIsLeftOf() const {return isLeftOf;}
 
 void Incoming::setIsLeftOf(const std::shared_ptr<Incoming> &leftOf) {isLeftOf = leftOf;}
+

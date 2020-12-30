@@ -119,3 +119,4 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(int id) {
 
     return *it;
 }
+

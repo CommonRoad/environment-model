@@ -46,8 +46,16 @@ gtest_discover_tests(
 # Code coverage
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     if (CodeCoverage MATCHES ON)
-        add_executable(env_model_test_coverage ${ENV_MODEL_TEST_SRC_FILES})
-        target_link_libraries(env_model_test_coverage PUBLIC env_model gtest)
+        add_executable(env_model_test_coverage ${ENV_MODEL_SRC_FILES} ${ENV_MODEL_TEST_SRC_FILES})
+        target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
+        target_link_libraries(env_model_test_coverage PUBLIC
+                env_model
+                ${CRCCOSY_LIBRARY}
+                gtest
+                Boost::filesystem
+                Boost::program_options
+                OpenMP::OpenMP_CXX
+                Eigen3::Eigen)
 
         include(CodeCoverage)
         append_coverage_compiler_flags()
@@ -60,7 +68,6 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
              EXCLUDE                                                          # Patterns to exclude (can be relative
                  "src/interfaces/commonroad/pugi_xml/pugixml.hpp"             #  to BASE_DIRECTORY, with CMake 3.4+)
                  "src/interfaces/commonroad/pugi_xml/pugixml.cpp"
-                 "cmake-(.+/)?/"
                  "ci/"
                  "docs/"
                  "external/"

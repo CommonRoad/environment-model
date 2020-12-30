@@ -112,3 +112,4 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
                                                         CurvilinearCoordinateSystem(reference_path));
     return lane;
 }
+

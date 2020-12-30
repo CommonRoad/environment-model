@@ -184,3 +184,4 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
     vertice vert2{centerVertices[closestIndex + 1]};
     return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
 }
+

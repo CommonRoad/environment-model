@@ -94,3 +94,5 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2018b::createInterse
     std::vector<std::shared_ptr<Intersection>> tempLaneletContainer{};
     return tempLaneletContainer;
 }
+
+

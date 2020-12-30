@@ -4,7 +4,6 @@
 
 #include "circle.h"
 
-
 void Circle::setRadius(const double rad) { radius = rad; }
 
 void Circle::setCenter(const double x, const double y) { center = vertice{.x = x, .y = y}; }

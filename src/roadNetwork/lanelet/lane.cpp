@@ -19,3 +19,4 @@ const CurvilinearCoordinateSystem &Lane::getCurvilinearCoordinateSystem() const 
 bool Lane::checkIntersection(const polygon_type &polygon_shape, ContainmentType intersection_type) const {
     return lanelet.checkIntersection(polygon_shape, intersection_type);
 }
+

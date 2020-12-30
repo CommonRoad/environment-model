@@ -29,3 +29,4 @@ ObstacleType matchObstacleTypeToString(const char *type){
     else
         return ObstacleType::unknown;
 }
+

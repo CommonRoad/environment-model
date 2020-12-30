@@ -221,3 +221,4 @@ double Obstacle::getLatPosition(int timeStep) const {
 
     return getStateByTimeStep(timeStep).getLatPosition();
 }
+

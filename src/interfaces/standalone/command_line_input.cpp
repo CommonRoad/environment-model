@@ -43,3 +43,4 @@ int CommandLine::readCommandLineValues(int argc, char *const *argv, int &num_thr
         return 1;
     }
 }
+
