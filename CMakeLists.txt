@@ -19,6 +19,12 @@ if(NOT CMAKE_BUILD_TYPE)
             STRING "Choose the type of build." FORCE)
 endif()
 
+# Activate code coverage
+if (CODE_COVERAGE)
+    option(CodeCoverage "CodeCoverage" ON)
+endif()
+
+
 # Set compiler optimizations for build types
 set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0")

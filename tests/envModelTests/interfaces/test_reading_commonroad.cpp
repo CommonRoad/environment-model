@@ -6,12 +6,39 @@
 #include "interfaces/standalone/command_line_input.h"
 #include "interfaces/commonroad/xml_reader.h"
 
+#include <sys/stat.h>
+
+bool existsDirectory(const std::string& path) {
+    struct stat info{};
+    if (stat(path.c_str(), &info) != 0) {
+        return false;
+    }
+    else if (info.st_mode & S_IFDIR) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+std::string getTestScenarioDirectory()  {
+    std::string curDir {get_current_dir_name()};
+    std::string srcDir {curDir + "/tests/testScenarios"};
+    if (!existsDirectory(srcDir)) {
+        srcDir = curDir + "/../tests/testScenarios";
+        existsDirectory(srcDir);
+    }
+    return srcDir;
+}
+
 TEST_F(ReadingCommonRoadTest, Read2018bFileSingleThread){
+
     //Read command line parameters; if none are provided, use default values (specified in read_command_line_values)
     int num_threads;
     std::string xmlFilePath;
     int argc { 5 };
-    const char *array[5] {"myprogram", "--input-file", "./tests/testScenarios/DEU_Muc-2_1_T-1.xml", "--t", "1" };
+    std::string pathToTestFile { getTestScenarioDirectory() + "/DEU_Muc-2_1_T-1.xml" };
+    const char *array[5] {"myprogram", "--input-file", pathToTestFile.c_str(), "--t", "1" };
     char **argv {const_cast<char **>(array)};
     int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);
@@ -37,7 +64,8 @@ TEST_F(ReadingCommonRoadTest, Read2018bFileMultiThread){
     int num_threads;
     std::string xmlFilePath;
     int argc { 5 };
-    const char *array[5] {"myprogram", "--input-file", "./tests/testScenarios/DEU_Muc-2_1_T-1.xml", "--t", "4" };
+    std::string pathToTestFile { getTestScenarioDirectory() + "/DEU_Muc-2_1_T-1.xml" };
+    const char *array[5] {"myprogram", "--input-file", pathToTestFile.c_str(), "--t", "4" };
     char **argv {const_cast<char **>(array)};
     int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);
@@ -63,7 +91,8 @@ TEST_F(ReadingCommonRoadTest, Read2020aFileSingleThread){
     int num_threads;
     std::string xmlFilePath;
     int argc { 5 };
-    const char *array[5] {"myprogram", "--input-file", "./tests/testScenarios/USA_Lanker-1_1_T-1.xml", "--t", "1" };
+    std::string pathToTestFile { getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml" };
+    const char *array[5] {"myprogram", "--input-file", pathToTestFile.c_str(), "--t", "1" };
     char **argv {const_cast<char **>(array)};
     int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);
@@ -89,7 +118,8 @@ TEST_F(ReadingCommonRoadTest, Read2020aFileMultiThread){
     int num_threads;
     std::string xmlFilePath;
     int argc { 5 };
-    const char *array[5] {"myprogram", "--input-file", "./tests/testScenarios/USA_Lanker-1_1_T-1.xml", "--t", "4" };
+    std::string pathToTestFile { getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml" };
+    const char *array[5] {"myprogram", "--input-file", pathToTestFile.c_str(), "--t", "4" };
     char **argv {const_cast<char **>(array)};
     int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);

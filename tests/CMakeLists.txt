@@ -43,29 +43,26 @@ gtest_discover_tests(
         DISCOVERY_TIMEOUT 60
 )
 
-
 # Code coverage
-#option(CodeCoverage "CodeCoverage" ON)
-#if (CMAKE_BUILD_TYPE MATCHES Debug)
-#    if (CodeCoverage MATCHES ON)
-#        add_executable(env_model_test_coverage ${ENV_MODEL_TEST_SRC_FILES})
-#        target_link_libraries(env_model_test_coverage PUBLIC env_model gtest)
-#
-#        include(CodeCoverage)
-#        append_coverage_compiler_flags()
-#         setup_target_for_coverage_gcovr_xml(
-#             NAME env_model_coverage                                          # New target name
-#             EXECUTABLE env_model_test_coverage -j ${PROCESSOR_COUNT}         # Executable in PROJECT_BINARY_DIR
-#             DEPENDENCIES env_model_test_coverage                             # Dependencies to build first
-#             BASE_DIRECTORY "../"                                             # Base directory for report
-#                                                                              #  (defaults to PROJECT_SOURCE_DIR)
-#             EXCLUDE                                                          # Patterns to exclude (can be relative
-#                 "src/interfaces/commonroad/pugi_xml/*"                       #  to BASE_DIRECTORY, with CMake 3.4+)
-#                 "tests/*"
-#                 "/cmake/*"
-#                 "ci/*"
-#                 "docs/*"
-#                 "external/*"
-#         )
-#    endif()
-#endif()
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    if (CodeCoverage MATCHES ON)
+        add_executable(env_model_test_coverage ${ENV_MODEL_TEST_SRC_FILES})
+        target_link_libraries(env_model_test_coverage PUBLIC env_model gtest)
+
+        include(CodeCoverage)
+        append_coverage_compiler_flags()
+         setup_target_for_coverage_gcovr_html(
+             NAME env_model_coverage                                          # New target name
+             EXECUTABLE env_model_test_coverage                               # Executable in PROJECT_BINARY_DIR
+             DEPENDENCIES env_model_test_coverage                             # Dependencies to build first
+             BASE_DIRECTORY "../"                                             # Base directory for report
+                                                                              #  (defaults to PROJECT_SOURCE_DIR)
+             EXCLUDE                                                          # Patterns to exclude (can be relative
+                 "src/interfaces/commonroad/pugi_xml/*"                       #  to BASE_DIRECTORY, with CMake 3.4+)
+                 "cmake/*"
+                 "ci/*"
+                 "docs/*"
+                 "external/*"
+         )
+    endif()
+endif()
