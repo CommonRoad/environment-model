@@ -64,7 +64,9 @@ publish-coverage:
   script:
     - gcovr -e src/interfaces/commonroad/pugi_xml/pugixml.hpp -e src/interfaces/commonroad/pugi_xml/pugixml.cpp -e src/interfaces/standalone/main.cpp -e external/ -e 'cmake-(.+/)?/' -e tests/
     - cd build
-    - ls
+    - ls -R
     - gcc --version
+    - gcov --version
+    - gcovr --version
   dependencies:
     - build-run-coverage
