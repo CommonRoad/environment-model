@@ -24,6 +24,20 @@ if (CODE_COVERAGE)
     option(CodeCoverage "CodeCoverage" ON)
 endif()
 
+# Include Curvilinear Coordinate System
+if(NOT EXISTS "${CRCCOSY_LIBRARY_DIR}")
+    message(SEND_ERROR "Can't find the CommonRoad-Curvilinear-Coordinate System library in ${CRCCOSY_LIBRARY_DIR}")
+endif()
+set(CRCCOSY_LIBRARY ${CRCCOSY_LIBRARY_DIR}/libcrccosy.a)
+set(LIB_CRCCOSY_INCLUDE ${CRCCOSY_LIBRARY_DIR}/cpp)
+
+# Include Eigen3, Boost filesystem, and OpenMP
+find_package(Eigen3 REQUIRED)
+find_package(Boost REQUIRED COMPONENTS filesystem program_options)
+find_package(OpenMP)
+if(NOT OpenMP_CXX_FOUND)
+    message(SEND_ERROR "Can't find the OpenMP package")
+endif()
 
 # Set compiler optimizations for build types
 set(CMAKE_CXX_FLAGS_RELEASE  "-O3")

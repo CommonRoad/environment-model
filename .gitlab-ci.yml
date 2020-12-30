@@ -44,8 +44,8 @@ build-run-coverage:
     - make env_model_coverage -j4
   artifacts:
     paths:
-      - build/CMakeFiles/
-      - env_model_coverage
+      - ./build/
+      - ./env_model_coverage
     expire_in: 20 minutes
 
 

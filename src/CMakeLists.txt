@@ -24,22 +24,6 @@ set(ENV_MODEL_SRC_FILES
         predicates/braking_predicates.cpp
         )
 
-
-# Include Curvilinear Coordinate System
-if(NOT EXISTS "${CRCCOSY_LIBRARY_DIR}")
-    message(SEND_ERROR "Can't find the CommonRoad-Curvilinear-Coordinate System library in ${CRCCOSY_LIBRARY_DIR}")
-endif()
-set(CRCCOSY_LIBRARY ${CRCCOSY_LIBRARY_DIR}/libcrccosy.a)
-set(LIB_CRCCOSY_INCLUDE ${CRCCOSY_LIBRARY_DIR}/cpp)
-
-# Include Eigen3, Boost filesystem, and OpenMP
-find_package(Eigen3 REQUIRED)
-find_package(Boost REQUIRED COMPONENTS filesystem program_options)
-find_package(OpenMP)
-if(NOT OpenMP_CXX_FOUND)
-    message(SEND_ERROR "Can't find the OpenMP package")
-endif()
-
 # Create environment model library
 #set(LIB_CR_ENV_MODEL_SRC ${ENV_MODEL_SRC_FILES})
 add_library(env_model STATIC ${ENV_MODEL_SRC_FILES})
