@@ -8,36 +8,38 @@ before_script:
   - conda create -n commonroad python=3.6
   - source activate commonroad
   - bash ./ci/install_cps_software.sh
-  - mkdir build && cd build
 
 
 build-library:
   stage: build
   script:
+    - mkdir build && cd build
     - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
 
 build-standalone:
   stage: build
   script:
+    - mkdir build && cd build
     - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCMAKE_BUILD_TYPE=Release ..
     - make env_model_example_node -j4
 
 build-test:
   stage: build
   script:
+    - mkdir build && cd build
     - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
   artifacts:
     paths:
-      - ./tests/env_model_test
-      - ./tests/testScenarios/*
+      - ./../env_model_test
+      - ./../tests/testScenarios/*
     expire_in: 20 minutes
 
 test:
   stage: test
   script:
-    - ./tests/env_model_test --gtest_output="xml:report.xml"
+    - ./env_model_test --gtest_output="xml:report.xml"
   dependencies:
     - build-test
   artifacts:
