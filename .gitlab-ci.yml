@@ -40,7 +40,7 @@ build-run-coverage:
   stage: build
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCODE_COVERAGE=ON -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-curvilinear-coordinate-system -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_coverage -j4
   artifacts:
     paths:
@@ -63,10 +63,5 @@ publish-coverage:
   stage: test
   script:
     - gcovr -e src/interfaces/commonroad/pugi_xml/pugixml.hpp -e src/interfaces/commonroad/pugi_xml/pugixml.cpp -e src/interfaces/standalone/main.cpp -e external/ -e 'cmake-(.+/)?/' -e tests/
-    - cd build
-    - ls -R
-    - gcc --version
-    - gcov --version
-    - gcovr --version
   dependencies:
     - build-run-coverage

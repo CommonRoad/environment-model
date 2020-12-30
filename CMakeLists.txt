@@ -41,6 +41,7 @@ endif()
 
 # Set compiler optimizations for build types
 set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
+set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../)
@@ -55,7 +56,6 @@ include(doxygen)
 # add unit testing
 enable_testing()
 add_subdirectory(tests)
-#add_subdirectory(external/googletest)
 
 
 
