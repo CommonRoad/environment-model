@@ -9,26 +9,32 @@
 #include "traffic_sign_element.h"
 
 class TrafficSign {
-    public:
-        TrafficSign();                                     // default constructor
-        /*
-         * setter functions*
-         */
-        void setId(int num);
-        void addTrafficSignElement(const TrafficSignElement& sign_element);
-        void setVirtualElement(bool virtualElement);
-        void setTrafficSignElement(const std::vector<TrafficSignElement>& trafficSignElement);
-        /*
-         * getter functions
-         */
-        [[nodiscard]] int getId() const;
-        [[nodiscard]] bool isVirtualElement() const;
-        [[nodiscard]] std::vector<TrafficSignElement> getTrafficSignElement() const;
+public:
+    TrafficSign();                                     // default constructor
+    /*
+     * setter functions*
+     */
+    void setId(int num);
 
-    private:
-        int id;                                  //unique id
-        bool virtualElement;                       //artificially added element
-        std::vector<TrafficSignElement> trafficSignElement;
+    void addTrafficSignElement(const TrafficSignElement &sign_element);
+
+    void setVirtualElement(bool virtualElement);
+
+    void setTrafficSignElement(const std::vector<TrafficSignElement> &trafficSignElement);
+
+    /*
+     * getter functions
+     */
+    [[nodiscard]] int getId() const;
+
+    [[nodiscard]] bool isVirtualElement() const;
+
+    [[nodiscard]] std::vector<TrafficSignElement> getTrafficSignElement() const;
+
+private:
+    int id;                                  //unique id
+    bool virtualElement;                       //artificially added element
+    std::vector<TrafficSignElement> trafficSignElement;
 };
 
 

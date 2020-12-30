@@ -24,84 +24,84 @@ using value = std::pair<box, unsigned>;
  * Class representing a road network.
  */
 class RoadNetwork {
-    public:
-        /**
-        * Constructor for RoadNetwork. Takes a lanelet network and automatically generates lanes out of them.
-         * Additionally, creates and Rtree from the lanelets for faster access of lanelets and faster
-         * occupancy computations of obstacles.
-         *
-         * @param list of pointers to lanelets
-         */
-        explicit RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
+public:
+    /**
+    * Constructor for RoadNetwork. Takes a lanelet network and automatically generates lanes out of them.
+     * Additionally, creates and Rtree from the lanelets for faster access of lanelets and faster
+     * occupancy computations of obstacles.
+     *
+     * @param list of pointers to lanelets
+     */
+    explicit RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
 
-        /**
-         * Getter for lanelet network.
-         *
-         * @return list of pointers to lanelets
-         */
-        [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getLaneletNetwork() const;
+    /**
+     * Getter for lanelet network.
+     *
+     * @return list of pointers to lanelets
+     */
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getLaneletNetwork() const;
 
-        /**
-         * Getter for lanes.
-         *
-         * @return list of pointers to lanes
-         */
-        std::vector<std::shared_ptr<Lane>> getLanes();
+    /**
+     * Getter for lanes.
+     *
+     * @return list of pointers to lanes
+     */
+    std::vector<std::shared_ptr<Lane>> getLanes();
 
-        /**
-         * Given a polygon shape, finds the list of lanelets within the road network which intersect with the shape.
-         *
-         * @param polygonShape boost polygon
-         * @return list of lanelet pointers
-         */
-        std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(const polygon_type &polygonShape);
+    /**
+     * Given a polygon shape, finds the list of lanelets within the road network which intersect with the shape.
+     *
+     * @param polygonShape boost polygon
+     * @return list of lanelet pointers
+     */
+    std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(const polygon_type &polygonShape);
 
-        /**
-         * Given a position, finds the list of lanelets within the road network which contain the point.
-         *
-         * @param xPos x-coordinate of point
-         * @param yPos y-coordinate of point
-         * @return list of lanelet pointers
-         */
-        std::vector<std::shared_ptr<Lanelet>> findLaneletsByPosition(double xPos, double yPos);
+    /**
+     * Given a position, finds the list of lanelets within the road network which contain the point.
+     *
+     * @param xPos x-coordinate of point
+     * @param yPos y-coordinate of point
+     * @return list of lanelet pointers
+     */
+    std::vector<std::shared_ptr<Lanelet>> findLaneletsByPosition(double xPos, double yPos);
 
-        /**
-         * Returns the lanelet which corresponds to a given lanelet ID.
-         *
-         * @param id lanelet ID
-         * @return pointer to lanelet
-         */
-        std::shared_ptr<Lanelet> findLaneletById(int id);
+    /**
+     * Returns the lanelet which corresponds to a given lanelet ID.
+     *
+     * @param id lanelet ID
+     * @return pointer to lanelet
+     */
+    std::shared_ptr<Lanelet> findLaneletById(int id);
 
-        /**
-         * Given a set of lanes and a polygon shape, finds a single lane which intersect with the shape (interstate)
-         *
-         * @param possibleLanes set of lanes
-         * @param polygonShape boost polygon
-         * @return list of lane pointers
-         */
-        static std::shared_ptr<Lane> findLaneByShape(const std::vector<std::shared_ptr<Lane>>& possibleLanes,
-                                                     const polygon_type &polygonShape);
+    /**
+     * Given a set of lanes and a polygon shape, finds a single lane which intersect with the shape (interstate)
+     *
+     * @param possibleLanes set of lanes
+     * @param polygonShape boost polygon
+     * @return list of lane pointers
+     */
+    static std::shared_ptr<Lane> findLaneByShape(const std::vector<std::shared_ptr<Lane>> &possibleLanes,
+                                                 const polygon_type &polygonShape);
 
-    private:
-        std::vector<std::shared_ptr<Lanelet>> laneletNetwork;   //**< set of lanelets contained in road network */
-        std::vector<std::shared_ptr<Lane>> lanes;               //**< set of interstate-based lanes contained in road network */
-        bgi::rtree< value, bgi::quadratic<16>> rtree;           //**< rtree defined by lanelets of road network for faster occupancy calculation*/
+private:
+    std::vector<std::shared_ptr<Lanelet>> laneletNetwork;   //**< set of lanelets contained in road network */
+    std::vector<std::shared_ptr<Lane>> lanes;               //**< set of interstate-based lanes contained in road network */
+    bgi::rtree<value, bgi::quadratic<16>> rtree;           //**< rtree defined by lanelets of road network for faster occupancy calculation*/
 
-        /**
-         * Given a set of lanelets, creates the corresponding interstate-based lanes
-         *
-         * @param laneletNetwork set of lanelets
-         */
-        void createLanes(const std::vector<std::shared_ptr<Lanelet>>& laneletNetwork);
+    /**
+     * Given a set of lanelets, creates the corresponding interstate-based lanes
+     *
+     * @param laneletNetwork set of lanelets
+     */
+    void createLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
 
-        /**
-         * Given a lanelet, extracts the classifying lanelet type, e.g., for interstates, main carriageway, access/exit ramp, or shoulder
-         *
-         * @param la lanelet for which classifying lanelet type should be extracted
-         * @return classifying lanelet type
-         */
-        static LaneletType extractClassifyingLaneletType(const std::shared_ptr<Lanelet> &la);
+    /**
+     * Given a lanelet, extracts the classifying lanelet type, e.g., for interstates, main carriageway, access/exit ramp, or shoulder
+     *
+     * @param la lanelet for which classifying lanelet type should be extracted
+     * @return classifying lanelet type
+     */
+    static LaneletType extractClassifyingLaneletType(const std::shared_ptr<Lanelet> &la);
 
 };
 

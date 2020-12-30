@@ -15,7 +15,7 @@ std::vector<std::string> TrafficSignElement::getAdditionalValue() const {
     return additional_value;
 }
 
-void TrafficSignElement::addAdditionalValue(const std::string& additionalValue) {
+void TrafficSignElement::addAdditionalValue(const std::string &additionalValue) {
     additional_value.push_back(additionalValue);
 }
 

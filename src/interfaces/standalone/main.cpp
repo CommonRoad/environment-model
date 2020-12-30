@@ -29,8 +29,8 @@ int main(int argc, char **argv) {
 
     std::shared_ptr<RoadNetwork> roadNetwork{std::make_shared<RoadNetwork>(RoadNetwork(lanelets))};
 
-    for(const auto& obs : obstacles) {
-        for (int i=0; i < obs->getTrajectoryLength(); ++i) {
+    for (const auto &obs : obstacles) {
+        for (int i = 0; i < obs->getTrajectoryLength(); ++i) {
             obs->setReferenceLane(roadNetwork->getLanes(), i);
         }
     }
@@ -40,9 +40,9 @@ int main(int argc, char **argv) {
     // Start measuring time
     auto begin = std::chrono::high_resolution_clock::now();
 
-    for(const auto& obs : obstacles) {
+    for (const auto &obs : obstacles) {
         std::cout << obs->getId() << '\n';
-        for (int i=0; i < obs->getTrajectoryLength(); ++i) {
+        for (int i = 0; i < obs->getTrajectoryLength(); ++i) {
             if (posPred.onMainCarriageWay(i, obs))
                 std::cout << "time step " << i << ": onMainCarriageWay: true \n";
             else
@@ -55,13 +55,13 @@ int main(int argc, char **argv) {
                 std::cout << "time step " << i << ": onAccessRamp: true \n";
             else
                 std::cout << "time step " << i << ": onAccessRamp: false \n";
-            for(const auto& obs2 : obstacles) {
-                if(obs->getId() == obs2->getId())
+            for (const auto &obs2 : obstacles) {
+                if (obs->getId() == obs2->getId())
                     continue;
                 if (PositionPredicates::inFrontOf(i, obs, obs2))
-                    std::cout << "time step " << i << ": obs " << obs2->getId() <<" inFrontOf: true \n";
+                    std::cout << "time step " << i << ": obs " << obs2->getId() << " inFrontOf: true \n";
                 else
-                    std::cout << "time step " << i << ": obs " << obs2->getId() <<" inFrontOf: false \n";
+                    std::cout << "time step " << i << ": obs " << obs2->getId() << " inFrontOf: false \n";
             }
         }
     }

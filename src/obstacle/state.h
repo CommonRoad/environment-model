@@ -173,21 +173,21 @@ public:
     *
     * @param ccs Curvilinear coordinate system in which projection should happen.
     */
-    void convertPointToCurvilinear(const CurvilinearCoordinateSystem& ccs);
+    void convertPointToCurvilinear(const CurvilinearCoordinateSystem &ccs);
 
 private:
-        double xPosition{0.0};                                          //**< x-coordinate in Cartesian space [m] */
-        double yPosition{0.0};                                          //**< y-coordinate in Cartesian space */
-        double velocity{0.0};                                           //**< velocity [m/s] */
-        double acceleration{0.0};                                       //**< acceleration [m/s^2] */
-        double lonPosition{0.0};                                        //**< longitudinal position [m] */
-        double latPosition{0.0};                                        //**< lateral position [m] */
-        double orientation{0.0};                                        //**< orientation [rad] */
-        ValidStates validStates{false, false,         //**< set of states which are already set and therefore are valid */
-                                false,false,
-                                false,false,
-                                false};
-        int timeStep{0};                                                //**< time step of the state variables */
+    double xPosition{0.0};                                          //**< x-coordinate in Cartesian space [m] */
+    double yPosition{0.0};                                          //**< y-coordinate in Cartesian space */
+    double velocity{0.0};                                           //**< velocity [m/s] */
+    double acceleration{0.0};                                       //**< acceleration [m/s^2] */
+    double lonPosition{0.0};                                        //**< longitudinal position [m] */
+    double latPosition{0.0};                                        //**< lateral position [m] */
+    double orientation{0.0};                                        //**< orientation [rad] */
+    ValidStates validStates{false, false,         //**< set of states which are already set and therefore are valid */
+                            false, false,
+                            false, false,
+                            false};
+    int timeStep{0};                                                //**< time step of the state variables */
 };
 
 

@@ -3,12 +3,12 @@
 //
 #include "lane.h"
 
-Lane::Lane(std::vector<std::shared_ptr<Lanelet>>containedLanelets,
+Lane::Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets,
            Lanelet lanelet,
            CurvilinearCoordinateSystem ccs) :
-           containedLanelets(std::move(containedLanelets)),
-           lanelet(std::move(lanelet)),
-           curvilinearCoordinateSystem(std::move(ccs)) {}
+        containedLanelets(std::move(containedLanelets)),
+        lanelet(std::move(lanelet)),
+        curvilinearCoordinateSystem(std::move(ccs)) {}
 
 Lanelet Lane::getLanelet() const { return lanelet; }
 

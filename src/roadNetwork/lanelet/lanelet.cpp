@@ -10,12 +10,12 @@ Lanelet::Lanelet(int id,
                  std::vector<LaneletType> type,
                  std::vector<ObstacleType> oneWay,
                  std::vector<ObstacleType> userBidirectional) :
-                 id{id},
-                 leftBorder{std::move(leftBorder)},
-                 rightBorder{std::move(rightBorder)},
-                 laneletType{std::move(type)},
-                 userOneWay{std::move(oneWay)},
-                 userBidirectional{std::move(userBidirectional)} {
+        id{id},
+        leftBorder{std::move(leftBorder)},
+        rightBorder{std::move(rightBorder)},
+        laneletType{std::move(type)},
+        userOneWay{std::move(oneWay)},
+        userBidirectional{std::move(userBidirectional)} {
     createCenterVertices();
     constructOuterPolygon();
 }
@@ -28,26 +28,26 @@ Lanelet::Lanelet(int id,
                  std::vector<LaneletType> type,
                  std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
                  std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>()) :
-                 id{id},
-                 leftBorder{std::move(leftBorder)},
-                 rightBorder{std::move(rightBorder)},
-                 predecessorLanelets{std::move(predecessorLanelets)},
-                 successorLanelets{std::move(successorLanelets)},
-                 laneletType{std::move(type)},
-                 userOneWay{std::move(oneWay)},
-                 userBidirectional{std::move(userBidirectional)} {
+        id{id},
+        leftBorder{std::move(leftBorder)},
+        rightBorder{std::move(rightBorder)},
+        predecessorLanelets{std::move(predecessorLanelets)},
+        successorLanelets{std::move(successorLanelets)},
+        laneletType{std::move(type)},
+        userOneWay{std::move(oneWay)},
+        userBidirectional{std::move(userBidirectional)} {
     createCenterVertices();
     constructOuterPolygon();
 }
 
 void Lanelet::setId(const int laneletId) { id = laneletId; }
 
-void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet>& left, DrivingDirection dir) {
+void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet> &left, DrivingDirection dir) {
     adjacentLeft.adj = left;
     adjacentLeft.dir = dir;
 }
 
-void Lanelet::setRightAdjacent(const std::shared_ptr<Lanelet>& right, DrivingDirection dir) {
+void Lanelet::setRightAdjacent(const std::shared_ptr<Lanelet> &right, DrivingDirection dir) {
     adjacentRight.adj = right;
     adjacentRight.dir = dir;
 }
@@ -58,13 +58,13 @@ void Lanelet::setRightBorderVertices(const std::vector<vertex> &rightBorderVerti
     rightBorder = rightBorderVertices;
 }
 
-void Lanelet::setLaneletType(const std::vector<LaneletType>& laType) { laneletType = laType; }
+void Lanelet::setLaneletType(const std::vector<LaneletType> &laType) { laneletType = laType; }
 
 void Lanelet::setUserOneWay(const std::vector<ObstacleType> &user) { userOneWay = user; }
 
-void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) { userBidirectional = user;}
+void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) { userBidirectional = user; }
 
-void Lanelet::setStopLine(const StopLine& sl) { stopLine = sl; }
+void Lanelet::setStopLine(const StopLine &sl) { stopLine = sl; }
 
 void Lanelet::addLeftVertex(const vertex left) { leftBorder.push_back(left); }
 
@@ -72,13 +72,13 @@ void Lanelet::addRightVertex(const vertex right) { rightBorder.push_back(right);
 
 void Lanelet::addCenterVertex(const vertex center) { centerVertices.push_back(center); }
 
-void Lanelet::addPredecessor(const std::shared_ptr<Lanelet>& pre) { predecessorLanelets.push_back(pre); }
+void Lanelet::addPredecessor(const std::shared_ptr<Lanelet> &pre) { predecessorLanelets.push_back(pre); }
 
-void Lanelet::addSuccessor(const std::shared_ptr<Lanelet>& suc) { successorLanelets.push_back(suc); }
+void Lanelet::addSuccessor(const std::shared_ptr<Lanelet> &suc) { successorLanelets.push_back(suc); }
 
-void Lanelet::addTrafficLight(const std::shared_ptr<TrafficLight>& light) { trafficLights.push_back(light); }
+void Lanelet::addTrafficLight(const std::shared_ptr<TrafficLight> &light) { trafficLights.push_back(light); }
 
-void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign>& sign) { trafficSigns.push_back(sign); }
+void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign> &sign) { trafficSigns.push_back(sign); }
 
 int Lanelet::getId() const { return id; }
 
@@ -96,9 +96,9 @@ std::vector<std::shared_ptr<TrafficLight>> Lanelet::getTrafficLights() const { r
 
 std::vector<std::shared_ptr<TrafficSign>> Lanelet::getTrafficSigns() const { return trafficSigns; }
 
-const polygon_type &Lanelet::getOuterPolygon() const {return outerPolygon;}
+const polygon_type &Lanelet::getOuterPolygon() const { return outerPolygon; }
 
-const box &Lanelet::getBoundingBox() const {return boundingBox;}
+const box &Lanelet::getBoundingBox() const { return boundingBox; }
 
 const std::vector<LaneletType> &Lanelet::getLaneletType() const { return laneletType; }
 
@@ -106,9 +106,9 @@ const std::vector<ObstacleType> &Lanelet::getUserOneWay() const { return userOne
 
 const std::vector<ObstacleType> &Lanelet::getUserBidirectional() const { return userBidirectional; }
 
-const Lanelet::adjacent &Lanelet::getAdjacentLeft() const {return adjacentLeft;}
+const Lanelet::adjacent &Lanelet::getAdjacentLeft() const { return adjacentLeft; }
 
-const Lanelet::adjacent &Lanelet::getAdjacentRight() const {return adjacentRight;}
+const Lanelet::adjacent &Lanelet::getAdjacentRight() const { return adjacentRight; }
 
 const StopLine &Lanelet::getStopLine() const { return stopLine; }
 
@@ -172,8 +172,8 @@ void Lanelet::createCenterVertices() {
 
 double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
     // find closest vertex to the given position
-    std::vector<double> dif(centerVertices.size()-1);
-    for(int i = 0; i < centerVertices.size() - 1; ++i){
+    std::vector<double> dif(centerVertices.size() - 1);
+    for (int i = 0; i < centerVertices.size() - 1; ++i) {
         vertex vert{centerVertices[i]};
         dif[i] = sqrt(pow(vert.x - positionX, 2) + pow(vert.y - positionY, 2));
     }

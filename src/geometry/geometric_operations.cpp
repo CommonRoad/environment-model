@@ -141,11 +141,11 @@ std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices,
     // rotation
     for (size_t i = 0; i < vertices.size(); i++) {
         transVertices[i] =
-            vertex{cosine * vertices[i].x - sinus * vertices[i].y, sinus * vertices[i].x + cosine * vertices[i].y};
+                vertex{cosine * vertices[i].x - sinus * vertices[i].y, sinus * vertices[i].x + cosine * vertices[i].y};
     }
 
     // translation
-    for (auto & transVertice : transVertices) {
+    for (auto &transVertice : transVertices) {
         transVertice.x = transVertice.x + refPosition.x;
         transVertice.y = transVertice.y + refPosition.y;
     }

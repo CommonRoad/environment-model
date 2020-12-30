@@ -60,7 +60,7 @@ public:
      * @return List of pointers to created intersection.
     */
     std::vector<std::shared_ptr<Intersection>> createIntersections(
-            const std::vector<std::shared_ptr<Lanelet>>& lanelets) override;
+            const std::vector<std::shared_ptr<Lanelet>> &lanelets) override;
 };
 
 #endif //ENV_MODEL_COMMONROAD_FACTORY_2020A_H

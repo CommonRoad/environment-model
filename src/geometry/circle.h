@@ -47,7 +47,7 @@ public:
      *
      * @param rad Radius of circle [m].
     */
-    void setRadius( double rad) override;
+    void setRadius(double rad) override;
 
     /**
      * Setter for circle center.
@@ -55,7 +55,7 @@ public:
      * @param x x-coordinate of center [m].
      * @param y y-coordinate of center [m].
     */
-    void setCenter( double x, double y) override;
+    void setCenter(double x, double y) override;
 
     /**
      * Getter for radius of circle.

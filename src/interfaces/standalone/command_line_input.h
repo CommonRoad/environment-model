@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-namespace CommandLine{
+namespace CommandLine {
     /**
      * Reads the arguments provided via command line.
      *

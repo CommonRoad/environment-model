@@ -13,7 +13,7 @@
  * @param id obstacle ID
  * @return pointer to obstacle
 */
-std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>>& obstacleList, int id);
+std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, int id);
 
 /**
  * Matches a string to an obstacle type

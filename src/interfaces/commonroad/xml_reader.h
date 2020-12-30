@@ -59,7 +59,7 @@ namespace XMLReader {
     */
     std::vector<std::shared_ptr<Intersection>> createIntersectionFromXML(
             const std::string &xmlFile,
-            const std::vector<std::shared_ptr<Lanelet>>& lanelets);
+            const std::vector<std::shared_ptr<Lanelet>> &lanelets);
 
     /**
      * Extracts an initial state from a XML node element.
@@ -116,7 +116,7 @@ namespace XMLReader {
     void extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                 int arrayIndex,
                                 const pugi::xml_node &child,
-                                const char* side);
+                                const char *side);
 
     /**
      * Extracts successor or predecessor lanelet for a lanelet.
@@ -129,7 +129,7 @@ namespace XMLReader {
     void extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                               int arrayIndex,
                               const pugi::xml_node &child,
-                              const char* type);
+                              const char *type);
 
     /**
      * Extracts left or right adjacent lanelet for a lanelet.
@@ -142,7 +142,7 @@ namespace XMLReader {
     void extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                  int arrayIndex,
                                  const pugi::xml_node &child,
-                                 const char* type);
+                                 const char *type);
 }
 
 #endif //ENV_MODEL_XML_READER_H

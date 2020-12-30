@@ -20,18 +20,18 @@ Obstacle::Obstacle(int id,
                    std::map<int, State> trajectoryPrediction,
                    double length,
                    double width) :
-                   id(id),
-                   isStatic(isStatic),
-                   currentState(currentState),
-                   obstacleType(obstacleType),
-                   vMax(vMax),
-                   aMax(aMax),
-                   aMaxLong(aMaxLong),
-                   aMinLong(aMinLong),
-                   reactionTime(reactionTime),
-                   trajectoryPrediction(std::move(trajectoryPrediction)),
-                   geoShape(Rectangle(length, width)) {
-    if(isStatic)
+        id(id),
+        isStatic(isStatic),
+        currentState(currentState),
+        obstacleType(obstacleType),
+        vMax(vMax),
+        aMax(aMax),
+        aMaxLong(aMaxLong),
+        aMinLong(aMinLong),
+        reactionTime(reactionTime),
+        trajectoryPrediction(std::move(trajectoryPrediction)),
+        geoShape(Rectangle(length, width)) {
+    if (isStatic)
         setIsStatic(isStatic);
 }
 
@@ -47,9 +47,9 @@ void Obstacle::setIsStatic(bool st) {
     }
 }
 
-void Obstacle::setCurrentState(const State &state) {currentState = state;}
+void Obstacle::setCurrentState(const State &state) { currentState = state; }
 
-void Obstacle::setObstacleType(ObstacleType type) {obstacleType = type;}
+void Obstacle::setObstacleType(ObstacleType type) { obstacleType = type; }
 
 void Obstacle::setVmax(const double vmax) { vMax = isStatic ? 0.0 : vmax; }
 
@@ -61,13 +61,13 @@ void Obstacle::setAminLong(const double amin) { aMinLong = isStatic ? 0.0 : amin
 
 void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 0.0 : tReact; }
 
-void Obstacle::setReferenceLane(const std::vector<std::shared_ptr<Lane>>& possibleLanes, int timeStep) {
-    if(referenceLane != nullptr
-    and referenceLane->checkIntersection(getOccupancyPolygonShape(timeStep),
-                                         ContainmentType::PARTIALLY_CONTAINED)) {
+void Obstacle::setReferenceLane(const std::vector<std::shared_ptr<Lane>> &possibleLanes, int timeStep) {
+    if (referenceLane != nullptr
+        and referenceLane->checkIntersection(getOccupancyPolygonShape(timeStep),
+                                             ContainmentType::PARTIALLY_CONTAINED)) {
         return; // old reference lane is still valid
     }
-    // assign new reference lane
+        // assign new reference lane
     else {
         polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
         referenceLane = RoadNetwork::findLaneByShape(possibleLanes, polygonShape);
@@ -97,11 +97,11 @@ bool Obstacle::getIsStatic() const { return isStatic; }
 const State &Obstacle::getCurrentState() const { return currentState; }
 
 State Obstacle::getStateByTimeStep(int timeStep) const {
-    if(trajectoryPrediction.count(timeStep) == 1)
+    if (trajectoryPrediction.count(timeStep) == 1)
         return trajectoryPrediction.at(timeStep);
-    else if(currentState.getTimeStep() == timeStep)
+    else if (currentState.getTimeStep() == timeStep)
         return currentState;
-    else if(history.count(timeStep) == 1)
+    else if (history.count(timeStep) == 1)
         return history.at(timeStep);
     else
         throw std::logic_error("Time step does not exist");
@@ -128,7 +128,7 @@ int Obstacle::getTrajectoryLength() { return trajectoryPrediction.size(); }
 polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
     std::vector<vertex> boundingRectangleVertices;
     polygon_type polygonShape;
-    State state { this->getStateByTimeStep(timeStep) };
+    State state{this->getStateByTimeStep(timeStep)};
 
     if (this->getGeoShape().getType() == ShapeType::rectangle) {
         // p are vertices of the bounding rectangle
@@ -151,13 +151,13 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
         // make polygon shape from previously created vertices
         for (size_t i = 0; i < adjustedBoundingRectangleVertices.size(); i++) {
             polygonShape.outer()[i] =
-                point_type{adjustedBoundingRectangleVertices[i].x, adjustedBoundingRectangleVertices[i].y};
+                    point_type{adjustedBoundingRectangleVertices[i].x, adjustedBoundingRectangleVertices[i].y};
         }
 
         // add first point once again at the end
         if (!adjustedBoundingRectangleVertices.empty()) {
             polygonShape.outer().back() =
-                point_type{adjustedBoundingRectangleVertices[0].x, adjustedBoundingRectangleVertices[0].y};
+                    point_type{adjustedBoundingRectangleVertices[0].x, adjustedBoundingRectangleVertices[0].y};
         }
     }
     return polygonShape;
@@ -165,9 +165,9 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
 
 Shape &Obstacle::getGeoShape() { return geoShape; }
 
-std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::shared_ptr<RoadNetwork>& roadNetwork,
+std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                                     int timeStep) {
-    if(occupiedLanelets.find(timeStep) != occupiedLanelets.end())
+    if (occupiedLanelets.find(timeStep) != occupiedLanelets.end())
         return occupiedLanelets.at(timeStep);
     polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
     std::vector<std::shared_ptr<Lanelet>> occupied{roadNetwork->findOccupiedLaneletsByShape(polygonShape)};
@@ -186,9 +186,9 @@ double Obstacle::frontS(int timeStep) {
 
     // use maximum of all corners
     return std::max({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
-              (length / 2) * cos(theta) - (-width / 2) * sin(theta) + s,
-              (-length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
-              (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + s});
+                     (length / 2) * cos(theta) - (-width / 2) * sin(theta) + s,
+                     (-length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
+                     (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + s});
 }
 
 double Obstacle::rearS(int timeStep) {
@@ -207,7 +207,7 @@ double Obstacle::rearS(int timeStep) {
 }
 
 double Obstacle::getLonPosition(int timeStep) const {
-    if(getStateByTimeStep(timeStep).getValidStates().lonPosition)
+    if (getStateByTimeStep(timeStep).getValidStates().lonPosition)
         return getStateByTimeStep(timeStep).getLonPosition();
     getStateByTimeStep(timeStep).convertPointToCurvilinear(getReferenceLane()->getCurvilinearCoordinateSystem());
 
@@ -215,7 +215,7 @@ double Obstacle::getLonPosition(int timeStep) const {
 }
 
 double Obstacle::getLatPosition(int timeStep) const {
-    if(getStateByTimeStep(timeStep).getValidStates().latPosition)
+    if (getStateByTimeStep(timeStep).getValidStates().latPosition)
         return getStateByTimeStep(timeStep).getLatPosition();
     getStateByTimeStep(timeStep).convertPointToCurvilinear(getReferenceLane()->getCurvilinearCoordinateSystem());
 

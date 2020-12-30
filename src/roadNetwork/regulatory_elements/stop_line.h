@@ -10,22 +10,28 @@
 #include "../../auxiliaryDefs/types_and_definitions.h"
 
 class StopLine {
-    public:
-        [[nodiscard]] const std::vector<vertex> &getPoints() const;
-        [[nodiscard]] std::shared_ptr<TrafficSign> getTrafficSign() const;
-        [[nodiscard]] std::shared_ptr<TrafficLight> getTrafficLight() const;
-        [[nodiscard]] LineMarking getLineMarking() const;
+public:
+    [[nodiscard]] const std::vector<vertex> &getPoints() const;
 
-        void setPoints(const std::vector<vertex> &points);
-        void setTrafficSign(std::shared_ptr<TrafficSign> trafficSign);
-        void setTrafficLight(std::shared_ptr<TrafficLight> trafficLight);
-        void setLineMarking(LineMarking lineMarking);
+    [[nodiscard]] std::shared_ptr<TrafficSign> getTrafficSign() const;
 
-    private:
-        std::vector<vertex> points;
-        std::shared_ptr<TrafficSign> trafficSign;
-        std::shared_ptr<TrafficLight> trafficLight;
-        LineMarking lineMarking;
+    [[nodiscard]] std::shared_ptr<TrafficLight> getTrafficLight() const;
+
+    [[nodiscard]] LineMarking getLineMarking() const;
+
+    void setPoints(const std::vector<vertex> &points);
+
+    void setTrafficSign(std::shared_ptr<TrafficSign> trafficSign);
+
+    void setTrafficLight(std::shared_ptr<TrafficLight> trafficLight);
+
+    void setLineMarking(LineMarking lineMarking);
+
+private:
+    std::vector<vertex> points;
+    std::shared_ptr<TrafficSign> trafficSign;
+    std::shared_ptr<TrafficLight> trafficLight;
+    LineMarking lineMarking;
 };
 
 #endif //ENV_MODEL_STOP_LINE_H

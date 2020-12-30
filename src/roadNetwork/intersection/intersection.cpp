@@ -16,7 +16,7 @@ const std::vector<std::shared_ptr<Incoming>> &Intersection::getIncoming() const 
     return incoming;
 }
 
-void Intersection::addIncoming(const std::shared_ptr<Incoming>& inc) {
+void Intersection::addIncoming(const std::shared_ptr<Incoming> &inc) {
     incoming.push_back(inc);
 }
 

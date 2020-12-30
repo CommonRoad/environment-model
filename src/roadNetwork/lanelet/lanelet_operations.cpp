@@ -4,7 +4,7 @@
 
 #include "lanelet_operations.h"
 
-LaneletType matchStringToLaneletType(const char *type){
+LaneletType matchStringToLaneletType(const char *type) {
     if (!(strcmp(type, "interstate")))
         return LaneletType::interstate;
     else if (!(strcmp(type, "urban")))
@@ -37,7 +37,7 @@ LaneletType matchStringToLaneletType(const char *type){
         return LaneletType::unknown;
 }
 
-LineMarking matchStringToLineMarking(const char *type){
+LineMarking matchStringToLineMarking(const char *type) {
     if (!(strcmp(type, "solid")))
         return LineMarking::solid;
     else if (!(strcmp(type, "dashed")))
@@ -52,8 +52,8 @@ LineMarking matchStringToLineMarking(const char *type){
         return LineMarking::unknown;
 }
 
-std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet,
-                                                                     LaneletType type) {
+std::shared_ptr<Lane> combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet,
+                                                                    LaneletType type) {
     // assumption: successors of a single lanelet have different types
 
     // initialize lanelet elements
@@ -68,32 +68,31 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
     std::vector<std::shared_ptr<Lanelet>> successorLanelets{nullptr};
     std::vector<LaneletType> typeList{type};
 
-    if(!curLanelet->getSuccessors().empty())
-        while (curLanelet != nullptr){
+    if (!curLanelet->getSuccessors().empty())
+        while (curLanelet != nullptr) {
             // iterate through all successors and concatenate them
-            for(const auto& la : curLanelet->getSuccessors()) {
-                if(std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(),
-                               [type](LaneletType t){return t == type;})){
+            for (const auto &la : curLanelet->getSuccessors()) {
+                if (std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(),
+                                [type](LaneletType t) { return t == type; })) {
                     curLanelet = la;
                     laneletList.push_back(curLanelet);
                     id += curLanelet->getId();
                     centerVertices.insert(centerVertices.end(),
-                                          curLanelet->getCenterVertices().begin()+1,
+                                          curLanelet->getCenterVertices().begin() + 1,
                                           curLanelet->getCenterVertices().end());
                     leftBorderVertices.insert(leftBorderVertices.end(),
-                                              curLanelet->getLeftBorderVertices().begin()+1,
+                                              curLanelet->getLeftBorderVertices().begin() + 1,
                                               curLanelet->getLeftBorderVertices().end());
                     rightBorderVertices.insert(rightBorderVertices.end(),
-                                               curLanelet->getRightBorderVertices().begin()+1,
+                                               curLanelet->getRightBorderVertices().begin() + 1,
                                                curLanelet->getRightBorderVertices().end());
                     successorLanelets = curLanelet->getSuccessors();
                     break;
-                }
-                else{
+                } else {
                     curLanelet = nullptr;
                 }
             }
-            if(curLanelet and curLanelet->getSuccessors().empty())
+            if (curLanelet and curLanelet->getSuccessors().empty())
                 curLanelet = nullptr;
         }
 
@@ -104,7 +103,7 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
     newLanelet.constructOuterPolygon();
 
     geometry::EigenPolyline reference_path;
-    for(auto vert : centerVertices){
+    for (auto vert : centerVertices) {
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     }
     std::shared_ptr<Lane> lane = std::make_shared<Lane>(laneletList,

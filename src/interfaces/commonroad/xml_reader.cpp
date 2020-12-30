@@ -46,12 +46,12 @@ std::vector<std::shared_ptr<TrafficLight>> XMLReader::createTrafficLightFromXML(
 }
 
 std::vector<std::shared_ptr<Intersection>> XMLReader::createIntersectionFromXML(
-        const std::string &xmlFile, const std::vector<std::shared_ptr<Lanelet>>& lanelets) {
+        const std::string &xmlFile, const std::vector<std::shared_ptr<Lanelet>> &lanelets) {
     const auto factory = createCommonRoadFactory(xmlFile);
     return factory->createIntersections(lanelets);
 }
 
-State XMLReader::extractInitialState(const pugi::xml_node &child)  {
+State XMLReader::extractInitialState(const pugi::xml_node &child) {
     pugi::xml_node states = child;
     State initialState;
     initialState.setTimeStep(0);
@@ -134,7 +134,7 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
 }
 
 int XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
-                                  const pugi::xml_node &commonRoad)  {
+                                  const pugi::xml_node &commonRoad) {
     // get the number of lanelets
     int n = std::distance(commonRoad.children("lanelet").begin(),
                           commonRoad.children("lanelet").end());
@@ -163,7 +163,7 @@ int XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLan
 void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                        int arrayIndex,
                                        const pugi::xml_node &child,
-                                       const char* side) {
+                                       const char *side) {
     for (pugi::xml_node points = child.first_child(); points; points = points.next_sibling()) {
         if (!(strcmp(points.name(), "point"))) {
             vertex newVertice{};
@@ -180,7 +180,7 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
 void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                      int arrayIndex,
                                      const pugi::xml_node &child,
-                                     const char* type) {
+                                     const char *type) {
     int id = child.first_attribute().as_int();
     for (int i = 0; i < tempLaneletContainer.size(); i++) {
         if (tempLaneletContainer[i]->getId() == id) {
@@ -196,14 +196,14 @@ void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>>
 void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                         int arrayIndex,
                                         const pugi::xml_node &child,
-                                        const char* type) {
+                                        const char *type) {
     int adjacentId = child.attribute("ref").as_int();
     DrivingDirection dir{DrivingDirection::invalid};
-    if(!(strcmp(child.attribute("drivingDir").as_string(), "same")))
+    if (!(strcmp(child.attribute("drivingDir").as_string(), "same")))
         dir = DrivingDirection::same;
-    else if(!(strcmp(child.attribute("drivingDir").as_string(), "opposite")))
+    else if (!(strcmp(child.attribute("drivingDir").as_string(), "opposite")))
         dir = DrivingDirection::opposite;
-    for (int i = 0; i < tempLaneletContainer.size(); i++){
+    for (int i = 0; i < tempLaneletContainer.size(); i++) {
         if (tempLaneletContainer[i]->getId() == adjacentId) {
             if (!(strcmp(type, "adjacentLeft")))
                 tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i], dir);

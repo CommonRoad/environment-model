@@ -4,8 +4,8 @@
 
 #include "obstacle_operations.h"
 
-std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>>& obstacleList, int id) {
-    std::shared_ptr<Obstacle> temp { nullptr };
+std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, int id) {
+    std::shared_ptr<Obstacle> temp{nullptr};
     for (auto &obs : obstacleList) {
         if (obs->getId() == id) {
             temp = obs;
@@ -15,7 +15,7 @@ std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obst
     return temp;
 }
 
-ObstacleType matchObstacleTypeToString(const char *type){
+ObstacleType matchObstacleTypeToString(const char *type) {
     if (!(strcmp(type, "car")))
         return ObstacleType::car;
     else if (!(strcmp(type, "truck")))

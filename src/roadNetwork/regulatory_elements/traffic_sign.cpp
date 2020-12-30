@@ -11,14 +11,15 @@ TrafficSign::TrafficSign() {
 
 // Setter
 void TrafficSign::setId(const int num) { id = num; }
-void TrafficSign::addTrafficSignElement(const TrafficSignElement& elem) { trafficSignElement.push_back(elem); }
+
+void TrafficSign::addTrafficSignElement(const TrafficSignElement &elem) { trafficSignElement.push_back(elem); }
 
 
 // Getter
 int TrafficSign::getId() const { return id; }
 
 
-void TrafficSign::setTrafficSignElement(const std::vector<TrafficSignElement>& newTrafficSignElement) {
+void TrafficSign::setTrafficSignElement(const std::vector<TrafficSignElement> &newTrafficSignElement) {
     trafficSignElement = newTrafficSignElement;
 }
 

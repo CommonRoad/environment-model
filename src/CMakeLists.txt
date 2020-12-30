@@ -32,7 +32,7 @@ target_compile_features(env_model
 set_property(TARGET env_model PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET env_model PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
 target_include_directories(env_model PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
-target_link_libraries (env_model
+target_link_libraries(env_model
         ${CRCCOSY_LIBRARY}
         Boost::filesystem
         Boost::program_options
@@ -46,4 +46,4 @@ target_compile_features(env_model_example_node
         PRIVATE cxx_lambdas cxx_auto_type)
 set_property(TARGET env_model_example_node PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET env_model_example_node PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
-target_link_libraries (env_model_example_node env_model)
+target_link_libraries(env_model_example_node env_model)

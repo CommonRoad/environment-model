@@ -8,18 +8,20 @@
 #include "../../auxiliaryDefs/structs.h"
 
 class TrafficSignElement {
-    public:
-        explicit TrafficSignElement(std::string id);
-        TrafficSignElement(const TrafficSignElement &) = default;            // copy constructor
+public:
+    explicit TrafficSignElement(std::string id);
 
-        [[nodiscard]] std::string getId() const;
-        [[nodiscard]] std::vector<std::string> getAdditionalValue() const;
+    TrafficSignElement(const TrafficSignElement &) = default;            // copy constructor
 
-        void addAdditionalValue(const std::string& additionalValue); //additional values, e.g. allowed time, weight
+    [[nodiscard]] std::string getId() const;
 
-    private:
-            std::string id;                                  //official national traffic sign id of a country
-            std::vector<std::string> additional_value;       //list of additional values classifying traffic sign, e.g., velocity, weight, time
+    [[nodiscard]] std::vector<std::string> getAdditionalValue() const;
+
+    void addAdditionalValue(const std::string &additionalValue); //additional values, e.g. allowed time, weight
+
+private:
+    std::string id;                                  //official national traffic sign id of a country
+    std::vector<std::string> additional_value;       //list of additional values classifying traffic sign, e.g., velocity, weight, time
 
 };
 

@@ -14,10 +14,9 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles()
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
          roadElements = roadElements.next_sibling()) {
         if (!(strcmp(roadElements.name(), "obstacle"))) {
-            if (!(strcmp(roadElements.first_child().text().as_string(), "dynamic"))){
+            if (!(strcmp(roadElements.first_child().text().as_string(), "dynamic"))) {
                 XMLReader::createDynamicObstacle(obstacleList, roadElements);
-            }
-            else if (!(strcmp(roadElements.first_child().text().as_string(), "static"))) {
+            } else if (!(strcmp(roadElements.first_child().text().as_string(), "static"))) {
                 XMLReader::extractStaticObstacle(obstacleList, roadElements);
             }
         }
@@ -34,7 +33,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(
     XMLReader::initializeLanelets(tempLaneletContainer, commonRoad);
 
     // get the other values of the lanelets
-    int arrayIndex { 0 };
+    int arrayIndex{0};
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
          roadElements = roadElements.next_sibling()) {
         if (!(strcmp(roadElements.name(), "lanelet"))) {
@@ -66,7 +65,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(
                 }
                 // set right adjacent lanelets
                 if (!(strcmp(child.name(), "adjacentRight"))) {
-                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, arrayIndex, child,"adjacentRight");
+                    XMLReader::extractLaneletAdjacency(tempLaneletContainer, arrayIndex, child, "adjacentRight");
                     continue;
                 }
             }
@@ -90,7 +89,7 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2018b::createTraffic
 }
 
 std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2018b::createIntersections(
-        const std::vector<std::shared_ptr<Lanelet>>& lanelets) {
+        const std::vector<std::shared_ptr<Lanelet>> &lanelets) {
     std::vector<std::shared_ptr<Intersection>> tempLaneletContainer{};
     return tempLaneletContainer;
 }

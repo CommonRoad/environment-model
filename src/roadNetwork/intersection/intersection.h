@@ -8,19 +8,23 @@
 #include "incoming.h"
 
 class Intersection {
-    public:
-        [[nodiscard]] int getId() const;
-        [[nodiscard]] const std::vector<std::shared_ptr<Incoming>> &getIncoming() const;
-        [[nodiscard]] const std::vector<std::vector<std::shared_ptr<Lanelet>>> &getCrossing() const;
+public:
+    [[nodiscard]] int getId() const;
 
-        void setId(int id);
-        void addIncoming(const std::shared_ptr<Incoming>& incoming);
-        void setCrossing(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &crossing);
+    [[nodiscard]] const std::vector<std::shared_ptr<Incoming>> &getIncoming() const;
 
-    private:
-        int id;
-        std::vector<std::shared_ptr<Incoming>> incoming;
-        std::vector<std::vector<std::shared_ptr<Lanelet>>> crossing;
+    [[nodiscard]] const std::vector<std::vector<std::shared_ptr<Lanelet>>> &getCrossing() const;
+
+    void setId(int id);
+
+    void addIncoming(const std::shared_ptr<Incoming> &incoming);
+
+    void setCrossing(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &crossing);
+
+private:
+    int id;
+    std::vector<std::shared_ptr<Incoming>> incoming;
+    std::vector<std::vector<std::shared_ptr<Lanelet>>> crossing;
 };
 
 

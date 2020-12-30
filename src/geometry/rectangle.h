@@ -39,14 +39,14 @@ public:
      *
      * @return Rectangle length [m].
     */
-    [[nodiscard]] double getLength() const  override;
+    [[nodiscard]] double getLength() const override;
 
     /**
      * Getter for rectangle width.
      *
      * @return Rectangle width [m].
     */
-    [[nodiscard]] double getWidth() const  override;
+    [[nodiscard]] double getWidth() const override;
 
     /**
      * Getter for type.
@@ -60,12 +60,12 @@ public:
      *
      * @param factor Scaling factor.
     */
-    void scaleShape(double factor)  override;
+    void scaleShape(double factor) override;
 
     /**
      * Print function. Prints width and length on console output.
     */
-    void printParameters()  override;
+    void printParameters() override;
 
 
 private:
