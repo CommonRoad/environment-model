@@ -58,11 +58,12 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
              BASE_DIRECTORY "../"                                             # Base directory for report
                                                                               #  (defaults to PROJECT_SOURCE_DIR)
              EXCLUDE                                                          # Patterns to exclude (can be relative
-                 "src/interfaces/commonroad/pugi_xml/*"                       #  to BASE_DIRECTORY, with CMake 3.4+)
-                 "cmake/*"
-                 "ci/*"
-                 "docs/*"
-                 "external/*"
+                 "src/interfaces/commonroad/pugi_xml/pugixml.hpp"             #  to BASE_DIRECTORY, with CMake 3.4+)
+                 "src/interfaces/commonroad/pugi_xml/pugixml.cpp"
+                 "cmake-(.+/)?/"
+                 "ci/"
+                 "docs/"
+                 "external/"
          )
     endif()
 endif()

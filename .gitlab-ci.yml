@@ -32,8 +32,8 @@ build-test:
     - make env_model_test -j4
   artifacts:
     paths:
-      - ./../env_model_test
-      - ./../tests/testScenarios/*
+      - ./env_model_test
+      - ./tests/testScenarios/*
     expire_in: 20 minutes
 
 build-run-coverage:
