@@ -68,8 +68,8 @@ class Shape {
          *
          * @return Shape center.
         */
-        [[nodiscard]] virtual vertice getCenter() const {
-            struct vertice v = {0, 0};
+        [[nodiscard]] virtual vertex getCenter() const {
+            struct vertex v = {0, 0};
             return v;
         };
 

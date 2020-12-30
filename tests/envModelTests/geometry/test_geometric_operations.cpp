@@ -12,9 +12,9 @@ void GeometricOperationsTest::SetUp() {
 }
 
 TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVertice){
-    std::vector<vertice> q;
-    std::vector<vertice> p; // result
-    vertice temp{ 1, 1 };
+    std::vector<vertex> q;
+    std::vector<vertex> p; // result
+    vertex temp{1, 1 };
 
     q.push_back(temp);
     double length = 2;
@@ -29,9 +29,9 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVertice){
 }
 
 TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVerticeDetailed){
-    std::vector<vertice> q;
-    std::vector<vertice> p; // result
-    vertice temp{ 0, 0 };
+    std::vector<vertex> q;
+    std::vector<vertex> p; // result
+    vertex temp{0, 0 };
 
     q.push_back(temp);
     double length = 5.4864;
@@ -46,9 +46,9 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVerticeDetailed){
 }
 
 TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVertices){
-    std::vector<vertice> q;
-    std::vector<vertice> p; // result
-    vertice temp{ 1, 2 };
+    std::vector<vertex> q;
+    std::vector<vertex> p; // result
+    vertex temp{1, 2 };
     q.push_back(temp);
     temp.x = 2;
     temp.y = 2;
@@ -74,9 +74,9 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVertices){
 }
 
 TEST_F(GeometricOperationsTest, AddObjectDimensionsFourVertices){
-    std::vector<vertice> q;
-    std::vector<vertice> p; // result
-    vertice temp{ 1, 1};
+    std::vector<vertex> q;
+    std::vector<vertex> p; // result
+    vertex temp{1, 1};
     q.push_back(temp);
     temp.x = 1;
     temp.y = 1.5;
@@ -104,9 +104,9 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsFourVertices){
 }
 
 TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVerticesDetailed){
-    std::vector<vertice> q;
-    std::vector<vertice> p; // result
-    vertice temp{ 11.76174, 12.960000000000004 };
+    std::vector<vertex> q;
+    std::vector<vertex> p; // result
+    vertex temp{11.76174, 12.960000000000004 };
     q.push_back(temp);
     temp.x = 37.681740000000005;
     temp.y = 12.960000000000004;
@@ -124,10 +124,10 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVerticesDetailed){
 }
 
 TEST_F(GeometricOperationsTest, AddObjectDimensionsSixVertices){
-    std::vector<vertice> q;
-    std::vector<vertice> p; // result
+    std::vector<vertex> q;
+    std::vector<vertex> p; // result
 
-    vertice temp{ 0 , 0 };
+    vertex temp{0 , 0 };
     q.push_back(temp);
     temp.x = 1.992705435012611;
     temp.y = 0.04;
@@ -163,24 +163,24 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsSixVertices){
 }
 
 TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesRotate90Degree){
-    vertice translation { vertice{0, 0} };
+    vertex translation {vertex{0, 0} };
     double rotationAngle { M_PI/2 };
-    std::vector<vertice> initialVector { vertice{1, 1} };
-    std::vector<vertice> expectedVector { vertice{-1, 1} };
+    std::vector<vertex> initialVector {vertex{1, 1} };
+    std::vector<vertex> expectedVector {vertex{-1, 1} };
 
-    std::vector<vertice> result { rotateAndTranslateVertices(initialVector, translation, rotationAngle) };
+    std::vector<vertex> result {rotateAndTranslateVertices(initialVector, translation, rotationAngle) };
 
     EXPECT_NEAR(result.at(0).x, expectedVector.at(0).x, epsilon);
     EXPECT_NEAR(result.at(0).y, expectedVector.at(0).y, epsilon);
 }
 
 TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesTranslate){
-    vertice translation { vertice{5.52, -2.2 } };
+    vertex translation {vertex{5.52, -2.2 } };
     double rotationAngle { 0 };
-    std::vector<vertice> initialVector { vertice{1, 1 } };
-    std::vector<vertice> expectedVector { vertice{6.52, -1.2 } };
+    std::vector<vertex> initialVector {vertex{1, 1 } };
+    std::vector<vertex> expectedVector {vertex{6.52, -1.2 } };
 
-    std::vector<vertice> result { rotateAndTranslateVertices(initialVector, translation, rotationAngle) };
+    std::vector<vertex> result {rotateAndTranslateVertices(initialVector, translation, rotationAngle) };
 
     EXPECT_NEAR(result.at(0).x, expectedVector.at(0).x, epsilon);
     EXPECT_NEAR(result.at(0).y, expectedVector.at(0).y, epsilon);

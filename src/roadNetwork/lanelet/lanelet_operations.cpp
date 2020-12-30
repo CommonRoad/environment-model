@@ -61,9 +61,9 @@ std::shared_ptr<Lane>  combineLaneletAndSuccessorsWithSameTypeToLane(std::shared
     std::vector<std::shared_ptr<Lanelet>> laneletList{curLanelet};
     std::vector<ObstacleType> userOneWay{curLanelet->getUserOneWay()};
     std::vector<ObstacleType> userBidirectional{curLanelet->getUserBidirectional()};
-    std::vector<vertice> centerVertices = curLanelet->getCenterVertices();
-    std::vector<vertice> leftBorderVertices = curLanelet->getLeftBorderVertices();
-    std::vector<vertice> rightBorderVertices = curLanelet->getRightBorderVertices();
+    std::vector<vertex> centerVertices = curLanelet->getCenterVertices();
+    std::vector<vertex> leftBorderVertices = curLanelet->getLeftBorderVertices();
+    std::vector<vertex> rightBorderVertices = curLanelet->getRightBorderVertices();
     std::vector<std::shared_ptr<Lanelet>> predecessorLanelets = curLanelet->getPredecessors();
     std::vector<std::shared_ptr<Lanelet>> successorLanelets{nullptr};
     std::vector<LaneletType> typeList{type};

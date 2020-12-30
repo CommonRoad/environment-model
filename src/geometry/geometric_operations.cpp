@@ -10,15 +10,15 @@ using polygon_type = boost::geometry::model::polygon<point_type>;
 using boost::geometry::get;
 
 
-std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, double width) {
-    std::vector<vertice> p;
+std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, double width) {
+    std::vector<vertex> p;
 
     // check for special cases
-    if (q.size() == 1) // exactly one vertice
+    if (q.size() == 1) // exactly one vertex
     {
         p.resize(4);
         // add the dimension around the point q
-        vertice p1{}, p2{}, p3{}, p4{};
+        vertex p1{}, p2{}, p3{}, p4{};
         p1.x = q.front().x + (-0.5 * length);
         p1.y = q.front().y + (0.5 * width);
         p2.x = q.front().x + (0.5 * length);
@@ -34,7 +34,7 @@ std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, 
     } else if (q.size() == 4) // exactly 4 vertices
     {
         p.resize(4);
-        vertice p1{}, p2{}, p3{}, p4{};
+        vertex p1{}, p2{}, p3{}, p4{};
         p1.x = q[0].x + (-0.5 * length);
         p1.y = q[0].y + (0.5 * width);
         p2.x = q[1].x + (0.5 * length);
@@ -51,7 +51,7 @@ std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, 
     {
         p.resize(6);
         // add the dimensions to all six vertices q (Theorem 1)
-        vertice p1{}, p2{}, p3{}, p4{}, p5{}, p6{};
+        vertex p1{}, p2{}, p3{}, p4{}, p5{}, p6{};
         p1.x = q[0].x + (-0.5 * length);
         p1.y = q[0].y + (0.5 * width);
         p2.x = q[1].x + (-0.5 * length);
@@ -74,11 +74,11 @@ std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, 
     {
         // add the dimensions to all vertices q:
         // (left up, right up, left down, right down)
-        std::vector<vertice> p_LU = q;
-        std::vector<vertice> p_RU = q;
-        std::vector<vertice> p_LD = q;
-        std::vector<vertice> p_RD = q;
-        std::vector<vertice> p_all(q.size() * 4);
+        std::vector<vertex> p_LU = q;
+        std::vector<vertex> p_RU = q;
+        std::vector<vertex> p_LD = q;
+        std::vector<vertex> p_RD = q;
+        std::vector<vertex> p_all(q.size() * 4);
         for (size_t i = 0; i < q.size(); i++) {
             p_LU[i].x -= 0.5 * length;
             p_LU[i].y += 0.5 * width;
@@ -124,7 +124,7 @@ std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, 
         std::vector<point_type> const &points = hull.outer();
         p.resize(points.size());
         for (std::vector<point_type>::size_type i = 0; i < points.size(); ++i) {
-            p[i] = vertice{double(get<0>(points[i])), double(get<1>(points[i]))};
+            p[i] = vertex{double(get<0>(points[i])), double(get<1>(points[i]))};
         }
     } else {
         throw std::runtime_error("Input vector is not a 2D row of vertices.");
@@ -132,16 +132,16 @@ std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, 
     return p;
 }
 
-std::vector<vertice> rotateAndTranslateVertices(std::vector<vertice> &vertices,
-                                                vertice refPosition,
-                                                double refOrientation) {
+std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices,
+                                               vertex refPosition,
+                                               double refOrientation) {
     double cosine = cos(refOrientation);
     double sinus = sin(refOrientation);
-    std::vector<vertice> transVertices(vertices.size());
+    std::vector<vertex> transVertices(vertices.size());
     // rotation
     for (size_t i = 0; i < vertices.size(); i++) {
         transVertices[i] =
-            vertice{cosine * vertices[i].x - sinus * vertices[i].y, sinus * vertices[i].x + cosine * vertices[i].y};
+            vertex{cosine * vertices[i].x - sinus * vertices[i].y, sinus * vertices[i].x + cosine * vertices[i].y};
     }
 
     // translation

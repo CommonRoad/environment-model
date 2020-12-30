@@ -102,11 +102,11 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
                 }
                 // set stop line
                 if (!(strcmp(child.name(), "stopLine"))) {
-                    std::vector<vertice> points;
+                    std::vector<vertex> points;
                     StopLine sl = StopLine();
                     for (pugi::xml_node elem = child.first_child(); elem; elem = elem.next_sibling()) {
                         if (!(strcmp(elem.name(), "point"))) {
-                            vertice newVertice{};
+                            vertex newVertice{};
                             newVertice.x = elem.child("x").text().as_double();
                             newVertice.y = elem.child("y").text().as_double();
                             points.push_back(newVertice);

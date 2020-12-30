@@ -7,17 +7,17 @@
 
 #include "types_and_definitions.h"
 
-struct CycleElement{
+struct CycleElement {
     CycleElementType color;
     int duration;
 };
 
-struct vertice {
+struct vertex {
     double x;
     double y;
 };
 
-struct ValidStates{
+struct ValidStates {
     bool xPosition;
     bool yPosition;
     bool velocity;

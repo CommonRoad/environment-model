@@ -5,8 +5,8 @@
 #include <utility>
 
 Lanelet::Lanelet(int id,
-                 std::vector<vertice> leftBorder,
-                 std::vector<vertice> rightBorder,
+                 std::vector<vertex> leftBorder,
+                 std::vector<vertex> rightBorder,
                  std::vector<LaneletType> type,
                  std::vector<ObstacleType> oneWay,
                  std::vector<ObstacleType> userBidirectional) :
@@ -21,8 +21,8 @@ Lanelet::Lanelet(int id,
 }
 
 Lanelet::Lanelet(int id,
-                 std::vector<vertice> leftBorder,
-                 std::vector<vertice> rightBorder,
+                 std::vector<vertex> leftBorder,
+                 std::vector<vertex> rightBorder,
                  std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
                  std::vector<std::shared_ptr<Lanelet>> successorLanelets,
                  std::vector<LaneletType> type,
@@ -52,9 +52,9 @@ void Lanelet::setRightAdjacent(const std::shared_ptr<Lanelet>& right, DrivingDir
     adjacentRight.dir = dir;
 }
 
-void Lanelet::setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices) { leftBorder = leftBorderVertices; }
+void Lanelet::setLeftBorderVertices(const std::vector<vertex> &leftBorderVertices) { leftBorder = leftBorderVertices; }
 
-void Lanelet::setRightBorderVertices(const std::vector<vertice> &rightBorderVertices) {
+void Lanelet::setRightBorderVertices(const std::vector<vertex> &rightBorderVertices) {
     rightBorder = rightBorderVertices;
 }
 
@@ -66,11 +66,11 @@ void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) { user
 
 void Lanelet::setStopLine(const StopLine& sl) { stopLine = sl; }
 
-void Lanelet::addLeftVertex(const vertice left) { leftBorder.push_back(left); }
+void Lanelet::addLeftVertex(const vertex left) { leftBorder.push_back(left); }
 
-void Lanelet::addRightVertex(const vertice right) { rightBorder.push_back(right); }
+void Lanelet::addRightVertex(const vertex right) { rightBorder.push_back(right); }
 
-void Lanelet::addCenterVertex(const vertice center) { centerVertices.push_back(center); }
+void Lanelet::addCenterVertex(const vertex center) { centerVertices.push_back(center); }
 
 void Lanelet::addPredecessor(const std::shared_ptr<Lanelet>& pre) { predecessorLanelets.push_back(pre); }
 
@@ -86,11 +86,11 @@ std::vector<std::shared_ptr<Lanelet>> Lanelet::getPredecessors() const { return 
 
 std::vector<std::shared_ptr<Lanelet>> Lanelet::getSuccessors() const { return successorLanelets; }
 
-const std::vector<vertice> &Lanelet::getCenterVertices() const { return centerVertices; }
+const std::vector<vertex> &Lanelet::getCenterVertices() const { return centerVertices; }
 
-const std::vector<vertice> &Lanelet::getLeftBorderVertices() const { return leftBorder; }
+const std::vector<vertex> &Lanelet::getLeftBorderVertices() const { return leftBorder; }
 
-const std::vector<vertice> &Lanelet::getRightBorderVertices() const { return rightBorder; }
+const std::vector<vertex> &Lanelet::getRightBorderVertices() const { return rightBorder; }
 
 std::vector<std::shared_ptr<TrafficLight>> Lanelet::getTrafficLights() const { return trafficLights; }
 
@@ -132,8 +132,8 @@ bool Lanelet::checkIntersection(const polygon_type &polygon_shape, ContainmentTy
 }
 
 void Lanelet::constructOuterPolygon() {
-    const std::vector<vertice> &leftBorderTemp = this->getLeftBorderVertices();
-    const std::vector<vertice> &rightBorderTemp = this->getRightBorderVertices();
+    const std::vector<vertex> &leftBorderTemp = this->getLeftBorderVertices();
+    const std::vector<vertex> &rightBorderTemp = this->getRightBorderVertices();
 
     if (!leftBorderTemp.empty()) {
         int idx = 0;
@@ -162,7 +162,7 @@ void Lanelet::constructOuterPolygon() {
 void Lanelet::createCenterVertices() {
     int numVertices = leftBorder.size();
     for (int i = 0; i < numVertices; i++) {
-        vertice newVertex{};
+        vertex newVertex{};
         // calculate x and y values separately in order to minimize error
         newVertex.x = 0.5 * (leftBorder[i].x + rightBorder[i].x);
         newVertex.y = 0.5 * (leftBorder[i].y + rightBorder[i].y);
@@ -174,14 +174,14 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
     // find closest vertex to the given position
     std::vector<double> dif(centerVertices.size()-1);
     for(int i = 0; i < centerVertices.size() - 1; ++i){
-        vertice vert{centerVertices[i]};
+        vertex vert{centerVertices[i]};
         dif[i] = sqrt(pow(vert.x - positionX, 2) + pow(vert.y - positionY, 2));
     }
     int closestIndex{static_cast<int>(std::min_element(dif.begin(), dif.end()) - dif.begin())};
 
     // calculate orientation at vertex using its successor vertex
-    vertice vert1{centerVertices[closestIndex]};
-    vertice vert2{centerVertices[closestIndex + 1]};
+    vertex vert1{centerVertices[closestIndex]};
+    vertex vert2{centerVertices[closestIndex + 1]};
     return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
 }
 

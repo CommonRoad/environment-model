@@ -9,7 +9,7 @@ namespace bg = boost::geometry;
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
 
-void LaneletTestInitialization::compareVerticesVector(std::vector<vertice> verticesOne, std::vector<vertice> verticesTwo){
+void LaneletTestInitialization::compareVerticesVector(std::vector<vertex> verticesOne, std::vector<vertex> verticesTwo){
     for(int i=0; i<verticesOne.size(); ++i){
         EXPECT_EQ(verticesOne.at(i).x, verticesTwo.at(i).x);
         EXPECT_EQ(verticesOne.at(i).y, verticesTwo.at(i).y);
@@ -22,12 +22,12 @@ void LaneletTestInitialization::setUpLanelets(){
     laneletTypeLaneletOne = std::vector<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate};
     userOneWayLaneletOne = std::vector<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     userBidirectionalLaneletOne = std::vector<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
-    centerVerticesLaneletOne = std::vector<vertice>{vertice{0, 0.5}, vertice{1, 0.5}, vertice{2, 0.5},
-                                                    vertice{3, 0.5}, vertice{4, 0.5}, vertice{5, 0.5}};
-    leftBorderLaneletOne = std::vector<vertice>{vertice{0, 1}, vertice{1, 1}, vertice{2, 1},
-                                                vertice{3, 1.0}, vertice{4, 1.0}, vertice{5, 1.0}};
-    rightBorderLaneletOne = std::vector<vertice>{vertice{0, 0}, vertice{1, 0}, vertice{2, 0},
-                                                 vertice{3, 0}, vertice{4, 0}, vertice{5, 0}};
+    centerVerticesLaneletOne = std::vector<vertex>{vertex{0, 0.5}, vertex{1, 0.5}, vertex{2, 0.5},
+                                                   vertex{3, 0.5}, vertex{4, 0.5}, vertex{5, 0.5}};
+    leftBorderLaneletOne = std::vector<vertex>{vertex{0, 1}, vertex{1, 1}, vertex{2, 1},
+                                               vertex{3, 1.0}, vertex{4, 1.0}, vertex{5, 1.0}};
+    rightBorderLaneletOne = std::vector<vertex>{vertex{0, 0}, vertex{1, 0}, vertex{2, 0},
+                                                vertex{3, 0}, vertex{4, 0}, vertex{5, 0}};
     laneletOne = std::make_shared<Lanelet>(Lanelet(idLaneletOne, leftBorderLaneletOne, rightBorderLaneletOne,
                                                    laneletTypeLaneletOne, userOneWayLaneletOne,
                                                    userBidirectionalLaneletOne));
@@ -38,12 +38,12 @@ void LaneletTestInitialization::setUpLanelets(){
     laneletTypeLaneletTwo = std::vector<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate};
     userOneWayLaneletTwo = std::vector<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     userBidirectionalLaneletTwo = std::vector<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
-    centerVerticesLaneletTwo = std::vector<vertice>{vertice{6, 0.5}, vertice{7, 0.5}, vertice{8, 0.5},
-                                                    vertice{9, 0.5}, vertice{10, 0.5}, vertice{11, 0.5}};
-    leftBorderLaneletTwo = std::vector<vertice>{vertice{6, 1.0}, vertice{7, 1.0}, vertice{8, 1.0},
-                                                vertice{9, 1.0}, vertice{10, 1.0}, vertice{11, 1.0}};
-    rightBorderLaneletTwo = std::vector<vertice>{vertice{6, 0}, vertice{7, 0}, vertice{8, 0},
-                                                 vertice{9, 0.0}, vertice{10, 0.0}, vertice{11, 0.0}};
+    centerVerticesLaneletTwo = std::vector<vertex>{vertex{6, 0.5}, vertex{7, 0.5}, vertex{8, 0.5},
+                                                   vertex{9, 0.5}, vertex{10, 0.5}, vertex{11, 0.5}};
+    leftBorderLaneletTwo = std::vector<vertex>{vertex{6, 1.0}, vertex{7, 1.0}, vertex{8, 1.0},
+                                               vertex{9, 1.0}, vertex{10, 1.0}, vertex{11, 1.0}};
+    rightBorderLaneletTwo = std::vector<vertex>{vertex{6, 0}, vertex{7, 0}, vertex{8, 0},
+                                                vertex{9, 0.0}, vertex{10, 0.0}, vertex{11, 0.0}};
     laneletTwo->setId(idLaneletTwo);
     laneletTwo->setLaneletType(laneletTypeLaneletTwo);
     laneletTwo->setRightBorderVertices(rightBorderLaneletTwo);
@@ -52,23 +52,23 @@ void LaneletTestInitialization::setUpLanelets(){
     laneletTwo->setUserOneWay(userOneWayLaneletTwo);
     laneletTwo->createCenterVertices();
     laneletTwo->constructOuterPolygon();
-    laneletTwo->addLeftVertex(vertice{12, 2.0});
-    laneletTwo->addRightVertex(vertice{12, 1.0});
-    laneletTwo->addCenterVertex(vertice{12, 1.5});
+    laneletTwo->addLeftVertex(vertex{12, 2.0});
+    laneletTwo->addRightVertex(vertex{12, 1.0});
+    laneletTwo->addCenterVertex(vertex{12, 1.5});
     laneletTwo->constructOuterPolygon();
-    leftBorderLaneletTwo.push_back(vertice{12, 2.0});
-    rightBorderLaneletTwo.push_back(vertice{12, 1.0});
-    centerVerticesLaneletTwo.push_back(vertice{12, 1.5});
+    leftBorderLaneletTwo.push_back(vertex{12, 2.0});
+    rightBorderLaneletTwo.push_back(vertex{12, 1.0});
+    centerVerticesLaneletTwo.push_back(vertex{12, 1.5});
 
     //rear lanelet
     idLaneletThree = 3;
     laneletTypeLaneletThree = std::vector<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate};
-    centerVerticesLaneletThree = std::vector<vertice>{vertice{-5, 0.5}, vertice{-4, 0.5}, vertice{-3, 0.5},
-                                                      vertice{-2, 0.5}, vertice{-1, 0.5}, vertice{0, 0.5}};
-    leftBorderLaneletThree = std::vector<vertice>{vertice{-5, 1}, vertice{-4, 1}, vertice{-3, 1},
-                                                  vertice{-2, 1.0}, vertice{-1, 1.0}, vertice{0, 1.0}};
-    rightBorderLaneletThree = std::vector<vertice>{vertice{-5, 0}, vertice{-4, 0}, vertice{-3, 0},
-                                                   vertice{-2, 0.0}, vertice{-1, 0.0}, vertice{0, 0.0}};
+    centerVerticesLaneletThree = std::vector<vertex>{vertex{-5, 0.5}, vertex{-4, 0.5}, vertex{-3, 0.5},
+                                                     vertex{-2, 0.5}, vertex{-1, 0.5}, vertex{0, 0.5}};
+    leftBorderLaneletThree = std::vector<vertex>{vertex{-5, 1}, vertex{-4, 1}, vertex{-3, 1},
+                                                 vertex{-2, 1.0}, vertex{-1, 1.0}, vertex{0, 1.0}};
+    rightBorderLaneletThree = std::vector<vertex>{vertex{-5, 0}, vertex{-4, 0}, vertex{-3, 0},
+                                                  vertex{-2, 0.0}, vertex{-1, 0.0}, vertex{0, 0.0}};
     Lanelet laneletThreeTmp = Lanelet();
     laneletThreeTmp.setId(idLaneletThree);
     laneletThreeTmp.setLaneletType(laneletTypeLaneletThree);
@@ -81,36 +81,36 @@ void LaneletTestInitialization::setUpLanelets(){
     //right lanelet
     int idFour{ 4 };
     std::vector<LaneletType> laneletTypeFour{ std::vector<LaneletType>{LaneletType::urban} };
-    std::vector<vertice> leftBorderFour{vertice{6, 0.0}, vertice{7, 0.0}, vertice{8, 0.0},
-                                        vertice{9, 0.0}, vertice{10, 0.0}, vertice{11, 0.0}};
-    std::vector<vertice> rightBorderFour{vertice{6, -1.0}, vertice{7, -1.0}, vertice{8, -1.0},
-                                         vertice{9, -1.0}, vertice{10, -1.0}, vertice{11, -1.0}};
+    std::vector<vertex> leftBorderFour{vertex{6, 0.0}, vertex{7, 0.0}, vertex{8, 0.0},
+                                       vertex{9, 0.0}, vertex{10, 0.0}, vertex{11, 0.0}};
+    std::vector<vertex> rightBorderFour{vertex{6, -1.0}, vertex{7, -1.0}, vertex{8, -1.0},
+                                        vertex{9, -1.0}, vertex{10, -1.0}, vertex{11, -1.0}};
     laneletFour = std::make_shared<Lanelet>(Lanelet(idFour, leftBorderFour, rightBorderFour, laneletTypeFour));
 
     //left lanelet
     int idFive{ 5 };
     std::vector<LaneletType> laneletTypeFive{ std::vector<LaneletType>{LaneletType::highway, LaneletType::crosswalk} };
-    std::vector<vertice> leftBorderFive{vertice{6, 2.0}, vertice{7, 2.0}, vertice{8, 2.0},
-                                        vertice{9, 2.0}, vertice{10, 2.0}, vertice{11, 2.0}};
-    std::vector<vertice> rightBorderFive{vertice{6, 1.0}, vertice{7, 1.0}, vertice{8, 1.0},
-                                         vertice{9, 1.0}, vertice{10, 1.0}, vertice{11, 1.0}};
+    std::vector<vertex> leftBorderFive{vertex{6, 2.0}, vertex{7, 2.0}, vertex{8, 2.0},
+                                       vertex{9, 2.0}, vertex{10, 2.0}, vertex{11, 2.0}};
+    std::vector<vertex> rightBorderFive{vertex{6, 1.0}, vertex{7, 1.0}, vertex{8, 1.0},
+                                        vertex{9, 1.0}, vertex{10, 1.0}, vertex{11, 1.0}};
     laneletFive = std::make_shared<Lanelet>(Lanelet(idFive, leftBorderFive, rightBorderFive, laneletTypeFive));
 
     //second front lanelet
     int idSix{ 6 };
     std::vector<LaneletType> laneletTypeSix{ std::vector<LaneletType>{LaneletType::busLane,
                                                                       LaneletType::urban} };
-    std::vector<vertice> leftBorderSix = std::vector<vertice>{vertice{6, 1.0}, vertice{7, 1.0},
-                                                              vertice{8, 1.0}};
-    std::vector<vertice> rightBorderSix = std::vector<vertice>{vertice{6, 0}, vertice{7, 0},
-                                                               vertice{8, 0}};
+    std::vector<vertex> leftBorderSix = std::vector<vertex>{vertex{6, 1.0}, vertex{7, 1.0},
+                                                            vertex{8, 1.0}};
+    std::vector<vertex> rightBorderSix = std::vector<vertex>{vertex{6, 0}, vertex{7, 0},
+                                                             vertex{8, 0}};
     laneletSix = std::make_shared<Lanelet>(Lanelet(idSix, leftBorderSix, rightBorderSix, laneletTypeSix));
 
     //second rear lanelet
     int idSeven{ 7 };
     std::vector<LaneletType> laneletTypeSeven{ std::vector<LaneletType>{LaneletType::urban, LaneletType::country} };
-    std::vector<vertice> leftBorderSeven{vertice{-2, 1.5}, vertice{-1, 2}, vertice{0, 2}};
-    std::vector<vertice> rightBorderSeven{vertice{-2, 0.0}, vertice{-1, 0.0}, vertice{0, 0.0}};
+    std::vector<vertex> leftBorderSeven{vertex{-2, 1.5}, vertex{-1, 2}, vertex{0, 2}};
+    std::vector<vertex> rightBorderSeven{vertex{-2, 0.0}, vertex{-1, 0.0}, vertex{0, 0.0}};
     laneletSeven = std::make_shared<Lanelet>(Lanelet(idSeven, leftBorderSeven, rightBorderSeven, laneletTypeSeven));
 
     //traffic sign, traffic light, and stop line for middle lanelet
@@ -130,7 +130,7 @@ void LaneletTestInitialization::setUpLanelets(){
 
     StopLine sl = StopLine();
     sl.setLineMarking(LineMarking::broad_solid);
-    sl.setPoints(std::vector<vertice>{vertice{1, 2}, vertice{3, 4}});
+    sl.setPoints(std::vector<vertex>{vertex{1, 2}, vertex{3, 4}});
     sl.setTrafficSign(ts);
     sl.setTrafficLight(tl);
 

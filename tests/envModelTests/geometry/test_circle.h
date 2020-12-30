@@ -13,16 +13,16 @@ class CircleTestInitialization {
 protected:
     Circle circleOne;
     double circleOneRadius{ 0.0 };
-    vertice circleOneCenter{ 0.0, 0.0 };
+    vertex circleOneCenter{0.0, 0.0 };
     Circle circleTwo;
     double circleTwoRadius{ 1.0 };
-    vertice circleTwoCenter{ 0.0, 0.0 };
+    vertex circleTwoCenter{0.0, 0.0 };
     Circle circleThree;
     double circleThreeRadius{ 1.0 };
-    vertice circleThreeCenter{ 1.0, 1.0 };
+    vertex circleThreeCenter{1.0, 1.0 };
     Circle circleFour;
     double circleFourRadius{ -1.0 };
-    vertice circleFourCenter{ -1.0, -1.0 };
+    vertex circleFourCenter{-1.0, -1.0 };
 
     void setUpCircle();
 };

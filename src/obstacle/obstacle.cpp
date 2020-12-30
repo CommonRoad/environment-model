@@ -126,7 +126,7 @@ std::map<int, State> Obstacle::getTrajectoryPrediction() const { return trajecto
 int Obstacle::getTrajectoryLength() { return trajectoryPrediction.size(); }
 
 polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
-    std::vector<vertice> boundingRectangleVertices;
+    std::vector<vertex> boundingRectangleVertices;
     polygon_type polygonShape;
     State state { this->getStateByTimeStep(timeStep) };
 
@@ -134,17 +134,17 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
         // p are vertices of the bounding rectangle
         // vertices p represent the occupancy with vehicle dimensions (Theorem 1 in SPOT paper)
         boundingRectangleVertices = addObjectDimensions(
-            std::vector<vertice>{vertice{0.0, 0.0}}, this->getGeoShape().getLength(),
-            this->getGeoShape().getWidth());
+                std::vector<vertex>{vertex{0.0, 0.0}}, this->getGeoShape().getLength(),
+                this->getGeoShape().getWidth());
 
         /*
          * rotate and translate the vertices of the occupancy set in local
          * coordinates to the object's reference position and rotation
          */
-        std::vector<vertice> adjustedBoundingRectangleVertices = rotateAndTranslateVertices(
-            boundingRectangleVertices,
-            vertice{state.getXPosition(), state.getYPosition()},
-            state.getOrientation());
+        std::vector<vertex> adjustedBoundingRectangleVertices = rotateAndTranslateVertices(
+                boundingRectangleVertices,
+                vertex{state.getXPosition(), state.getYPosition()},
+                state.getOrientation());
 
         polygonShape.outer().resize(adjustedBoundingRectangleVertices.size() + 1);
 

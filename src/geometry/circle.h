@@ -18,7 +18,7 @@ public:
     */
     Circle() {
         radius = 0;
-        center = vertice{.x = 0, .y = 0};
+        center = vertex{.x = 0, .y = 0};
     }
 
     /**
@@ -37,15 +37,24 @@ public:
      * @param rad Radius of circle [m].
      * @param vert Center vertex.
     */
-    Circle(double rad, vertice &vert) {
+    Circle(double rad, vertex &vert) {
         radius = rad;
         center = vert;
     }
 
-    /*
-     * setter functions
-     */
+    /**
+     * Setter for circle radius.
+     *
+     * @param rad Radius of circle [m].
+    */
     void setRadius( double rad) override;
+
+    /**
+     * Setter for circle center.
+     *
+     * @param x x-coordinate of center [m].
+     * @param y y-coordinate of center [m].
+    */
     void setCenter( double x, double y) override;
 
     /**
@@ -67,7 +76,7 @@ public:
      *
      * @return Center vertex.
     */
-    [[nodiscard]] vertice getCenter() const override;
+    [[nodiscard]] vertex getCenter() const override;
 
     /**
      * Function for scaling a circle.
@@ -79,7 +88,7 @@ public:
 
 private:
     double radius;          //**< Radius of shape. */
-    vertice center{};       //**< Center of shape. */
+    vertex center{};       //**< Center of shape. */
 };
 
 #endif //ENV_MODEL_CIRCLE_H

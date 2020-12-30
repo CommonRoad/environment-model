@@ -40,8 +40,8 @@ class Lanelet {
          * @param userBidirectional List of road users bidirectional.
         */
         Lanelet(int id,
-                std::vector<vertice> leftBorder,
-                std::vector<vertice> rightBorder,
+                std::vector<vertex> leftBorder,
+                std::vector<vertex> rightBorder,
                 std::vector<LaneletType> type,
                 std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
                 std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>());
@@ -59,8 +59,8 @@ class Lanelet {
          * @param userBidirectional List of road users bidirectional.
         */
         Lanelet(int id,
-                std::vector<vertice> leftBorder,
-                std::vector<vertice> rightBorder,
+                std::vector<vertex> leftBorder,
+                std::vector<vertex> rightBorder,
                 std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
                 std::vector<std::shared_ptr<Lanelet>> successorLanelets,
                 std::vector<LaneletType> laneletType,
@@ -104,14 +104,14 @@ class Lanelet {
          *
          * @param leftBorderVertices Vector of vertices of left lanelet border.
         */
-        void setLeftBorderVertices(const std::vector<vertice> &leftBorderVertices);
+        void setLeftBorderVertices(const std::vector<vertex> &leftBorderVertices);
 
         /**
          * Setter for right lanelet border vertices.
          *
          * @param rightBorderVertices Vector of vertices of right lanelet border.
         */
-        void setRightBorderVertices(const std::vector<vertice> &rightBorderVertices);
+        void setRightBorderVertices(const std::vector<vertex> &rightBorderVertices);
 
         /**
          * Setter for lanelet type.
@@ -146,21 +146,21 @@ class Lanelet {
          *
          * @param center Vertex which should be appended.
         */
-        void addCenterVertex(vertice center);
+        void addCenterVertex(vertex center);
 
         /**
          * Appends a vertex to the left border.
          *
          * @param right Vertex which should be appended.
         */
-        void addLeftVertex(vertice left);
+        void addLeftVertex(vertex left);
 
         /**
          * Appends a vertex to the right border.
          *
          * @param right Vertex which should be appended.
         */
-        void addRightVertex(vertice right);
+        void addRightVertex(vertex right);
 
         /**
          * Add a predecessor lanelet.
@@ -216,21 +216,21 @@ class Lanelet {
          *
          * @return Vector containing center vertices.
         */
-        [[nodiscard]] const std::vector<vertice> &getCenterVertices() const;
+        [[nodiscard]] const std::vector<vertex> &getCenterVertices() const;
 
         /**
          * Getter for left border vertices of lanelet.
          *
          * @return Vector containing vertices of left border.
         */
-        [[nodiscard]] const std::vector<vertice> &getLeftBorderVertices() const;
+        [[nodiscard]] const std::vector<vertex> &getLeftBorderVertices() const;
 
         /**
          * Getter for right border vertices of lanelet.
          *
          * @return Vector containing vertices of right border.
         */
-        [[nodiscard]] const std::vector<vertice> &getRightBorderVertices() const;
+        [[nodiscard]] const std::vector<vertex> &getRightBorderVertices() const;
 
         /**
          * Getter for traffic lights referenced to lanelet.
@@ -343,9 +343,9 @@ class Lanelet {
 
 private:
         int id{};                                                   //**< unique ID of lanelet */
-        std::vector<vertice> centerVertices;                        //**< vertices of center line of lanelet */
-        std::vector<vertice> leftBorder;                            //**< vertices of left border */
-        std::vector<vertice> rightBorder;                           //**< vertices of right border */
+        std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
+        std::vector<vertex> leftBorder;                            //**< vertices of left border */
+        std::vector<vertex> rightBorder;                           //**< vertices of right border */
         std::vector<std::shared_ptr<Lanelet>> predecessorLanelets;  //**< list of pointers to predecessor lanelets */
         std::vector<std::shared_ptr<Lanelet>> successorLanelets;    //**< list of pointers to successor lanelets */
         adjacent adjacentLeft;                                      //**< pointer to left adjacent lanelet and info about its driving direction */

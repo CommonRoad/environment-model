@@ -5,9 +5,9 @@
 #include "stop_line.h"
 #include <utility>
 
-const std::vector<vertice> &StopLine::getPoints() const {return points;}
+const std::vector<vertex> &StopLine::getPoints() const {return points;}
 
-void StopLine::setPoints(const std::vector<vertice> &po) {points = po;}
+void StopLine::setPoints(const std::vector<vertex> &po) { points = po;}
 
 std::shared_ptr<TrafficSign> StopLine::getTrafficSign() const {return trafficSign;}
 

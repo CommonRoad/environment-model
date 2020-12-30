@@ -16,7 +16,7 @@
  * @param width Width to add.
  * @return Vertices of polygon.
  */
-std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, double width);
+std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, double width);
 
 /**
  * Rotate and translate the vertices from the special relative coordinates to the reference position and orientation
@@ -27,7 +27,7 @@ std::vector<vertice> addObjectDimensions(std::vector<vertice> q, double length, 
  * @param refOrientation Rotation factor.
  * @return Vertices of shape.
  */
-std::vector<vertice> rotateAndTranslateVertices(std::vector<vertice> &vertices, vertice refPosition,
-                                                double refOrientation);
+std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
+                                               double refOrientation);
 
 #endif //ENV_MODEL_GEOMETRIC_OPERATIONS_H

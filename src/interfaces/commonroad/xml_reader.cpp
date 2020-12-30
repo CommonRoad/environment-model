@@ -166,7 +166,7 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
                                        const char* side) {
     for (pugi::xml_node points = child.first_child(); points; points = points.next_sibling()) {
         if (!(strcmp(points.name(), "point"))) {
-            vertice newVertice{};
+            vertex newVertice{};
             newVertice.x = points.child("x").text().as_double();
             newVertice.y = points.child("y").text().as_double();
             if (!(strcmp(side, "rightBound")))

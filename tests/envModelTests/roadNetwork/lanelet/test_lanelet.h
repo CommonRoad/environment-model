@@ -16,25 +16,25 @@ protected:
     std::vector<LaneletType> laneletTypeLaneletOne;
     std::vector<ObstacleType> userOneWayLaneletOne;
     std::vector<ObstacleType> userBidirectionalLaneletOne;
-    std::vector<vertice> centerVerticesLaneletOne;
-    std::vector<vertice> leftBorderLaneletOne;
-    std::vector<vertice> rightBorderLaneletOne;
+    std::vector<vertex> centerVerticesLaneletOne;
+    std::vector<vertex> leftBorderLaneletOne;
+    std::vector<vertex> rightBorderLaneletOne;
     std::shared_ptr<Lanelet> laneletOne;
 
     int idLaneletTwo;
     std::vector<LaneletType> laneletTypeLaneletTwo;
-    std::vector<vertice> centerVerticesLaneletTwo;
-    std::vector<vertice> leftBorderLaneletTwo;
-    std::vector<vertice> rightBorderLaneletTwo;
+    std::vector<vertex> centerVerticesLaneletTwo;
+    std::vector<vertex> leftBorderLaneletTwo;
+    std::vector<vertex> rightBorderLaneletTwo;
     std::shared_ptr<Lanelet> laneletTwo;
     std::vector<ObstacleType> userOneWayLaneletTwo;
     std::vector<ObstacleType> userBidirectionalLaneletTwo;
 
     int idLaneletThree;
     std::vector<LaneletType> laneletTypeLaneletThree;
-    std::vector<vertice> centerVerticesLaneletThree;
-    std::vector<vertice> leftBorderLaneletThree;
-    std::vector<vertice> rightBorderLaneletThree;
+    std::vector<vertex> centerVerticesLaneletThree;
+    std::vector<vertex> leftBorderLaneletThree;
+    std::vector<vertex> rightBorderLaneletThree;
     std::shared_ptr<Lanelet> laneletThree;
 
     std::shared_ptr<Lanelet> laneletFour;
@@ -46,7 +46,7 @@ protected:
     polygon_type polygonTwo;
     polygon_type polygonThree;
 
-    static void compareVerticesVector(std::vector<vertice> verticesOne, std::vector<vertice> verticesTwo);
+    static void compareVerticesVector(std::vector<vertex> verticesOne, std::vector<vertex> verticesTwo);
     template <typename T>
     void evaluateTypes(std::vector<T> typeVectorOne, std::vector<T> typeVectorTwo);
 
