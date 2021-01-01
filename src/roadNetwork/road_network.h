@@ -6,6 +6,7 @@
 #define ENV_MODEL_ROAD_NETWORK_H
 
 #include "lanelet/lane.h"
+#include "intersection/intersection.h"
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/box.hpp>
@@ -32,7 +33,8 @@ public:
      *
      * @param list of pointers to lanelets
      */
-    explicit RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
+    explicit RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network,
+                         const std::vector<std::shared_ptr<Intersection>> &inters = std::vector<std::shared_ptr<Intersection>>{});
 
     /**
      * Getter for lanelet network.
@@ -46,7 +48,14 @@ public:
      *
      * @return list of pointers to lanes
      */
-    std::vector<std::shared_ptr<Lane>> getLanes();
+    [[nodiscard]] std::vector<std::shared_ptr<Lane>> getLanes();
+
+    /**
+     * Getter for intersections.
+     *
+     * @return list of pointers to intersections.
+     */
+    [[nodiscard]] const std::vector<std::shared_ptr<Intersection>> &getIntersections() const;
 
     /**
      * Given a polygon shape, finds the list of lanelets within the road network which intersect with the shape.
@@ -84,9 +93,10 @@ public:
                                                  const polygon_type &polygonShape);
 
 private:
-    std::vector<std::shared_ptr<Lanelet>> laneletNetwork;   //**< set of lanelets contained in road network */
-    std::vector<std::shared_ptr<Lane>> lanes;               //**< set of interstate-based lanes contained in road network */
-    bgi::rtree<value, bgi::quadratic<16>> rtree;           //**< rtree defined by lanelets of road network for faster occupancy calculation*/
+    std::vector<std::shared_ptr<Lanelet>> laneletNetwork;       //**< set of lanelets contained in road network */
+    std::vector<std::shared_ptr<Lane>> lanes;                   //**< set of interstate-based lanes contained in road network */
+    std::vector<std::shared_ptr<Intersection>> intersections;   //**< set of intersections contained in road network */
+    bgi::rtree<value, bgi::quadratic<16>> rtree;                //**< rtree defined by lanelets of road network for faster occupancy calculation*/
 
     /**
      * Given a set of lanelets, creates the corresponding interstate-based lanes

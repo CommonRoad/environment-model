@@ -3,10 +3,10 @@ set(ENV_MODEL_SRC_FILES
         roadNetwork/lanelet/lanelet.cpp
         roadNetwork/lanelet/lane.cpp
         roadNetwork/lanelet/lanelet_operations.cpp
-        roadNetwork/regulatory_elements/stop_line.cpp
-        roadNetwork/regulatory_elements/traffic_light.cpp
-        roadNetwork/regulatory_elements/traffic_sign.cpp
-        roadNetwork/regulatory_elements/traffic_sign_element.cpp
+        roadNetwork/regulatoryElements/stop_line.cpp
+        roadNetwork/regulatoryElements/traffic_light.cpp
+        roadNetwork/regulatoryElements/traffic_sign.cpp
+        roadNetwork/regulatoryElements/traffic_sign_element.cpp
         roadNetwork/intersection/incoming.cpp
         roadNetwork/intersection/intersection.cpp
         obstacle/obstacle.cpp

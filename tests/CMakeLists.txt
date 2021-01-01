@@ -11,7 +11,10 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/geometry/test_circle.cpp
         envModelTests/geometry/test_geometric_operations.cpp
         envModelTests/interfaces/test_command_line_input.cpp
-        envModelTests/interfaces/test_reading_commonroad.cpp)
+        envModelTests/interfaces/test_reading_commonroad.cpp
+        #envModelTests/roadNetwork/intersection/test_incoming.cpp
+        #envModelTests/roadNetwork/intersection/test_intersection.cpp
+        )
 
 # Add google-test
 add_subdirectory("${PROJECT_SOURCE_DIR}/external/googletest" "external/googletest")

@@ -9,9 +9,9 @@
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 
-#include "../regulatory_elements/traffic_light.h"
-#include "../regulatory_elements/traffic_sign.h"
-#include "../regulatory_elements/stop_line.h"
+#include "../regulatoryElements/traffic_light.h"
+#include "../regulatoryElements/traffic_sign.h"
+#include "../regulatoryElements/stop_line.h"
 #include "../../auxiliaryDefs/structs.h"
 
 namespace bg = boost::geometry;

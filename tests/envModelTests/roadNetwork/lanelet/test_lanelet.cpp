@@ -3,7 +3,6 @@
 //
 
 #include "test_lanelet.h"
-#include "roadNetwork/regulatory_elements/traffic_light.h"
 
 namespace bg = boost::geometry;
 typedef boost::geometry::model::d2::point_xy<double> point_type;
