@@ -344,9 +344,9 @@ public:
 
 private:
     int id{};                                                   //**< unique ID of lanelet */
-    std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
-    std::vector<vertex> leftBorder;                            //**< vertices of left border */
-    std::vector<vertex> rightBorder;                           //**< vertices of right border */
+    std::vector<vertex> centerVertices;                         //**< vertices of center line of lanelet */
+    std::vector<vertex> leftBorder;                             //**< vertices of left border */
+    std::vector<vertex> rightBorder;                            //**< vertices of right border */
     std::vector<std::shared_ptr<Lanelet>> predecessorLanelets;  //**< list of pointers to predecessor lanelets */
     std::vector<std::shared_ptr<Lanelet>> successorLanelets;    //**< list of pointers to successor lanelets */
     adjacent adjacentLeft;                                      //**< pointer to left adjacent lanelet and info about its driving direction */

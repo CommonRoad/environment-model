@@ -7,21 +7,48 @@
 
 #include "../../auxiliaryDefs/structs.h"
 
+/**
+ * Class representing a CommonRoad traffic sign element.
+ */
 class TrafficSignElement {
 public:
+    /**
+     * Constructor of traffic sign element.
+     *
+     * @param id ID of traffic sign element. Note this ID corresponds to the official national traffic sign ID of a country.
+     */
     explicit TrafficSignElement(std::string id);
 
-    TrafficSignElement(const TrafficSignElement &) = default;            // copy constructor
+    /**
+     * Copy constructor of traffic sign element.
+     *
+     */
+    TrafficSignElement(const TrafficSignElement &) = default;
 
+    /**
+     * Getter for ID of traffic sign element.
+     *
+     * @return ID of traffic sign element.
+     */
     [[nodiscard]] std::string getId() const;
 
+    /**
+     * Getter for additional value of traffic sign element.
+     *
+     * @return Additional value.
+     */
     [[nodiscard]] std::vector<std::string> getAdditionalValue() const;
 
-    void addAdditionalValue(const std::string &additionalValue); //additional values, e.g. allowed time, weight
+    /**
+     * Adds an additional value to a traffic sign element.
+     *
+     * @return Additional value.
+     */
+    void addAdditionalValue(const std::string &additionalValue);
 
 private:
-    std::string id;                                  //official national traffic sign id of a country
-    std::vector<std::string> additional_value;       //list of additional values classifying traffic sign, e.g., velocity, weight, time
+    std::string id;                                  //**< official national traffic sign ID of a country */
+    std::vector<std::string> additional_value;       //**< list of additional values classifying traffic sign, e.g., velocity, weight, time */
 
 };
 
