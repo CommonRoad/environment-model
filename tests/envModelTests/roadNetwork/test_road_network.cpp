@@ -8,7 +8,7 @@ void RoadNetworkTestInitialization::setUpRoadNetwork(){
     std::vector<std::shared_ptr<Lanelet>> lanelets{ laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive};
 
     roadNetwork = std::make_shared<RoadNetwork>(RoadNetwork(lanelets));
-
+    // TODO add intersection
 }
 
 void RoadNetworkTest::SetUp(){

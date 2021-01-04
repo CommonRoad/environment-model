@@ -4,25 +4,15 @@
 
 #include "intersection.h"
 
-int Intersection::getId() const {
-    return id;
-}
+int Intersection::getId() const { return id; }
 
-void Intersection::setId(int index) {
-    Intersection::id = index;
-}
+void Intersection::setId(int num) { Intersection::id = num; }
 
-const std::vector<std::shared_ptr<Incoming>> &Intersection::getIncoming() const {
-    return incoming;
-}
+const std::vector<std::shared_ptr<Incoming>> &Intersection::getIncoming() const { return incoming; }
 
-void Intersection::addIncoming(const std::shared_ptr<Incoming> &inc) {
-    incoming.push_back(inc);
-}
+void Intersection::addIncoming(const std::shared_ptr<Incoming> &inc) { incoming.push_back(inc); }
 
-const std::vector<std::vector<std::shared_ptr<Lanelet>>> &Intersection::getCrossing() const {
-    return crossing;
-}
+const std::vector<std::vector<std::shared_ptr<Lanelet>>> &Intersection::getCrossing() const { return crossing; }
 
 void Intersection::setCrossing(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &cr) {
     Intersection::crossing = cr;

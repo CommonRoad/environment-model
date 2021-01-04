@@ -7,24 +7,57 @@
 
 #include "incoming.h"
 
+/**
+ * Class representing an intersection.
+ */
 class Intersection {
 public:
+    /**
+     * Getter for intersection ID.
+     *
+     * @return ID of intersection.
+     */
     [[nodiscard]] int getId() const;
 
+    /**
+     * Getter for incomings belonging to intersection.
+     *
+     * @return List of pointers to incomings.
+     */
     [[nodiscard]] const std::vector<std::shared_ptr<Incoming>> &getIncoming() const;
 
+    /**
+     * Getter for crossing lanelets belonging to intersection.
+     *
+     * @return List of pointers to lanelets.
+     */
     [[nodiscard]] const std::vector<std::vector<std::shared_ptr<Lanelet>>> &getCrossing() const;
 
-    void setId(int id);
+    /**
+     * Getter for intersection ID.
+     *
+     * @param num ID of intersection.
+     */
+    void setId(int num);
 
+    /**
+     * Adds and incoming to the intersection.
+     *
+     * @param incoming Pointer to incoming.
+     */
     void addIncoming(const std::shared_ptr<Incoming> &incoming);
 
+    /**
+     * Setter for crossing belonging to intersection.
+     *
+     * @param crossing List of pointers to lanelets.
+     */
     void setCrossing(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &crossing);
 
 private:
-    int id;
-    std::vector<std::shared_ptr<Incoming>> incoming;
-    std::vector<std::vector<std::shared_ptr<Lanelet>>> crossing;
+    int id;                                                         //**< ID of intersection. */
+    std::vector<std::shared_ptr<Incoming>> incoming;                //**< List of pointers to incomings belonging to intersection. */
+    std::vector<std::vector<std::shared_ptr<Lanelet>>> crossing;    //**< List of pointers to crossing lanelets belonging to intersection. */
 };
 
 

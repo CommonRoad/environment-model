@@ -27,7 +27,7 @@ using value = std::pair<box, unsigned>;
 class RoadNetwork {
 public:
     /**
-    * Constructor for RoadNetwork. Takes a lanelet network and automatically generates lanes out of them.
+     * Constructor for RoadNetwork. Takes a lanelet network and automatically generates lanes out of them.
      * Additionally, creates and Rtree from the lanelets for faster access of lanelets and faster
      * occupancy computations of obstacles.
      *
