@@ -305,6 +305,16 @@ public:
     */
     [[nodiscard]] double getLatPosition(int timeStep) const;
 
+    /**
+     * Extracts the lanes from the road network the obstacle occupies at a certain time step
+     *
+     * @param timeStep time step of interest
+     * @return list of pointers to occupied lanes
+    */
+    [[nodiscard]] std::vector<std::shared_ptr<Lane>> getOccupiedLanes(
+            const std::shared_ptr<RoadNetwork> &roadNetwork,
+            int timeStep); //TODO create test case
+
 private:
     int id{};                                                                   //**< unique ID of lanelet */
     bool isStatic{false};                                                       //**< true if Obstacle is static */
@@ -319,8 +329,8 @@ private:
     std::map<int, State> history{};                                             //**< previous states of the obstacle */
     Rectangle geoShape;                                                         //**< shape of the obstacle */
     std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};    //**< map of time steps to lanelets occupied by the obstacle */
-    std::shared_ptr<Lane> referenceLane{
-            nullptr};                               //**< lane which is used as reference for curvilinear projection */
+    std::shared_ptr<Lane> referenceLane{nullptr};                               //**< lane which is used as reference for curvilinear projection */
+    std::map<int, std::vector<std::shared_ptr<Lane>>> occupiedLanes{};          //**< map of time steps to lanes occupied by the obstacle */
 };
 
 #endif //ENV_MODEL_OBSTACLE_H

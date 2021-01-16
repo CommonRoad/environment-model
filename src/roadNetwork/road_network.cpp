@@ -73,8 +73,10 @@ LaneletType RoadNetwork::extractClassifyingLaneletType(const std::shared_ptr<Lan
             return LaneletType::mainCarriageWay;
         else if (type == LaneletType::shoulder)
             return LaneletType::shoulder;
+        else if (type == LaneletType::urban)
+            return LaneletType::urban;
     }
-    return LaneletType::mainCarriageWay;
+    return LaneletType::urban;
 }
 
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {

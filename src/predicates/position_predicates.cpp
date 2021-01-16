@@ -2,11 +2,11 @@
 // Created by Sebastian Maierhofer on 13.11.20.
 //
 
-#include "position_predicates.h"
+#include "predicates.h"
 
 #include <utility>
 
-bool PositionPredicates::onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle> &obstacle) {
+bool Predicates::onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle> &obstacle) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork, timeStep);
     LaneletType type = LaneletType::mainCarriageWay;
     for (const auto &la : occupiedLanelets) {
@@ -17,7 +17,7 @@ bool PositionPredicates::onMainCarriageWay(int timeStep, const std::shared_ptr<O
     return false;
 }
 
-bool PositionPredicates::onMainCarriageWayRightLane(int timeStep, const std::shared_ptr<Obstacle> &obstacle) {
+bool Predicates::onMainCarriageWayRightLane(int timeStep, const std::shared_ptr<Obstacle> &obstacle) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork, timeStep);
     LaneletType type = LaneletType::mainCarriageWay;
     for (const auto &la : occupiedLanelets) {
@@ -33,7 +33,7 @@ bool PositionPredicates::onMainCarriageWayRightLane(int timeStep, const std::sha
     return false;
 }
 
-bool PositionPredicates::onAccessRamp(int timeStep, const std::shared_ptr<Obstacle> &obstacle) {
+bool Predicates::onAccessRamp(int timeStep, const std::shared_ptr<Obstacle> &obstacle) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork, timeStep);
     LaneletType type = LaneletType::accessRamp;
     for (const auto &la : occupiedLanelets) {
@@ -44,7 +44,7 @@ bool PositionPredicates::onAccessRamp(int timeStep, const std::shared_ptr<Obstac
     return false;
 }
 
-bool PositionPredicates::inFrontOf(int timeStep,
+bool Predicates::inFrontOf(int timeStep,
                                    const std::shared_ptr<Obstacle> &obsP,
                                    const std::shared_ptr<Obstacle> &obsK) {
     if (obsP->frontS(timeStep) < obsK->rearS(timeStep))
@@ -53,7 +53,19 @@ bool PositionPredicates::inFrontOf(int timeStep,
         return false;
 }
 
-void PositionPredicates::setRoadNetwork(const std::shared_ptr<RoadNetwork> &net) { roadNetwork = net; }
+bool Predicates::inSameLane(int timeStep,
+                           const std::shared_ptr<Obstacle> &obsP,
+                           const std::shared_ptr<Obstacle> &obsK) {
+    for (const auto &laneP : obsP->getOccupiedLanes(roadNetwork, timeStep)){
+        for (const auto &laneK : obsK->getOccupiedLanes(roadNetwork, timeStep)){
+            if (laneP->getLanelet().getId() == laneK->getLanelet().getId())
+                return true;
+        }
+    }
 
-PositionPredicates::PositionPredicates(std::shared_ptr<RoadNetwork> roadNetwork) : roadNetwork(
-        std::move(roadNetwork)) {}
+    return false;
+}
+
+void Predicates::setRoadNetwork(const std::shared_ptr<RoadNetwork> &net) { roadNetwork = net; }
+
+

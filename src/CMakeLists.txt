@@ -22,6 +22,8 @@ set(ENV_MODEL_SRC_FILES
         interfaces/standalone/command_line_input.cpp
         predicates/position_predicates.cpp
         predicates/braking_predicates.cpp
+        predicates/predicates.cpp
+        predicates/general_predicates.cpp
         )
 
 # Create environment model library

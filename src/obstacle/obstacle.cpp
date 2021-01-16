@@ -222,3 +222,20 @@ double Obstacle::getLatPosition(int timeStep) const {
     return getStateByTimeStep(timeStep).getLatPosition();
 }
 
+std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                              int timeStep) {
+    if (occupiedLanes.find(timeStep) != occupiedLanes.end())
+        return occupiedLanes.at(timeStep);
+    std::vector<std::shared_ptr<Lane>> occupied;
+    std::vector<std::shared_ptr<Lanelet>> lanelets{getOccupiedLanelets(roadNetwork, timeStep)};
+    for (const auto &lane : roadNetwork->getLanes()) {
+        for (const auto &laneletLane : lane->getContainedLanelets()) {
+            for (const auto &laneletOccupied : lanelets) {
+                if (laneletLane->getId() == laneletOccupied->getId())
+                    occupied.push_back(lane);
+            }
+        }
+        return occupied;
+    }
+}
+

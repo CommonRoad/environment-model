@@ -10,4 +10,5 @@ env_model_test
 env_model_test_coverage
 
 .idea/
+.ipynb_checkpoints/
 
