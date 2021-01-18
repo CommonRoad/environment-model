@@ -19,7 +19,6 @@ set(ENV_MODEL_SRC_FILES
         interfaces/commonroad/commonroad_factory_2018b.cpp
         interfaces/commonroad/commonroad_factory_2020a.cpp
         interfaces/commonroad/xml_reader.cpp
-        interfaces/standalone/command_line_input.cpp
         predicates/position_predicates.cpp
         predicates/braking_predicates.cpp
         predicates/predicates.cpp

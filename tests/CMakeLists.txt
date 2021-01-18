@@ -10,8 +10,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/geometry/test_rectangle.cpp
         envModelTests/geometry/test_circle.cpp
         envModelTests/geometry/test_geometric_operations.cpp
-        envModelTests/interfaces/test_command_line_input.cpp
-        envModelTests/interfaces/test_reading_commonroad.cpp
+        envModelTests/interfaces/test_interfaces.cpp
         #envModelTests/roadNetwork/intersection/test_incoming.cpp
         #envModelTests/roadNetwork/intersection/test_intersection.cpp
         )

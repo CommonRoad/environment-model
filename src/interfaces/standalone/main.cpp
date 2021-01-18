@@ -2,12 +2,11 @@
 // Created by Sebastian Maierhofer on 28.10.20.
 //
 
-#include "../../auxiliaryDefs/structs.h"
-#include "../commonroad/xml_reader.h"
 #include "command_line_input.h"
-#include "../../predicates/position_predicates.h"
+#include "../../predicates/predicates.h"
 
 #include <chrono>
+
 
 int main(int argc, char **argv) {
 
@@ -19,15 +18,7 @@ int main(int argc, char **argv) {
         return error_code;
 
     //Read and parse CommonRoad scenario file
-    std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
-    std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
-    std::vector<std::shared_ptr<Lanelet>> lanelets = XMLReader::createLaneletFromXML(xmlFilePath, trafficSigns,
-                                                                                     trafficLights);
-    std::vector<std::shared_ptr<Obstacle>> obstacles = XMLReader::createObstacleFromXML(xmlFilePath);
-    std::vector<std::shared_ptr<Intersection>> intersections = XMLReader::createIntersectionFromXML(xmlFilePath,
-                                                                                                    lanelets);
-
-    std::shared_ptr<RoadNetwork> roadNetwork{std::make_shared<RoadNetwork>(RoadNetwork(lanelets))};
+    const auto &[obstacles, roadNetwork, intersections, trafficLights, trafficSigns] = CommandLine::getDataFromCommonRoad(xmlFilePath);
 
     for (const auto &obs : obstacles) {
         for (int i = 0; i < obs->getTrajectoryLength(); ++i) {
@@ -35,7 +26,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    PositionPredicates posPred{PositionPredicates(roadNetwork)};
+    Predicates predicates{Predicates(roadNetwork)};
 
     // Start measuring time
     auto begin = std::chrono::high_resolution_clock::now();
@@ -43,22 +34,22 @@ int main(int argc, char **argv) {
     for (const auto &obs : obstacles) {
         std::cout << obs->getId() << '\n';
         for (int i = 0; i < obs->getTrajectoryLength(); ++i) {
-            if (posPred.onMainCarriageWay(i, obs))
+            if (predicates.onMainCarriageWay(i, obs))
                 std::cout << "time step " << i << ": onMainCarriageWay: true \n";
             else
                 std::cout << "time step " << i << ": onMainCarriageWay: false \n";
-            if (posPred.onMainCarriageWayRightLane(i, obs))
+            if (predicates.onMainCarriageWayRightLane(i, obs))
                 std::cout << "time step " << i << ": onMainCarriageWayRightLane: true \n";
             else
                 std::cout << "time step " << i << ": onMainCarriageWayRightLane: false \n";
-            if (posPred.onAccessRamp(i, obs))
+            if (predicates.onAccessRamp(i, obs))
                 std::cout << "time step " << i << ": onAccessRamp: true \n";
             else
                 std::cout << "time step " << i << ": onAccessRamp: false \n";
             for (const auto &obs2 : obstacles) {
                 if (obs->getId() == obs2->getId())
                     continue;
-                if (PositionPredicates::inFrontOf(i, obs, obs2))
+                if (predicates.inFrontOf(i, obs, obs2))
                     std::cout << "time step " << i << ": obs " << obs2->getId() << " inFrontOf: true \n";
                 else
                     std::cout << "time step " << i << ": obs " << obs2->getId() << " inFrontOf: false \n";
