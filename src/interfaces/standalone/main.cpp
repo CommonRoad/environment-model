@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
         return error_code;
 
     //Read and parse CommonRoad scenario file
-    const auto &[obstacles, roadNetwork, intersections, trafficLights, trafficSigns] = CommandLine::getDataFromCommonRoad(xmlFilePath);
+    const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(xmlFilePath);
 
     for (const auto &obs : obstacles) {
         for (int i = 0; i < obs->getTrajectoryLength(); ++i) {
