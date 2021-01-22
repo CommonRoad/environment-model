@@ -5,3 +5,4 @@
 #include "predicates.h"
 
 Predicates::Predicates(std::shared_ptr<RoadNetwork> roadNetwork) : roadNetwork(std::move(roadNetwork)) {}
+

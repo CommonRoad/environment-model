@@ -209,9 +209,9 @@ double Obstacle::rearS(int timeStep) {
 double Obstacle::getLonPosition(int timeStep) const {
     if (getStateByTimeStep(timeStep).getValidStates().lonPosition)
         return getStateByTimeStep(timeStep).getLonPosition();
-    getStateByTimeStep(timeStep).convertPointToCurvilinear(getReferenceLane()->getCurvilinearCoordinateSystem());
-
-    return getStateByTimeStep(timeStep).getLonPosition();
+    State s { getStateByTimeStep(timeStep) };
+    s.convertPointToCurvilinear(getReferenceLane()->getCurvilinearCoordinateSystem());
+    return s.getLonPosition();
 }
 
 double Obstacle::getLatPosition(int timeStep) const {
@@ -237,5 +237,13 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
         }
         return occupied;
     }
+}
+
+int Obstacle::getFirstTrajectoryTimeStep() {
+    return trajectoryPrediction.at(0).getTimeStep();
+}
+
+int Obstacle::getLastTrajectoryTimeStep() {
+    return trajectoryPrediction.at(0).getTimeStep() + getTrajectoryLength();
 }
 

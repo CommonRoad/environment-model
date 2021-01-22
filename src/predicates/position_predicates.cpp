@@ -4,8 +4,6 @@
 
 #include "predicates.h"
 
-#include <utility>
-
 bool Predicates::onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle> &obstacle) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork, timeStep);
     LaneletType type = LaneletType::mainCarriageWay;

@@ -8,6 +8,7 @@
 *.a
 env_model_test
 env_model_test_coverage
+env_model_example_node
 
 .idea/
 .ipynb_checkpoints/

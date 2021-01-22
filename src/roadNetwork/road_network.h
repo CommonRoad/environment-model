@@ -7,6 +7,7 @@
 
 #include "lanelet/lane.h"
 #include "intersection/intersection.h"
+
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/box.hpp>
@@ -34,7 +35,9 @@ public:
      * @param list of pointers to lanelets
      */
     explicit RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network,
-                         const std::vector<std::shared_ptr<Intersection>> &inters = std::vector<std::shared_ptr<Intersection>>{});
+                         std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{},
+                         std::vector<std::shared_ptr<TrafficSign>> signs = std::vector<std::shared_ptr<TrafficSign>>{},
+                         std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{});
 
     /**
      * Getter for lanelet network.
@@ -96,6 +99,8 @@ private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;       //**< set of lanelets contained in road network */
     std::vector<std::shared_ptr<Lane>> lanes;                   //**< set of interstate-based lanes contained in road network */
     std::vector<std::shared_ptr<Intersection>> intersections;   //**< set of intersections contained in road network */
+    std::vector<std::shared_ptr<TrafficLight>> trafficLights;   //**< set of traffic lights contained in road network */
+    std::vector<std::shared_ptr<TrafficSign>> trafficSigns;     //**< set of traffic signs contained in road network */
     bgi::rtree<value, bgi::quadratic<16>> rtree;                //**< rtree defined by lanelets of road network for faster occupancy calculation*/
 
     /**

@@ -15,9 +15,13 @@ namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network,
-                         const std::vector<std::shared_ptr<Intersection>> &inters) {
-    laneletNetwork = network;
-    intersections = inters;
+                         std::vector<std::shared_ptr<Intersection>> inters,
+                         std::vector<std::shared_ptr<TrafficSign>> signs ,
+                         std::vector<std::shared_ptr<TrafficLight>> lights ) :
+                         laneletNetwork(network),
+                         intersections(std::move(inters)),
+                         trafficSigns(std::move(signs)),
+                         trafficLights(std::move(lights)){
     // construct Rtree out of lanelets
     for (const std::shared_ptr<Lanelet> &la : network)
         rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));

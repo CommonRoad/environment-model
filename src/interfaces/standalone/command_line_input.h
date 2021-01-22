@@ -73,7 +73,10 @@ namespace CommandLine {
         std::vector<std::shared_ptr<Intersection>> intersections = XMLReader::createIntersectionFromXML(xmlFilePath,
                                                                                                         lanelets);
 
-        std::shared_ptr<RoadNetwork> roadNetwork{std::make_shared<RoadNetwork>(RoadNetwork(lanelets))};
+        std::shared_ptr<RoadNetwork> roadNetwork{ std::make_shared<RoadNetwork>(RoadNetwork(lanelets,
+                                                                                            intersections,
+                                                                                            trafficSigns,
+                                                                                            trafficLights)) };
 
         for (const auto &obs : obstacles) {
             for (size_t i = 0; i < obs->getTrajectoryLength(); ++i) {
@@ -81,7 +84,7 @@ namespace CommandLine {
             }
         }
 
-        return std::make_tuple(obstacles, roadNetwork, intersections, trafficLights, trafficSigns);
+        return std::make_tuple(obstacles, roadNetwork);
     }
 }
 

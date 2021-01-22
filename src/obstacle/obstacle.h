@@ -315,6 +315,22 @@ public:
             const std::shared_ptr<RoadNetwork> &roadNetwork,
             int timeStep); //TODO create test case
 
+    /**
+     * Extracts first time step of trajectory
+     *
+     * @param timeStep time step of interest
+     * @return lateral position of obstacle state
+    */
+    [[nodiscard]] int getFirstTrajectoryTimeStep(); //TODO create test case
+
+    /**
+     * Extracts last time step of trajectory
+     *
+     * @param timeStep time step of interest
+     * @return lateral position of obstacle state
+    */
+    [[nodiscard]] int getLastTrajectoryTimeStep(); //TODO create test case
+
 private:
     int id{};                                                                   //**< unique ID of lanelet */
     bool isStatic{false};                                                       //**< true if Obstacle is static */
