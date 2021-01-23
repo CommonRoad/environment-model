@@ -31,6 +31,10 @@ public:
 
     bool cutIn(int timeStep, const std::shared_ptr<Obstacle> &obs1, const std::shared_ptr<Obstacle> &obs2);
 
+    static bool reverse(int timeStep, const std::shared_ptr<Obstacle> &obs);
+
+    bool makesUTurn(int timeStep, const  std::shared_ptr<Obstacle> &obs);
+
 private:
     std::shared_ptr<RoadNetwork> roadNetwork;
 };

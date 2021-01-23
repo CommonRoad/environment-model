@@ -21,3 +21,15 @@ bool Predicates::cutIn(int timeStep, const  std::shared_ptr<Obstacle> &obsK, con
         return false;
 }
 
+bool Predicates::makesUTurn(int timeStep, const  std::shared_ptr<Obstacle> &obs){
+    auto lanes = obs->getOccupiedLanes(roadNetwork, timeStep);
+    if (std::any_of(lanes.begin(), lanes.end(),
+                    [obs, timeStep](const std::shared_ptr<Lane>& la)
+                    {return 1.57 <= abs(obs->getStateByTimeStep(timeStep).getOrientation() -   // TODO use parameter
+                     la->getLanelet().getOrientationAtPosition(obs->getStateByTimeStep(timeStep).getXPosition(),
+                                                              obs->getStateByTimeStep(timeStep).getYPosition()));
+                     }))
+            return true;
+    return false;
+}
+

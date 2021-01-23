@@ -23,6 +23,7 @@ set(ENV_MODEL_SRC_FILES
         predicates/braking_predicates.cpp
         predicates/predicates.cpp
         predicates/general_predicates.cpp
+        predicates/velocity_predicates.cpp
         )
 
 # Create environment model library

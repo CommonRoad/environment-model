@@ -229,14 +229,20 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
     std::vector<std::shared_ptr<Lane>> occupied;
     std::vector<std::shared_ptr<Lanelet>> lanelets{getOccupiedLanelets(roadNetwork, timeStep)};
     for (const auto &lane : roadNetwork->getLanes()) {
+        bool laneIsOccupied { false };
         for (const auto &laneletLane : lane->getContainedLanelets()) {
             for (const auto &laneletOccupied : lanelets) {
-                if (laneletLane->getId() == laneletOccupied->getId())
+                if (laneletLane->getId() == laneletOccupied->getId()) {
                     occupied.push_back(lane);
+                    laneIsOccupied = true;
+                    break;
+                }
             }
+            if (laneIsOccupied)
+                break;
         }
-        return occupied;
     }
+    return occupied;
 }
 
 int Obstacle::getFirstTrajectoryTimeStep() {
