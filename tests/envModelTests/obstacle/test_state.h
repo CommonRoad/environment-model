@@ -72,12 +72,12 @@ protected:
     double orientationStateSix;
     ValidStates validityStateSix;
 
-    State stateOne;
-    State stateTwo;
-    State stateThree;
-    State stateFour;
-    State stateFive;
-    State stateSix;
+    std::shared_ptr<State> stateOne;
+    std::shared_ptr<State> stateTwo;
+    std::shared_ptr<State> stateThree;
+    std::shared_ptr<State> stateFour;
+    std::shared_ptr<State> stateFive;
+    std::shared_ptr<State> stateSix;
 
     void setUpStates();
 

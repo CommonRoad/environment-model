@@ -51,7 +51,7 @@ std::vector<std::shared_ptr<Intersection>> XMLReader::createIntersectionFromXML(
     return factory->createIntersections(lanelets);
 }
 
-State XMLReader::extractInitialState(const pugi::xml_node &child) {
+std::shared_ptr<State> XMLReader::extractInitialState(const pugi::xml_node &child) {
     pugi::xml_node states = child;
     State initialState;
     initialState.setTimeStep(0);
@@ -62,10 +62,10 @@ State XMLReader::extractInitialState(const pugi::xml_node &child) {
     initialState.setOrientation(states.child("orientation").child("exact").text().as_double());
     initialState.setVelocity(states.child("velocity").child("exact").text().as_double());
     initialState.setAcceleration(states.child("acceleration").child("exact").text().as_double());
-    return initialState;
+    return std::make_shared<State>(initialState);
 }
 
-State XMLReader::extractState(const pugi::xml_node &states) {
+std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
     State st;
     st.setTimeStep(states.child("time").child("exact").text().as_int());
     st.setXPosition(states.child("position").child("point").child("x").text().as_double());
@@ -73,7 +73,7 @@ State XMLReader::extractState(const pugi::xml_node &states) {
     st.setOrientation(states.child("orientation").child("exact").text().as_double());
     st.setVelocity(states.child("velocity").child("exact").text().as_double());
     st.setAcceleration(states.child("acceleration").child("exact").text().as_double());
-    return st;
+    return std::make_shared<State>(st);
 }
 
 void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
@@ -95,13 +95,12 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
             continue;
         }
         if (!(strcmp(child.name(), "initialState"))) {
-            State initialState = XMLReader::extractInitialState(child);
+            std::shared_ptr<State> initialState { XMLReader::extractInitialState(child) };
             tempObstacle->setCurrentState(initialState);
             tempObstacle->appendStateToTrajectoryPrediction(initialState);
         } else if (!(strcmp(child.name(), "trajectory"))) {
             for (pugi::xml_node states = child.first_child(); states; states = states.next_sibling()) {
-                State st = XMLReader::extractState(states);
-                tempObstacle->appendStateToTrajectoryPrediction(st);
+                tempObstacle->appendStateToTrajectoryPrediction(XMLReader::extractState(states));
             }
         }
     }
@@ -126,7 +125,7 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
             }
             continue;
         } else if (!(strcmp(child.name(), "initialState"))) {
-            State initialState = XMLReader::extractInitialState(child);
+            std::shared_ptr<State> initialState { XMLReader::extractInitialState(child) };
             tempObstacle->setCurrentState(initialState);
         }
     }

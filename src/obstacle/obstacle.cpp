@@ -10,19 +10,19 @@
 
 Obstacle::Obstacle(int id,
                    bool isStatic,
-                   const State &currentState,
+                   std::shared_ptr<State> currentState,
                    ObstacleType obstacleType,
                    double vMax,
                    double aMax,
                    double aMaxLong,
                    double aMinLong,
                    double reactionTime,
-                   std::map<int, State> trajectoryPrediction,
+                   std::map<int, std::shared_ptr<State>> trajectoryPrediction,
                    double length,
                    double width) :
         id(id),
         isStatic(isStatic),
-        currentState(currentState),
+        currentState(std::move(currentState)),
         obstacleType(obstacleType),
         vMax(vMax),
         aMax(aMax),
@@ -47,7 +47,7 @@ void Obstacle::setIsStatic(bool st) {
     }
 }
 
-void Obstacle::setCurrentState(const State &state) { currentState = state; }
+void Obstacle::setCurrentState(const std::shared_ptr<State> &state) { currentState = state; }
 
 void Obstacle::setObstacleType(ObstacleType type) { obstacleType = type; }
 
@@ -74,7 +74,7 @@ void Obstacle::setOwnLane(const std::vector<std::shared_ptr<Lane>> &possibleLane
     }
 }
 
-void Obstacle::setTrajectoryPrediction(const std::map<int, State> &trajPrediction) {
+void Obstacle::setTrajectoryPrediction(const std::map<int, std::shared_ptr<State>> &trajPrediction) {
     trajectoryPrediction = trajPrediction;
 }
 
@@ -82,24 +82,24 @@ void Obstacle::setRectangleShape(double length, double width) {
     geoShape = Rectangle(length, width);
 }
 
-void Obstacle::appendStateToTrajectoryPrediction(State state) {
-    trajectoryPrediction.insert(std::pair<int, State>(state.getTimeStep(), state));
+void Obstacle::appendStateToTrajectoryPrediction(const std::shared_ptr<State>& state) {
+    trajectoryPrediction.insert(std::pair<int, std::shared_ptr<State>>(state->getTimeStep(), state));
 }
 
-void Obstacle::appendStateToHistory(State state) {
-    history.insert(std::pair<int, State>(state.getTimeStep(), state));
+void Obstacle::appendStateToHistory(const std::shared_ptr<State>& state) {
+    history.insert(std::pair<int, std::shared_ptr<State>>(state->getTimeStep(), state));
 }
 
 int Obstacle::getId() const { return id; }
 
 bool Obstacle::getIsStatic() const { return isStatic; }
 
-const State &Obstacle::getCurrentState() const { return currentState; }
+const std::shared_ptr<State> &Obstacle::getCurrentState() const { return currentState; }
 
-State Obstacle::getStateByTimeStep(int timeStep) const {
+std::shared_ptr<State> Obstacle::getStateByTimeStep(int timeStep) const {
     if (trajectoryPrediction.count(timeStep) == 1)
         return trajectoryPrediction.at(timeStep);
-    else if (currentState.getTimeStep() == timeStep)
+    else if (currentState->getTimeStep() == timeStep)
         return currentState;
     else if (history.count(timeStep) == 1)
         return history.at(timeStep);
@@ -123,14 +123,14 @@ std::shared_ptr<Lane> Obstacle::getOwnLane() const { return ownLane; }
 
 void Obstacle::setReferenceLane(const std::shared_ptr<Lane> &lane) { referenceLane = lane; }
 
-std::map<int, State> Obstacle::getTrajectoryPrediction() const { return trajectoryPrediction; }
+std::map<int, std::shared_ptr<State>> Obstacle::getTrajectoryPrediction() const { return trajectoryPrediction; }
 
 int Obstacle::getTrajectoryLength() { return trajectoryPrediction.size(); }
 
 polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
     std::vector<vertex> boundingRectangleVertices;
     polygon_type polygonShape;
-    State state{this->getStateByTimeStep(timeStep)};
+    std::shared_ptr<State> state{this->getStateByTimeStep(timeStep)};
 
     if (this->getGeoShape().getType() == ShapeType::rectangle) {
         // p are vertices of the bounding rectangle
@@ -145,8 +145,8 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
          */
         std::vector<vertex> adjustedBoundingRectangleVertices = rotateAndTranslateVertices(
                 boundingRectangleVertices,
-                vertex{state.getXPosition(), state.getYPosition()},
-                state.getOrientation());
+                vertex{state->getXPosition(), state->getYPosition()},
+                state->getOrientation());
 
         polygonShape.outer().resize(adjustedBoundingRectangleVertices.size() + 1);
 
@@ -182,9 +182,9 @@ double Obstacle::frontS(int timeStep) {
     double s = getLonPosition(timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
-    double theta = getStateByTimeStep(timeStep).getOrientation() - getReferenceLane()->
-            getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep).getXPosition(),
-                                                  getStateByTimeStep(timeStep).getYPosition());
+    double theta = getStateByTimeStep(timeStep)->getOrientation() - getReferenceLane()->
+            getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                                  getStateByTimeStep(timeStep)->getYPosition());
 
     // use maximum of all corners
     return std::max({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
@@ -197,9 +197,9 @@ double Obstacle::rearS(int timeStep) {
     double s = getLonPosition(timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
-    double theta = getStateByTimeStep(timeStep).getOrientation() - getReferenceLane()->
-            getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep).getXPosition(),
-                                                  getStateByTimeStep(timeStep).getYPosition());
+    double theta = getStateByTimeStep(timeStep)->getOrientation() - getReferenceLane()->
+            getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                                  getStateByTimeStep(timeStep)->getYPosition());
 
     // use minimum of all corners
     return std::min({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
@@ -209,19 +209,17 @@ double Obstacle::rearS(int timeStep) {
 }
 
 double Obstacle::getLonPosition(int timeStep) const {
-    if (getStateByTimeStep(timeStep).getValidStates().lonPosition)
-        return getStateByTimeStep(timeStep).getLonPosition();
-    State s { getStateByTimeStep(timeStep) };
-    s.convertPointToCurvilinear(getReferenceLane()->getCurvilinearCoordinateSystem());
-    return s.getLonPosition();
+    if (getStateByTimeStep(timeStep)->getValidStates().lonPosition)
+        return getStateByTimeStep(timeStep)->getLonPosition();
+    getStateByTimeStep(timeStep)->convertPointToCurvilinear(referenceLane->getCurvilinearCoordinateSystem());
+    return getStateByTimeStep(timeStep)->getLonPosition();
 }
 
 double Obstacle::getLatPosition(int timeStep) const {
-    if (getStateByTimeStep(timeStep).getValidStates().latPosition)
-        return getStateByTimeStep(timeStep).getLatPosition();
-    getStateByTimeStep(timeStep).convertPointToCurvilinear(getReferenceLane()->getCurvilinearCoordinateSystem());
-
-    return getStateByTimeStep(timeStep).getLatPosition();
+    if (getStateByTimeStep(timeStep)->getValidStates().latPosition)
+        return getStateByTimeStep(timeStep)->getLatPosition();
+    getStateByTimeStep(timeStep)->convertPointToCurvilinear(referenceLane->getCurvilinearCoordinateSystem());
+    return getStateByTimeStep(timeStep)->getLatPosition();
 }
 
 std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
@@ -248,11 +246,11 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
 }
 
 int Obstacle::getFirstTrajectoryTimeStep() {
-    return trajectoryPrediction.at(0).getTimeStep();
+    return trajectoryPrediction.at(0)->getTimeStep();
 }
 
 int Obstacle::getLastTrajectoryTimeStep() {
-    return trajectoryPrediction.at(0).getTimeStep() + getTrajectoryLength();
+    return trajectoryPrediction.at(0)->getTimeStep() + getTrajectoryLength();
 }
 
 std::shared_ptr<Lane> Obstacle::getReferenceLane() const { return referenceLane; }

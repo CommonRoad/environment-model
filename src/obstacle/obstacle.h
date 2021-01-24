@@ -31,7 +31,7 @@ public:
      *
      * @param id ID of obstacle.
      * @param isStatic Boolean indicating whether the obstacle is static or not.
-     * @param currentState Current state of obstacle.
+     * @param currentState Pointer to current state of obstacle.
      * @param obstacleType Type of the obstacle.
      * @param vMax Maximum velocity the obstacle can drive [m/s].
      * @param aMax Maximum acceleration the obstacle can have [m/s^2].
@@ -44,14 +44,14 @@ public:
     */
     Obstacle(int id,
              bool isStatic,
-             const State &currentState,
+             std::shared_ptr<State> currentState,
              ObstacleType obstacleType,
              double vMax,
              double aMax,
              double aMaxLong,
              double aMinLong,
              double reactionTime,
-             std::map<int, State> trajectoryPrediction,
+             std::map<int, std::shared_ptr<State>> trajectoryPrediction,
              double length,
              double width);
 
@@ -74,7 +74,7 @@ public:
      *
      * @param currentState Current state of obstacle.
     */
-    void setCurrentState(const State &currentState);
+    void setCurrentState(const std::shared_ptr<State> &currentState);
 
     /**
      * Setter for obstacle type.
@@ -139,7 +139,7 @@ public:
      *
      * @param trajPrediction Map matching time step to state.
     */
-    void setTrajectoryPrediction(const std::map<int, State> &trajPrediction);
+    void setTrajectoryPrediction(const std::map<int, std::shared_ptr<State>> &trajPrediction);
 
     /**
      * Setter for obstacle shape.
@@ -152,16 +152,16 @@ public:
     /**
      * Appends a state to the trajectory prediction.
      *
-     * @param state State object.
+     * @param state Pointer to state object.
     */
-    void appendStateToTrajectoryPrediction(State state);
+    void appendStateToTrajectoryPrediction(const std::shared_ptr<State>& state);
 
     /**
      * Appends a state to the history.
      *
-     * @param state State object.
+     * @param state Pointer to state object.
     */
-    void appendStateToHistory(State state);
+    void appendStateToHistory(const std::shared_ptr<State>& state);
 
     /**
      * Getter for obstacle ID.
@@ -180,9 +180,9 @@ public:
     /**
      * Getter for current state.
      *
-     * @return State object.
+     * @return Pointer to state object.
     */
-    [[nodiscard]] const State &getCurrentState() const;
+    [[nodiscard]] const std::shared_ptr<State> &getCurrentState() const;
 
     /**
      * Getter for obstacle type.
@@ -245,7 +245,7 @@ public:
      *
      * @return Map matching time step to state.
     */
-    [[nodiscard]] std::map<int, State> getTrajectoryPrediction() const;
+    [[nodiscard]] std::map<int, std::shared_ptr<State>> getTrajectoryPrediction() const;
 
     /**
      * Getter for polygon shape of obstacle at given time step.
@@ -277,9 +277,9 @@ public:
      * Provides state given a time step. The time step can belong to the current state, history, or prediction.
      *
      * @param timeStep Time step of interest.
-     * @return State object.
+     * @return Pointer to state object.
     */
-    [[nodiscard]] State getStateByTimeStep(int timeStep) const;
+    [[nodiscard]] std::shared_ptr<State> getStateByTimeStep(int timeStep) const;
 
     /**
      * Returns the length of the trajectory prediction.
@@ -349,15 +349,15 @@ public:
 private:
     int id{};                                                                   //**< unique ID of lanelet */
     bool isStatic{false};                                                       //**< true if Obstacle is static */
-    State currentState;                                                         //**< current state of obstacle */
+    std::shared_ptr<State> currentState;                                        //**< pointer to current state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown};                           //**< CommonRoad obstacle type */
     double vMax{};                                                              //**< maximum velocity of obstacle in m/s */
     double aMax{};                                                              //**< maximum absolute acceleration of obstacle in [m/s^2] */
     double aMaxLong{};                                                          //**< maximal longitudinal acceleration of obstacle in [m/s^2] */
     double aMinLong{};                                                          //**< minimal longitudinal acceleration of obstacle in [m/s^2] */
     double reactionTime{};                                                      //**< reaction time of obstacle in [s] */
-    std::map<int, State> trajectoryPrediction{};                                //**< trajectory prediction of the obstacle */
-    std::map<int, State> history{};                                             //**< previous states of the obstacle */
+    std::map<int, std::shared_ptr<State>> trajectoryPrediction{};               //**< trajectory prediction of the obstacle */
+    std::map<int, std::shared_ptr<State>> history{};                            //**< previous states of the obstacle */
     Rectangle geoShape;                                                         //**< shape of the obstacle */
     std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};    //**< map of time steps to lanelets occupied by the obstacle */
     std::shared_ptr<Lane> ownLane{nullptr};                                     //**< lane to which obstacle is assigned to */

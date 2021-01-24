@@ -17,8 +17,8 @@ bool Predicates::keepsSafeDistancePrec(int timeStep,
     double aMinFollow{vehicleFollow->getAminLong()};
     double aMinLead{vehicleLead->getAminLong()};
     double tReact{vehicleFollow->getReactionTime()};
-    double dSafe{ safeDistance(vehicleFollow->getTrajectoryPrediction().at(timeStep).getVelocity(),
-                              vehicleLead->getTrajectoryPrediction().at(timeStep).getVelocity(),
+    double dSafe{ safeDistance(vehicleFollow->getTrajectoryPrediction().at(timeStep)->getVelocity(),
+                              vehicleLead->getTrajectoryPrediction().at(timeStep)->getVelocity(),
                               aMinFollow, aMinLead, tReact) };
     double deltaS = vehicleLead->rearS(timeStep) - vehicleFollow->frontS(timeStep);
     if (0 <= deltaS and deltaS < dSafe)

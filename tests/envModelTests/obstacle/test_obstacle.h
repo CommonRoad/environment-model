@@ -21,8 +21,8 @@ protected:
     double lengthObstacleOne;
     double widthObstacleOne;
     std::map<int, std::shared_ptr<Lane>> occupiedLaneObstacleOne{};
-    std::map<int, State> trajectoryPredictionObstacleOne{};
-    std::map<int, State> historyObstacleOne{};
+    std::map<int, std::shared_ptr<State>> trajectoryPredictionObstacleOne{};
+    std::map<int, std::shared_ptr<State>> historyObstacleOne{};
     Rectangle geoShapeObstacleOne;
     std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLaneletsObstacleOne{};
     std::shared_ptr<Obstacle> obstacleOne;
@@ -37,14 +37,14 @@ protected:
     double reactionTimeObstacleTwo;
     double lengthObstacleTwo;
     double widthObstacleTwo;
-    std::map<int, State> trajectoryPredictionObstacleTwo{};
+    std::map<int, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{};
     std::shared_ptr<Obstacle> obstacleTwo;
 
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
 
     void setUpObstacles();
 
-    static void compareStates(State stateOne, State stateTwo);
+    static void compareStates(const std::shared_ptr<State>& stateOne, const std::shared_ptr<State>& stateTwo);
 };
 
 class ObstacleTest : public ObstacleTestInitialization, public testing::Test{

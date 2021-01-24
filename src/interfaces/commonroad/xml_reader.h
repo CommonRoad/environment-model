@@ -65,17 +65,17 @@ namespace XMLReader {
      * Extracts an initial state from a XML node element.
      *
      * @param child XML node element.
-     * @return Initial state.
+     * @return Pointer to initial state.
     */
-    State extractInitialState(const pugi::xml_node &child);
+    std::shared_ptr<State> extractInitialState(const pugi::xml_node &child);
 
     /**
      * Extracts an state from a XML node element.
      *
      * @param child XML node element.
-     * @return State.
+     * @return Pointer to state.
     */
-    State extractState(const pugi::xml_node &states);
+    std::shared_ptr<State> extractState(const pugi::xml_node &states);
 
     /**
      * Creates a dynamic obstacle from a XML node element and adds the obstacle to provided vector.

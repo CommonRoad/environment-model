@@ -12,11 +12,10 @@ bool Predicates::cutIn(int timeStep, const  std::shared_ptr<Obstacle> &obsK, con
     if (!inSameLane(timeStep, obsK, obsP))
         return false;
     // check orientation and lateral distance
-    std::cout << obsK->getStateByTimeStep(timeStep).getLatPosition() << " - " << obsP->getStateByTimeStep(timeStep).getLatPosition() << " - " << obsK->getStateByTimeStep(timeStep).getOrientation() << '\n';
-    if (obsK->getStateByTimeStep(timeStep).getLatPosition() < obsP->getStateByTimeStep(timeStep).getLatPosition()
-    && obsK->getStateByTimeStep(timeStep).getOrientation() > 0
-    || (obsK->getStateByTimeStep(timeStep).getLatPosition() > obsP->getStateByTimeStep(timeStep).getLatPosition()
-    and obsK->getStateByTimeStep(timeStep).getOrientation() < 0))
+    if (obsK->getLatPosition(timeStep) < obsP->getLatPosition(timeStep)
+    && obsK->getStateByTimeStep(timeStep)->getOrientation() > 0
+    || (obsK->getStateByTimeStep(timeStep)->getLatPosition() > obsP->getLatPosition(timeStep)
+    and obsK->getStateByTimeStep(timeStep)->getOrientation() < 0))
         return true;
     else
         return false;
@@ -26,9 +25,9 @@ bool Predicates::makesUTurn(int timeStep, const  std::shared_ptr<Obstacle> &obs)
     auto lanes = obs->getOccupiedLanes(roadNetwork, timeStep);
     if (std::any_of(lanes.begin(), lanes.end(),
                     [obs, timeStep](const std::shared_ptr<Lane>& la)
-                    {return 1.57 <= abs(obs->getStateByTimeStep(timeStep).getOrientation() -   // TODO use parameter
-                     la->getLanelet().getOrientationAtPosition(obs->getStateByTimeStep(timeStep).getXPosition(),
-                                                              obs->getStateByTimeStep(timeStep).getYPosition()));
+                    {return 1.57 <= abs(obs->getStateByTimeStep(timeStep)->getOrientation() -   // TODO use parameter
+                     la->getLanelet().getOrientationAtPosition(obs->getStateByTimeStep(timeStep)->getXPosition(),
+                                                              obs->getStateByTimeStep(timeStep)->getYPosition()));
                      }))
             return true;
     return false;
