@@ -3,8 +3,8 @@
 //
 
 #include "predicates.h"
-
 #include <cmath>
+#include <iostream>
 
 double
 Predicates::safeDistance(double vFollow, double vLead, double aMinFollow, double aMinLead, double tReact) {
@@ -17,14 +17,14 @@ bool Predicates::keepsSafeDistancePrec(int timeStep,
     double aMinFollow{vehicleFollow->getAminLong()};
     double aMinLead{vehicleLead->getAminLong()};
     double tReact{vehicleFollow->getReactionTime()};
-    double dSafe{safeDistance(vehicleFollow->getTrajectoryPrediction().at(timeStep).getVelocity(),
+    double dSafe{ safeDistance(vehicleFollow->getTrajectoryPrediction().at(timeStep).getVelocity(),
                               vehicleLead->getTrajectoryPrediction().at(timeStep).getVelocity(),
-                              aMinFollow, aMinLead, tReact)};
+                              aMinFollow, aMinLead, tReact) };
     double deltaS = vehicleLead->rearS(timeStep) - vehicleFollow->frontS(timeStep);
-    if (0 <= deltaS < dSafe)
+    if (0 <= deltaS and deltaS < dSafe)
         return false;
     else
         return true;
 }
 
-void Predicates::setRoadNetwork(const std::shared_ptr<RoadNetwork> &net) { roadNetwork = net; }
+

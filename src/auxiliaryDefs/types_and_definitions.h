@@ -42,7 +42,7 @@ enum class ContainmentType {
     PARTIALLY_CONTAINED, COMPLETELY_CONTAINED
 };
 
-const double reactionTimeObstacles = 0.5;
+const double reactionTimeObstacles = 0.3;
 
 #endif //ENV_MODEL_TYPES_AND_DEFINITIONS_H
 

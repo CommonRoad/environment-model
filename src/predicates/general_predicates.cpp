@@ -12,6 +12,7 @@ bool Predicates::cutIn(int timeStep, const  std::shared_ptr<Obstacle> &obsK, con
     if (!inSameLane(timeStep, obsK, obsP))
         return false;
     // check orientation and lateral distance
+    std::cout << obsK->getStateByTimeStep(timeStep).getLatPosition() << " - " << obsP->getStateByTimeStep(timeStep).getLatPosition() << " - " << obsK->getStateByTimeStep(timeStep).getOrientation() << '\n';
     if (obsK->getStateByTimeStep(timeStep).getLatPosition() < obsP->getStateByTimeStep(timeStep).getLatPosition()
     && obsK->getStateByTimeStep(timeStep).getOrientation() > 0
     || (obsK->getStateByTimeStep(timeStep).getLatPosition() > obsP->getStateByTimeStep(timeStep).getLatPosition()

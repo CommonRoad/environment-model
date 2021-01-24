@@ -119,12 +119,20 @@ public:
     void setReactionTime(double tReact);
 
     /**
-     * Setter for reference lane.
+     * Setter for own lane.
      *
-     * @param possibleLanes Lanes which should be considered for finding possible reference lane.
+     * @param possibleLanes Lanes which should be considered for finding possible assigned lane.
      * @param timeStep Current time step.
     */
-    void setReferenceLane(const std::vector<std::shared_ptr<Lane>> &possibleLanes, int timeStep);
+    void setOwnLane(const std::vector<std::shared_ptr<Lane>> &possibleLanes, int timeStep);
+
+    /**
+     * Setter for reference lane.
+     *
+     * @param lane Lane which should be used as reference lane for curvilinear coordinate system. Usually, this is the ego vehicle's lane.
+     * @param timeStep Current time step.
+    */
+    void setReferenceLane(const std::shared_ptr<Lane> &lane); //TODO add unit test
 
     /**
      * Setter for trajectory prediction.
@@ -217,6 +225,13 @@ public:
      * @return Reaction time [s].
     */
     [[nodiscard]] double getReactionTime() const;
+
+    /**
+     * Getter for assigned own lane.
+     *
+     * @return Pointer to lane object.
+    */
+    [[nodiscard]] std::shared_ptr<Lane> getOwnLane() const;
 
     /**
      * Getter for reference lane.
@@ -345,6 +360,7 @@ private:
     std::map<int, State> history{};                                             //**< previous states of the obstacle */
     Rectangle geoShape;                                                         //**< shape of the obstacle */
     std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLanelets{};    //**< map of time steps to lanelets occupied by the obstacle */
+    std::shared_ptr<Lane> ownLane{nullptr};                                     //**< lane to which obstacle is assigned to */
     std::shared_ptr<Lane> referenceLane{nullptr};                               //**< lane which is used as reference for curvilinear projection */
     std::map<int, std::vector<std::shared_ptr<Lane>>> occupiedLanes{};          //**< map of time steps to lanes occupied by the obstacle */
 };

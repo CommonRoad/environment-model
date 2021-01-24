@@ -80,7 +80,7 @@ namespace CommandLine {
 
         for (const auto &obs : obstacles) {
             for (size_t i = 0; i < obs->getTrajectoryLength(); ++i) {
-                obs->setReferenceLane(roadNetwork->getLanes(), i);
+                obs->setOwnLane(roadNetwork->getLanes(), i);
             }
         }
 

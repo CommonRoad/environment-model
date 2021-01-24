@@ -64,6 +64,6 @@ bool Predicates::inSameLane(int timeStep,
     return false;
 }
 
-void Predicates::setRoadNetwork(const std::shared_ptr<RoadNetwork> &net) { roadNetwork = net; }
+
 
 

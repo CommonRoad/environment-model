@@ -14,9 +14,9 @@ public:
 
     void setRoadNetwork(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
-    double safeDistance(double vFollow, double vLead, double aMinFollow, double aMinLead, double tReact);
+    static double safeDistance(double vFollow, double vLead, double aMinFollow, double aMinLead, double tReact);
 
-    bool keepsSafeDistancePrec(int timeStep, const std::shared_ptr<Obstacle> &vehicleFollow,
+    static bool keepsSafeDistancePrec(int timeStep, const std::shared_ptr<Obstacle> &vehicleFollow,
                                       const std::shared_ptr<Obstacle> &vehicleLead);
 
     bool onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle> &obstacle);

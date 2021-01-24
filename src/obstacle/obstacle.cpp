@@ -61,16 +61,16 @@ void Obstacle::setAminLong(const double amin) { aMinLong = isStatic ? 0.0 : amin
 
 void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 0.0 : tReact; }
 
-void Obstacle::setReferenceLane(const std::vector<std::shared_ptr<Lane>> &possibleLanes, int timeStep) {
-    if (referenceLane != nullptr
-        and referenceLane->checkIntersection(getOccupancyPolygonShape(timeStep),
-                                             ContainmentType::PARTIALLY_CONTAINED)) {
+void Obstacle::setOwnLane(const std::vector<std::shared_ptr<Lane>> &possibleLanes, int timeStep) {
+    if (ownLane != nullptr
+        and ownLane->checkIntersection(getOccupancyPolygonShape(timeStep),
+                                       ContainmentType::PARTIALLY_CONTAINED)) {
         return; // old reference lane is still valid
     }
         // assign new reference lane
     else {
         polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
-        referenceLane = RoadNetwork::findLaneByShape(possibleLanes, polygonShape);
+        ownLane = RoadNetwork::findLaneByShape(possibleLanes, polygonShape);
     }
 }
 
@@ -119,7 +119,9 @@ double Obstacle::getAminLong() const { return aMinLong; }
 
 double Obstacle::getReactionTime() const { return reactionTime; }
 
-std::shared_ptr<Lane> Obstacle::getReferenceLane() const { return referenceLane; }
+std::shared_ptr<Lane> Obstacle::getOwnLane() const { return ownLane; }
+
+void Obstacle::setReferenceLane(const std::shared_ptr<Lane> &lane) { referenceLane = lane; }
 
 std::map<int, State> Obstacle::getTrajectoryPrediction() const { return trajectoryPrediction; }
 
@@ -252,4 +254,6 @@ int Obstacle::getFirstTrajectoryTimeStep() {
 int Obstacle::getLastTrajectoryTimeStep() {
     return trajectoryPrediction.at(0).getTimeStep() + getTrajectoryLength();
 }
+
+std::shared_ptr<Lane> Obstacle::getReferenceLane() const { return referenceLane; }
 

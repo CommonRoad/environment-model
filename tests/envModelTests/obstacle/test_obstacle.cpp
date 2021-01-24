@@ -43,7 +43,7 @@ void ObstacleTestInitialization::setUpObstacles(){
     obstacleOne->setReactionTime(reactionTimeObstacleOne);
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
-    obstacleOne->setReferenceLane(std::vector<std::shared_ptr<Lane>>{laneOne}, 0);
+    obstacleOne->setReferenceLane(laneOne);
     obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);
 
     idObstacleTwo = 2;
@@ -64,11 +64,10 @@ void ObstacleTestInitialization::setUpObstacles(){
                                                       reactionTimeObstacleTwo,
                                                       trajectoryPredictionObstacleTwo,
                                                       lengthObstacleTwo, widthObstacleTwo));
-    obstacleTwo->setReferenceLane(std::vector<std::shared_ptr<Lane>>{roadNetwork->getLanes().at(0)},
-                                  5);
+    obstacleTwo->setReferenceLane(roadNetwork->getLanes().at(0));
 
-     obstacleList.push_back(obstacleOne);
-     obstacleList.push_back(obstacleTwo);
+    obstacleList.push_back(obstacleOne);
+    obstacleList.push_back(obstacleTwo);
 }
 
 void ObstacleTest::SetUp(){

@@ -6,3 +6,4 @@
 
 Predicates::Predicates(std::shared_ptr<RoadNetwork> roadNetwork) : roadNetwork(std::move(roadNetwork)) {}
 
+void Predicates::setRoadNetwork(const std::shared_ptr<RoadNetwork> &net) { roadNetwork = net; }
