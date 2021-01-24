@@ -94,7 +94,6 @@ double State::getLatPosition() const {
 void State::setLatPosition(double d) {
     validStates.latPosition = true;
     latPosition = d;
-    std::cout << "d: " << latPosition << '\n';
 }
 
 double State::getOrientation() const {
