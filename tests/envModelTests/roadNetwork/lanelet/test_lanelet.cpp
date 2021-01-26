@@ -148,7 +148,7 @@ void LaneletTestInitialization::setUpLanelets(){
     laneletFour->setLeftAdjacent(laneletOne, DrivingDirection::same);
     laneletOne->addTrafficLight(tl);
     laneletOne->addTrafficSign(ts);
-    laneletOne->setStopLine(sl);
+    laneletOne->setStopLine(std::make_shared<StopLine>(sl));
 
     polygonOne = polygon_type{{{0.0, 0.0}, {0.0, 0.5}, {0.5, 0.5}, {0.5, 0.0},
                                       {0.0, 0.0}}};
@@ -181,7 +181,7 @@ TEST_F(LaneletTest, InitializationComplete){
     EXPECT_EQ(laneletOne->getAdjacentRight().adj->getId(), 4);
     EXPECT_EQ(laneletOne->getTrafficSigns()[0]->getId(), 123);
     EXPECT_EQ(laneletOne->getTrafficLights()[0]->getId(), 456);
-    EXPECT_EQ(laneletOne->getStopLine().getPoints()[0].x, 1);
+    EXPECT_EQ(laneletOne->getStopLine()->getPoints()[0].x, 1);
 }
 
 TEST_F(LaneletTest, InitializationManual){

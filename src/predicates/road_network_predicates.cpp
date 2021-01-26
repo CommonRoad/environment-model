@@ -58,7 +58,7 @@ bool Predicates::stopLineInFront(int timeStep, const std::shared_ptr<Obstacle> &
     auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
     for (const auto &la : lanelets) {
         std::shared_ptr<StopLine> stopLine{la->getStopLine()};
-        if (stopLine == NULL) //or stop sign not in reference traffic signs of lanelet
+        if (stopLine == nullptr) //or stop sign not in reference traffic signs of lanelet
             continue;
         Eigen::Vector2d stopLineS = obs->getOwnLane()->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
                 stopLine->getPoints().at(0).x, stopLine->getPoints().at(0).y);
