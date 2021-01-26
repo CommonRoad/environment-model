@@ -118,9 +118,14 @@ const ValidStates &State::getValidStates() const {
 }
 
 void State::convertPointToCurvilinear(const CurvilinearCoordinateSystem &ccs) {
-    Eigen::Vector2d convertedPoint = ccs.convertToCurvilinearCoords(getXPosition(), getYPosition());
-    setLonPosition(convertedPoint.x());
-    setLatPosition(convertedPoint.y());
+    try {
+        Eigen::Vector2d convertedPoint = ccs.convertToCurvilinearCoords(getXPosition(), getYPosition());
+        setLonPosition(convertedPoint.x());
+        setLatPosition(convertedPoint.y());
+    }
+    catch (std::invalid_argument){
+        std::cerr << "time step: " << timeStep << " | x-position: " << getXPosition() << " | y-position: " << getYPosition() << '\n';
+    }
 }
 
 

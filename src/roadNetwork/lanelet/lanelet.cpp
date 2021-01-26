@@ -64,7 +64,7 @@ void Lanelet::setUserOneWay(const std::vector<ObstacleType> &user) { userOneWay 
 
 void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) { userBidirectional = user; }
 
-void Lanelet::setStopLine(const StopLine &sl) { stopLine = sl; }
+void Lanelet::setStopLine(const std::shared_ptr<StopLine> &sl) { stopLine = sl; }
 
 void Lanelet::addLeftVertex(const vertex left) { leftBorder.push_back(left); }
 
@@ -110,7 +110,7 @@ const Lanelet::adjacent &Lanelet::getAdjacentLeft() const { return adjacentLeft;
 
 const Lanelet::adjacent &Lanelet::getAdjacentRight() const { return adjacentRight; }
 
-const StopLine &Lanelet::getStopLine() const { return stopLine; }
+const std::shared_ptr<StopLine> &Lanelet::getStopLine() const { return stopLine; }
 
 bool Lanelet::applyIntersectionTesting(const polygon_type &polygon_shape) const {
     // check first if shape intersects with bounding box since this evaluation is faster

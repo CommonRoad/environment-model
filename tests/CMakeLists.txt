@@ -29,11 +29,11 @@ set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
 # Create executable for test
 add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
-target_compile_features(env_model_example_node
-        PUBLIC cxx_lambdas cxx_auto_type
-        PRIVATE cxx_lambdas cxx_auto_type)
-set_property(TARGET env_model_example_node PROPERTY POSITION_INDEPENDENT_CODE ON)
-set_property(TARGET env_model_example_node PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
+#target_compile_features(env_model_example_node
+#        PUBLIC cxx_lambdas cxx_auto_type
+#        PRIVATE cxx_lambdas cxx_auto_type)
+#set_property(TARGET env_model_example_node PROPERTY POSITION_INDEPENDENT_CODE ON)
+#set_property(TARGET env_model_example_node PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
 target_link_libraries(env_model_test PUBLIC env_model gtest)
 
 include(GoogleTest)

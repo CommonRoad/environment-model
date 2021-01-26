@@ -140,7 +140,7 @@ public:
      *
      * @param sl Stop line belonging to lanelet.
     */
-    void setStopLine(const StopLine &sl);
+    void setStopLine(const std::shared_ptr<StopLine> &sl);
 
     /**
      * Appends a center vertex.
@@ -301,7 +301,7 @@ public:
      *
      * @return Stop line.
     */
-    [[nodiscard]] const StopLine &getStopLine() const;
+    [[nodiscard]] const std::shared_ptr<StopLine> &getStopLine() const;
 
     /**
      * Given a polygon, checks whether the polygon intersects with the lanelet.
@@ -358,7 +358,7 @@ private:
     std::vector<LaneletType> laneletType;                       //**< list of relevant lanelet types*/
     std::vector<ObstacleType> userOneWay;                       //**< list of relevant allowed users one way*/
     std::vector<ObstacleType> userBidirectional;                //**< list of relevant allowed users bidirectional*/
-    StopLine stopLine;                                          //**< stopLine assigned to lanelet*/
+    std::shared_ptr<StopLine> stopLine;                         //**< stopLine assigned to lanelet*/
 };
 
 #endif //ENVIRONMENT_MODEL_LANELET_H

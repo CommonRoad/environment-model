@@ -19,7 +19,7 @@ enum class LineMarking {
 
 enum class LaneletType {
     interstate, urban, crosswalk, busStop, country, highway, driveWay, mainCarriageWay,
-    accessRamp, exitRamp, shoulder, busLane, bikeLane, sidewalk, unknown
+    accessRamp, exitRamp, shoulder, busLane, bikeLane, sidewalk, unknown, intersection
 };
 
 enum class CycleElementType {

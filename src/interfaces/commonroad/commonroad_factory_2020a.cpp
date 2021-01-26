@@ -102,7 +102,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
                 // set stop line
                 if (!(strcmp(child.name(), "stopLine"))) {
                     std::vector<vertex> points;
-                    StopLine sl = StopLine();
+                    std::shared_ptr<StopLine> sl = std::make_shared<StopLine>();
                     for (pugi::xml_node elem = child.first_child(); elem; elem = elem.next_sibling()) {
                         if (!(strcmp(elem.name(), "point"))) {
                             vertex newVertice{};
@@ -111,23 +111,23 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
                             points.push_back(newVertice);
                         }
                         if (!(strcmp(elem.name(), "lineMarking")))
-                            sl.setLineMarking(matchStringToLineMarking(elem.first_child().value()));
+                            sl->setLineMarking(matchStringToLineMarking(elem.first_child().value()));
                         if (!(strcmp(elem.name(), "trafficSignRef"))) {
                             for (const auto &sign: trafficSigns) {
                                 if (child.attribute("ref").as_int() == sign->getId()) {
-                                    sl.setTrafficSign(sign);
+                                    sl->setTrafficSign(sign);
                                 }
                             }
                         }
                         if (!(strcmp(elem.name(), "trafficLightRef"))) {
                             for (const auto &light: trafficLights) {
                                 if (child.attribute("ref").as_int() == light->getId()) {
-                                    sl.setTrafficLight(light);
+                                    sl->setTrafficLight(light);
                                 }
                             }
                         }
                     }
-                    sl.setPoints(points);
+                    sl->setPoints(points);
                     tempLaneletContainer[arrayIndex]->setStopLine(sl);
                 }
             }
