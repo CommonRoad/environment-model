@@ -95,6 +95,11 @@ public:
     static std::shared_ptr<Lane> findLaneByShape(const std::vector<std::shared_ptr<Lane>> &possibleLanes,
                                                  const polygon_type &polygonShape);
 
+    /**
+     * Computes and sets dynamic intersection labels of incomings.
+     */
+    void setDynamicIntersectionLabels();
+
 private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;       //**< set of lanelets contained in road network */
     std::vector<std::shared_ptr<Lane>> lanes;                   //**< set of interstate-based lanes contained in road network */
@@ -118,6 +123,9 @@ private:
      */
     static LaneletType extractClassifyingLaneletType(const std::shared_ptr<Lanelet> &la);
 
+    static std::vector<std::shared_ptr<Lanelet>>
+    extractOutgoingsFromIncoming(const LaneletType &intersectionLaneletType,
+                                     const std::vector<std::shared_ptr<Lanelet>> &incomingSuccessors) ;
 };
 
 #endif //ENV_MODEL_ROAD_NETWORK_H

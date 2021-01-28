@@ -27,6 +27,7 @@ RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network,
         rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
 
     createLanes(network);
+    setDynamicIntersectionLabels();
 }
 
 const std::vector<std::shared_ptr<Lanelet>> &RoadNetwork::getLaneletNetwork() const { return laneletNetwork; }
@@ -131,3 +132,27 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(int id) {
 }
 
 //https://gitlab.lrz.de/maierhofer/commonroad_monitor/-/blob/intersection/crmonitor/common/road_network.py
+
+void RoadNetwork::setDynamicIntersectionLabels() {
+    auto intersectionLaneletType = LaneletType::intersection;
+    for (const auto &inters : intersections) {
+        for (const auto &incom : inters->getIncoming()) {
+            incom->setLeftOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsLeft()));
+            incom->setRightOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsRight()));
+            incom->setStraightOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsStraight()));
+        }
+    }
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+RoadNetwork::extractOutgoingsFromIncoming(const LaneletType &intersectionLaneletType,
+                                              const std::vector<std::shared_ptr<Lanelet>> &incomingSuccessors) {
+    std::vector<std::shared_ptr<Lanelet>> outgoings;
+    for ( const auto &inSuc : incomingSuccessors) {
+        auto suc = inSuc;
+        while (std::all_of(suc->getSuccessors().begin(), suc->getSuccessors().end(), [intersectionLaneletType](auto laSuc){ return laSuc->hasType(intersectionLaneletType); }))
+            suc = suc->getSuccessors().at(0); //we assume only one successor
+        outgoings.push_back(suc);
+    }
+    return outgoings;
+}

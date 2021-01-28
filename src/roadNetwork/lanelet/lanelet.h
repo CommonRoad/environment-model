@@ -341,6 +341,14 @@ public:
     */
     double getOrientationAtPosition(double positionX, double positionY);
 
+    /**
+     * Evaluates whether a lanelet has a specific lanelet type.
+     *
+     * @param laType Lanelet type which existence should be checked.
+     * @return Boolean indicating whether the lanelet type exists.
+    */
+    bool hasType(LaneletType laType);
+
 
 private:
     int id{};                                                   //**< unique ID of lanelet */
