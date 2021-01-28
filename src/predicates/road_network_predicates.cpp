@@ -64,30 +64,11 @@ bool Predicates::stopLineInFront(int timeStep, const std::shared_ptr<Obstacle> &
                 stopLine->getPoints().at(0).x, stopLine->getPoints().at(0).y);
 
         //maybe check orientation as in BA
-        if (stopLineS.x() - 1 < obs->frontS(timeStep) and obs->frontS(timeStep) < stopLineS.x())
+        if (stopLineS.x() - 1 < obs->frontS(timeStep) and obs->frontS(timeStep) < stopLineS.x()) {
             return true;
+        }
     }
     return false;
-}
-
-bool Predicates::onLeftIncoming(int timeStep,
-                                const std::shared_ptr<Obstacle> &obsP,
-                                const std::shared_ptr<Obstacle> &obsK) {
-
-}
-
-
-bool Predicates::intersectionRegulatedByTrafficSigns(int timeStep, const std::shared_ptr<Obstacle> &obs) {
-
-}
-
-bool Predicates::intersectionRegulatedByTrafficLights(int timeStep, const std::shared_ptr<Obstacle> &obs) {
-
-}
-
-bool Predicates::inSameIntersection(int timeStep, const std::shared_ptr<Obstacle> &obsP,
-                                    const std::shared_ptr<Obstacle> &obsK) {
-
 }
 
 bool Predicates::inIntersectionMainArea(int timeStep, const std::shared_ptr<Obstacle> &obs) {
@@ -101,3 +82,103 @@ bool Predicates::inIntersectionMainArea(int timeStep, const std::shared_ptr<Obst
     return false;
 }
 
+bool Predicates::atRedStraightTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs){
+    return atRedTrafficLight(timeStep, obs, TrafficLightDirection::straight);
+}
+
+bool Predicates::atRedLeftTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs){
+    return atRedTrafficLight(timeStep, obs, TrafficLightDirection::left);
+}
+
+bool Predicates::atRedRightTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs){
+    return atRedTrafficLight(timeStep, obs, TrafficLightDirection::right);
+}
+
+bool Predicates::atRedTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs, TrafficLightDirection turnDir){
+    std::vector<TrafficLightDirection> relevantTrafficLightDirections;
+    switch(turnDir) {
+        case TrafficLightDirection::left:
+            relevantTrafficLightDirections = {TrafficLightDirection::left, TrafficLightDirection::leftStraight,
+                                              TrafficLightDirection::leftRight};
+            break;
+        case TrafficLightDirection::right:
+            relevantTrafficLightDirections = {TrafficLightDirection::leftRight, TrafficLightDirection::straightRight,
+                                              TrafficLightDirection::straightRight};
+            break;
+        default:
+            relevantTrafficLightDirections = {TrafficLightDirection::straight, TrafficLightDirection::leftStraight,
+                                              TrafficLightDirection::straightRight};
+    }
+    auto activeTl { activeTrafficLights(timeStep, obs) };
+    for (const auto &tl : activeTl){
+        auto trafficLightState { tl->getElementAtTime(timeStep).color };
+        if (std::any_of(relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
+                        [tl](const TrafficLightDirection& relevantDirection) { return relevantDirection == tl->getDirection(); }) and trafficLightState != TrafficLightState::green)
+            return true;
+    }
+
+    // use all when no other relevant TL is active
+    for (const auto &tl : activeTl){
+        auto trafficLightState { tl->getElementAtTime(timeStep).color };
+        if (tl->getDirection() == TrafficLightDirection::all and trafficLightState != TrafficLightState::green)
+            return true;
+    }
+
+    return false;
+
+}
+
+std::set<std::shared_ptr<TrafficLight>> Predicates::activeTrafficLights(int timeStep, const std::shared_ptr<Obstacle> &obs){
+    std::set<std::shared_ptr<TrafficLight>> trafficLights;
+    TrafficLightState inactive = TrafficLightState::inactive;
+    auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
+    for (const auto &la : lanelets) {
+        for (const auto &tl : la->getTrafficLights()) {
+            if (tl->isActive() and tl->getElementAtTime(timeStep).color != inactive)
+                trafficLights.insert(tl);
+        }
+    }
+    return trafficLights;
+}
+
+bool Predicates::atGreenArrow(int timeStep, const std::shared_ptr<Obstacle> &obs){
+    auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
+    std::string trafficSignID { TrafficSignElement::mapTrafficSignNameToCountryID("green_arrow", country) };
+    for (const auto &la : lanelets) {
+        auto trafficSigns { la->getTrafficSigns() };
+        for (const auto &ts : trafficSigns){
+            if (std::any_of(ts->getTrafficSignElement().begin(), ts->getTrafficSignElement().end(),
+                            [trafficSignID](const TrafficSignElement& t) { return t.getId() == trafficSignID; }))
+                return true;
+        }
+
+    }
+    return false;
+}
+
+bool Predicates::onRightOutgoing(int timeStep, const std::shared_ptr<Obstacle> &obs){
+    auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
+    for (const auto &la : lanelets) {
+        if (std::any_of(obs->getRightOutgoings().begin(), obs->getRightOutgoings().end(), [la](const std::shared_ptr<Lanelet>& outgoing) { return la->getId() == outgoing->getId(); }))
+            return true;
+    }
+    return false;
+}
+
+bool Predicates::onLeftOutgoing(int timeStep, const std::shared_ptr<Obstacle> &obs){
+    auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
+    for (const auto &la : lanelets) {
+        if (std::any_of(obs->getLeftOutgoings().begin(), obs->getLeftOutgoings().end(), [la](const std::shared_ptr<Lanelet>& outgoing) { return la->getId() == outgoing->getId(); }))
+            return true;
+    }
+    return false;
+}
+
+bool Predicates::onStraightOutgoing(int timeStep, const std::shared_ptr<Obstacle> &obs){
+    auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
+    for (const auto &la : lanelets) {
+        if (std::any_of(obs->getStraightOutgoings().begin(), obs->getStraightOutgoings().end(), [la](const std::shared_ptr<Lanelet>& outgoing) { return la->getId() == outgoing->getId(); }))
+            return true;
+    }
+    return false;
+}

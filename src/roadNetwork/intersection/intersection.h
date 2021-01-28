@@ -54,6 +54,12 @@ public:
      */
     void setCrossing(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &crossing);
 
+    /**
+     * Computes and sets dynamic intersection labels of incomings.
+     *
+     */
+    void setDynamicIntersectionLabels();
+
 private:
     int id;                                                         //**< ID of intersection. */
     std::vector<std::shared_ptr<Incoming>> incoming;                //**< List of pointers to incomings belonging to intersection. */

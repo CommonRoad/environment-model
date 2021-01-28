@@ -346,6 +346,22 @@ public:
     */
     [[nodiscard]] int getLastTrajectoryTimeStep(); //TODO create test case
 
+    const std::vector<std::shared_ptr<Lanelet>> &getStraightOutgoings() const;
+
+    void setStraightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &straightOutgoings);
+
+    const std::vector<std::shared_ptr<Lanelet>> &getLeftOutgoings() const;
+
+    void setLeftOutgoings(const std::vector<std::shared_ptr<Lanelet>> &leftOutgoings);
+
+    const std::vector<std::shared_ptr<Lanelet>> &getRightOutgoings() const;
+
+    void setRightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &rightOutgoings);
+
+    const std::vector<std::shared_ptr<Lanelet>> &getOncomings() const;
+
+    void setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings);
+
 private:
     int id{};                                                                   //**< unique ID of lanelet */
     bool isStatic{false};                                                       //**< true if Obstacle is static */
@@ -363,6 +379,10 @@ private:
     std::shared_ptr<Lane> ownLane{nullptr};                                     //**< lane to which obstacle is assigned to */
     std::shared_ptr<Lane> referenceLane{nullptr};                               //**< lane which is used as reference for curvilinear projection */
     std::map<int, std::vector<std::shared_ptr<Lane>>> occupiedLanes{};          //**< map of time steps to lanes occupied by the obstacle */
+    std::vector<std::shared_ptr<Lanelet>> straightOutgoings;                    //**< set of pointers to straight outgoing lanelets to which obstacle belongs */
+    std::vector<std::shared_ptr<Lanelet>> leftOutgoings;                        //**< set of pointers to left outgoing lanelets to which obstacle belongs */
+    std::vector<std::shared_ptr<Lanelet>> rightOutgoings;                       //**< set of pointers to right outgoing lanelets to which obstacle belongs */
+    std::vector<std::shared_ptr<Lanelet>> oncomings;                            //**< set of pointers to oncoming lanelets to which obstacle belongs */
 };
 
 #endif //ENV_MODEL_OBSTACLE_H

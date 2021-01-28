@@ -29,7 +29,7 @@ public:
      *
      * @param light_cycle List of traffic light cycle elements.
      */
-    void setCycle(const std::vector<CycleElement> &light_cycle);
+    void setCycle(const std::vector<TrafficLightCycleElement> &light_cycle);
 
     /**
      * Setter for traffic light offset.
@@ -57,7 +57,7 @@ public:
      *
      * @param ce Traffic light cycle element.
      */
-    void addCycleElement(CycleElement ce);
+    void addCycleElement(TrafficLightCycleElement ce);
 
      /**
       * Getter for traffic light ID.
@@ -71,7 +71,7 @@ public:
      *
      * @return List of traffic light cycle elements.
      */
-    [[nodiscard]] std::vector<CycleElement> getCycle() const;
+    [[nodiscard]] std::vector<TrafficLightCycleElement> getCycle() const;
 
     /**
      * Getter for traffic light offset.
@@ -100,11 +100,11 @@ public:
      * @param time Time step of interest.
      * @return Traffic light cycle element which is active at the provided time step.
      */
-    CycleElement getElementAtTime(int time);
+    TrafficLightCycleElement getElementAtTime(int time);
 
 private:
     int id;                             //**< unique ID of traffic light */
-    std::vector<CycleElement> cycle;    //**< cycle of traffic light */
+    std::vector<TrafficLightCycleElement> cycle;    //**< cycle of traffic light */
     int offset;                         //**< time offset of traffic light */
     TrafficLightDirection direction;    //**< direction for which traffic light is valid */
     bool active{};                      //**< boolean indicating whether traffic sign is valid */

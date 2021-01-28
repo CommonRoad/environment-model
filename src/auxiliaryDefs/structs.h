@@ -7,8 +7,8 @@
 
 #include "types_and_definitions.h"
 
-struct CycleElement {
-    CycleElementType color;
+struct TrafficLightCycleElement {
+    TrafficLightState color;
     int duration;
 };
 
@@ -26,6 +26,8 @@ struct ValidStates {
     bool latPosition;
     bool orientation;
 };
+
+
 
 #endif //ENV_MODEL_STRUCTS_H
 

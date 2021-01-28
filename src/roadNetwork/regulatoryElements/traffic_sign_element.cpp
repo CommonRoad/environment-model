@@ -4,7 +4,9 @@
 
 #include "traffic_sign_element.h"
 
-TrafficSignElement::TrafficSignElement(std::string el_id) : id(std::move(el_id)) {}
+#include <utility>
+
+TrafficSignElement::TrafficSignElement(std::string  el_id) : id(std::move(el_id)) {}
 
 std::string TrafficSignElement::getId() const { return id; }
 
@@ -14,3 +16,16 @@ void TrafficSignElement::addAdditionalValue(const std::string &additionalValue) 
     additional_value.push_back(additionalValue);
 }
 
+std::string TrafficSignElement::mapTrafficSignNameToCountryID(const std::string& trafficSignName, SupportedTrafficSignCountry country){
+    if (trafficSignName =="green_arrow")
+        if (country == SupportedTrafficSignCountry::GERMANY)
+            return convertGermanTrafficSignIdToString(TrafficSignIDGermany::green_arrow);
+    return "206"; //Stop sign in Germany
+}
+
+std::string TrafficSignElement::convertGermanTrafficSignIdToString(TrafficSignIDGermany signId){
+    if (signId == TrafficSignIDGermany::green_arrow)
+        return "720";
+    else
+        return "206"; //Stop sign in Germany
+}

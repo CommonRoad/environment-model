@@ -255,3 +255,35 @@ int Obstacle::getLastTrajectoryTimeStep() {
 
 std::shared_ptr<Lane> Obstacle::getReferenceLane() const { return referenceLane; }
 
+const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getStraightOutgoings() const {
+    return straightOutgoings;
+}
+
+void Obstacle::setStraightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &straightOutgoings) {
+    Obstacle::straightOutgoings = straightOutgoings;
+}
+
+const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getLeftOutgoings() const {
+    return leftOutgoings;
+}
+
+void Obstacle::setLeftOutgoings(const std::vector<std::shared_ptr<Lanelet>> &leftOutgoings) {
+    Obstacle::leftOutgoings = leftOutgoings;
+}
+
+const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getRightOutgoings() const {
+    return rightOutgoings;
+}
+
+void Obstacle::setRightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &rightOutgoings) {
+    Obstacle::rightOutgoings = rightOutgoings;
+}
+
+const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getOncomings() const {
+    return oncomings;
+}
+
+void Obstacle::setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings) {
+    Obstacle::oncomings = oncomings;
+}
+

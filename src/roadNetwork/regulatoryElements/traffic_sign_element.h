@@ -17,7 +17,7 @@ public:
      *
      * @param id ID of traffic sign element. Note this ID corresponds to the official national traffic sign ID of a country.
      */
-    explicit TrafficSignElement(std::string id);
+    explicit TrafficSignElement(std::string  id);
 
     /**
      * Copy constructor of traffic sign element.
@@ -45,6 +45,22 @@ public:
      * @return Additional value.
      */
     void addAdditionalValue(const std::string &additionalValue);
+
+    /**
+     *
+     * @param trafficSignName CommonRoad name of traffic sign.
+     * @param country Country for which traffic sign number should be extracted.
+     * @return String corresponding to traffic sign ID of country.
+     */
+    static std::string mapTrafficSignNameToCountryID(const std::string& trafficSignName, SupportedTrafficSignCountry country);
+
+    /**
+     * Converts German traffic sign ID to string.
+     *
+     * @param signId Traffic sign ID from corresponding enum.
+     * @return String which corresponds to traffic sign ID.
+     */
+    static std::string convertGermanTrafficSignIdToString(TrafficSignIDGermany signId);
 
 private:
     std::string id;                                  //**< official national traffic sign ID of a country */

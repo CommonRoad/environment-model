@@ -218,15 +218,15 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                             std::string duration = trafficLightCycleChildElement.first_child().first_child().value();
                             std::string color =
                                     trafficLightCycleChildElement.first_child().next_sibling().first_child().value();
-                            CycleElement cycle{};
+                            TrafficLightCycleElement cycle{};
                             if (color == "red")
-                                cycle = CycleElement{CycleElementType::red, std::stoi(duration)};
+                                cycle = TrafficLightCycleElement{TrafficLightState::red, std::stoi(duration)};
                             if (color == "green")
-                                cycle = CycleElement{CycleElementType::green, std::stoi(duration)};
+                                cycle = TrafficLightCycleElement{TrafficLightState::green, std::stoi(duration)};
                             if (color == "yellow")
-                                cycle = CycleElement{CycleElementType::yellow, std::stoi(duration)};
+                                cycle = TrafficLightCycleElement{TrafficLightState::yellow, std::stoi(duration)};
                             if (color == "red_yellow")
-                                cycle = CycleElement{CycleElementType::red_yellow, std::stoi(duration)};
+                                cycle = TrafficLightCycleElement{TrafficLightState::red_yellow, std::stoi(duration)};
 
                             tempLaneletContainer[arrayIndex]->addCycleElement(cycle);
                         }

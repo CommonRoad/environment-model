@@ -22,8 +22,8 @@ enum class LaneletType {
     accessRamp, exitRamp, shoulder, busLane, bikeLane, sidewalk, unknown, intersection
 };
 
-enum class CycleElementType {
-    red, green, yellow, red_yellow
+enum class TrafficLightState {
+    red, green, yellow, red_yellow, inactive
 };
 
 enum class TrafficLightDirection {
@@ -40,6 +40,14 @@ enum class ShapeType {
 
 enum class ContainmentType {
     PARTIALLY_CONTAINED, COMPLETELY_CONTAINED
+};
+
+enum class TrafficSignIDGermany {
+    green_arrow = 720
+};
+
+enum class SupportedTrafficSignCountry {
+    GERMANY, ZAMUNDA
 };
 
 const double reactionTimeObstacles = 0.3;

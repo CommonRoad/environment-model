@@ -130,3 +130,4 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(int id) {
     return *it;
 }
 
+//https://gitlab.lrz.de/maierhofer/commonroad_monitor/-/blob/intersection/crmonitor/common/road_network.py

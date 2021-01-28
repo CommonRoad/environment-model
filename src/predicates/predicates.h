@@ -10,7 +10,7 @@
 
 class Predicates {
 public:
-    explicit Predicates(std::shared_ptr<RoadNetwork> roadNetwork);
+    explicit Predicates(std::shared_ptr<RoadNetwork> roadNetwork, SupportedTrafficSignCountry country = SupportedTrafficSignCountry::GERMANY);
 
     void setRoadNetwork(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
@@ -40,63 +40,99 @@ public:
     bool stopLineInFront(int timeStep, const std::shared_ptr<Obstacle> &obs);
 
     /**
-     * Evaluates whether the kth vehicle is left of the pth vehicle
-     *
-     * @param timeStep Time step of interest.
-     * @param obsP The pth obstacle.
-     * @param obsK The kth obstacle.
-     * @return Boolean indicating satisfaction
-     */
-    static bool onLeftIncoming(int timeStep, const std::shared_ptr<Obstacle> &obsP, const std::shared_ptr<Obstacle> &obsK);
-
-    /**
-     * Evaluates whether the intersection the obstacle belongs to is regulated by traffic signs.
-     *
-     * @param timeStep Time step of interest.
-     * @param obs The obstacle for which predicate should be evaluated.
-     * @return Boolean indicating satisfaction.
-     */
-    static bool intersectionRegulatedByTrafficSigns(int timeStep, const std::shared_ptr<Obstacle> &obs);
-
-    /**
-     * Evaluates whether the intersection the obstacle belongs to is regulated by traffic lights.
-     *
-     * @param timeStep Time step of interest.
-     * @param obs The obstacle for which predicate should be evaluated.
-     * @return Boolean indicating satisfaction.
-     */
-    static bool intersectionRegulatedByTrafficLights(int timeStep, const std::shared_ptr<Obstacle> &obs);
-
-    /**
-     * Evaluates whether two vehicles are part of the same intersection.
-     *
-     * @param timeStep Time step of interest.
-     * @param obsP The pth obstacle.
-     * @param obsK The kth obstacle.
-     * @return Boolean indicating satisfaction.
-     */
-    static bool inSameIntersection(int timeStep, const std::shared_ptr<Obstacle> &obsP, const std::shared_ptr<Obstacle> &obsK);
-
-    /**
      * Evaluates whether a vehicle is within the main area of an intersection.
      *
      * @param timeStep Time step of interest.
-     * @param obs The obstacle for which predicate should be evaluated.
+     * @param obs The obstacle for which the predicate should be evaluated.
      * @return Boolean indicating satisfaction.
      */
     bool inIntersectionMainArea(int timeStep, const std::shared_ptr<Obstacle> &obs);
 
     /**
-     * Evaluates whether a vehicle is on an incoming lanelet of an intersection.
+     * Returns set of pointers to active traffic lights of lanelets a given obstacle occupies.
      *
      * @param timeStep Time step of interest.
-     * @param obs The obstacle for which predicate should be evaluated.
+     * @param obs The obstacle for which the predicate should be evaluated.
      * @return Boolean indicating satisfaction.
      */
-    bool onIncoming(int timeStep, const std::shared_ptr<Obstacle> &obs);
+    std::set<std::shared_ptr<TrafficLight>> activeTrafficLights(int timeStep, const std::shared_ptr<Obstacle> &obs);
+
+    /**
+     * Evaluates whether an obstacle is on an lanelet which is regulated by an green arrow traffic sign.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool atGreenArrow(int timeStep, const std::shared_ptr<Obstacle> &obs);
+
+    /**
+     * Evaluates whether the obstacle is on an lanelet regulated by a traffic light for straight direction which is currently red.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool atRedStraightTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs);
+
+    /**
+     * Evaluates whether the obstacle is on an lanelet regulated by a traffic light for lt direction which is currently red.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool atRedLeftTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs);
+
+    /**
+     * Evaluates whether the obstacle is on an lanelet regulated by a traffic light for right direction which is currently red.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool atRedRightTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs);
+
+    /**
+     * Evaluates whether the obstacle is on an lanelet regulated by a traffic light for a provided turning direction which is currently red.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @param turnDir Turning direction the red traffic light should have.
+     * @return Boolean indicating satisfaction.
+     */
+    bool atRedTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs, TrafficLightDirection turnDir);
+
+    /**
+     * Evaluates whether the obstacle is on an right outgoing lanelet of an intersection incoming.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool onRightOutgoing(int timeStep, const std::shared_ptr<Obstacle> &obs);
+
+    /**
+     * Evaluates whether the obstacle is on an left outgoing lanelet of an intersection incoming.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool onLeftOutgoing(int timeStep, const std::shared_ptr<Obstacle> &obs);
+
+    /**
+     * Evaluates whether the obstacle is on an straight outgoing lanelet of an intersection incoming.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool onStraightOutgoing(int timeStep, const std::shared_ptr<Obstacle> &obs);
 
 private:
     std::shared_ptr<RoadNetwork> roadNetwork;
+    SupportedTrafficSignCountry country;
 };
 
 
