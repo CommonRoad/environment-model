@@ -41,8 +41,6 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
             std::vector<LaneletType> laneletType;
             std::vector<ObstacleType> userOneWay;
             std::vector<ObstacleType> userBidirectional;
-            std::vector<std::shared_ptr<TrafficSign>> signs;
-            std::vector<std::shared_ptr<TrafficLight>> lights;
             for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
                 // set left bound
                 if (!(strcmp(child.name(), "leftBound"))) {
@@ -87,15 +85,15 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
                 if (!(strcmp(child.name(), "trafficSign"))) {
                     for (const auto &sign: trafficSigns) {
                         if (child.attribute("ref").as_int() == sign->getId()) {
-                            signs.push_back(sign);
+                            tempLaneletContainer[arrayIndex]->addTrafficSign(sign);
                         }
                     }
                 }
                 // add traffic lights to temporary list
-                if (!(strcmp(child.name(), "trafficLight"))) {
+                if (!(strcmp(child.name(), "trafficLightRef"))) {
                     for (const auto &light: trafficLights) {
                         if (child.attribute("ref").as_int() == light->getId()) {
-                            lights.push_back(light);
+                            tempLaneletContainer[arrayIndex]->addTrafficLight(light);
                         }
                     }
                 }

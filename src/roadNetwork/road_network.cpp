@@ -150,7 +150,7 @@ RoadNetwork::extractOutgoingsFromIncoming(const LaneletType &intersectionLanelet
     std::vector<std::shared_ptr<Lanelet>> outgoings;
     for ( const auto &inSuc : incomingSuccessors) {
         auto suc = inSuc;
-        while (std::all_of(suc->getSuccessors().begin(), suc->getSuccessors().end(), [intersectionLaneletType](auto laSuc){ return laSuc->hasType(intersectionLaneletType); }))
+        while (!std::all_of(suc->getSuccessors().begin(), suc->getSuccessors().end(), [intersectionLaneletType](auto laSuc){ return laSuc->hasType(intersectionLaneletType); }))
             suc = suc->getSuccessors().at(0); //we assume only one successor
         outgoings.push_back(suc);
     }

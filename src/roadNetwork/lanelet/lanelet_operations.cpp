@@ -33,6 +33,8 @@ LaneletType matchStringToLaneletType(const char *type) {
         return LaneletType::sidewalk;
     else if (!(strcmp(type, "busLane")))
         return LaneletType::busLane;
+    else if (!(strcmp(type, "intersection")))
+        return LaneletType::intersection;
     else
         return LaneletType::unknown;
 }
