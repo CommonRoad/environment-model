@@ -12,31 +12,126 @@ class Predicates {
 public:
     explicit Predicates(std::shared_ptr<RoadNetwork> roadNetwork, SupportedTrafficSignCountry country = SupportedTrafficSignCountry::GERMANY);
 
+    /**
+     * Setter for road network.
+     * @param roadNetwork Pointer to road network.
+     */
     void setRoadNetwork(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
+    /**
+     * Computes the safe distance between a following and leading obstacle.
+     *
+     * @param vFollow Velocity of following obstacle.
+     * @param vLead Velocity of leading obstacle.
+     * @param aMinFollow Minimum acceleration of following obstacle.
+     * @param aMinLead Minimum acceleration of leading obstacle.
+     * @param tReact Reaction time of obstacle.
+     * @return Safe distance of following vehicle with respect to the leading vehicle.
+     */
     static double safeDistance(double vFollow, double vLead, double aMinFollow, double aMinLead, double tReact);
 
-    static bool keepsSafeDistancePrec(int timeStep, const std::shared_ptr<Obstacle> &vehicleFollow,
-                                      const std::shared_ptr<Obstacle> &vehicleLead);
+    /**
+     * Evaluates whether the kth obstacle maintains the safe distance to the pth vehicle.
+     *
+     * @param timeStep Time step of interest.
+     * @param obsK The kth obstacle.
+     * @param obsK The pth obstacle.
+     * @return Boolean indicating satisfaction.
+     */
+    static bool keepsSafeDistancePrec(int timeStep, const std::shared_ptr<Obstacle> &obsK,
+                                      const std::shared_ptr<Obstacle> &obsP);
 
-    bool onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle> &obstacle);
+    /**
+     * Evaluates whether the obstacle is on the main carriageway.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle> &obs);
 
-    bool onMainCarriageWayRightLane(int timeStep, const std::shared_ptr<Obstacle> &obstacle);
+    /**
+     * Evaluates whether the obstacle is on the main carriageway right lane.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool onMainCarriageWayRightLane(int timeStep, const std::shared_ptr<Obstacle> &obs);
 
-    bool onAccessRamp(int timeStep, const std::shared_ptr<Obstacle> &obstacle);
+    /**
+     * Evaluates whether the obstacle is on an access ramp.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
+    bool onAccessRamp(int timeStep, const std::shared_ptr<Obstacle> &obs);
 
-    static bool inFrontOf(int timeStep, const std::shared_ptr<Obstacle> &obs1, const std::shared_ptr<Obstacle> &obs2);
+    /**
+     * Evaluates whether the kth obstacle is in front of the pth obstacle.
+     *
+     * @param timeStep Time step of interest.
+     * @param obsK The kth obstacle.
+     * @param obsK The pth obstacle.
+     * @return Boolean indicating satisfaction.
+     */
+    static bool inFrontOf(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
 
-    bool inSameLane(int timeStep, const std::shared_ptr<Obstacle> &obs1, const std::shared_ptr<Obstacle> &obs2);
+    /**
+     * Evaluates whether two obstacles are in the same lane.
+     *
+     * @param timeStep Time step of interest.
+     * @param obsK The kth obstacle.
+     * @param obsK The pth obstacle.
+     * @return Boolean indicating satisfaction.
+     */
+    bool inSameLane(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
 
-    bool cutIn(int timeStep, const std::shared_ptr<Obstacle> &obs1, const std::shared_ptr<Obstacle> &obs2);
+    /**
+     * Evaluates whether the kth obstacle performs a cut-in into the lane of the pth obstacle.
+     *
+     * @param timeStep Time step of interest.
+     * @param obsK The kth obstacle.
+     * @param obsK The pth obstacle.
+     * @return Boolean indicating satisfaction.
+     */
+    bool cutIn(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
 
+    /**
+     * Evaluates whether a vehicle reverses.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
     static bool reverse(int timeStep, const std::shared_ptr<Obstacle> &obs);
 
+    /**
+     * Evaluates whether a vehicle makes a u-turn.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
     bool makesUTurn(int timeStep, const  std::shared_ptr<Obstacle> &obs);
 
+    /**
+     * Evaluates whether a vehicle is in standstill.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
     static bool inStandstill(int timeStep, const  std::shared_ptr<Obstacle> &obs);
 
+    /**
+     * Evaluates whether a vehicle has a stop line in front.
+     *
+     * @param timeStep Time step of interest.
+     * @param obs The obstacle for which the predicate should be evaluated.
+     * @return Boolean indicating satisfaction.
+     */
     bool stopLineInFront(int timeStep, const std::shared_ptr<Obstacle> &obs);
 
     /**
@@ -101,7 +196,7 @@ public:
      * @param turnDir Turning direction the red traffic light should have.
      * @return Boolean indicating satisfaction.
      */
-    bool atRedTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs, TrafficLightDirection turnDir);
+    bool atRedTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs, TurningDirections turnDir);
 
     /**
      * Evaluates whether the obstacle is on a right outgoing lanelet of an intersection incoming.
@@ -139,6 +234,19 @@ public:
      */
     bool onIncoming(int timeStep, const std::shared_ptr<Obstacle> &obs);
 
+    /**
+     * Evaluates whether the kth obstacle has priority over the pth obstacle at an intersection.
+     *
+     * @param timeStep Time step of interest.
+     * @param obsK The kth obstacle.
+     * @param obsK The pth obstacle.
+     * @return Boolean indicating satisfaction.
+     */
+    bool hasPriority(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP, TurningDirections dirK, TurningDirections dirP);
+
+    int getPriority(int timeStep, const std::shared_ptr<Obstacle> &obs, TurningDirections dir);
+
+    static bool causesBraking(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
 private:
     std::shared_ptr<RoadNetwork> roadNetwork;
     SupportedTrafficSignCountry country;

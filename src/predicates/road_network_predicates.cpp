@@ -83,46 +83,46 @@ bool Predicates::inIntersectionMainArea(int timeStep, const std::shared_ptr<Obst
 }
 
 bool Predicates::atRedStraightTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs) {
-    return atRedTrafficLight(timeStep, obs, TrafficLightDirection::straight);
+    return atRedTrafficLight(timeStep, obs, TurningDirections::straight);
 }
 
 bool Predicates::atRedLeftTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs) {
-    return atRedTrafficLight(timeStep, obs, TrafficLightDirection::left);
+    return atRedTrafficLight(timeStep, obs, TurningDirections::left);
 }
 
 bool Predicates::atRedRightTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs) {
-    return atRedTrafficLight(timeStep, obs, TrafficLightDirection::right);
+    return atRedTrafficLight(timeStep, obs, TurningDirections::right);
 }
 
-bool Predicates::atRedTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs, TrafficLightDirection turnDir) {
+bool Predicates::atRedTrafficLight(int timeStep, const std::shared_ptr<Obstacle> &obs, TurningDirections turnDir) {
     if (!onIncoming(timeStep, obs))
         return false;
-    std::vector<TrafficLightDirection> relevantTrafficLightDirections;
+    std::vector<TurningDirections> relevantTrafficLightDirections;
     switch (turnDir) {
-        case TrafficLightDirection::left:
-            relevantTrafficLightDirections = {TrafficLightDirection::left, TrafficLightDirection::leftStraight,
-                                              TrafficLightDirection::leftRight};
+        case TurningDirections::left:
+            relevantTrafficLightDirections = {TurningDirections::left, TurningDirections::leftStraight,
+                                              TurningDirections::leftRight};
             break;
-        case TrafficLightDirection::right:
-            relevantTrafficLightDirections = {TrafficLightDirection::leftRight, TrafficLightDirection::straightRight,
-                                              TrafficLightDirection::straightRight};
+        case TurningDirections::right:
+            relevantTrafficLightDirections = {TurningDirections::leftRight, TurningDirections::straightRight,
+                                              TurningDirections::straightRight};
             break;
         default:
-            relevantTrafficLightDirections = {TrafficLightDirection::straight, TrafficLightDirection::leftStraight,
-                                              TrafficLightDirection::straightRight};
+            relevantTrafficLightDirections = {TurningDirections::straight, TurningDirections::leftStraight,
+                                              TurningDirections::straightRight};
     }
     auto activeTl{activeTrafficLights(timeStep, obs)};
     for (const auto &tl : activeTl) {
         auto trafficLightState{tl->getElementAtTime(timeStep).color};
         if (std::any_of(relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
-                        [tl](const TrafficLightDirection &relevantDirection) {
+                        [tl](const TurningDirections &relevantDirection) {
                             return relevantDirection == tl->getDirection();
                         }) and trafficLightState != TrafficLightState::green)
             return true;
     }
 
     // use all when no other relevant TL is active
-    const TrafficLightDirection tlDirectionAll{TrafficLightDirection::all};
+    const TurningDirections tlDirectionAll{TurningDirections::all};
     const TrafficLightState tlStateGreen{TrafficLightState::green};
     if (std::any_of(activeTl.begin(), activeTl.end(), [timeStep](const std::shared_ptr<TrafficLight>& tl) {
         return tlDirectionAll == tl->getDirection() and tl->getElementAtTime(timeStep).color != tlStateGreen;
@@ -211,4 +211,13 @@ bool Predicates::onIncoming(int timeStep, const std::shared_ptr<Obstacle> &obs) 
         }
     }
     return false;
+}
+
+
+int Predicates::getPriority(int timeStep, const std::shared_ptr<Obstacle> &obs, TurningDirections dir){
+    auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
+}
+
+bool Predicates::hasPriority(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP, TurningDirections dirK, TurningDirections dirP) {
+    return getPriority(timeStep, obsK, dirK) > getPriority(timeStep, obsP, dirP);
 }

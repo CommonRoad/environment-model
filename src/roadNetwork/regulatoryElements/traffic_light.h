@@ -43,7 +43,7 @@ public:
      *
      * @param dir Direction of the traffic light.
      */
-    void setDirection(TrafficLightDirection dir);
+    void setDirection(TurningDirections dir);
 
     /**
      * Setter for traffic light activity.
@@ -85,7 +85,7 @@ public:
      *
      * @return Direction of traffic light.
      */
-    [[nodiscard]] TrafficLightDirection getDirection() const;
+    [[nodiscard]] TurningDirections getDirection() const;
 
     /**
      * Getter for traffic light activity indicator.
@@ -106,7 +106,7 @@ private:
     int id;                             //**< unique ID of traffic light */
     std::vector<TrafficLightCycleElement> cycle;    //**< cycle of traffic light */
     int offset;                         //**< time offset of traffic light */
-    TrafficLightDirection direction;    //**< direction for which traffic light is valid */
+    TurningDirections direction;    //**< direction for which traffic light is valid */
     bool active{};                      //**< boolean indicating whether traffic sign is valid */
 };
 

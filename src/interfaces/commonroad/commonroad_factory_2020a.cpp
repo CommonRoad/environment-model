@@ -235,21 +235,21 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                     }
                 }
                 if (!(strcmp(trafficLightChildElement.name(), "direction"))) {
-                    TrafficLightDirection dir;
+                    TurningDirections dir;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "right")))
-                        dir = TrafficLightDirection::right;
+                        dir = TurningDirections::right;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "straight")))
-                        dir = TrafficLightDirection::straight;
+                        dir = TurningDirections::straight;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "left")))
-                        dir = TrafficLightDirection::left;
+                        dir = TurningDirections::left;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "leftStraight")))
-                        dir = TrafficLightDirection::leftStraight;
+                        dir = TurningDirections::leftStraight;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "straightRight")))
-                        dir = TrafficLightDirection::straightRight;
+                        dir = TurningDirections::straightRight;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "leftRight")))
-                        dir = TrafficLightDirection::leftRight;
+                        dir = TurningDirections::leftRight;
                     if (!(strcmp(trafficLightChildElement.first_child().value(), "all")))
-                        dir = TrafficLightDirection::all;
+                        dir = TurningDirections::all;
                     tempLaneletContainer[arrayIndex]->setDirection(dir);
                 }
                 if (!(strcmp(trafficLightChildElement.name(), "active"))) {

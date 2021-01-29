@@ -121,7 +121,7 @@ void LaneletTestInitialization::setUpLanelets(){
     tl->setId(456);
     tl->setActive(true);
     tl->setOffset(0.0);
-    tl->setDirection(TrafficLightDirection::straight);
+    tl->setDirection(TurningDirections::straight);
     tl->setCycle(std::vector<TrafficLightCycleElement>{TrafficLightCycleElement{TrafficLightState::green, 1},
                                                        TrafficLightCycleElement{TrafficLightState::yellow, 1},
                                                        TrafficLightCycleElement{TrafficLightState::red, 1},

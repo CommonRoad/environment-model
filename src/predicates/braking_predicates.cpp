@@ -4,7 +4,6 @@
 
 #include "predicates.h"
 #include <cmath>
-#include <iostream>
 
 double
 Predicates::safeDistance(double vFollow, double vLead, double aMinFollow, double aMinLead, double tReact) {
@@ -27,4 +26,13 @@ bool Predicates::keepsSafeDistancePrec(int timeStep,
         return true;
 }
 
+bool Predicates::causesBraking(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP){
+    const int causeBrakingMaxDistance = 15; // todo add to parameters;
+    const double causeBrakingMaxAcceleration = -0.25; // todo add to parameters;
 
+    if (obsP->getStateByTimeStep(timeStep)->getAcceleration() > causeBrakingMaxAcceleration)
+        return false;
+
+    double distance { obsK->frontS(timeStep) - obsP->frontS(timeStep) };
+    return 0 <= distance and distance <= causeBrakingMaxDistance;
+}

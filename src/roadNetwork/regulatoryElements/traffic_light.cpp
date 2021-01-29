@@ -4,7 +4,7 @@
 
 #include "traffic_light.h"
 
-TrafficLight::TrafficLight() : id(0), offset(0), direction(TrafficLightDirection::all), active(false){ }
+TrafficLight::TrafficLight() : id(0), offset(0), direction(TurningDirections::all), active(false){ }
 
 void TrafficLight::setId(const int num) { id = num; }
 
@@ -33,9 +33,9 @@ TrafficLightCycleElement TrafficLight::getElementAtTime(int time) {
     return current;
 }
 
-TrafficLightDirection TrafficLight::getDirection() const { return direction; }
+TurningDirections TrafficLight::getDirection() const { return direction; }
 
-void TrafficLight::setDirection(TrafficLightDirection dir) { TrafficLight::direction = dir; }
+void TrafficLight::setDirection(TurningDirections dir) { TrafficLight::direction = dir; }
 
 bool TrafficLight::isActive() const { return active; }
 
