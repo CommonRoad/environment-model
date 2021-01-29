@@ -346,19 +346,19 @@ public:
     */
     [[nodiscard]] int getLastTrajectoryTimeStep(); //TODO create test case
 
-    const std::vector<std::shared_ptr<Lanelet>> &getStraightOutgoings() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getStraightOutgoings() const;
 
     void setStraightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &straightOutgoings);
 
-    const std::vector<std::shared_ptr<Lanelet>> &getLeftOutgoings() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getLeftOutgoings() const;
 
     void setLeftOutgoings(const std::vector<std::shared_ptr<Lanelet>> &leftOutgoings);
 
-    const std::vector<std::shared_ptr<Lanelet>> &getRightOutgoings() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getRightOutgoings() const;
 
     void setRightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &rightOutgoings);
 
-    const std::vector<std::shared_ptr<Lanelet>> &getOncomings() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getOncomings() const;
 
     void setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings);
 
