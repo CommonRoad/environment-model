@@ -163,17 +163,17 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                 // get traffic sign elements
                 if (!(strcmp(trafficSignChildElement.name(), "trafficSignElement"))) {
                     std::string trafficSignId = trafficSignChildElement.first_child().first_child().value();
-                    TrafficSignElement newTrafficSignElement = TrafficSignElement(trafficSignId);
+                    std::shared_ptr<TrafficSignElement> newTrafficSignElements = std::make_shared<TrafficSignElement>(trafficSignId);
                     std::vector<std::string> additionalValuesList;
                     for (pugi::xml_node trafficSignChildElementChild = trafficSignChildElement.first_child();
                          trafficSignChildElementChild;
                          trafficSignChildElementChild = trafficSignChildElementChild.next_sibling()) {
                         if (!(strcmp(trafficSignChildElementChild.name(), "additionalValue"))) {
-                            newTrafficSignElement.addAdditionalValue(
+                            newTrafficSignElements->addAdditionalValue(
                                     trafficSignChildElementChild.first_child().value());
                         }
                     }
-                    tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElement);
+                    tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElements);
                 }
                 if (!(strcmp(trafficSignChildElement.name(), "virtual"))) {
                     tempLaneletContainer[arrayIndex]->setVirtualElement(
@@ -298,8 +298,10 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
                          incomingChildElementChild = incomingChildElementChild.next_sibling()) {
                         if (!(strcmp(incomingChildElementChild.name(), "incomingLanelet"))) {
                             for (const auto &la: lanelets) {
-                                if (incomingChildElementChild.attribute("ref").as_int() == la->getId())
+                                if (incomingChildElementChild.attribute("ref").as_int() == la->getId()) {
                                     incomingLanelet.push_back(la);
+                                    la->addLaneletType(LaneletType::incoming);
+                                }
                             }
                             inc->setIncomingLanelet(incomingLanelet);
                         }

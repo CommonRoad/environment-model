@@ -247,6 +247,21 @@ public:
     int getPriority(int timeStep, const std::shared_ptr<Obstacle> &obs, TurningDirections dir);
 
     static bool causesBraking(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
+
+    static std::vector<std::shared_ptr<Lanelet>> incomingLaneletOfLanelet(const std::shared_ptr<Lanelet>& la);
+
+    static std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::shared_ptr<Lanelet>& lanelet);
+
+    static std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>>& lanelets);
+
+    static std::vector<std::shared_ptr<Lanelet>> findUpcomingIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>>& lanelets);
+
+    static std::vector<std::shared_ptr<Lanelet>> findUpcomingIncomingLanelets(const std::shared_ptr<Lanelet>& lanelet);
+
+    bool isLeftOf(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
+
+    std::vector<std::shared_ptr<Lanelet>> incomingLaneletsLeftOfLanelet(const std::shared_ptr<Lanelet> &lanelet);
+
 private:
     std::shared_ptr<RoadNetwork> roadNetwork;
     SupportedTrafficSignCountry country;

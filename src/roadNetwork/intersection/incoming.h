@@ -24,7 +24,7 @@ public:
      *
      * @return List of pointers to lanelets.
      */
-    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getIncomingLanelet() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getIncomingLanelets() const;
 
     /**
      * Getter for successor right lanelets of incoming.
@@ -66,7 +66,7 @@ public:
      *
      * @param incomingLanelet List of pointers to lanelets.
      */
-    void setIncomingLanelet(const std::vector<std::shared_ptr<Lanelet>> &incomingLanelet);
+    void setIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>> &incomingLanelets);
 
     /**
      * Setter for successor right lanelets.
@@ -154,7 +154,7 @@ public:
 
 private:
     int id;
-    std::vector<std::shared_ptr<Lanelet>> incomingLanelet;          //**< set of pointers to lanelets belonging to incoming */
+    std::vector<std::shared_ptr<Lanelet>> incomingLanelets;          //**< set of pointers to lanelets belonging to incoming */
     std::vector<std::shared_ptr<Lanelet>> successorsRight;          //**< set of pointers to successor right lanelets of incoming */
     std::vector<std::shared_ptr<Lanelet>> successorsStraight;       //**< set of pointers to successor straight lanelets of incoming */
     std::vector<std::shared_ptr<Lanelet>> successorsLeft;           //**< set of pointers to successor left lanelets of incoming */

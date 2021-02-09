@@ -3,6 +3,7 @@
 //
 
 #include "predicates.h"
+#include <tuple>
 
 bool Predicates::onMainCarriageWay(int timeStep, const std::shared_ptr<Obstacle> &obstacle) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacle->getOccupiedLanelets(roadNetwork, timeStep);
@@ -155,8 +156,8 @@ bool Predicates::atGreenArrow(int timeStep, const std::shared_ptr<Obstacle> &obs
     for (const auto &la : lanelets) {
         auto trafficSigns{la->getTrafficSigns()};
         for (const auto &ts : trafficSigns) {
-            if (std::any_of(ts->getTrafficSignElement().begin(), ts->getTrafficSignElement().end(),
-                            [trafficSignID](const TrafficSignElement &t) { return t.getId() == trafficSignID; }))
+            if (std::any_of(ts->getTrafficSignElements().begin(), ts->getTrafficSignElements().end(),
+                            [trafficSignID](const std::shared_ptr<TrafficSignElement> &t) { return t->getId() == trafficSignID; }))
                 return true;
         }
 
@@ -216,8 +217,123 @@ bool Predicates::onIncoming(int timeStep, const std::shared_ptr<Obstacle> &obs) 
 
 int Predicates::getPriority(int timeStep, const std::shared_ptr<Obstacle> &obs, TurningDirections dir){
     auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
+    std::vector<std::shared_ptr<Lanelet>> relevantIncomingLanelets;
+    for (const auto &la : lanelets) {
+        auto incomingLanelets { incomingLaneletOfLanelet(la) };
+        relevantIncomingLanelets.insert(relevantIncomingLanelets.end(), incomingLanelets.begin(), incomingLanelets.end());
+    }
+    auto prioTrafficSign { extractPriorityTrafficSign(relevantIncomingLanelets) };
+    return priorityTable.at(prioTrafficSign->getId()).at(static_cast<int>(dir));
 }
 
 bool Predicates::hasPriority(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP, TurningDirections dirK, TurningDirections dirP) {
     return getPriority(timeStep, obsK, dirK) > getPriority(timeStep, obsP, dirP);
+}
+
+std::vector<std::shared_ptr<Lanelet>> Predicates::incomingLaneletOfLanelet(const std::shared_ptr<Lanelet>& la) {
+    std::vector<std::shared_ptr<Lanelet>> incomingLanelets;
+    if (la->hasLaneletType(LaneletType::intersection)){
+        auto pre = la->getPredecessors().at(0);    //TODO currently only a single predecessor is considered
+        while (!pre->hasLaneletType(LaneletType::incoming)){
+            pre = pre->getPredecessors().at(0);
+        }
+        incomingLanelets.push_back(pre);
+    } else if (la->hasLaneletType(LaneletType::incoming)) {
+        incomingLanelets.push_back(la);
+    }
+    return incomingLanelets;
+}
+
+std::vector<std::string> getRelevantPrioritySignIDs() {
+    std::vector<std::string> keys;
+    keys.reserve(priorityTable.size());
+    for(const auto& [key, value] : priorityTable) {
+        keys.push_back(key);
+    }
+    return keys;
+}
+
+std::shared_ptr<TrafficSignElement> Predicates::extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>>& lanelets){
+    for ( const auto &la : lanelets) {  // TODO don't use just first value
+        auto ts{extractPriorityTrafficSign(la)};
+        if (ts == nullptr)
+            continue;
+        else
+            return ts;
+    }
+}
+
+std::shared_ptr<TrafficSignElement> Predicates::extractPriorityTrafficSign(const std::shared_ptr<Lanelet>& lanelet){
+    static const std::vector<std::string> relevantPrioritySignIds { getRelevantPrioritySignIDs() };
+    std::vector<std::shared_ptr<TrafficSignElement>> relevantTrafficSignElements;
+    for (const auto &ts : lanelet->getTrafficSigns()){
+        auto trafficSignElements { ts->getTrafficSignElements() };
+        relevantTrafficSignElements.insert(relevantTrafficSignElements.end(), trafficSignElements.begin(), trafficSignElements.end());
+    }
+    for (const auto &tse : relevantTrafficSignElements){
+        if (std::any_of(relevantTrafficSignElements.begin(), relevantTrafficSignElements.end(), [tse](const std::shared_ptr<TrafficSignElement> &el){return el->getId() == tse->getId();}))
+            continue;
+        else
+            return tse; //TODO don't just return first sign -> look at BA there it is different
+    }
+    return nullptr;
+}
+
+std::vector<std::shared_ptr<Lanelet>> Predicates::findUpcomingIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>>& lanelets) {
+    std::vector<std::shared_ptr<Lanelet>> upcomingIncomingLanelets;
+    for (const auto &la : lanelets)
+        if (la->hasLaneletType(LaneletType::incoming))
+            upcomingIncomingLanelets.push_back(la);
+    if (!upcomingIncomingLanelets.empty())
+        return upcomingIncomingLanelets;
+
+    for (const auto &la : lanelets) {
+        auto upcomingLanelets{findUpcomingIncomingLanelets(la)};
+        if (upcomingLanelets.empty())
+            upcomingIncomingLanelets.insert(upcomingLanelets.end(), upcomingLanelets.begin(), upcomingLanelets.end());
+    }
+    return upcomingIncomingLanelets;
+}
+
+std::vector<std::shared_ptr<Lanelet>> Predicates::findUpcomingIncomingLanelets(const std::shared_ptr<Lanelet>& lanelet){
+    std::vector<std::shared_ptr<Lanelet>> upcomingIncomingLanelets;
+    if (lanelet->hasLaneletType(LaneletType::incoming)) {
+        upcomingIncomingLanelets.push_back(lanelet);
+        return upcomingIncomingLanelets;
+    }
+    auto succs = lanelet->getSuccessors();
+    while (!succs.empty()){
+        std::vector<std::shared_ptr<Lanelet>> upcomingIncomingLaneletsTmp;
+        for (const auto &suc : succs){
+            if (suc->hasLaneletType(LaneletType::incoming))
+                upcomingIncomingLanelets.push_back(suc);
+            else if (!suc->getSuccessors().empty())
+                upcomingIncomingLaneletsTmp.insert(upcomingIncomingLaneletsTmp.end(), suc->getSuccessors().begin(), suc->getSuccessors().end());
+        }
+        succs = upcomingIncomingLaneletsTmp;
+    }
+    return upcomingIncomingLanelets;
+}
+
+std::vector<std::shared_ptr<Lanelet>> Predicates::incomingLaneletsLeftOfLanelet(const std::shared_ptr<Lanelet> &lanelet) {
+
+}
+
+bool Predicates::isLeftOf(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP){
+    for (const auto &laneK : obsK->getOccupiedLanes(roadNetwork, timeStep)){
+        for (const auto &laneP : obsP->getOccupiedLanes(roadNetwork, timeStep)){
+            for (const auto &laneletK : laneK->getContainedLanelets()){
+                auto incomingLaneletsK { roadNetwork->incomingOfLanelet(laneletK) };
+                if (incomingLaneletsK != nullptr) {
+                    for (const auto &laneletP : laneP->getContainedLanelets()){
+                        if (std::any_of(incomingLaneletsK->getIncomingLanelets().begin(), incomingLaneletsK->getIncomingLanelets().end(),
+                                        [laneletP](std::shared_ptr<Lanelet> &la){ return la->getId() == laneletP->getId(); })) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }

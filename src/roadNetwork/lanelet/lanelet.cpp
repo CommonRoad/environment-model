@@ -185,6 +185,10 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
     return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
 }
 
-bool Lanelet::hasType(LaneletType laType) {
+bool Lanelet::hasLaneletType(LaneletType laType) {
     return std::any_of(laneletType.begin(), laneletType.end(), [laType](auto ty) { return ty == laType; });
+}
+
+void Lanelet::addLaneletType(LaneletType laType){
+    laneletType.push_back(laType);
 }

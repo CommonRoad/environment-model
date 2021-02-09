@@ -131,12 +131,10 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(int id) {
     return *it;
 }
 
-//https://gitlab.lrz.de/maierhofer/commonroad_monitor/-/blob/intersection/crmonitor/common/road_network.py
-
 void RoadNetwork::setDynamicIntersectionLabels() {
     auto intersectionLaneletType = LaneletType::intersection;
     for (const auto &inters : intersections) {
-        for (const auto &incom : inters->getIncoming()) {
+        for (const auto &incom : inters->getIncomings()) {
             incom->setLeftOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsLeft()));
             incom->setRightOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsRight()));
             incom->setStraightOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsStraight()));
@@ -150,9 +148,18 @@ RoadNetwork::extractOutgoingsFromIncoming(const LaneletType &intersectionLanelet
     std::vector<std::shared_ptr<Lanelet>> outgoings;
     for ( const auto &inSuc : incomingSuccessors) {
         auto suc = inSuc;
-        while (!std::all_of(suc->getSuccessors().begin(), suc->getSuccessors().end(), [intersectionLaneletType](auto laSuc){ return laSuc->hasType(intersectionLaneletType); }))
+        while (!std::all_of(suc->getSuccessors().begin(), suc->getSuccessors().end(), [intersectionLaneletType](auto laSuc){ return laSuc->hasLaneletType(
+                intersectionLaneletType); }))
             suc = suc->getSuccessors().at(0); //we assume only one successor
         outgoings.push_back(suc);
     }
     return outgoings;
+}
+
+std::shared_ptr<Incoming> RoadNetwork::incomingOfLanelet(const std::shared_ptr<Lanelet>& lanelet){
+    for (const auto &inter : intersections)
+        for (const auto &inco : inter->getIncomings())
+            if (std::any_of(inco->getIncomingLanelets().begin(), inco->getIncomingLanelets().end(), [lanelet](std::shared_ptr<Lanelet> &la){return la->getId() == lanelet->getId();}))
+                return inco;
+    return nullptr;
 }

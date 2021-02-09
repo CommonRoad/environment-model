@@ -25,7 +25,7 @@ public:
      *
      * @param sign_element Traffic sign element.
      */
-    void addTrafficSignElement(const TrafficSignElement &sign_element);
+    void addTrafficSignElement(const std::shared_ptr<TrafficSignElement> &sign_element);
 
     /**
      * Setter for virtual indicator.
@@ -39,7 +39,7 @@ public:
      *
      * @param trafficSignElement List of traffic sign elements.
      */
-    void setTrafficSignElement(const std::vector<TrafficSignElement> &trafficSignElement);
+    void setTrafficSignElement(const std::vector<std::shared_ptr<TrafficSignElement>> &trafficSignElement);
 
     /**
      * Getter for ID of traffic sign.
@@ -60,12 +60,12 @@ public:
      *
      * @return List of traffic sign elements.
      */
-    [[nodiscard]] std::vector<TrafficSignElement> getTrafficSignElement() const;
+    [[nodiscard]] std::vector<std::shared_ptr<TrafficSignElement>> getTrafficSignElements() const;
 
 private:
-    int id;                                                 //**< unique ID of traffic sign */
-    bool virtualElement;                                    //**< indicator whether traffic sign is artificially added */ //
-    std::vector<TrafficSignElement> trafficSignElement;     //**< list of traffic sign elements represented by traffic sign */ //
+    int id;                                                                   //**< unique ID of traffic sign */
+    bool virtualElement;                                                      //**< indicator whether traffic sign is artificially added */ //
+    std::vector<std::shared_ptr<TrafficSignElement>> trafficSignElement;     //**< list of traffic sign elements represented by traffic sign */ //
 };
 
 

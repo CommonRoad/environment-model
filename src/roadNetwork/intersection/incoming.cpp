@@ -8,9 +8,9 @@ int Incoming::getId() const { return id; }
 
 void Incoming::setId(int index) { id = index; }
 
-const std::vector<std::shared_ptr<Lanelet>> &Incoming::getIncomingLanelet() const { return incomingLanelet; }
+const std::vector<std::shared_ptr<Lanelet>> &Incoming::getIncomingLanelets() const { return incomingLanelets; }
 
-void Incoming::setIncomingLanelet(const std::vector<std::shared_ptr<Lanelet>> &incLa) { incomingLanelet = incLa; }
+void Incoming::setIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>> &incLa) { incomingLanelets = incLa; }
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsRight() const { return successorsRight; }
 

@@ -6,11 +6,13 @@
 
 void TrafficSign::setId(const int num) { id = num; }
 
-void TrafficSign::addTrafficSignElement(const TrafficSignElement &elem) { trafficSignElement.push_back(elem); }
+void TrafficSign::addTrafficSignElement(const std::shared_ptr<TrafficSignElement> &elem) {
+    trafficSignElement.push_back(elem);
+}
 
 int TrafficSign::getId() const { return id; }
 
-void TrafficSign::setTrafficSignElement(const std::vector<TrafficSignElement> &newTrafficSignElement) {
+void TrafficSign::setTrafficSignElement(const std::vector<std::shared_ptr<TrafficSignElement>> &newTrafficSignElement) {
     trafficSignElement = newTrafficSignElement;
 }
 
@@ -22,7 +24,7 @@ void TrafficSign::setVirtualElement(bool elem) {
     virtualElement = elem;
 }
 
-std::vector<TrafficSignElement> TrafficSign::getTrafficSignElement() const {
+std::vector<std::shared_ptr<TrafficSignElement>> TrafficSign::getTrafficSignElements() const {
     return trafficSignElement;
 }
 

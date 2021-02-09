@@ -100,13 +100,16 @@ public:
      */
     void setDynamicIntersectionLabels();
 
+    std::shared_ptr<Incoming> incomingOfLanelet(const std::shared_ptr<Lanelet>& lanelet);
+
+
 private:
-    std::vector<std::shared_ptr<Lanelet>> laneletNetwork;       //**< set of lanelets contained in road network */
-    std::vector<std::shared_ptr<Lane>> lanes;                   //**< set of interstate-based lanes contained in road network */
-    std::vector<std::shared_ptr<Intersection>> intersections;   //**< set of intersections contained in road network */
-    std::vector<std::shared_ptr<TrafficLight>> trafficLights;   //**< set of traffic lights contained in road network */
-    std::vector<std::shared_ptr<TrafficSign>> trafficSigns;     //**< set of traffic signs contained in road network */
-    bgi::rtree<value, bgi::quadratic<16>> rtree;                //**< rtree defined by lanelets of road network for faster occupancy calculation*/
+    std::vector<std::shared_ptr<Lanelet>> laneletNetwork;                           //**< set of lanelets contained in road network */
+    std::vector<std::shared_ptr<Lane>> lanes;                                       //**< set of interstate-based lanes contained in road network */
+    std::vector<std::shared_ptr<Intersection>> intersections;                       //**< set of intersections contained in road network */
+    std::vector<std::shared_ptr<TrafficLight>> trafficLights;                       //**< set of traffic lights contained in road network */
+    std::vector<std::shared_ptr<TrafficSign>> trafficSigns;                         //**< set of traffic signs contained in road network */
+    bgi::rtree<value, bgi::quadratic<16>> rtree;                                    //**< rtree defined by lanelets of road network for faster occupancy calculation*/
 
     /**
      * Given a set of lanelets, creates the corresponding interstate-based lanes

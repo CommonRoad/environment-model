@@ -347,7 +347,14 @@ public:
      * @param laType Lanelet type which existence should be checked.
      * @return Boolean indicating whether the lanelet type exists.
     */
-    bool hasType(LaneletType laType);
+    bool hasLaneletType(LaneletType laType);
+
+    /**
+     * Adds a lanelet type to the lanelet.
+     *
+     * @param laType Lanelet type which should be added.
+    */
+    void addLaneletType(LaneletType laType);
 
 
 private:
