@@ -159,7 +159,7 @@ RoadNetwork::extractOutgoingsFromIncoming(const LaneletType &intersectionLanelet
 std::shared_ptr<Incoming> RoadNetwork::incomingOfLanelet(const std::shared_ptr<Lanelet>& lanelet){
     for (const auto &inter : intersections)
         for (const auto &inco : inter->getIncomings())
-            if (std::any_of(inco->getIncomingLanelets().begin(), inco->getIncomingLanelets().end(), [lanelet](std::shared_ptr<Lanelet> &la){return la->getId() == lanelet->getId();}))
+            if (std::any_of(inco->getIncomingLanelets().begin(), inco->getIncomingLanelets().end(), [lanelet](const std::shared_ptr<Lanelet> &la){ return la->getId() == lanelet->getId(); }))
                 return inco;
     return nullptr;
 }

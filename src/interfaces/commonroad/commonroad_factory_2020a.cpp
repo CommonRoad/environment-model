@@ -303,7 +303,7 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
                                     la->addLaneletType(LaneletType::incoming);
                                 }
                             }
-                            inc->setIncomingLanelet(incomingLanelet);
+                            inc->setIncomingLanelets(incomingLanelet);
                         }
                         if (!(strcmp(incomingChildElementChild.name(), "successorsRight"))) {
                             for (const auto &la: lanelets) {
@@ -341,9 +341,9 @@ std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2020a::createInterse
             }
             // iterate over all incoming lefts and assign correct reference
             for (auto const&[key, val] : tmpLeftOf) {
-                for (const auto &inc1 : tempIntersectionContainer[arrayIndex]->getIncoming()) {
+                for (const auto &inc1 : tempIntersectionContainer[arrayIndex]->getIncomings()) {
                     if (inc1->getId() == key)
-                        for (const auto &inc2 : tempIntersectionContainer[arrayIndex]->getIncoming()) {
+                        for (const auto &inc2 : tempIntersectionContainer[arrayIndex]->getIncomings()) {
                             if (inc2->getId() == val)
                                 inc1->setIsLeftOf(inc2);
                         }

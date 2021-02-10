@@ -8,9 +8,9 @@ int Intersection::getId() const { return id; }
 
 void Intersection::setId(int num) { Intersection::id = num; }
 
-const std::vector<std::shared_ptr<Incoming>> &Intersection::getIncomings() const { return incoming; }
+const std::vector<std::shared_ptr<Incoming>> &Intersection::getIncomings() const { return incomings; }
 
-void Intersection::addIncoming(const std::shared_ptr<Incoming> &inc) { incoming.push_back(inc); }
+void Intersection::addIncoming(const std::shared_ptr<Incoming> &inc) { incomings.push_back(inc); }
 
 const std::vector<std::vector<std::shared_ptr<Lanelet>>> &Intersection::getCrossing() const { return crossing; }
 

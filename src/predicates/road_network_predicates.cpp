@@ -198,9 +198,9 @@ bool Predicates::onStraightOutgoing(int timeStep, const std::shared_ptr<Obstacle
 bool Predicates::onIncoming(int timeStep, const std::shared_ptr<Obstacle> &obs) {
     auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
     for (const auto &inter : roadNetwork->getIntersections()) {
-        for (const auto &incom : inter->getIncoming()) {
+        for (const auto &incom : inter->getIncomings()) {
             for (const auto &la : lanelets)
-                if (std::any_of(incom->getIncomingLanelet().begin(), incom->getIncomingLanelet().end(),
+                if (std::any_of(incom->getIncomingLanelets().begin(), incom->getIncomingLanelets().end(),
                                 [la](const std::shared_ptr<Lanelet> &incomingLanelet) {
                                     return la->getId() == incomingLanelet->getId();
                                 })) {
@@ -327,7 +327,7 @@ bool Predicates::isLeftOf(int timeStep, const std::shared_ptr<Obstacle> &obsK, c
                 if (incomingLaneletsK != nullptr) {
                     for (const auto &laneletP : laneP->getContainedLanelets()){
                         if (std::any_of(incomingLaneletsK->getIncomingLanelets().begin(), incomingLaneletsK->getIncomingLanelets().end(),
-                                        [laneletP](std::shared_ptr<Lanelet> &la){ return la->getId() == laneletP->getId(); })) {
+                                        [laneletP](const std::shared_ptr<Lanelet> &la){ return la->getId() == laneletP->getId(); })) {
                             return true;
                         }
                     }
@@ -337,3 +337,4 @@ bool Predicates::isLeftOf(int timeStep, const std::shared_ptr<Obstacle> &obsK, c
     }
     return false;
 }
+
