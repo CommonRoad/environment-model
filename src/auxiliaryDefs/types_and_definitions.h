@@ -77,22 +77,22 @@ enum class SupportedTrafficSignCountry {
 const double reactionTimeObstacles = 0.3;
 
 const std::map<std::string, std::vector<int>> priorityTable{
+        std::pair<std::string, std::vector<int>>("1002-10", {5, 4, 4}),
+        std::pair<std::string, std::vector<int>>("1002-12", {5, 4, -1}),
+        std::pair<std::string, std::vector<int>>("1002-13", {5, -1, 4}),
+        std::pair<std::string, std::vector<int>>("1002-11", {2, 2, 2}),
+        std::pair<std::string, std::vector<int>>("1002-22", {-1, 4, 5}),
+        std::pair<std::string, std::vector<int>>("1002-23", {4, -1, 5}),
+        std::pair<std::string, std::vector<int>>("1002-14", {2, 2, -1}),
+        std::pair<std::string, std::vector<int>>("1002-20", {4, 4, 5}),
+        std::pair<std::string, std::vector<int>>("1002-21", {2, 2, 2}),
+        std::pair<std::string, std::vector<int>>("1002-24", {-1, 2, 2}),
         std::pair<std::string, std::vector<int>>("306", {4, 5, 4}),
         std::pair<std::string, std::vector<int>>("301", {4, 5, 4}),
         std::pair<std::string, std::vector<int>>("205", {2, 2, 2}),
         std::pair<std::string, std::vector<int>>("206", {1, 1, 1}),
         std::pair<std::string, std::vector<int>>("102", {3, 3, 3}),
         std::pair<std::string, std::vector<int>>("720", {-1, -1, 0}),
-        std::pair<std::string, std::vector<int>>("1002-10", {5, 4, 4}),
-        std::pair<std::string, std::vector<int>>("1002-11", {2, 2, 2}),
-        std::pair<std::string, std::vector<int>>("1002-12", {5, 4, -1}),
-        std::pair<std::string, std::vector<int>>("1002-13", {5, -1, 4}),
-        std::pair<std::string, std::vector<int>>("1002-14", {2, 2, -1}),
-        std::pair<std::string, std::vector<int>>("1002-20", {4, 4, 5}),
-        std::pair<std::string, std::vector<int>>("1002-21", {2, 2, 2}),
-        std::pair<std::string, std::vector<int>>("1002-22", {-1, 4, 5}),
-        std::pair<std::string, std::vector<int>>("1002-23", {4, -1, 5}),
-        std::pair<std::string, std::vector<int>>("1002-24", {-1, 2, 2})
 };
 
 #endif //ENV_MODEL_TYPES_AND_DEFINITIONS_H

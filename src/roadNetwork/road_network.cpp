@@ -138,6 +138,7 @@ void RoadNetwork::setDynamicIntersectionLabels() {
             incom->setLeftOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsLeft()));
             incom->setRightOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsRight()));
             incom->setStraightOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsStraight()));
+            incom->setOncomings(ext)
         }
     }
 }
@@ -146,6 +147,21 @@ std::vector<std::shared_ptr<Lanelet>>
 RoadNetwork::extractOutgoingsFromIncoming(const LaneletType &intersectionLaneletType,
                                               const std::vector<std::shared_ptr<Lanelet>> &incomingSuccessors) {
     std::vector<std::shared_ptr<Lanelet>> outgoings;
+    for ( const auto &inSuc : incomingSuccessors) {
+        auto suc = inSuc;
+        while (!std::all_of(suc->getSuccessors().begin(), suc->getSuccessors().end(), [intersectionLaneletType](auto laSuc){ return laSuc->hasLaneletType(
+                intersectionLaneletType); }))
+            suc = suc->getSuccessors().at(0); //we assume only one successor
+        outgoings.push_back(suc);
+    }
+    return outgoings;
+}
+
+std::vector<std::shared_ptr<Lanelet>> RoadNetwork::extractOncomings(const LaneletType &intersectionLaneletType,
+                                          const std::vector<std::shared_ptr<Lanelet>> &incomingLanelets) {
+    // todo compute incomings
+
+    std::vector<std::shared_ptr<Lanelet>> oncomings;
     for ( const auto &inSuc : incomingSuccessors) {
         auto suc = inSuc;
         while (!std::all_of(suc->getSuccessors().begin(), suc->getSuccessors().end(), [intersectionLaneletType](auto laSuc){ return laSuc->hasLaneletType(

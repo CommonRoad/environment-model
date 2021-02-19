@@ -250,9 +250,9 @@ public:
 
     static std::vector<std::shared_ptr<Lanelet>> incomingLaneletOfLanelet(const std::shared_ptr<Lanelet>& la);
 
-    static std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::shared_ptr<Lanelet>& lanelet);
+    static std::string extractPriorityTrafficSign(const std::shared_ptr<Lanelet>& lanelet);
 
-    static std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>>& lanelets);
+    static std::string extractPriorityTrafficSignId(const std::vector<std::shared_ptr<Lanelet>>& lanelets);
 
     static std::vector<std::shared_ptr<Lanelet>> findUpcomingIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>>& lanelets);
 
@@ -261,6 +261,20 @@ public:
     bool isLeftOf(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
 
     std::vector<std::shared_ptr<Lanelet>> incomingLaneletsLeftOfLanelet(const std::shared_ptr<Lanelet> &lanelet);
+
+    bool samePriority(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP, TurningDirections dirK, TurningDirections dirP);
+
+    bool upcomingTrafficLights(int timeStep, const std::shared_ptr<Obstacle> &obs);
+
+    bool inConflictArea(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
+
+    static double rearPosition(int timeStep, const std::shared_ptr<Lane> &referenceLane, const std::shared_ptr<Obstacle> &obs);
+
+    static double frontPosition(int timeStep, const std::shared_ptr<Lane> &referenceLane, const std::shared_ptr<Obstacle> &obs);
+
+    bool onOncomingOf(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
+
+    static bool sameLeftRightOutgoing(int timeStep, const std::shared_ptr<Obstacle> &obsK, const std::shared_ptr<Obstacle> &obsP);
 
 private:
     std::shared_ptr<RoadNetwork> roadNetwork;
