@@ -51,7 +51,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/../)
 add_subdirectory(src)
 
 # add pybind
-#add_subdirectory(pybind11)
+add_subdirectory(external/pybind11)
 #pybind11_add_module(cmake_example src/main.cpp)
 
 # Doxygen
