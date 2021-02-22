@@ -6,8 +6,7 @@
 #define ENV_MODEL_TEST_INPUT_H
 
 #include <gtest/gtest.h>
-
-#include "interfaces/standalone/command_line_input.h"
+#include "utility_functions.h"
 
 class InterfacesTest : public testing::Test {
 

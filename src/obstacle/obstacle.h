@@ -346,6 +346,13 @@ public:
     */
     [[nodiscard]] int getLastTrajectoryTimeStep(); //TODO create test case
 
+    /**
+    * Converts the x- and y-coordinate into the Curvilinear domain.
+    *
+    * @param timeStep Time step for which the coordinates should me transformed.
+    */
+    void convertPointToCurvilinear(int timeStep) const;
+
     [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getStraightOutgoings() const;
 
     void setStraightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &straightOutgoings);

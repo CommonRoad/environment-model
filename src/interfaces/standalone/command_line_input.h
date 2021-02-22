@@ -6,13 +6,11 @@
 #define ENV_MODEL_COMMAND_LINE_INPUT_H
 
 #include <iostream>
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
 #include "../commonroad/xml_reader.h"
 
 namespace po = boost::program_options;
-namespace fs = boost::filesystem;
 
 namespace CommandLine {
     /**

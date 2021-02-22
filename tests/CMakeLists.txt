@@ -1,5 +1,6 @@
 set(ENV_MODEL_TEST_SRC_FILES
-        envModelTests/allTests.cpp
+        envModelTests/interfaces/utility_functions.cpp
+        allTests.cpp
         envModelTests/roadNetwork/test_road_network.cpp
         envModelTests/roadNetwork/lanelet/test_lanelet_operations.cpp
         envModelTests/roadNetwork/lanelet/test_lane.cpp
@@ -8,11 +9,10 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/obstacle/test_state.cpp
         envModelTests/obstacle/test_obstacle_operations.cpp
         envModelTests/geometry/test_rectangle.cpp
-        envModelTests/geometry/test_circle.cpp
+        envModelTests/geometry/test_safe_distance.cpp
         envModelTests/geometry/test_geometric_operations.cpp
         envModelTests/interfaces/test_interfaces.cpp
-        #envModelTests/roadNetwork/intersection/test_incoming.cpp
-        #envModelTests/roadNetwork/intersection/test_intersection.cpp
+        predicateTest/test_safe_distance_predicate.cpp
         )
 
 # Add google-test

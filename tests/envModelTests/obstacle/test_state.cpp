@@ -11,7 +11,8 @@ void StateTestInitialization::setUpStates() {
     accelerationStateOne = 1.0;
     lonPositionStateOne = 7.5;
     latPositionStateOne = 0.5;
-    orientationStateOne = 0.0;
+    globalOrientationStateOne = 0.0;
+    curvilinearOrientationStateOne = 0.0;
     timeStepStateOne = 0;
     validityStateOne = ValidStates{true, true, true, true,
                                    true, true, true};
@@ -22,7 +23,8 @@ void StateTestInitialization::setUpStates() {
     accelerationStateTwo = 0.0;
     lonPositionStateTwo = 8.5;
     latPositionStateTwo = 2.0;
-    orientationStateTwo = M_PI / 2;
+    globalOrientationStateTwo = M_PI / 2;
+    curvilinearOrientationStateTwo = M_PI / 2;
     timeStepStateTwo = 1;
     validityStateTwo = ValidStates{true, true, true, true,
                                    true, true, true};
@@ -33,7 +35,8 @@ void StateTestInitialization::setUpStates() {
     accelerationStateThree = -0.6;
     lonPositionStateThree = 9.0;
     latPositionStateThree = -0.5;
-    orientationStateThree = 0.01;
+    globalOrientationStateThree = 0.01;
+    curvilinearOrientationStateThree = 0.01;
     timeStepStateThree = 2;
     validityStateThree = ValidStates{true, true, true, true,
                                      true, true, true};
@@ -44,7 +47,8 @@ void StateTestInitialization::setUpStates() {
     accelerationStateFour = 0.0;
     lonPositionStateFour = 10;
     latPositionStateFour = 0;
-    orientationStateFour = -0.01;
+    globalOrientationStateFour = -0.01;
+    curvilinearOrientationStateFour = -0.01;
     timeStepStateFour = 3;
     validityStateFour = ValidStates{true, true, true, true,
                                     true, true, true};
@@ -55,7 +59,8 @@ void StateTestInitialization::setUpStates() {
     accelerationStateFive = 1.0;
     lonPositionStateFive = 9.0;
     latPositionStateFive = 9.0;
-    orientationStateFive = 0.00;
+    globalOrientationStateFive = 0.00;
+    curvilinearOrientationStateFive = 0.0;
     timeStepStateFive = 4;
     validityStateFour = ValidStates{true, true, true, true,
                                     true, true, true};
@@ -66,7 +71,8 @@ void StateTestInitialization::setUpStates() {
     accelerationStateSix = -1.0;
     lonPositionStateSix = 16.0;
     latPositionStateSix = 1.0;
-    orientationStateSix = 0.0;
+    globalOrientationStateSix = 0.0;
+    curvilinearOrientationStateSix = 0.0;
     timeStepStateSix = 5;
     validityStateFour = ValidStates{true, true, true, true,
                                     true, true, true};
@@ -75,32 +81,39 @@ void StateTestInitialization::setUpStates() {
     stateOne->setAcceleration(accelerationStateOne);
     stateOne->setLatPosition(latPositionStateOne);
     stateOne->setLonPosition(lonPositionStateOne);
-    stateOne->setOrientation(orientationStateOne);
+    stateOne->setGlobalOrientation(globalOrientationStateOne);
+    stateOne->setCurvilinearOrientation(curvilinearOrientationStateOne);
     stateOne->setTimeStep(timeStepStateOne);
     stateOne->setVelocity(velocityStateOne);
     stateOne->setXPosition(xPositionStateOne);
     stateOne->setYPosition(yPositionStateOne);
+    stateOne->setCurvilinearOrientation(curvilinearOrientationStateOne);
 
     stateTwo = std::make_shared<State>(timeStepStateTwo, xPositionStateTwo, yPositionStateTwo, velocityStateTwo,
-                                       accelerationStateTwo, orientationStateTwo);
+                                       accelerationStateTwo, globalOrientationStateTwo);
     stateTwo->setLonPosition(lonPositionStateTwo);
     stateTwo->setLatPosition(latPositionStateTwo);
+    stateTwo->setCurvilinearOrientation(curvilinearOrientationStateTwo);
 
     stateThree = std::make_shared<State>(timeStepStateThree, xPositionStateThree,
                                          yPositionStateThree, velocityStateThree,
-                                         accelerationStateThree, orientationStateThree,
+                                         accelerationStateThree, globalOrientationStateThree,
+                                         curvilinearOrientationStateThree,
                                          lonPositionStateThree, latPositionStateThree);
 
     stateFour = std::make_shared<State>(timeStepStateFour, xPositionStateFour, yPositionStateFour,
-                                        velocityStateFour, accelerationStateFour, orientationStateFour,
+                                        velocityStateFour, accelerationStateFour, globalOrientationStateFour,
+                                        curvilinearOrientationStateFour,
                                         lonPositionStateFour, latPositionStateFour);
 
     stateFive = std::make_shared<State>(timeStepStateFive, xPositionStateFive, yPositionStateFive,
-                                        velocityStateFive, accelerationStateFive, orientationStateFive,
+                                        velocityStateFive, accelerationStateFive, globalOrientationStateFive,
+                                        curvilinearOrientationStateFive,
                                         lonPositionStateFive, latPositionStateFive);
 
     stateSix = std::make_shared<State>(timeStepStateSix, xPositionStateSix, yPositionStateSix,
-                                       velocityStateSix, accelerationStateSix, orientationStateSix,
+                                       velocityStateSix, accelerationStateSix, globalOrientationStateSix,
+                                       curvilinearOrientationStateSix,
                                        lonPositionStateSix, latPositionStateSix);
 }
 
@@ -117,14 +130,14 @@ TEST_F(StateTest, InitializationComplete) {
     EXPECT_EQ(stateOne->getAcceleration(), accelerationStateOne);
     EXPECT_EQ(stateOne->getLonPosition(), lonPositionStateOne);
     EXPECT_EQ(stateOne->getLatPosition(), latPositionStateOne);
-    EXPECT_EQ(stateOne->getOrientation(), orientationStateOne);
+    EXPECT_EQ(stateOne->getGlobalOrientation(), globalOrientationStateOne);
     EXPECT_EQ(stateOne->getValidStates().xPosition, validityStateOne.xPosition);
     EXPECT_EQ(stateOne->getValidStates().yPosition, validityStateOne.yPosition);
     EXPECT_EQ(stateOne->getValidStates().velocity, validityStateOne.velocity);
     EXPECT_EQ(stateOne->getValidStates().acceleration, validityStateOne.acceleration);
     EXPECT_EQ(stateOne->getValidStates().lonPosition, validityStateOne.lonPosition);
     EXPECT_EQ(stateOne->getValidStates().latPosition, validityStateOne.latPosition);
-    EXPECT_EQ(stateOne->getValidStates().orientation, validityStateOne.orientation);
+    EXPECT_EQ(stateOne->getValidStates().globalOrientation, validityStateOne.globalOrientation);
 
     EXPECT_EQ(stateTwo->getTimeStep(), timeStepStateTwo);
     EXPECT_EQ(stateTwo->getXPosition(), xPositionStateTwo);
@@ -133,14 +146,14 @@ TEST_F(StateTest, InitializationComplete) {
     EXPECT_EQ(stateTwo->getAcceleration(), accelerationStateTwo);
     EXPECT_EQ(stateTwo->getLonPosition(), lonPositionStateTwo);
     EXPECT_EQ(stateTwo->getLatPosition(), latPositionStateTwo);
-    EXPECT_EQ(stateTwo->getOrientation(), orientationStateTwo);
+    EXPECT_EQ(stateTwo->getGlobalOrientation(), globalOrientationStateTwo);
     EXPECT_EQ(stateTwo->getValidStates().xPosition, validityStateTwo.xPosition);
     EXPECT_EQ(stateTwo->getValidStates().yPosition, validityStateTwo.yPosition);
     EXPECT_EQ(stateTwo->getValidStates().velocity, validityStateTwo.velocity);
     EXPECT_EQ(stateTwo->getValidStates().acceleration, validityStateTwo.acceleration);
     EXPECT_EQ(stateTwo->getValidStates().lonPosition, validityStateTwo.lonPosition);
     EXPECT_EQ(stateTwo->getValidStates().latPosition, validityStateTwo.latPosition);
-    EXPECT_EQ(stateTwo->getValidStates().orientation, validityStateTwo.orientation);
+    EXPECT_EQ(stateTwo->getValidStates().globalOrientation, validityStateTwo.globalOrientation);
 
     EXPECT_EQ(stateThree->getTimeStep(), timeStepStateThree);
     EXPECT_EQ(stateThree->getXPosition(), xPositionStateThree);
@@ -149,25 +162,12 @@ TEST_F(StateTest, InitializationComplete) {
     EXPECT_EQ(stateThree->getAcceleration(), accelerationStateThree);
     EXPECT_EQ(stateThree->getLonPosition(), lonPositionStateThree);
     EXPECT_EQ(stateThree->getLatPosition(), latPositionStateThree);
-    EXPECT_EQ(stateThree->getOrientation(), orientationStateThree);
+    EXPECT_EQ(stateThree->getGlobalOrientation(), globalOrientationStateThree);
     EXPECT_EQ(stateThree->getValidStates().xPosition, validityStateThree.xPosition);
     EXPECT_EQ(stateThree->getValidStates().yPosition, validityStateThree.yPosition);
     EXPECT_EQ(stateThree->getValidStates().velocity, validityStateThree.velocity);
     EXPECT_EQ(stateThree->getValidStates().acceleration, validityStateThree.acceleration);
     EXPECT_EQ(stateThree->getValidStates().lonPosition, validityStateThree.lonPosition);
     EXPECT_EQ(stateThree->getValidStates().latPosition, validityStateThree.latPosition);
-    EXPECT_EQ(stateThree->getValidStates().orientation, validityStateThree.orientation);
-}
-
-TEST_F(StateTest, ConvertPointToCurvilinear) {
-    stateOne->setXPosition(2.5);
-    stateOne->setYPosition(0.5);
-    stateOne->convertPointToCurvilinear(laneOne->getCurvilinearCoordinateSystem());
-    EXPECT_EQ(stateOne->getLonPosition(), 7.5);
-    EXPECT_EQ(stateOne->getLatPosition(), 0.0);
-    stateOne->setXPosition(2.5);
-    stateOne->setYPosition(-0.75);
-    stateOne->convertPointToCurvilinear(laneOne->getCurvilinearCoordinateSystem());
-    EXPECT_EQ(stateOne->getLonPosition(), 7.5);
-    EXPECT_EQ(stateOne->getLatPosition(), -1.25);
+    EXPECT_EQ(stateThree->getValidStates().globalOrientation, validityStateThree.globalOrientation);
 }

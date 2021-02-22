@@ -19,7 +19,8 @@ protected:
     double accelerationStateOne;
     double lonPositionStateOne;
     double latPositionStateOne;
-    double orientationStateOne;
+    double globalOrientationStateOne;
+    double curvilinearOrientationStateOne;
     ValidStates validityStateOne;
 
     int timeStepStateTwo;
@@ -29,7 +30,8 @@ protected:
     double accelerationStateTwo;
     double lonPositionStateTwo;
     double latPositionStateTwo;
-    double orientationStateTwo;
+    double globalOrientationStateTwo;
+    double curvilinearOrientationStateTwo;
     ValidStates validityStateTwo;
 
     int timeStepStateThree;
@@ -39,7 +41,8 @@ protected:
     double accelerationStateThree;
     double lonPositionStateThree;
     double latPositionStateThree;
-    double orientationStateThree;
+    double globalOrientationStateThree;
+    double curvilinearOrientationStateThree;
     ValidStates validityStateThree;
 
     int timeStepStateFour;
@@ -49,7 +52,8 @@ protected:
     double accelerationStateFour;
     double lonPositionStateFour;
     double latPositionStateFour;
-    double orientationStateFour;
+    double globalOrientationStateFour;
+    double curvilinearOrientationStateFour;
     ValidStates validityStateFour;
 
     int timeStepStateFive;
@@ -59,7 +63,8 @@ protected:
     double accelerationStateFive;
     double lonPositionStateFive;
     double latPositionStateFive;
-    double orientationStateFive;
+    double globalOrientationStateFive;
+    double curvilinearOrientationStateFive;
     ValidStates validityStateFive;
 
     int timeStepStateSix;
@@ -69,7 +74,8 @@ protected:
     double accelerationStateSix;
     double lonPositionStateSix;
     double latPositionStateSix;
-    double orientationStateSix;
+    double globalOrientationStateSix;
+    double curvilinearOrientationStateSix;
     ValidStates validityStateSix;
 
     std::shared_ptr<State> stateOne;

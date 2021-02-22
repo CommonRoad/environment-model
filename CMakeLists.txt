@@ -50,13 +50,16 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/../)
 # Add Environment model node
 add_subdirectory(src)
 
+# add pybind
+#add_subdirectory(pybind11)
+#pybind11_add_module(cmake_example src/main.cpp)
+
 # Doxygen
 include(doxygen)
 
 # add unit testing
 enable_testing()
 add_subdirectory(tests)
-
 
 
 

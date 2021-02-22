@@ -24,9 +24,25 @@ struct ValidStates {
     bool acceleration;
     bool lonPosition;
     bool latPosition;
-    bool orientation;
+    bool globalOrientation;
+    bool curvilinearOrientation;
 };
 
+struct PredicateParameters {
+
+};
+
+struct PredicateStatistics {
+    double maxComputationTime { 0.0 };
+    double minComputationTime { 0.0 };
+    double totalComputationTime { 0.0 };
+    int numExecutions { 0 };
+    int numSatisfaction { 0 };
+};
+
+struct Constraint {
+    double realValuedConstraint;
+};
 
 
 #endif //ENV_MODEL_STRUCTS_H

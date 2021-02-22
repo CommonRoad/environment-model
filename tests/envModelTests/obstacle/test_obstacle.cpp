@@ -84,14 +84,14 @@ void ObstacleTestInitialization::compareStates(const std::shared_ptr<State>& sta
     EXPECT_EQ(stateOne->getAcceleration(), stateTwo->getAcceleration());
     EXPECT_EQ(stateOne->getLatPosition(), stateTwo->getLatPosition());
     EXPECT_EQ(stateOne->getLonPosition(), stateTwo->getLonPosition());
-    EXPECT_EQ(stateOne->getOrientation(), stateTwo->getOrientation());
+    EXPECT_EQ(stateOne->getGlobalOrientation(), stateTwo->getGlobalOrientation());
     EXPECT_EQ(stateOne->getXPosition(), stateTwo->getXPosition());
     EXPECT_EQ(stateOne->getYPosition(), stateTwo->getYPosition());
     EXPECT_EQ(stateOne->getValidStates().acceleration, stateTwo->getValidStates().acceleration);
     EXPECT_EQ(stateOne->getValidStates().velocity, stateTwo->getValidStates().velocity);
     EXPECT_EQ(stateOne->getValidStates().xPosition, stateTwo->getValidStates().xPosition);
     EXPECT_EQ(stateOne->getValidStates().yPosition, stateTwo->getValidStates().yPosition);
-    EXPECT_EQ(stateOne->getValidStates().orientation, stateTwo->getValidStates().orientation);
+    EXPECT_EQ(stateOne->getValidStates().globalOrientation, stateTwo->getValidStates().globalOrientation);
     EXPECT_EQ(stateOne->getValidStates().lonPosition, stateTwo->getValidStates().lonPosition);
     EXPECT_EQ(stateOne->getValidStates().latPosition, stateTwo->getValidStates().latPosition);
 }
@@ -181,4 +181,17 @@ TEST_F(ObstacleTest, GetStateByTimeStep){
     EXPECT_EQ(obstacleOne->getStateByTimeStep(0)->getTimeStep(), 0);
     EXPECT_EQ(obstacleOne->getStateByTimeStep(1)->getTimeStep(), 1);
     EXPECT_EQ(obstacleOne->getStateByTimeStep(2)->getTimeStep(), 2);
+}
+
+TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
+    stateOne->setXPosition(2.5);
+    stateOne->setYPosition(0.5);
+    obstacleOne->convertPointToCurvilinear(0);
+    EXPECT_EQ(stateOne->getLonPosition(), 7.5);
+    EXPECT_EQ(stateOne->getLatPosition(), 0.0);
+    stateOne->setXPosition(2.5);
+    stateOne->setYPosition(-0.75);
+    obstacleOne->convertPointToCurvilinear(0);
+    EXPECT_EQ(stateOne->getLonPosition(), 7.5);
+    EXPECT_EQ(stateOne->getLatPosition(), -1.25);
 }

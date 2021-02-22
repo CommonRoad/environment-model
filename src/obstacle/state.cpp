@@ -9,7 +9,8 @@ State::State(int timeStep,
              double yPosition,
              double velocity,
              double acceleration,
-             double orientation,
+             double globalOrientation,
+             double curvilinearOrientation,
              double lonPosition,
              double latPosition) :
         timeStep(timeStep),
@@ -19,7 +20,8 @@ State::State(int timeStep,
         acceleration(acceleration),
         lonPosition(lonPosition),
         latPosition(latPosition),
-        orientation(orientation),
+        globalOrientation(globalOrientation),
+        curvilinearOrientation(curvilinearOrientation),
         validStates(ValidStates{true, true, true, true,
                                 true, true, true}) {}
 
@@ -34,7 +36,7 @@ State::State(int timeStep,
         yPosition(yPosition),
         velocity(velocity),
         acceleration(acceleration),
-        orientation(orientation),
+        globalOrientation(orientation),
         validStates(ValidStates{true, true, true, true,
                                 false, false, true}) {}
 
@@ -96,13 +98,22 @@ void State::setLatPosition(double d) {
     latPosition = d;
 }
 
-double State::getOrientation() const {
-    return orientation;
+double State::getGlobalOrientation() const {
+    return globalOrientation;
 }
 
-void State::setOrientation(double theta) {
-    validStates.orientation = true;
-    orientation = theta;
+void State::setGlobalOrientation(double theta) {
+    validStates.globalOrientation = true;
+    globalOrientation = theta;
+}
+
+double State::getCurvilinearOrientation() const {
+    return curvilinearOrientation;
+}
+
+void State::setCurvilinearOrientation(double theta) {
+    validStates.curvilinearOrientation = true;
+    curvilinearOrientation = theta;
 }
 
 int State::getTimeStep() const {
@@ -115,17 +126,6 @@ void State::setTimeStep(int time) {
 
 const ValidStates &State::getValidStates() const {
     return validStates;
-}
-
-void State::convertPointToCurvilinear(const CurvilinearCoordinateSystem &ccs) {
-    try {
-        Eigen::Vector2d convertedPoint = ccs.convertToCurvilinearCoords(getXPosition(), getYPosition());
-        setLonPosition(convertedPoint.x());
-        setLatPosition(convertedPoint.y());
-    }
-    catch (std::invalid_argument){
-        std::cerr << "time step: " << timeStep << " | x-position: " << getXPosition() << " | y-position: " << getYPosition() << '\n';
-    }
 }
 
 

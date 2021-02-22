@@ -146,7 +146,7 @@ polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
         std::vector<vertex> adjustedBoundingRectangleVertices = rotateAndTranslateVertices(
                 boundingRectangleVertices,
                 vertex{state->getXPosition(), state->getYPosition()},
-                state->getOrientation());
+                state->getGlobalOrientation());
 
         polygonShape.outer().resize(adjustedBoundingRectangleVertices.size() + 1);
 
@@ -182,9 +182,7 @@ double Obstacle::frontS(int timeStep) {
     double s = getLonPosition(timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
-    double theta = getStateByTimeStep(timeStep)->getOrientation() - getReferenceLane()->
-            getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
-                                                  getStateByTimeStep(timeStep)->getYPosition());
+    double theta = getStateByTimeStep(timeStep)->getCurvilinearOrientation();
 
     // use maximum of all corners
     return std::max({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
@@ -197,9 +195,7 @@ double Obstacle::rearS(int timeStep) {
     double s = getLonPosition(timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
-    double theta = getStateByTimeStep(timeStep)->getOrientation() - getReferenceLane()->
-            getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
-                                                  getStateByTimeStep(timeStep)->getYPosition());
+    double theta = getStateByTimeStep(timeStep)->getCurvilinearOrientation();
 
     // use minimum of all corners
     return std::min({(length / 2) * cos(theta) - (width / 2) * sin(theta) + s,
@@ -211,14 +207,14 @@ double Obstacle::rearS(int timeStep) {
 double Obstacle::getLonPosition(int timeStep) const {
     if (getStateByTimeStep(timeStep)->getValidStates().lonPosition)
         return getStateByTimeStep(timeStep)->getLonPosition();
-    getStateByTimeStep(timeStep)->convertPointToCurvilinear(referenceLane->getCurvilinearCoordinateSystem());
+    convertPointToCurvilinear(timeStep);
     return getStateByTimeStep(timeStep)->getLonPosition();
 }
 
 double Obstacle::getLatPosition(int timeStep) const {
     if (getStateByTimeStep(timeStep)->getValidStates().latPosition)
         return getStateByTimeStep(timeStep)->getLatPosition();
-    getStateByTimeStep(timeStep)->convertPointToCurvilinear(referenceLane->getCurvilinearCoordinateSystem());
+    convertPointToCurvilinear(timeStep);
     return getStateByTimeStep(timeStep)->getLatPosition();
 }
 
@@ -255,35 +251,34 @@ int Obstacle::getLastTrajectoryTimeStep() {
 
 std::shared_ptr<Lane> Obstacle::getReferenceLane() const { return referenceLane; }
 
-const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getStraightOutgoings() const {
-    return straightOutgoings;
-}
+const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getStraightOutgoings() const { return straightOutgoings; }
 
-void Obstacle::setStraightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &straightOutgoings) {
-    Obstacle::straightOutgoings = straightOutgoings;
-}
+void Obstacle::setStraightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &stroug) { straightOutgoings = stroug; }
 
-const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getLeftOutgoings() const {
-    return leftOutgoings;
-}
+const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getLeftOutgoings() const { return leftOutgoings; }
 
-void Obstacle::setLeftOutgoings(const std::vector<std::shared_ptr<Lanelet>> &leftOutgoings) {
-    Obstacle::leftOutgoings = leftOutgoings;
-}
+void Obstacle::setLeftOutgoings(const std::vector<std::shared_ptr<Lanelet>> &leftoug) { leftOutgoings = leftoug; }
 
-const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getRightOutgoings() const {
-    return rightOutgoings;
-}
+const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getRightOutgoings() const { return rightOutgoings; }
 
-void Obstacle::setRightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &rightOutgoings) {
-    Obstacle::rightOutgoings = rightOutgoings;
-}
+void Obstacle::setRightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &rightoug) { rightOutgoings = rightoug; }
 
-const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getOncomings() const {
-    return oncomings;
-}
+const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getOncomings() const { return oncomings; }
 
-void Obstacle::setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings) {
-    Obstacle::oncomings = oncomings;
-}
+void Obstacle::setOncomings(const std::vector<std::shared_ptr<Lanelet>> &onc) { oncomings = onc; }
 
+
+void Obstacle::convertPointToCurvilinear(int timeStep) const {
+    try {
+        Eigen::Vector2d convertedPoint = referenceLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(getStateByTimeStep(timeStep)->getXPosition(),getStateByTimeStep(timeStep)->getYPosition());
+        getStateByTimeStep(timeStep)->setLonPosition(convertedPoint.x());
+        getStateByTimeStep(timeStep)->setLatPosition(convertedPoint.y());
+        double theta = getStateByTimeStep(timeStep)->getGlobalOrientation() - getReferenceLane()->
+                getLanelet().getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                                      getStateByTimeStep(timeStep)->getYPosition());
+        getStateByTimeStep(timeStep)->setCurvilinearOrientation(theta);
+    }
+    catch (std::invalid_argument){
+        std::cerr << "time step: " << timeStep << " | x-position: " << getStateByTimeStep(timeStep)->getXPosition() << " | y-position: " << getStateByTimeStep(timeStep)->getYPosition() << '\n';
+    }
+}

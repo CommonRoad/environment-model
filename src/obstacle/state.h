@@ -29,12 +29,13 @@ public:
      * @param yPosition y-position in Cartesian space.
      * @param velocity velocity in [m/s].
      * @param acceleration acceleration in [m/s^2].
-     * @param orientation orientation in [rad].
+     * @param globalOrientation Global orientation in [rad].
+     * @param curvilinearOrientation Orientation along reference path in [rad].
      * @param lonPosition longitudinal position in Curvilinear domain.
      * @param latPosition lateral position in Curvilinear domain.
      */
-    State(int timeStep, double xPosition, double yPosition, double velocity, double acceleration, double orientation,
-          double lonPosition, double latPosition);
+    State(int timeStep, double xPosition, double yPosition, double velocity, double acceleration,
+          double globalOrientation, double curvilinearOrientation, double lonPosition, double latPosition);
 
     /**
      * Constructor initializing all variables except longitudinal and lateral position.
@@ -92,11 +93,18 @@ public:
     [[nodiscard]] double getLatPosition() const;
 
     /**
-     * Getter for orientation.
+     * Getter for global orientation.
      *
      * @return orientation.
      */
-    [[nodiscard]] double getOrientation() const;
+    [[nodiscard]] double getGlobalOrientation() const;
+
+    /**
+     * Getter for curvilinear orientation.
+     *
+     * @return orientation.
+     */
+    [[nodiscard]] double getCurvilinearOrientation() const;
 
     /**
      * Getter for time step.
@@ -155,11 +163,18 @@ public:
     void setLatPosition(double latPosition);
 
     /**
-     * Setter for orientation.
+     * Setter for global orientation.
      *
      * @param orientation orientation in [rad].
      */
-    void setOrientation(double orientation);
+    void setGlobalOrientation(double orientation);
+
+    /**
+     * Setter for curvilinear orientation.
+     *
+     * @param orientation orientation in [rad].
+     */
+    void setCurvilinearOrientation(double orientation);
 
     /**
      * Setter for time step.
@@ -168,21 +183,15 @@ public:
      */
     void setTimeStep(int timeStep);
 
-    /**
-    * Converts the x- and y-coordinate into the Curvilinear domain.
-    *
-    * @param ccs Curvilinear coordinate system in which projection should happen.
-    */
-    void convertPointToCurvilinear(const CurvilinearCoordinateSystem &ccs);
-
 private:
-    double xPosition{0.0};                                          //**< x-coordinate in Cartesian space [m] */
-    double yPosition{0.0};                                          //**< y-coordinate in Cartesian space */
-    double velocity{0.0};                                           //**< velocity [m/s] */
-    double acceleration{0.0};                                       //**< acceleration [m/s^2] */
-    double lonPosition{0.0};                                        //**< longitudinal position [m] */
-    double latPosition{0.0};                                        //**< lateral position [m] */
-    double orientation{0.0};                                        //**< orientation [rad] */
+    double xPosition { 0.0 };                                       //**< x-coordinate in Cartesian space [m] */
+    double yPosition { 0.0 };                                       //**< y-coordinate in Cartesian space */
+    double velocity { 0.0 };                                        //**< velocity [m/s] */
+    double acceleration { 0.0 };                                    //**< acceleration [m/s^2] */
+    double lonPosition { 0.0 };                                     //**< longitudinal position in curvilinear coordinate system [m] */
+    double latPosition { 0.0 };                                     //**< lateral position in curvilinear coordinate system [m] */
+    double globalOrientation { 0.0 };                               //**< orientation in Cartesian space [rad] */
+    double curvilinearOrientation { 0.0 };                          //**< orientation along reference path [rad] */
     ValidStates validStates{false, false,         //**< set of states which are already set and therefore are valid */
                             false, false,
                             false, false,

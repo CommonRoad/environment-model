@@ -59,7 +59,7 @@ std::shared_ptr<State> XMLReader::extractInitialState(const pugi::xml_node &chil
             states.child("position").child("point").child("x").text().as_double());
     initialState.setYPosition(
             states.child("position").child("point").child("y").text().as_double());
-    initialState.setOrientation(states.child("orientation").child("exact").text().as_double());
+    initialState.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
     initialState.setVelocity(states.child("velocity").child("exact").text().as_double());
     initialState.setAcceleration(states.child("acceleration").child("exact").text().as_double());
     return std::make_shared<State>(initialState);
@@ -70,7 +70,7 @@ std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
     st.setTimeStep(states.child("time").child("exact").text().as_int());
     st.setXPosition(states.child("position").child("point").child("x").text().as_double());
     st.setYPosition(states.child("position").child("point").child("y").text().as_double());
-    st.setOrientation(states.child("orientation").child("exact").text().as_double());
+    st.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
     st.setVelocity(states.child("velocity").child("exact").text().as_double());
     st.setAcceleration(states.child("acceleration").child("exact").text().as_double());
     return std::make_shared<State>(st);
