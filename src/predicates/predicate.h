@@ -15,6 +15,20 @@
 class Predicate {
 public:
     /**
+     * Constructor for predicate class.
+     *
+     * @param parameters Struct containing parameters of all predicates.
+     */
+    explicit Predicate(const PredicateParameters &parameters);
+
+    /**
+     * Default constructor for predicate class without parameter.
+     *
+     * @param parameters Struct containing parameters of all predicates.
+     */
+    Predicate();
+
+    /**
      * Virtual function for the boolean evaluation of a predicate.
      *
      * @param timeStep Time step of interest.
@@ -93,13 +107,6 @@ public:
      * @param parameters Struct containing all parameters.
      */
     void setParameters(const PredicateParameters &parameters);
-
-    /**
-     * Getter for predicate statistics (for all object instances).
-     *
-     * @return Struct containing statistics of this predicate.
-     */
-    [[nodiscard]] static const PredicateStatistics &getStatistics() ;
 
 protected:
     PredicateParameters parameters;             //**< Struct containing parameters of all predicates. */

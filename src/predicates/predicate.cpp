@@ -20,4 +20,6 @@ const PredicateParameters &Predicate::getParameters() const { return parameters;
 
 void Predicate::setParameters(const PredicateParameters &params) { parameters = params; }
 
-const PredicateStatistics &Predicate::getStatistics() { return statistics; }
+Predicate::Predicate(const PredicateParameters &parameters) : parameters(parameters) {}
+
+Predicate::Predicate() = default;

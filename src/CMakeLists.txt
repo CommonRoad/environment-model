@@ -46,3 +46,7 @@ add_executable(env_model_example_node interfaces/standalone/main.cpp)
 #set_property(TARGET env_model_example_node PROPERTY POSITION_INDEPENDENT_CODE ON)
 #set_property(TARGET env_model_example_node PROPERTY INTERPROCEDURAL_OPTIMIZATION ON)
 target_link_libraries(env_model_example_node env_model)
+
+
+# add pybind module
+pybind11_add_module(crmonitor_python ${ENV_MODEL_SRC_FILES} interfaces/pybind/python_interface.cpp interfaces/pybind/translate_python_types.cpp)

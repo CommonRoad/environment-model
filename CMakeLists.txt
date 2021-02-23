@@ -39,6 +39,10 @@ if(NOT OpenMP_CXX_FOUND)
     message(SEND_ERROR "Can't find the OpenMP package")
 endif()
 
+## Include pybind
+add_subdirectory(external/pybind11)
+set(PYBIND11_CPP_STANDARD -std=c++17)
+
 # Set compiler optimizations for build types
 set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
 set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
@@ -49,10 +53,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/../)
 
 # Add Environment model node
 add_subdirectory(src)
-
-# add pybind
-add_subdirectory(external/pybind11)
-#pybind11_add_module(cmake_example src/main.cpp)
 
 # Doxygen
 include(doxygen)
