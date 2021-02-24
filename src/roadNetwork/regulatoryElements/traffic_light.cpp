@@ -43,3 +43,7 @@ void TrafficLight::setActive(bool ac) { TrafficLight::active = ac; }
 
 void TrafficLight::addCycleElement(TrafficLightCycleElement ce) { cycle.push_back(ce); }
 
+void TrafficLight::setPosition(vertex pos) { position = pos; }
+
+vertex TrafficLight::getPosition() const { return position; }
+

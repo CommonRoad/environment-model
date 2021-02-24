@@ -179,6 +179,14 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                     tempLaneletContainer[arrayIndex]->setVirtualElement(
                             trafficSignChildElement.first_attribute().as_bool());
                 }
+                if (!(strcmp(trafficSignChildElement.name(), "position"))) {
+                    if (!(strcmp(trafficSignChildElement.first_child().name(), "point"))) {
+                        vertex newVertex{};
+                        newVertex.x = trafficSignChildElement.first_child().child("x").text().as_double();
+                        newVertex.y = trafficSignChildElement.first_child().child("y").text().as_double();
+                        tempLaneletContainer[arrayIndex]->setPosition(newVertex);
+                    }
+                }
             }
             ++arrayIndex;
         }
@@ -255,6 +263,14 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                 if (!(strcmp(trafficLightChildElement.name(), "active"))) {
                     tempLaneletContainer[arrayIndex]->setActive(
                             strcasecmp("true", trafficLightChildElement.first_child().value()) == 0);
+                }
+                if (!(strcmp(trafficLightChildElement.name(), "position"))) {
+                    if (!(strcmp(trafficLightChildElement.first_child().name(), "point"))) {
+                        vertex newVertex{};
+                        newVertex.x = trafficLightChildElement.first_child().child("x").text().as_double();
+                        newVertex.y = trafficLightChildElement.first_child().child("y").text().as_double();
+                        tempLaneletContainer[arrayIndex]->setPosition(newVertex);
+                    }
                 }
             }
             ++arrayIndex;

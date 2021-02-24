@@ -28,3 +28,6 @@ std::vector<std::shared_ptr<TrafficSignElement>> TrafficSign::getTrafficSignElem
     return trafficSignElement;
 }
 
+void TrafficSign::setPosition(vertex pos) { position = pos; }
+
+vertex TrafficSign::getPosition() const { return position; }

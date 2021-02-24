@@ -42,6 +42,13 @@ public:
     void setTrafficSignElement(const std::vector<std::shared_ptr<TrafficSignElement>> &trafficSignElement);
 
     /**
+     * Setter for traffic sign position.
+     *
+     * @param pos Position of traffic sign.
+     */
+    void setPosition(vertex pos);
+
+    /**
      * Getter for ID of traffic sign.
      *
      * @return
@@ -62,10 +69,18 @@ public:
      */
     [[nodiscard]] std::vector<std::shared_ptr<TrafficSignElement>> getTrafficSignElements() const;
 
+    /**
+     * Getter for traffic sign position.
+     *
+     * @return Position of traffic sign.
+     */
+    [[nodiscard]] vertex getPosition() const;
+
 private:
     int id;                                                                   //**< unique ID of traffic sign */
-    bool virtualElement;                                                      //**< indicator whether traffic sign is artificially added */ //
-    std::vector<std::shared_ptr<TrafficSignElement>> trafficSignElement;     //**< list of traffic sign elements represented by traffic sign */ //
+    bool virtualElement;                                                      //**< indicator whether traffic sign is artificially added */
+    std::vector<std::shared_ptr<TrafficSignElement>> trafficSignElement;      //**< list of traffic sign elements represented by traffic sign */
+    vertex position{};                                                          //**< position of traffic sign */
 };
 
 

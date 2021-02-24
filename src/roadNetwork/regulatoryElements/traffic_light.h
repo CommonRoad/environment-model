@@ -53,6 +53,13 @@ public:
     void setActive(bool ac);
 
     /**
+     * Setter for traffic light position.
+     *
+     * @param pos Position of traffic light.
+     */
+    void setPosition(vertex pos);
+
+    /**
      * Adds a cycle element to the traffic light.
      *
      * @param ce Traffic light cycle element.
@@ -95,6 +102,13 @@ public:
     [[nodiscard]] bool isActive() const;
 
     /**
+     * Getter for traffic light position.
+     *
+     * @return Position of traffic light.
+     */
+    [[nodiscard]] vertex getPosition() const;
+
+    /**
      * Computes traffic light cycle element at a given time step.
      *
      * @param time Time step of interest.
@@ -103,11 +117,12 @@ public:
     TrafficLightCycleElement getElementAtTime(int time);
 
 private:
-    int id;                             //**< unique ID of traffic light */
+    int id;                                         //**< unique ID of traffic light */
     std::vector<TrafficLightCycleElement> cycle;    //**< cycle of traffic light */
-    int offset;                         //**< time offset of traffic light */
-    TurningDirections direction;    //**< direction for which traffic light is valid */
-    bool active{};                      //**< boolean indicating whether traffic sign is valid */
+    int offset;                                     //**< time offset of traffic light */
+    TurningDirections direction;                    //**< direction for which traffic light is valid */
+    bool active{};                                  //**< boolean indicating whether traffic light is valid */
+    vertex position{};                              //**< position of traffic light */
 };
 
 #endif //ENV_MODEL_TRAFFIC_LIGHT_H

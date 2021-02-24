@@ -5,28 +5,13 @@
 #include "python_interface.h"
 #include "translate_python_types.h"
 
-uint8_t py_registerScenario(py::int_ &ScenarioID, py::handle &py_laneletNetwork, py::list &py_obstacles,
-                            py::list &py_trafficSigns, py::list &py_trafficLights, py::list &py_trafficIntersections,
-                            py::list &py_planningProblem) {
-    auto tempLaneletContainer = TranslatePythonTypes::convertLanelets(py_laneletNetwork); // outsourced function
+uint8_t py_registerScenario(py::int_ &ScenarioID, py::handle &py_laneletNetwork, py::list &py_obstacles) {
 
-    //------------------------------- Lane creation  -------------------------------
-    // Lanes are now created when constructing the scenario from transfered lanelets (by private member function)
+    auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
+    //auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
+    //auto tempLaneletContainer = TranslatePythonTypes::convertLanelets(py_laneletNetwork);
+    //auto tempObstacleContainer = TranslatePythonTypes::convertObstacle(py_laneletNetwork);
 
-    //------------------------------- Dynamic obstacles  -------------------------------
-    // temporary pointer which stores translated dynamic obstacles
-//    std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer{};
-//    uint8_t ObstacleConversionFlag = TranslatePythonTypes::convertObstacles(py_dynamicObstacles, tempObstacleContainer);
-//    if (ObstacleConversionFlag) {
-//        // Todo One undefined obstacle parameter brings the program to a stop --> Check if this is desired
-//        // Otherwise only give an error and proceed with next obstacle (or set default values)
-//        std::cout << "Error during obstacleConversion" << std::endl;
-//        return ObstacleConversionFlag; // error during conversion of obstacles
-//    }
-
-    //------------------------------- Static obstacles  -------------------------------
-    // Would be a new parameter given to function
-    // Creates only staticObstacles and pushes them to tempObstacleContainer (obstacle = parentClass)
     // Todo give static obstacles through interface
 
 

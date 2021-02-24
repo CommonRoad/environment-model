@@ -21,10 +21,32 @@ inline double extractSpeedLimit2020(const py::handle &py_singleLanelet, const st
     return std::numeric_limits<double>::infinity();
 }
 
+std::vector<std::shared_ptr<TrafficSign>> TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {
+    std::vector<std::shared_ptr<TrafficSign>> trafficSignContainer;
+    const py::list &py_trafficSigns = py_laneletNetwork.attr("traffic_signs").cast<py::list>();
+    trafficSignContainer.reserve(py_trafficSigns.size()); // Already know the size --> Faster memory allocation
+
+    for (const auto &py_trafficSign : py_trafficSigns) {
+        std::shared_ptr<TrafficSign> tempTrafficSign = std::make_shared<TrafficSign>();
+        tempLaneletContainer.emplace_back(tempTrafficSign);
+
+        int trafficSignId = py_trafficSign.attr("traffic_sign_id").cast<int>();
+        const py::list &py_trafficSignElements = py_trafficSign.attr("traffic_sign_elements").cast<py::list>();
+        for (const py::handle &py_trafficSignElement : py_trafficSignElements) {
+            std::string trafficSignElementId =
+                    py_trafficSignElement.attr("traffic_sign_element_id").cast<py::str>();
+            if (trafficSignElementId.find("MAX_SPEED") != std::string::npos) {
+                const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
+                const std::string py_speedLimit = additionalValues[0].attr("__str__")().cast<std::string>();
+            }
+        }
+    }
+
+    return trafficSignContainer;
+}
+
 std::vector<std::shared_ptr<Lanelet>>
 TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork) {
-    // todo add checks if laneletContainer is unused
-
     std::vector<std::shared_ptr<Lanelet>> laneletContainer;
     const py::list &py_lanelets = py_laneletNetwork.attr("lanelets").cast<py::list>();
     laneletContainer.reserve(py_lanelets.size()); // Already know the size --> Faster memory allocation
