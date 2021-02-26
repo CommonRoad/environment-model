@@ -10,10 +10,14 @@ TrafficSignElement::TrafficSignElement(std::string  el_id) : id(std::move(el_id)
 
 std::string TrafficSignElement::getId() const { return id; }
 
-std::vector<std::string> TrafficSignElement::getAdditionalValue() const { return additional_value; }
+std::vector<std::string> TrafficSignElement::getAdditionalValues() const { return additionalValues; }
 
-void TrafficSignElement::addAdditionalValue(const std::string &additionalValue) {
-    additional_value.push_back(additionalValue);
+void TrafficSignElement::addAdditionalValue(const std::string &value) {
+    additionalValues.push_back(value);
+}
+
+void TrafficSignElement::setAdditionalValues(const std::vector<std::string>& values) {
+    additionalValues = values;
 }
 
 std::string TrafficSignElement::mapTrafficSignNameToCountryID(const std::string& trafficSignName, SupportedTrafficSignCountry country){

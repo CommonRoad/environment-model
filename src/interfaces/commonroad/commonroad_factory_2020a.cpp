@@ -163,17 +163,16 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                 // get traffic sign elements
                 if (!(strcmp(trafficSignChildElement.name(), "trafficSignElement"))) {
                     std::string trafficSignId = trafficSignChildElement.first_child().first_child().value();
-                    std::shared_ptr<TrafficSignElement> newTrafficSignElements = std::make_shared<TrafficSignElement>(trafficSignId);
-                    std::vector<std::string> additionalValuesList;
+                    std::shared_ptr<TrafficSignElement> newTrafficSignElement = std::make_shared<TrafficSignElement>(trafficSignId);
                     for (pugi::xml_node trafficSignChildElementChild = trafficSignChildElement.first_child();
                          trafficSignChildElementChild;
                          trafficSignChildElementChild = trafficSignChildElementChild.next_sibling()) {
                         if (!(strcmp(trafficSignChildElementChild.name(), "additionalValue"))) {
-                            newTrafficSignElements->addAdditionalValue(
+                            newTrafficSignElement->addAdditionalValue(
                                     trafficSignChildElementChild.first_child().value());
                         }
                     }
-                    tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElements);
+                    tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElement);
                 }
                 if (!(strcmp(trafficSignChildElement.name(), "virtual"))) {
                     tempLaneletContainer[arrayIndex]->setVirtualElement(
@@ -243,22 +242,7 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                     }
                 }
                 if (!(strcmp(trafficLightChildElement.name(), "direction"))) {
-                    TurningDirections dir;
-                    if (!(strcmp(trafficLightChildElement.first_child().value(), "right")))
-                        dir = TurningDirections::right;
-                    if (!(strcmp(trafficLightChildElement.first_child().value(), "straight")))
-                        dir = TurningDirections::straight;
-                    if (!(strcmp(trafficLightChildElement.first_child().value(), "left")))
-                        dir = TurningDirections::left;
-                    if (!(strcmp(trafficLightChildElement.first_child().value(), "leftStraight")))
-                        dir = TurningDirections::leftStraight;
-                    if (!(strcmp(trafficLightChildElement.first_child().value(), "straightRight")))
-                        dir = TurningDirections::straightRight;
-                    if (!(strcmp(trafficLightChildElement.first_child().value(), "leftRight")))
-                        dir = TurningDirections::leftRight;
-                    if (!(strcmp(trafficLightChildElement.first_child().value(), "all")))
-                        dir = TurningDirections::all;
-                    tempLaneletContainer[arrayIndex]->setDirection(dir);
+                    tempLaneletContainer[arrayIndex]->setDirection(TrafficLight::matchTurningDirections(trafficLightChildElement.first_child().value()));
                 }
                 if (!(strcmp(trafficLightChildElement.name(), "active"))) {
                     tempLaneletContainer[arrayIndex]->setActive(

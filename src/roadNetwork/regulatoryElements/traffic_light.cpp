@@ -47,3 +47,20 @@ void TrafficLight::setPosition(vertex pos) { position = pos; }
 
 vertex TrafficLight::getPosition() const { return position; }
 
+TurningDirections TrafficLight::matchTurningDirections(const std::string& dir) {
+    if (dir == "right")
+        return TurningDirections::right;
+    else if (dir == "straight")
+        return TurningDirections::straight;
+    else if (dir == "left")
+        return TurningDirections::left;
+    else if (dir == "leftStraight")
+        return TurningDirections::leftStraight;
+    else if (dir == "straightRight")
+        return TurningDirections::straightRight;
+    else if (dir == "leftRight")
+        return TurningDirections::leftRight;
+    else
+        return TurningDirections::all;
+
+}

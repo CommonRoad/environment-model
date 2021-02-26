@@ -33,18 +33,25 @@ public:
     [[nodiscard]] std::string getId() const;
 
     /**
-     * Getter for additional value of traffic sign element.
+     * Getter for additional values of traffic sign element.
      *
      * @return Additional value.
      */
-    [[nodiscard]] std::vector<std::string> getAdditionalValue() const;
+    [[nodiscard]] std::vector<std::string> getAdditionalValues() const;
 
     /**
      * Adds an additional value to a traffic sign element.
      *
      * @return Additional value.
      */
-    void addAdditionalValue(const std::string &additionalValue);
+    void addAdditionalValue(const std::string &value);
+
+    /**
+     * Adds a list of additional values to a traffic sign element.
+     *
+     * @return Additional value.
+     */
+    void setAdditionalValues(const std::vector<std::string>& values);
 
     /**
      *
@@ -64,7 +71,7 @@ public:
 
 private:
     std::string id;                                  //**< official national traffic sign ID of a country */
-    std::vector<std::string> additional_value;       //**< list of additional values classifying traffic sign, e.g., velocity, weight, time */
+    std::vector<std::string> additionalValues;       //**< list of additional values classifying traffic sign, e.g., velocity, weight, time */
 
 };
 

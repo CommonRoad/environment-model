@@ -5,6 +5,7 @@
 #include "translate_python_types.h"
 #include "../../auxiliaryDefs/structs.h"
 #include <limits>
+#include "pybind11/numpy.h"
 
 inline double extractSpeedLimit2018(const py::handle &py_singleLanelet) {
     return py_singleLanelet.attr("speed_limit").cast<double>();
@@ -28,22 +29,48 @@ std::vector<std::shared_ptr<TrafficSign>> TranslatePythonTypes::convertTrafficSi
 
     for (const auto &py_trafficSign : py_trafficSigns) {
         std::shared_ptr<TrafficSign> tempTrafficSign = std::make_shared<TrafficSign>();
-        tempLaneletContainer.emplace_back(tempTrafficSign);
-
-        int trafficSignId = py_trafficSign.attr("traffic_sign_id").cast<int>();
+        tempTrafficSign->setId(py_trafficSign.attr("traffic_sign_id").cast<int>());
         const py::list &py_trafficSignElements = py_trafficSign.attr("traffic_sign_elements").cast<py::list>();
         for (const py::handle &py_trafficSignElement : py_trafficSignElements) {
-            std::string trafficSignElementId =
-                    py_trafficSignElement.attr("traffic_sign_element_id").cast<py::str>();
-            if (trafficSignElementId.find("MAX_SPEED") != std::string::npos) {
-                const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
-                const std::string py_speedLimit = additionalValues[0].attr("__str__")().cast<std::string>();
-            }
+            std::string trafficSignElementId = py_trafficSignElement.attr("traffic_sign_element_id").cast<py::str>();
+            std::shared_ptr<TrafficSignElement> newTrafficSignElement = std::make_shared<TrafficSignElement>(trafficSignElementId);
+            const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
+            std::vector<std::string> additionalValuesList { additionalValues.attr("__str__")().cast<std::vector<std::string>>()};
+            newTrafficSignElement->setAdditionalValues(additionalValuesList);
         }
+        tempTrafficSign->setVirtualElement(py_trafficSign.attr("virtual").cast<bool>());
+        py::array_t<double> py_trafficSignPosition = py::getattr(py_trafficSign, "position");
+        tempTrafficSign->setPosition({py_trafficSignPosition.at(0), py_trafficSignPosition.at(1)});
+        trafficSignContainer.emplace_back(tempTrafficSign);
     }
 
     return trafficSignContainer;
 }
+
+//std::vector<std::shared_ptr<TrafficLight>> TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) {
+//    std::vector<std::shared_ptr<TrafficLight>> trafficLightContainer;
+//    const py::list &py_trafficLights = py_laneletNetwork.attr("traffic_lights").cast<py::list>();
+//    trafficLightContainer.reserve(py_trafficLights.size()); // Already know the size --> Faster memory allocation
+//
+//    for (const auto &py_trafficLight : py_trafficLights) {
+//        std::shared_ptr<TrafficLight> tempTrafficLight = std::make_shared<TrafficLight>();
+//        tempTrafficLight->setId(py_trafficLight.attr("traffic_light_id").cast<int>());
+//        tempTrafficLight->setOffset(py_trafficLight.attr("time_offset").cast<int>());
+//        for (const py::handle &py_trafficSignElement : py_trafficSignElements) {
+//            std::string trafficSignElementId = py_trafficSignElement.attr("traffic_sign_element_id").cast<py::str>();
+//            std::shared_ptr<TrafficSignElement> newTrafficSignElement = std::make_shared<TrafficSignElement>(trafficSignElementId);
+//            const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
+//            std::vector<std::string> additionalValuesList { additionalValues.attr("__str__")().cast<std::vector<std::string>>()};
+//            newTrafficSignElement->setAdditionalValues(additionalValuesList);
+//        }
+//        tempTrafficLight->setActive(py_trafficLight.attr("active").cast<bool>());
+//        py::array_t<double> py_trafficLightPosition = py::getattr(py_trafficLight, "position");
+//        tempTrafficLight->setPosition({py_trafficLightPosition.at(0), py_trafficLightPosition.at(1)});
+//        trafficLightContainer.emplace_back(tempTrafficLight);
+//    }
+//
+//    return trafficLightContainer;
+//}
 
 std::vector<std::shared_ptr<Lanelet>>
 TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork) {

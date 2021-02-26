@@ -116,7 +116,14 @@ public:
      */
     TrafficLightCycleElement getElementAtTime(int time);
 
-private:
+    /**
+     * Matches turning direction given as string to the corresponding enum value.
+     *
+     * @param dir String representing turning direction.
+     * @return Turning direction enum value.
+     */
+    [[nodiscard]] static TurningDirections matchTurningDirections(const std::string& dir);
+
     int id;                                         //**< unique ID of traffic light */
     std::vector<TrafficLightCycleElement> cycle;    //**< cycle of traffic light */
     int offset;                                     //**< time offset of traffic light */
