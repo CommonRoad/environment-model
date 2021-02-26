@@ -7,6 +7,7 @@
 #include "commonroad_factory_2018b.h"
 #include "commonroad_factory_2020a.h"
 #include "../../obstacle/obstacle_operations.h"
+#include "../../roadNetwork/lanelet/lanelet_operations.h"
 
 std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xmlFile) {
     std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
@@ -142,8 +143,7 @@ int XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLan
 
     // all lanelets must be initialized first because they are referencing each other
     for (int i = 0; i < n; i++) {
-        Lanelet newLanelet;
-        std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>(); // make_shared is faster than (new vehicularLanelet());
+        std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>(); // make_shared is faster than (new Lanelet());
         tempLaneletContainer.emplace_back(tempLanelet);
     }
 
@@ -164,14 +164,21 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
                                        const pugi::xml_node &child,
                                        const char *side) {
     for (pugi::xml_node points = child.first_child(); points; points = points.next_sibling()) {
+        vertex newVertex {  };
+        LineMarking lineMarking;
         if (!(strcmp(points.name(), "point"))) {
-            vertex newVertice{};
-            newVertice.x = points.child("x").text().as_double();
-            newVertice.y = points.child("y").text().as_double();
+            newVertex = {points.child("x").text().as_double(), points.child("y").text().as_double()};
             if (!(strcmp(side, "rightBound")))
-                tempLaneletContainer[arrayIndex]->addRightVertex(newVertice);
+                tempLaneletContainer[arrayIndex]->addRightVertex(newVertex);
             else if (!(strcmp(side, "leftBound")))
-                tempLaneletContainer[arrayIndex]->addLeftVertex(newVertice);
+                tempLaneletContainer[arrayIndex]->addLeftVertex(newVertex);
+        }
+        if (!(strcmp(points.name(), "lineMarking"))) {
+            lineMarking = matchStringToLineMarking(points.value());
+            if (!(strcmp(side, "rightBound")))
+                tempLaneletContainer[arrayIndex]->setLineMarkingRight(lineMarking);
+            else if (!(strcmp(side, "leftBound")))
+                tempLaneletContainer[arrayIndex]->setLineMarkingLeft(lineMarking);
         }
     }
 }

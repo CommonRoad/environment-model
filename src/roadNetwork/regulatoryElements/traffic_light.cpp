@@ -62,5 +62,15 @@ TurningDirections TrafficLight::matchTurningDirections(const std::string& dir) {
         return TurningDirections::leftRight;
     else
         return TurningDirections::all;
+}
 
+TrafficLightState TrafficLight::matchTrafficLightState(const std::string& trafficLightState){
+    if (trafficLightState == "green")
+        return TrafficLightState::green;
+    else if (trafficLightState == "yellow")
+        return TrafficLightState::yellow;
+    else if (trafficLightState == "red_yellow")
+        return TrafficLightState::red_yellow;
+    else
+        return TrafficLightState::red; //default case -> consider also trafficLightState == "red"
 }

@@ -124,6 +124,14 @@ public:
      */
     [[nodiscard]] static TurningDirections matchTurningDirections(const std::string& dir);
 
+    /**
+     * Matches a traffic light state given as string to the corresponding enum value.
+     *
+     * @param trafficLightState String representing traffic light state.
+     * @return Traffic light state enum value.
+     */
+    [[nodiscard]] static TrafficLightState matchTrafficLightState(const std::string& trafficLightState);
+
     int id;                                         //**< unique ID of traffic light */
     std::vector<TrafficLightCycleElement> cycle;    //**< cycle of traffic light */
     int offset;                                     //**< time offset of traffic light */

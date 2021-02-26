@@ -3,24 +3,8 @@
 //
 
 #include "translate_python_types.h"
-#include "../../auxiliaryDefs/structs.h"
-#include <limits>
 #include "pybind11/numpy.h"
 
-inline double extractSpeedLimit2018(const py::handle &py_singleLanelet) {
-    return py_singleLanelet.attr("speed_limit").cast<double>();
-}
-
-inline double extractSpeedLimit2020(const py::handle &py_singleLanelet, const std::map<int, double> &speedLimits) {
-    const py::list py_trafficSigns = py_singleLanelet.attr("traffic_signs").cast<py::list>();
-    for (const auto &py_trafficSignId : py_trafficSigns) {
-        int trafficSignId = py::cast<int>(py_trafficSignId);
-        const auto trafficSign = speedLimits.find(trafficSignId);
-        if (trafficSign != speedLimits.end())
-            return trafficSign->second;
-    }
-    return std::numeric_limits<double>::infinity();
-}
 
 std::vector<std::shared_ptr<TrafficSign>> TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {
     std::vector<std::shared_ptr<TrafficSign>> trafficSignContainer;
@@ -47,256 +31,76 @@ std::vector<std::shared_ptr<TrafficSign>> TranslatePythonTypes::convertTrafficSi
     return trafficSignContainer;
 }
 
-//std::vector<std::shared_ptr<TrafficLight>> TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) {
-//    std::vector<std::shared_ptr<TrafficLight>> trafficLightContainer;
-//    const py::list &py_trafficLights = py_laneletNetwork.attr("traffic_lights").cast<py::list>();
-//    trafficLightContainer.reserve(py_trafficLights.size()); // Already know the size --> Faster memory allocation
-//
-//    for (const auto &py_trafficLight : py_trafficLights) {
-//        std::shared_ptr<TrafficLight> tempTrafficLight = std::make_shared<TrafficLight>();
-//        tempTrafficLight->setId(py_trafficLight.attr("traffic_light_id").cast<int>());
-//        tempTrafficLight->setOffset(py_trafficLight.attr("time_offset").cast<int>());
-//        for (const py::handle &py_trafficSignElement : py_trafficSignElements) {
-//            std::string trafficSignElementId = py_trafficSignElement.attr("traffic_sign_element_id").cast<py::str>();
-//            std::shared_ptr<TrafficSignElement> newTrafficSignElement = std::make_shared<TrafficSignElement>(trafficSignElementId);
-//            const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
-//            std::vector<std::string> additionalValuesList { additionalValues.attr("__str__")().cast<std::vector<std::string>>()};
-//            newTrafficSignElement->setAdditionalValues(additionalValuesList);
-//        }
-//        tempTrafficLight->setActive(py_trafficLight.attr("active").cast<bool>());
-//        py::array_t<double> py_trafficLightPosition = py::getattr(py_trafficLight, "position");
-//        tempTrafficLight->setPosition({py_trafficLightPosition.at(0), py_trafficLightPosition.at(1)});
-//        trafficLightContainer.emplace_back(tempTrafficLight);
-//    }
-//
-//    return trafficLightContainer;
-//}
+std::vector<std::shared_ptr<TrafficLight>> TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) {
+    std::vector<std::shared_ptr<TrafficLight>> trafficLightContainer;
+    const py::list &py_trafficLights = py_laneletNetwork.attr("traffic_lights").cast<py::list>();
+    trafficLightContainer.reserve(py_trafficLights.size()); // Already know the size --> Faster memory allocation
+
+    for (const auto &py_trafficLight : py_trafficLights) {
+        std::shared_ptr<TrafficLight> tempTrafficLight = std::make_shared<TrafficLight>();
+        tempTrafficLight->setId(py_trafficLight.attr("traffic_light_id").cast<int>());
+        tempTrafficLight->setOffset(py_trafficLight.attr("time_offset").cast<int>());
+        const py::list &py_trafficLightCycle = py_trafficLight.attr("cycle").cast<py::list>();
+        std::vector<TrafficLightCycleElement> cycle;
+        for (const py::handle &py_cycleElement : py_trafficLightCycle) {
+            cycle.push_back({TrafficLight::matchTrafficLightState(py_cycleElement.attr("state").cast<py::str>()),
+                             py_cycleElement.attr("duration").cast<int>()});
+        }
+        tempTrafficLight->setActive(py_trafficLight.attr("active").cast<bool>());
+        py::array_t<double> py_trafficLightPosition = py::getattr(py_trafficLight, "position");
+        tempTrafficLight->setDirection(TrafficLight::matchTurningDirections(py_trafficLight.attr("direction").cast<py::str>()));
+        trafficLightContainer.emplace_back(tempTrafficLight);
+    }
+    return trafficLightContainer;
+}
 
 std::vector<std::shared_ptr<Lanelet>>
-TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork) {
-    std::vector<std::shared_ptr<Lanelet>> laneletContainer;
+TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
+                                      std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
+                                      std::vector<std::shared_ptr<TrafficLight>> trafficLights) {
+    std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer {};
     const py::list &py_lanelets = py_laneletNetwork.attr("lanelets").cast<py::list>();
-    laneletContainer.reserve(py_lanelets.size()); // Already know the size --> Faster memory allocation
+    tempLaneletContainer.reserve(py_lanelets.size()); // Already know the size --> Faster memory allocation
 
-    std::map<int, double> speedLimits;
-
-    const py::list &py_trafficSigns = py_laneletNetwork.attr("traffic_signs").cast<py::list>();
-    for (const auto &py_trafficSign : py_trafficSigns) {
-        int trafficSignId = py_trafficSign.attr("traffic_sign_id").cast<int>();
-        const py::list &py_trafficSignElements = py_trafficSign.attr("traffic_sign_elements").cast<py::list>();
-        for (const py::handle &py_trafficSignElement : py_trafficSignElements) {
-            std::string trafficSignElementId =
-                    py_trafficSignElement.attr("traffic_sign_element_id").cast<py::str>();
-            if (trafficSignElementId.find("MAX_SPEED") != std::string::npos) {
-                const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
-
-                const std::string py_speedLimit = additionalValues[0].attr("__str__")().cast<std::string>();
-                double speedLimit = std::stod(py_speedLimit);
-                speedLimits.insert({trafficSignId, speedLimit});
-            }
-        }
+    // all lanelets must be initialized first because they are referencing each other
+    for (int i = 0; i < py_lanelets.size(); i++) {
+        std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>(); // make_shared is faster than (new Lanelet());
+        tempLaneletContainer.emplace_back(tempLanelet);
     }
 
-
-    // iterate over items in python list
-    for (py::handle py_SingleLanelet : py_lanelets) {
-        // how to tell vehicular and pedestrian lanelets apart (later on if implemented in commonroad)
-        // py_SingleLanelet.get_type().attr("__name__").cast<std::string>()
-
-        //-----------------------------------------------------------
-
-
-        //-----------------------------------------------------------
-        size_t id = py::cast<size_t>(py_SingleLanelet.attr("lanelet_id"));
-
-        //-----------------------------------------------------------
-        // py_left_vertices is a numpy array with two dimensions
-        // Possible alternative (needs numpy.h)
-        // py::array_t<double> py_left_vertices2 = py::getattr(item, "left_vertices");
-        py::object py_left_vertices = py_SingleLanelet.attr("left_vertices");
-
-        std::vector<vertex> left_vertices;
-        for (auto &el : py_left_vertices) {
-            vertex temp_vert;
-            int i = 0;
-            for (auto &el2 : el) {
-                // not possible to loop over struct --> use i as counter to differentiate
-                if (i == 0) {
-                    temp_vert.x = el2.cast<double>();
-                } else {
-                    temp_vert.y = el2.cast<double>();
-                }
-                i++;
-            }
-            left_vertices.emplace_back(temp_vert); // don't use std::move = trivially copyable
-        }
-
-        //-----------------------------------------------------------
-        py::object py_right_vertices = py_SingleLanelet.attr("right_vertices");
-
-        std::vector<vertex> right_vertices;
-        for (auto &el : py_right_vertices) {
-            vertex temp_vert;
-            int i = 0;
-            for (auto &el2 : el) {
-                // not possible to loop over struct --> use i as counter to differentiate
-                if (i == 0) {
-                    temp_vert.x = el2.cast<double>();
-                } else {
-                    temp_vert.y = el2.cast<double>();
-                }
-                i++;
-            }
-            right_vertices.emplace_back(temp_vert);
-        }
-
-        //-----------------------------------------------------------
-        py::object py_center_vertices = py_SingleLanelet.attr("center_vertices");
-
-        std::vector<vertex> center_vertices;
-        for (auto &el : py_center_vertices) {
-            vertex temp_vert;
-            int i = 0;
-            for (auto &el2 : el) {
-                // not possible to loop over struct --> use i as counter to differentiate
-                if (i == 0) {
-                    temp_vert.x = el2.cast<double>();
-                } else {
-                    temp_vert.y = el2.cast<double>();
-                }
-                i++;
-            }
-            center_vertices.emplace_back(temp_vert); // no std::move as trivially copyable
-        }
-
-        //-----------------------------------------------------------
-        // Assign the information to a lanelet instance
-        // For now it is assumed, that the lanelet is Lanelet (Like in the old interface)
-        // Later: Compare what distinguishes the lanelets and create right instance (for addition of pedestrianLanelets)
-        // Specific lanelet then should both be assignable to general pointer (polymorphism)
-        // Alternative: Add container with pedestrianLanelets to Scenario
-        std::shared_ptr<Lanelet> tempLanelet =
-                std::make_shared<Lanelet>(); // make_shared is faster than (new Lanelet());
-        tempLanelet->setId(id);
-//        tempLanelet->setSpeedLimit(speed_lim);
-//        tempLanelet->moveLeftBorder(std::move(left_vertices));
-//        tempLanelet->moveRightBorder(std::move(right_vertices));
-//        tempLanelet->moveCenterVertices(std::move(center_vertices));
-        tempLanelet->constructOuterPolygon();
-
-        // Add final Lanelet to container
-        laneletContainer.emplace_back(tempLanelet);
+    int arrayIndex = 0;
+    // set id of lanelets
+    for (py::handle py_singleLanelet : py_lanelets) {
+        tempLaneletContainer[arrayIndex]->setId(py::cast<int>(py_singleLanelet.attr("lanelet_id")));
+        arrayIndex++;
     }
 
-    // After creation of Lanelets still assign predecessor/successor pointers
-    // Call the function below for this (keeps the single functions smaller)
-//    TranslatePythonTypes::setLaneletPointer(py_lanelets, laneletContainer);
+    arrayIndex = 0;
+    for (py::handle py_singleLanelet : py_lanelets) {
+        // add left vertices
+        py::handle py_leftVertices = py_singleLanelet.attr("left_vertices");
+        for (auto &el : py_leftVertices) {
+            vertex newVertex{ el.cast<py::array_t<double>>().at(0), el.cast<py::array_t<double>>().at(1) };
+            tempLaneletContainer[arrayIndex]->addLeftVertex(newVertex);
+        }
+        // add right vertices
+        py::array_t<double> py_rightVertices = py::getattr(py_singleLanelet, "right_vertices");
+        for (auto &el : py_rightVertices) {
+            vertex newVertex{ el.cast<py::array_t<double>>().at(0), el.cast<py::array_t<double>>().at(1) };
+            tempLaneletContainer[arrayIndex]->addRightVertex(newVertex);
+        }
 
-    return laneletContainer;
+        tempLaneletContainer[arrayIndex]->createCenterVertices();
+        tempLaneletContainer[arrayIndex]->constructOuterPolygon();
+        tempLaneletContainer[arrayIndex]->setL(laneletType);
+       // tempLaneletContainer[arrayIndex]->setUserOneWay(userOneWay);
+       // tempLaneletContainer[arrayIndex]->setUserBidirectional(userBidirectional);
+        arrayIndex++;
+    }
+
+    return tempLaneletContainer;
 }
-//
-//// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-///// \brief This function adds the predecessor and successor lanelet pointers to the laneletObjects
-/////
-/////     This function should only be called by TranslatePythonTypes::convertLanelets() and is only meant to outsource
-/////     some of the code.
-/////     It is always assumed, that the laneletContainer is already initialized (holds all the lanelets).
-/////     Thus this function only assigns the pointer values to predecessor/sucessor
-/////
-///// \param[in] py_lanelets = Commonroad version of lanelets
-///// \param[in] laneletContainer = Container for SPOT version of lanelets (changes existing given lanelet instances)
-///// \note The functions inside the namesapce "TranslatePythonTypes" are only used by the python-interface
-//void TranslatePythonTypes::setLaneletPointer(const py::list &py_lanelets,
-//                                             std::vector<std::shared_ptr<Lanelet>> &laneletContainer) {
-//    // Second loop through lanelets to set pointers of predecessor/successors correctly
-//    // In commonroad only IDs are given as Integer values --> Search ID in C++ container and store pointer value
-//    // Todo: Check if this can be done more efficiently (don't loop two times through lanelets, Use std::map?)
-//    int IndexPointer = 0;
-//    for (py::handle py_SingleLanelet : py_lanelets) {
-//        //-----------------------------------------------------------
-//        // All predecessors
-//        py::object py_predecessors = py_SingleLanelet.attr("predecessor");
-//        for (py::handle py_item : py_predecessors) {
-//            // One lanelet can have multiple predecessors
-//            for (auto it = laneletContainer.begin(); it != laneletContainer.end(); ++it) {
-//                // Search specified predecessor id and store its pointer
-//                if ((*it)->getId() == py_item.cast<size_t>()) {
-//                    // give raw pointer (no ownership only access)
-//                    laneletContainer.at(IndexPointer)->addPredecessor((*it).get());
-//                    break; // Id's are unique: Stop if found
-//                }
-//            }
-//        }
-//
-//        //-----------------------------------------------------------
-//        // All Successors
-//        py::object py_successors = py_SingleLanelet.attr("successor");
-//        for (py::handle py_item : py_successors) {
-//            // One lanelet can have multiple sucessors
-//            // for(std::size_t i=0; i<tempLaneletContainer.size(); ++i)
-//            for (auto it = laneletContainer.begin(); it != laneletContainer.end(); ++it) {
-//                // Search specified successor id and store its pointer
-//                if ((*it)->getId() == py_item.cast<size_t>()) {
-//                    // give raw pointer (no ownership only access)
-//                    laneletContainer.at(IndexPointer)->addSuccessor((*it).get());
-//                    break; // Id's are unique
-//                }
-//            }
-//        }
-//
-//        //-----------------------------------------------------------
-//        // Adjacent left
-//        py::object py_AdjLeft = py_SingleLanelet.attr("adj_left");
-//        if (py_AdjLeft.get_type().attr("__name__").cast<std::string>() == "int") {
-//            // One adjacent lanelet on the left (if not the type is "NoneType" not "int")
-//            for (auto it = laneletContainer.begin(); it != laneletContainer.end(); ++it) {
-//                // Search specified predecessor id and store its pointer
-//                if ((*it)->getId() == py_AdjLeft.cast<size_t>()) {
-//                    // Found lanelet which is adjacent left
-//                    // Same or opposite direction:
-//                    py::object py_AdjLeftSameDir = py_SingleLanelet.attr("adj_left_same_direction");
-//                    if (py_AdjLeftSameDir.cast<bool>()) {
-//                        // Same direction
-//                        // give raw pointer (no ownership only access)
-//                        laneletContainer.at(IndexPointer)->setLeftAdjacent((*it).get(), "same");
-//                    } else {
-//                        // opposite direction
-//                        // give raw pointer (no ownership only access)
-//                        laneletContainer.at(IndexPointer)->setLeftAdjacent((*it).get(), "opposite");
-//                    }
-//                    break; // Id's are unique
-//                }
-//            }
-//        }
-//
-//        //-----------------------------------------------------------
-//        // Adjacent right
-//        py::object py_AdjRight = py_SingleLanelet.attr("adj_right");
-//        if (py_AdjRight.get_type().attr("__name__").cast<std::string>() == "int") {
-//            // One adjacent lanelet on the right (if not the type is "NoneType" not "int")
-//            for (auto it = laneletContainer.begin(); it != laneletContainer.end(); ++it) {
-//                // Search specified predecessor id and store its pointer
-//                if ((*it)->getId() == py_AdjRight.cast<size_t>()) {
-//                    // Found lanelet which is adjacent left
-//                    // Same or opposite direction:
-//                    py::object py_AdjRightSameDir = py_SingleLanelet.attr("adj_right_same_direction");
-//                    if (py_AdjRightSameDir.cast<bool>()) {
-//                        // Same direction
-//                        // give raw pointer (no ownership only access)
-//                        laneletContainer.at(IndexPointer)->setRightAdjacent((*it).get(), "same");
-//                    } else {
-//                        // opposite direction
-//                        // give raw pointer (no ownership only access)
-//                        laneletContainer.at(IndexPointer)->setRightAdjacent((*it).get(), "opposite");
-//                    }
-//                    break; // Id's are unique
-//                }
-//            }
-//        }
-//        IndexPointer++;
-//    }
-//}
-//
+
 //// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ///// \brief Convert the obstacles from Commonroad to the C++ counterpart
 /////

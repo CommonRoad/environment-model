@@ -192,3 +192,11 @@ bool Lanelet::hasLaneletType(LaneletType laType) {
 void Lanelet::addLaneletType(LaneletType laType){
     laneletType.push_back(laType);
 }
+
+LineMarking Lanelet::getLineMarkingLeft() const { return lineMarkingLeft; }
+
+void Lanelet::setLineMarkingLeft(LineMarking marking) { lineMarkingLeft = marking; }
+
+LineMarking Lanelet::getLineMarkingRight() const { return lineMarkingRight; }
+
+void Lanelet::setLineMarkingRight(LineMarking marking) { lineMarkingRight = marking; }

@@ -143,6 +143,20 @@ public:
     void setStopLine(const std::shared_ptr<StopLine> &sl);
 
     /**
+     * Setter for left line marking.
+     *
+     * @param marking Left line marking.
+    */
+    void setLineMarkingLeft(LineMarking marking);
+
+    /**
+     * Setter for right line marking.
+     *
+     * @param marking Right line marking.
+    */
+    void setLineMarkingRight(LineMarking marking);
+
+    /**
      * Appends a center vertex.
      *
      * @param center Vertex which should be appended.
@@ -304,6 +318,20 @@ public:
     [[nodiscard]] const std::shared_ptr<StopLine> &getStopLine() const;
 
     /**
+     * Getter for left line marking of lanelet.
+     *
+     * @return Left line marking.
+    */
+    [[nodiscard]] LineMarking getLineMarkingLeft() const;
+
+    /**
+     * Getter for right line marking of lanelet.
+     *
+     * @return Right line marking.
+    */
+    [[nodiscard]] LineMarking getLineMarkingRight() const;
+
+    /**
      * Given a polygon, checks whether the polygon intersects with the lanelet.
      *
      * @param polygon_shape boost polygon
@@ -356,7 +384,6 @@ public:
     */
     void addLaneletType(LaneletType laType);
 
-
 private:
     int id{};                                                   //**< unique ID of lanelet */
     std::vector<vertex> centerVertices;                         //**< vertices of center line of lanelet */
@@ -374,6 +401,8 @@ private:
     std::vector<ObstacleType> userOneWay;                       //**< list of relevant allowed users one way*/
     std::vector<ObstacleType> userBidirectional;                //**< list of relevant allowed users bidirectional*/
     std::shared_ptr<StopLine> stopLine;                         //**< stopLine assigned to lanelet*/
+    LineMarking lineMarkingLeft;                                //**< Line marking of left boundary*/
+    LineMarking lineMarkingRight;                               //**< Line marking of right boundary*/
 };
 
 #endif //ENVIRONMENT_MODEL_LANELET_H

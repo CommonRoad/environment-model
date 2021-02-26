@@ -16,9 +16,13 @@ namespace TranslatePythonTypes {
      * Converts Python lanelet objects to C++ representation.
      *
      * @param py_laneletNetwork Python lanelet network object.
+     * @param trafficSigns List of pointers to converted traffic signs.
+     * @param trafficLights List of pointers to converted traffic lights
      * @return List of pointers to lanelet objects.
      */
-    std::vector<std::shared_ptr<Lanelet>> convertLanelets(const py::handle &py_laneletNetwork);
+    std::vector<std::shared_ptr<Lanelet>> convertLanelets(const py::handle &py_laneletNetwork,
+                                                          std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
+                                                          std::vector<std::shared_ptr<TrafficLight>> trafficLights);
 
     /**
      * Converts Python obstacle objects to C++ representation.

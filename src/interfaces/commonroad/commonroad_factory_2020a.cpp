@@ -29,12 +29,12 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
         std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
         std::vector<std::shared_ptr<TrafficLight>> trafficLights) {
 
-    std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer{};
+    std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer {};
     pugi::xml_node commonRoad = doc->child("commonRoad");
     XMLReader::initializeLanelets(tempLaneletContainer, commonRoad);
 
     // get the other values of the lanelets
-    int arrayIndex{0};
+    int arrayIndex { 0 };
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
          roadElements = roadElements.next_sibling()) {
         if (!(strcmp(roadElements.name(), "lanelet"))) {
@@ -223,17 +223,7 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                             std::string duration = trafficLightCycleChildElement.first_child().first_child().value();
                             std::string color =
                                     trafficLightCycleChildElement.first_child().next_sibling().first_child().value();
-                            TrafficLightCycleElement cycle{};
-                            if (color == "red")
-                                cycle = TrafficLightCycleElement{TrafficLightState::red, std::stoi(duration)};
-                            if (color == "green")
-                                cycle = TrafficLightCycleElement{TrafficLightState::green, std::stoi(duration)};
-                            if (color == "yellow")
-                                cycle = TrafficLightCycleElement{TrafficLightState::yellow, std::stoi(duration)};
-                            if (color == "red_yellow")
-                                cycle = TrafficLightCycleElement{TrafficLightState::red_yellow, std::stoi(duration)};
-
-                            tempLaneletContainer[arrayIndex]->addCycleElement(cycle);
+                            tempLaneletContainer[arrayIndex]->addCycleElement( {TrafficLight::matchTrafficLightState(color), std::stoi(duration)} );
                         }
                         if (!(strcmp(trafficLightCycleChildElement.name(), "timeOffset"))) {
                             tempLaneletContainer[arrayIndex]->setOffset(
