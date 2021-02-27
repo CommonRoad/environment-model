@@ -15,7 +15,7 @@ std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obst
     return temp;
 }
 
-ObstacleType matchObstacleTypeToString(const char *type) {
+ObstacleType matchStringToObstacleType(const char *type) {
     if (!(strcmp(type, "car")))
         return ObstacleType::car;
     else if (!(strcmp(type, "truck")))

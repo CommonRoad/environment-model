@@ -3,6 +3,8 @@
 //
 
 #include "translate_python_types.h"
+#include "../../obstacle/obstacle_operations.h"
+#include "../../roadNetwork/lanelet/lanelet_operations.h"
 #include "pybind11/numpy.h"
 
 
@@ -48,10 +50,37 @@ std::vector<std::shared_ptr<TrafficLight>> TranslatePythonTypes::convertTrafficL
         }
         tempTrafficLight->setActive(py_trafficLight.attr("active").cast<bool>());
         py::array_t<double> py_trafficLightPosition = py::getattr(py_trafficLight, "position");
+        tempTrafficLight->setPosition({py_trafficLightPosition.at(0), py_trafficLightPosition.at(1)});
         tempTrafficLight->setDirection(TrafficLight::matchTurningDirections(py_trafficLight.attr("direction").cast<py::str>()));
         trafficLightContainer.emplace_back(tempTrafficLight);
     }
     return trafficLightContainer;
+}
+
+std::shared_ptr<StopLine> TranslatePythonTypes::convertStopLine(const py::handle& py_stopLine,
+                                                                std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
+                                                                std::vector<std::shared_ptr<TrafficLight>> trafficLights) {
+    std::shared_ptr<StopLine> sl;
+    sl->setLineMarking(matchStringToLineMarking(py::cast<const char*>(py_stopLine.attr("line_marking"))));
+    py::object py_trafficSigns = py_stopLine.attr("_traffic_sign_ref");
+    for (const auto &sign : trafficSigns) {
+        if (sign->getId() == py_trafficSigns.cast<int>()) {
+            sl->setTrafficSign(sign);
+            break;
+        }
+    }
+    py::object py_trafficLights = py_stopLine.attr("_traffic_light_ref");
+    for (const auto &light : trafficLights) {
+        if (light->getId() == py_trafficLights.cast<int>()) {
+            sl->setTrafficLight(light);
+            break;
+        }
+    }
+    py::array_t<double> py_stopLineStartPosition = py::getattr(py_stopLine, "_start");
+    py::array_t<double> py_stopLineEndPosition = py::getattr(py_stopLine, "_end");
+    sl->setPoints({ {py_stopLineStartPosition.at(0), py_stopLineStartPosition.at(1)},
+                    {py_stopLineEndPosition.at(0), py_stopLineEndPosition.at(1)} });
+    return sl;
 }
 
 std::vector<std::shared_ptr<Lanelet>>
@@ -64,7 +93,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
 
     // all lanelets must be initialized first because they are referencing each other
     for (int i = 0; i < py_lanelets.size(); i++) {
-        std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>(); // make_shared is faster than (new Lanelet());
+        std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>();
         tempLaneletContainer.emplace_back(tempLanelet);
     }
 
@@ -89,85 +118,115 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
             vertex newVertex{ el.cast<py::array_t<double>>().at(0), el.cast<py::array_t<double>>().at(1) };
             tempLaneletContainer[arrayIndex]->addRightVertex(newVertex);
         }
-
+        // add users one way
+        const py::list &py_laneletUserOneWay = py_singleLanelet.attr("user_one_way").cast<py::list>();
+        std::vector<ObstacleType> usersOneWay;
+        for (py::handle py_user : py_laneletUserOneWay)
+            usersOneWay.push_back(matchStringToObstacleType(py::cast<const char *>(py_user)));
+        tempLaneletContainer[arrayIndex]->setUserOneWay(usersOneWay);
+        // add users bidirectional
+        const py::list &py_laneletUserBidirectional = py_singleLanelet.attr("user_bidirectional").cast<py::list>();
+        std::vector<ObstacleType> usersBidirectional;
+        for (py::handle py_user : py_laneletUserBidirectional)
+            usersBidirectional.push_back(matchStringToObstacleType(py::cast<const char *>(py_user)));
+        tempLaneletContainer[arrayIndex]->setUserBidirectional(usersBidirectional);
+        // add lanelet types
+        const py::list &py_laneletTypes = py_singleLanelet.attr("lanelet_type").cast<py::list>();
+        std::vector<LaneletType> laneletTypes;
+        for (py::handle py_type : py_laneletTypes)
+            laneletTypes.push_back(matchStringToLaneletType(py::cast<const char *>(py_type)));
+        tempLaneletContainer[arrayIndex]->setLaneletType(laneletTypes);
+        // set line markings
+        tempLaneletContainer[arrayIndex]->setLineMarkingLeft(matchStringToLineMarking(py::cast<const char*>(py_singleLanelet.attr("line_marking_left_vertices"))));
+        tempLaneletContainer[arrayIndex]->setLineMarkingRight(matchStringToLineMarking(py::cast<const char*>(py_singleLanelet.attr("line_marking_left_vertices"))));
+        // set successors
+        py::object py_successors = py_singleLanelet.attr("successor");
+        for (py::handle py_item : py_successors) {
+            for (const auto &la : tempLaneletContainer) {
+                if (la->getId() == py_item.cast<int>()) {
+                    tempLaneletContainer[arrayIndex]->addSuccessor(la);
+                    break;
+                }
+            }
+        }
+        // set predecessors
+        py::object py_predecessors = py_singleLanelet.attr("predecessors");
+        for (py::handle py_item : py_predecessors) {
+            for (const auto &la : tempLaneletContainer) {
+                if (la->getId() == py_item.cast<int>()) {
+                    tempLaneletContainer[arrayIndex]->addPredecessor(la);
+                    break;
+                }
+            }
+        }
+        // add adjacent left
+        py::object py_adjLeft = py_singleLanelet.attr("adj_left");
+        if (py_adjLeft.get_type().attr("__name__").cast<std::string>() == "int") {
+            for (const auto &la : tempLaneletContainer) {
+                if (la->getId() == py_adjLeft.cast<int>()) {
+                    if (py_singleLanelet.attr("adj_left_same_direction").cast<bool>()) // same direction
+                        tempLaneletContainer[arrayIndex]->setLeftAdjacent(la, DrivingDirection::same);
+                    else // opposite direction
+                        tempLaneletContainer[arrayIndex]->setLeftAdjacent(la, DrivingDirection::opposite);
+                    break;
+                }
+            }
+        }
+        // add adjacent right
+        py::object py_adjRight = py_singleLanelet.attr("adj_right");
+        if (py_adjRight.get_type().attr("__name__").cast<std::string>() == "int") {
+            for (const auto &la : tempLaneletContainer) {
+                if (la->getId() == py_adjRight.cast<int>()) {
+                    if (py_singleLanelet.attr("adj_right_same_direction").cast<bool>()) // same direction
+                        tempLaneletContainer[arrayIndex]->setRightAdjacent(la, DrivingDirection::same);
+                    else // opposite direction
+                        tempLaneletContainer[arrayIndex]->setRightAdjacent(la, DrivingDirection::opposite);
+                    break;
+                }
+            }
+        }
+        // add traffic signs
+        py::object py_trafficSigns = py_singleLanelet.attr("traffic_signs");
+        for (const auto &sign : trafficSigns) {
+            if (sign->getId() == py_trafficSigns.cast<int>()) {
+                tempLaneletContainer[arrayIndex]->addTrafficSign(sign);
+                break;
+            }
+        }
+        // add traffic signs
+        py::object py_trafficLights = py_singleLanelet.attr("traffic_lights");
+        for (const auto &light : trafficLights) {
+            if (light->getId() == py_trafficLights.cast<int>()) {
+                tempLaneletContainer[arrayIndex]->addTrafficLight(light);
+                break;
+            }
+        }
+        tempLaneletContainer[arrayIndex]->setStopLine(convertStopLine(py_singleLanelet.attr("stop_line"), trafficSigns, trafficLights));
         tempLaneletContainer[arrayIndex]->createCenterVertices();
         tempLaneletContainer[arrayIndex]->constructOuterPolygon();
-        tempLaneletContainer[arrayIndex]->setL(laneletType);
-       // tempLaneletContainer[arrayIndex]->setUserOneWay(userOneWay);
-       // tempLaneletContainer[arrayIndex]->setUserBidirectional(userBidirectional);
         arrayIndex++;
     }
-
     return tempLaneletContainer;
 }
 
-//// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-///// \brief Convert the obstacles from Commonroad to the C++ counterpart
-/////
-/////     This function is called from the PythonInterface.cpp
-/////
-///// \param[in] py_dynamicObstacles = Commonroad version of obstacles
-///// \param[in] ObstacleContainer = Container for SPOT version of the obstacles (filled here and should be empty before)
-///// \note The functions inside the namesapce "TranslatePythonTypes" are only used by the python-interface
-//uint8_t TranslatePythonTypes::convertObstacles(const py::list &py_dynamicObstacles,
-//                                               std::vector<std::shared_ptr<Obstacle>> &ObstacleContainer) {
-//    // loop through all the given dynamic obstacles and differentiate between different commonroad types
-//    // assign the corresponding C++ version of the obstacles
+//void TranslatePythonTypes::convertDynamicObstacles(const py::list &py_dynamicObstacles,
+//                                                   std::vector<std::shared_ptr<Obstacle>> &obstacleList) {
+//    std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
 //    for (py::handle py_singleObstacle : py_dynamicObstacles) {
-//        //-----------------------------------------------------------
-//        // ToDo: Additionally revise how the default parameters of each class are set
-//        py::object py_ObstacleType = py_singleObstacle.attr("obstacle_type");
-//        std::shared_ptr<Obstacle> tempObstacle(
-//                nullptr); // Empty pointer (specific object gets assigned depending on obstacle type)
+//        tempObstacle->setId(py_singleObstacle.attr("obstacle_id").cast<int>());
+//        tempObstacle->setObstacleType(matchObstacleTypeToString(py_singleObstacle.attr("obstacle_type").cast<py::str>()));
 //
-//        // Vehicles get the shape rectangular and pedestrian a circle in SPOT
-//        // The the subclasses of dynamicObstacle: vehicle and pedestrian have their own specific
-//        // implementations of "Compute occupancy core --> There either a rectangle or a circle is extracted from shape
-//        // Todo this implicit handling might not be advisable for the future (needs assumption, that here the corect
-//        // subclass of shape is assigned)
-//        // Is this assumption even needed? (Why not let also pedestrian be rectangles
-//        // if they were like this in Commonroad)
-//        // might be interesting to look at with level 2 architecture change
 //
-//        if (py_ObstacleType.is(py_ObstacleType.attr("CAR"))) {
-//            tempObstacle = std::make_shared<passengerCar>();
-//        } else if (py_ObstacleType.is(py_ObstacleType.attr("TRUCK"))) {
-//            tempObstacle = std::make_shared<truck>();
-//        } else if (py_ObstacleType.is(py_ObstacleType.attr("BUS"))) {
-//            tempObstacle = std::make_shared<bus>();
-//        } else if (py_ObstacleType.is(py_ObstacleType.attr("PRIORITY_VEHICLE"))) {
-//            tempObstacle = std::make_shared<priorityVehicle>();
-//            //        ToDo: uncomment the lines below when commonroad-io supports motorcycles
-//            //        } else if (py_ObstacleType.is(py_ObstacleType.attr("MOTORCYCLE"))) {
-//            //            tempObstacle = std::make_shared<motorcycle>();
-//        } else if (py_ObstacleType.is(py_ObstacleType.attr("BICYCLE"))) {
-//            tempObstacle = std::make_shared<bicycle>();
-//        } else if (py_ObstacleType.is(py_ObstacleType.attr("TRAIN"))) {
-//            tempObstacle = std::make_shared<train>();
-//        } else if (py_ObstacleType.is(py_ObstacleType.attr("PEDESTRIAN"))) {
-//            tempObstacle = std::make_shared<pedestrian>();
-//        } else if (py_ObstacleType.is(py_ObstacleType.attr("UNKNOWN"))) {
-//            std::cout << "Obstacle type is " << py_ObstacleType << std::endl;
-//            return 1;
-//        } else {
-//            std::cout << "Unknown obstacle type. Only car, bicycle and pedestrian are supported for now, but received "
-//                      << py_ObstacleType << std::endl;
-//            return 1; // Don't know obstacle type
-//        }
 //
-//        //-----------------------------------------------------------
-//        // Generate values which are handled the same for all obstacle types
-//        // Note: Specific assignments might have to be added into if-structure above
-//        size_t temp_ID = py::cast<size_t>(py_singleObstacle.attr("obstacle_id"));
-//        tempObstacle->setId(temp_ID);
+//
 //
 //        //-----------------------------------------------------------
 //        // Get position: Different handling if position is uncertain (then instead of x,y value, we have a shape)
 //        double xPos = 0, yPos = 0;
-//        double UncertaintyAllDim = 0, UncertaintyLength = 0, UncertaintyWidth = 0;
-//        std::string temp_Uncertainty =
+//        double uncertaintyAllDim = 0, uncertaintyLength = 0, uncertaintyWidth = 0;
+//        std::string tempUncertainty =
 //                py_singleObstacle.attr("initial_state").attr("position").get_type().attr("__name__").cast<std::string>();
-//        if (temp_Uncertainty == "ndarray") {
+//        if (tempUncertainty == "ndarray") {
 //            // No uncertainty
 //            int i = 0;
 //            for (auto &elements : py_singleObstacle.attr("initial_state").attr("position")) {
@@ -178,7 +237,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
 //                }
 //                i++;
 //            }
-//        } else if (temp_Uncertainty == "Rectangle") {
+//        } else if (tempUncertainty == "Rectangle") {
 //            // Uncertainty is given with shape of rectangle
 //            int i = 0;
 //            for (auto &elements : py_singleObstacle.attr("initial_state").attr("position").attr("center")) {
@@ -342,51 +401,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
 //            // No uncertainty: get one value
 //            tempObstacle->setVelocity(py_singleObstacle.attr("initial_state").attr("velocity").cast<double>());
 //        }
-//
-//        //-----------------------------------------------------------
-//        // Set values which are handled the same for all obstacle types
-//        ObstacleContainer.emplace_back(tempObstacle);
 //    }
 //
-//    return 0;
-//}
-//
-//// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-///// \brief Use the information from the planning problem from Commonroad to define the egoVehicle
-/////
-/////     This function is called from the PythonInterface.cpp
-/////
-///// \param[in] py_planningProblem = Commonroad version of a planningProblem
-///// \param[in] tempEgo = create the egoVehicle and store it in this pointer
-///// \note The functions inside the namesapce "TranslatePythonTypes" are only used by the python-interface
-//void TranslatePythonTypes::convertEgoVehicle(const py::list &py_planningProblem, std::shared_ptr<EgoVehicle> tempEgo) {
-//    // The planning problem contains information about position, velocity and orientation of the egoVehicle
-//    // Note, that the information about the size of the rectangular shape is curently by default: width = 1,8 and length
-//    // = 4,5 To change these values: Use update function Also information about comfortable accelerations min/max should
-//    // be updated with updateScenario
-//    for (py::handle pyEgo : py_planningProblem) {
-//        // List should contain only one element (loop only one time)
-//        vehicle tempEgoVehicleObj = tempEgo->getVehicleObj();
-//        tempEgoVehicleObj.setId(pyEgo.attr("planning_problem_id").cast<size_t>());
-//        tempEgoVehicleObj.setVelocity(pyEgo.attr("initial_state").attr("velocity").cast<double>());
-//        tempEgoVehicleObj.setOrientation(pyEgo.attr("initial_state").attr("orientation").cast<double>());
-//        // py_planningProblem
-//
-//        double xPos = 0, yPos = 0;
-//        int i = 0;
-//        for (auto &elements : pyEgo.attr("initial_state").attr("position")) {
-//            if (i == 0) {
-//                xPos = elements.cast<double>();
-//            } else {
-//                yPos = elements.cast<double>();
-//            }
-//            i++;
-//        }
-//        tempEgoVehicleObj.setPosition(xPos, yPos);
-//
-//        tempEgoVehicleObj.getGeoShape().setLength(4.5);
-//        tempEgoVehicleObj.getGeoShape().setWidth(1.8);
-//
-//        // Acc_Comfort min and max also have to be change with updateScenario (default = 4 and -1)
-//    }
+//    obstacleList.emplace_back(tempObstacle);
 //}

@@ -20,6 +20,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles()
         } else if (!(strcmp(roadElements.name(), "staticObstacle"))) {
             XMLReader::extractStaticObstacle(obstacleList, roadElements);
         }
+        // TODO add environmental obstacles
     }
     return obstacleList;
 }
@@ -77,10 +78,10 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
                     laneletType.push_back(matchStringToLaneletType(child.first_child().value()));
                 // set user one way
                 if (!(strcmp(child.name(), "userOneWay")))
-                    userOneWay.push_back(matchObstacleTypeToString(child.first_child().value()));
+                    userOneWay.push_back(matchStringToObstacleType(child.first_child().value()));
                 // set user bidirectional
                 if (!(strcmp(child.name(), "userBidirectional")))
-                    userBidirectional.push_back(matchObstacleTypeToString(child.first_child().value()));
+                    userBidirectional.push_back(matchStringToObstacleType(child.first_child().value()));
                 // add traffic signs to temporary list
                 if (!(strcmp(child.name(), "trafficSign"))) {
                     for (const auto &sign: trafficSigns) {

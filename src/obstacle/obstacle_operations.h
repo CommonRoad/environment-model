@@ -21,6 +21,6 @@ std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obst
  * @param string for which obstacle type should be extracted
  * @return obstacle type which corresponds to string or unknown type if string does not match
 */
-ObstacleType matchObstacleTypeToString(const char *type);
+ObstacleType matchStringToObstacleType(const char *type);
 
 #endif //ENV_MODEL_OBSTACLE_OPERATIONS_H

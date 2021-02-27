@@ -19,10 +19,10 @@ TEST_F(ObstacleOperationsTest, GetObstacleById){
 }
 
 TEST_F(ObstacleOperationsTest, MatchObstacleTypeToString){
-    EXPECT_EQ(matchObstacleTypeToString("car"), ObstacleType::car);
-    EXPECT_EQ(matchObstacleTypeToString("truck"), ObstacleType::truck);
-    EXPECT_EQ(matchObstacleTypeToString("pedestrian"), ObstacleType::pedestrian);
-    EXPECT_EQ(matchObstacleTypeToString("bus"), ObstacleType::bus);
-    EXPECT_EQ(matchObstacleTypeToString("unknown"), ObstacleType::unknown);
-    EXPECT_EQ(matchObstacleTypeToString("vehicle"), ObstacleType::vehicle);
+    EXPECT_EQ(matchStringToObstacleType("car"), ObstacleType::car);
+    EXPECT_EQ(matchStringToObstacleType("truck"), ObstacleType::truck);
+    EXPECT_EQ(matchStringToObstacleType("pedestrian"), ObstacleType::pedestrian);
+    EXPECT_EQ(matchStringToObstacleType("bus"), ObstacleType::bus);
+    EXPECT_EQ(matchStringToObstacleType("unknown"), ObstacleType::unknown);
+    EXPECT_EQ(matchStringToObstacleType("vehicle"), ObstacleType::vehicle);
 }

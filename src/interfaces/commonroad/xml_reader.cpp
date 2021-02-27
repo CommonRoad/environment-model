@@ -79,12 +79,11 @@ std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
 
 void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
                                       const pugi::xml_node &roadElements) {
-    std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned in the following)
-    tempObstacle = std::make_shared<Obstacle>();
+    std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
 
     // extract ID, type, shape, initial state, and trajectory
     tempObstacle->setId(roadElements.first_attribute().as_int());
-    tempObstacle->setObstacleType(matchObstacleTypeToString(roadElements.first_child().text().as_string()));
+    tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
         if (!(strcmp(child.name(), "shape"))) {
             if (!(strcmp(child.first_child().name(), "rectangle"))) {
@@ -111,13 +110,12 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
 
 void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
                                       const pugi::xml_node &roadElements) {
-    std::shared_ptr<Obstacle> tempObstacle(nullptr); // Empty pointer (specific object gets assigned in the following)
-    tempObstacle = std::make_shared<Obstacle>();
+    std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
 
     // extract ID, type, shape, and initial state
     tempObstacle->setId(roadElements.first_attribute().as_int());
     tempObstacle->setIsStatic(true);
-    tempObstacle->setObstacleType(matchObstacleTypeToString(roadElements.first_child().text().as_string()));
+    tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
         if (!(strcmp(child.name(), "shape"))) {
             if (!(strcmp(child.first_child().name(), "rectangle"))) {
