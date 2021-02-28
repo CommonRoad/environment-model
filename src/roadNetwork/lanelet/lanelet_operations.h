@@ -15,7 +15,7 @@
  * @param string for which lanelet type should be extracted
  * @return lanelet type which corresponds to string or unknown type if string does not match
 */
-LaneletType matchStringToLaneletType(const char *type);
+LaneletType matchStringToLaneletType(std::string type);
 
 /**
  * Matches a string to a line marking
@@ -23,7 +23,7 @@ LaneletType matchStringToLaneletType(const char *type);
  * @param string for which line marking should be extracted
  * @return line marking which corresponds to string or unknown type if string does not match
 */
-LineMarking matchStringToLineMarking(const char *type);
+LineMarking matchStringToLineMarking(std::string type);
 
 /**
  * Iteratively concatenates lanelets with same lanelet type given a start lanelet and creates a lane out of them

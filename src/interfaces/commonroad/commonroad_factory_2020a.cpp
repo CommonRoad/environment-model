@@ -81,7 +81,7 @@ std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2020a::createLanelets(
                     userOneWay.push_back(matchStringToObstacleType(child.first_child().value()));
                 // set user bidirectional
                 if (!(strcmp(child.name(), "userBidirectional")))
-                    userBidirectional.push_back(matchStringToObstacleType(child.first_child().value()));
+                    userBidirectional.push_back(matchStringToObstacleType((child.first_child().value())));
                 // add traffic signs to temporary list
                 if (!(strcmp(child.name(), "trafficSign"))) {
                     for (const auto &sign: trafficSigns) {

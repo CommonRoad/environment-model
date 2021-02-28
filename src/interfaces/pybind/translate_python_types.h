@@ -21,8 +21,8 @@ namespace TranslatePythonTypes {
      * @return List of pointers to lanelet objects.
      */
     std::vector<std::shared_ptr<Lanelet>> convertLanelets(const py::handle &py_laneletNetwork,
-                                                          std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
-                                                          std::vector<std::shared_ptr<TrafficLight>> trafficLights);
+                                                          const std::vector<std::shared_ptr<TrafficSign>>& trafficSigns,
+                                                          const std::vector<std::shared_ptr<TrafficLight>>& trafficLights);
 
     /**
      * Converts Python dynamic obstacle objects to C++ representation.
@@ -69,8 +69,8 @@ namespace TranslatePythonTypes {
      * @return
      */
     std::shared_ptr<StopLine> convertStopLine(const py::handle& py_stopLine,
-                                              std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
-                                              std::vector<std::shared_ptr<TrafficLight>> trafficLights);
+                                              const std::vector<std::shared_ptr<TrafficSign>>& trafficSigns,
+                                              const std::vector<std::shared_ptr<TrafficLight>>& trafficLights);
 }
 
 

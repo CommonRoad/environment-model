@@ -4,51 +4,51 @@
 
 #include "lanelet_operations.h"
 
-LaneletType matchStringToLaneletType(const char *type) {
-    if (!(strcmp(type, "interstate")))
+LaneletType matchStringToLaneletType(std::string type) {
+    if (type == "interstate")
         return LaneletType::interstate;
-    else if (!(strcmp(type, "urban")))
+    else if (type == "urban")
         return LaneletType::urban;
-    else if (!(strcmp(type, "crosswalk")))
+    else if (type == "crosswalk")
         return LaneletType::crosswalk;
-    else if (!(strcmp(type, "busStop")))
+    else if (type == "busStop")
         return LaneletType::busStop;
-    else if (!(strcmp(type, "country")))
+    else if (type == "country")
         return LaneletType::country;
-    else if (!(strcmp(type, "highway")))
+    else if (type == "highway")
         return LaneletType::highway;
-    else if (!(strcmp(type, "driveWay")))
+    else if (type == "driveWay")
         return LaneletType::driveWay;
-    else if (!(strcmp(type, "mainCarriageWay")))
+    else if (type == "mainCarriageWay")
         return LaneletType::mainCarriageWay;
-    else if (!(strcmp(type, "accessRamp")))
+    else if (type == "accessRamp")
         return LaneletType::accessRamp;
-    else if (!(strcmp(type, "exitRamp")))
+    else if (type == "exitRamp")
         return LaneletType::exitRamp;
-    else if (!(strcmp(type, "shoulder")))
+    else if (type == "shoulder")
         return LaneletType::shoulder;
-    else if (!(strcmp(type, "bikeLane")))
+    else if (type == "bikeLane")
         return LaneletType::bikeLane;
-    else if (!(strcmp(type, "sidewalk")))
+    else if (type == "sidewalk")
         return LaneletType::sidewalk;
-    else if (!(strcmp(type, "busLane")))
+    else if (type == "busLane")
         return LaneletType::busLane;
-    else if (!(strcmp(type, "intersection")))
+    else if (type == "intersection")
         return LaneletType::intersection;
     else
         return LaneletType::unknown;
 }
 
-LineMarking matchStringToLineMarking(const char *type) {
-    if (!(strcmp(type, "solid")))
+LineMarking matchStringToLineMarking(std::string type) {
+    if (type == "solid")
         return LineMarking::solid;
-    else if (!(strcmp(type, "dashed")))
+    else if (type == "dashed")
         return LineMarking::dashed;
-    else if (!(strcmp(type, "broad_solid")))
+    else if (type == "broad_solid")
         return LineMarking::broad_solid;
-    else if (!(strcmp(type, "broad_dashed")))
+    else if (type == "broad_dashed")
         return LineMarking::broad_dashed;
-    else if (!(strcmp(type, "no_marking")))
+    else if (type == "no_marking")
         return LineMarking::no_marking;
     else
         return LineMarking::unknown;

@@ -58,10 +58,10 @@ std::vector<std::shared_ptr<TrafficLight>> TranslatePythonTypes::convertTrafficL
 }
 
 std::shared_ptr<StopLine> TranslatePythonTypes::convertStopLine(const py::handle& py_stopLine,
-                                                                std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
-                                                                std::vector<std::shared_ptr<TrafficLight>> trafficLights) {
+                                                                const std::vector<std::shared_ptr<TrafficSign>>& trafficSigns,
+                                                                const std::vector<std::shared_ptr<TrafficLight>>& trafficLights) {
     std::shared_ptr<StopLine> sl;
-    sl->setLineMarking(matchStringToLineMarking(py::cast<const char*>(py_stopLine.attr("line_marking"))));
+    sl->setLineMarking(matchStringToLineMarking(py::cast<std::string>(py_stopLine.attr("line_marking"))));
     py::object py_trafficSigns = py_stopLine.attr("_traffic_sign_ref");
     for (const auto &sign : trafficSigns) {
         if (sign->getId() == py_trafficSigns.cast<int>()) {
@@ -85,8 +85,8 @@ std::shared_ptr<StopLine> TranslatePythonTypes::convertStopLine(const py::handle
 
 std::vector<std::shared_ptr<Lanelet>>
 TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
-                                      std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
-                                      std::vector<std::shared_ptr<TrafficLight>> trafficLights) {
+                                      const std::vector<std::shared_ptr<TrafficSign>>& trafficSigns,
+                                      const std::vector<std::shared_ptr<TrafficLight>>& trafficLights) {
     std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer {};
     const py::list &py_lanelets = py_laneletNetwork.attr("lanelets").cast<py::list>();
     tempLaneletContainer.reserve(py_lanelets.size()); // Already know the size --> Faster memory allocation
@@ -122,23 +122,23 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         const py::list &py_laneletUserOneWay = py_singleLanelet.attr("user_one_way").cast<py::list>();
         std::vector<ObstacleType> usersOneWay;
         for (py::handle py_user : py_laneletUserOneWay)
-            usersOneWay.push_back(matchStringToObstacleType(py::cast<const char *>(py_user)));
+            usersOneWay.push_back(matchStringToObstacleType(py::cast<std::string>(py_user)));
         tempLaneletContainer[arrayIndex]->setUserOneWay(usersOneWay);
         // add users bidirectional
         const py::list &py_laneletUserBidirectional = py_singleLanelet.attr("user_bidirectional").cast<py::list>();
         std::vector<ObstacleType> usersBidirectional;
         for (py::handle py_user : py_laneletUserBidirectional)
-            usersBidirectional.push_back(matchStringToObstacleType(py::cast<const char *>(py_user)));
+            usersBidirectional.push_back(matchStringToObstacleType(py::cast<std::string>(py_user)));
         tempLaneletContainer[arrayIndex]->setUserBidirectional(usersBidirectional);
         // add lanelet types
         const py::list &py_laneletTypes = py_singleLanelet.attr("lanelet_type").cast<py::list>();
         std::vector<LaneletType> laneletTypes;
         for (py::handle py_type : py_laneletTypes)
-            laneletTypes.push_back(matchStringToLaneletType(py::cast<const char *>(py_type)));
+            laneletTypes.push_back(matchStringToLaneletType(py::cast<std::string>(py_type)));
         tempLaneletContainer[arrayIndex]->setLaneletType(laneletTypes);
         // set line markings
-        tempLaneletContainer[arrayIndex]->setLineMarkingLeft(matchStringToLineMarking(py::cast<const char*>(py_singleLanelet.attr("line_marking_left_vertices"))));
-        tempLaneletContainer[arrayIndex]->setLineMarkingRight(matchStringToLineMarking(py::cast<const char*>(py_singleLanelet.attr("line_marking_left_vertices"))));
+        tempLaneletContainer[arrayIndex]->setLineMarkingLeft(matchStringToLineMarking(py::cast<std::string>(py_singleLanelet.attr("line_marking_left_vertices"))));
+        tempLaneletContainer[arrayIndex]->setLineMarkingRight(matchStringToLineMarking(py::cast<std::string>(py_singleLanelet.attr("line_marking_left_vertices"))));
         // set successors
         py::object py_successors = py_singleLanelet.attr("successor");
         for (py::handle py_item : py_successors) {
