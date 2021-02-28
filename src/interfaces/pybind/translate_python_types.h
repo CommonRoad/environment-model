@@ -58,7 +58,7 @@ namespace TranslatePythonTypes {
      * @return List of pointers to intersection objects.
      */
     std::vector<std::shared_ptr<Intersection>> convertIntersections(const py::handle &py_laneletNetwork,
-                                                                    const std::vector<std::shared_ptr<Lanelet>> lanelets);
+                                                                    const std::vector<std::shared_ptr<Lanelet>>& lanelets);
 
     /**
      * Converts Python stop line object to C++ representation.
