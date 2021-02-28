@@ -24,7 +24,7 @@ set(ENV_MODEL_SRC_FILES
         )
 
 # Create environment model library
-add_library(env_model ${ENV_MODEL_SRC_FILES})
+add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
 #target_compile_features(env_model
 #        PUBLIC cxx_lambdas cxx_auto_type
 #        PRIVATE cxx_lambdas cxx_auto_type)
