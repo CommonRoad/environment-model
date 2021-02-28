@@ -20,7 +20,7 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles()
         } else if (!(strcmp(roadElements.name(), "staticObstacle"))) {
             XMLReader::extractStaticObstacle(obstacleList, roadElements);
         }
-        // TODO add environmental obstacles
+        // TODO add environmental and phantom obstacles
     }
     return obstacleList;
 }

@@ -31,7 +31,7 @@ public:
      *
      * @return List of pointers to lanelets.
      */
-    [[nodiscard]] const std::vector<std::vector<std::shared_ptr<Lanelet>>> &getCrossing() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getCrossings() const;
 
     /**
      * Getter for intersection ID.
@@ -41,6 +41,13 @@ public:
     void setId(int num);
 
     /**
+     * Setter for incomings.
+     *
+     * @param incs List of pointers to incomings.
+     */
+    void setIncomings(const std::vector<std::shared_ptr<Incoming>> &incs);
+
+    /**
      * Adds and incoming to the intersection.
      *
      * @param incoming Pointer to incoming.
@@ -48,16 +55,16 @@ public:
     void addIncoming(const std::shared_ptr<Incoming> &incoming);
 
     /**
-     * Setter for crossing belonging to intersection.
+     * Setter for crossing lanelets belonging to intersection.
      *
-     * @param crossing List of pointers to lanelets.
+     * @param cr List of pointers to lanelets.
      */
-    void setCrossing(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &crossing);
+    void setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cr);
 
 private:
     int id;                                                         //**< ID of intersection. */
     std::vector<std::shared_ptr<Incoming>> incomings;               //**< List of pointers to incomings belonging to intersection. */
-    std::vector<std::vector<std::shared_ptr<Lanelet>>> crossing;    //**< List of pointers to crossing lanelets belonging to intersection. */
+    std::vector<std::shared_ptr<Lanelet>> crossings;   //**< List of pointers to crossing lanelets belonging to intersection. */
 };
 
 
