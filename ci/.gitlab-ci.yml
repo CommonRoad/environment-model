@@ -33,7 +33,7 @@ build-test:
   artifacts:
     paths:
       - ./env_model_test
-      - ./lib_env_model.so
+      - ./libenv_model.so
       - ./tests/testScenarios/*
     expire_in: 20 minutes
 
