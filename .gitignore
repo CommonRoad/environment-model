@@ -4,13 +4,16 @@
 /cmake-build-debug-coverage/
 /cmake-build-release-coverage/
 /build*
-
-*.a
-*.so
 env_model_test
 env_model_test_coverage
 env_model_example_node
 
+# Exclude binaries
+*.a
+*.so
+
+# Exclude Python directories
 .idea/
 .ipynb_checkpoints/
-
+dist
+*.egg-info

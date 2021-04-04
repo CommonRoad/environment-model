@@ -11,19 +11,19 @@ namespace py = pybind11;
 
 uint8_t py_registerScenario(const py::int_ &ScenarioID, const py::handle &py_laneletNetwork, const py::list &py_obstacles);
 
-uint8_t py_registerScenario2018b(const py::int_ &ScenarioID, const py::handle &py_laneletNetwork, const py::list &py_obstacles);
+//uint8_t py_registerScenario2018b(const py::int_ &ScenarioID, const py::handle &py_laneletNetwork, const py::list &py_obstacles);
 
-uint8_t py_removeScenario(const py::int_ &ScenarioID);
+//uint8_t py_removeScenario(const py::int_ &ScenarioID);
 
-PYBIND11_MODULE(env_model, m) {
+PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
     m.def("registerScenario", &py_registerScenario,
           "Add new scenario to C++ environment model", py::arg("ScenarioID"), py::arg("py_lanelets"),
           py::arg("py_obstacles"));
-    m.def("registerScenario2018b", &py_registerScenario2018b,
-          "Add 2018b scenario to C++ environment model", py::arg("ScenarioID"),
-          py::arg("py_lanelets"),py::arg("py_obstacles"));
-    m.def("removeScenario", &py_removeScenario, "Remove a scenario from the environment model");
+//    m.def("registerScenario2018b", &py_registerScenario2018b,
+//          "Add 2018b scenario to C++ environment model", py::arg("ScenarioID"),
+//          py::arg("py_lanelets"),py::arg("py_obstacles"));
+//    m.def("removeScenario", &py_removeScenario, "Remove a scenario from the environment model");
 }
 
 #endif //ENV_MODEL_PYTHON_INTERFACE_H

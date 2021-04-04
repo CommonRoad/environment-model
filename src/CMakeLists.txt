@@ -49,5 +49,9 @@ target_link_libraries(env_model_example_node PRIVATE env_model)
 
 
 # add pybind module
-pybind11_add_module(crenvmodel_python interfaces/pybind/python_interface.cpp interfaces/pybind/translate_python_types.cpp)
-target_link_libraries(crenvmodel_python PRIVATE env_model)
+pybind11_add_module(cpp_env_model
+        interfaces/pybind/python_interface.cpp
+        interfaces/pybind/python_interface.h
+        interfaces/pybind/translate_python_types.cpp
+        interfaces/pybind/translate_python_types.h)
+target_link_libraries(cpp_env_model PRIVATE env_model)
