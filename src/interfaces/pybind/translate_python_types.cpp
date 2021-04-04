@@ -2,10 +2,14 @@
 // Created by Sebastian Maierhofer on 23.02.21.
 //
 
+#include "pybind11/numpy.h"
 #include "translate_python_types.h"
+
 #include "../../obstacle/obstacle_operations.h"
 #include "../../roadNetwork/lanelet/lanelet_operations.h"
-#include "pybind11/numpy.h"
+#include "../../geometry/circle.h"
+#include "../../geometry/rectangle.h"
+
 
 
 std::vector<std::shared_ptr<TrafficSign>>
@@ -23,8 +27,9 @@ TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {
             std::shared_ptr<TrafficSignElement> newTrafficSignElement = std::make_shared<TrafficSignElement>(
                     trafficSignElementId);
             const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
-            std::vector<std::string> additionalValuesList{
-                    additionalValues.attr("__str__")().cast<std::vector<std::string>>()};
+            std::vector<std::string> additionalValuesList { };
+            for (const auto &py_additional_value : additionalValues)
+                additionalValuesList.push_back(py_additional_value.cast<std::string>());
             newTrafficSignElement->setAdditionalValues(additionalValuesList);
         }
         tempTrafficSign->setVirtualElement(py_trafficSign.attr("virtual").cast<bool>());
@@ -197,18 +202,20 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         // add traffic signs
         py::object py_trafficSigns = py_singleLanelet.attr("traffic_signs");
         for (const auto &sign : trafficSigns) {
-            if (sign->getId() == py_trafficSigns.cast<int>()) {
-                tempLaneletContainer[arrayIndex]->addTrafficSign(sign);
-                break;
-            }
+            for (const auto &py_sign : py_trafficSigns)
+                if (sign->getId() == py_sign.cast<int>()) {
+                    tempLaneletContainer[arrayIndex]->addTrafficSign(sign);
+                    break;
+                }
         }
         // add traffic signs
         py::object py_trafficLights = py_singleLanelet.attr("traffic_lights");
         for (const auto &light : trafficLights) {
-            if (light->getId() == py_trafficLights.cast<int>()) {
-                tempLaneletContainer[arrayIndex]->addTrafficLight(light);
-                break;
-            }
+            for (const auto &py_light : py_trafficLights)
+                if (light->getId() == py_light.cast<int>()) {
+                    tempLaneletContainer[arrayIndex]->addTrafficLight(light);
+                    break;
+                }
         }
         py::handle py_stopLine = py_singleLanelet.attr("stop_line");
         if (py_stopLine != Py_None)
@@ -326,195 +333,91 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
     return tempIntersectionContainer;
 }
 
-//std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertDynamicObstacles(const py::list &py_obstacles,
-//                                                                                     std::vector<std::shared_ptr<Obstacle>> &obstacleList) {
-//    std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
-//    for (py::handle py_singleObstacle : py_obstacles) {
-//        tempObstacle->setId(py_singleObstacle.attr("obstacle_id").cast<int>());
-//        tempObstacle->setObstacleType(matchStringToObstacleType(py_singleObstacle.attr("obstacle_type").cast<std::string>()));
-//
-//
-//
-//        //-----------------------------------------------------------
-//        // Get position: Different handling if position is uncertain (then instead of x,y value, we have a shape)
-//        double xPos = 0, yPos = 0;
-//        double uncertaintyAllDim = 0, uncertaintyLength = 0, uncertaintyWidth = 0;
-//        auto tempUncertainty = py_singleObstacle.attr("initial_state").attr("position").get_type().attr("__name__").cast<std::string>();
-//        if (tempUncertainty == "ndarray") {
-//            // No uncertainty
-//            int i = 0;
-//            for (auto &elements : py_singleObstacle.attr("initial_state").attr("position")) {
-//                if (i == 0) {
-//                    xPos = elements.cast<double>();
-//                } else {
-//                    yPos = elements.cast<double>();
-//                }
-//                i++;
-//            }
-//        } else if (tempUncertainty == "Rectangle") {
-//            // Uncertainty is given with shape of rectangle
-//            int i = 0;
-//            for (auto &elements : py_singleObstacle.attr("initial_state").attr("position").attr("center")) {
-//                if (i == 0) {
-//                    xPos = elements.cast<double>();
-//                } else {
-//                    yPos = elements.cast<double>();
-//                }
-//                i++;
-//            }
-//            uncertaintyLength = py_singleObstacle.attr("initial_state").attr("position").attr("length").cast<double>();
-//            uncertaintyWidth = py_singleObstacle.attr("initial_state").attr("position").attr("width").cast<double>();
-//        } else if (tempUncertainty == "Circle") {
-//            // Uncertainty is given with shape of circle
-//            int i = 0;
-//            for (auto &elements : py_singleObstacle.attr("initial_state").attr("position").attr("center")) {
-//                if (i == 0) {
-//                    xPos = elements.cast<double>();
-//                } else {
-//                    yPos = elements.cast<double>();
-//                }
-//                i++;
-//            }
-//            // uncertainty of size is given by the diameter
-//            uncertaintyAllDim = 2 * py_singleObstacle.attr("initial_state").attr("position").attr("radius").cast<double>();
-//        } else if (tempUncertainty == "Polygon") {
-//            std::cout << "Uncertainty type not included yet" << std::endl;
-//            // Todo: Implement old implementation from python (don't have shapely + how is ndaray stuctured
-//            // Python code:
-//            // minx, miny, maxx, maxy = item.initial_state.position._shapely_polygon.bounds
-//            // length_x = abs(maxx-minx)
-//            // length_y = abs(maxy-miny)
-//            // dynamicObj.setPosition(minx+length_x/2.0, miny+length/2.0)
-//            // position_uncertainty = math.sqrt(length_x**2+length_y**2)
-//        } else {
-//            std::cout << "Unknown uncertainty type for ID: " << temp_ID
-//                      << " (only circles, polygons and rectangles supported)" << std::endl;
-//            return 2; // Don't know uncertainty type
-//        }
-//        tempObstacle->setPosition(xPos, yPos); // set position
-//
-//        //-----------------------------------------------------------
-//        // Use extracted uncertainties from above to
-//        std::unique_ptr<shape> tempShape(
-//                nullptr); // Empty pointer (specific object gets assigned depending on obstacle shape)
-//
-//        // Get the shape of the obstacle in commonRoad
-//        std::string CommonroadShape =
-//                py_singleObstacle.attr("obstacle_shape").get_type().attr("__name__").cast<std::string>();
-//
-//        // SPOT handles the shapes a little differently
-//        // Independently from the shape in Commonroad --> Pedestrians are Circles in SPOT, Vehicles are Rectangles
-//        if (tempObstacle->getGeoShape().getType() == "Rectangle") {
-//            // This means, that this obstacle is some kind of vehicle
-//            double RectLength = 0;
-//            double RectWidth = 0;
-//            double RawLength = 0;
-//            double RawWidth = 0;
-//
-//            if (CommonroadShape == "Rectangle") {
-//                RawLength = py_singleObstacle.attr("obstacle_shape").attr("length").cast<double>();
-//                RawWidth = py_singleObstacle.attr("obstacle_shape").attr("width").cast<double>();
-//
-//                // If there were uncertainties, one has to add these to length and width
-//                RectLength = RawLength + uncertaintyAllDim + uncertaintyLength;
-//                RectWidth = RawWidth + uncertaintyAllDim + uncertaintyWidth;
-//            } else if (CommonroadShape == "Circle") {
-//                std::cout << "Commonroad vehicles of shape circle currently not supported" << std::endl;
-//                return 5;
-//            } else if (CommonroadShape == "Polygon") {
-//                std::cout << "Obstacles with polygon shape currently not supported" << std::endl;
-//                // Todo This would basically be a bounding box = rectangle?
-//                return 4;
-//            } else {
-//                std::cout << "Unknown obstacle shape for ID: " << temp_ID
-//                          << " (only circles, polygons and rectangles supported)" << std::endl;
-//                return 3; // Don't know obstacle shape
-//            }
-//
-//            tempObstacle->getGeoShape().setLength(RectLength);
-//            tempObstacle->getGeoShape().setWidth(RectWidth);
-//            tempObstacle->getGeoShape().setLength_raw(RawLength);
-//            tempObstacle->getGeoShape().setWidth_raw(RawWidth);
-//
-//        } else if (tempObstacle->getGeoShape().getType() == "Circle") {
-//            // This means that the obstacle is a pedestrian
-//            // Small corrections for uncertainties needed if circular shape is used
-//            uncertaintyAllDim = uncertaintyAllDim / 2.0; // Radius instead of diameter from before
-//            double UncertaintyRadius = sqrt(pow(uncertaintyLength, 2) + pow(uncertaintyWidth, 2)) / 2.0;
-//            double Radius = 0; // Radius assigned to circular shape
-//
-//            if (CommonroadShape == "Rectangle") {
-//                double RawLength = py_singleObstacle.attr("obstacle_shape").attr("length").cast<double>();
-//                double RawWidth = py_singleObstacle.attr("obstacle_shape").attr("width").cast<double>();
-//
-//                Radius = sqrt(pow(RawLength, 2) + pow(RawWidth, 2)) / 2.0 + uncertaintyAllDim + UncertaintyRadius;
-//            } else if (CommonroadShape == "Circle") {
-//                double RawRadius = py_singleObstacle.attr("obstacle_shape").attr("radius").cast<double>();
-//
-//                Radius = RawRadius + uncertaintyAllDim + UncertaintyRadius + uncertaintyAllDim;
-//            } else if (CommonroadShape == "Polygon") {
-//                std::cout << "Obstacles with polygon shape currently not supported" << std::endl;
-//                // Todo This would basically be a bounding box = rectangle?
-//                return 4;
-//            } else {
-//                std::cout << "Unknown obstacle shape for ID: " << temp_ID
-//                          << " (only circles, polygons and rectangles supported)" << std::endl;
-//                return 3; // Don't know obstacle shape
-//            }
-//
-//            // Center point can be assinged independent from Commonroad Shape (all use center attribute
-//            vertex CenterPoint; // Center point assigned to circular shape
-//            py::object pyCenter = py_singleObstacle.attr("obstacle_shape").attr("center");
-//            int XorY = 0; // Fo selection of x or y in struct
-//            for (auto &el : pyCenter) {
-//                // not possible to loop over struct --> use i as counter to differentiate
-//                if (XorY == 0) {
-//                    CenterPoint.x = el.cast<double>();
-//                } else {
-//                    CenterPoint.y = el.cast<double>();
-//                }
-//                XorY++;
-//            }
-//
-//            tempObstacle->getGeoShape().setCenter(CenterPoint.x, CenterPoint.y);
-//            tempObstacle->getGeoShape().setRadius(Radius);
-//        }
-//
-//        //-----------------------------------------------------------
-//        // Assign orientation (depending on uncertainty)
-//        if (py::hasattr(py_singleObstacle.attr("initial_state").attr("orientation"), "start") &&
-//            py::hasattr(py_singleObstacle.attr("initial_state").attr("orientation"), "end")) {
-//            // Uncertain orientation: Intervall is given
-//            double StartOrientation =
-//                    py_singleObstacle.attr("initial_state").attr("orientation").attr("start").cast<double>();
-//            double EndOrientation =
-//                    py_singleObstacle.attr("initial_state").attr("orientation").attr("end").cast<double>();
-//            double MeanOrientation = (StartOrientation + EndOrientation) / 2.0;
-//
-//            tempObstacle->setOrientation(MeanOrientation);
-//            tempObstacle->setOrientationError(abs(MeanOrientation - StartOrientation));
-//        } else {
-//            // No uncertainty: get one value
-//            tempObstacle->setOrientation(py_singleObstacle.attr("initial_state").attr("orientation").cast<double>());
-//        }
-//
-//        //-----------------------------------------------------------
-//        // Assign Velocity (depending on uncertainty)
-//        if (py::hasattr(py_singleObstacle.attr("initial_state").attr("velocity"), "start") &&
-//            py::hasattr(py_singleObstacle.attr("initial_state").attr("velocity"), "end")) {
-//            // Uncertain orientation: Intervall is given
-//            double StartVelocity =
-//                    py_singleObstacle.attr("initial_state").attr("velocity").attr("start").cast<double>();
-//            double EndVelocity = py_singleObstacle.attr("initial_state").attr("velocity").attr("end").cast<double>();
-//            double MeanVelocity = (StartVelocity + EndVelocity) / 2.0;
-//
-//            tempObstacle->setVelocity(MeanVelocity);
-//            tempObstacle->setVelocityError(abs(MeanVelocity - StartVelocity));
-//        } else {
-//            // No uncertainty: get one value
-//            tempObstacle->setVelocity(py_singleObstacle.attr("initial_state").attr("velocity").cast<double>());
-//        }
-//    }
-//
-//    obstacleList.emplace_back(tempObstacle);
-//}
+std::shared_ptr<State> createInitialState(py::handle py_singleObstacle){
+    // TODO add support for uncertain states
+    std::shared_ptr<State> initialState = std::make_shared<State>();
+
+    auto initialStateType = py_singleObstacle.attr("initial_state").attr("position").get_type().attr(
+            "__name__").cast<std::string>();
+    if (initialStateType == "ndarray") {
+        auto xPos = py_singleObstacle.attr("initial_state").attr("position").cast<py::list>()[0].cast<double>();
+        auto yPos = py_singleObstacle.attr("initial_state").attr("position").cast<py::list>()[1].cast<double>();
+        initialState->setXPosition(xPos);
+        initialState->setYPosition(yPos);
+        initialState->setGlobalOrientation(py_singleObstacle.attr("initial_state").attr("orientation").cast<double>());
+        if (py::hasattr(py_singleObstacle.attr("initial_state"), "velocity"))
+            initialState->setVelocity(py_singleObstacle.attr("initial_state").attr("velocity").cast<double>());
+        if (py::hasattr(py_singleObstacle.attr("initial_state"), "acceleration"))
+            initialState->setAcceleration(py_singleObstacle.attr("initial_state").attr("acceleration").cast<double>());
+    }
+    return initialState;
+}
+
+std::shared_ptr<Obstacle> createCommonObstaclePart(py::handle py_singleObstacle) {
+    std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
+    tempObstacle->setId(py_singleObstacle.attr("obstacle_id").cast<int>());
+    tempObstacle->setObstacleType(matchStringToObstacleType(py_singleObstacle.attr("obstacle_type").attr("value").cast<std::string>()));
+    py::handle py_obstacleShape = py_singleObstacle.attr("obstacle_shape");
+    std::string commonroadShape { py_obstacleShape.get_type().attr("__name__").cast<std::string>() };
+
+    if (commonroadShape == "Rectangle") { // TODO: add other shape types
+        auto length { py_obstacleShape.attr("length").cast<double>() };
+        auto width { py_obstacleShape.attr("width").cast<double>() };
+        tempObstacle->getGeoShape().setLength(length);
+        tempObstacle->getGeoShape().setWidth(width);
+    } else {
+        std::cout << "Unknown obstacle shape (only circles, polygons and rectangles supported) \n";
+    }
+    tempObstacle->setCurrentState(createInitialState(py_singleObstacle));
+
+    return  tempObstacle;
+}
+
+std::shared_ptr<State> extractState(py::handle py_state) {
+    auto xPosition = py_state.attr("position").cast<py::list>()[0].cast<double>();
+    auto yPosition = py_state.attr("position").cast<py::list>()[1].cast<double>();
+    auto orientation = py_state.attr("orientation").cast<double>();
+    auto velocity = py_state.attr("velocity").cast<double>();
+    auto acceleration = py_state.attr("acceleration").cast<double>();
+    auto timeStep = py_state.attr("time_step").cast<int>();
+
+    return std::make_shared<State>(timeStep, xPosition, yPosition, velocity, acceleration, orientation);
+}
+
+std::shared_ptr<Obstacle> createDynamicObstacle(py::handle py_singleObstacle) {
+    // TODO: add other prediction than trajectory prediction
+    std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
+    for (const auto &py_state : py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list").cast<py::list>()) {
+        tempObstacle->appendStateToTrajectoryPrediction(extractState(py_state));
+    }
+    return tempObstacle;
+}
+
+std::shared_ptr<Obstacle> createStaticObstacle(py::handle py_singleObstacle) {
+    std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
+    return tempObstacle;
+}
+
+std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertObstacles(const py::list &py_obstacle_list) {
+    std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer{};
+    tempObstacleContainer.reserve(py_obstacle_list.size()); // Already know the size --> Faster memory allocation
+    // all obstacles must be initialized first
+    for (int i = 0; i < py_obstacle_list.size(); i++) {
+        std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
+        tempObstacleContainer.emplace_back(tempObstacle);
+    }
+
+    std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
+    int arrayIndex{0};
+    for (py::handle py_singleObstacle : py_obstacle_list) {
+        std::string obstacleRole { py_singleObstacle.attr("obstacle_role").attr("value").cast<std::string>() };
+        if (obstacleRole == "dynamic")
+            tempObstacleContainer[arrayIndex] = createDynamicObstacle(py_singleObstacle);
+        else if (obstacleRole == "static")
+            tempObstacleContainer[arrayIndex] = createStaticObstacle(py_singleObstacle);
+        arrayIndex++;
+
+    }
+
+    return tempObstacleContainer;
+}

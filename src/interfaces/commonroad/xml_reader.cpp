@@ -85,7 +85,7 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     tempObstacle->setId(roadElements.first_attribute().as_int());
     tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
-        if (!(strcmp(child.name(), "shape"))) {
+        if (!(strcmp(child.name(), "shape"))) { //TODO: other shape types
             if (!(strcmp(child.first_child().name(), "rectangle"))) {
                 tempObstacle->getGeoShape().setLength(
                         child.first_child().child("length").text().as_double());
@@ -118,7 +118,7 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
         if (!(strcmp(child.name(), "shape"))) {
-            if (!(strcmp(child.first_child().name(), "rectangle"))) {
+            if (!(strcmp(child.first_child().name(), "rectangle"))) {  //TODO: other shape types
                 tempObstacle->getGeoShape().setLength(child.first_child().child("length").text().as_double());
                 tempObstacle->getGeoShape().setWidth(child.first_child().child("width").text().as_double());
             }

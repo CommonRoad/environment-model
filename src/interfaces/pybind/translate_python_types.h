@@ -28,11 +28,9 @@ namespace TranslatePythonTypes {
      * Converts Python dynamic obstacle objects to C++ representation.
      *
      * @param py_obstacles List of Python version of dynamic obstacles.
-     * @param obstacleList Vector in which new dynamic obstacle are stored.
      * @return List of pointers to obstacle objects.
      */
-    std::vector<std::shared_ptr<Obstacle>> convertDynamicObstacles(const py::list &py_obstacles,
-                                                                   std::vector<std::shared_ptr<Obstacle>> &obstacleList);
+    std::vector<std::shared_ptr<Obstacle>> convertObstacles(const py::list &py_obstacles);
 
     /**
      * Converts Python traffic sign objects to C++ representation.

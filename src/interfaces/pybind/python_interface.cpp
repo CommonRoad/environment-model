@@ -12,7 +12,7 @@ uint8_t py_registerScenario(const py::int_ &ScenarioID, const py::handle &py_lan
     auto tempLaneletContainer = TranslatePythonTypes::convertLanelets(py_laneletNetwork, tempTrafficSignContainer,
                                                                       tempTrafficLightContainer);
     auto tempIntersectionContainer = TranslatePythonTypes::convertIntersections(py_laneletNetwork, tempLaneletContainer);
-    //auto tempObstacleContainer = TranslatePythonTypes::convertDynamicObstacles(py_obstacles);
+    auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
 
     return 1;
 }
