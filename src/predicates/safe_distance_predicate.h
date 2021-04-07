@@ -27,36 +27,6 @@ public:
                         double tReact);
 
     /**
-     * Boolean evaluation of predicate.
-     *
-     * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
-     * @param obstacleK The kth obstacle.
-     * @param obstacleP The pth obstacle. This is an optional parameter.
-     * @param obstacles Pointers to all obstacles. This is an optional parameter.
-     * @return Boolean indicating satisfaction of the predicate.
-     */
-    bool booleanEvaluation(int timeStep,
-                           const std::shared_ptr<RoadNetwork> &roadNetwork,
-                           const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP,
-                           const std::vector<std::shared_ptr<Obstacle>> &obstacles) override;
-
-    /**
-     * Boolean evaluation of predicate.
-     *
-     * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
-     * @param obstacleK The kth obstacle.
-     * @param obstacleP The pth obstacle. This is an optional parameter.
-     * @return Boolean indicating satisfaction of the predicate.
-     */
-    bool booleanEvaluation(int timeStep,
-                           const std::shared_ptr<RoadNetwork> &roadNetwork,
-                           const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP);
-
-    /**
      *
      * @param lonPosK Longitudinal position in the curvilinear coordinate system of the kth vehicle [m].
      * @param lonPosP Longitudinal position in the curvilinear coordinate system of the pth vehicle [m].
@@ -75,31 +45,15 @@ public:
      * Constraint evaluation of predicate.
      *
      * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
-     * @param obstacleK The kth obstacle.
-     * @param obstacleP The pth obstacle. This is an optional parameter.
-     * @param obstacles Pointers to all obstacles. This is an optional parameter.
-     * @return Constraints defined by the predicate.
-     */
-    Constraint constraintEvaluation(int timeStep,
-                                    const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                    const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                    const std::vector<std::shared_ptr<Obstacle>> &obstacles) override;
-
-    /**
-     * Constraint evaluation of predicate.
-     *
-     * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
+     * @param world World object.
      * @param obstacleK The kth obstacle.
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Constraints defined by the predicate.
      */
     Constraint constraintEvaluation(int timeStep,
-                                    const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                    const std::shared_ptr<World>& world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP);
+                                    const std::shared_ptr<Obstacle> &obstacleP) override;
 
     /**
      *
@@ -120,31 +74,16 @@ public:
      * Robustness evaluation of predicate.
      *
      * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
+     * @param world World object.
      * @param obstacleK The kth obstacle.
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
     double robustEvaluation(int timeStep,
-                            const std::shared_ptr<RoadNetwork> &roadNetwork,
+                            const std::shared_ptr<World>& world,
                             const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP,
-                            const std::vector<std::shared_ptr<Obstacle>> &obstacles) override;
-
-    /**
-     * Robustness evaluation of predicate.
-     *
-     * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
-     * @param obstacleK The kth obstacle.
-     * @param obstacleP The pth obstacle. This is an optional parameter.
-     * @return Real value indicating robustness of the predicate.
-     */
-    double robustEvaluation(int timeStep,
-                            const std::shared_ptr<RoadNetwork> &roadNetwork,
-                            const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP);
+                            const std::shared_ptr<Obstacle> &obstacleP) override;
 
     /**
      *

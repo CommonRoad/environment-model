@@ -7,6 +7,7 @@
 
 #include "../roadNetwork/road_network.h"
 #include "../obstacle/obstacle.h"
+#include "../world.h"
 #include "../auxiliaryDefs/structs.h"
 
 /**
@@ -32,67 +33,59 @@ public:
      * Virtual function for the boolean evaluation of a predicate.
      *
      * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
+     * @param world Contains road network, ego vehicle, and obstacle list.
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Boolean indicating satisfaction of the predicate.
      */
-    virtual bool booleanEvaluation(int timeStep,
-                                   const std::shared_ptr<RoadNetwork>& roadNetwork,
-                                   const std::shared_ptr<Obstacle>& obstacleK,
-                                   const std::shared_ptr<Obstacle>& obstacleP,
-                                   const std::vector<std::shared_ptr<Obstacle>>& obstacles) = 0;
+    bool booleanEvaluation(int timeStep,
+                           const std::shared_ptr<World>& world,
+                           const std::shared_ptr<Obstacle>& obstacleK,
+                           const std::shared_ptr<Obstacle>& obstacleP);
 
 
     /**
      * Virtual function for the robustness evaluation of a predicate.
      *
      * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
+     * @param world Contains road network, ego vehicle, and obstacle list.
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
-     * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
     virtual double robustEvaluation(int timeStep,
-                                    const std::shared_ptr<RoadNetwork>& roadNetwork,
+                                    const std::shared_ptr<World>& world,
                                     const std::shared_ptr<Obstacle>& obstacleK,
-                                    const std::shared_ptr<Obstacle>& obstacleP,
-                                    const std::vector<std::shared_ptr<Obstacle>>& obstacles) = 0;
+                                    const std::shared_ptr<Obstacle>& obstacleP) = 0;
 
 
     /**
      * Virtual function for the constraint evaluation of a predicate.
      *
      * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
+     * @param world Contains road network, ego vehicle, and obstacle list.
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
-     * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Constraints defined by the predicate.
      */
     virtual Constraint constraintEvaluation(int timeStep,
-                                            const std::shared_ptr<RoadNetwork>& roadNetwork,
+                                            const std::shared_ptr<World>& world,
                                             const std::shared_ptr<Obstacle>& obstacleK,
-                                            const std::shared_ptr<Obstacle>& obstacleP,
-                                            const std::vector<std::shared_ptr<Obstacle>>& obstacles) = 0;
+                                            const std::shared_ptr<Obstacle>& obstacleP) = 0;
 
     /**
      * Function for the statistical evaluation of a predicate.
      *
-     * @param evalType Evaluation type which should be used for statistical evaluation (robust, boolean, constraint).
      * @param timeStep Time step of interest.
-     * @param roadNetwork RoadNetwork object.
+     * @param world Contains road network, ego vehicle, and obstacle list.
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
-     * @param obstacles Pointers to all obstacles. This is an optional parameter.
      */
     bool statisticBooleanEvaluation(int timeStep,
-                                    const std::shared_ptr<RoadNetwork>& roadNetwork,
+                                    const std::shared_ptr<World>& world,
                                     const std::shared_ptr<Obstacle>& obstacleK,
-                                    const std::shared_ptr<Obstacle>& obstacleP,
-                                    const std::vector<std::shared_ptr<Obstacle>>& obstacles);
+                                    const std::shared_ptr<Obstacle>& obstacleP);
 
     /**
      * Getter for parameters.

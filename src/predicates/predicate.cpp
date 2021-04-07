@@ -8,12 +8,18 @@
 PredicateStatistics Predicate::statistics;
 
 bool Predicate::statisticBooleanEvaluation(int timeStep,
-                                           const std::shared_ptr<RoadNetwork>& roadNetwork,
+                                           const std::shared_ptr<World>& world,
                                            const std::shared_ptr<Obstacle>& obstacleK,
-                                           const std::shared_ptr<Obstacle>& obstacleP,
-                                           const std::vector<std::shared_ptr<Obstacle>>& obstacles) {
+                                           const std::shared_ptr<Obstacle>& obstacleP) {
     statistics.numExecutions++;
-    return booleanEvaluation(timeStep, roadNetwork, obstacleK, obstacleP, obstacles);
+    return booleanEvaluation(timeStep, world, obstacleK, obstacleP);
+}
+
+bool Predicate::booleanEvaluation(int timeStep,
+                                  const std::shared_ptr<World> &world,
+                                  const std::shared_ptr<Obstacle> &obstacleK,
+                                  const std::shared_ptr<Obstacle> &obstacleP) {
+    return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
 }
 
 const PredicateParameters &Predicate::getParameters() const { return parameters; }

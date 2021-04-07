@@ -19,8 +19,11 @@ set(ENV_MODEL_SRC_FILES
         interfaces/commonroad/commonroad_factory_2018b.cpp
         interfaces/commonroad/commonroad_factory_2020a.cpp
         interfaces/commonroad/xml_reader.cpp
+        world.cpp
         predicates/predicate.cpp
         predicates/safe_distance_predicate.cpp
+        predicates/in_front_of_predicate.cpp
+        predicates/in_same_lane_predicate.cpp
         )
 
 # Create environment model library

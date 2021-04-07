@@ -26,10 +26,8 @@ void SafeDistancePredicateTest::SetUp() {
 }
 
 TEST_F(SafeDistancePredicateTest, BooleanEvaluation) {
-    EXPECT_TRUE(pred.booleanEvaluation(0, {}, egoVehicle, otherVehicle));
-    EXPECT_FALSE(pred.booleanEvaluation(1, {}, egoVehicle, otherVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(0, {}, egoVehicle, otherVehicle, {}));
-    EXPECT_FALSE(pred.booleanEvaluation(1, {}, egoVehicle, otherVehicle, {}));
+    EXPECT_TRUE(pred.Predicate::booleanEvaluation(0, {}, egoVehicle, otherVehicle));
+    EXPECT_FALSE(pred.Predicate::booleanEvaluation(1, {}, egoVehicle, otherVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(0, 20, 20, 20, -10, -10, 0.3));
     EXPECT_FALSE(pred.booleanEvaluation(20, 30, 20, 0, -10, -10, 0.3));
 }
@@ -37,8 +35,6 @@ TEST_F(SafeDistancePredicateTest, BooleanEvaluation) {
 TEST_F(SafeDistancePredicateTest, ConstraintEvaluation) {
     EXPECT_NEAR(pred.constraintEvaluation(0, {}, egoVehicle, otherVehicle).realValuedConstraint, 6.0, 0.001);
     EXPECT_NEAR(pred.constraintEvaluation(1, {}, egoVehicle, otherVehicle).realValuedConstraint, 26.0, 0.001);
-    EXPECT_NEAR(pred.constraintEvaluation(0, {}, egoVehicle, otherVehicle, {}).realValuedConstraint, 6.0, 0.001);
-    EXPECT_NEAR(pred.constraintEvaluation(1, {}, egoVehicle, otherVehicle, {}).realValuedConstraint, 26.0, 0.001);
     EXPECT_NEAR(pred.constraintEvaluation(20, 20, -10, -10, 0.3).realValuedConstraint, 6.0, 0.001);
     EXPECT_NEAR(pred.constraintEvaluation(20, 0, -10, -10, 0.3).realValuedConstraint, 26.0, 0.001);
 }
@@ -46,16 +42,14 @@ TEST_F(SafeDistancePredicateTest, ConstraintEvaluation) {
 TEST_F(SafeDistancePredicateTest, RobustEvaluation) {
     EXPECT_NEAR(pred.robustEvaluation(0, {}, egoVehicle, otherVehicle), 9, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(1, {}, egoVehicle, otherVehicle), -21, 0.001);
-    EXPECT_NEAR(pred.robustEvaluation(0, {}, egoVehicle, otherVehicle, {}), 9, 0.001);
-    EXPECT_NEAR(pred.robustEvaluation(1, {}, egoVehicle, otherVehicle, {}), -21, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(2.5, 17.5, 20, 20, -10, -10, 0.3), 9, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(22.5, 27.5, 20, 0, -10, -10, 0.3), -21, 0.001);
 }
 
 TEST_F(SafeDistancePredicateTest, StatisticBooleanEvaluation) {
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, {}, egoVehicle, otherVehicle, {}));
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, {}, egoVehicle, otherVehicle));
     EXPECT_EQ(SafeDistancePredicate::statistics.numExecutions, 1);
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, {}, egoVehicle, otherVehicle, {}));
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, {}, egoVehicle, otherVehicle));
     EXPECT_EQ(SafeDistancePredicate::statistics.numExecutions, 2);
 }
 

@@ -77,7 +77,7 @@ namespace CommandLine {
                                                                                             trafficLights)) };
 
         for (const auto &obs : obstacles) {
-            for (size_t i = 0; i < obs->getTrajectoryLength(); ++i) {
+            for (size_t i = obs->getFirstTrajectoryTimeStep(); i < obs->getLastTrajectoryTimeStep(); ++i) {
                 obs->setOwnLane(roadNetwork->getLanes(), i);
             }
         }

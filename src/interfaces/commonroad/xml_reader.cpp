@@ -55,7 +55,7 @@ std::vector<std::shared_ptr<Intersection>> XMLReader::createIntersectionFromXML(
 std::shared_ptr<State> XMLReader::extractInitialState(const pugi::xml_node &child) {
     pugi::xml_node states = child;
     State initialState;
-    initialState.setTimeStep(0);
+    initialState.setTimeStep(states.child("time").child("exact").text().as_int());
     initialState.setXPosition(
             states.child("position").child("point").child("x").text().as_double());
     initialState.setYPosition(

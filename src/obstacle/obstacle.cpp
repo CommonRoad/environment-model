@@ -104,7 +104,9 @@ std::shared_ptr<State> Obstacle::getStateByTimeStep(int timeStep) const {
     else if (history.count(timeStep) == 1)
         return history.at(timeStep);
     else
-        throw std::logic_error("Time step does not exist");
+        throw std::logic_error("Time step does not exist. Obstacle ID: "
+        + std::to_string(this->getId())
+        + " - Time step: " + std::to_string(timeStep));
 }
 
 ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
@@ -242,11 +244,11 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
 }
 
 int Obstacle::getFirstTrajectoryTimeStep() {
-    return trajectoryPrediction.at(0)->getTimeStep();
+    return trajectoryPrediction.begin()->second->getTimeStep();
 }
 
 int Obstacle::getLastTrajectoryTimeStep() {
-    return trajectoryPrediction.at(0)->getTimeStep() + getTrajectoryLength();
+    return trajectoryPrediction.begin()->second->getTimeStep() + getTrajectoryLength() - 1;
 }
 
 std::shared_ptr<Lane> Obstacle::getReferenceLane() const { return referenceLane; }
