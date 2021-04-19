@@ -8,9 +8,10 @@ bool InSameLanePredicate::booleanEvaluation(int timeStep, const std::shared_ptr<
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP) {
     for (const auto &laneP : obstacleP->getOccupiedLanes(world->getRoadNetwork(), timeStep)) {
-        for (const auto &laneK : obstacleP->getOccupiedLanes(world->getRoadNetwork(), timeStep)) {
-            if (laneP->getLanelet().getId() == laneK->getLanelet().getId())
+        for (const auto &laneK : obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)) {
+            if (laneP->getLanelet().getId() == laneK->getLanelet().getId()) {
                 return true;
+            }
         }
     }
     return false;

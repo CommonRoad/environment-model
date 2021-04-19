@@ -7,7 +7,7 @@
 
 #include "predicate.h"
 
-class InSameLanePredicate : Predicate{
+class InSameLanePredicate : public Predicate{
     /**
      * Constraint evaluation of predicate.
      *

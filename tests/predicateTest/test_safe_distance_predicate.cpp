@@ -26,8 +26,8 @@ void SafeDistancePredicateTest::SetUp() {
 }
 
 TEST_F(SafeDistancePredicateTest, BooleanEvaluation) {
-    EXPECT_TRUE(pred.Predicate::booleanEvaluation(0, {}, egoVehicle, otherVehicle));
-    EXPECT_FALSE(pred.Predicate::booleanEvaluation(1, {}, egoVehicle, otherVehicle));
+    EXPECT_TRUE(pred.booleanEvaluation(0, {}, egoVehicle, otherVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(1, {}, egoVehicle, otherVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(0, 20, 20, 20, -10, -10, 0.3));
     EXPECT_FALSE(pred.booleanEvaluation(20, 30, 20, 0, -10, -10, 0.3));
 }

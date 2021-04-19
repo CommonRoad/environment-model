@@ -26,6 +26,11 @@ public:
     computeSafeDistance(double velocityK, double velocityP, double minAccelerationK, double minAccelerationP,
                         double tReact);
 
+    bool booleanEvaluation(int timeStep,
+                           const std::shared_ptr<World> &world,
+                           const std::shared_ptr<Obstacle> &obstacleK,
+                           const std::shared_ptr<Obstacle> &obstacleP) override;
+
     /**
      *
      * @param lonPosK Longitudinal position in the curvilinear coordinate system of the kth vehicle [m].

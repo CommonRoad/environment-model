@@ -19,6 +19,11 @@ public:
     bool
     booleanEvaluation(double lonPositionK, double lonPositionP);
 
+    bool booleanEvaluation(int timeStep,
+                           const std::shared_ptr<World> &world,
+                           const std::shared_ptr<Obstacle> &obstacleK,
+                           const std::shared_ptr<Obstacle> &obstacleP) override;
+
     /**
      * Constraint evaluation of predicate.
      *

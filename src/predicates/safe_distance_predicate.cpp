@@ -12,6 +12,13 @@ SafeDistancePredicate::computeSafeDistance(double velocityK, double velocityP, d
            pow(velocityK, 2) / (-2 * std::abs(minAccelerationK)) + velocityK * tReact;
 }
 
+bool SafeDistancePredicate::booleanEvaluation(int timeStep,
+                                           const std::shared_ptr<World> &world,
+                                           const std::shared_ptr<Obstacle> &obstacleK,
+                                           const std::shared_ptr<Obstacle> &obstacleP) {
+    return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
+}
+
 bool SafeDistancePredicate::booleanEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP,
                                               double minAccelerationK, double minAccelerationP, double tReact) {
     return robustEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK, minAccelerationP, tReact) > 0;
@@ -33,7 +40,7 @@ Constraint
 SafeDistancePredicate::constraintEvaluation(double velocityK, double velocityP, double minAccelerationK,
                                             double minAccelerationP,
                                             double tReact) {
-    return {computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact)};
+    return { computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact) };
 }
 
 double SafeDistancePredicate::robustEvaluation(int timeStep,
@@ -41,9 +48,12 @@ double SafeDistancePredicate::robustEvaluation(int timeStep,
                                                const std::shared_ptr<Obstacle> &obstacleK,
                                                const std::shared_ptr<Obstacle> &obstacleP) {
     double dSafe{constraintEvaluation(timeStep, world, obstacleK, obstacleP).realValuedConstraint};
-    double deltaS{obstacleP->rearS(timeStep) - obstacleK->frontS(timeStep)};
+    double deltaS{ obstacleP->rearS(timeStep) - obstacleK->frontS(timeStep) };
 
-    return (deltaS - dSafe);
+    if (deltaS < 0)
+        return abs(deltaS);
+    else
+        return (deltaS - dSafe);
 }
 
 double SafeDistancePredicate::robustEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP,

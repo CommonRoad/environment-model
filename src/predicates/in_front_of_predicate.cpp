@@ -4,6 +4,12 @@
 
 #include "in_front_of_predicate.h"
 
+bool InFrontOfPredicate::booleanEvaluation(int timeStep,
+                                  const std::shared_ptr<World> &world,
+                                  const std::shared_ptr<Obstacle> &obstacleK,
+                                  const std::shared_ptr<Obstacle> &obstacleP) {
+    return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
+}
 
 bool InFrontOfPredicate::booleanEvaluation(double lonPositionK, double lonPositionP) {
     return robustEvaluation(lonPositionK, lonPositionP) > 0;

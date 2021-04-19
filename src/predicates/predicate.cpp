@@ -15,12 +15,6 @@ bool Predicate::statisticBooleanEvaluation(int timeStep,
     return booleanEvaluation(timeStep, world, obstacleK, obstacleP);
 }
 
-bool Predicate::booleanEvaluation(int timeStep,
-                                  const std::shared_ptr<World> &world,
-                                  const std::shared_ptr<Obstacle> &obstacleK,
-                                  const std::shared_ptr<Obstacle> &obstacleP) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
-}
 
 const PredicateParameters &Predicate::getParameters() const { return parameters; }
 

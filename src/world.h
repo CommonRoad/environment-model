@@ -19,16 +19,16 @@ public:
      * @param obstacles List of obstacles.
      */
     World(int timeStep, std::shared_ptr<RoadNetwork> &roadNetwork,
-          const std::vector<std::shared_ptr<Obstacle>> &egoVehicles,
-          const std::vector<std::shared_ptr<Obstacle>> &obstacles);
+          std::vector<std::shared_ptr<Obstacle>> egoVehicles,
+          std::vector<std::shared_ptr<Obstacle>> obstacles);
 
-    int getTimeStep() const;
+    [[nodiscard]] int getTimeStep() const;
 
-    std::shared_ptr<RoadNetwork> &getRoadNetwork() const;
+    [[nodiscard]] std::shared_ptr<RoadNetwork> &getRoadNetwork() const;
 
-    const std::vector<std::shared_ptr<Obstacle>> &getEgoVehicles() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Obstacle>> &getEgoVehicles() const;
 
-    const std::vector<std::shared_ptr<Obstacle>> &getObstacles() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Obstacle>> &getObstacles() const;
 
 private:
     int timeStep;

@@ -39,10 +39,10 @@ public:
      * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Boolean indicating satisfaction of the predicate.
      */
-    bool booleanEvaluation(int timeStep,
-                           const std::shared_ptr<World>& world,
-                           const std::shared_ptr<Obstacle>& obstacleK,
-                           const std::shared_ptr<Obstacle>& obstacleP);
+    virtual bool booleanEvaluation(int timeStep,
+                                   const std::shared_ptr<World>& world,
+                                   const std::shared_ptr<Obstacle>& obstacleK,
+                                   const std::shared_ptr<Obstacle>& obstacleP) = 0;
 
 
     /**

@@ -4,11 +4,13 @@
 
 #include "world.h"
 
+#include <utility>
+
 World::World(int timeStep, std::shared_ptr <RoadNetwork> &roadNetwork,
-             const std::vector <std::shared_ptr<Obstacle>> &egoVehicles,
-             const std::vector <std::shared_ptr<Obstacle>> &obstacles) : timeStep(timeStep), roadNetwork(roadNetwork),
-                                                                         egoVehicles(egoVehicles),
-                                                                         obstacles(obstacles) {}
+             std::vector <std::shared_ptr<Obstacle>> egoVehicles,
+             std::vector <std::shared_ptr<Obstacle>> obstacles) : timeStep(timeStep), roadNetwork(roadNetwork),
+                                                                         egoVehicles(std::move(egoVehicles)),
+                                                                         obstacles(std::move(obstacles)) {}
 
 int World::getTimeStep() const { return timeStep; }
 
