@@ -2,11 +2,11 @@
 
 CommonRoad C++ Environment Model
 
-**Note: Still in development!!!** 
-Not all functionality is finished and well tested.
-When you add or change something always check whether a test case already exists. 
-If no test case exists, please create one. 
-Please assign all merge request to Sebastian Maierhofer.
+**Note: Still in development!!!**   
+Not all functionalities are finished and well tested.  
+When you add or change something always check whether a test case already exists.   
+If no test case exists, please create one.   
+Please create always merge requests and assign them to Sebastian Maierhofer.
 
 The CommonRoad C++ Environment Model implemented in C++17 provides classes and methods to represent the CommonRoad format to read CommonRoad scenarios.
 It contains also an interface to Python and predicates for evaluating traffic rules.
@@ -20,8 +20,8 @@ Note that the repository does not contain runtime-verification algorithms and co
 ## Build and Compile
 
 Tested with
-- CMake 3.19.2
-- GCC 10.2.0
+- CMake 3.17.5
+- GCC 7.?.?
 
   
 ## Build
