@@ -13,6 +13,7 @@ class World {
 public:
     /**
      * Constructor for world.
+     *
      * @param timeStep Current time step of world object.
      * @param roadNetwork Currently relevant road network.
      * @param egoVehicles List of ego vehicles.
@@ -22,12 +23,32 @@ public:
           std::vector<std::shared_ptr<Obstacle>> egoVehicles,
           std::vector<std::shared_ptr<Obstacle>> obstacles);
 
+    /**
+     * Getter for world time step.
+     *
+     * @return Time step of world.
+     */
     [[nodiscard]] int getTimeStep() const;
 
+    /**
+     * Getter for pointer to road network object.
+     *
+     * @return Pointer to road network object.
+     */
     [[nodiscard]] std::shared_ptr<RoadNetwork> &getRoadNetwork() const;
 
+    /**
+     * Getter for pointer to vector of ego vehicle objects.
+     *
+     * @return Vector with pointers to obstacle objects.
+     */
     [[nodiscard]] const std::vector<std::shared_ptr<Obstacle>> &getEgoVehicles() const;
 
+    /**
+     * Getter for pointer to vector of ego vehicle objects.
+     *
+     * @return Vector with pointers to obstacle objects.
+     */
     [[nodiscard]] const std::vector<std::shared_ptr<Obstacle>> &getObstacles() const;
 
 private:
