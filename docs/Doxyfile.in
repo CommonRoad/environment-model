@@ -1,4 +1,4 @@
-PROJECT_NAME           = "@CMAKE_PROJECT_NAME@"
+PROJECT_NAME           = "CommonRoad C++ Environment Model"
 STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@/src
 OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@/doc_doxygen/
 INPUT                  = @PROJECT_SOURCE_DIR@/@DOXY_MAIN_PAGE@ \
@@ -10,6 +10,15 @@ FILE_PATTERNS          = *.h \
                          *.cpp \
                          *.cu \
                          *.md
+EXCLUDE                = ../docs \
+                         ../external \
+                         ../ci \
+                         ../build \
+                         ../cmake \
+                         ../cmake-build-debug \
+                         ../cmake-build-debug-coverage \
+                         ../cmake-build-release \
+                         ../cmake-build-release-coverage
 # This would enable documentation of the CUDA code.
 #EXTENSION_MAPPING      = h=c++ cpp=c++ cuh=c++ cu=c++
 RECURSIVE              = YES

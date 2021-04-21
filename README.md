@@ -51,3 +51,11 @@ or
 pip install -e .
 ```
 from the root directory.
+
+
+## Documentation
+The documentation can be generated with
+```bash
+cd build
+make doc_doxygen
+```

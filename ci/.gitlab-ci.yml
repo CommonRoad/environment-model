@@ -60,6 +60,12 @@ test:
     reports:
       junit: ./report.xml
 
+docs:
+  stage: test
+  script:
+    - mkdir build && cd build
+    - make doc_doxygen
+
 publish-coverage:
   stage: test
   script:
