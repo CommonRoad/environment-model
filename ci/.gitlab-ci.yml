@@ -63,8 +63,8 @@ test:
 docs:
   stage: test
   script:
-    - mkdir build && cd build
-    - make doc_doxygen
+    - cd build
+    - make doc_doxygen ..
 
 publish-coverage:
   stage: test
