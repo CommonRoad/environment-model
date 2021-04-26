@@ -11,6 +11,8 @@ namespace py = pybind11;
 
 uint8_t py_registerScenario(const py::int_ &ScenarioID, const py::handle &py_laneletNetwork, const py::list &py_obstacles);
 
+bool py_safe_distance_boolean_evaluation();
+
 //uint8_t py_registerScenario2018b(const py::int_ &ScenarioID, const py::handle &py_laneletNetwork, const py::list &py_obstacles);
 
 //uint8_t py_removeScenario(const py::int_ &ScenarioID);
@@ -20,6 +22,8 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("registerScenario", &py_registerScenario,
           "Add new scenario to C++ environment model", py::arg("ScenarioID"), py::arg("py_lanelets"),
           py::arg("py_obstacles"));
+    m.def("safeDistanceBooleanEvaluation", &py_safe_distance_boolean_evaluation,
+          "Boolean evaluation of safe distance predicate");
 //    m.def("registerScenario2018b", &py_registerScenario2018b,
 //          "Add 2018b scenario to C++ environment model", py::arg("ScenarioID"),
 //          py::arg("py_lanelets"),py::arg("py_obstacles"));
