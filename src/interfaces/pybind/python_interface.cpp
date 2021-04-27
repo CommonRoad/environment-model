@@ -40,14 +40,14 @@ uint8_t py_registerScenario(const py::int_ &scenarioId, const py::int_ &timeStep
 
 bool py_safe_distance_boolean_evaluation(const py::int_ &scenarioId,
                                          const py::int_& timeStep,
-                                         const py::list &py_obstacleIds,
-                                         const py::list &py_egoVehicleIds){
+                                         const py::int_ &py_egoVehicleId,
+                                         const py::list &py_obstacleIds){
     SafeDistancePredicate pred;
     PredicateEvaluation *predicateEvaluation = PredicateEvaluation::getInstance();
     auto world = predicateEvaluation->findWorld(scenarioId);
     return pred.booleanEvaluation(timeStep, world,
                                   world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0),
-                                  world->findObstacles(createVectorFromPyList(py_egoVehicleIds)).at(0));
+                                  world->findObstacle(py::cast<int>(py_egoVehicleId)));
 }
 
 std::vector<int> createVectorFromPyList(const py::list& list){

@@ -30,3 +30,9 @@ std::vector<std::shared_ptr<Obstacle>> World::findObstacles(const std::vector<in
     }
     return obstacleList;
 }
+
+std::shared_ptr<Obstacle> World::findObstacle(int obstacleId) const {
+    for (const auto &obs : obstacles)
+        if (obstacleId == obs->getId())
+            return obs;
+}

@@ -52,11 +52,18 @@ public:
     [[nodiscard]] const std::vector<std::shared_ptr<Obstacle>> &getObstacles() const;
 
     /**
-     * Find all obstacles with from given set of IDs.
+     * Find all obstacles objects from given set of IDs.
      *
      * @return Vector with pointers to obstacle objects.
      */
     [[nodiscard]] std::vector<std::shared_ptr<Obstacle>> findObstacles(const std::vector<int>& obstacleIdList) const;
+
+    /**
+     * Find all obstacles object corresponding to given ID.
+     *
+     * @return Obstacle object.
+     */
+    [[nodiscard]] std::shared_ptr<Obstacle> findObstacle(int obstacleId) const;
 
 private:
     int timeStep;
