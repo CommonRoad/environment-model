@@ -24,6 +24,7 @@ set(ENV_MODEL_SRC_FILES
         predicates/safe_distance_predicate.cpp
         predicates/in_front_of_predicate.cpp
         predicates/in_same_lane_predicate.cpp
+        predicates/predicate_evaluation.cpp
         )
 
 # Create environment model library

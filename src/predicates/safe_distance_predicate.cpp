@@ -28,12 +28,12 @@ Constraint SafeDistancePredicate::constraintEvaluation(int timeStep,
                                                        const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP) {
-    double aMinK{obstacleK->getAminLong()};
-    double aMinP{obstacleP->getAminLong()};
-    double tReact{obstacleK->getReactionTime()};
-    return {computeSafeDistance(obstacleK->getTrajectoryPrediction().at(timeStep)->getVelocity(),
-                                obstacleP->getTrajectoryPrediction().at(timeStep)->getVelocity(),
-                                aMinK, aMinP, tReact)};
+    double aMinK{ obstacleK->getAminLong() };
+    double aMinP{ obstacleP->getAminLong() };
+    double tReact{ obstacleK->getReactionTime() };
+    return {computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
+                                obstacleP->getStateByTimeStep(timeStep)->getVelocity(),
+                                aMinK, aMinP, tReact) };
 }
 
 Constraint

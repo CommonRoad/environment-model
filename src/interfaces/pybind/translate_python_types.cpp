@@ -399,7 +399,7 @@ std::shared_ptr<Obstacle> createStaticObstacle(py::handle py_singleObstacle) {
 }
 
 std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertObstacles(const py::list &py_obstacle_list) {
-    std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer{};
+    std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer { };
     tempObstacleContainer.reserve(py_obstacle_list.size()); // Already know the size --> Faster memory allocation
     // all obstacles must be initialized first
     for (int i = 0; i < py_obstacle_list.size(); i++) {

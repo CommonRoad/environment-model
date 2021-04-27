@@ -19,3 +19,14 @@ std::shared_ptr <RoadNetwork> &World::getRoadNetwork() const { return roadNetwor
 const std::vector <std::shared_ptr<Obstacle>> &World::getEgoVehicles() const { return egoVehicles; }
 
 const std::vector <std::shared_ptr<Obstacle>> &World::getObstacles() const { return obstacles; }
+
+std::vector<std::shared_ptr<Obstacle>> World::findObstacles(const std::vector<int>& obstacleIdList) const {
+    std::vector<std::shared_ptr<Obstacle>> obstacleList { };
+    obstacleList.reserve(obstacleIdList.size());
+    for (const auto &id : obstacleIdList){
+        for (const auto &obs : obstacles)
+            if (id == obs->getId())
+                obstacleList.emplace_back(obs);
+    }
+    return obstacleList;
+}

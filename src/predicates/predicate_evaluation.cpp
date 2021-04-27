@@ -4,30 +4,34 @@
 
 #include "predicate_evaluation.h"
 
-uint8_t PredicateEvaluation::registerScenario(const int id, std::shared_ptr<RoadNetwork> roadNetwork,
-                               std::vector<std::shared_ptr<Obstacle>> obstacleList,
-                               std::vector<std::shared_ptr<Obstacle>> egoVehicles) {
-    for (auto const &wo : worldList) {
-        std::cout << "Registered IDs: " << std::get<0>(it) << std::endl;
+// Global static pointer used to ensure a single instance of the class.
+PredicateEvaluation *PredicateEvaluation::instance = nullptr; // with static declaration, this can live outside of class instance
 
-        if (std::get<0>(wo) == Id) {
-            std::cout << "Scenario ID already in use" << std::endl; // only for debugging
+uint8_t PredicateEvaluation::registerScenario(const int id, int timeStep,
+                                              std::shared_ptr<RoadNetwork> roadNetwork,
+                                              const std::vector<std::shared_ptr<Obstacle>>& obstacleList,
+                                              const std::vector<std::shared_ptr<Obstacle>>& egoVehicles) {
+    for (auto const &wo : worldList) {
+        if (std::get<0>(wo) == id) {
             return 1;                                               // Id already given
         }
     }
-
-    std::cout << "Unique ID: " << Id << std::endl;
-    worldList.emplace_back(std::make_tuple(Id, World(roadNetwork, egoVehicles, obstacleList));
+    worldList.emplace_back(id, std::make_shared<World>(timeStep, roadNetwork, egoVehicles, obstacleList));
 
     return 0;
 }
 
 PredicateEvaluation *PredicateEvaluation::getInstance() {
-    if (!PredicateEvaluation::Instance) // Only allow one instance of class to be generated.
+    if (!instance) // Only allow one instance of class to be generated.
     {
-        std::cout << "Creating unique instance of PredicateEvaluation" << std::endl; // only for debugging
-        PredicateEvaluation::Instance = new PredicateEvaluation();
+        instance = new PredicateEvaluation();
     }
-    // std::cout << "Returning instance of Spot" << std::endl; // only for debugging
-    return PredicateEvaluation::Instance;
+    return instance;
+}
+
+std::shared_ptr<World> PredicateEvaluation::findWorld(int scenarioId) {
+    for (auto &it : worldList) {
+        if (std::get<0>(it) == scenarioId)
+            return std::get<1>(it);
+    }
 }

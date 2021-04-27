@@ -44,7 +44,6 @@ public:
                                    const std::shared_ptr<Obstacle>& obstacleK,
                                    const std::shared_ptr<Obstacle>& obstacleP) = 0;
 
-
     /**
      * Virtual function for the robustness evaluation of a predicate.
      *

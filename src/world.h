@@ -51,11 +51,18 @@ public:
      */
     [[nodiscard]] const std::vector<std::shared_ptr<Obstacle>> &getObstacles() const;
 
+    /**
+     * Find all obstacles with from given set of IDs.
+     *
+     * @return Vector with pointers to obstacle objects.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<Obstacle>> findObstacles(const std::vector<int>& obstacleIdList) const;
+
 private:
     int timeStep;
     std::shared_ptr<RoadNetwork>& roadNetwork;              //**< road network containing lanelets, traffic signs, etc. */
     std::vector<std::shared_ptr<Obstacle>> egoVehicles;     //**< pointers to ego vehicle objects */
-    std::vector<std::shared_ptr<Obstacle>> obstacles;       //**< pointers to obstacles*/
+    std::vector<std::shared_ptr<Obstacle>> obstacles;       //**< pointers to obstacles*
 };
 
 
