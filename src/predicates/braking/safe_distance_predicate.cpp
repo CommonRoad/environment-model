@@ -12,7 +12,7 @@ SafeDistancePredicate::computeSafeDistance(double velocityK, double velocityP, d
            pow(velocityK, 2) / (-2 * std::abs(minAccelerationK)) + velocityK * tReact;
 }
 
-bool SafeDistancePredicate::booleanEvaluation(int timeStep,
+bool SafeDistancePredicate::booleanEvaluation(size_t timeStep,
                                            const std::shared_ptr<World> &world,
                                            const std::shared_ptr<Obstacle> &obstacleK,
                                            const std::shared_ptr<Obstacle> &obstacleP) {
@@ -24,7 +24,7 @@ bool SafeDistancePredicate::booleanEvaluation(double lonPosK, double lonPosP, do
     return robustEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK, minAccelerationP, tReact) > 0;
 }
 
-Constraint SafeDistancePredicate::constraintEvaluation(int timeStep,
+Constraint SafeDistancePredicate::constraintEvaluation(size_t timeStep,
                                                        const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP) {
@@ -43,11 +43,11 @@ SafeDistancePredicate::constraintEvaluation(double velocityK, double velocityP, 
     return { computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact) };
 }
 
-double SafeDistancePredicate::robustEvaluation(int timeStep,
+double SafeDistancePredicate::robustEvaluation(size_t timeStep,
                                                const std::shared_ptr<World> &world,
                                                const std::shared_ptr<Obstacle> &obstacleK,
                                                const std::shared_ptr<Obstacle> &obstacleP) {
-    double dSafe{constraintEvaluation(timeStep, world, obstacleK, obstacleP).realValuedConstraint};
+    double dSafe{ constraintEvaluation(timeStep, world, obstacleK, obstacleP).realValuedConstraint };
     double deltaS{ obstacleP->rearS(timeStep) - obstacleK->frontS(timeStep) };
 
     if (deltaS < 0)

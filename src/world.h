@@ -63,7 +63,7 @@ public:
      *
      * @return Obstacle object.
      */
-    [[nodiscard]] std::shared_ptr<Obstacle> findObstacle(int obstacleId) const;
+    [[nodiscard]] std::shared_ptr<Obstacle> findObstacle(size_t obstacleId) const;
 
 private:
     int timeStep;

@@ -8,8 +8,6 @@
 #include "../../obstacle/obstacle_operations.h"
 #include "../../roadNetwork/lanelet/lanelet_operations.h"
 #include "../../geometry/circle.h"
-#include "../../geometry/rectangle.h"
-
 
 
 std::vector<std::shared_ptr<TrafficSign>>
@@ -102,12 +100,12 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
     tempLaneletContainer.reserve(py_lanelets.size()); // Already know the size --> Faster memory allocation
 
     // all lanelets must be initialized first because they are referencing each other
-    for (int i = 0; i < py_lanelets.size(); i++) {
+    for (size_t i = 0; i < py_lanelets.size(); i++) {
         std::shared_ptr<Lanelet> tempLanelet = std::make_shared<Lanelet>();
         tempLaneletContainer.emplace_back(tempLanelet);
     }
 
-    int arrayIndex = 0;
+  size_t arrayIndex { 0 };
     // set id of lanelets
     for (py::handle py_singleLanelet : py_lanelets) {
         tempLaneletContainer[arrayIndex]->setId(py::cast<int>(py_singleLanelet.attr("lanelet_id")));
@@ -232,15 +230,15 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                                            const std::vector<std::shared_ptr<Lanelet>> &lanelets) {
     std::vector<std::shared_ptr<Intersection>> tempIntersectionContainer{};
     const py::list &py_intersection_list = py_laneletNetwork.attr("intersections").cast<py::list>();
-    int n = static_cast<int>(py_intersection_list.size());
+    size_t n = py_intersection_list.size();
     tempIntersectionContainer.reserve(n); // Already know the size --> Faster memory allocation
     // all intersections must be initialized first
-    for (int i = 0; i < py_intersection_list.size(); i++) {
+    for (size_t i = 0; i < py_intersection_list.size(); i++) {
         std::shared_ptr<Intersection> tempIntersection = std::make_shared<Intersection>();
         tempIntersectionContainer.emplace_back(tempIntersection);
     }
 
-    int intersectionIndex{0};
+    size_t intersectionIndex{ 0 };
     for (const auto &py_intersection : py_intersection_list) {
         std::shared_ptr<Intersection> tempIntersection = std::make_shared<Intersection>();
         tempIntersection->setId(py_intersection.attr("intersection_id").cast<int>());
@@ -251,7 +249,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             tempIncoming->setId(py_incoming.attr("incoming_id").cast<int>());
             incomings.emplace_back(tempIncoming);
         }
-        int incomignIndex{0};
+        size_t incomignIndex{ 0 };
         for (const auto &py_incoming : py_intersection.attr("incomings").cast<py::list>()) {
             // incoming lanelets
             auto py_incomingLanelets = py_incoming.attr("incoming_lanelets").cast<py::list>();
@@ -402,13 +400,13 @@ std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertObstacles(co
     std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer { };
     tempObstacleContainer.reserve(py_obstacle_list.size()); // Already know the size --> Faster memory allocation
     // all obstacles must be initialized first
-    for (int i = 0; i < py_obstacle_list.size(); i++) {
+    for (size_t i = 0; i < py_obstacle_list.size(); i++) {
         std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
         tempObstacleContainer.emplace_back(tempObstacle);
     }
 
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
-    int arrayIndex{0};
+    size_t arrayIndex{ 0 };
     for (py::handle py_singleObstacle : py_obstacle_list) {
         std::string obstacleRole { py_singleObstacle.attr("obstacle_role").attr("value").cast<std::string>() };
         if (obstacleRole == "dynamic")

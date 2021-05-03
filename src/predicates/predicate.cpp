@@ -7,7 +7,7 @@
 // define static variable for statistics
 PredicateStatistics Predicate::statistics;
 
-bool Predicate::statisticBooleanEvaluation(int timeStep,
+bool Predicate::statisticBooleanEvaluation(size_t timeStep,
                                            const std::shared_ptr<World>& world,
                                            const std::shared_ptr<Obstacle>& obstacleK,
                                            const std::shared_ptr<Obstacle>& obstacleP) {

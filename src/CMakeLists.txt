@@ -23,9 +23,9 @@ set(ENV_MODEL_SRC_FILES
         interfaces/commonroad/xml_reader.cpp
         world.cpp
         predicates/predicate.cpp
-        predicates/safe_distance_predicate.cpp
-        predicates/in_front_of_predicate.cpp
-        predicates/in_same_lane_predicate.cpp
+        predicates/braking/safe_distance_predicate.cpp
+        predicates/position/in_front_of_predicate.cpp
+        predicates/position/in_same_lane_predicate.cpp
         predicates/predicate_evaluation.cpp
         )
 

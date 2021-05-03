@@ -11,17 +11,17 @@
 // TODO extract interface which can also be used by SPOT
 class PredicateEvaluation {
 public:
-    uint8_t registerScenario(int id, int timeStep, std::shared_ptr<RoadNetwork> roadNetwork,
-                             const std::vector<std::shared_ptr<Obstacle>>& obstacleList,
-                             const std::vector<std::shared_ptr<Obstacle>>& egoVehicles);
+    uint8_t registerScenario(size_t id, size_t timeStep, std::shared_ptr<RoadNetwork> roadNetwork,
+                             std::vector<std::shared_ptr<Obstacle>>& obstacleList,
+                             std::vector<std::shared_ptr<Obstacle>>& egoVehicles);
 //    uint8_t removeScenario(const int &Id);
-    static PredicateEvaluation *getInstance(); // Instantiates Singleton/gives back reference
-    std::shared_ptr<World> findWorld(int scenarioId);
+    static std::shared_ptr<PredicateEvaluation> getInstance(); // Instantiates Singleton/gives back reference
+    std::shared_ptr<World> findWorld(size_t scenarioId);
 
 private:
-    PredicateEvaluation() = default;                        // Private constructor so that it cannot be called
-    ~PredicateEvaluation() = default;                       // private destructor
-    static PredicateEvaluation *instance; // self-reference
+ //   PredicateEvaluation() = default;                        // Private constructor so that it cannot be called
+   // ~PredicateEvaluation() = default;                       // private destructor
+    static std::shared_ptr<PredicateEvaluation> instance; // self-reference
     std::vector<std::tuple<int, std::shared_ptr<World>>> worldList;
 
 };

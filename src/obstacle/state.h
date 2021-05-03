@@ -34,7 +34,7 @@ public:
      * @param lonPosition longitudinal position in Curvilinear domain.
      * @param latPosition lateral position in Curvilinear domain.
      */
-    State(int timeStep, double xPosition, double yPosition, double velocity, double acceleration,
+    State(size_t timeStep, double xPosition, double yPosition, double velocity, double acceleration,
           double globalOrientation, double curvilinearOrientation, double lonPosition, double latPosition);
 
     /**
@@ -48,7 +48,8 @@ public:
      * @param orientation orientation in [rad].
      *
      */
-    State(int timeStep, double xPosition, double yPosition, double velocity, double acceleration, double orientation);
+    State(size_t timeStep, double xPosition, double yPosition, double velocity, double acceleration,
+          double orientation);
 
     /**
      * Getter for x-position.
@@ -111,7 +112,7 @@ public:
      *
      * @return time step.
      */
-    [[nodiscard]] int getTimeStep() const;
+    [[nodiscard]] size_t getTimeStep() const;
 
     /**
      * Getter for list of valid states elements.
@@ -181,7 +182,7 @@ public:
      *
      * @param timeStep time step.
      */
-    void setTimeStep(int timeStep);
+    void setTimeStep(size_t timeStep);
 
 private:
     double xPosition { 0.0 };                                       //**< x-coordinate in Cartesian space [m] */
@@ -196,7 +197,7 @@ private:
                             false, false,
                             false, false,
                             false, false};
-    int timeStep{0};                                                //**< time step of the state variables */
+    size_t timeStep{ 0 };                                                //**< time step of the state variables */
 };
 
 

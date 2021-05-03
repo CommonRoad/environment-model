@@ -4,7 +4,7 @@
 
 #include "state.h"
 
-State::State(int timeStep,
+State::State(size_t timeStep,
              double xPosition,
              double yPosition,
              double velocity,
@@ -23,9 +23,9 @@ State::State(int timeStep,
         globalOrientation(globalOrientation),
         curvilinearOrientation(curvilinearOrientation),
         validStates(ValidStates{true, true, true, true,
-                                true, true, true}) {}
+                                true, true, true, true}) {}
 
-State::State(int timeStep,
+State::State(size_t timeStep,
              double xPosition,
              double yPosition,
              double velocity,
@@ -38,7 +38,7 @@ State::State(int timeStep,
         acceleration(acceleration),
         globalOrientation(orientation),
         validStates(ValidStates{true, true, true, true,
-                                false, false, true}) {}
+                                false, false, true, false}) {}
 
 double State::getXPosition() const {
     return xPosition;
@@ -116,11 +116,11 @@ void State::setCurvilinearOrientation(double theta) {
     curvilinearOrientation = theta;
 }
 
-int State::getTimeStep() const {
+size_t State::getTimeStep() const {
     return timeStep;
 }
 
-void State::setTimeStep(int time) {
+void State::setTimeStep(size_t time) {
     timeStep = time;
 }
 

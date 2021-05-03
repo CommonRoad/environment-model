@@ -4,9 +4,9 @@
 
 #include "python_interface.h"
 #include "translate_python_types.h"
-#include "predicates/safe_distance_predicate.h"
+#include "predicates/braking/safe_distance_predicate.h"
 
-uint8_t py_registerScenario(const py::int_ &scenarioId, const py::int_ &timeStep, const py::handle &py_laneletNetwork,
+uint8_t py_registerScenario(const size_t scenarioId, const size_t timeStep, const py::handle &py_laneletNetwork,
                             const py::list &py_obstacles, const py::list &py_egoVehicles) {
 
     auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
@@ -19,35 +19,35 @@ uint8_t py_registerScenario(const py::int_ &scenarioId, const py::int_ &timeStep
                                                      tempTrafficSignContainer, tempTrafficLightContainer);
     auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
     for (const auto &obs : tempObstacleContainer) {
-        for (int i = 0; i < obs->getTrajectoryLength(); ++i) {
+        for (unsigned long i = 0; i < obs->getTrajectoryLength(); ++i) {
             obs->setOwnLane(roadNetwork->getLanes(), i);
             obs->setReferenceLane(obs->getOwnLane());
         }
     }
     auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles);
     for (const auto &obs : tempEgoVehicleContainer) {
-        for (int i = 0; i < obs->getTrajectoryLength(); ++i) {
+        for (unsigned long i = 0; i < obs->getTrajectoryLength(); ++i) {
             obs->setOwnLane(roadNetwork->getLanes(), i);
             obs->setReferenceLane(obs->getOwnLane());
         }
     }
 
-    PredicateEvaluation *eval = PredicateEvaluation::getInstance();
+    std::shared_ptr<PredicateEvaluation> eval = PredicateEvaluation::getInstance();
 
-    return eval->registerScenario(py::cast<int>(scenarioId), py::cast<int>(timeStep), roadNetwork,
+    return eval->registerScenario(scenarioId, timeStep, roadNetwork,
                                   tempObstacleContainer, tempEgoVehicleContainer);
 }
 
-bool py_safe_distance_boolean_evaluation(const py::int_ &scenarioId,
-                                         const py::int_& timeStep,
-                                         const py::int_ &py_egoVehicleId,
+bool py_safe_distance_boolean_evaluation(const size_t scenarioId,
+                                         const size_t timeStep,
+                                         const size_t py_egoVehicleId,
                                          const py::list &py_obstacleIds){
     SafeDistancePredicate pred;
-    PredicateEvaluation *predicateEvaluation = PredicateEvaluation::getInstance();
+    std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
     auto world = predicateEvaluation->findWorld(scenarioId);
     return pred.booleanEvaluation(timeStep, world,
-                                  world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0),
-                                  world->findObstacle(py::cast<int>(py_egoVehicleId)));
+                                  world->findObstacle(py_egoVehicleId),
+                                  world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
 }
 
 std::vector<int> createVectorFromPyList(const py::list& list){
@@ -57,4 +57,13 @@ std::vector<int> createVectorFromPyList(const py::list& list){
         vec.emplace_back(py::cast<int>(elem));
     }
     return vec;
+}
+
+bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double lonPosP,
+                                                         double velocityK, double velocityP,
+                                                         double minAccelerationK,
+                                                         double minAccelerationP,
+                                                         double tReact){
+  SafeDistancePredicate pred;
+  return pred.booleanEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK, minAccelerationP, tReact);
 }
