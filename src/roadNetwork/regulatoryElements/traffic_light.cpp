@@ -21,7 +21,7 @@ std::vector<TrafficLightCycleElement> TrafficLight::getCycle() const { return cy
 TrafficLightCycleElement TrafficLight::getElementAtTime(int time) {
     time += offset;
     TrafficLightCycleElement current = cycle.front();
-    int i = 0;
+    unsigned long i = 0;
     while (time > 0) {
         if (i >= cycle.size()) {
             i = 0;

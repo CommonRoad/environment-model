@@ -1,3 +1,5 @@
+set(LIBRARY_NAME env_model)
+
 set(ENV_MODEL_SRC_FILES
         roadNetwork/road_network.cpp
         roadNetwork/lanelet/lanelet.cpp
@@ -28,10 +30,10 @@ set(ENV_MODEL_SRC_FILES
         )
 
 # Create environment model library
-add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
+add_library(${LIBRARY_NAME} SHARED ${ENV_MODEL_SRC_FILES})
 
-target_include_directories(env_model PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
-target_link_libraries(env_model PUBLIC
+target_include_directories(${LIBRARY_NAME} PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
+target_link_libraries(${LIBRARY_NAME} PUBLIC
         ${CRCCOSY_LIBRARY}
         Boost::filesystem
         Boost::program_options
@@ -41,7 +43,7 @@ target_link_libraries(env_model PUBLIC
 # Create environment model test node
 add_executable(env_model_example_node interfaces/standalone/main.cpp)
 
-target_link_libraries(env_model_example_node PRIVATE env_model)
+target_link_libraries(env_model_example_node PRIVATE ${LIBRARY_NAME})
 
 
 # add pybind module
@@ -50,4 +52,18 @@ pybind11_add_module(cpp_env_model
         interfaces/pybind/python_interface.h
         interfaces/pybind/translate_python_types.cpp
         interfaces/pybind/translate_python_types.h)
-target_link_libraries(cpp_env_model PRIVATE env_model)
+target_link_libraries(cpp_env_model PRIVATE ${LIBRARY_NAME})
+
+# this adds many warnings to the build. They usually help to find some bugs
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    target_compile_options(env_model_example_node PUBLIC -Wall -Wextra -Wconversion -pedantic
+            -Wfatal-errors)
+    target_compile_options(${LIBRARY_NAME} PUBLIC -Wall -Wextra -Wconversion
+            -pedantic -Wfatal-errors)
+endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    target_compile_options(${LIBRARY_NAME} PUBLIC /W3 /WX)
+    target_compile_options(HW01Main PUBLIC /W3 /WX)
+endif()
+
+

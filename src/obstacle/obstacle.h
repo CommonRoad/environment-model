@@ -286,7 +286,7 @@ public:
      *
      * @return Length of trajectory prediction.
     */
-    [[nodiscard]] int getTrajectoryLength();
+    [[nodiscard]] unsigned long getTrajectoryLength();
 
     /**
      * Computes the maximum longitudinal front position of obstacle (for rectangle shapes)

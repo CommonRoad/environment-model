@@ -195,7 +195,7 @@ private:
     ValidStates validStates{false, false,         //**< set of states which are already set and therefore are valid */
                             false, false,
                             false, false,
-                            false};
+                            false, false};
     int timeStep{0};                                                //**< time step of the state variables */
 };
 

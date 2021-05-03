@@ -127,7 +127,7 @@ void Obstacle::setReferenceLane(const std::shared_ptr<Lane> &lane) { referenceLa
 
 std::map<int, std::shared_ptr<State>> Obstacle::getTrajectoryPrediction() const { return trajectoryPrediction; }
 
-int Obstacle::getTrajectoryLength() { return trajectoryPrediction.size(); }
+unsigned long Obstacle::getTrajectoryLength() { return trajectoryPrediction.size(); }
 
 polygon_type Obstacle::getOccupancyPolygonShape(int timeStep) {
     std::vector<vertex> boundingRectangleVertices;

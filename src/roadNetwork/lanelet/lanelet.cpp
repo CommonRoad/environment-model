@@ -160,8 +160,8 @@ void Lanelet::constructOuterPolygon() {
 }
 
 void Lanelet::createCenterVertices() {
-    int numVertices = leftBorder.size();
-    for (int i = 0; i < numVertices; i++) {
+    unsigned long numVertices = leftBorder.size();
+    for (unsigned long i = 0; i < numVertices; i++) {
         vertex newVertex{};
         // calculate x and y values separately in order to minimize error
         newVertex.x = 0.5 * (leftBorder[i].x + rightBorder[i].x);
@@ -173,11 +173,11 @@ void Lanelet::createCenterVertices() {
 double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
     // find closest vertex to the given position
     std::vector<double> dif(centerVertices.size() - 1);
-    for (int i = 0; i < centerVertices.size() - 1; ++i) {
+    for (unsigned long i = 0; i < centerVertices.size() - 1; ++i) {
         vertex vert{centerVertices[i]};
         dif[i] = sqrt(pow(vert.x - positionX, 2) + pow(vert.y - positionY, 2));
     }
-    int closestIndex{static_cast<int>(std::min_element(dif.begin(), dif.end()) - dif.begin())};
+  unsigned long closestIndex{static_cast<unsigned long>(std::min_element(dif.begin(), dif.end()) - dif.begin())};
 
     // calculate orientation at vertex using its successor vertex
     vertex vert1{centerVertices[closestIndex]};

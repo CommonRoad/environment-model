@@ -18,7 +18,7 @@ public:
     */
     Circle() {
         radius = 0;
-        center = vertex{.x = 0, .y = 0};
+        center = vertex{0, 0};
     }
 
     /**

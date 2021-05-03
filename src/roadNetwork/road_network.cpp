@@ -91,12 +91,12 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
                 std::back_inserter(relevantLanelets));
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for (auto la : relevantLanelets)
-        lanelets.push_back(findLaneletById(la.second));
+        lanelets.push_back(findLaneletById(static_cast<int>(la.second)));
 
     // check intersection with relevant lanelets
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
 #pragma omp parallel for schedule(guided) shared(lanelets, occupiedLanelets, polygonShape) default(none)
-    for (int i = 0; i < lanelets.size(); ++i) {
+    for (unsigned long i = 0; i < lanelets.size(); ++i) {
         std::shared_ptr<Lanelet> la{lanelets.at(i)};
         if (la->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED)) {
 #pragma omp critical
