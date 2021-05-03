@@ -28,11 +28,20 @@ std::vector<std::shared_ptr<Obstacle>> World::findObstacles(const std::vector<in
             if (id == obs->getId())
                 obstacleList.emplace_back(obs);
     }
-    return obstacleList;
+    for (const auto &id : obstacleIdList){
+      for (const auto &obs : egoVehicles)
+        if (id == obs->getId())
+          obstacleList.emplace_back(obs);
+    }
+
+  return obstacleList;
 }
 
-std::shared_ptr<Obstacle> World::findObstacle(int obstacleId) const {
+std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
     for (const auto &obs : obstacles)
         if (obstacleId == obs->getId())
             return obs;
+    for (const auto &obs : egoVehicles)
+      if (obstacleId == obs->getId())
+        return obs;
 }

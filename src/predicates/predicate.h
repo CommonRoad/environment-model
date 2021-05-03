@@ -39,7 +39,7 @@ public:
      * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Boolean indicating satisfaction of the predicate.
      */
-    virtual bool booleanEvaluation(int timeStep,
+    virtual bool booleanEvaluation(size_t timeStep,
                                    const std::shared_ptr<World>& world,
                                    const std::shared_ptr<Obstacle>& obstacleK,
                                    const std::shared_ptr<Obstacle>& obstacleP) = 0;
@@ -53,7 +53,7 @@ public:
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
-    virtual double robustEvaluation(int timeStep,
+    virtual double robustEvaluation(size_t timeStep,
                                     const std::shared_ptr<World>& world,
                                     const std::shared_ptr<Obstacle>& obstacleK,
                                     const std::shared_ptr<Obstacle>& obstacleP) = 0;
@@ -68,7 +68,7 @@ public:
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      * @return Constraints defined by the predicate.
      */
-    virtual Constraint constraintEvaluation(int timeStep,
+    virtual Constraint constraintEvaluation(size_t timeStep,
                                             const std::shared_ptr<World>& world,
                                             const std::shared_ptr<Obstacle>& obstacleK,
                                             const std::shared_ptr<Obstacle>& obstacleP) = 0;
@@ -81,7 +81,7 @@ public:
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      */
-    bool statisticBooleanEvaluation(int timeStep,
+    bool statisticBooleanEvaluation(size_t timeStep,
                                     const std::shared_ptr<World>& world,
                                     const std::shared_ptr<Obstacle>& obstacleK,
                                     const std::shared_ptr<Obstacle>& obstacleP);

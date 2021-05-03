@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(xmlFilePath);
 
     for (const auto &obs : obstacles) {
-        for (int i = 0; i < obs->getTrajectoryLength(); ++i) {
+        for (size_t i = 0; i < obs->getTrajectoryLength(); ++i) {
             obs->setOwnLane(roadNetwork->getLanes(), i);
             obs->setReferenceLane(obs->getOwnLane());
         }

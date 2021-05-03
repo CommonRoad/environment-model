@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_IN_SAME_LANE_H
 #define ENV_MODEL_IN_SAME_LANE_H
 
-#include "predicate.h"
+#include "predicates/predicate.h"
 
 class InSameLanePredicate : public Predicate{
     /**
@@ -17,17 +17,17 @@ class InSameLanePredicate : public Predicate{
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Constraints defined by the predicate.
      */
-    bool booleanEvaluation(int timeStep,
+    bool booleanEvaluation(size_t timeStep,
                                     const std::shared_ptr<World>& world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
                                     const std::shared_ptr<Obstacle> &obstacleP);
 
     double
-    robustEvaluation(int timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                      const std::shared_ptr<Obstacle> &obstacleP) override;
 
     Constraint
-    constraintEvaluation(int timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                          const std::shared_ptr<Obstacle> &obstacleP) override;
 
 };

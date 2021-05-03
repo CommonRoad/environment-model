@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_SAFE_DISTANCE_PREDICATE_H
 #define ENV_MODEL_SAFE_DISTANCE_PREDICATE_H
 
-#include "predicate.h"
+#include "predicates/predicate.h"
 
 /**
  * Predicate for the safe distance between two vehicles.
@@ -26,7 +26,7 @@ public:
     computeSafeDistance(double velocityK, double velocityP, double minAccelerationK, double minAccelerationP,
                         double tReact);
 
-    bool booleanEvaluation(int timeStep,
+    bool booleanEvaluation(size_t timeStep,
                            const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
                            const std::shared_ptr<Obstacle> &obstacleP) override;
@@ -55,7 +55,7 @@ public:
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Constraints defined by the predicate.
      */
-    Constraint constraintEvaluation(int timeStep,
+    Constraint constraintEvaluation(size_t timeStep,
                                     const std::shared_ptr<World>& world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
                                     const std::shared_ptr<Obstacle> &obstacleP) override;
@@ -85,7 +85,7 @@ public:
      * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
-    double robustEvaluation(int timeStep,
+    double robustEvaluation(size_t timeStep,
                             const std::shared_ptr<World>& world,
                             const std::shared_ptr<Obstacle> &obstacleK,
                             const std::shared_ptr<Obstacle> &obstacleP) override;

@@ -71,7 +71,8 @@ setup(
     author_email='sebastian.maierhofer@tum.de',
     description='CommonRoad C++ Environment Model',
     packages=find_packages(exclude=("tests", "docs", "build", "ci", "cmake", "external", "cmake-build-debug",
-                                    "cmake-build-debug-coverage", "cmake-build-release", "cmake-build-release-coverage")),
+                                    "cmake-build-debug-coverage", "cmake-build-release",
+                                    "cmake-build-release-coverage", "env_model_pybind.egg-info"),),
   #  packages=find_packages(exclude=("tests", "docs", "jupyter")),
   #  include_package_data=True,
    # install_requires=[

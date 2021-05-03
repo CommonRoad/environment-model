@@ -4,7 +4,7 @@
 
 #include "in_front_of_predicate.h"
 
-bool InFrontOfPredicate::booleanEvaluation(int timeStep,
+bool InFrontOfPredicate::booleanEvaluation(size_t timeStep,
                                   const std::shared_ptr<World> &world,
                                   const std::shared_ptr<Obstacle> &obstacleK,
                                   const std::shared_ptr<Obstacle> &obstacleP) {
@@ -15,7 +15,7 @@ bool InFrontOfPredicate::booleanEvaluation(double lonPositionK, double lonPositi
     return robustEvaluation(lonPositionK, lonPositionP) > 0;
 }
 
-Constraint InFrontOfPredicate::constraintEvaluation(int timeStep, const std::shared_ptr<World> &world,
+Constraint InFrontOfPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP) {
     return { obstacleK->frontS(timeStep) };
@@ -25,7 +25,7 @@ Constraint InFrontOfPredicate::constraintEvaluation(double lonPositionK, double 
     return { lonPositionK };
 }
 
-double InFrontOfPredicate::robustEvaluation(int timeStep, const std::shared_ptr<World> &world,
+double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP) {
     return obstacleK->frontS(timeStep) - obstacleP->frontS(timeStep);

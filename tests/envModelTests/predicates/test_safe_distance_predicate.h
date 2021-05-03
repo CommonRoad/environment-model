@@ -7,9 +7,9 @@
 
 #include <gtest/gtest.h>
 #include "roadNetwork/road_network.h"
-#include "../envModelTests/interfaces/utility_functions.h"
+#include "../interfaces/utility_functions.h"
 #include "obstacle/obstacle.h"
-#include "predicates/safe_distance_predicate.h"
+#include "predicates/braking/safe_distance_predicate.h"
 #include "world.h"
 
 class SafeDistancePredicateTest : public testing::Test {
