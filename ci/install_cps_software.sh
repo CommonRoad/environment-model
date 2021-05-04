@@ -5,7 +5,7 @@ git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/"
 git clone --branch development git@gitlab.lrz.de:cps/commonroad-drivability-checker.git "$HOME"/commonroad-drivability-checker
 cd "$HOME"/commonroad-drivability-checker/ || exit
 bash build.sh -e /opt/conda/envs/commonroad -v 3.7 --cgal --serializer -i -j 6
-cd build/lib/commonroad-dc/
+cd build/lib/commonroad_dc/
 mv libcrccosy.a.a ../../../
 cd ../../../
 cd "$CI_PROJECT_DIR" || exit
