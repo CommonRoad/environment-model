@@ -6,6 +6,6 @@ git clone --branch development git@gitlab.lrz.de:cps/commonroad-drivability-chec
 cd "$HOME"/commonroad-drivability-checker/ || exit
 bash build.sh -e /opt/conda/envs/commonroad -v 3.7 --cgal --serializer -i -j 6
 cd build/lib/commonroad_dc/
-mv libcrccosy.a.a ../../../
+mv libcrccosy.a ../../../
 cd ../../../
 cd "$CI_PROJECT_DIR" || exit
