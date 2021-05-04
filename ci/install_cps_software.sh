@@ -2,7 +2,7 @@
 git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
 
 # curvilinear-coordinate-system
-git clone --branch cpp_traffic_rule_monitor git@gitlab.lrz.de:cps/commonroad-curvilinear-coordinate-system.git "$HOME"/commonroad-curvilinear-coordinate-system
+git clone --branch development git@gitlab.lrz.de:cps/commonroad-curvilinear-coordinate-system.git "$HOME"/commonroad-curvilinear-coordinate-system
 cd "$HOME"/commonroad-curvilinear-coordinate-system/ || exit
 mkdir -p build
 cd build || exit
