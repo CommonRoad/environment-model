@@ -31,7 +31,10 @@ set(ENV_MODEL_SRC_FILES
 
 # Create environment model library
 add_library(${LIBRARY_NAME} SHARED ${ENV_MODEL_SRC_FILES})
-
+target_compile_features(${LIBRARY_NAME}
+        PUBLIC cxx_lambdas cxx_auto_type
+        PRIVATE cxx_lambdas cxx_auto_type)
+set_property(TARGET ${LIBRARY_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_include_directories(${LIBRARY_NAME} PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
 target_link_libraries(${LIBRARY_NAME} PUBLIC
         ${CRCCOSY_LIBRARY}

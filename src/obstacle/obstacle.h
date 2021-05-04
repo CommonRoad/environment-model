@@ -374,11 +374,11 @@ private:
     bool isStatic { false };                                                            //**< true if Obstacle is static */
     std::shared_ptr<State> currentState;                                                //**< pointer to current state of obstacle */
     ObstacleType obstacleType { ObstacleType::unknown };                                //**< CommonRoad obstacle type */
-    double vMax{};                                                                      //**< maximum velocity of obstacle in m/s */
-    double aMax{};                                                                      //**< maximum absolute acceleration of obstacle in [m/s^2] */
-    double aMaxLong{};                                                                  //**< maximal longitudinal acceleration of obstacle in [m/s^2] */
-    double aMinLong{};                                                                  //**< minimal longitudinal acceleration of obstacle in [m/s^2] */
-    double reactionTime{};                                                              //**< reaction time of obstacle in [s] */
+    double vMax { 50.0 } ;                                                                      //**< maximum velocity of obstacle in m/s */
+    double aMax { 3.0 };                                                                      //**< maximum absolute acceleration of obstacle in [m/s^2] */
+    double aMaxLong { 3.0 } ;                                                                  //**< maximal longitudinal acceleration of obstacle in [m/s^2] */
+    double aMinLong { -10.0 };                                                                  //**< minimal longitudinal acceleration of obstacle in [m/s^2] */
+    double reactionTime { 0.5 };                                                              //**< reaction time of obstacle in [s] */
     std::map<size_t, std::shared_ptr<State>> trajectoryPrediction{};                    //**< trajectory prediction of the obstacle */
     std::map<size_t, std::shared_ptr<State>> history{};                                 //**< previous states of the obstacle */
     Rectangle geoShape;   // TODO make general                                          //**< shape of the obstacle */
