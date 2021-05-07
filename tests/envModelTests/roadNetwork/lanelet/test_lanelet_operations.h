@@ -7,10 +7,9 @@
 
 #include "../test_road_network.h"
 
-class LaneletOperationsTest : public::RoadNetworkTestInitialization, public testing::Test {
-private:
+class LaneletOperationsTest : public ::RoadNetworkTestInitialization, public testing::Test {
+  private:
     void SetUp() override;
 };
 
-
-#endif //ENV_MODEL_TEST_LANELET_OPERATIONS_H
+#endif // ENV_MODEL_TEST_LANELET_OPERATIONS_H

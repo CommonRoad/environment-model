@@ -6,15 +6,15 @@
 #define ENV_MODEL_LANELET_OPERATIONS_H
 
 #include "../../auxiliaryDefs/types_and_definitions.h"
-#include "lanelet.h"
 #include "lane.h"
+#include "lanelet.h"
 
 /**
  * Matches a string to a lanelet type
  *
  * @param string for which lanelet type should be extracted
  * @return lanelet type which corresponds to string or unknown type if string does not match
-*/
+ */
 LaneletType matchStringToLaneletType(std::string type);
 
 /**
@@ -22,7 +22,7 @@ LaneletType matchStringToLaneletType(std::string type);
  *
  * @param string for which line marking should be extracted
  * @return line marking which corresponds to string or unknown type if string does not match
-*/
+ */
 LineMarking matchStringToLineMarking(std::string type);
 
 /**
@@ -31,8 +31,8 @@ LineMarking matchStringToLineMarking(std::string type);
  * @param curLanelet start lanelet for which concatenation should be started
  * @param type specifies the lanelet type the concatenated lanelets should have in common
  * @return lane spanned by concatenated lanelets
-*/
+ */
 std::shared_ptr<Lane> combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet,
                                                                     LaneletType type);
 
-#endif //ENV_MODEL_LANELET_OPERATIONS_H
+#endif // ENV_MODEL_LANELET_OPERATIONS_H

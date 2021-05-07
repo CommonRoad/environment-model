@@ -8,15 +8,15 @@
 #include "../lanelet/test_lanelet.h"
 #include "roadNetwork/lanelet/lane.h"
 
-class LaneTestInitialization : public LaneletTestInitialization{
-protected:
+class LaneTestInitialization : public LaneletTestInitialization {
+  protected:
     std::shared_ptr<Lane> laneOne;
     void setUpLane();
 };
 
 class LaneTest : public LaneTestInitialization, public testing::Test {
-private:
+  private:
     void SetUp() override;
 };
 
-#endif //ENV_MODEL_TEST_LANE_H
+#endif // ENV_MODEL_TEST_LANE_H

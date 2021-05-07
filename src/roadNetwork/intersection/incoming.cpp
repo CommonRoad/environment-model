@@ -18,8 +18,9 @@ void Incoming::setSuccessorsRight(const std::vector<std::shared_ptr<Lanelet>> &s
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsStraight() const { return successorsStraight; }
 
-void Incoming::setSuccessorsStraight(
-        const std::vector<std::shared_ptr<Lanelet>> &sucStraight) { successorsStraight = sucStraight; }
+void Incoming::setSuccessorsStraight(const std::vector<std::shared_ptr<Lanelet>> &sucStraight) {
+    successorsStraight = sucStraight;
+}
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsLeft() const { return successorsLeft; }
 
@@ -37,19 +38,14 @@ void Incoming::setStraightOutgoings(const std::vector<std::shared_ptr<Lanelet>> 
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getLeftOutgoings() const { return leftOutgoings; }
 
-void Incoming::setLeftOutgoings(const std::vector<std::shared_ptr<Lanelet>> &left) {
-    leftOutgoings = left;
-}
+void Incoming::setLeftOutgoings(const std::vector<std::shared_ptr<Lanelet>> &left) { leftOutgoings = left; }
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getRightOutgoings() const { return rightOutgoings; }
 
-void Incoming::setRightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &right) {
-    rightOutgoings = right;
-}
+void Incoming::setRightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &right) { rightOutgoings = right; }
 
-const std::vector<std::shared_ptr<Lanelet>> &Incoming::getOncomings() const  { return oncomings; }
+const std::vector<std::shared_ptr<Lanelet>> &Incoming::getOncomings() const { return oncomings; }
 
 void Incoming::setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomingLanelets) {
     oncomings = oncomingLanelets;
 }
-

@@ -19,4 +19,3 @@ void StopLine::setTrafficLight(std::shared_ptr<TrafficLight> light) { trafficLig
 LineMarking StopLine::getLineMarking() const { return lineMarking; }
 
 void StopLine::setLineMarking(LineMarking marking) { lineMarking = marking; }
-

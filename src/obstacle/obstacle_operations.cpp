@@ -29,4 +29,3 @@ ObstacleType matchStringToObstacleType(std::string type) {
     else
         return ObstacleType::unknown;
 }
-

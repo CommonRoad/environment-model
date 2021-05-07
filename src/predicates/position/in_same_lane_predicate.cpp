@@ -15,7 +15,6 @@ bool InSameLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_p
         }
     }
     return false;
-
 }
 
 double InSameLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

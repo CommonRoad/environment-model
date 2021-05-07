@@ -11,10 +11,10 @@
  * Class representing a CommonRoad traffic light.
  */
 class TrafficLight {
-public:
+  public:
     /**
-    * Default Constructor without parameters for a traffic light.
-    */
+     * Default Constructor without parameters for a traffic light.
+     */
     TrafficLight();
 
     /**
@@ -66,11 +66,11 @@ public:
      */
     void addCycleElement(TrafficLightCycleElement ce);
 
-     /**
-      * Getter for traffic light ID.
-      *
-      * @return ID of traffic light.
-      */
+    /**
+     * Getter for traffic light ID.
+     *
+     * @return ID of traffic light.
+     */
     [[nodiscard]] int getId() const;
 
     /**
@@ -122,7 +122,7 @@ public:
      * @param dir String representing turning direction.
      * @return Turning direction enum value.
      */
-    [[nodiscard]] static TurningDirections matchTurningDirections(const std::string& dir);
+    [[nodiscard]] static TurningDirections matchTurningDirections(const std::string &dir);
 
     /**
      * Matches a traffic light state given as string to the corresponding enum value.
@@ -130,14 +130,14 @@ public:
      * @param trafficLightState String representing traffic light state.
      * @return Traffic light state enum value.
      */
-    [[nodiscard]] static TrafficLightState matchTrafficLightState(const std::string& trafficLightState);
+    [[nodiscard]] static TrafficLightState matchTrafficLightState(const std::string &trafficLightState);
 
-    int id;                                         //**< unique ID of traffic light */
-    std::vector<TrafficLightCycleElement> cycle;    //**< cycle of traffic light */
-    int offset;                                     //**< time offset of traffic light */
-    TurningDirections direction;                    //**< direction for which traffic light is valid */
-    bool active{};                                  //**< boolean indicating whether traffic light is valid */
-    vertex position{};                              //**< position of traffic light */
+    int id;                                      //**< unique ID of traffic light */
+    std::vector<TrafficLightCycleElement> cycle; //**< cycle of traffic light */
+    int offset;                                  //**< time offset of traffic light */
+    TurningDirections direction;                 //**< direction for which traffic light is valid */
+    bool active{};                               //**< boolean indicating whether traffic light is valid */
+    vertex position{};                           //**< position of traffic light */
 };
 
-#endif //ENV_MODEL_TRAFFIC_LIGHT_H
+#endif // ENV_MODEL_TRAFFIC_LIGHT_H

@@ -5,23 +5,21 @@
 #include "road_network.h"
 #include "lanelet/lanelet_operations.h"
 
-#include <utility>
 #include <boost/geometry.hpp>
-#include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/box.hpp>
+#include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
+#include <utility>
 
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network,
                          std::vector<std::shared_ptr<Intersection>> inters,
-                         std::vector<std::shared_ptr<TrafficSign>> signs ,
-                         std::vector<std::shared_ptr<TrafficLight>> lights ) :
-                         laneletNetwork(network),
-                         intersections(std::move(inters)),
-                         trafficSigns(std::move(signs)),
-                         trafficLights(std::move(lights)){
+                         std::vector<std::shared_ptr<TrafficSign>> signs,
+                         std::vector<std::shared_ptr<TrafficLight>> lights)
+    : laneletNetwork(network), intersections(std::move(inters)), trafficSigns(std::move(signs)),
+      trafficLights(std::move(lights)) {
     // construct Rtree out of lanelets
     for (const std::shared_ptr<Lanelet> &la : network)
         rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
@@ -57,7 +55,7 @@ void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>> &netwo
                     startLanelets.push_back(la);
                     break;
                 }
-                break;  // there exists at least one predecessor with same classifying type (e.g., at a merge)
+                break; // there exists at least one predecessor with same classifying type (e.g., at a merge)
             }
         }
     }
@@ -87,8 +85,7 @@ LaneletType RoadNetwork::extractClassifyingLaneletType(const std::shared_ptr<Lan
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
     // find all relevant lanelets by making use of the rtree
     std::vector<value> relevantLanelets;
-    rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())),
-                std::back_inserter(relevantLanelets));
+    rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())), std::back_inserter(relevantLanelets));
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for (auto la : relevantLanelets)
         lanelets.push_back(findLaneletById(static_cast<int>(la.second)));
@@ -136,30 +133,34 @@ void RoadNetwork::setDynamicIntersectionLabels() {
     for (const auto &inters : intersections) {
         for (const auto &incom : inters->getIncomings()) {
             incom->setLeftOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsLeft()));
-            incom->setRightOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsRight()));
-            incom->setStraightOutgoings(extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsStraight()));
+            incom->setRightOutgoings(
+                extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsRight()));
+            incom->setStraightOutgoings(
+                extractOutgoingsFromIncoming(intersectionLaneletType, incom->getSuccessorsStraight()));
         }
     }
 }
 
 std::vector<std::shared_ptr<Lanelet>>
 RoadNetwork::extractOutgoingsFromIncoming(const LaneletType &intersectionLaneletType,
-                                              const std::vector<std::shared_ptr<Lanelet>> &incomingSuccessors) {
+                                          const std::vector<std::shared_ptr<Lanelet>> &incomingSuccessors) {
     std::vector<std::shared_ptr<Lanelet>> outgoings;
-    for ( const auto &inSuc : incomingSuccessors) {
+    for (const auto &inSuc : incomingSuccessors) {
         auto suc = inSuc;
-        while (!std::all_of(suc->getSuccessors().begin(), suc->getSuccessors().end(), [intersectionLaneletType](auto laSuc){ return laSuc->hasLaneletType(
-                intersectionLaneletType); }))
-            suc = suc->getSuccessors().at(0); //we assume only one successor
+        while (!std::all_of(
+            suc->getSuccessors().begin(), suc->getSuccessors().end(),
+            [intersectionLaneletType](auto laSuc) { return laSuc->hasLaneletType(intersectionLaneletType); }))
+            suc = suc->getSuccessors().at(0); // we assume only one successor
         outgoings.push_back(suc);
     }
     return outgoings;
 }
 
-std::shared_ptr<Incoming> RoadNetwork::incomingOfLanelet(const std::shared_ptr<Lanelet>& lanelet){
+std::shared_ptr<Incoming> RoadNetwork::incomingOfLanelet(const std::shared_ptr<Lanelet> &lanelet) {
     for (const auto &inter : intersections)
         for (const auto &inco : inter->getIncomings())
-            if (std::any_of(inco->getIncomingLanelets().begin(), inco->getIncomingLanelets().end(), [lanelet](const std::shared_ptr<Lanelet> &la){ return la->getId() == lanelet->getId(); }))
+            if (std::any_of(inco->getIncomingLanelets().begin(), inco->getIncomingLanelets().end(),
+                            [lanelet](const std::shared_ptr<Lanelet> &la) { return la->getId() == lanelet->getId(); }))
                 return inco;
     return nullptr;
 }

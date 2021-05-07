@@ -30,4 +30,4 @@ std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, do
 std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
                                                double refOrientation);
 
-#endif //ENV_MODEL_GEOMETRIC_OPERATIONS_H
+#endif // ENV_MODEL_GEOMETRIC_OPERATIONS_H

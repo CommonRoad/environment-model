@@ -5,12 +5,9 @@
 #ifndef ENV_MODEL_TEST_INPUT_H
 #define ENV_MODEL_TEST_INPUT_H
 
-#include <gtest/gtest.h>
 #include "utility_functions.h"
+#include <gtest/gtest.h>
 
-class InterfacesTest : public testing::Test {
+class InterfacesTest : public testing::Test {};
 
-};
-
-
-#endif //ENV_MODEL_TEST_INPUT_H
+#endif // ENV_MODEL_TEST_INPUT_H

@@ -7,18 +7,14 @@
 
 #include "test_incoming.h"
 
-
 class IntersectionTestInitialization : public IncomingTestInitialization {
-protected:
+  protected:
     void setUpIntersection();
 };
 
 class IntersectionTest : public IntersectionTestInitialization, public testing::Test {
-private:
+  private:
     void SetUp() override;
 };
 
-
-
-
-#endif //ENV_MODEL_TEST_INTERSECTION_H
+#endif // ENV_MODEL_TEST_INTERSECTION_H

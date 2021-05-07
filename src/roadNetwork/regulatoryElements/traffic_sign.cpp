@@ -16,13 +16,9 @@ void TrafficSign::setTrafficSignElement(const std::vector<std::shared_ptr<Traffi
     trafficSignElement = newTrafficSignElement;
 }
 
-bool TrafficSign::isVirtualElement() const {
-    return virtualElement;
-}
+bool TrafficSign::isVirtualElement() const { return virtualElement; }
 
-void TrafficSign::setVirtualElement(bool elem) {
-    virtualElement = elem;
-}
+void TrafficSign::setVirtualElement(bool elem) { virtualElement = elem; }
 
 std::vector<std::shared_ptr<TrafficSignElement>> TrafficSign::getTrafficSignElements() const {
     return trafficSignElement;

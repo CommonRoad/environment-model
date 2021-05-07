@@ -28,22 +28,18 @@ struct ValidStates {
     bool curvilinearOrientation;
 };
 
-struct PredicateParameters {
-
-};
+struct PredicateParameters {};
 
 struct PredicateStatistics {
-    double maxComputationTime { 0.0 };
-    double minComputationTime { 0.0 };
-    double totalComputationTime { 0.0 };
-    int numExecutions { 0 };
-    int numSatisfaction { 0 };
+    double maxComputationTime{0.0};
+    double minComputationTime{0.0};
+    double totalComputationTime{0.0};
+    int numExecutions{0};
+    int numSatisfaction{0};
 };
 
 struct Constraint {
     double realValuedConstraint;
 };
 
-
-#endif //ENV_MODEL_STRUCTS_H
-
+#endif // ENV_MODEL_STRUCTS_H

@@ -5,16 +5,15 @@
 #ifndef ENV_MODEL_TEST_GEOMETRIC_OPERATIONS_H
 #define ENV_MODEL_TEST_GEOMETRIC_OPERATIONS_H
 
-#include <gtest/gtest.h>
 #include "geometry/geometric_operations.h"
+#include <gtest/gtest.h>
 
 class GeometricOperationsTest : public testing::Test {
-private:
+  private:
     void SetUp() override;
 
-protected:
-    double epsilon { 0.000001 };
+  protected:
+    double epsilon{0.000001};
 };
 
-
-#endif //ENV_MODEL_TEST_GEOMETRIC_OPERATIONS_H
+#endif // ENV_MODEL_TEST_GEOMETRIC_OPERATIONS_H

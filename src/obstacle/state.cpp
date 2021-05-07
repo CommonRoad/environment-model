@@ -4,72 +4,40 @@
 
 #include "state.h"
 
-State::State(size_t timeStep,
-             double xPosition,
-             double yPosition,
-             double velocity,
-             double acceleration,
-             double globalOrientation,
-             double curvilinearOrientation,
-             double lonPosition,
-             double latPosition) :
-        timeStep(timeStep),
-        xPosition(xPosition),
-        yPosition(yPosition),
-        velocity(velocity),
-        acceleration(acceleration),
-        lonPosition(lonPosition),
-        latPosition(latPosition),
-        globalOrientation(globalOrientation),
-        curvilinearOrientation(curvilinearOrientation),
-        validStates(ValidStates{true, true, true, true,
-                                true, true, true, true}) {}
+State::State(size_t timeStep, double xPosition, double yPosition, double velocity, double acceleration,
+             double globalOrientation, double curvilinearOrientation, double lonPosition, double latPosition)
+    : timeStep(timeStep), xPosition(xPosition), yPosition(yPosition), velocity(velocity), acceleration(acceleration),
+      lonPosition(lonPosition), latPosition(latPosition), globalOrientation(globalOrientation),
+      curvilinearOrientation(curvilinearOrientation),
+      validStates(ValidStates{true, true, true, true, true, true, true, true}) {}
 
-State::State(size_t timeStep,
-             double xPosition,
-             double yPosition,
-             double velocity,
-             double acceleration,
-             double orientation) :
-        timeStep(timeStep),
-        xPosition(xPosition),
-        yPosition(yPosition),
-        velocity(velocity),
-        acceleration(acceleration),
-        globalOrientation(orientation),
-        validStates(ValidStates{true, true, true, true,
-                                false, false, true, false}) {}
+State::State(size_t timeStep, double xPosition, double yPosition, double velocity, double acceleration,
+             double orientation)
+    : timeStep(timeStep), xPosition(xPosition), yPosition(yPosition), velocity(velocity), acceleration(acceleration),
+      globalOrientation(orientation), validStates(ValidStates{true, true, true, true, false, false, true, false}) {}
 
-double State::getXPosition() const {
-    return xPosition;
-}
+double State::getXPosition() const { return xPosition; }
 
 void State::setXPosition(double x) {
     validStates.xPosition = true;
     xPosition = x;
 }
 
-double State::getYPosition() const {
-    return yPosition;
-}
+double State::getYPosition() const { return yPosition; }
 
 void State::setYPosition(double y) {
     validStates.yPosition = true;
     yPosition = y;
 }
 
-double State::getVelocity() const {
-    return velocity;
-}
+double State::getVelocity() const { return velocity; }
 
 void State::setVelocity(double vel) {
     validStates.velocity = true;
     State::velocity = vel;
 }
 
-double State::getAcceleration() const {
-    return acceleration;
-}
+double State::getAcceleration() const { return acceleration; }
 
 void State::setAcceleration(double acc) {
     validStates.acceleration = true;
@@ -98,34 +66,22 @@ void State::setLatPosition(double d) {
     latPosition = d;
 }
 
-double State::getGlobalOrientation() const {
-    return globalOrientation;
-}
+double State::getGlobalOrientation() const { return globalOrientation; }
 
 void State::setGlobalOrientation(double theta) {
     validStates.globalOrientation = true;
     globalOrientation = theta;
 }
 
-double State::getCurvilinearOrientation() const {
-    return curvilinearOrientation;
-}
+double State::getCurvilinearOrientation() const { return curvilinearOrientation; }
 
 void State::setCurvilinearOrientation(double theta) {
     validStates.curvilinearOrientation = true;
     curvilinearOrientation = theta;
 }
 
-size_t State::getTimeStep() const {
-    return timeStep;
-}
+size_t State::getTimeStep() const { return timeStep; }
 
-void State::setTimeStep(size_t time) {
-    timeStep = time;
-}
+void State::setTimeStep(size_t time) { timeStep = time; }
 
-const ValidStates &State::getValidStates() const {
-    return validStates;
-}
-
-
+const ValidStates &State::getValidStates() const { return validStates; }

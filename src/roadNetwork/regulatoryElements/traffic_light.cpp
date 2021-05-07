@@ -4,7 +4,7 @@
 
 #include "traffic_light.h"
 
-TrafficLight::TrafficLight() : id(0), offset(0), direction(TurningDirections::all), active(false){ }
+TrafficLight::TrafficLight() : id(0), offset(0), direction(TurningDirections::all), active(false) {}
 
 void TrafficLight::setId(const int num) { id = num; }
 
@@ -47,7 +47,7 @@ void TrafficLight::setPosition(vertex pos) { position = pos; }
 
 vertex TrafficLight::getPosition() const { return position; }
 
-TurningDirections TrafficLight::matchTurningDirections(const std::string& dir) {
+TurningDirections TrafficLight::matchTurningDirections(const std::string &dir) {
     if (dir == "right")
         return TurningDirections::right;
     else if (dir == "straight")
@@ -64,7 +64,7 @@ TurningDirections TrafficLight::matchTurningDirections(const std::string& dir) {
         return TurningDirections::all;
 }
 
-TrafficLightState TrafficLight::matchTrafficLightState(const std::string& trafficLightState){
+TrafficLightState TrafficLight::matchTrafficLightState(const std::string &trafficLightState) {
     if (trafficLightState == "green")
         return TrafficLightState::green;
     else if (trafficLightState == "yellow")
@@ -72,5 +72,5 @@ TrafficLightState TrafficLight::matchTrafficLightState(const std::string& traffi
     else if (trafficLightState == "red_yellow")
         return TrafficLightState::red_yellow;
     else
-        return TrafficLightState::red; //default case -> consider also trafficLightState == "red"
+        return TrafficLightState::red; // default case -> consider also trafficLightState == "red"
 }

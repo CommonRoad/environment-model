@@ -2,16 +2,18 @@ import numpy as np
 import cpp_env_model
 
 from commonroad.geometry.shape import Rectangle
-from commonroad.scenario.lanelet import LaneletNetwork
-from commonroad.scenario.obstacle import State, ObstacleType
+from commonroad.scenario.lanelet import LaneletNetwork, Lanelet
+from commonroad.scenario.obstacle import State, ObstacleType, DynamicObstacle
 from commonroad.prediction.prediction import TrajectoryPrediction, Trajectory
 
-from crmonitor.common.helper import *
 
-
-right_vertices = np.array([[0, 0], [10, 0], [20, 0], [30, 0], [40, 0], [50, 0], [60, 0], [70, 0], [80, 0]])
-left_vertices = np.array([[0, 4], [10, 4], [20, 4], [30, 4], [40, 4], [50, 4], [60, 4], [70, 4], [80, 4]])
-center_vertices = np.array([[0, 2], [10, 2], [20, 2], [30, 2], [40, 2], [50, 2], [60, 2], [70, 2], [80, 2]])
+center_vertices = np.array([[-20, 0], [-10, 0], [0, 0], [10, 0], [20, 0], [30, 0], [40, 0], [50, 0], [60, 0], [70, 0],
+                            [80, 0]])
+right_vertices = np.array([[-20, -2], [-10, -2], [0, -2], [10, -2], [20, -2], [30, -2], [40, -2], [50, -2], [60, -2],
+                           [70, -2],
+                           [80, -2]])
+left_vertices = np.array([[-20, 2], [-10, 2], [0, 2], [10, 2], [20, 2], [30, 2], [40, 2], [50, 2], [60, 2], [70, 2],
+                          [80, 2]])
 lanelet_id = 1
 lanelet_network = LaneletNetwork()
 lanelet_network.add_lanelet(Lanelet(left_vertices, center_vertices, right_vertices, lanelet_id))

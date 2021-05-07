@@ -1,31 +1,59 @@
 stages:
-  - build
+  - static-test
+  - compile
   - test
+  #  - sanitizer TODO
+  - coverage
+  - docs
 
-image: $CI_REGISTRY/maierhofer/environment-model:v0.2.1
+
+image: $CI_REGISTRY/maierhofer/environment-model/ci:0.1.0
 
 before_script:
-  - conda create -n commonroad python=3.7
+  - conda create -n commonroad python=3.8
   - source activate commonroad
   - bash ./ci/install_cps_software.sh
 
-
-build-library:
-  stage: build
+### static test ###
+clang-format:
+  stage: static-test
   script:
+    bash ./ci/clang-format.sh
+
+clang-tidy:
+  stage: static-test
+  script:
+    bash ./ci/clang-tidy.sh
+
+
+### build project ###
+build-clang:
+  stage: compile
+  script:
+    - export CC=clang
+    - export CXX=clang++
+    - mkdir build && cd build
+    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - make env_model -j4
+
+build-gcc:
+  stage: compile
+  script:
+    - export CC=gcc
+    - export CXX=g++
     - mkdir build && cd build
     - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
 
 build-standalone:
-  stage: build
+  stage: compile
   script:
     - mkdir build && cd build
     - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
     - make env_model_example_node -j4
 
 build-test:
-  stage: build
+  stage: compile
   script:
     - mkdir build && cd build
     - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Debug ..
@@ -38,7 +66,7 @@ build-test:
     expire_in: 20 minutes
 
 build-run-coverage:
-  stage: build
+  stage: compile
   script:
     - mkdir build && cd build
     - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug ..
@@ -50,25 +78,33 @@ build-run-coverage:
     expire_in: 20 minutes
 
 
+### tests ###
 test:
   stage: test
   script:
     - ./env_model_test --gtest_output="xml:report.xml"
+    - pip install tox coverage
+    - pip install -r ./requirements.txt
+    - python setup.py install --crccosy "$HOME"/commonroad-drivability-checker
+    - coverage run -m pytest tests/envModelTests/pybind
+    - coverage report -m || true
   dependencies:
     - build-test
   artifacts:
     reports:
       junit: ./report.xml
 
-docs:
-  stage: test
-  script:
-    - cd build
-    - make doc_doxygen ..
-
+### coverage ###
 publish-coverage:
-  stage: test
+  stage: coverage
   script:
     - gcovr -e src/interfaces/commonroad/pugi_xml/pugixml.hpp -e src/interfaces/commonroad/pugi_xml/pugixml.cpp -e src/interfaces/standalone/main.cpp -e external/ -e 'cmake-(.+/)?/' -e tests/ -e build/CMakeFiles/
   dependencies:
     - build-run-coverage
+
+### create documentation ###
+docs:
+  stage: docs
+  script:
+    - cd build
+    - make doc_doxygen ..

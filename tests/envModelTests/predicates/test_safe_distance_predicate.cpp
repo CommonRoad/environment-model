@@ -12,17 +12,16 @@ void SafeDistancePredicateTest::SetUp() {
     std::shared_ptr<State> stateOtherOne = std::make_shared<State>(1, 30, 0, 0, 0, 0, 0, 30, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
-            std::pair<int, std::shared_ptr<State>>(0, stateEgoZero),
-            std::pair<int, std::shared_ptr<State>>(1, stateEgoOne)};
+        std::pair<int, std::shared_ptr<State>>(0, stateEgoZero),
+        std::pair<int, std::shared_ptr<State>>(1, stateEgoOne)};
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionOtherVehicle{
-            std::pair<int, std::shared_ptr<State>>(0, stateOtherZero),
-            std::pair<int, std::shared_ptr<State>>(1, stateOtherOne)};
+        std::pair<int, std::shared_ptr<State>>(0, stateOtherZero),
+        std::pair<int, std::shared_ptr<State>>(1, stateOtherOne)};
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(0, false, stateEgoZero, ObstacleType::car, 50, 10, 3, -10, 0.3,
-                                                     trajectoryPredictionEgoVehicle, 5, 2));
-    otherVehicle = std::make_shared<Obstacle>(
-            Obstacle(1, false, stateOtherZero, ObstacleType::car, 50, 10, 3, -10, 0.3,
-                     trajectoryPredictionOtherVehicle, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(
+        Obstacle(0, false, stateEgoZero, ObstacleType::car, 50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    otherVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateOtherZero, ObstacleType::car, 50, 10, 3, -10, 0.3,
+                                                       trajectoryPredictionOtherVehicle, 5, 2));
 }
 
 TEST_F(SafeDistancePredicateTest, BooleanEvaluation) {

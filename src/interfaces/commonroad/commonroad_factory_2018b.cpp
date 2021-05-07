@@ -2,9 +2,9 @@
 // Created by Sebastian Maierhofer on 08.11.20.
 //
 
-#include <obstacle/obstacle_operations.h>
 #include "commonroad_factory_2018b.h"
 #include "xml_reader.h"
+#include <obstacle/obstacle_operations.h>
 
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles() {
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
@@ -24,9 +24,9 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles()
     return obstacleList;
 }
 
-std::vector<std::shared_ptr<Lanelet>> CommonRoadFactory2018b::createLanelets(
-        std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
-        std::vector<std::shared_ptr<TrafficLight>> trafficLights) {
+std::vector<std::shared_ptr<Lanelet>>
+CommonRoadFactory2018b::createLanelets(std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
+                                       std::vector<std::shared_ptr<TrafficLight>> trafficLights) {
 
     std::vector<std::shared_ptr<Lanelet>> tempLaneletContainer{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
@@ -88,10 +88,8 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2018b::createTraffic
     return tempLaneletContainer;
 }
 
-std::vector<std::shared_ptr<Intersection>> CommonRoadFactory2018b::createIntersections(
-        const std::vector<std::shared_ptr<Lanelet>> &lanelets) {
+std::vector<std::shared_ptr<Intersection>>
+CommonRoadFactory2018b::createIntersections(const std::vector<std::shared_ptr<Lanelet>> &lanelets) {
     std::vector<std::shared_ptr<Intersection>> tempLaneletContainer{};
     return tempLaneletContainer;
 }
-
-

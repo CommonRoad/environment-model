@@ -12,7 +12,7 @@
  * Class representing a CommonRoad traffic sign.
  */
 class TrafficSign {
-public:
+  public:
     /**
      * Setter for the ID of a traffic sign.
      *
@@ -76,12 +76,12 @@ public:
      */
     [[nodiscard]] vertex getPosition() const;
 
-private:
-    int id;                                                                   //**< unique ID of traffic sign */
-    bool virtualElement;                                                      //**< indicator whether traffic sign is artificially added */
-    std::vector<std::shared_ptr<TrafficSignElement>> trafficSignElement;      //**< list of traffic sign elements represented by traffic sign */
-    vertex position{};                                                          //**< position of traffic sign */
+  private:
+    int id;              //**< unique ID of traffic sign */
+    bool virtualElement; //**< indicator whether traffic sign is artificially added */
+    std::vector<std::shared_ptr<TrafficSignElement>>
+        trafficSignElement; //**< list of traffic sign elements represented by traffic sign */
+    vertex position{};      //**< position of traffic sign */
 };
 
-
-#endif //ENV_MODEL_TRAFFIC_SIGN_H
+#endif // ENV_MODEL_TRAFFIC_SIGN_H

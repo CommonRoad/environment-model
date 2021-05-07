@@ -4,18 +4,15 @@
 
 #include "safe_distance_predicate.h"
 
-double
-SafeDistancePredicate::computeSafeDistance(double velocityK, double velocityP, double minAccelerationK,
-                                           double minAccelerationP,
-                                           double tReact) {
+double SafeDistancePredicate::computeSafeDistance(double velocityK, double velocityP, double minAccelerationK,
+                                                  double minAccelerationP, double tReact) {
     return pow(velocityP, 2) / (-2 * std::abs(minAccelerationP)) -
            pow(velocityK, 2) / (-2 * std::abs(minAccelerationK)) + velocityK * tReact;
 }
 
-bool SafeDistancePredicate::booleanEvaluation(size_t timeStep,
-                                           const std::shared_ptr<World> &world,
-                                           const std::shared_ptr<Obstacle> &obstacleK,
-                                           const std::shared_ptr<Obstacle> &obstacleP) {
+bool SafeDistancePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                              const std::shared_ptr<Obstacle> &obstacleK,
+                                              const std::shared_ptr<Obstacle> &obstacleP) {
     return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
 }
 
@@ -24,31 +21,26 @@ bool SafeDistancePredicate::booleanEvaluation(double lonPosK, double lonPosP, do
     return robustEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK, minAccelerationP, tReact) > 0;
 }
 
-Constraint SafeDistancePredicate::constraintEvaluation(size_t timeStep,
-                                                       const std::shared_ptr<World> &world,
+Constraint SafeDistancePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP) {
-    double aMinK{ obstacleK->getAminLong() };
-    double aMinP{ obstacleP->getAminLong() };
-    double tReact{ obstacleK->getReactionTime() };
+    double aMinK{obstacleK->getAminLong()};
+    double aMinP{obstacleP->getAminLong()};
+    double tReact{obstacleK->getReactionTime()};
     return {computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
-                                obstacleP->getStateByTimeStep(timeStep)->getVelocity(),
-                                aMinK, aMinP, tReact) };
+                                obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
 }
 
-Constraint
-SafeDistancePredicate::constraintEvaluation(double velocityK, double velocityP, double minAccelerationK,
-                                            double minAccelerationP,
-                                            double tReact) {
-    return { computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact) };
+Constraint SafeDistancePredicate::constraintEvaluation(double velocityK, double velocityP, double minAccelerationK,
+                                                       double minAccelerationP, double tReact) {
+    return {computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact)};
 }
 
-double SafeDistancePredicate::robustEvaluation(size_t timeStep,
-                                               const std::shared_ptr<World> &world,
+double SafeDistancePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                const std::shared_ptr<Obstacle> &obstacleK,
                                                const std::shared_ptr<Obstacle> &obstacleP) {
-    double dSafe{ constraintEvaluation(timeStep, world, obstacleK, obstacleP).realValuedConstraint };
-    double deltaS{ obstacleP->rearS(timeStep) - obstacleK->frontS(timeStep) };
+    double dSafe{constraintEvaluation(timeStep, world, obstacleK, obstacleP).realValuedConstraint};
+    double deltaS{obstacleP->rearS(timeStep) - obstacleK->frontS(timeStep)};
 
     if (deltaS < 0)
         return abs(deltaS);
@@ -58,8 +50,8 @@ double SafeDistancePredicate::robustEvaluation(size_t timeStep,
 
 double SafeDistancePredicate::robustEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP,
                                                double minAccelerationK, double minAccelerationP, double tReact) {
-    double dSafe{ constraintEvaluation(velocityK, velocityP, minAccelerationK, minAccelerationP,
-                                      tReact).realValuedConstraint };
+    double dSafe{
+        constraintEvaluation(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact).realValuedConstraint};
     double deltaS = lonPosP - lonPosK;
 
     return (deltaS - dSafe);

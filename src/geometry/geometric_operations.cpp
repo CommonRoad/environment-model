@@ -9,7 +9,6 @@ using point_type = boost::geometry::model::d2::point_xy<double>;
 using polygon_type = boost::geometry::model::polygon<point_type>;
 using boost::geometry::get;
 
-
 std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, double width) {
     std::vector<vertex> p;
 
@@ -132,8 +131,7 @@ std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, do
     return p;
 }
 
-std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices,
-                                               vertex refPosition,
+std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
                                                double refOrientation) {
     double cosine = cos(refOrientation);
     double sinus = sin(refOrientation);
@@ -141,7 +139,7 @@ std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices,
     // rotation
     for (size_t i = 0; i < vertices.size(); i++) {
         transVertices[i] =
-                vertex{cosine * vertices[i].x - sinus * vertices[i].y, sinus * vertices[i].x + cosine * vertices[i].y};
+            vertex{cosine * vertices[i].x - sinus * vertices[i].y, sinus * vertices[i].x + cosine * vertices[i].y};
     }
 
     // translation
@@ -152,4 +150,3 @@ std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices,
 
     return transVertices;
 }
-

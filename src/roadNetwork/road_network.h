@@ -5,12 +5,12 @@
 #ifndef ENV_MODEL_ROAD_NETWORK_H
 #define ENV_MODEL_ROAD_NETWORK_H
 
-#include "lanelet/lane.h"
 #include "intersection/intersection.h"
+#include "lanelet/lane.h"
 
 #include <boost/geometry.hpp>
-#include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/box.hpp>
+#include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/range/adaptor/indexed.hpp>
@@ -26,7 +26,7 @@ using value = std::pair<box, unsigned>;
  * Class representing a road network.
  */
 class RoadNetwork {
-public:
+  public:
     /**
      * Constructor for RoadNetwork. Takes a lanelet network and automatically generates lanes out of them.
      * Additionally, creates and Rtree from the lanelets for faster access of lanelets and faster
@@ -34,10 +34,11 @@ public:
      *
      * @param list of pointers to lanelets
      */
-    explicit RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network,
-                         std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{},
-                         std::vector<std::shared_ptr<TrafficSign>> signs = std::vector<std::shared_ptr<TrafficSign>>{},
-                         std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{});
+    explicit RoadNetwork(
+        const std::vector<std::shared_ptr<Lanelet>> &network,
+        std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{},
+        std::vector<std::shared_ptr<TrafficSign>> signs = std::vector<std::shared_ptr<TrafficSign>>{},
+        std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{});
 
     /**
      * Getter for lanelet network.
@@ -100,16 +101,16 @@ public:
      */
     void setDynamicIntersectionLabels();
 
-    std::shared_ptr<Incoming> incomingOfLanelet(const std::shared_ptr<Lanelet>& lanelet);
+    std::shared_ptr<Incoming> incomingOfLanelet(const std::shared_ptr<Lanelet> &lanelet);
 
-
-private:
-    std::vector<std::shared_ptr<Lanelet>> laneletNetwork;                           //**< set of lanelets contained in road network */
-    std::vector<std::shared_ptr<Intersection>> intersections;                       //**< set of intersections contained in road network */
-    std::vector<std::shared_ptr<TrafficSign>> trafficSigns;                         //**< set of traffic signs contained in road network */
-    std::vector<std::shared_ptr<TrafficLight>> trafficLights;                       //**< set of traffic lights contained in road network */
-    std::vector<std::shared_ptr<Lane>> lanes;                                       //**< set of interstate-based lanes contained in road network */
-    bgi::rtree<value, bgi::quadratic<16>> rtree;                                    //**< rtree defined by lanelets of road network for faster occupancy calculation*/
+  private:
+    std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
+    std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
+    std::vector<std::shared_ptr<TrafficSign>> trafficSigns;   //**< set of traffic signs contained in road network */
+    std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< set of traffic lights contained in road network */
+    std::vector<std::shared_ptr<Lane>> lanes; //**< set of interstate-based lanes contained in road network */
+    bgi::rtree<value, bgi::quadratic<16>>
+        rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
 
     /**
      * Given a set of lanelets, creates the corresponding interstate-based lanes
@@ -119,7 +120,8 @@ private:
     void createLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
 
     /**
-     * Given a lanelet, extracts the classifying lanelet type, e.g., for interstates, main carriageway, access/exit ramp, or shoulder
+     * Given a lanelet, extracts the classifying lanelet type, e.g., for interstates, main carriageway, access/exit
+     * ramp, or shoulder
      *
      * @param la lanelet for which classifying lanelet type should be extracted
      * @return classifying lanelet type
@@ -128,7 +130,7 @@ private:
 
     static std::vector<std::shared_ptr<Lanelet>>
     extractOutgoingsFromIncoming(const LaneletType &intersectionLaneletType,
-                                     const std::vector<std::shared_ptr<Lanelet>> &incomingSuccessors) ;
+                                 const std::vector<std::shared_ptr<Lanelet>> &incomingSuccessors);
 };
 
-#endif //ENV_MODEL_ROAD_NETWORK_H
+#endif // ENV_MODEL_ROAD_NETWORK_H

@@ -7,11 +7,11 @@
 
 #include <gtest/gtest.h>
 
-#include "obstacle/state.h"
 #include "../roadNetwork/test_road_network.h"
+#include "obstacle/state.h"
 
-class StateTestInitialization: public RoadNetworkTestInitialization {
-protected:
+class StateTestInitialization : public RoadNetworkTestInitialization {
+  protected:
     int timeStepStateOne;
     double xPositionStateOne;
     double yPositionStateOne;
@@ -86,12 +86,11 @@ protected:
     std::shared_ptr<State> stateSix;
 
     void setUpStates();
-
 };
 
 class StateTest : public StateTestInitialization, public testing::Test {
-private:
+  private:
     void SetUp() override;
 };
 
-#endif //ENV_MODEL_TEST_STATE_H
+#endif // ENV_MODEL_TEST_STATE_H

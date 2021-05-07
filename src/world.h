@@ -5,12 +5,12 @@
 #ifndef ENV_MODEL_WORLD_H
 #define ENV_MODEL_WORLD_H
 
-#include <memory>
-#include "roadNetwork/road_network.h"
 #include "obstacle/obstacle.h"
+#include "roadNetwork/road_network.h"
+#include <memory>
 
 class World {
-public:
+  public:
     /**
      * Constructor for world.
      *
@@ -19,8 +19,7 @@ public:
      * @param egoVehicles List of ego vehicles.
      * @param obstacles List of obstacles.
      */
-    World(int timeStep, std::shared_ptr<RoadNetwork> &roadNetwork,
-          std::vector<std::shared_ptr<Obstacle>> egoVehicles,
+    World(int timeStep, std::shared_ptr<RoadNetwork> &roadNetwork, std::vector<std::shared_ptr<Obstacle>> egoVehicles,
           std::vector<std::shared_ptr<Obstacle>> obstacles);
 
     /**
@@ -56,7 +55,7 @@ public:
      *
      * @return Vector with pointers to obstacle objects.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<Obstacle>> findObstacles(const std::vector<int>& obstacleIdList) const;
+    [[nodiscard]] std::vector<std::shared_ptr<Obstacle>> findObstacles(const std::vector<int> &obstacleIdList) const;
 
     /**
      * Find all obstacles object corresponding to given ID.
@@ -65,12 +64,11 @@ public:
      */
     [[nodiscard]] std::shared_ptr<Obstacle> findObstacle(size_t obstacleId) const;
 
-private:
+  private:
     int timeStep;
-    std::shared_ptr<RoadNetwork>& roadNetwork;              //**< road network containing lanelets, traffic signs, etc. */
-    std::vector<std::shared_ptr<Obstacle>> egoVehicles;     //**< pointers to ego vehicle objects */
-    std::vector<std::shared_ptr<Obstacle>> obstacles;       //**< pointers to obstacles*
+    std::shared_ptr<RoadNetwork> &roadNetwork;          //**< road network containing lanelets, traffic signs, etc. */
+    std::vector<std::shared_ptr<Obstacle>> egoVehicles; //**< pointers to ego vehicle objects */
+    std::vector<std::shared_ptr<Obstacle>> obstacles;   //**< pointers to obstacles*
 };
 
-
-#endif //ENV_MODEL_WORLD_H
+#endif // ENV_MODEL_WORLD_H

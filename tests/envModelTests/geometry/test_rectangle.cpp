@@ -10,11 +10,9 @@ void RectangleTestInitialization::SetUpRectangle() {
     rectangleThree = Rectangle(rectangleThreeLength, rectangleThreeWidth);
 }
 
-void RectangleTest::SetUp() {
-    SetUpRectangle();
-}
+void RectangleTest::SetUp() { SetUpRectangle(); }
 
-TEST_F(RectangleTest, Initialization){
+TEST_F(RectangleTest, Initialization) {
     EXPECT_EQ(rectangleOne.getType(), ShapeType::rectangle);
     EXPECT_EQ(rectangleOne.getLength(), rectangleOneLength);
     EXPECT_EQ(rectangleOne.getWidth(), rectangleOneWidth);
@@ -24,22 +22,20 @@ TEST_F(RectangleTest, Initialization){
     EXPECT_EQ(rectangleThree.getWidth(), rectangleThreeWidth);
 }
 
-TEST_F(RectangleTest, SetWidth){
+TEST_F(RectangleTest, SetWidth) {
     rectangleOne.setWidth(2.1);
     EXPECT_EQ(rectangleOne.getWidth(), 2.1);
 }
 
-TEST_F(RectangleTest, SetLength){
+TEST_F(RectangleTest, SetLength) {
     rectangleOne.setLength(2.1);
     EXPECT_EQ(rectangleOne.getLength(), 2.1);
 }
 
-TEST_F(RectangleTest, ScaleShape){
+TEST_F(RectangleTest, ScaleShape) {
     rectangleTwo.scaleShape(2.0);
-    EXPECT_EQ(rectangleTwo.getWidth(), 2*rectangleTwoWidth);
-    EXPECT_EQ(rectangleTwo.getLength(), 2*rectangleTwoLength);
+    EXPECT_EQ(rectangleTwo.getWidth(), 2 * rectangleTwoWidth);
+    EXPECT_EQ(rectangleTwo.getLength(), 2 * rectangleTwoLength);
 }
 
-TEST_F(RectangleTest, PrintParameters){
-    rectangleOne.printParameters();
-}
+TEST_F(RectangleTest, PrintParameters) { rectangleOne.printParameters(); }

@@ -4,38 +4,22 @@
 #include "lanelet.h"
 #include <utility>
 
-Lanelet::Lanelet(int id,
-                 std::vector<vertex> leftBorder,
-                 std::vector<vertex> rightBorder,
-                 std::vector<LaneletType> type,
-                 std::vector<ObstacleType> oneWay,
-                 std::vector<ObstacleType> userBidirectional) :
-        id{id},
-        leftBorder{std::move(leftBorder)},
-        rightBorder{std::move(rightBorder)},
-        laneletType{std::move(type)},
-        userOneWay{std::move(oneWay)},
-        userBidirectional{std::move(userBidirectional)} {
+Lanelet::Lanelet(int id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::vector<LaneletType> type,
+                 std::vector<ObstacleType> oneWay, std::vector<ObstacleType> userBidirectional)
+    : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)}, laneletType{std::move(type)},
+      userOneWay{std::move(oneWay)}, userBidirectional{std::move(userBidirectional)} {
     createCenterVertices();
     constructOuterPolygon();
 }
 
-Lanelet::Lanelet(int id,
-                 std::vector<vertex> leftBorder,
-                 std::vector<vertex> rightBorder,
+Lanelet::Lanelet(int id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
                  std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
-                 std::vector<std::shared_ptr<Lanelet>> successorLanelets,
-                 std::vector<LaneletType> type,
+                 std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::vector<LaneletType> type,
                  std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
-                 std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>()) :
-        id{id},
-        leftBorder{std::move(leftBorder)},
-        rightBorder{std::move(rightBorder)},
-        predecessorLanelets{std::move(predecessorLanelets)},
-        successorLanelets{std::move(successorLanelets)},
-        laneletType{std::move(type)},
-        userOneWay{std::move(oneWay)},
-        userBidirectional{std::move(userBidirectional)} {
+                 std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>())
+    : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)},
+      predecessorLanelets{std::move(predecessorLanelets)}, successorLanelets{std::move(successorLanelets)},
+      laneletType{std::move(type)}, userOneWay{std::move(oneWay)}, userBidirectional{std::move(userBidirectional)} {
     createCenterVertices();
     constructOuterPolygon();
 }
@@ -120,14 +104,14 @@ bool Lanelet::applyIntersectionTesting(const polygon_type &polygon_shape) const 
 
 bool Lanelet::checkIntersection(const polygon_type &polygon_shape, ContainmentType intersection_type) const {
     switch (intersection_type) {
-        case ContainmentType::PARTIALLY_CONTAINED: {
-            return this->applyIntersectionTesting(polygon_shape);
-        }
-        case ContainmentType::COMPLETELY_CONTAINED: {
-            return bg::within(polygon_shape, this->getOuterPolygon());
-        }
-        default:
-            return false;
+    case ContainmentType::PARTIALLY_CONTAINED: {
+        return this->applyIntersectionTesting(polygon_shape);
+    }
+    case ContainmentType::COMPLETELY_CONTAINED: {
+        return bg::within(polygon_shape, this->getOuterPolygon());
+    }
+    default:
+        return false;
     }
 }
 
@@ -177,7 +161,7 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
         vertex vert{centerVertices[i]};
         dif[i] = sqrt(pow(vert.x - positionX, 2) + pow(vert.y - positionY, 2));
     }
-  unsigned long closestIndex{static_cast<unsigned long>(std::min_element(dif.begin(), dif.end()) - dif.begin())};
+    unsigned long closestIndex{static_cast<unsigned long>(std::min_element(dif.begin(), dif.end()) - dif.begin())};
 
     // calculate orientation at vertex using its successor vertex
     vertex vert1{centerVertices[closestIndex]};
@@ -189,9 +173,7 @@ bool Lanelet::hasLaneletType(LaneletType laType) {
     return std::any_of(laneletType.begin(), laneletType.end(), [laType](auto ty) { return ty == laType; });
 }
 
-void Lanelet::addLaneletType(LaneletType laType){
-    laneletType.push_back(laType);
-}
+void Lanelet::addLaneletType(LaneletType laType) { laneletType.push_back(laType); }
 
 LineMarking Lanelet::getLineMarkingLeft() const { return lineMarkingLeft; }
 

@@ -5,15 +5,16 @@
 #include "predicate_evaluation.h"
 
 // Global static pointer used to ensure a single instance of the class.
-std::shared_ptr<PredicateEvaluation> PredicateEvaluation::instance = nullptr; // with static declaration, this can live outside of class instance
+std::shared_ptr<PredicateEvaluation> PredicateEvaluation::instance =
+    nullptr; // with static declaration, this can live outside of class instance
 
 uint8_t PredicateEvaluation::registerScenario(const size_t id, size_t timeStep,
                                               std::shared_ptr<RoadNetwork> roadNetwork,
-                                              std::vector<std::shared_ptr<Obstacle>>& obstacleList,
-                                              std::vector<std::shared_ptr<Obstacle>>& egoVehicles) {
+                                              std::vector<std::shared_ptr<Obstacle>> &obstacleList,
+                                              std::vector<std::shared_ptr<Obstacle>> &egoVehicles) {
     for (auto const &wo : worldList) {
         if (id == std::get<0>(wo))
-            return 1;                                               // Id already given
+            return 1; // Id already given
     }
     worldList.emplace_back(id, std::make_shared<World>(timeStep, roadNetwork, egoVehicles, obstacleList));
 

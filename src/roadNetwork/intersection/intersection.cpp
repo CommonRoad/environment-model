@@ -17,4 +17,3 @@ const std::vector<std::shared_ptr<Lanelet>> &Intersection::getCrossings() const 
 void Intersection::setIncomings(const std::vector<std::shared_ptr<Incoming>> &incs) { incomings = incs; }
 
 void Intersection::setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cr) { crossings = cr; }
-

@@ -5,15 +5,15 @@
 #ifndef ENV_MODEL_STOP_LINE_H
 #define ENV_MODEL_STOP_LINE_H
 
-#include "traffic_sign.h"
-#include "traffic_light.h"
 #include "../../auxiliaryDefs/types_and_definitions.h"
+#include "traffic_light.h"
+#include "traffic_sign.h"
 
 /**
  * Class representing a CommonRoad stop line.
  */
 class StopLine {
-public:
+  public:
     /**
      * Getter for start and end point of stop line.
      *
@@ -70,11 +70,11 @@ public:
      */
     void setLineMarking(LineMarking lineMarking);
 
-private:
-    std::vector<vertex> points;                     //**< start and end vertex of stop line */
-    std::shared_ptr<TrafficSign> trafficSign;       //**< pointer to traffic sign referenced by stop line */
-    std::shared_ptr<TrafficLight> trafficLight;     //**< pointer to traffic light referenced by stop line */
-    LineMarking lineMarking;                        //**< type of line marking */
+  private:
+    std::vector<vertex> points;                 //**< start and end vertex of stop line */
+    std::shared_ptr<TrafficSign> trafficSign;   //**< pointer to traffic sign referenced by stop line */
+    std::shared_ptr<TrafficLight> trafficLight; //**< pointer to traffic light referenced by stop line */
+    LineMarking lineMarking;                    //**< type of line marking */
 };
 
-#endif //ENV_MODEL_STOP_LINE_H
+#endif // ENV_MODEL_STOP_LINE_H

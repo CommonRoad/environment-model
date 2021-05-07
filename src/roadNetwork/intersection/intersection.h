@@ -11,7 +11,7 @@
  * Class representing an intersection.
  */
 class Intersection {
-public:
+  public:
     /**
      * Getter for intersection ID.
      *
@@ -61,11 +61,11 @@ public:
      */
     void setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cr);
 
-private:
-    int id;                                                         //**< ID of intersection. */
-    std::vector<std::shared_ptr<Incoming>> incomings;               //**< List of pointers to incomings belonging to intersection. */
-    std::vector<std::shared_ptr<Lanelet>> crossings;   //**< List of pointers to crossing lanelets belonging to intersection. */
+  private:
+    int id;                                           //**< ID of intersection. */
+    std::vector<std::shared_ptr<Incoming>> incomings; //**< List of pointers to incomings belonging to intersection. */
+    std::vector<std::shared_ptr<Lanelet>>
+        crossings; //**< List of pointers to crossing lanelets belonging to intersection. */
 };
 
-
-#endif //ENV_MODEL_INTERSECTION_H
+#endif // ENV_MODEL_INTERSECTION_H

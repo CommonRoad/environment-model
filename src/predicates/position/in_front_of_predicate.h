@@ -8,7 +8,7 @@
 #include "predicates/predicate.h"
 
 class InFrontOfPredicate : public Predicate {
-public:
+  public:
     /**
      * Boolean evaluation of predicate.
      *
@@ -16,11 +16,9 @@ public:
      * @param lonPositionP Longitudinal position of the pth obstacle [m].
      * @return Boolean indicating satisfaction of the predicate.
      */
-    bool
-    booleanEvaluation(double lonPositionK, double lonPositionP);
+    bool booleanEvaluation(double lonPositionK, double lonPositionP);
 
-    bool booleanEvaluation(size_t timeStep,
-                           const std::shared_ptr<World> &world,
+    bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
                            const std::shared_ptr<Obstacle> &obstacleP) override;
 
@@ -33,8 +31,7 @@ public:
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Constraints defined by the predicate.
      */
-    Constraint constraintEvaluation(size_t timeStep,
-                                    const std::shared_ptr<World>& world,
+    Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
                                     const std::shared_ptr<Obstacle> &obstacleP) override;
 
@@ -56,8 +53,7 @@ public:
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
-    double robustEvaluation(size_t timeStep,
-                            const std::shared_ptr<World>& world,
+    double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
                             const std::shared_ptr<Obstacle> &obstacleP) override;
 
@@ -69,8 +65,6 @@ public:
      * @return Real value indicating robustness of the predicate.
      */
     double robustEvaluation(double lonPositionK, double lonPositionP);
-
 };
 
-
-#endif //ENV_MODEL_IN_FRONT_OF_PREDICATE_H
+#endif // ENV_MODEL_IN_FRONT_OF_PREDICATE_H

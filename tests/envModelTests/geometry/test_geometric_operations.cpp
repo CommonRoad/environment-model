@@ -7,20 +7,18 @@
 
 #include <cmath>
 
-void GeometricOperationsTest::SetUp() {
+void GeometricOperationsTest::SetUp() {}
 
-}
-
-TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVertice){
+TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVertice) {
     std::vector<vertex> q;
     std::vector<vertex> p; // result
-    vertex temp{1, 1 };
+    vertex temp{1, 1};
 
     q.push_back(temp);
     double length = 2;
     double width = 3;
     p = addObjectDimensions(q, length, width);
-    bool rightResults{ false };
+    bool rightResults{false};
     if (p[0].x == 0 && p[0].y == 2.5 && p[1].x == 2 && p[1].y == 2.5 && p[2].x == 2 && p[2].y == -0.5 && p[3].x == 0 &&
         p[3].y == -0.5) {
         rightResults = true;
@@ -28,16 +26,16 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVertice){
     EXPECT_TRUE(rightResults);
 }
 
-TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVerticeDetailed){
+TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVerticeDetailed) {
     std::vector<vertex> q;
     std::vector<vertex> p; // result
-    vertex temp{0, 0 };
+    vertex temp{0, 0};
 
     q.push_back(temp);
     double length = 5.4864;
     double width = 1.6459;
     p = addObjectDimensions(q, length, width);
-    bool rightResults{ false };
+    bool rightResults{false};
     if (p[0].x == -2.7432 && p[0].y == 0.82295 && p[1].x == 2.7432 && p[1].y == 0.82295 && p[2].x == 2.7432 &&
         p[2].y == -0.82295 && p[3].x == -2.7432 && p[3].y == -0.82295) {
         rightResults = true;
@@ -45,10 +43,10 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVerticeDetailed){
     EXPECT_TRUE(rightResults);
 }
 
-TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVertices){
+TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVertices) {
     std::vector<vertex> q;
     std::vector<vertex> p; // result
-    vertex temp{1, 2 };
+    vertex temp{1, 2};
     q.push_back(temp);
     temp.x = 2;
     temp.y = 2;
@@ -73,7 +71,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVertices){
     EXPECT_EQ(p[3].y, -0.5);
 }
 
-TEST_F(GeometricOperationsTest, AddObjectDimensionsFourVertices){
+TEST_F(GeometricOperationsTest, AddObjectDimensionsFourVertices) {
     std::vector<vertex> q;
     std::vector<vertex> p; // result
     vertex temp{1, 1};
@@ -103,10 +101,10 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsFourVertices){
     EXPECT_EQ(p[3].y, -0.5);
 }
 
-TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVerticesDetailed){
+TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVerticesDetailed) {
     std::vector<vertex> q;
     std::vector<vertex> p; // result
-    vertex temp{11.76174, 12.960000000000004 };
+    vertex temp{11.76174, 12.960000000000004};
     q.push_back(temp);
     temp.x = 37.681740000000005;
     temp.y = 12.960000000000004;
@@ -123,11 +121,11 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVerticesDetailed){
     // TODO use result
 }
 
-TEST_F(GeometricOperationsTest, AddObjectDimensionsSixVertices){
+TEST_F(GeometricOperationsTest, AddObjectDimensionsSixVertices) {
     std::vector<vertex> q;
     std::vector<vertex> p; // result
 
-    vertex temp{0 , 0 };
+    vertex temp{0, 0};
     q.push_back(temp);
     temp.x = 1.992705435012611;
     temp.y = 0.04;
@@ -162,27 +160,26 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsSixVertices){
     EXPECT_NEAR(p[5].y, -0.82295, epsilon);
 }
 
-TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesRotate90Degree){
-    vertex translation {vertex{0, 0} };
-    double rotationAngle { M_PI/2 };
-    std::vector<vertex> initialVector {vertex{1, 1} };
-    std::vector<vertex> expectedVector {vertex{-1, 1} };
+TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesRotate90Degree) {
+    vertex translation{vertex{0, 0}};
+    double rotationAngle{M_PI / 2};
+    std::vector<vertex> initialVector{vertex{1, 1}};
+    std::vector<vertex> expectedVector{vertex{-1, 1}};
 
-    std::vector<vertex> result {rotateAndTranslateVertices(initialVector, translation, rotationAngle) };
+    std::vector<vertex> result{rotateAndTranslateVertices(initialVector, translation, rotationAngle)};
 
     EXPECT_NEAR(result.at(0).x, expectedVector.at(0).x, epsilon);
     EXPECT_NEAR(result.at(0).y, expectedVector.at(0).y, epsilon);
 }
 
-TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesTranslate){
-    vertex translation {vertex{5.52, -2.2 } };
-    double rotationAngle { 0 };
-    std::vector<vertex> initialVector {vertex{1, 1 } };
-    std::vector<vertex> expectedVector {vertex{6.52, -1.2 } };
+TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesTranslate) {
+    vertex translation{vertex{5.52, -2.2}};
+    double rotationAngle{0};
+    std::vector<vertex> initialVector{vertex{1, 1}};
+    std::vector<vertex> expectedVector{vertex{6.52, -1.2}};
 
-    std::vector<vertex> result {rotateAndTranslateVertices(initialVector, translation, rotationAngle) };
+    std::vector<vertex> result{rotateAndTranslateVertices(initialVector, translation, rotationAngle)};
 
     EXPECT_NEAR(result.at(0).x, expectedVector.at(0).x, epsilon);
     EXPECT_NEAR(result.at(0).y, expectedVector.at(0).y, epsilon);
-
 }

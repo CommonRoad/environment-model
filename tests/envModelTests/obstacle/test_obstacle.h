@@ -9,7 +9,7 @@
 #include "test_state.h"
 
 class ObstacleTestInitialization : public StateTestInitialization {
-protected:
+  protected:
     int idObstacleOne;
     bool isStaticObstacleOne;
     ObstacleType obstacleTypeObstacleOne;
@@ -44,13 +44,12 @@ protected:
 
     void setUpObstacles();
 
-    static void compareStates(const std::shared_ptr<State>& stateOne, const std::shared_ptr<State>& stateTwo);
+    static void compareStates(const std::shared_ptr<State> &stateOne, const std::shared_ptr<State> &stateTwo);
 };
 
-class ObstacleTest : public ObstacleTestInitialization, public testing::Test{
-private:
+class ObstacleTest : public ObstacleTestInitialization, public testing::Test {
+  private:
     void SetUp() override;
 };
 
-
-#endif //ENV_MODEL_TEST_OBSTACLE_H
+#endif // ENV_MODEL_TEST_OBSTACLE_H

@@ -2,13 +2,12 @@
 // Created by Sebastian Maierhofer on 23.02.21.
 //
 
-#include "pybind11/numpy.h"
 #include "translate_python_types.h"
+#include "pybind11/numpy.h"
 
+#include "../../geometry/circle.h"
 #include "../../obstacle/obstacle_operations.h"
 #include "../../roadNetwork/lanelet/lanelet_operations.h"
-#include "../../geometry/circle.h"
-
 
 std::vector<std::shared_ptr<TrafficSign>>
 TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {
@@ -22,10 +21,10 @@ TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {
         const py::list &py_trafficSignElements = py_trafficSign.attr("traffic_sign_elements").cast<py::list>();
         for (const py::handle &py_trafficSignElement : py_trafficSignElements) {
             std::string trafficSignElementId = py_trafficSignElement.attr("traffic_sign_element_id").cast<py::str>();
-            std::shared_ptr<TrafficSignElement> newTrafficSignElement = std::make_shared<TrafficSignElement>(
-                    trafficSignElementId);
+            std::shared_ptr<TrafficSignElement> newTrafficSignElement =
+                std::make_shared<TrafficSignElement>(trafficSignElementId);
             const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
-            std::vector<std::string> additionalValuesList { };
+            std::vector<std::string> additionalValuesList{};
             for (const auto &py_additional_value : additionalValues)
                 additionalValuesList.push_back(py_additional_value.cast<std::string>());
             newTrafficSignElement->setAdditionalValues(additionalValuesList);
@@ -59,15 +58,16 @@ TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) 
         py::array_t<double> py_trafficLightPosition = py::getattr(py_trafficLight, "position");
         tempTrafficLight->setPosition({py_trafficLightPosition.at(0), py_trafficLightPosition.at(1)});
         tempTrafficLight->setDirection(
-                TrafficLight::matchTurningDirections(py_trafficLight.attr("direction").cast<py::str>()));
+            TrafficLight::matchTurningDirections(py_trafficLight.attr("direction").cast<py::str>()));
         trafficLightContainer.emplace_back(tempTrafficLight);
     }
     return trafficLightContainer;
 }
 
-std::shared_ptr<StopLine> TranslatePythonTypes::convertStopLine(const py::handle &py_stopLine,
-                                                                const std::vector<std::shared_ptr<TrafficSign>> &trafficSigns,
-                                                                const std::vector<std::shared_ptr<TrafficLight>> &trafficLights) {
+std::shared_ptr<StopLine>
+TranslatePythonTypes::convertStopLine(const py::handle &py_stopLine,
+                                      const std::vector<std::shared_ptr<TrafficSign>> &trafficSigns,
+                                      const std::vector<std::shared_ptr<TrafficLight>> &trafficLights) {
     std::shared_ptr<StopLine> sl;
     sl->setLineMarking(matchStringToLineMarking(py::cast<std::string>(py_stopLine.attr("line_marking"))));
     py::object py_trafficSigns = py_stopLine.attr("_traffic_sign_ref");
@@ -87,7 +87,7 @@ std::shared_ptr<StopLine> TranslatePythonTypes::convertStopLine(const py::handle
     py::array_t<double> py_stopLineStartPosition = py::getattr(py_stopLine, "_start");
     py::array_t<double> py_stopLineEndPosition = py::getattr(py_stopLine, "_end");
     sl->setPoints({{py_stopLineStartPosition.at(0), py_stopLineStartPosition.at(1)},
-                   {py_stopLineEndPosition.at(0),   py_stopLineEndPosition.at(1)}});
+                   {py_stopLineEndPosition.at(0), py_stopLineEndPosition.at(1)}});
     return sl;
 }
 
@@ -105,7 +105,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         tempLaneletContainer.emplace_back(tempLanelet);
     }
 
-  size_t arrayIndex { 0 };
+    size_t arrayIndex{0};
     // set id of lanelets
     for (py::handle py_singleLanelet : py_lanelets) {
         tempLaneletContainer[arrayIndex]->setId(py::cast<int>(py_singleLanelet.attr("lanelet_id")));
@@ -145,12 +145,10 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
             laneletTypes.push_back(matchStringToLaneletType(py::cast<std::string>(py_type.attr("value"))));
         tempLaneletContainer[arrayIndex]->setLaneletType(laneletTypes);
         // set line markings
-        tempLaneletContainer[arrayIndex]->setLineMarkingLeft(
-                matchStringToLineMarking(
-                        py::cast<std::string>(py_singleLanelet.attr("line_marking_left_vertices").attr("value"))));
-        tempLaneletContainer[arrayIndex]->setLineMarkingRight(
-                matchStringToLineMarking(
-                        py::cast<std::string>(py_singleLanelet.attr("line_marking_left_vertices").attr("value"))));
+        tempLaneletContainer[arrayIndex]->setLineMarkingLeft(matchStringToLineMarking(
+            py::cast<std::string>(py_singleLanelet.attr("line_marking_left_vertices").attr("value"))));
+        tempLaneletContainer[arrayIndex]->setLineMarkingRight(matchStringToLineMarking(
+            py::cast<std::string>(py_singleLanelet.attr("line_marking_left_vertices").attr("value"))));
         // set successors
         py::object py_successors = py_singleLanelet.attr("successor");
         for (py::handle py_item : py_successors) {
@@ -238,7 +236,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
         tempIntersectionContainer.emplace_back(tempIntersection);
     }
 
-    size_t intersectionIndex{ 0 };
+    size_t intersectionIndex{0};
     for (const auto &py_intersection : py_intersection_list) {
         std::shared_ptr<Intersection> tempIntersection = std::make_shared<Intersection>();
         tempIntersection->setId(py_intersection.attr("intersection_id").cast<int>());
@@ -249,7 +247,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             tempIncoming->setId(py_incoming.attr("incoming_id").cast<int>());
             incomings.emplace_back(tempIncoming);
         }
-        size_t incomignIndex{ 0 };
+        size_t incomignIndex{0};
         for (const auto &py_incoming : py_intersection.attr("incomings").cast<py::list>()) {
             // incoming lanelets
             auto py_incomingLanelets = py_incoming.attr("incoming_lanelets").cast<py::list>();
@@ -331,12 +329,12 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
     return tempIntersectionContainer;
 }
 
-std::shared_ptr<State> createInitialState(py::handle py_singleObstacle){
+std::shared_ptr<State> createInitialState(py::handle py_singleObstacle) {
     // TODO add support for uncertain states
     std::shared_ptr<State> initialState = std::make_shared<State>();
 
-    auto initialStateType = py_singleObstacle.attr("initial_state").attr("position").get_type().attr(
-            "__name__").cast<std::string>();
+    auto initialStateType =
+        py_singleObstacle.attr("initial_state").attr("position").get_type().attr("__name__").cast<std::string>();
     if (initialStateType == "ndarray") {
         auto xPos = py_singleObstacle.attr("initial_state").attr("position").cast<py::list>()[0].cast<double>();
         auto yPos = py_singleObstacle.attr("initial_state").attr("position").cast<py::list>()[1].cast<double>();
@@ -354,13 +352,14 @@ std::shared_ptr<State> createInitialState(py::handle py_singleObstacle){
 std::shared_ptr<Obstacle> createCommonObstaclePart(py::handle py_singleObstacle) {
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
     tempObstacle->setId(py_singleObstacle.attr("obstacle_id").cast<int>());
-    tempObstacle->setObstacleType(matchStringToObstacleType(py_singleObstacle.attr("obstacle_type").attr("value").cast<std::string>()));
+    tempObstacle->setObstacleType(
+        matchStringToObstacleType(py_singleObstacle.attr("obstacle_type").attr("value").cast<std::string>()));
     py::handle py_obstacleShape = py_singleObstacle.attr("obstacle_shape");
-    std::string commonroadShape { py_obstacleShape.get_type().attr("__name__").cast<std::string>() };
+    std::string commonroadShape{py_obstacleShape.get_type().attr("__name__").cast<std::string>()};
 
     if (commonroadShape == "Rectangle") { // TODO: add other shape types
-        auto length { py_obstacleShape.attr("length").cast<double>() };
-        auto width { py_obstacleShape.attr("width").cast<double>() };
+        auto length{py_obstacleShape.attr("length").cast<double>()};
+        auto width{py_obstacleShape.attr("width").cast<double>()};
         tempObstacle->getGeoShape().setLength(length);
         tempObstacle->getGeoShape().setWidth(width);
     } else {
@@ -368,7 +367,7 @@ std::shared_ptr<Obstacle> createCommonObstaclePart(py::handle py_singleObstacle)
     }
     tempObstacle->setCurrentState(createInitialState(py_singleObstacle));
 
-    return  tempObstacle;
+    return tempObstacle;
 }
 
 std::shared_ptr<State> extractState(py::handle py_state) {
@@ -385,7 +384,8 @@ std::shared_ptr<State> extractState(py::handle py_state) {
 std::shared_ptr<Obstacle> createDynamicObstacle(py::handle py_singleObstacle) {
     // TODO: add other prediction than trajectory prediction
     std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
-    for (const auto &py_state : py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list").cast<py::list>()) {
+    for (const auto &py_state :
+         py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list").cast<py::list>()) {
         tempObstacle->appendStateToTrajectoryPrediction(extractState(py_state));
     }
     return tempObstacle;
@@ -397,7 +397,7 @@ std::shared_ptr<Obstacle> createStaticObstacle(py::handle py_singleObstacle) {
 }
 
 std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertObstacles(const py::list &py_obstacle_list) {
-    std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer { };
+    std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer{};
     tempObstacleContainer.reserve(py_obstacle_list.size()); // Already know the size --> Faster memory allocation
     // all obstacles must be initialized first
     for (size_t i = 0; i < py_obstacle_list.size(); i++) {
@@ -406,15 +406,14 @@ std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertObstacles(co
     }
 
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
-    size_t arrayIndex{ 0 };
+    size_t arrayIndex{0};
     for (py::handle py_singleObstacle : py_obstacle_list) {
-        std::string obstacleRole { py_singleObstacle.attr("obstacle_role").attr("value").cast<std::string>() };
+        std::string obstacleRole{py_singleObstacle.attr("obstacle_role").attr("value").cast<std::string>()};
         if (obstacleRole == "dynamic")
             tempObstacleContainer[arrayIndex] = createDynamicObstacle(py_singleObstacle);
         else if (obstacleRole == "static")
             tempObstacleContainer[arrayIndex] = createStaticObstacle(py_singleObstacle);
         arrayIndex++;
-
     }
 
     return tempObstacleContainer;

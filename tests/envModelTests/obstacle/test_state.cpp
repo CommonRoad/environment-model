@@ -14,8 +14,7 @@ void StateTestInitialization::setUpStates() {
     globalOrientationStateOne = 0.0;
     curvilinearOrientationStateOne = 0.0;
     timeStepStateOne = 0;
-    validityStateOne = ValidStates{true, true, true, true,
-                                   true, true, true};
+    validityStateOne = ValidStates{true, true, true, true, true, true, true};
 
     xPositionStateTwo = 3.5;
     yPositionStateTwo = 2;
@@ -26,8 +25,7 @@ void StateTestInitialization::setUpStates() {
     globalOrientationStateTwo = M_PI / 2;
     curvilinearOrientationStateTwo = M_PI / 2;
     timeStepStateTwo = 1;
-    validityStateTwo = ValidStates{true, true, true, true,
-                                   true, true, true};
+    validityStateTwo = ValidStates{true, true, true, true, true, true, true};
 
     xPositionStateThree = 4.0;
     yPositionStateThree = -0.5;
@@ -38,8 +36,7 @@ void StateTestInitialization::setUpStates() {
     globalOrientationStateThree = 0.01;
     curvilinearOrientationStateThree = 0.01;
     timeStepStateThree = 2;
-    validityStateThree = ValidStates{true, true, true, true,
-                                     true, true, true};
+    validityStateThree = ValidStates{true, true, true, true, true, true, true};
 
     xPositionStateFour = 5.0;
     yPositionStateFour = -0.0;
@@ -50,8 +47,7 @@ void StateTestInitialization::setUpStates() {
     globalOrientationStateFour = -0.01;
     curvilinearOrientationStateFour = -0.01;
     timeStepStateFour = 3;
-    validityStateFour = ValidStates{true, true, true, true,
-                                    true, true, true};
+    validityStateFour = ValidStates{true, true, true, true, true, true, true};
 
     xPositionStateFive = 4.0;
     yPositionStateFive = 9.0;
@@ -62,8 +58,7 @@ void StateTestInitialization::setUpStates() {
     globalOrientationStateFive = 0.00;
     curvilinearOrientationStateFive = 0.0;
     timeStepStateFive = 4;
-    validityStateFour = ValidStates{true, true, true, true,
-                                    true, true, true};
+    validityStateFour = ValidStates{true, true, true, true, true, true, true};
 
     xPositionStateSix = 11.0;
     yPositionStateSix = 1.0;
@@ -74,8 +69,7 @@ void StateTestInitialization::setUpStates() {
     globalOrientationStateSix = 0.0;
     curvilinearOrientationStateSix = 0.0;
     timeStepStateSix = 5;
-    validityStateFour = ValidStates{true, true, true, true,
-                                    true, true, true};
+    validityStateFour = ValidStates{true, true, true, true, true, true, true};
 
     stateOne = std::make_shared<State>();
     stateOne->setAcceleration(accelerationStateOne);
@@ -95,25 +89,20 @@ void StateTestInitialization::setUpStates() {
     stateTwo->setLatPosition(latPositionStateTwo);
     stateTwo->setCurvilinearOrientation(curvilinearOrientationStateTwo);
 
-    stateThree = std::make_shared<State>(timeStepStateThree, xPositionStateThree,
-                                         yPositionStateThree, velocityStateThree,
-                                         accelerationStateThree, globalOrientationStateThree,
-                                         curvilinearOrientationStateThree,
-                                         lonPositionStateThree, latPositionStateThree);
+    stateThree = std::make_shared<State>(
+        timeStepStateThree, xPositionStateThree, yPositionStateThree, velocityStateThree, accelerationStateThree,
+        globalOrientationStateThree, curvilinearOrientationStateThree, lonPositionStateThree, latPositionStateThree);
 
-    stateFour = std::make_shared<State>(timeStepStateFour, xPositionStateFour, yPositionStateFour,
-                                        velocityStateFour, accelerationStateFour, globalOrientationStateFour,
-                                        curvilinearOrientationStateFour,
-                                        lonPositionStateFour, latPositionStateFour);
+    stateFour = std::make_shared<State>(timeStepStateFour, xPositionStateFour, yPositionStateFour, velocityStateFour,
+                                        accelerationStateFour, globalOrientationStateFour,
+                                        curvilinearOrientationStateFour, lonPositionStateFour, latPositionStateFour);
 
-    stateFive = std::make_shared<State>(timeStepStateFive, xPositionStateFive, yPositionStateFive,
-                                        velocityStateFive, accelerationStateFive, globalOrientationStateFive,
-                                        curvilinearOrientationStateFive,
-                                        lonPositionStateFive, latPositionStateFive);
+    stateFive = std::make_shared<State>(timeStepStateFive, xPositionStateFive, yPositionStateFive, velocityStateFive,
+                                        accelerationStateFive, globalOrientationStateFive,
+                                        curvilinearOrientationStateFive, lonPositionStateFive, latPositionStateFive);
 
-    stateSix = std::make_shared<State>(timeStepStateSix, xPositionStateSix, yPositionStateSix,
-                                       velocityStateSix, accelerationStateSix, globalOrientationStateSix,
-                                       curvilinearOrientationStateSix,
+    stateSix = std::make_shared<State>(timeStepStateSix, xPositionStateSix, yPositionStateSix, velocityStateSix,
+                                       accelerationStateSix, globalOrientationStateSix, curvilinearOrientationStateSix,
                                        lonPositionStateSix, latPositionStateSix);
 }
 

@@ -11,7 +11,7 @@
  * Class representing an incoming of an intersection.
  */
 class Incoming {
-public:
+  public:
     /**
      * Getter for incoming ID.
      *
@@ -152,18 +152,23 @@ public:
      */
     void setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings);
 
-private:
+  private:
     int id;
-    std::vector<std::shared_ptr<Lanelet>> incomingLanelets;          //**< set of pointers to lanelets belonging to incoming */
-    std::vector<std::shared_ptr<Lanelet>> successorsRight;          //**< set of pointers to successor right lanelets of incoming */
-    std::vector<std::shared_ptr<Lanelet>> successorsStraight;       //**< set of pointers to successor straight lanelets of incoming */
-    std::vector<std::shared_ptr<Lanelet>> successorsLeft;           //**< set of pointers to successor left lanelets of incoming */
-    std::shared_ptr<Incoming> isLeftOf;                             //**< pointer to incoming which is left */
-    std::vector<std::shared_ptr<Lanelet>> straightOutgoings;        //**< set of pointers to straight outgoing lanelets of this incoming */
-    std::vector<std::shared_ptr<Lanelet>> leftOutgoings;            //**< set of pointers to left outgoing lanelets of this incoming */
-    std::vector<std::shared_ptr<Lanelet>> rightOutgoings;           //**< set of pointers to right outgoing lanelets of this incoming */
-    std::vector<std::shared_ptr<Lanelet>> oncomings;                //**< set of pointers to oncoming lanelets of this incoming */
+    std::vector<std::shared_ptr<Lanelet>> incomingLanelets; //**< set of pointers to lanelets belonging to incoming */
+    std::vector<std::shared_ptr<Lanelet>>
+        successorsRight; //**< set of pointers to successor right lanelets of incoming */
+    std::vector<std::shared_ptr<Lanelet>>
+        successorsStraight; //**< set of pointers to successor straight lanelets of incoming */
+    std::vector<std::shared_ptr<Lanelet>>
+        successorsLeft;                 //**< set of pointers to successor left lanelets of incoming */
+    std::shared_ptr<Incoming> isLeftOf; //**< pointer to incoming which is left */
+    std::vector<std::shared_ptr<Lanelet>>
+        straightOutgoings; //**< set of pointers to straight outgoing lanelets of this incoming */
+    std::vector<std::shared_ptr<Lanelet>>
+        leftOutgoings; //**< set of pointers to left outgoing lanelets of this incoming */
+    std::vector<std::shared_ptr<Lanelet>>
+        rightOutgoings; //**< set of pointers to right outgoing lanelets of this incoming */
+    std::vector<std::shared_ptr<Lanelet>> oncomings; //**< set of pointers to oncoming lanelets of this incoming */
 };
 
-
-#endif //ENV_MODEL_INCOMING_H
+#endif // ENV_MODEL_INCOMING_H

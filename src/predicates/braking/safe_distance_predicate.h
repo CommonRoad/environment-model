@@ -11,7 +11,7 @@
  * Predicate for the safe distance between two vehicles.
  */
 class SafeDistancePredicate : public Predicate {
-public:
+  public:
     /**
      * Safe distance between the kth and the pth obstacle.
      *
@@ -22,12 +22,10 @@ public:
      * @param tReact Reaction time of the kth obstacle [s].
      * @return Safe distance [m].
      */
-    static double
-    computeSafeDistance(double velocityK, double velocityP, double minAccelerationK, double minAccelerationP,
-                        double tReact);
+    static double computeSafeDistance(double velocityK, double velocityP, double minAccelerationK,
+                                      double minAccelerationP, double tReact);
 
-    bool booleanEvaluation(size_t timeStep,
-                           const std::shared_ptr<World> &world,
+    bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
                            const std::shared_ptr<Obstacle> &obstacleP) override;
 
@@ -42,9 +40,8 @@ public:
      * @param tReact Reaction time of the kth obstacle [s].
      * @return Boolean indicating satisfaction of the predicate.
      */
-    bool
-    booleanEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP, double minAccelerationK,
-                      double minAccelerationP, double tReact);
+    bool booleanEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP, double minAccelerationK,
+                           double minAccelerationP, double tReact);
 
     /**
      * Constraint evaluation of predicate.
@@ -55,8 +52,7 @@ public:
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Constraints defined by the predicate.
      */
-    Constraint constraintEvaluation(size_t timeStep,
-                                    const std::shared_ptr<World>& world,
+    Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
                                     const std::shared_ptr<Obstacle> &obstacleP) override;
 
@@ -71,9 +67,8 @@ public:
      * @param tReact Reaction time of the kth obstacle [s].
      * @return Constraints defined by the predicate.
      */
-    Constraint
-    constraintEvaluation(double velocityK, double velocityP, double minAccelerationK, double minAccelerationP,
-                         double tReact);
+    Constraint constraintEvaluation(double velocityK, double velocityP, double minAccelerationK,
+                                    double minAccelerationP, double tReact);
 
     /**
      * Robustness evaluation of predicate.
@@ -85,8 +80,7 @@ public:
      * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
-    double robustEvaluation(size_t timeStep,
-                            const std::shared_ptr<World>& world,
+    double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
                             const std::shared_ptr<Obstacle> &obstacleP) override;
 
@@ -99,10 +93,8 @@ public:
      * @param tReact Reaction time of the kth obstacle [s].
      * @return Real value indicating robustness of the predicate.
      */
-    double
-    robustEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP, double minAccelerationK,
-                     double minAccelerationP, double tReact);
+    double robustEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP, double minAccelerationK,
+                            double minAccelerationP, double tReact);
 };
 
-
-#endif //ENV_MODEL_SAFE_DISTANCE_PREDICATE_H
+#endif // ENV_MODEL_SAFE_DISTANCE_PREDICATE_H

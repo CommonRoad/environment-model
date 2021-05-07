@@ -11,13 +11,14 @@
  * Class representing a CommonRoad traffic sign element.
  */
 class TrafficSignElement {
-public:
+  public:
     /**
      * Constructor of traffic sign element.
      *
-     * @param id ID of traffic sign element. Note this ID corresponds to the official national traffic sign ID of a country.
+     * @param id ID of traffic sign element. Note this ID corresponds to the official national traffic sign ID of a
+     * country.
      */
-    explicit TrafficSignElement(std::string  id);
+    explicit TrafficSignElement(std::string id);
 
     /**
      * Copy constructor of traffic sign element.
@@ -51,7 +52,7 @@ public:
      *
      * @return Additional value.
      */
-    void setAdditionalValues(const std::vector<std::string>& values);
+    void setAdditionalValues(const std::vector<std::string> &values);
 
     /**
      *
@@ -59,7 +60,8 @@ public:
      * @param country Country for which traffic sign number should be extracted.
      * @return String corresponding to traffic sign ID of country.
      */
-    static std::string mapTrafficSignNameToCountryID(const std::string& trafficSignName, SupportedTrafficSignCountry country);
+    static std::string mapTrafficSignNameToCountryID(const std::string &trafficSignName,
+                                                     SupportedTrafficSignCountry country);
 
     /**
      * Converts German traffic sign ID to string.
@@ -69,10 +71,10 @@ public:
      */
     static std::string convertGermanTrafficSignIdToString(TrafficSignIDGermany signId);
 
-private:
-    std::string id;                                  //**< official national traffic sign ID of a country */
-    std::vector<std::string> additionalValues;       //**< list of additional values classifying traffic sign, e.g., velocity, weight, time */
-
+  private:
+    std::string id; //**< official national traffic sign ID of a country */
+    std::vector<std::string>
+        additionalValues; //**< list of additional values classifying traffic sign, e.g., velocity, weight, time */
 };
 
-#endif //ENV_MODEL_TRAFFIC_SIGN_ELEMENT_H
+#endif // ENV_MODEL_TRAFFIC_SIGN_ELEMENT_H

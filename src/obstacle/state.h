@@ -14,7 +14,7 @@ typedef geometry::CurvilinearCoordinateSystem CurvilinearCoordinateSystem;
  * Class representing a state.
  */
 class State {
-public:
+  public:
     /**
      * Default Constructor for a state without parameters. Everything state variable is set to
      * 0.0 and all validities are set to false.
@@ -184,21 +184,18 @@ public:
      */
     void setTimeStep(size_t timeStep);
 
-private:
-    double xPosition { 0.0 };                                       //**< x-coordinate in Cartesian space [m] */
-    double yPosition { 0.0 };                                       //**< y-coordinate in Cartesian space */
-    double velocity { 0.0 };                                        //**< velocity [m/s] */
-    double acceleration { 0.0 };                                    //**< acceleration [m/s^2] */
-    double lonPosition { 0.0 };                                     //**< longitudinal position in curvilinear coordinate system [m] */
-    double latPosition { 0.0 };                                     //**< lateral position in curvilinear coordinate system [m] */
-    double globalOrientation { 0.0 };                               //**< orientation in Cartesian space [rad] */
-    double curvilinearOrientation { 0.0 };                          //**< orientation along reference path [rad] */
-    ValidStates validStates{false, false,         //**< set of states which are already set and therefore are valid */
-                            false, false,
-                            false, false,
-                            false, false};
-    size_t timeStep{ 0 };                                                //**< time step of the state variables */
+  private:
+    double xPosition{0.0};                //**< x-coordinate in Cartesian space [m] */
+    double yPosition{0.0};                //**< y-coordinate in Cartesian space */
+    double velocity{0.0};                 //**< velocity [m/s] */
+    double acceleration{0.0};             //**< acceleration [m/s^2] */
+    double lonPosition{0.0};              //**< longitudinal position in curvilinear coordinate system [m] */
+    double latPosition{0.0};              //**< lateral position in curvilinear coordinate system [m] */
+    double globalOrientation{0.0};        //**< orientation in Cartesian space [rad] */
+    double curvilinearOrientation{0.0};   //**< orientation along reference path [rad] */
+    ValidStates validStates{false, false, //**< set of states which are already set and therefore are valid */
+                            false, false, false, false, false, false};
+    size_t timeStep{0}; //**< time step of the state variables */
 };
 
-
-#endif //ENV_MODEL_STATE_H
+#endif // ENV_MODEL_STATE_H

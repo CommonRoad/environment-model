@@ -24,4 +24,3 @@ void Rectangle::printParameters() {
 }
 
 ShapeType Rectangle::getType() { return ShapeType::rectangle; }
-
