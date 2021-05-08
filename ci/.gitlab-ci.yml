@@ -7,10 +7,9 @@ stages:
   - docs
 
 
-image: $CI_REGISTRY/maierhofer/environment-model/ci:0.1.0
+image: $CI_REGISTRY/maierhofer/environment-model/ci:0.2.0
 
 before_script:
-  - conda create -n commonroad python=3.8
   - source activate commonroad
   - bash ./ci/install_cps_software.sh
 

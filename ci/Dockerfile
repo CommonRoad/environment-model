@@ -1,3 +1,4 @@
+#Created by Sebastian Maierhofer
 FROM ubuntu:20.04
 
 RUN apt-get update
@@ -43,8 +44,14 @@ RUN set -eux && apt update && apt upgrade -qqy && apt-get install -y clang-tidy 
 # Append llvm directory to path, that we can use clang-tidyinstead of clang-tidy-<some-version>
 ENV PATH="$PATH:/usr/lib/llvm-${CLANG_TIDY_VERSION}/bin/"
 
-#ARG PYTHON_VERSION=3.8
-#RUN wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh \
-#    && bash Anaconda3-2020.11-Linux-x86_64.sh -y
-#RUN conda create --name commonroad python=PYTHON_VERSION -y
+ARG PYTHON_VERSION=3.8
+RUN wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O ~/anaconda.sh\
+    && bash ~/anaconda.sh -b && rm ~/anaconda.sh
+ENV PATH /root/anaconda3/bin:$PATH
+
+# Updating Anaconda packages
+RUN conda update conda
+RUN conda update anaconda
+RUN conda update --all
+RUN conda create --name commonroad python=${COMPILER_VERSION}
 #RUN conda activate commonroad
