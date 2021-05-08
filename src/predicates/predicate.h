@@ -99,7 +99,7 @@ class Predicate {
     PredicateParameters parameters; //**< Struct containing parameters of all predicates. */
   public:
     static PredicateStatistics statistics; //**< Struct storing statistics of a predicate, e.g., average computation
-                                           //time,  number of calls, etc. */
+                                           // time,  number of calls, etc. */
 };
 
 #endif // ENV_MODEL_PREDICATE_H
