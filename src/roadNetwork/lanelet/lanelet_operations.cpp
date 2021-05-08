@@ -4,7 +4,7 @@
 
 #include "lanelet_operations.h"
 
-LaneletType matchStringToLaneletType(std::string type) {
+LaneletType matchStringToLaneletType(const std::string& type) {
     if (type == "interstate")
         return LaneletType::interstate;
     else if (type == "urban")
@@ -39,7 +39,7 @@ LaneletType matchStringToLaneletType(std::string type) {
         return LaneletType::unknown;
 }
 
-LineMarking matchStringToLineMarking(std::string type) {
+LineMarking matchStringToLineMarking(const std::string& type) {
     if (type == "solid")
         return LineMarking::solid;
     else if (type == "dashed")
