@@ -62,7 +62,7 @@ build-test:
       - ./env_model_test
       - ./libenv_model.so
       - ./tests/testScenarios/*
-    expire_in: 20 minutes
+    expire_in: 45 minutes
 
 build-run-coverage:
   stage: compile
@@ -74,7 +74,7 @@ build-run-coverage:
     paths:
       - ./build/
       - ./env_model_coverage
-    expire_in: 20 minutes
+    expire_in: 45 minutes
 
 
 ### tests ###
