@@ -5,8 +5,8 @@
 #ifndef ENV_MODEL_GEOMETRIC_OPERATIONS_H
 #define ENV_MODEL_GEOMETRIC_OPERATIONS_H
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "circle.h"
+#include "commonroad_cpp/auxiliaryDefs/structs.h"
 
 /**
  * Add the dimensions of the object (length and width) to the polygon vertices q in the object's coordinate frame.

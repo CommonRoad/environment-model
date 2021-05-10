@@ -4,10 +4,10 @@
 #ifndef ENV_MODEL_COMMONROAD_FACTORY_H
 #define ENV_MODEL_COMMONROAD_FACTORY_H
 
+#include "commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.hpp"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
-#include "commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.hpp"
 #include <stdexcept>
 
 /**
