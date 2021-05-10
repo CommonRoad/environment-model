@@ -8,7 +8,7 @@
 #include <gtest/gtest.h>
 
 #include "../roadNetwork/test_road_network.h"
-#include "obstacle/state.h"
+#include "commonroad_cpp/obstacle/state.h"
 
 class StateTestInitialization : public RoadNetworkTestInitialization {
   protected:

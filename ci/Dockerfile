@@ -54,3 +54,4 @@ RUN conda update anaconda
 RUN conda update --all
 RUN conda create --name commonroad python=${PYTHON_VERSION}
 #RUN conda activate commonroad
+# TODO install drivability checker

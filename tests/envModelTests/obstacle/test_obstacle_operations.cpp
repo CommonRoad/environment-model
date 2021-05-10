@@ -3,7 +3,7 @@
 //
 
 #include "test_obstacle_operations.h"
-#include "obstacle/obstacle_operations.h"
+#include "commonroad_cpp/obstacle/obstacle_operations.h"
 
 void ObstacleOperationsTest::SetUp() {
     setUpLanelets();

@@ -3,7 +3,7 @@
 //
 
 #include "test_geometric_operations.h"
-#include "auxiliaryDefs/structs.h"
+#include "commonroad_cpp/auxiliaryDefs/structs.h"
 
 #include <cmath>
 

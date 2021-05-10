@@ -6,7 +6,7 @@
 #define ENV_MODEL_TEST_ROAD_NETWORK_H
 
 #include "lanelet/test_lane.h"
-#include "roadNetwork/road_network.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 
 class RoadNetworkTestInitialization : public LaneTestInitialization {
   protected:

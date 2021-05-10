@@ -3,7 +3,7 @@
 //
 
 #include "test_lanelet_operations.h"
-#include "roadNetwork/lanelet/lanelet_operations.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 
 void LaneletOperationsTest::SetUp() {
     setUpLane();

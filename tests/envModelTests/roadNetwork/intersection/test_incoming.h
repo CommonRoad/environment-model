@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_TEST_INCOMING_H
 #define ENV_MODEL_TEST_INCOMING_H
 
-#include "roadNetwork/intersection/incoming.h"
+#include "commonroad_cpp/roadNetwork/intersection/incoming.h"
 #include <gtest/gtest.h>
 
 class IncomingTestInitialization {

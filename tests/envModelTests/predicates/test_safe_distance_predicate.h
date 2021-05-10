@@ -6,10 +6,10 @@
 #define ENV_MODEL_TEST_SAFE_DISTANCE_PREDICATE_H
 
 #include "../interfaces/utility_functions.h"
-#include "obstacle/obstacle.h"
-#include "predicates/braking/safe_distance_predicate.h"
-#include "roadNetwork/road_network.h"
-#include "world.h"
+#include "commonroad_cpp/obstacle/obstacle.h"
+#include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
+#include "commonroad_cpp/world.h"
 #include <gtest/gtest.h>
 
 class SafeDistancePredicateTest : public testing::Test {

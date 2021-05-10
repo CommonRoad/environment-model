@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_TEST_OBSTACLE_H
 #define ENV_MODEL_TEST_OBSTACLE_H
 
-#include "obstacle/obstacle.h"
+#include "commonroad_cpp/obstacle/obstacle.h"
 #include "test_state.h"
 
 class ObstacleTestInitialization : public StateTestInitialization {

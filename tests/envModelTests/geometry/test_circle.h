@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "geometry/circle.h"
+#include "commonroad_cpp/geometry/circle.h"
 
 class CircleTestInitialization {
   protected:

@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_TEST_GEOMETRIC_OPERATIONS_H
 #define ENV_MODEL_TEST_GEOMETRIC_OPERATIONS_H
 
-#include "geometry/geometric_operations.h"
+#include "commonroad_cpp/geometry/geometric_operations.h"
 #include <gtest/gtest.h>
 
 class GeometricOperationsTest : public testing::Test {

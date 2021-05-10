@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_TEST_RECTANGLE_H
 #define ENV_MODEL_TEST_RECTANGLE_H
 
-#include "geometry/rectangle.h"
+#include "commonroad_cpp/geometry/rectangle.h"
 #include <gtest/gtest.h>
 
 class RectangleTestInitialization {

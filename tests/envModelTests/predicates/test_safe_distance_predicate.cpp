@@ -3,7 +3,7 @@
 //
 
 #include "test_safe_distance_predicate.h"
-#include "obstacle/state.h"
+#include "commonroad_cpp/obstacle/state.h"
 
 void SafeDistancePredicateTest::SetUp() {
     std::shared_ptr<State> stateEgoZero = std::make_shared<State>(0, 0, 0, 20, 0, 0, 0, 0, 0);

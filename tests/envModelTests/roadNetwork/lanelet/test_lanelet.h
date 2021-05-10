@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "roadNetwork/lanelet/lanelet.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 
 class LaneletTestInitialization {
   protected:
