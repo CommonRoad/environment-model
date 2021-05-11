@@ -21,6 +21,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2018b.cpp
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2020a.cpp
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
+        commonroad_cpp/interfaces/standalone/command_line_input.cpp
         commonroad_cpp/world.cpp
         commonroad_cpp/predicates/predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
@@ -50,12 +51,12 @@ target_include_directories(env_model
 target_link_libraries(env_model
     PUBLIC
         Eigen3::Eigen
-        Boost::program_options
         DrivabilityChecker::crccosy
     )
 
 target_link_libraries(env_model
     PRIVATE
+        Boost::program_options
         Boost::filesystem
         OpenMP::OpenMP_CXX
     )

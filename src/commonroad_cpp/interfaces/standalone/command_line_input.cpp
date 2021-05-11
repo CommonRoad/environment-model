@@ -1,0 +1,83 @@
+//
+// Created by Sebastian Maierhofer on 02.11.20.
+//
+
+#ifndef ENV_MODEL_COMMAND_LINE_INPUT_H
+#define ENV_MODEL_COMMAND_LINE_INPUT_H
+
+#include <boost/program_options.hpp>
+#include <iostream>
+
+#include "commonroad_cpp/interfaces/commonroad/xml_reader.h"
+
+#include "command_line_input.h"
+
+namespace po = boost::program_options;
+
+namespace CommandLine {
+
+int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath) {
+    try {
+        std::string xmlFileName;
+        po::options_description desc;
+        po::variables_map vm;
+        desc.add_options()("help", "produce help message")(
+            "input-file",
+            boost::program_options::value<std::string>(&xmlFilePath)
+                ->default_value("../testScenarios/USA_Lanker-1_1_T-1.xml")
+                ->required(),
+            "Input file")("threads,t", po::value<int>(&num_threads)->default_value(1),
+                          "set number of threads to run with");
+        po::positional_options_description p;
+        p.add("input-file", -1);
+        boost::program_options::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
+        po::notify(vm);
+
+        if (vm.count("help")) {
+            std::cout << desc << "\n";
+            return 0;
+        }
+
+        std::cout << "[*] Using file " << xmlFilePath << std::endl;
+        std::cout << "[*] Using that many threads: " << num_threads << std::endl;
+
+        return 0;
+    } catch (std::exception &e) {
+        std::cerr << "error: " << e.what() << "\n";
+        return 1;
+    } catch (...) {
+        std::cerr << "Exception of unknown type!\n";
+        return 1;
+    }
+}
+
+std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>>
+getDataFromCommonRoad(const std::string &xmlFilePath) {
+    // Read and parse CommonRoad scenario file
+    std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
+    std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
+    std::vector<std::shared_ptr<Lanelet>> lanelets =
+        XMLReader::createLaneletFromXML(xmlFilePath, trafficSigns, trafficLights);
+    std::vector<std::shared_ptr<Obstacle>> obstacles = XMLReader::createObstacleFromXML(xmlFilePath);
+    std::vector<std::shared_ptr<Intersection>> intersections =
+        XMLReader::createIntersectionFromXML(xmlFilePath, lanelets);
+    auto country{XMLReader::extractCountryFromXML(xmlFilePath)};
+
+    std::shared_ptr<RoadNetwork> roadNetwork{
+        std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, intersections, trafficSigns, trafficLights))};
+
+    for (const auto &obs : obstacles) {
+        if (obs->getIsStatic())
+            obs->setOwnLane(roadNetwork->getLanes(), 0);
+        else {
+            for (size_t i = obs->getFirstTrajectoryTimeStep(); i < obs->getLastTrajectoryTimeStep(); ++i) {
+                obs->setOwnLane(roadNetwork->getLanes(), i);
+            }
+        }
+    }
+
+    return std::make_tuple(obstacles, roadNetwork);
+}
+} // namespace CommandLine
+
+#endif // ENV_MODEL_COMMAND_LINE_INPUT_H
