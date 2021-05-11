@@ -40,7 +40,7 @@ TEST_F(LaneTest, ConvertPoint){
             laneOne->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(originalPoint.x(), originalPoint.y());
     Eigen::Vector2d convertedBack =
             laneOne->getCurvilinearCoordinateSystem().convertToCartesianCoords(convertedPoint.x(), convertedPoint.y());
-    EXPECT_EQ(originalPoint.x(), convertedBack.x());
+    EXPECT_NEAR(originalPoint.x(), convertedBack.x(), 0.001);
     EXPECT_EQ(originalPoint.y(), convertedBack.y());
 }
 

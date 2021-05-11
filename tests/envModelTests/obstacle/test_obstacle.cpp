@@ -187,11 +187,11 @@ TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
     stateOne->setXPosition(2.5);
     stateOne->setYPosition(0.5);
     obstacleOne->convertPointToCurvilinear(0);
-    EXPECT_EQ(stateOne->getLonPosition(), 7.5);
+    EXPECT_NEAR(stateOne->getLonPosition(), 7.5, 0.001);
     EXPECT_EQ(stateOne->getLatPosition(), 0.0);
     stateOne->setXPosition(2.5);
     stateOne->setYPosition(-0.75);
     obstacleOne->convertPointToCurvilinear(0);
-    EXPECT_EQ(stateOne->getLonPosition(), 7.5);
+    EXPECT_NEAR(stateOne->getLonPosition(), 7.5, 0.001);
     EXPECT_EQ(stateOne->getLatPosition(), -1.25);
 }
