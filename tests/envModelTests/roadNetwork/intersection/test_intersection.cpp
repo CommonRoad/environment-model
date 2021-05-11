@@ -4,15 +4,8 @@
 
 #include "test_intersection.h"
 
-void IntersectionTestInitialization::setUpIntersection(){
+void IntersectionTestInitialization::setUpIntersection() {}
 
+void IntersectionTest::SetUp() {}
 
-}
-
-void IntersectionTest::SetUp(){
-
-}
-
-TEST_F(IntersectionTest, InitializationComplete){
-
-}
+TEST_F(IntersectionTest, InitializationComplete) {}

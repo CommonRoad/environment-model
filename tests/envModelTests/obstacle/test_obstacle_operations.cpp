@@ -3,9 +3,9 @@
 //
 
 #include "test_obstacle_operations.h"
-#include "obstacle/obstacle_operations.h"
+#include "commonroad_cpp/obstacle/obstacle_operations.h"
 
-void ObstacleOperationsTest::SetUp(){
+void ObstacleOperationsTest::SetUp() {
     setUpLanelets();
     setUpLane();
     setUpRoadNetwork();
@@ -13,12 +13,12 @@ void ObstacleOperationsTest::SetUp(){
     setUpObstacles();
 }
 
-TEST_F(ObstacleOperationsTest, GetObstacleById){
+TEST_F(ObstacleOperationsTest, GetObstacleById) {
     EXPECT_EQ(getObstacleById(obstacleList, 1)->getId(), 1);
     EXPECT_EQ(getObstacleById(obstacleList, 2)->getId(), 2);
 }
 
-TEST_F(ObstacleOperationsTest, MatchObstacleTypeToString){
+TEST_F(ObstacleOperationsTest, MatchObstacleTypeToString) {
     EXPECT_EQ(matchStringToObstacleType("car"), ObstacleType::car);
     EXPECT_EQ(matchStringToObstacleType("truck"), ObstacleType::truck);
     EXPECT_EQ(matchStringToObstacleType("pedestrian"), ObstacleType::pedestrian);

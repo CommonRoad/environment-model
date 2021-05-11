@@ -8,9 +8,8 @@
 #include "test_obstacle.h"
 
 class ObstacleOperationsTest : public ObstacleTestInitialization, public testing::Test {
-private:
+  private:
     void SetUp() override;
 };
 
-
-#endif //ENV_MODEL_TEST_OBSTACLE_OPERATIONS_H
+#endif // ENV_MODEL_TEST_OBSTACLE_OPERATIONS_H

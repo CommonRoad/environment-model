@@ -7,11 +7,10 @@
 
 #include <gtest/gtest.h>
 
-#include "roadNetwork/lanelet/lanelet.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 
-
-class LaneletTestInitialization{
-protected:
+class LaneletTestInitialization {
+  protected:
     int idLaneletOne;
     std::vector<LaneletType> laneletTypeLaneletOne;
     std::vector<ObstacleType> userOneWayLaneletOne;
@@ -47,23 +46,22 @@ protected:
     polygon_type polygonThree;
 
     static void compareVerticesVector(std::vector<vertex> verticesOne, std::vector<vertex> verticesTwo);
-    template <typename T>
-    void evaluateTypes(std::vector<T> typeVectorOne, std::vector<T> typeVectorTwo);
+    template <typename T> void evaluateTypes(std::vector<T> typeVectorOne, std::vector<T> typeVectorTwo);
 
     void setUpLanelets();
 };
 
-class LaneletTest : public LaneletTestInitialization, public testing::Test{
-private:
+class LaneletTest : public LaneletTestInitialization, public testing::Test {
+  private:
     void SetUp() override;
 };
 
 template <typename T>
 void LaneletTestInitialization::evaluateTypes(std::vector<T> typeVectorOne, std::vector<T> typeVectorTwo) {
-    for(auto ty : typeVectorOne){
-        bool typeValid{ false };
-        for(auto typeExpected : typeVectorTwo)
-            if(ty == typeExpected){
+    for (auto ty : typeVectorOne) {
+        bool typeValid{false};
+        for (auto typeExpected : typeVectorTwo)
+            if (ty == typeExpected) {
                 typeValid = true;
                 break;
             }
@@ -71,4 +69,4 @@ void LaneletTestInitialization::evaluateTypes(std::vector<T> typeVectorOne, std:
     }
 }
 
-#endif //ENV_MODEL_TEST_LANELET_H
+#endif // ENV_MODEL_TEST_LANELET_H

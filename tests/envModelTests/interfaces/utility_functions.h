@@ -9,10 +9,9 @@
 
 namespace TestUtils {
 
-    bool existsDirectory(const std::string& path);
+bool existsDirectory(const std::string &path);
 
-    std::string getTestScenarioDirectory();
-}
+std::string getTestScenarioDirectory();
+} // namespace TestUtils
 
-
-#endif //ENV_MODEL_UTILITY_FUNCTIONS_H
+#endif // ENV_MODEL_UTILITY_FUNCTIONS_H

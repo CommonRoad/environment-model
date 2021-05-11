@@ -5,11 +5,11 @@
 #ifndef ENV_MODEL_TEST_OBSTACLE_H
 #define ENV_MODEL_TEST_OBSTACLE_H
 
-#include "obstacle/obstacle.h"
+#include "commonroad_cpp/obstacle/obstacle.h"
 #include "test_state.h"
 
 class ObstacleTestInitialization : public StateTestInitialization {
-protected:
+  protected:
     int idObstacleOne;
     bool isStaticObstacleOne;
     ObstacleType obstacleTypeObstacleOne;
@@ -20,11 +20,11 @@ protected:
     double reactionTimeObstacleOne;
     double lengthObstacleOne;
     double widthObstacleOne;
-    std::map<int, std::shared_ptr<Lane>> occupiedLaneObstacleOne{};
-    std::map<int, std::shared_ptr<State>> trajectoryPredictionObstacleOne{};
-    std::map<int, std::shared_ptr<State>> historyObstacleOne{};
+    std::map<size_t, std::shared_ptr<Lane>> occupiedLaneObstacleOne{};
+    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{};
+    std::map<size_t, std::shared_ptr<State>> historyObstacleOne{};
     Rectangle geoShapeObstacleOne;
-    std::map<int, std::vector<std::shared_ptr<Lanelet>>> occupiedLaneletsObstacleOne{};
+    std::map<size_t, std::vector<std::shared_ptr<Lanelet>>> occupiedLaneletsObstacleOne{};
     std::shared_ptr<Obstacle> obstacleOne;
 
     int idObstacleTwo;
@@ -37,20 +37,19 @@ protected:
     double reactionTimeObstacleTwo;
     double lengthObstacleTwo;
     double widthObstacleTwo;
-    std::map<int, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{};
+    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{};
     std::shared_ptr<Obstacle> obstacleTwo;
 
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
 
     void setUpObstacles();
 
-    static void compareStates(const std::shared_ptr<State>& stateOne, const std::shared_ptr<State>& stateTwo);
+    static void compareStates(const std::shared_ptr<State> &stateOne, const std::shared_ptr<State> &stateTwo);
 };
 
-class ObstacleTest : public ObstacleTestInitialization, public testing::Test{
-private:
+class ObstacleTest : public ObstacleTestInitialization, public testing::Test {
+  private:
     void SetUp() override;
 };
 
-
-#endif //ENV_MODEL_TEST_OBSTACLE_H
+#endif // ENV_MODEL_TEST_OBSTACLE_H

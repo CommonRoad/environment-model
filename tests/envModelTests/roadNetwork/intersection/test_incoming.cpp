@@ -4,15 +4,8 @@
 
 #include "test_incoming.h"
 
-void IncomingTestInitialization::setUpIncoming(){
+void IncomingTestInitialization::setUpIncoming() {}
 
+void IncomingTest::SetUp() {}
 
-}
-
-void IncomingTest::SetUp(){
-
-}
-
-TEST_F(IncomingTest, InitializationComplete){
-
-}
+TEST_F(IncomingTest, InitializationComplete) {}

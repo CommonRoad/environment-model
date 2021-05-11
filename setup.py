@@ -4,9 +4,17 @@ import sys
 import platform
 import subprocess
 
-from setuptools import setup, find_packages, Extension
+from setuptools import find_packages, Extension
 from setuptools.command.build_ext import build_ext
+from distutils.core import setup
 from distutils.version import LooseVersion
+
+
+crccosy = "./"
+if '--crccosy' in sys.argv:
+    index = sys.argv.index('--crccosy')
+    sys.argv.pop(index)
+    crccosy = sys.argv.pop(index)
 
 
 class CMakeExtension(Extension):
@@ -39,7 +47,7 @@ class CMakeBuild(build_ext):
 
         cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
                       '-DPYTHON_EXECUTABLE=' + sys.executable,
-                      '-DCRCCOSY_LIBRARY_DIR=/media/sebastian/TUM/06_code/commonroad/cps/curvilinear-coordinate-system']
+                      '-DCRCCOSY_LIBRARY_DIR=' + crccosy]
 
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
@@ -71,7 +79,8 @@ setup(
     author_email='sebastian.maierhofer@tum.de',
     description='CommonRoad C++ Environment Model',
     packages=find_packages(exclude=("tests", "docs", "build", "ci", "cmake", "external", "cmake-build-debug",
-                                    "cmake-build-debug-coverage", "cmake-build-release", "cmake-build-release-coverage")),
+                                    "cmake-build-debug-coverage", "cmake-build-release",
+                                    "cmake-build-release-coverage", "env_model_pybind.egg-info"),),
   #  packages=find_packages(exclude=("tests", "docs", "jupyter")),
   #  include_package_data=True,
    # install_requires=[
@@ -82,7 +91,7 @@ setup(
    #     'matplotlib>=2.5.0'
    # ],
     #setup_requires=['pytest-runner', 'flake8'],
-    #tests_require=['pytest'],
+    tests_require=['pytest'],
    # entry_points={
    #     'console_scripts': ['commonroad-monitor=crmonitor.main:main'],
    # },
