@@ -63,6 +63,10 @@ target_link_libraries(env_model
 # Create environment model test node
 add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
 target_link_libraries(env_model_example_node PRIVATE ${LIBRARY_NAME})
+target_link_libraries(env_model_example_node
+    PRIVATE
+        Boost::program_options
+    )
 
 
 # add pybind module
