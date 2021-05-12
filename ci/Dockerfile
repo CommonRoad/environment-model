@@ -59,7 +59,7 @@ ENV CONDA_DEFAULT_ENV $commonroad
 
 
 RUN /bin/bash -c "source activate commonroad"
-RUN git clone https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker.git /commonroad
-RUN bash build.sh -e /root/anaconda3/envs/commonroad -v 3.8 --cgal --serializer -i -j 6
-RUN cd build/lib/commonroad_dc && mv libcrccosy.a ../../../
+RUN cd /commonroad && git clone https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker.git
+RUN cd /commonroad/commonroad-drivability-checker && bash /commonroad/commonroad-drivability-checker/build.sh -e /root/anaconda3/envs/commonroad -v 3.8 --cgal --serializer -i -j 6
+RUN cd /commonroad/commonroad-drivability-checker/build/lib/commonroad_dc && mv libcrccosy.a ../../../
 
