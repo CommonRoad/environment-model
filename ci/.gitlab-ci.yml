@@ -7,11 +7,10 @@ stages:
   - docs
 
 
-image: $CI_REGISTRY/maierhofer/environment-model/ci:0.3.1
+image: $CI_REGISTRY/maierhofer/environment-model/ci:0.4.0
 
 before_script:
   - source activate commonroad
-  - bash ./ci/install_cps_software.sh
 
 ### static test ###
 clang-format:
@@ -32,7 +31,7 @@ build-clang:
     - export CC=clang
     - export CXX=clang++
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCRCCOSY_LIBRARY_DIR="commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
 
 build-gcc:
@@ -41,40 +40,40 @@ build-gcc:
     - export CC=gcc
     - export CXX=g++
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCRCCOSY_LIBRARY_DIR=commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
 
 build-standalone:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCRCCOSY_LIBRARY_DIR=commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
     - make env_model_example_node -j4
 
 build-test:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCRCCOSY_LIBRARY_DIR=commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
   artifacts:
     paths:
       - ./env_model_test
       - ./libenv_model.so
       - ./tests/testScenarios/*
-    expire_in: 45 minutes # TODO set to 20min when drivability checker is installed in docker directly
+    expire_in: 20 minutes
 
 build-run-coverage:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR="$HOME"/commonroad-drivability-checker -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCRCCOSY_LIBRARY_DIR=commonroad/commonroad-drivability-checker -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_coverage -j4
   artifacts:
     paths:
       - ./build/
       - ./env_model_coverage
-    expire_in: 45 minutes # TODO set to 20min when drivability checker is installed in docker directly
+    expire_in: 20 minutes
 
 
 ### tests ###
@@ -84,7 +83,7 @@ test:
     - ./env_model_test --gtest_output="xml:report.xml"
 #    - pip install tox coverage
 #    - pip install -r ./requirements.txt
-#    - python setup.py install --crccosy "$HOME"/commonroad-drivability-checker
+#    - python setup.py install --crccosy commonroad/commonroad-drivability-checker
 #    - coverage run -m pytest tests/envModelTests/pybind
 #    - coverage report -m || true
   dependencies:
