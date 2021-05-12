@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.4.1
+version=0.4.2
 gitlab_img=gitlab.lrz.de:5005/maierhofer/environment-model/ci:$version
 
 docker login gitlab.lrz.de:5005 \
