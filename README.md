@@ -16,7 +16,7 @@ Note that the repository does not contain runtime verification algorithms and co
 ## Dependencies:
 - [gtest](https://github.com/google/googletest) (should be automatically installed)
 - [commonroad-io](https://gitlab.lrz.de/cps/commonroad-io)
-- [CommonRoad Curvilinear Coordinate System](https://gitlab.lrz.de/cps/commonroad-curvilinear-coordinate-system)
+- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker) (use *Full Installation with Installation Script* for the installation)
 - cmake > 3.16
 
 ## Build and Compile
@@ -39,7 +39,7 @@ cd build
 
 Build with `cmake` and specify paths to external dependencies:
 ```bash
-cmake -DCRCCOSY_LIBRARY_DIR=absolutPathToCurvilinearCoordinateSystem/CurvilinearCoordinateSystem ..
+cmake -DCRCCOSY_LIBRARY_DIR=absolutPathToCurvilinearCoordinateSystem/DrivabilityChecker ..
 ```
 
 To use the Python binding, run 

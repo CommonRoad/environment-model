@@ -28,7 +28,7 @@ endif()
 if(NOT EXISTS "${CRCCOSY_LIBRARY_DIR}")
     message(SEND_ERROR "Can't find the CommonRoad-Curvilinear-Coordinate System library in ${CRCCOSY_LIBRARY_DIR}")
 endif()
-set(CRCCOSY_LIBRARY ${CRCCOSY_LIBRARY_DIR}/libcrccosy.a)
+set(CRCCOSY_LIBRARY ${CRCCOSY_LIBRARY_DIR}/build/lib/commonroad_dc/libcrccosy.a)
 set(LIB_CRCCOSY_INCLUDE ${CRCCOSY_LIBRARY_DIR}/cpp)
 
 # Include Eigen3, Boost filesystem, and OpenMP
