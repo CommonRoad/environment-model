@@ -106,6 +106,9 @@ std::shared_ptr<Lane> combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_
     for (auto vert : centerVertices) {
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     }
+
+    geometry::util::resample_polyline(reference_path, 2, reference_path);
+
     std::shared_ptr<Lane> lane =
         std::make_shared<Lane>(laneletList, newLanelet, CurvilinearCoordinateSystem(reference_path));
     return lane;

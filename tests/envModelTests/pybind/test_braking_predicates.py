@@ -4,11 +4,9 @@ import numpy as np
 import cpp_env_model
 
 from commonroad.geometry.shape import Rectangle
-from commonroad.scenario.lanelet import LaneletNetwork
-from commonroad.scenario.obstacle import State, ObstacleType
+from commonroad.scenario.lanelet import LaneletNetwork, Lanelet
+from commonroad.scenario.obstacle import State, ObstacleType, DynamicObstacle
 from commonroad.prediction.prediction import TrajectoryPrediction, Trajectory
-
-from crmonitor.common.helper import *
 
 
 class TestBrakingPredicates(unittest.TestCase):
