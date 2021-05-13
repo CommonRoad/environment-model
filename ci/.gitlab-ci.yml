@@ -81,9 +81,10 @@ test:
   stage: test
   script:
     - ./env_model_test --gtest_output="xml:report.xml"
+    - pip install tox coverage
     - pip install -r ./requirements.txt
     - python setup.py install --crccosy /commonroad/commonroad-drivability-checker
-    - pytest tests/envModelTests/pybind
+    - coverage run -m pytest tests/envModelTests/pybind
   dependencies:
     - build-test
   artifacts:
