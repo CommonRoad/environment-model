@@ -50,12 +50,14 @@ target_link_libraries(env_model_example_node PRIVATE ${LIBRARY_NAME})
 
 
 # add pybind module
-pybind11_add_module(cpp_env_model
-        commonroad_cpp/interfaces/pybind/python_interface.cpp
-        commonroad_cpp/interfaces/pybind/python_interface.h
-        commonroad_cpp/interfaces/pybind/translate_python_types.cpp
-        commonroad_cpp/interfaces/pybind/translate_python_types.h)
-target_link_libraries(cpp_env_model PRIVATE ${LIBRARY_NAME})
+if(BUILD_PYBIND)
+    pybind11_add_module(cpp_env_model
+            commonroad_cpp/interfaces/pybind/python_interface.cpp
+            commonroad_cpp/interfaces/pybind/python_interface.h
+            commonroad_cpp/interfaces/pybind/translate_python_types.cpp
+            commonroad_cpp/interfaces/pybind/translate_python_types.h)
+    target_link_libraries(cpp_env_model PRIVATE ${LIBRARY_NAME})
+endif(BUILD_PYBIND)
 
 # this adds many warnings to the build. They usually help to find some bugs
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")

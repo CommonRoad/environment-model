@@ -4,7 +4,7 @@ import sys
 import platform
 import subprocess
 
-from setuptools import find_packages, Extension
+from setuptools import Extension
 from setuptools.command.build_ext import build_ext
 from distutils.core import setup
 from distutils.version import LooseVersion
@@ -41,13 +41,17 @@ class CMakeBuild(build_ext):
 
     def build_extension(self, ext):
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
+
         # required for auto-detection of auxiliary "native" libs
         if not extdir.endswith(os.path.sep):
             extdir += os.path.sep
 
-        cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
-                      '-DPYTHON_EXECUTABLE=' + sys.executable,
-                      '-DCRCCOSY_LIBRARY_DIR=' + crccosy]
+        cmake_args = ["-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
+                      "-DPYTHON_EXECUTABLE={}".format(sys.executable),
+                      "-DCRCCOSY_LIBRARY_DIR={}".format(crccosy),
+                      "-DBUILD_TESTS=OFF",
+                      "-DBUILD_DOXYGEN=OFF",
+                      "-DBUILD_PYBIND=ON"]
 
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
@@ -78,24 +82,7 @@ setup(
     author='Sebastian Maierhofer',
     author_email='sebastian.maierhofer@tum.de',
     description='CommonRoad C++ Environment Model',
-    packages=find_packages(exclude=("tests", "docs", "build", "ci", "cmake", "external", "cmake-build-debug",
-                                    "cmake-build-debug-coverage", "cmake-build-release",
-                                    "cmake-build-release-coverage", "env_model_pybind.egg-info"),),
-  #  packages=find_packages(exclude=("tests", "docs", "jupyter")),
-  #  include_package_data=True,
-   # install_requires=[
-   #     'scipy>=1.4.1',
-   #     'numpy>=1.16.4'
-   #     'metric-temporal-logic>=0.1.7'
-   #     'commonroad-io==2020.3'
-   #     'matplotlib>=2.5.0'
-   # ],
-    #setup_requires=['pytest-runner', 'flake8'],
-    tests_require=['pytest'],
-   # entry_points={
-   #     'console_scripts': ['commonroad-monitor=crmonitor.main:main'],
-   # },
-    ext_modules=[CMakeExtension('cpp_env_model')],
-    cmdclass=dict(build_ext=CMakeBuild),
+    ext_modules=[CMakeExtension("environment-model")],
+    cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
 )

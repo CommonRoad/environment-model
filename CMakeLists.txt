@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+option(BUILD_DOXYGEN "Build doxygen" ON)
+option(BUILD_TESTS "Build tests" ON)
+option(BUILD_PYBIND "Build python interface" OFF)
+
 # Appends dictionary where other cmake files are stored which install required Software
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
 
@@ -39,27 +43,33 @@ if(NOT OpenMP_CXX_FOUND)
     message(SEND_ERROR "Can't find the OpenMP package")
 endif()
 
-## Include pybind
-add_subdirectory(external/pybind11)
-set(PYBIND11_CPP_STANDARD -std=c++17)
-
 # Set compiler optimizations for build types
 set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
 set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/../)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
+
+## Include pybind
+if(BUILD_PYBIND)
+    add_subdirectory(external/pybind11)
+    set(PYBIND11_CPP_STANDARD -std=c++17)
+endif(BUILD_PYBIND)
 
 # Add Environment model node
 add_subdirectory(src)
 
-# Doxygen
-include(doxygen)
+## Doxygen
+if(BUILD_DOXYGEN)
+    include(doxygen)
+endif(BUILD_DOXYGEN)
 
 # add unit testing
-enable_testing()
-add_subdirectory(tests)
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif(BUILD_TESTS)
 
 
 
