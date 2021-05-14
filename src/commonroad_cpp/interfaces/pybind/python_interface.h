@@ -20,18 +20,17 @@ bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double 
                                                          double velocityP, double minAccelerationK,
                                                          double minAccelerationP, double tReact);
 
-double py_safe_distance_robust_evaluation(size_t scenarioId, size_t timeStep,
-                                          size_t py_egoVehicleId, const py::list &py_obstaclesIds);
+double py_safe_distance_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                          const py::list &py_obstaclesIds);
 
 double py_safe_distance_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double velocityK,
                                                           double velocityP, double minAccelerationK,
                                                           double minAccelerationP, double tReact);
 
-double py_safe_distance(double velocityK, double velocityP, double minAccelerationK,
-                        double minAccelerationP, double tReact);
+double py_safe_distance(double velocityK, double velocityP, double minAccelerationK, double minAccelerationP,
+                        double tReact);
 
 std::vector<int> createVectorFromPyList(const py::list &list);
-
 
 // uint8_t py_removeScenario(const int &ScenarioID);
 
@@ -53,10 +52,8 @@ PYBIND11_MODULE(cpp_env_model, m) {
           "Robust evaluation of safe distance predicate using parameters directly", py::arg("lonPosK"),
           py::arg("lonPosP"), py::arg("velocityK"), py::arg("velocityP"), py::arg("minAccelerationK"),
           py::arg("minAccelerationP"), py::arg("tReact"));
-  m.def("safe_distance", &py_safe_distance,
-        "Calculation of safe distance", py::arg("velocityK"),
-        py::arg("velocityP"), py::arg("minAccelerationK"),
-        py::arg("minAccelerationP"), py::arg("tReact"));
+    m.def("safe_distance", &py_safe_distance, "Calculation of safe distance", py::arg("velocityK"),
+          py::arg("velocityP"), py::arg("minAccelerationK"), py::arg("minAccelerationP"), py::arg("tReact"));
 }
 
 #endif // ENV_MODEL_PYTHON_INTERFACE_H

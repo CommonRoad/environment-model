@@ -22,8 +22,8 @@ class TestBrakingPredicates(unittest.TestCase):
         # expected solutions
         exp_sol_monitor_mode_1 = True
         exp_sol_monitor_mode_2 = False
-        exp_sol_constraint_mode_1 = 6.0
-        exp_sol_constraint_mode_2 = 26.0
+        # exp_sol_constraint_mode_1 = 6.0
+        # exp_sol_constraint_mode_2 = 26.0
         exp_sol_robustness_mode_1 = 9.0
         exp_sol_robustness_mode_2 = -21.0
 

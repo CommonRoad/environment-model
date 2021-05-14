@@ -38,12 +38,12 @@ uint8_t py_registerScenario(const size_t scenarioId, const size_t timeStep, cons
 }
 
 std::vector<int> createVectorFromPyList(const py::list &list) {
-  std::vector<int> vec{};
-  vec.reserve(list.size());
-  for (const auto &elem : list) {
-    vec.emplace_back(py::cast<int>(elem));
-  }
-  return vec;
+    std::vector<int> vec{};
+    vec.reserve(list.size());
+    for (const auto &elem : list) {
+        vec.emplace_back(py::cast<int>(elem));
+    }
+    return vec;
 }
 
 bool py_safe_distance_boolean_evaluation(const size_t scenarioId, const size_t timeStep, const size_t py_egoVehicleId,
@@ -63,23 +63,23 @@ bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double 
 }
 
 double py_safe_distance_robust_evaluation(const size_t scenarioId, const size_t timeStep, const size_t py_egoVehicleId,
-                                        const py::list &py_obstacleIds) {
-  SafeDistancePredicate pred;
-  std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
-  auto world = predicateEvaluation->findWorld(scenarioId);
-  return pred.robustEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
-                              world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
+                                          const py::list &py_obstacleIds) {
+    SafeDistancePredicate pred;
+    std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
+    auto world = predicateEvaluation->findWorld(scenarioId);
+    return pred.robustEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
+                                 world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
 }
 
 double py_safe_distance_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double velocityK,
-                                                         double velocityP, double minAccelerationK,
-                                                         double minAccelerationP, double tReact) {
-  SafeDistancePredicate pred;
-  return pred.robustEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK, minAccelerationP, tReact);
+                                                          double velocityP, double minAccelerationK,
+                                                          double minAccelerationP, double tReact) {
+    SafeDistancePredicate pred;
+    return pred.robustEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK, minAccelerationP, tReact);
 }
 
 double py_safe_distance(double velocityK, double velocityP, double minAccelerationK, double minAccelerationP,
                         double tReact) {
-  SafeDistancePredicate pred;
-  return pred.computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact);
+    SafeDistancePredicate pred;
+    return pred.computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact);
 }
