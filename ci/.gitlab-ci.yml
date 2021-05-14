@@ -105,5 +105,5 @@ docs:
   stage: docs
   script:
     - cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DBUILD_DOXYGEN=ON
+    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DBUILD_DOXYGEN=ON -DCMAKE_BUILD_TYPE=Debug ..
     - make doc_doxygen ..
