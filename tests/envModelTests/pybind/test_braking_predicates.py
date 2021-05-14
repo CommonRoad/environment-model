@@ -46,9 +46,9 @@ class TestBrakingPredicates(unittest.TestCase):
         sol_monitor_mode_1_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 0, 1, [2])
         sol_monitor_mode_2_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 1, 1, [2])
         sol_monitor_mode_1_parameters = \
-            cpp_env_model.safeDistanceBooleanEvaluation(2.5, 17.5, 20, 20, -10.0, -10.0, 0.3)
+            cpp_env_model.safe_distance_boolean_evaluation(2.5, 17.5, 20, 20, -10.0, -10.0, 0.3)
         sol_monitor_mode_2_parameters = \
-            cpp_env_model.safeDistanceBooleanEvaluation(22.5, 27.5, 20, 0, -10.0, -10.0, 0.3)
+            cpp_env_model.safe_distance_boolean_evaluation(22.5, 27.5, 20, 0, -10.0, -10.0, 0.3)
 
         self.assertEqual(exp_sol_monitor_mode_1, sol_monitor_mode_1_obstacles)
         self.assertEqual(exp_sol_monitor_mode_2, sol_monitor_mode_2_obstacles)
@@ -71,9 +71,9 @@ class TestBrakingPredicates(unittest.TestCase):
         sol_robustness_mode_1_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 0, 1, [2])
         sol_robustness_mode_2_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 1, 1, [2])
         sol_robustness_mode_1_parameters = \
-            cpp_env_model.safeDistanceRobustEvaluation(2.5, 17.5, 20, 20, -10.0, -10.0, 0.3)
+            cpp_env_model.safe_distance_robust_evaluation(2.5, 17.5, 20, 20, -10.0, -10.0, 0.3)
         sol_robustness_mode_2_parameters = \
-            cpp_env_model.safeDistanceRobustEvaluation(22.5, 27.5, 20, 0, -10.0, -10.0, 0.3)
+            cpp_env_model.safe_distance_robust_evaluation(22.5, 27.5, 20, 0, -10.0, -10.0, 0.3)
 
         self.assertEqual(exp_sol_robustness_mode_1, sol_robustness_mode_1_obstacles)
         self.assertEqual(exp_sol_robustness_mode_2, sol_robustness_mode_2_obstacles)
