@@ -368,7 +368,7 @@ class Obstacle {
     double aMax{3.0};                                 //**< maximum absolute acceleration of obstacle in [m/s^2] */
     double aMaxLong{3.0};                             //**< maximal longitudinal acceleration of obstacle in [m/s^2] */
     double aMinLong{-10.0};                           //**< minimal longitudinal acceleration of obstacle in [m/s^2] */
-    double reactionTime{0.5};                         //**< reaction time of obstacle in [s] */
+    double reactionTime{0.3};                         //**< reaction time of obstacle in [s] */
     std::map<size_t, std::shared_ptr<State>> trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
     std::map<size_t, std::shared_ptr<State>> history{};              //**< previous states of the obstacle */
     Rectangle geoShape; // TODO make general                                          //**< shape of the obstacle */

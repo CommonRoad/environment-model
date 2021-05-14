@@ -6,6 +6,8 @@
 
 double SafeDistancePredicate::computeSafeDistance(double velocityK, double velocityP, double minAccelerationK,
                                                   double minAccelerationP, double tReact) {
+    if (minAccelerationK >= 0 or minAccelerationP >= 0)
+        throw std::logic_error("Acceleration is not negative!");
     return pow(velocityP, 2) / (-2 * std::abs(minAccelerationP)) -
            pow(velocityK, 2) / (-2 * std::abs(minAccelerationK)) + velocityK * tReact;
 }

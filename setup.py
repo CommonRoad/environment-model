@@ -85,4 +85,12 @@ setup(
     ext_modules=[CMakeExtension("environment-model")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
+    install_requires=[
+        'commonroad-io>=2021.1',
+    ],
+    extras_require={
+        'tests': ['numpy>=1.20.0',
+                  'pytest>=5.3.2', ],
+    },
+
 )

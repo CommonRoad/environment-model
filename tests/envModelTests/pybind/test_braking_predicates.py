@@ -40,61 +40,70 @@ class TestBrakingPredicates(unittest.TestCase):
                                              State(time_step=1, position=np.array([30, 0]), velocity=0, acceleration=0,
                                                    orientation=0)]), Rectangle(5, 2)))
 
-        cpp_env_model.registerScenario(123, 0, self.lanelet_network, [other_obstacle], [ego_obstacle])
+        cpp_env_model.register_scenario(123, 0, self.lanelet_network, [other_obstacle], [ego_obstacle])
 
         # Monitor-Mode
-        sol_monitor_mode_1_obstacles = cpp_env_model.safeDistanceBooleanEvaluation(123, 0, 1, [2])
-        sol_monitor_mode_2_obstacles = cpp_env_model.safeDistanceBooleanEvaluation(123, 1, 1, [2])
-        sol_monitor_mode_1_parameters = cpp_env_model.safeDistanceBooleanEvaluation(0, 20, 20, 20, -1, -1, 0)
-        sol_monitor_mode_2_parameters = cpp_env_model.safeDistanceBooleanEvaluation(20, 30, 20, 0, 0, 0, 0)
+        sol_monitor_mode_1_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 0, 1, [2])
+        sol_monitor_mode_2_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 1, 1, [2])
+        sol_monitor_mode_1_parameters = \
+            cpp_env_model.safeDistanceBooleanEvaluation(2.5, 17.5, 20, 20, -10.0, -10.0, 0.3)
+        sol_monitor_mode_2_parameters = \
+            cpp_env_model.safeDistanceBooleanEvaluation(22.5, 27.5, 20, 0, -10.0, -10.0, 0.3)
 
         self.assertEqual(exp_sol_monitor_mode_1, sol_monitor_mode_1_obstacles)
         self.assertEqual(exp_sol_monitor_mode_2, sol_monitor_mode_2_obstacles)
         self.assertEqual(exp_sol_monitor_mode_1, sol_monitor_mode_1_parameters)
         self.assertEqual(exp_sol_monitor_mode_2, sol_monitor_mode_2_parameters)
 
-        # # Constraint-Mode
-        # sol_constraint_mode_1 = BrakingPredicateCollection.keeps_safe_distance_prec(0, ego_vehicle, other_vehicle,
-        #                                                                             OperatingMode.CONSTRAINT)
-        # sol_constraint_mode_2 = BrakingPredicateCollection.keeps_safe_distance_prec(1, ego_vehicle, other_vehicle,
-        #                                                                             OperatingMode.CONSTRAINT)
+        # Constraint-Mode
+        # TODO: not supported yet
+        # sol_constraint_mode_1_obstacles = cpp_env_model.safeDistanceConstraintEvaluation(123, 0, 1, [2])
+        # sol_constraint_mode_2_obstacles = cpp_env_model.safeDistanceConstraintEvaluation(123, 1, 1, [2])
+        # sol_constraint_mode_1_parameters = cpp_env_model.safeDistanceConstraintEvaluation(0, 20, 20, 20, -1, -1, 0)
+        # sol_constraint_mode_2_parameters = cpp_env_model.safeDistanceConstraintEvaluation(0, 20, 20, 20, -1, -1, 0)
         #
-        # self.assertEqual(exp_sol_constraint_mode_1, sol_constraint_mode_1.value)
-        # self.assertEqual(exp_sol_constraint_mode_2, sol_constraint_mode_2.value)
-        #
-        # # Robustness-Mode
-        # sol_robustness_mode_1 = BrakingPredicateCollection.keeps_safe_distance_prec(0, ego_vehicle, other_vehicle,
-        #                                                                             OperatingMode.ROBUSTNESS)
-        # sol_robustness_mode_2 = BrakingPredicateCollection.keeps_safe_distance_prec(1, ego_vehicle, other_vehicle,
-        #                                                                             OperatingMode.ROBUSTNESS)
-        #
-        # self.assertEqual(exp_sol_robustness_mode_1, sol_robustness_mode_1)
-        # self.assertEqual(exp_sol_robustness_mode_2, sol_robustness_mode_2)
+        # self.assertEqual(exp_sol_constraint_mode_1, sol_constraint_mode_1_obstacles.value)
+        # self.assertEqual(exp_sol_constraint_mode_2, sol_constraint_mode_2_obstacles.value)
+        # self.assertEqual(exp_sol_constraint_mode_1, sol_constraint_mode_1_parameters.value)
+        # self.assertEqual(exp_sol_constraint_mode_2, sol_constraint_mode_2_parameters.value)
 
-    # def test_safe_distance(self):
-    #     # invalid parameters a_min_follow, a_min_lead
-    #     self.assertRaises(AssertionError, BrakingPredicateCollection.safe_distance, 0, 0, -1, 0, 0)
-    #     self.assertRaises(AssertionError, BrakingPredicateCollection.safe_distance, 0, 0, 0, -1, 0)
-    #
-    #     exp_sol = 0  # both vehicles standing, no reaction time
-    #     solution = BrakingPredicateCollection.safe_distance(0, 0, -10, -10, 0)
-    #     self.assertEqual(exp_sol, solution)
-    #
-    #     exp_sol = 0  # both vehicles same velocity, no reaction time
-    #     solution = BrakingPredicateCollection.safe_distance(5, 5, -10, -10, 0)
-    #     self.assertEqual(exp_sol, solution)
-    #
-    #     exp_sol = 50.0  # both vehicles same velocity, with reaction time
-    #     solution = BrakingPredicateCollection.safe_distance(5, 5, -10, -10, 10)
-    #     self.assertEqual(exp_sol, solution)
-    #
-    #     exp_sol = 5.0  # following vehicle higher velocity, no reaction time
-    #     solution = BrakingPredicateCollection.safe_distance(10, 0, -10, -10, 0)
-    #     self.assertEqual(exp_sol, solution)
-    #
-    #     exp_sol = -5.0  # leading vehicle higher velocity, no reaction time
-    #     solution = BrakingPredicateCollection.safe_distance(0, 10, -10, -10, 0)
-    #     self.assertEqual(exp_sol, solution)
+        # # Robustness-Mode
+        sol_robustness_mode_1_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 0, 1, [2])
+        sol_robustness_mode_2_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 1, 1, [2])
+        sol_robustness_mode_1_parameters = \
+            cpp_env_model.safeDistanceRobustEvaluation(2.5, 17.5, 20, 20, -10.0, -10.0, 0.3)
+        sol_robustness_mode_2_parameters = \
+            cpp_env_model.safeDistanceRobustEvaluation(22.5, 27.5, 20, 0, -10.0, -10.0, 0.3)
+
+        self.assertEqual(exp_sol_robustness_mode_1, sol_robustness_mode_1_obstacles)
+        self.assertEqual(exp_sol_robustness_mode_2, sol_robustness_mode_2_obstacles)
+        self.assertEqual(exp_sol_robustness_mode_1, sol_robustness_mode_1_parameters)
+        self.assertEqual(exp_sol_robustness_mode_2, sol_robustness_mode_2_parameters)
+
+    def test_safe_distance(self):
+        # invalid parameters a_min_follow, a_min_lead
+        self.assertRaises(RuntimeError, cpp_env_model.safe_distance, 0, 0, -1, 0, 0)
+        self.assertRaises(RuntimeError, cpp_env_model.safe_distance, 0, 0, 0, -1, 0)
+
+        exp_sol = 0  # both vehicles standing, no reaction time
+        solution = cpp_env_model.safe_distance(0, 0, -10, -10, 0)
+        self.assertEqual(exp_sol, solution)
+
+        exp_sol = 0  # both vehicles same velocity, no reaction time
+        solution = cpp_env_model.safe_distance(5, 5, -10, -10, 0)
+        self.assertEqual(exp_sol, solution)
+
+        exp_sol = 50.0  # both vehicles same velocity, with reaction time
+        solution = cpp_env_model.safe_distance(5, 5, -10, -10, 10)
+        self.assertEqual(exp_sol, solution)
+
+        exp_sol = 5.0  # following vehicle higher velocity, no reaction time
+        solution = cpp_env_model.safe_distance(10, 0, -10, -10, 0)
+        self.assertEqual(exp_sol, solution)
+
+        exp_sol = -5.0  # leading vehicle higher velocity, no reaction time
+        solution = cpp_env_model.safe_distance(0, 10, -10, -10, 0)
+        self.assertEqual(exp_sol, solution)
     #
     # def test_brakes_stronger(self):
     #     # expected solutions
