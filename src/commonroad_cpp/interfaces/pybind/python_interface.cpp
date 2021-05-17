@@ -3,9 +3,9 @@
 //
 
 #include "python_interface.h"
-#include "translate_python_types.h"
 #include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
+#include "translate_python_types.h"
 
 uint8_t py_registerScenario(const size_t scenarioId, const size_t timeStep, const py::handle &py_laneletNetwork,
                             const py::list &py_obstacles, const py::list &py_egoVehicles) {
@@ -86,29 +86,29 @@ double py_safe_distance(double velocityK, double velocityP, double minAccelerati
 }
 
 bool py_in_front_of_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                       const py::list &py_obstacleIds){
-  InFrontOfPredicate pred;
-  std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
-  auto world = predicateEvaluation->findWorld(scenarioId);
-  return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
-                                world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
+                                       const py::list &py_obstacleIds) {
+    InFrontOfPredicate pred;
+    std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
+    auto world = predicateEvaluation->findWorld(scenarioId);
+    return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
+                                  world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
 }
 
-bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lonPosP){
-  InFrontOfPredicate pred;
-  return pred.booleanEvaluation(lonPosK, lonPosP);
+bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lonPosP) {
+    InFrontOfPredicate pred;
+    return pred.booleanEvaluation(lonPosK, lonPosP);
 }
 
 double py_in_front_of_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                        const py::list &py_obstacleIds){
-  InFrontOfPredicate pred;
-  std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
-  auto world = predicateEvaluation->findWorld(scenarioId);
-  return pred.robustEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
-                               world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
+                                        const py::list &py_obstacleIds) {
+    InFrontOfPredicate pred;
+    std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
+    auto world = predicateEvaluation->findWorld(scenarioId);
+    return pred.robustEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
+                                 world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
 }
 
-double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP){
-  InFrontOfPredicate pred;
-  return pred.robustEvaluation(lonPosK, lonPosP);
+double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP) {
+    InFrontOfPredicate pred;
+    return pred.robustEvaluation(lonPosK, lonPosP);
 }
