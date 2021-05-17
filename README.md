@@ -42,7 +42,7 @@ Build with `cmake` and specify paths to external dependencies:
 cmake -DCRCCOSY_LIBRARY_DIR=absolutPathToCurvilinearCoordinateSystem/DrivabilityChecker ..
 ```
 
-To use the Python binding, run 
+To use the environment model within Python, run 
 ```bash
 python setup.py install
 ```
