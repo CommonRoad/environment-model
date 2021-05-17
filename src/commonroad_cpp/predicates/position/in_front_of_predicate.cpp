@@ -25,7 +25,7 @@ Constraint InFrontOfPredicate::constraintEvaluation(double lonPositionK, double 
 double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP) {
-    return obstacleK->frontS(timeStep) - obstacleP->frontS(timeStep);
+  return obstacleK->rearS(timeStep) - obstacleP->frontS(timeStep);
 }
 
 double InFrontOfPredicate::robustEvaluation(double lonPositionK, double lonPositionP) {

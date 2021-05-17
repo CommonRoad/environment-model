@@ -14,14 +14,14 @@ uint8_t py_registerScenario(size_t scenarioId, size_t timeStep, const py::handle
                             const py::list &py_obstacles, const py::list &py_egoVehicles);
 
 bool py_safe_distance_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                         const py::list &py_obstaclesIds);
+                                         const py::list &py_obstacleIds);
 
 bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double lonPosP, double velocityK,
                                                          double velocityP, double minAccelerationK,
                                                          double minAccelerationP, double tReact);
 
 double py_safe_distance_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                          const py::list &py_obstaclesIds);
+                                          const py::list &py_obstacleIds);
 
 double py_safe_distance_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double velocityK,
                                                           double velocityP, double minAccelerationK,
@@ -29,6 +29,17 @@ double py_safe_distance_robust_evaluation_with_parameters(double lonPosK, double
 
 double py_safe_distance(double velocityK, double velocityP, double minAccelerationK, double minAccelerationP,
                         double tReact);
+
+bool py_in_front_of_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                       const py::list &py_obstacleIds);
+
+bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lonPosP);
+
+double py_in_front_of_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                        const py::list &py_obstacleIds);
+
+double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP);
+
 
 std::vector<int> createVectorFromPyList(const py::list &list);
 
@@ -54,6 +65,19 @@ PYBIND11_MODULE(cpp_env_model, m) {
           py::arg("minAccelerationP"), py::arg("tReact"));
     m.def("safe_distance", &py_safe_distance, "Calculation of safe distance", py::arg("velocityK"),
           py::arg("velocityP"), py::arg("minAccelerationK"), py::arg("minAccelerationP"), py::arg("tReact"));
+    m.def("in_front_of_boolean_evaluation", &py_in_front_of_boolean_evaluation,
+        "Boolean evaluation of safe distance predicate", py::arg("scenarioId"), py::arg("time_step"),
+        py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
+    m.def("in_front_of_boolean_evaluation", &py_in_front_of_boolean_evaluation_with_parameters,
+          "Boolean evaluation of in front of predicate using parameters directly", py::arg("lonPosK"),
+          py::arg("lonPosP"));
+    m.def("in_front_of_robust_evaluation", &py_in_front_of_robust_evaluation,
+          "Robust evaluation of in front of predicate", py::arg("scenarioId"), py::arg("time_step"),
+          py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
+    m.def("in_front_of_robust_evaluation", &py_in_front_of_robust_evaluation_with_parameters,
+          "Robust evaluation of in front of predicate using parameters directly", py::arg("lonPosK"),
+          py::arg("lonPosP"));
+
 }
 
 #endif // ENV_MODEL_PYTHON_INTERFACE_H
