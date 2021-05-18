@@ -8,9 +8,9 @@ bool Predicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_pt
                                            const std::shared_ptr<Obstacle> &obstacleK,
                                            const std::shared_ptr<Obstacle> &obstacleP) {
     statistics.numExecutions++;
-    evaluationTimer.start();
+    auto startTime{Timer::start()};
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
-    long compTime{evaluationTimer.stop()};
+    long compTime{evaluationTimer.stop(startTime)};
     if (compTime > statistics.maxComputationTime)
         statistics.maxComputationTime = compTime;
     else if (compTime > statistics.minComputationTime)

@@ -3,25 +3,16 @@
 
 using namespace std::chrono;
 
-Timer::Timer() : startTime{} {}
+Timer::Timer() = default;
 
 Timer::~Timer() = default;
 
-void Timer::start() {
-    if (currentlyRunning) {
-        throw std::runtime_error("Timer::start() Timer is already running.");
-    }
-    currentlyRunning = true;
-    startTime = high_resolution_clock::now();
+std::chrono::high_resolution_clock::time_point Timer::start() {
+  return high_resolution_clock::now();
 }
 
-long Timer::stop() {
+long Timer::stop(std::chrono::high_resolution_clock::time_point startTime) {
     const auto time(high_resolution_clock::now());
-
-    if (not currentlyRunning) {
-        throw std::runtime_error("Timer::stop() Timer did not even start.");
-    }
-    currentlyRunning = false;
 
     const auto diff = duration_cast<nanoseconds>(time - startTime).count();
 

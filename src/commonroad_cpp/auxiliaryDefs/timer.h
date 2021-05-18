@@ -2,6 +2,7 @@
 #include <chrono>
 /**
  * Taken from https://github.com/AutoPas/AutoPas/blob/ecbf799e8c1f828eb51e3507b76275afe98a8cb2/src/autopas/utils/Timer.h
+ * RV-Monitor contains a similar class.
  */
 class Timer {
   public:
@@ -11,15 +12,17 @@ class Timer {
 
     /**
      * Start the timer.
+     * @return Start time as high resolution time point.
      */
-    void start();
+    static std::chrono::high_resolution_clock::time_point start();
 
     /**
      * Stops the timer and returns the time elapsed in nanoseconds since the last call to start.
      * It also adds the duration to the total time.
+     * @param Start time as high resolution time point.
      * @return elapsed time in nanoseconds
      */
-    long stop();
+    long stop(std::chrono::high_resolution_clock::time_point startTime);
 
     /**
      * Adds the given amount of nanoseconds to the total time.
@@ -35,17 +38,7 @@ class Timer {
 
   private:
     /**
-     * Time point of last call of start().
-     */
-    std::chrono::high_resolution_clock::time_point startTime;
-
-    /**
      * Accumulated total time.
      */
     long totalTime = 0;
-
-    /**
-     * Indicator if this timer currently is measuring.
-     */
-    bool currentlyRunning = false;
 };
