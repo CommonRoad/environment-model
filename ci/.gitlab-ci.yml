@@ -96,7 +96,7 @@ test:
 publish-coverage:
   stage: coverage
   script:
-    - gcovr -e src/interfaces/commonroad/pugi_xml/pugixml.hpp -e src/interfaces/commonroad/pugi_xml/pugixml.cpp -e src/interfaces/standalone/main.cpp -e external/ -e 'cmake-(.+/)?/' -e tests/ -e build/CMakeFiles/
+    - gcovr -e src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.hpp -e src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp -e src/commonroad_cpp/interfaces/standalone/main.cpp -e src/commonroad_cpp/interfaces/pybind/ -e external/ -e 'cmake-(.+/)?/' -e tests/ -e build/CMakeFiles/
   dependencies:
     - build-run-coverage
 
