@@ -76,10 +76,9 @@ bool Obstacle::getIsStatic() const { return isStatic; }
 
 const std::shared_ptr<State> &Obstacle::getCurrentState() const { return currentState; }
 
-bool Obstacle::timeStepExists(size_t timeStep){
-    if (trajectoryPrediction.count(timeStep) == 1
-        or currentState->getTimeStep() == timeStep
-        or history.count(timeStep) == 1)
+bool Obstacle::timeStepExists(size_t timeStep) {
+    if (trajectoryPrediction.count(timeStep) == 1 or currentState->getTimeStep() == timeStep or
+        history.count(timeStep) == 1)
         return true;
     else
         return false;

@@ -4,7 +4,6 @@
 
 #include "predicate.h"
 
-
 bool Predicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                            const std::shared_ptr<Obstacle> &obstacleK,
                                            const std::shared_ptr<Obstacle> &obstacleP) {
@@ -12,12 +11,12 @@ bool Predicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_pt
     evaluationTimer.start();
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
     long compTime{evaluationTimer.stop()};
-    if(compTime > statistics.maxComputationTime)
-      statistics.maxComputationTime = compTime;
-    else if(compTime > statistics.minComputationTime)
-      statistics.minComputationTime = compTime;
-    else if(result)
-      statistics.numSatisfaction++;
+    if (compTime > statistics.maxComputationTime)
+        statistics.maxComputationTime = compTime;
+    else if (compTime > statistics.minComputationTime)
+        statistics.minComputationTime = compTime;
+    else if (result)
+        statistics.numSatisfaction++;
     return result;
 }
 
