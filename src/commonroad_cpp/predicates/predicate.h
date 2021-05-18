@@ -9,6 +9,7 @@
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
+#include "commonroad_cpp/auxiliaryDefs/timer.h"
 
 /**
  * Interface for a predicate.
@@ -98,8 +99,9 @@ class Predicate {
   protected:
     PredicateParameters parameters; //**< Struct containing parameters of all predicates. */
   public:
-    static PredicateStatistics statistics; //**< Struct storing statistics of a predicate, e.g., average computation
-                                           // time,  number of calls, etc. */
+    Timer evaluationTimer;
+    PredicateStatistics statistics; //**< Struct storing statistics of a predicate, e.g., average computation
+                                    // time,  number of calls, etc. */
 };
 
 #endif // ENV_MODEL_PREDICATE_H

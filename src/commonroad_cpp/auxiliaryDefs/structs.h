@@ -6,6 +6,7 @@
 #define ENV_MODEL_STRUCTS_H
 
 #include "types_and_definitions.h"
+#include <climits>
 
 struct TrafficLightCycleElement {
     TrafficLightState color;
@@ -31,9 +32,9 @@ struct ValidStates {
 struct PredicateParameters {};
 
 struct PredicateStatistics {
-    double maxComputationTime{0.0};
-    double minComputationTime{0.0};
-    double totalComputationTime{0.0};
+    long maxComputationTime{LONG_MIN};
+    long minComputationTime{LONG_MAX};
+    long totalComputationTime{0};
     int numExecutions{0};
     int numSatisfaction{0};
 };

@@ -359,6 +359,8 @@ class Obstacle {
 
     void setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings);
 
+    bool timeStepExists(size_t timeStep);
+
   private:
     int id{};                                         //**< unique ID of lanelet */
     bool isStatic{false};                             //**< true if Obstacle is static */

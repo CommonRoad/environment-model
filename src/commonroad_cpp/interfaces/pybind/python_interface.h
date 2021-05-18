@@ -65,7 +65,7 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("safe_distance", &py_safe_distance, "Calculation of safe distance", py::arg("velocityK"),
           py::arg("velocityP"), py::arg("minAccelerationK"), py::arg("minAccelerationP"), py::arg("tReact"));
     m.def("in_front_of_boolean_evaluation", &py_in_front_of_boolean_evaluation,
-          "Boolean evaluation of safe distance predicate", py::arg("scenarioId"), py::arg("time_step"),
+          "Boolean evaluation of in front of predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
     m.def("in_front_of_boolean_evaluation", &py_in_front_of_boolean_evaluation_with_parameters,
           "Boolean evaluation of in front of predicate using parameters directly", py::arg("lonPosK"),

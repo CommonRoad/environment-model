@@ -4,14 +4,21 @@
 
 #include "predicate.h"
 
-// define static variable for statistics
-PredicateStatistics Predicate::statistics;
 
 bool Predicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                            const std::shared_ptr<Obstacle> &obstacleK,
                                            const std::shared_ptr<Obstacle> &obstacleP) {
     statistics.numExecutions++;
-    return booleanEvaluation(timeStep, world, obstacleK, obstacleP);
+    evaluationTimer.start();
+    bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
+    long compTime{evaluationTimer.stop()};
+    if(compTime > statistics.maxComputationTime)
+      statistics.maxComputationTime = compTime;
+    else if(compTime > statistics.minComputationTime)
+      statistics.minComputationTime = compTime;
+    else if(result)
+      statistics.numSatisfaction++;
+    return result;
 }
 
 const PredicateParameters &Predicate::getParameters() const { return parameters; }
