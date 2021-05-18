@@ -47,9 +47,9 @@ TEST_F(SafeDistancePredicateTest, RobustEvaluation) {
 
 TEST_F(SafeDistancePredicateTest, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(0, {}, egoVehicle, otherVehicle));
-    EXPECT_EQ(SafeDistancePredicate::statistics.numExecutions, 1);
+    EXPECT_EQ(pred.statistics.numExecutions, 1);
     EXPECT_FALSE(pred.statisticBooleanEvaluation(1, {}, egoVehicle, otherVehicle));
-    EXPECT_EQ(SafeDistancePredicate::statistics.numExecutions, 2);
+    EXPECT_EQ(pred.statistics.numExecutions, 2);
 }
 
 TEST_F(SafeDistancePredicateTest, ComputeSafeDistance) {
