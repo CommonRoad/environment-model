@@ -7,9 +7,7 @@ Timer::Timer() = default;
 
 Timer::~Timer() = default;
 
-std::chrono::high_resolution_clock::time_point Timer::start() {
-  return high_resolution_clock::now();
-}
+std::chrono::high_resolution_clock::time_point Timer::start() { return high_resolution_clock::now(); }
 
 long Timer::stop(std::chrono::high_resolution_clock::time_point startTime) {
     const auto time(high_resolution_clock::now());
