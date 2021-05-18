@@ -20,7 +20,6 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, co
 double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
-    bool sameLaneFront{false};
     std::vector<double> robustnessValues;
     InFrontOfPredicate inFrontOfPredicate;
     InFrontOfPredicate inSameLanePredicate;
