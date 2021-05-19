@@ -96,9 +96,9 @@ class Predicate {
      */
     void setParameters(const PredicateParameters &parameters);
 
-  const PredicateStatistics &getStatistics() const;
+    const PredicateStatistics &getStatistics() const;
 
-  const Timer &getEvaluationTimer() const;
+    const Timer &getEvaluationTimer() const;
 
   protected:
     PredicateParameters parameters; //**< Struct containing parameters of all predicates. */
