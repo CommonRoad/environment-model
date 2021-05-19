@@ -35,10 +35,10 @@ std::shared_ptr<World> PredicateEvaluation::findWorld(size_t scenarioId) {
 }
 
 uint8_t PredicateEvaluation::removeScenario(const size_t scenarioId) {
-  for (size_t i{0}; i < worldList.size(); ++i)
-    if (std::get<0>(worldList.at(i)) == scenarioId) {
-      worldList.erase(worldList.begin() + static_cast<long>(i));
-      return 0;
-    }
-  return 1;
+    for (size_t i{0}; i < worldList.size(); ++i)
+        if (std::get<0>(worldList.at(i)) == scenarioId) {
+            worldList.erase(worldList.begin() + static_cast<long>(i));
+            return 0;
+        }
+    return 1;
 }

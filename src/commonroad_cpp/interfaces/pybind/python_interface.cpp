@@ -39,8 +39,8 @@ uint8_t py_registerScenario(const size_t scenarioId, const size_t timeStep, cons
 }
 
 uint8_t py_removeScenario(const size_t scenarioId) {
-  std::shared_ptr<PredicateEvaluation> eval = PredicateEvaluation::getInstance();
-  return eval->removeScenario(scenarioId);
+    std::shared_ptr<PredicateEvaluation> eval = PredicateEvaluation::getInstance();
+    return eval->removeScenario(scenarioId);
 }
 
 std::vector<int> createVectorFromPyList(const py::list &list) {
