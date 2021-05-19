@@ -80,6 +80,8 @@ class TestBrakingPredicates(unittest.TestCase):
         self.assertEqual(exp_sol_robustness_mode_1, sol_robustness_mode_1_parameters)
         self.assertEqual(exp_sol_robustness_mode_2, sol_robustness_mode_2_parameters)
 
+        cpp_env_model.remove_scenario(123)
+
     def test_safe_distance(self):
         # invalid parameters a_min_follow, a_min_lead
         self.assertRaises(RuntimeError, cpp_env_model.safe_distance, 0, 0, -1, 0, 0)

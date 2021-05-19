@@ -42,12 +42,13 @@ double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double l
 
 std::vector<int> createVectorFromPyList(const py::list &list);
 
-// uint8_t py_removeScenario(const int &ScenarioID);
+uint8_t py_removeScenario(size_t scenarioId);
 
 PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
     m.def("register_scenario", &py_registerScenario, "Add new scenario to C++ environment model", py::arg("scenarioId"),
           py::arg("timeStep"), py::arg("py_lanelets"), py::arg("py_obstacles"), py::arg("py_egoVehicles"));
+    m.def("remove_scenario", &py_removeScenario, "Remove scenario to C++ environment model", py::arg("scenarioId"));
     m.def("safe_distance_boolean_evaluation", &py_safe_distance_boolean_evaluation,
           "Boolean evaluation of safe distance predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
