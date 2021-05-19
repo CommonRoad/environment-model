@@ -35,8 +35,8 @@ struct PredicateStatistics {
     long maxComputationTime{LONG_MIN};
     long minComputationTime{LONG_MAX};
     long totalComputationTime{0};
-    int numExecutions{0};
-    int numSatisfaction{0};
+    long numExecutions{0};
+    long numSatisfaction{0};
 };
 
 struct Constraint {

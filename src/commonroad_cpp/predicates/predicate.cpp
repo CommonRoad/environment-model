@@ -26,4 +26,8 @@ void Predicate::setParameters(const PredicateParameters &params) { parameters = 
 
 Predicate::Predicate(const PredicateParameters &parameters) : parameters(parameters) {}
 
+const PredicateStatistics &Predicate::getStatistics() const { return statistics; }
+
+const Timer &Predicate::getEvaluationTimer() const { return evaluationTimer; }
+
 Predicate::Predicate() = default;

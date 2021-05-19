@@ -96,9 +96,12 @@ class Predicate {
      */
     void setParameters(const PredicateParameters &parameters);
 
+  const PredicateStatistics &getStatistics() const;
+
+  const Timer &getEvaluationTimer() const;
+
   protected:
     PredicateParameters parameters; //**< Struct containing parameters of all predicates. */
-  public:
     Timer evaluationTimer;
     PredicateStatistics statistics; //**< Struct storing statistics of a predicate, e.g., average computation
                                     // time,  number of calls, etc. */
