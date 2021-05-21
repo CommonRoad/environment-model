@@ -47,7 +47,7 @@ class Circle : public Shape {
      *
      * @param rad Radius of circle [m].
      */
-    void setRadius(double rad) override;
+    void setRadius(double rad);
 
     /**
      * Setter for circle center.
@@ -55,14 +55,14 @@ class Circle : public Shape {
      * @param x x-coordinate of center [m].
      * @param y y-coordinate of center [m].
      */
-    void setCenter(double x, double y) override;
+    void setCenter(double x, double y);
 
     /**
      * Getter for radius of circle.
      *
      * @return Circle radius [m].
      */
-    [[nodiscard]] double getRadius() const override;
+    [[nodiscard]] double getRadius() const;
 
     /**
      * Getter for type.
@@ -76,7 +76,7 @@ class Circle : public Shape {
      *
      * @return Center vertex.
      */
-    [[nodiscard]] vertex getCenter() const override;
+    [[nodiscard]] vertex getCenter() const;
 
     /**
      * Function for scaling a circle.
@@ -84,6 +84,11 @@ class Circle : public Shape {
      * @param factor Scaling factor.
      */
     void scaleShape(double factor) override;
+
+    /**
+     * Print function. Prints radius and center on console output.
+     */
+    void printParameters() override;
 
   private:
     double radius;   //**< Radius of shape. */

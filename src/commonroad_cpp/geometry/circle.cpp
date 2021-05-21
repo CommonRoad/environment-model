@@ -15,3 +15,9 @@ vertex Circle::getCenter() const { return center; }
 void Circle::scaleShape(double factor) { this->setRadius(this->getRadius() * factor); }
 
 ShapeType Circle::getType() { return ShapeType::circle; }
+
+void Circle::printParameters() {
+    std::cout << "--- Circle Shape ---" << std::endl;
+    std::cout << "radius: " << this->getRadius() << std::endl;
+    std::cout << "center: " << this->getCenter().x << this->getCenter().y << std::endl;
+}
