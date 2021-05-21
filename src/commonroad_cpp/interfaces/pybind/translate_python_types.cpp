@@ -360,8 +360,9 @@ std::shared_ptr<Obstacle> createCommonObstaclePart(py::handle py_singleObstacle)
     if (commonroadShape == "Rectangle") { // TODO: add other shape types
         auto length{py_obstacleShape.attr("length").cast<double>()};
         auto width{py_obstacleShape.attr("width").cast<double>()};
-        tempObstacle->getGeoShape().setLength(length);
-        tempObstacle->getGeoShape().setWidth(width);
+        Rectangle &geoRectangle = dynamic_cast<Rectangle &>(tempObstacle->getGeoShape());
+        geoRectangle.setLength(length);
+        geoRectangle.setWidth(width);
     } else {
         std::cout << "Unknown obstacle shape (only circles, polygons and rectangles supported) \n";
     }

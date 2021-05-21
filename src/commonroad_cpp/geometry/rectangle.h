@@ -25,28 +25,28 @@ class Rectangle : public Shape {
      *
      * @param l Length of rectangle [m].
      */
-    void setLength(double len) override;
+    void setLength(double len);
 
     /**
      * Setter for rectangle width.
      *
      * @param w Width of rectangle [m].
      */
-    void setWidth(double wid) override;
+    void setWidth(double wid);
 
     /**
      * Getter for rectangle length.
      *
      * @return Rectangle length [m].
      */
-    [[nodiscard]] double getLength() const override;
+    [[nodiscard]] double getLength() const;
 
     /**
      * Getter for rectangle width.
      *
      * @return Rectangle width [m].
      */
-    [[nodiscard]] double getWidth() const override;
+    [[nodiscard]] double getWidth() const;
 
     /**
      * Getter for type.
