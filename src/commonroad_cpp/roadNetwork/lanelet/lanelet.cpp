@@ -4,15 +4,16 @@
 #include "lanelet.h"
 #include <utility>
 
-Lanelet::Lanelet(int id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::vector<LaneletType> type,
-                 std::vector<ObstacleType> oneWay, std::vector<ObstacleType> userBidirectional)
+Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
+                 std::vector<LaneletType> type, std::vector<ObstacleType> oneWay,
+                 std::vector<ObstacleType> userBidirectional)
     : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)}, laneletType{std::move(type)},
       userOneWay{std::move(oneWay)}, userBidirectional{std::move(userBidirectional)} {
     createCenterVertices();
     constructOuterPolygon();
 }
 
-Lanelet::Lanelet(int id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
+Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
                  std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
                  std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::vector<LaneletType> type,
                  std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
@@ -24,7 +25,7 @@ Lanelet::Lanelet(int id, std::vector<vertex> leftBorder, std::vector<vertex> rig
     constructOuterPolygon();
 }
 
-void Lanelet::setId(const int laneletId) { id = laneletId; }
+void Lanelet::setId(const size_t laneletId) { id = laneletId; }
 
 void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet> &left, DrivingDirection dir) {
     adjacentLeft.adj = left;
@@ -64,7 +65,7 @@ void Lanelet::addTrafficLight(const std::shared_ptr<TrafficLight> &light) { traf
 
 void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign> &sign) { trafficSigns.push_back(sign); }
 
-int Lanelet::getId() const { return id; }
+size_t Lanelet::getId() const { return id; }
 
 std::vector<std::shared_ptr<Lanelet>> Lanelet::getPredecessors() const { return predecessorLanelets; }
 
@@ -120,15 +121,15 @@ void Lanelet::constructOuterPolygon() {
     const std::vector<vertex> &rightBorderTemp = this->getRightBorderVertices();
 
     if (!leftBorderTemp.empty()) {
-        int idx = 0;
+        size_t idx = 0;
         polygon_type polygon;
         polygon.outer().resize(leftBorderTemp.size() + rightBorderTemp.size() + 1);
 
-        for (auto &it : leftBorderTemp) {
+        for (const auto &it : leftBorderTemp) {
             polygon.outer()[idx] = point_type{it.x, it.y};
             idx++;
         }
-        for (auto &it : boost::adaptors::reverse(rightBorderTemp)) {
+        for (const auto &it : boost::adaptors::reverse(rightBorderTemp)) {
             polygon.outer()[idx] = point_type{it.x, it.y};
             idx++;
         }

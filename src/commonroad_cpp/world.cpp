@@ -19,7 +19,7 @@ const std::vector<std::shared_ptr<Obstacle>> &World::getEgoVehicles() const { re
 
 const std::vector<std::shared_ptr<Obstacle>> &World::getObstacles() const { return obstacles; }
 
-std::vector<std::shared_ptr<Obstacle>> World::findObstacles(const std::vector<int> &obstacleIdList) const {
+std::vector<std::shared_ptr<Obstacle>> World::findObstacles(const std::vector<size_t> &obstacleIdList) const {
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
     obstacleList.reserve(obstacleIdList.size());
     for (const auto &id : obstacleIdList) {
@@ -43,4 +43,5 @@ std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
     for (const auto &obs : egoVehicles)
         if (obstacleId == obs->getId())
             return obs;
+    throw std::logic_error("Provided obstacle ID does not exist!");
 }

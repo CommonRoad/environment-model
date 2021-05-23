@@ -80,7 +80,7 @@ class Predicate {
      */
     bool statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP);
+                                    const std::shared_ptr<Obstacle> &obstacleP = {});
 
     /**
      * Getter for parameters.

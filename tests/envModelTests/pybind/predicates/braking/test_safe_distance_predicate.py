@@ -22,8 +22,6 @@ class TestBrakingPredicates(unittest.TestCase):
         # expected solutions
         exp_sol_monitor_mode_1 = True
         exp_sol_monitor_mode_2 = False
-        # exp_sol_constraint_mode_1 = 6.0
-        # exp_sol_constraint_mode_2 = 26.0
         exp_sol_robustness_mode_1 = 9.0
         exp_sol_robustness_mode_2 = -21.0
 
@@ -46,9 +44,9 @@ class TestBrakingPredicates(unittest.TestCase):
         sol_monitor_mode_1_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 0, 1, [2])
         sol_monitor_mode_2_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 1, 1, [2])
         sol_monitor_mode_1_parameters = \
-            cpp_env_model.safe_distance_boolean_evaluation(2.5, 17.5, 20, 20, -10.0, -10.0, 0.3)
+            cpp_env_model.safe_distance_boolean_evaluation(0, 20, 20, 20, -10.0, -10.0, 0.3, 5, 5)
         sol_monitor_mode_2_parameters = \
-            cpp_env_model.safe_distance_boolean_evaluation(22.5, 27.5, 20, 0, -10.0, -10.0, 0.3)
+            cpp_env_model.safe_distance_boolean_evaluation(20, 30, 20, 0, -10.0, -10.0, 0.3, 5, 5)
 
         self.assertEqual(exp_sol_monitor_mode_1, sol_monitor_mode_1_obstacles)
         self.assertEqual(exp_sol_monitor_mode_2, sol_monitor_mode_2_obstacles)
@@ -56,24 +54,15 @@ class TestBrakingPredicates(unittest.TestCase):
         self.assertEqual(exp_sol_monitor_mode_2, sol_monitor_mode_2_parameters)
 
         # Constraint-Mode
-        # TODO: not supported yet
-        # sol_constraint_mode_1_obstacles = cpp_env_model.safeDistanceConstraintEvaluation(123, 0, 1, [2])
-        # sol_constraint_mode_2_obstacles = cpp_env_model.safeDistanceConstraintEvaluation(123, 1, 1, [2])
-        # sol_constraint_mode_1_parameters = cpp_env_model.safeDistanceConstraintEvaluation(0, 20, 20, 20, -1, -1, 0)
-        # sol_constraint_mode_2_parameters = cpp_env_model.safeDistanceConstraintEvaluation(0, 20, 20, 20, -1, -1, 0)
-        #
-        # self.assertEqual(exp_sol_constraint_mode_1, sol_constraint_mode_1_obstacles.value)
-        # self.assertEqual(exp_sol_constraint_mode_2, sol_constraint_mode_2_obstacles.value)
-        # self.assertEqual(exp_sol_constraint_mode_1, sol_constraint_mode_1_parameters.value)
-        # self.assertEqual(exp_sol_constraint_mode_2, sol_constraint_mode_2_parameters.value)
+        # TODO: not yet supported by Python interface
 
         # # Robustness-Mode
         sol_robustness_mode_1_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 0, 1, [2])
         sol_robustness_mode_2_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 1, 1, [2])
         sol_robustness_mode_1_parameters = \
-            cpp_env_model.safe_distance_robust_evaluation(2.5, 17.5, 20, 20, -10.0, -10.0, 0.3)
+            cpp_env_model.safe_distance_robust_evaluation(0, 20, 20, 20, -10.0, -10.0, 0.3, 5, 5)
         sol_robustness_mode_2_parameters = \
-            cpp_env_model.safe_distance_robust_evaluation(22.5, 27.5, 20, 0, -10.0, -10.0, 0.3)
+            cpp_env_model.safe_distance_robust_evaluation(20, 30, 20, 0, -10.0, -10.0, 0.3, 5, 5)
 
         self.assertEqual(exp_sol_robustness_mode_1, sol_robustness_mode_1_obstacles)
         self.assertEqual(exp_sol_robustness_mode_2, sol_robustness_mode_2_obstacles)

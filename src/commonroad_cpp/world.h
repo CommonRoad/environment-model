@@ -55,7 +55,7 @@ class World {
      *
      * @return Vector with pointers to obstacle objects.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<Obstacle>> findObstacles(const std::vector<int> &obstacleIdList) const;
+    [[nodiscard]] std::vector<std::shared_ptr<Obstacle>> findObstacles(const std::vector<size_t> &obstacleIdList) const;
 
     /**
      * Find all obstacles object corresponding to given ID.

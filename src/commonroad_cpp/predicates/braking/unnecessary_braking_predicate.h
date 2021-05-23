@@ -23,7 +23,7 @@ class UnnecessaryBrakingPredicate : public Predicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP) override;
+                           const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Constraint evaluation of predicate.
@@ -36,7 +36,7 @@ class UnnecessaryBrakingPredicate : public Predicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP) override;
+                                    const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Robustness evaluation of predicate.
@@ -50,7 +50,7 @@ class UnnecessaryBrakingPredicate : public Predicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP) override;
+                            const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 };
 
 #endif // ENV_MODEL_UNNECESSARY_BRAKING_PREDICATE_H

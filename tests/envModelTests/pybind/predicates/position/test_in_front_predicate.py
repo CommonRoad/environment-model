@@ -79,11 +79,6 @@ class TestBrakingPredicates(unittest.TestCase):
         exp_sol_monitor_mode_3 = False  # ego vehicle is not completely in front
         exp_sol_monitor_mode_4 = True  # ego vehicle is in front in same lane
         exp_sol_monitor_mode_5 = True  # ego vehicle is in front in another lane
-        exp_sol_constraint_mode_1 = 10.5
-        exp_sol_constraint_mode_2 = 12.5
-        exp_sol_constraint_mode_3 = 14.5
-        exp_sol_constraint_mode_4 = 16.5
-        exp_sol_constraint_mode_5 = 12.5
         exp_sol_robustness_mode_1 = -13.0
         exp_sol_robustness_mode_2 = -5.0
         exp_sol_robustness_mode_3 = -3.0
@@ -137,7 +132,7 @@ class TestBrakingPredicates(unittest.TestCase):
         self.assertEqual(exp_sol_monitor_mode_5, sol_monitor_mode_5)
 
         # # Constraint-Mode
-        # not yet supported by Python interface
+        # TODO: not yet supported by Python interface
 
         # Robustness-Mode
         sol_robustness_mode_1 = cpp_env_model.in_front_of_robust_evaluation(123, 0, 1, [2])

@@ -10,7 +10,7 @@
 bool UnnecessaryBrakingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
+    return robustEvaluation(timeStep, world, obstacleK) > 0;
 }
 
 Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -30,14 +30,14 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
         if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
-            robustnessValues.push_back(
-                -2 - obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
-                obs->getStateByTimeStep(timeStep)->getAcceleration()); // TODO replace -2 with a_abrupt parameter
+            robustnessValues.push_back(obstacleK->getStateByTimeStep(timeStep)->getAcceleration() -
+                                       obs->getStateByTimeStep(timeStep)->getAcceleration() -
+                                       -2); // TODO replace -2 with a_abrupt parameter
     }
     if (robustnessValues.size())
-        return *max_element(robustnessValues.begin(), robustnessValues.end());
+        return *min_element(robustnessValues.begin(), robustnessValues.end());
     else
-        std::max({obstacleK->getStateByTimeStep(timeStep)->getAcceleration(),
+        std::min({obstacleK->getStateByTimeStep(timeStep)->getAcceleration(),
                   -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
                       -2}); // TODO replace -2 with a_abrupt parameter
 }

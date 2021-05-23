@@ -42,7 +42,7 @@ class Obstacle {
      * @param length Length of the obstacle [m].
      * @param width Width of the obstacle [m].
      */
-    Obstacle(int id, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType, double vMax,
+    Obstacle(size_t id, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType, double vMax,
              double aMax, double aMaxLong, double aMinLong, double reactionTime,
              std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width);
 
@@ -51,7 +51,7 @@ class Obstacle {
      *
      * @param obstacleId ID of obstacle.
      */
-    void setId(int obstacleId);
+    void setId(size_t obstacleId);
 
     /**
      * Setter for isStatic.
@@ -160,7 +160,7 @@ class Obstacle {
      *
      * @return Obstacle ID.
      */
-    [[nodiscard]] int getId() const;
+    [[nodiscard]] size_t getId() const;
 
     /**
      * Getter for isStatic.
@@ -362,7 +362,7 @@ class Obstacle {
     bool timeStepExists(size_t timeStep);
 
   private:
-    int id{};                                         //**< unique ID of lanelet */
+    size_t id{};                                      //**< unique ID of lanelet */
     bool isStatic{false};                             //**< true if Obstacle is static */
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */

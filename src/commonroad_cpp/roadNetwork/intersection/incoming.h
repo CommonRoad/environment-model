@@ -17,7 +17,7 @@ class Incoming {
      *
      * @return Id of incoming.
      */
-    [[nodiscard]] int getId() const;
+    [[nodiscard]] size_t getId() const;
 
     /**
      * Getter for lanelets belonging to incoming.
@@ -59,7 +59,7 @@ class Incoming {
      *
      * @param id Id of incoming.
      */
-    void setId(int id);
+    void setId(size_t id);
 
     /**
      * Setter for lanelets belonging to incoming.
@@ -153,7 +153,7 @@ class Incoming {
     void setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings);
 
   private:
-    int id;
+    size_t id;
     std::vector<std::shared_ptr<Lanelet>> incomingLanelets; //**< set of pointers to lanelets belonging to incoming */
     std::vector<std::shared_ptr<Lanelet>>
         successorsRight; //**< set of pointers to successor right lanelets of incoming */

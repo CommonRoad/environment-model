@@ -4,9 +4,9 @@
 
 #include "incoming.h"
 
-int Incoming::getId() const { return id; }
+size_t Incoming::getId() const { return id; }
 
-void Incoming::setId(int index) { id = index; }
+void Incoming::setId(size_t index) { id = index; }
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getIncomingLanelets() const { return incomingLanelets; }
 

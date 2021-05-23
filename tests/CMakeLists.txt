@@ -12,7 +12,10 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/geometry/test_safe_distance.cpp
         envModelTests/geometry/test_geometric_operations.cpp
         envModelTests/interfaces/test_interfaces.cpp
-        envModelTests/predicates/test_safe_distance_predicate.cpp
+        envModelTests/predicates/braking/test_safe_distance_predicate.cpp
+        envModelTests/predicates/braking/test_unnecessary_braking_predicate.cpp
+        envModelTests/predicates/position/test_in_front_of_predicate.cpp
+        envModelTests/predicates/utils_predicate_test.cpp
         )
 
 # Add google-test
