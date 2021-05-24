@@ -85,7 +85,7 @@ test:
   script:
     - ./env_model_test --gtest_output="xml:report.xml"
     - python setup.py install --crccosy /commonroad/commonroad-drivability-checker
-    - coverage run -m pytest tests/envModelTests/pybind
+    - coverage run -m pytest tests/python
   dependencies:
     - build-test
   artifacts:

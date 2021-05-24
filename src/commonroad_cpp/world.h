@@ -19,7 +19,7 @@ class World {
      * @param egoVehicles List of ego vehicles.
      * @param obstacles List of obstacles.
      */
-    World(int timeStep, std::shared_ptr<RoadNetwork> &roadNetwork, std::vector<std::shared_ptr<Obstacle>> egoVehicles,
+    World(int timeStep, std::shared_ptr<RoadNetwork> roadNetwork, std::vector<std::shared_ptr<Obstacle>> egoVehicles,
           std::vector<std::shared_ptr<Obstacle>> obstacles);
 
     /**
@@ -34,7 +34,7 @@ class World {
      *
      * @return Pointer to road network object.
      */
-    [[nodiscard]] std::shared_ptr<RoadNetwork> &getRoadNetwork() const;
+    [[nodiscard]] std::shared_ptr<RoadNetwork> getRoadNetwork() const;
 
     /**
      * Getter for pointer to vector of ego vehicle objects.
@@ -66,7 +66,7 @@ class World {
 
   private:
     int timeStep;
-    std::shared_ptr<RoadNetwork> &roadNetwork;          //**< road network containing lanelets, traffic signs, etc. */
+    std::shared_ptr<RoadNetwork> roadNetwork;           //**< road network containing lanelets, traffic signs, etc. */
     std::vector<std::shared_ptr<Obstacle>> egoVehicles; //**< pointers to ego vehicle objects */
     std::vector<std::shared_ptr<Obstacle>> obstacles;   //**< pointers to obstacles*
 };

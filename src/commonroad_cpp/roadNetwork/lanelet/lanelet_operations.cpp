@@ -59,7 +59,7 @@ std::shared_ptr<Lane> combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_
     // assumption: successors of a single lanelet have different types
 
     // initialize lanelet elements
-    int id = curLanelet->getId();
+    size_t id{curLanelet->getId()};
     std::vector<std::shared_ptr<Lanelet>> laneletList{curLanelet};
     std::vector<ObstacleType> userOneWay{curLanelet->getUserOneWay()};
     std::vector<ObstacleType> userBidirectional{curLanelet->getUserBidirectional()};

@@ -20,11 +20,11 @@ bool InSameLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_p
 double InSameLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                              const std::shared_ptr<Obstacle> &obstacleK,
                                              const std::shared_ptr<Obstacle> &obstacleP) {
-    return 0;
+    throw std::runtime_error("InSameLanePredicate does not support robust evaluation!");
 }
 
 Constraint InSameLanePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
-    return Constraint();
+    throw std::runtime_error("InSameLanePredicate does not support constraint evaluation!");
 }

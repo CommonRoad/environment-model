@@ -6,6 +6,7 @@
 #include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
+#include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include "translate_python_types.h"
 
 uint8_t py_registerScenario(const size_t scenarioId, const size_t timeStep, const py::handle &py_laneletNetwork,
@@ -103,8 +104,7 @@ bool py_in_front_of_boolean_evaluation(size_t scenarioId, size_t timeStep, size_
 }
 
 bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP) {
-    InFrontOfPredicate pred;
-    return pred.booleanEvaluation(lonPosK, lonPosP, lengthK, lengthP);
+    return InFrontOfPredicate::booleanEvaluation(lonPosK, lonPosP, lengthK, lengthP);
 }
 
 double py_in_front_of_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
@@ -118,8 +118,16 @@ double py_in_front_of_robust_evaluation(size_t scenarioId, size_t timeStep, size
 
 double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK,
                                                         double lengthP) {
-    InFrontOfPredicate pred;
-    return pred.robustEvaluation(lonPosK, lonPosP, lengthK, lengthP);
+    return InFrontOfPredicate::robustEvaluation(lonPosK, lonPosP, lengthK, lengthP);
+}
+
+bool py_in_same_lane_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                        const py::list &py_obstacleIds) {
+    InSameLanePredicate pred;
+    std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
+    auto world = predicateEvaluation->findWorld(scenarioId);
+    return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
+                                  world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
 }
 
 bool py_unnecessary_braking_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,

@@ -42,6 +42,9 @@ double py_in_front_of_robust_evaluation(size_t scenarioId, size_t timeStep, size
 
 double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP);
 
+bool py_in_same_lane_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                        const py::list &py_obstacleIds);
+
 bool py_unnecessary_braking_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
                                                const py::list &py_obstacleIds);
 
@@ -95,6 +98,10 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("in_front_of_robust_evaluation", &py_in_front_of_robust_evaluation_with_parameters,
           "Robust evaluation of in front of predicate using parameters directly", py::arg("lonPosK"),
           py::arg("lonPosP"), py::arg("lengthK"), py::arg("lengthP"));
+
+    m.def("in_same_lane_boolean_evaluation", &py_in_same_lane_boolean_evaluation,
+          "Boolean evaluation of in same lane predicate", py::arg("scenarioId"), py::arg("time_step"),
+          py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
 
     m.def("unnecessary_braking_boolean_evaluation", &py_unnecessary_braking_boolean_evaluation,
           "Boolean evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
