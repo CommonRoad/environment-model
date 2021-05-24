@@ -135,8 +135,7 @@ bool py_unnecessary_braking_boolean_evaluation(size_t scenarioId, size_t timeSte
     UnnecessaryBrakingPredicate pred;
     std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
     auto world = predicateEvaluation->findWorld(scenarioId);
-    return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
-                                  world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
+    return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId));
 }
 
 double py_unnecessary_braking_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
@@ -144,6 +143,5 @@ double py_unnecessary_braking_robust_evaluation(size_t scenarioId, size_t timeSt
     UnnecessaryBrakingPredicate pred;
     std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
     auto world = predicateEvaluation->findWorld(scenarioId);
-    return pred.robustEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
-                                 world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
+    return pred.robustEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId));
 }
