@@ -61,10 +61,11 @@ void UnnecessaryBrakingPredicateTest::SetUp() {
 
 TEST_F(UnnecessaryBrakingPredicateTest, BooleanEvaluation) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne)); // a_ego > 0
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne)); // a_ego < a_lead - |a_abrupt| for single leading vehicle
-    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne)); // a_ego < a_lead - |a_abrupt| for all leading vehicles
+    EXPECT_TRUE(
+        pred.booleanEvaluation(1, world, obstacleOne)); // a_ego < a_lead - |a_abrupt| for single leading vehicle
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne));  // a_ego < a_lead - |a_abrupt| for all leading vehicles
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne)); // a_ego > a_lead - |a_abrupt| for all leading vehicles
-    EXPECT_TRUE(pred.booleanEvaluation(4, world, obstacleOne)); // a_ego < a_abrupt; no leading vehicle
+    EXPECT_TRUE(pred.booleanEvaluation(4, world, obstacleOne));  // a_ego < a_abrupt; no leading vehicle
     EXPECT_FALSE(pred.booleanEvaluation(5, world, obstacleOne)); // a_ego > a_abrupt; no leading vehicle
 }
 
@@ -86,10 +87,9 @@ TEST_F(UnnecessaryBrakingPredicateTest, RobustEvaluation) {
     EXPECT_NEAR(pred.robustEvaluation(5, world, obstacleOne), -4, 0.001);
 }
 
- TEST_F(UnnecessaryBrakingPredicateTest, StatisticBooleanEvaluation) {
+TEST_F(UnnecessaryBrakingPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 1);
     EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 2);
 }
-
