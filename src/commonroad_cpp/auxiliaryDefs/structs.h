@@ -29,8 +29,6 @@ struct ValidStates {
     bool curvilinearOrientation;
 };
 
-struct PredicateParameters {};
-
 struct PredicateStatistics {
     long maxComputationTime{LONG_MIN};
     long minComputationTime{LONG_MAX};

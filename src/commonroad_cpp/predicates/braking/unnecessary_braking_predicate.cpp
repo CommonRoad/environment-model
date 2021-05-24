@@ -26,13 +26,12 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, co
         if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obs, obstacleK) and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
-            constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() +
-                                       -2); // TODO replace -2 with a_abrupt parameter
+            constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt);
     }
     if (constraintValues.size())
         return {*max_element(constraintValues.begin(), constraintValues.end())};
     else
-        return {-2}; // TODO replace -2 with a_abrupt parameter
+        return {parameters.aAbrupt};
 }
 
 double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -49,12 +48,11 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             robustnessValues.push_back(
-                -2 - obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
-                obs->getStateByTimeStep(timeStep)->getAcceleration()); // TODO replace -2 with a_abrupt parameter
+                parameters.aAbrupt - obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
+                obs->getStateByTimeStep(timeStep)->getAcceleration());
     }
     if (robustnessValues.size())
         return *max_element(robustnessValues.begin(), robustnessValues.end());
     else
-        return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
-               -2; // TODO replace -2 with a_abrupt parameter
+        return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt;
 }

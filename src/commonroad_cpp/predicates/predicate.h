@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_PREDICATE_H
 #define ENV_MODEL_PREDICATE_H
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include "predicate_parameters.h"
 #include "commonroad_cpp/auxiliaryDefs/timer.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
