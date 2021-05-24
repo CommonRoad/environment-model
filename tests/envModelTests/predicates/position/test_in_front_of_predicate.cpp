@@ -52,10 +52,12 @@ void TestInFrontOfPredicate::SetUp() {
 
 TEST_F(TestInFrontOfPredicate, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne, obstacleTwo)); // ego vehicle behind
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo)); // ego vehicle and other vehicle have same occupancy
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne,
+                                        obstacleTwo)); // ego vehicle and other vehicle have same occupancy
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo)); // ego vehicle is not completely in front
-    EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo)); // ego vehicle is in front in same lane
-    EXPECT_TRUE(pred.booleanEvaluation(4, world, obstacleOne, obstacleThree)); // ego vehicle is in front in another lane
+    EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo));  // ego vehicle is in front in same lane
+    EXPECT_TRUE(
+        pred.booleanEvaluation(4, world, obstacleOne, obstacleThree)); // ego vehicle is in front in another lane
 }
 
 TEST_F(TestInFrontOfPredicate, BooleanEvaluationValues) {
