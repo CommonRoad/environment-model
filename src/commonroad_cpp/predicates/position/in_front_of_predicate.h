@@ -30,7 +30,7 @@ class InFrontOfPredicate : public Predicate {
      * @param world World object.
      * @param obstacleK The kth obstacle.
      * @param obstacleP The pth obstacle.
-     * @return Constraints defined by the predicate.
+     * @return Boolean indicating satisfaction of the predicate.
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
