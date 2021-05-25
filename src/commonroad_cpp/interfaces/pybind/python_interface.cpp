@@ -56,13 +56,9 @@ std::vector<size_t> createVectorFromPyList(const py::list &list) {
 
 bool py_safe_distance_boolean_evaluation(const size_t scenarioId, const size_t timeStep, const size_t py_egoVehicleId,
                                          const py::list &py_obstacleIds) {
-    std::cout << "print 1" << '\n';
     SafeDistancePredicate pred;
-    std::cout << "print 2" << '\n';
     std::shared_ptr<PredicateEvaluation> predicateEvaluation = PredicateEvaluation::getInstance();
-    std::cout << "print 3" << '\n';
     auto world = predicateEvaluation->findWorld(scenarioId);
-    std::cout << "print 4" << '\n';
     return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
                                   world->findObstacles(createVectorFromPyList(py_obstacleIds)).at(0));
 }
