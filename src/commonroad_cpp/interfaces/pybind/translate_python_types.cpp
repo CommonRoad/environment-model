@@ -108,7 +108,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
     size_t arrayIndex{0};
     // set id of lanelets
     for (py::handle py_singleLanelet : py_lanelets) {
-        tempLaneletContainer[arrayIndex]->setId(py::cast<int>(py_singleLanelet.attr("lanelet_id")));
+        tempLaneletContainer[arrayIndex]->setId(py::cast<size_t>(py_singleLanelet.attr("lanelet_id")));
         arrayIndex++;
     }
 
@@ -153,7 +153,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         py::object py_successors = py_singleLanelet.attr("successor");
         for (py::handle py_item : py_successors) {
             for (const auto &la : tempLaneletContainer) {
-                if (la->getId() == py_item.cast<int>()) {
+                if (la->getId() == py_item.cast<size_t>()) {
                     tempLaneletContainer[arrayIndex]->addSuccessor(la);
                     break;
                 }
@@ -163,7 +163,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         py::object py_predecessors = py_singleLanelet.attr("predecessor");
         for (py::handle py_item : py_predecessors) {
             for (const auto &la : tempLaneletContainer) {
-                if (la->getId() == py_item.cast<int>()) {
+                if (la->getId() == py_item.cast<size_t>()) {
                     tempLaneletContainer[arrayIndex]->addPredecessor(la);
                     break;
                 }
@@ -173,7 +173,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         py::object py_adjLeft = py_singleLanelet.attr("adj_left");
         if (py_adjLeft.get_type().attr("__name__").cast<std::string>() == "int") {
             for (const auto &la : tempLaneletContainer) {
-                if (la->getId() == py_adjLeft.cast<int>()) {
+                if (la->getId() == py_adjLeft.cast<size_t>()) {
                     if (py_singleLanelet.attr("adj_left_same_direction").cast<bool>()) // same direction
                         tempLaneletContainer[arrayIndex]->setLeftAdjacent(la, DrivingDirection::same);
                     else // opposite direction
@@ -186,7 +186,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         py::object py_adjRight = py_singleLanelet.attr("adj_right");
         if (py_adjRight.get_type().attr("__name__").cast<std::string>() == "int") {
             for (const auto &la : tempLaneletContainer) {
-                if (la->getId() == py_adjRight.cast<int>()) {
+                if (la->getId() == py_adjRight.cast<size_t>()) {
                     if (py_singleLanelet.attr("adj_right_same_direction").cast<bool>()) // same direction
                         tempLaneletContainer[arrayIndex]->setRightAdjacent(la, DrivingDirection::same);
                     else // opposite direction
@@ -253,7 +253,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             auto py_incomingLanelets = py_incoming.attr("incoming_lanelets").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> incomingLanelets;
             for (auto &incomingLaneletId : py_incomingLanelets) {
-                int incId{incomingLaneletId.cast<int>()};
+                size_t incId{incomingLaneletId.cast<size_t>()};
                 for (const auto &la : lanelets) {
                     if (la->getId() == incId) {
                         incomingLanelets.push_back(la);
@@ -265,7 +265,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             auto py_successorRight = py_incoming.attr("successors_right").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> successorRightLanelets;
             for (auto &successorRightLaneletId : py_successorRight) {
-                int incId{successorRightLaneletId.cast<int>()};
+                size_t incId{successorRightLaneletId.cast<size_t>()};
                 for (const auto &la : lanelets) {
                     if (la->getId() == incId) {
                         successorRightLanelets.push_back(la);
@@ -278,7 +278,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             auto py_successorLeft = py_incoming.attr("successors_left").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> successorLeftLanelets;
             for (auto &successorLeftLaneletId : py_successorLeft) {
-                int incId{successorLeftLaneletId.cast<int>()};
+                size_t incId{successorLeftLaneletId.cast<size_t>()};
                 for (const auto &la : lanelets) {
                     if (la->getId() == incId) {
                         successorLeftLanelets.push_back(la);
@@ -291,7 +291,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             auto py_successorStraight = py_incoming.attr("successors_straight").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> successorStraightLanelets;
             for (auto &successorStraightLaneletId : py_successorStraight) {
-                int incId{successorStraightLaneletId.cast<int>()};
+                size_t incId{successorStraightLaneletId.cast<size_t>()};
                 for (const auto &la : lanelets) {
                     if (la->getId() == incId) {
                         successorStraightLanelets.push_back(la);
@@ -301,7 +301,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             }
             incomings[incomignIndex]->setSuccessorsStraight(successorStraightLanelets);
             // left of
-            int py_isLeftOf = py_incoming.attr("left_of").cast<int>();
+            size_t py_isLeftOf = py_incoming.attr("left_of").cast<size_t>();
             if (py_incoming.attr("left_of").get_type().attr("__name__").cast<std::string>() == "int")
                 for (auto &inc : incomings) {
                     if (inc->getId() == py_isLeftOf) {
@@ -316,7 +316,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
         auto py_crossings = py_intersection.attr("crossings").cast<py::list>();
         std::vector<std::shared_ptr<Lanelet>> crossings;
         for (auto &crossing : py_crossings) {
-            int crossingId{crossing.cast<int>()};
+            size_t crossingId{crossing.cast<size_t>()};
             for (const auto &la : lanelets) {
                 if (la->getId() == crossingId) {
                     crossings.push_back(la);

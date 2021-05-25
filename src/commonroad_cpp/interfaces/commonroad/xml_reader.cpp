@@ -56,7 +56,7 @@ XMLReader::createIntersectionFromXML(const std::string &xmlFile,
 std::shared_ptr<State> XMLReader::extractInitialState(const pugi::xml_node &child) {
     pugi::xml_node states = child;
     State initialState;
-    initialState.setTimeStep(states.child("time").child("exact").text().as_int());
+    initialState.setTimeStep(states.child("time").child("exact").text().as_ullong());
     initialState.setXPosition(states.child("position").child("point").child("x").text().as_double());
     initialState.setYPosition(states.child("position").child("point").child("y").text().as_double());
     initialState.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
@@ -67,7 +67,7 @@ std::shared_ptr<State> XMLReader::extractInitialState(const pugi::xml_node &chil
 
 std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
     State st;
-    st.setTimeStep(states.child("time").child("exact").text().as_int());
+    st.setTimeStep(states.child("time").child("exact").text().as_ullong());
     st.setXPosition(states.child("position").child("point").child("x").text().as_double());
     st.setYPosition(states.child("position").child("point").child("y").text().as_double());
     st.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
@@ -83,21 +83,21 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     // extract ID, type, shape, initial state, and trajectory
     tempObstacle->setId(roadElements.first_attribute().as_int());
     tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
-    for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
-        if (!(strcmp(child.name(), "shape"))) { // TODO: other shape types
-            if (!(strcmp(child.first_child().name(), "rectangle"))) {
+    for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
+        if ((strcmp(child.name(), "shape")) == 0) { // TODO: other shape types
+            if ((strcmp(child.first_child().name(), "rectangle")) == 0) {
                 Rectangle &geoRectangle = dynamic_cast<Rectangle &>(tempObstacle->getGeoShape());
                 geoRectangle.setLength(child.first_child().child("length").text().as_double());
                 geoRectangle.setWidth(child.first_child().child("width").text().as_double());
             }
             continue;
         }
-        if (!(strcmp(child.name(), "initialState"))) {
+        if ((strcmp(child.name(), "initialState")) == 0) {
             std::shared_ptr<State> initialState{XMLReader::extractInitialState(child)};
             tempObstacle->setCurrentState(initialState);
             tempObstacle->appendStateToTrajectoryPrediction(initialState);
-        } else if (!(strcmp(child.name(), "trajectory"))) {
-            for (pugi::xml_node states = child.first_child(); states; states = states.next_sibling()) {
+        } else if ((strcmp(child.name(), "trajectory")) == 0) {
+            for (pugi::xml_node states = child.first_child(); states != nullptr; states = states.next_sibling()) {
                 tempObstacle->appendStateToTrajectoryPrediction(XMLReader::extractState(states));
             }
         }
@@ -114,15 +114,15 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     tempObstacle->setId(roadElements.first_attribute().as_int());
     tempObstacle->setIsStatic(true);
     tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
-    for (pugi::xml_node child = roadElements.first_child(); child; child = child.next_sibling()) {
-        if (!(strcmp(child.name(), "shape"))) {
-            if (!(strcmp(child.first_child().name(), "rectangle"))) { // TODO: other shape types
+    for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
+        if ((strcmp(child.name(), "shape")) == 0) {
+            if ((strcmp(child.first_child().name(), "rectangle")) == 0) { // TODO: other shape types
                 Rectangle &geoRectangle = dynamic_cast<Rectangle &>(tempObstacle->getGeoShape());
                 geoRectangle.setLength(child.first_child().child("length").text().as_double());
                 geoRectangle.setWidth(child.first_child().child("width").text().as_double());
             }
             continue;
-        } else if (!(strcmp(child.name(), "initialState"))) {
+        } else if ((strcmp(child.name(), "initialState")) == 0) {
             std::shared_ptr<State> initialState{XMLReader::extractInitialState(child)};
             tempObstacle->setCurrentState(initialState);
         }
@@ -130,15 +130,16 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     obstacleList.emplace_back(tempObstacle);
 }
 
-int XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
-                                  const pugi::xml_node &commonRoad) {
+size_t XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
+                                     const pugi::xml_node &commonRoad) {
     // get the number of lanelets
-    int n = std::distance(commonRoad.children("lanelet").begin(), commonRoad.children("lanelet").end());
+    size_t n{static_cast<size_t>(
+        std::distance(commonRoad.children("lanelet").begin(), commonRoad.children("lanelet").end()))};
     tempLaneletContainer.clear();
     tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
 
     // all lanelets must be initialized first because they are referencing each other
-    for (int i = 0; i < n; i++) {
+    for (size_t i{0}; i < n; i++) {
         std::shared_ptr<Lanelet> tempLanelet =
             std::make_shared<Lanelet>(); // make_shared is faster than (new Lanelet());
         tempLaneletContainer.emplace_back(tempLanelet);
@@ -146,10 +147,11 @@ int XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLan
 
     int arrayIndex = 0;
     // set id of lanelets
-    for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
+    for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;
          roadElements = roadElements.next_sibling()) {
-        if (!(strcmp(roadElements.name(), "lanelet"))) {
-            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
+        if ((strcmp(roadElements.name(), "lanelet")) == 0) {
+            tempLaneletContainer[static_cast<unsigned long>(arrayIndex)]->setId(
+                static_cast<size_t>(roadElements.first_attribute().as_int()));
             arrayIndex++;
         }
     }
@@ -157,18 +159,18 @@ int XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLan
 }
 
 void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
-                                       int arrayIndex, const pugi::xml_node &child, const char *side) {
-    for (pugi::xml_node points = child.first_child(); points; points = points.next_sibling()) {
-        vertex newVertex{};
+                                       size_t arrayIndex, const pugi::xml_node &child, const char *side) {
+    for (pugi::xml_node points = child.first_child(); points != nullptr; points = points.next_sibling()) {
+        vertex newVertex;
         LineMarking lineMarking;
-        if (!(strcmp(points.name(), "point"))) {
+        if ((strcmp(points.name(), "point")) == 0) {
             newVertex = {points.child("x").text().as_double(), points.child("y").text().as_double()};
             if (!(strcmp(side, "rightBound")))
                 tempLaneletContainer[arrayIndex]->addRightVertex(newVertex);
             else if (!(strcmp(side, "leftBound")))
                 tempLaneletContainer[arrayIndex]->addLeftVertex(newVertex);
         }
-        if (!(strcmp(points.name(), "lineMarking"))) {
+        if ((strcmp(points.name(), "lineMarking")) == 0) {
             lineMarking = matchStringToLineMarking(points.value());
             if (!(strcmp(side, "rightBound")))
                 tempLaneletContainer[arrayIndex]->setLineMarkingRight(lineMarking);
@@ -178,10 +180,10 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
     }
 }
 
-void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, int arrayIndex,
-                                     const pugi::xml_node &child, const char *type) {
-    int id = child.first_attribute().as_int();
-    for (int i = 0; i < tempLaneletContainer.size(); i++) {
+void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
+                                     size_t arrayIndex, const pugi::xml_node &child, const char *type) {
+    size_t id{child.first_attribute().as_ullong()};
+    for (size_t i{0}; i < tempLaneletContainer.size(); i++) {
         if (tempLaneletContainer[i]->getId() == id) {
             if (!(strcmp(type, "successor")))
                 tempLaneletContainer[arrayIndex]->addSuccessor(tempLaneletContainer[i]);
@@ -193,14 +195,14 @@ void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>>
 }
 
 void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
-                                        int arrayIndex, const pugi::xml_node &child, const char *type) {
-    int adjacentId = child.attribute("ref").as_int();
+                                        size_t arrayIndex, const pugi::xml_node &child, const char *type) {
+    size_t adjacentId{child.attribute("ref").as_ullong()};
     DrivingDirection dir{DrivingDirection::invalid};
-    if (!(strcmp(child.attribute("drivingDir").as_string(), "same")))
+    if ((strcmp(child.attribute("drivingDir").as_string(), "same")) == 0)
         dir = DrivingDirection::same;
-    else if (!(strcmp(child.attribute("drivingDir").as_string(), "opposite")))
+    else if ((strcmp(child.attribute("drivingDir").as_string(), "opposite")) == 0)
         dir = DrivingDirection::opposite;
-    for (int i = 0; i < tempLaneletContainer.size(); i++) {
+    for (size_t i{0}; i < tempLaneletContainer.size(); i++) {
         if (tempLaneletContainer[i]->getId() == adjacentId) {
             if (!(strcmp(type, "adjacentLeft")))
                 tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i], dir);

@@ -5,11 +5,11 @@
 #ifndef ENV_MODEL_PREDICATE_H
 #define ENV_MODEL_PREDICATE_H
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/auxiliaryDefs/timer.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
+#include "predicate_parameters.h"
 
 /**
  * Interface for a predicate.
@@ -80,7 +80,7 @@ class Predicate {
      */
     bool statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP);
+                                    const std::shared_ptr<Obstacle> &obstacleP = {});
 
     /**
      * Getter for parameters.

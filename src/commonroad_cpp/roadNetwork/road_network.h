@@ -84,7 +84,7 @@ class RoadNetwork {
      * @param id lanelet ID
      * @return pointer to lanelet
      */
-    std::shared_ptr<Lanelet> findLaneletById(int id);
+    std::shared_ptr<Lanelet> findLaneletById(size_t id);
 
     /**
      * Given a set of lanes and a polygon shape, finds a single lane which intersect with the shape (interstate)

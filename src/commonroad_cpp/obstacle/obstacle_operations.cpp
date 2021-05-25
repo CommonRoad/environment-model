@@ -4,7 +4,7 @@
 
 #include "obstacle_operations.h"
 
-std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, int id) {
+std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t id) {
     std::shared_ptr<Obstacle> temp{nullptr};
     for (auto &obs : obstacleList) {
         if (obs->getId() == id) {

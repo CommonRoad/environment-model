@@ -97,7 +97,8 @@ void extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
  * @param commonRoad XML node element.
  * @return Number of created lanelets.
  */
-int initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, const pugi::xml_node &commonRoad);
+size_t initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
+                          const pugi::xml_node &commonRoad);
 
 /**
  * Extracts lanelet boundary for a lanelet.
@@ -107,7 +108,7 @@ int initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLaneletContain
  * @param child XML node element.
  * @param side String which defines whether left or right lanelet boundary should be extracted.
  */
-void extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, int arrayIndex,
+void extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, size_t arrayIndex,
                             const pugi::xml_node &child, const char *side);
 
 /**
@@ -118,7 +119,7 @@ void extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet>> &tempLan
  * @param child XML node element.
  * @param type String which defines whether successor or predecessor lanelet should be extracted.
  */
-void extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, int arrayIndex,
+void extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, size_t arrayIndex,
                           const pugi::xml_node &child, const char *type);
 
 /**
@@ -129,7 +130,7 @@ void extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLanel
  * @param child XML node element.
  * @param type String which defines whether left or right adjacent lanelet should be extracted.
  */
-void extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, int arrayIndex,
+void extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, size_t arrayIndex,
                              const pugi::xml_node &child, const char *type);
 } // namespace XMLReader
 

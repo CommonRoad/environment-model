@@ -8,8 +8,8 @@
 #include <cmath>
 #include <utility>
 
-Obstacle::Obstacle(int id, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType, double vMax,
-                   double aMax, double aMaxLong, double aMinLong, double reactionTime,
+Obstacle::Obstacle(size_t id, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
+                   double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
                    std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width)
     : id(id), isStatic(isStatic), currentState(std::move(currentState)), obstacleType(obstacleType), vMax(vMax),
       aMax(aMax), aMaxLong(aMaxLong), aMinLong(aMinLong), reactionTime(reactionTime),
@@ -18,7 +18,7 @@ Obstacle::Obstacle(int id, bool isStatic, std::shared_ptr<State> currentState, O
         setIsStatic(isStatic);
 }
 
-void Obstacle::setId(const int obstacleId) { id = obstacleId; }
+void Obstacle::setId(const size_t obstacleId) { id = obstacleId; }
 
 void Obstacle::setIsStatic(bool st) {
     isStatic = st;
@@ -70,18 +70,15 @@ void Obstacle::appendStateToHistory(const std::shared_ptr<State> &state) {
     history.insert(std::pair<size_t, std::shared_ptr<State>>(state->getTimeStep(), state));
 }
 
-int Obstacle::getId() const { return id; }
+size_t Obstacle::getId() const { return id; }
 
 bool Obstacle::getIsStatic() const { return isStatic; }
 
 const std::shared_ptr<State> &Obstacle::getCurrentState() const { return currentState; }
 
 bool Obstacle::timeStepExists(size_t timeStep) {
-    if (trajectoryPrediction.count(timeStep) == 1 or currentState->getTimeStep() == timeStep or
-        history.count(timeStep) == 1)
-        return true;
-    else
-        return false;
+    return (trajectoryPrediction.count(timeStep) == 1 or currentState->getTimeStep() == timeStep or
+            history.count(timeStep) == 1);
 }
 
 std::shared_ptr<State> Obstacle::getStateByTimeStep(size_t timeStep) const {

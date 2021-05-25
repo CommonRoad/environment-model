@@ -119,7 +119,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double
     return RoadNetwork::findOccupiedLaneletsByShape(polygonPos);
 }
 
-std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(int id) {
+std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
     auto it = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork),
                            [id](auto val) { return val->getId() == id; });
     if (it == std::end(laneletNetwork))

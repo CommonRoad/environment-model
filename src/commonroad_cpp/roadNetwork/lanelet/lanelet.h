@@ -39,7 +39,7 @@ class Lanelet {
      * @param oneWay List of road users one way.
      * @param userBidirectional List of road users bidirectional.
      */
-    Lanelet(int id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::vector<LaneletType> type,
+    Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::vector<LaneletType> type,
             std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
             std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>());
 
@@ -55,7 +55,7 @@ class Lanelet {
      * @param oneWay List of road users one way.
      * @param userBidirectional List of road users bidirectional.
      */
-    Lanelet(int id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
+    Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
             std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
             std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::vector<LaneletType> laneletType,
             std::vector<ObstacleType> userOneWay, std::vector<ObstacleType> userBidirectional);
@@ -75,7 +75,7 @@ class Lanelet {
      *
      * @param laneletId ID of lanelet.
      */
-    void setId(int laneletId);
+    void setId(size_t laneletId);
 
     /**
      * Setter for adjacent left lanelet.
@@ -203,7 +203,7 @@ class Lanelet {
      *
      * @return Lanelet ID.
      */
-    [[nodiscard]] int getId() const;
+    [[nodiscard]] size_t getId() const;
 
     /**
      * Getter for predecessor lanelets.
@@ -377,7 +377,7 @@ class Lanelet {
     void addLaneletType(LaneletType laType);
 
   private:
-    int id{};                                                  //**< unique ID of lanelet */
+    size_t id{};                                               //**< unique ID of lanelet */
     std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
     std::vector<vertex> leftBorder;                            //**< vertices of left border */
     std::vector<vertex> rightBorder;                           //**< vertices of right border */
