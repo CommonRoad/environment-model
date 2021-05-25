@@ -29,7 +29,7 @@ Tested with
 For development the IDE [Clion](https://www.jetbrains.com/clion/?gclid=EAIaIQobChMI3-KEq9fk8AIVB853Ch2JdgNFEAAYASAAEgIChfD_BwE&gclsrc=aw.ds) is recommended.
 
   
-### C++ only
+### C++
 Make a build folder:
 ```bash
 mkdir build
