@@ -108,6 +108,6 @@ obstacle_3 = DynamicObstacle(2, ObstacleType.CAR, Rectangle(5, 2),
 cpp_env_model.register_scenario(123, 0, lanelet_network, [obstacle_2, obstacle_3], [obstacle_1])
 
 
-print(cpp_env_model.safe_distance_robust_evaluation(123, 5, 1, [2]))
+print("Safe Distance: {}".format(cpp_env_model.safe_distance_robust_evaluation(123, 1, 1, [2])))
 
 cpp_env_model.remove_scenario(123)
