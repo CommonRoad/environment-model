@@ -116,10 +116,9 @@ TEST_F(ObstacleTest, InitializationComplete) {
     EXPECT_EQ(obstacleTwo->getAminLong(), 0.0);
     EXPECT_EQ(obstacleOne->getReactionTime(), reactionTimeObstacleOne);
     EXPECT_EQ(obstacleTwo->getReactionTime(), reactionTimeObstacleTwo);
-    EXPECT_EQ(obstacleOne->getReferenceLane()->getLanelet().getId(), laneOne->getLanelet().getId());
-    compareVerticesVector(obstacleOne->getReferenceLane()->getLanelet().getCenterVertices(),
-                          laneOne->getLanelet().getCenterVertices());
-    for (int i = 2; i <= 3; ++i)
+    EXPECT_EQ(obstacleOne->getId(), laneOne->getId());
+    compareVerticesVector(obstacleOne->getReferenceLane()->getCenterVertices(), laneOne->getCenterVertices());
+    for (size_t i = 2; i <= 3; ++i)
         compareStates(trajectoryPredictionObstacleOne.at(i), obstacleOne->getTrajectoryPrediction().at(i));
     compareStates(trajectoryPredictionObstacleTwo.at(5), obstacleTwo->getTrajectoryPrediction().at(5));
     EXPECT_EQ(obstacleOne->getTrajectoryLength(), 2);
