@@ -38,8 +38,8 @@ std::vector<std::shared_ptr<Obstacle>> World::findObstacles(const std::vector<si
 
 std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
     for (const auto &obs : obstacles)
-      if (obstacleId == obs->getId())
-        return obs;
+        if (obstacleId == obs->getId())
+            return obs;
     for (const auto &obs : egoVehicles)
         if (obstacleId == obs->getId())
             return obs;
