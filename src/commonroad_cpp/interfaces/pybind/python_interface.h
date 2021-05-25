@@ -13,8 +13,10 @@ namespace py = pybind11;
 uint8_t py_registerScenario(size_t scenarioId, size_t timeStep, const py::handle &py_laneletNetwork,
                             const py::list &py_obstacles, const py::list &py_egoVehicles);
 
+uint8_t py_removeScenario(size_t scenarioId);
+
 bool py_safe_distance_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                         const py::list &py_obstacleIds);
+                                         size_t py_obstacleId);
 
 bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double lonPosP, double velocityK,
                                                          double velocityP, double minAccelerationK,
@@ -22,7 +24,7 @@ bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double 
                                                          double lengthP);
 
 double py_safe_distance_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                          const py::list &py_obstacleIds);
+                                          size_t py_obstacleId);
 
 double py_safe_distance_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double velocityK,
                                                           double velocityP, double minAccelerationK,
@@ -33,27 +35,23 @@ double py_safe_distance(double velocityK, double velocityP, double minAccelerati
                         double tReact);
 
 bool py_in_front_of_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                       const py::list &py_obstacleIds);
+                                       size_t py_obstacleId);
 
 bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP);
 
 double py_in_front_of_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                        const py::list &py_obstacleIds);
+                                        size_t py_obstacleId);
 
 double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP);
 
 bool py_in_same_lane_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                        const py::list &py_obstacleIds);
+                                        size_t py_obstacleId);
 
 bool py_unnecessary_braking_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                               const py::list &py_obstacleIds);
+                                               size_t py_obstacleId = 123456789);
 
 double py_unnecessary_braking_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                                const py::list &py_obstacleIds);
-
-std::vector<size_t> createVectorFromPyList(const py::list &list);
-
-uint8_t py_removeScenario(size_t scenarioId);
+                                                size_t py_obstacleId = 123456789);
 
 PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
@@ -64,7 +62,7 @@ PYBIND11_MODULE(cpp_env_model, m) {
 
     m.def("safe_distance_boolean_evaluation", &py_safe_distance_boolean_evaluation,
           "Boolean evaluation of safe distance predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
     m.def("safe_distance_boolean_evaluation", &py_safe_distance_boolean_evaluation_with_parameters,
           "Boolean evaluation of safe distance predicate using parameters directly", py::arg("lonPosK"),
@@ -73,7 +71,7 @@ PYBIND11_MODULE(cpp_env_model, m) {
 
     m.def("safe_distance_robust_evaluation", &py_safe_distance_robust_evaluation,
           "Robust evaluation of safe distance predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
     m.def("safe_distance_robust_evaluation", &py_safe_distance_robust_evaluation_with_parameters,
           "Robust evaluation of safe distance predicate using parameters directly", py::arg("lonPosK"),
@@ -85,7 +83,7 @@ PYBIND11_MODULE(cpp_env_model, m) {
 
     m.def("in_front_of_boolean_evaluation", &py_in_front_of_boolean_evaluation,
           "Boolean evaluation of in front of predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
     m.def("in_front_of_boolean_evaluation", &py_in_front_of_boolean_evaluation_with_parameters,
           "Boolean evaluation of in front of predicate using parameters directly", py::arg("lonPosK"),
@@ -93,7 +91,7 @@ PYBIND11_MODULE(cpp_env_model, m) {
 
     m.def("in_front_of_robust_evaluation", &py_in_front_of_robust_evaluation,
           "Robust evaluation of in front of predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
     m.def("in_front_of_robust_evaluation", &py_in_front_of_robust_evaluation_with_parameters,
           "Robust evaluation of in front of predicate using parameters directly", py::arg("lonPosK"),
@@ -101,15 +99,15 @@ PYBIND11_MODULE(cpp_env_model, m) {
 
     m.def("in_same_lane_boolean_evaluation", &py_in_same_lane_boolean_evaluation,
           "Boolean evaluation of in same lane predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
     m.def("unnecessary_braking_boolean_evaluation", &py_unnecessary_braking_boolean_evaluation,
           "Boolean evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 123456789);
 
     m.def("unnecessary_braking_robust_evaluation", &py_unnecessary_braking_robust_evaluation,
           "Robust evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleIds"), py::arg("py_obstaclesIds"));
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 123456789);
 }
 
 #endif // ENV_MODEL_PYTHON_INTERFACE_H

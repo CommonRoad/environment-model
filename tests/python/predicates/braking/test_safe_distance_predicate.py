@@ -41,8 +41,8 @@ class TestBrakingPredicates(unittest.TestCase):
         cpp_env_model.register_scenario(123, 0, self.lanelet_network, [other_obstacle], [ego_obstacle])
 
         # Monitor-Mode
-        sol_monitor_mode_1_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 0, 1, [2])
-        sol_monitor_mode_2_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 1, 1, [2])
+        sol_monitor_mode_1_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 0, 1, 2)
+        sol_monitor_mode_2_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 1, 1, 2)
         sol_monitor_mode_1_parameters = \
             cpp_env_model.safe_distance_boolean_evaluation(0, 20, 20, 20, -10.0, -10.0, 0.3, 5, 5)
         sol_monitor_mode_2_parameters = \
@@ -57,8 +57,8 @@ class TestBrakingPredicates(unittest.TestCase):
         # TODO: not yet supported by Python interface
 
         # # Robustness-Mode
-        sol_robustness_mode_1_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 0, 1, [2])
-        sol_robustness_mode_2_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 1, 1, [2])
+        sol_robustness_mode_1_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 0, 1, 2)
+        sol_robustness_mode_2_obstacles = cpp_env_model.safe_distance_robust_evaluation(123, 1, 1, 2)
         sol_robustness_mode_1_parameters = \
             cpp_env_model.safe_distance_robust_evaluation(0, 20, 20, 20, -10.0, -10.0, 0.3, 5, 5)
         sol_robustness_mode_2_parameters = \

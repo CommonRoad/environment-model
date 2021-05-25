@@ -76,12 +76,12 @@ class TestBrakingPredicates(unittest.TestCase):
         cpp_env_model.register_scenario(123, 0, self.lanelet_network, [obstacle_2, obstacle_3], [obstacle_1])
 
         # Monitor-Mode
-        sol_monitor_mode_1 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 0, 1, [2, 3])
-        sol_monitor_mode_2 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 1, 1, [2, 3])
-        sol_monitor_mode_3 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 2, 1, [2, 3])
-        sol_monitor_mode_4 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 3, 1, [2, 3])
-        sol_monitor_mode_5 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 4, 1, [2, 3])
-        sol_monitor_mode_6 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 5, 1, [2, 3])
+        sol_monitor_mode_1 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 0, 1)
+        sol_monitor_mode_2 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 1, 1)
+        sol_monitor_mode_3 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 2, 1)
+        sol_monitor_mode_4 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 3, 1)
+        sol_monitor_mode_5 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 4, 1)
+        sol_monitor_mode_6 = cpp_env_model.unnecessary_braking_boolean_evaluation(123, 5, 1)
         self.assertEqual(exp_sol_monitor_mode_1, sol_monitor_mode_1)
         self.assertEqual(exp_sol_monitor_mode_2, sol_monitor_mode_2)
         self.assertEqual(exp_sol_monitor_mode_3, sol_monitor_mode_3)
@@ -93,12 +93,12 @@ class TestBrakingPredicates(unittest.TestCase):
         # TODO: not yet supported by Python interface
 
         # Robustness-Mode
-        sol_robustness_mode_1 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 0, 1, [2, 3])
-        sol_robustness_mode_2 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 1, 1, [2, 3])
-        sol_robustness_mode_3 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 2, 1, [2, 3])
-        sol_robustness_mode_4 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 3, 1, [2, 3])
-        sol_robustness_mode_5 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 4, 1, [2, 3])
-        sol_robustness_mode_6 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 5, 1, [2, 3])
+        sol_robustness_mode_1 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 0, 1)
+        sol_robustness_mode_2 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 1, 1)
+        sol_robustness_mode_3 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 2, 1)
+        sol_robustness_mode_4 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 3, 1)
+        sol_robustness_mode_5 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 4, 1)
+        sol_robustness_mode_6 = cpp_env_model.unnecessary_braking_robust_evaluation(123, 5, 1)
         self.assertEqual(exp_sol_robustness_mode_1, sol_robustness_mode_1)
         self.assertEqual(exp_sol_robustness_mode_2, sol_robustness_mode_2)
         self.assertEqual(exp_sol_robustness_mode_3, sol_robustness_mode_3)
