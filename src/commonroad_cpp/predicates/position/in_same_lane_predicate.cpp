@@ -9,7 +9,7 @@ bool InSameLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleP) {
     for (const auto &laneP : obstacleP->getOccupiedLanes(world->getRoadNetwork(), timeStep)) {
         for (const auto &laneK : obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)) {
-            if (laneP->getLanelet().getId() == laneK->getLanelet().getId()) {
+            if (laneP->getId() == laneK->getId()) {
                 return true;
             }
         }
