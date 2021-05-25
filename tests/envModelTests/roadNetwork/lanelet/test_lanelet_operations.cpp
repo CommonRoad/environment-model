@@ -38,15 +38,11 @@ TEST_F(LaneletOperationsTest, MatchStringToLineMarking) {
 }
 
 TEST_F(LaneletOperationsTest, CombineLaneletAndSuccessorsWithSameTypeToLane) {
-    EXPECT_EQ(
-        combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree, LaneletType::mainCarriageWay)->getLanelet().getId(),
-        roadNetwork->getLanes().at(0)->getLanelet().getId());
-    compareVerticesVector(combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree, LaneletType::mainCarriageWay)
-                              ->getLanelet()
-                              .getCenterVertices(),
-                          roadNetwork->getLanes().at(0)->getLanelet().getCenterVertices());
-    EXPECT_EQ(
-        combineLaneletAndSuccessorsWithSameTypeToLane(laneletSeven, LaneletType::mainCarriageWay)->getLanelet().getId(),
-        10);
-    EXPECT_EQ(combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree, LaneletType::urban)->getLanelet().getId(), 3);
+    EXPECT_EQ(combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree, LaneletType::mainCarriageWay)->getId(),
+              roadNetwork->getLanes().at(0)->getId());
+    compareVerticesVector(
+        combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree, LaneletType::mainCarriageWay)->getCenterVertices(),
+        roadNetwork->getLanes().at(0)->getCenterVertices());
+    EXPECT_EQ(combineLaneletAndSuccessorsWithSameTypeToLane(laneletSeven, LaneletType::mainCarriageWay)->getId(), 10);
+    EXPECT_EQ(combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree, LaneletType::urban)->getId(), 3);
 }

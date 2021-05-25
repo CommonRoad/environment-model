@@ -10,7 +10,7 @@
 
 class ObstacleTestInitialization : public StateTestInitialization {
   protected:
-    int idObstacleOne;
+    size_t idObstacleOne;
     bool isStaticObstacleOne;
     ObstacleType obstacleTypeObstacleOne;
     double vMaxObstacleOne;
@@ -27,7 +27,7 @@ class ObstacleTestInitialization : public StateTestInitialization {
     std::map<size_t, std::vector<std::shared_ptr<Lanelet>>> occupiedLaneletsObstacleOne{};
     std::shared_ptr<Obstacle> obstacleOne;
 
-    int idObstacleTwo;
+    size_t idObstacleTwo;
     bool isStaticObstacleTwo;
     ObstacleType obstacleTypeObstacleTwo;
     double vMaxObstacleTwo;

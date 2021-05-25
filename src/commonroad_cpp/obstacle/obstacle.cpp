@@ -257,7 +257,7 @@ void Obstacle::convertPointToCurvilinear(size_t timeStep) const {
     getStateByTimeStep(timeStep)->setLonPosition(convertedPoint.x());
     getStateByTimeStep(timeStep)->setLatPosition(convertedPoint.y());
     double theta = getStateByTimeStep(timeStep)->getGlobalOrientation() -
-                   getReferenceLane()->getLanelet().getOrientationAtPosition(
-                       getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
+                   getReferenceLane()->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                                                getStateByTimeStep(timeStep)->getYPosition());
     getStateByTimeStep(timeStep)->setCurvilinearOrientation(theta);
 }
