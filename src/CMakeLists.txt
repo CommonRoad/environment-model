@@ -28,6 +28,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/predicate_evaluation.cpp
+        commonroad_cpp/predicates/predicate_parameters.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
         )
 
