@@ -56,7 +56,7 @@ LineMarking matchStringToLineMarking(const std::string &type) {
 
 std::vector<std::shared_ptr<Lane>>
 combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet,
-                                              std::shared_ptr<Lanelet> curLaneLanelet,
+                                              Lanelet curLaneLanelet,
                                               std::vector<std::shared_ptr<Lanelet>> containedLanelets) {
     // initialize lanelet elements
     static size_t id;
@@ -71,8 +71,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanele
     std::vector<std::shared_ptr<Lanelet>> successorLanelets{curLanelet->getSuccessors()};
     std::set<LaneletType> typeList;
     laneletList.push_back(curLanelet);
-    if (!(curLaneLanelet)) {
-
+    if (curLaneLanelet.getCenterVertices().size() == 0) {
         userOneWay = curLanelet->getUserOneWay();
         userBidirectional = curLanelet->getUserBidirectional();
         centerVertices = curLanelet->getCenterVertices();
@@ -81,37 +80,33 @@ combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanele
         predecessorLanelets = curLanelet->getPredecessors();
         typeList = curLanelet->getLaneletType();
     } else {
-        userOneWay = curLaneLanelet->getUserOneWay();
-        userBidirectional = curLaneLanelet->getUserBidirectional();
-        centerVertices = curLaneLanelet->getCenterVertices();
+        userOneWay = curLaneLanelet.getUserOneWay();
+        userBidirectional = curLaneLanelet.getUserBidirectional();
+        centerVertices = curLaneLanelet.getCenterVertices();
         centerVertices.insert(centerVertices.end(), curLanelet->getCenterVertices().begin() + 1,
                               curLanelet->getCenterVertices().end());
-        leftBorderVertices = curLaneLanelet->getLeftBorderVertices();
+        leftBorderVertices = curLaneLanelet.getLeftBorderVertices();
         leftBorderVertices.insert(leftBorderVertices.end(), curLanelet->getLeftBorderVertices().begin() + 1,
                                   curLanelet->getLeftBorderVertices().end());
-        rightBorderVertices = curLaneLanelet->getRightBorderVertices();
+        rightBorderVertices = curLaneLanelet.getRightBorderVertices();
         rightBorderVertices.insert(rightBorderVertices.end(), curLanelet->getRightBorderVertices().begin() + 1,
                                    curLanelet->getRightBorderVertices().end());
-        predecessorLanelets = curLaneLanelet->getPredecessors();
-        typeList = curLaneLanelet->getLaneletType();
+        predecessorLanelets = curLaneLanelet.getPredecessors();
+        typeList = curLaneLanelet.getLaneletType();
     }
 
     if (curLanelet->getSuccessors().size() > 0) {
         // create new lane
         Lanelet newLanelet = Lanelet(id, leftBorderVertices, rightBorderVertices, predecessorLanelets,
                                      successorLanelets, typeList, userOneWay, userBidirectional);
-        newLanelet.createCenterVertices();
-        newLanelet.constructOuterPolygon();
         for (const auto &la : curLanelet->getSuccessors()) {
             auto newLanes{
-                combineLaneletAndSuccessorsWithSameTypeToLane(la, std::make_shared<Lanelet>(newLanelet), laneletList)};
+                combineLaneletAndSuccessorsWithSameTypeToLane(la, newLanelet, laneletList)};
             lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
         }
     } else {
         Lanelet newLanelet = Lanelet(id++, leftBorderVertices, rightBorderVertices, predecessorLanelets,
                                      successorLanelets, typeList, userOneWay, userBidirectional);
-        newLanelet.createCenterVertices();
-        newLanelet.constructOuterPolygon();
         geometry::EigenPolyline reference_path;
         for (auto vert : centerVertices)
             reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));

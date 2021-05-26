@@ -251,13 +251,18 @@ const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getOncomings() const { re
 void Obstacle::setOncomings(const std::vector<std::shared_ptr<Lanelet>> &onc) { oncomings = onc; }
 
 void Obstacle::convertPointToCurvilinear(size_t timeStep) const {
-
-    Eigen::Vector2d convertedPoint = referenceLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
-        getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
-    getStateByTimeStep(timeStep)->setLonPosition(convertedPoint.x());
-    getStateByTimeStep(timeStep)->setLatPosition(convertedPoint.y());
-    double theta = getStateByTimeStep(timeStep)->getGlobalOrientation() -
-                   getReferenceLane()->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
-                                                                getStateByTimeStep(timeStep)->getYPosition());
-    getStateByTimeStep(timeStep)->setCurvilinearOrientation(theta);
+    try {
+        Eigen::Vector2d convertedPoint = referenceLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+            getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
+        getStateByTimeStep(timeStep)->setLonPosition(convertedPoint.x());
+        getStateByTimeStep(timeStep)->setLatPosition(convertedPoint.y());
+        double theta = getStateByTimeStep(timeStep)->getGlobalOrientation() -
+                       getReferenceLane()->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                                                    getStateByTimeStep(timeStep)->getYPosition());
+        getStateByTimeStep(timeStep)->setCurvilinearOrientation(theta);
+    } catch (...) {
+        throw std::runtime_error("Curvilinear Projection Error - Obstacle ID: " + std::to_string(id) +
+                                 " - Time Step: " + std::to_string(timeStep) +
+                                 " - Reference Lane: " + std::to_string(referenceLane->getId()));
+    }
 }

@@ -34,7 +34,7 @@ LineMarking matchStringToLineMarking(const std::string &type);
  */
 std::vector<std::shared_ptr<Lane>>
 combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet,
-                                              std::shared_ptr<Lanelet> curLaneLanelet = nullptr,
+                                              Lanelet curLaneLanelet = {},
                                               std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
 #endif // ENV_MODEL_LANELET_OPERATIONS_H
