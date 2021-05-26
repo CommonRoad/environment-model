@@ -17,5 +17,5 @@ env_model_example_node
 .ipynb_checkpoints/
 dist
 *.egg-info
-tests/envModelTests/pybind/__pycache__/
+__pycache__/
 

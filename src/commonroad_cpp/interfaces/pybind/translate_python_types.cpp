@@ -128,21 +128,21 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         }
         // add users one way
         const py::list &py_laneletUserOneWay = py_singleLanelet.attr("user_one_way").cast<py::list>();
-        std::vector<ObstacleType> usersOneWay;
+        std::set<ObstacleType> usersOneWay;
         for (py::handle py_user : py_laneletUserOneWay)
-            usersOneWay.push_back(matchStringToObstacleType(py::cast<std::string>(py_user.attr("value"))));
+            usersOneWay.insert(matchStringToObstacleType(py::cast<std::string>(py_user.attr("value"))));
         tempLaneletContainer[arrayIndex]->setUserOneWay(usersOneWay);
         // add users bidirectional
         const py::list &py_laneletUserBidirectional = py_singleLanelet.attr("user_bidirectional").cast<py::list>();
-        std::vector<ObstacleType> usersBidirectional;
+        std::set<ObstacleType> usersBidirectional;
         for (py::handle py_user : py_laneletUserBidirectional)
-            usersBidirectional.push_back(matchStringToObstacleType(py::cast<std::string>(py_user.attr("value"))));
+            usersBidirectional.insert(matchStringToObstacleType(py::cast<std::string>(py_user.attr("value"))));
         tempLaneletContainer[arrayIndex]->setUserBidirectional(usersBidirectional);
         // add lanelet types
         const py::list &py_laneletTypes = py_singleLanelet.attr("lanelet_type").cast<py::list>();
-        std::vector<LaneletType> laneletTypes;
+        std::set<LaneletType> laneletTypes;
         for (py::handle py_type : py_laneletTypes)
-            laneletTypes.push_back(matchStringToLaneletType(py::cast<std::string>(py_type.attr("value"))));
+            laneletTypes.insert(matchStringToLaneletType(py::cast<std::string>(py_type.attr("value"))));
         tempLaneletContainer[arrayIndex]->setLaneletType(laneletTypes);
         // set line markings
         tempLaneletContainer[arrayIndex]->setLineMarkingLeft(matchStringToLineMarking(

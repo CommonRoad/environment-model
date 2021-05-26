@@ -18,8 +18,7 @@ void RoadNetworkTest::SetUp() {
 
 TEST_F(RoadNetworkTest, InitializationComplete) {
     EXPECT_EQ(roadNetwork->getLaneletNetwork().size(), 5);
-    EXPECT_EQ(roadNetwork->getLanes().size(), 3);
-    EXPECT_EQ(roadNetwork->getLanes().at(0)->getId(), 6);
+    EXPECT_EQ(roadNetwork->getLanes().size(), 4);
     EXPECT_EQ(roadNetwork->getLaneletNetwork().at(0)->getId(), 1);
 }
 
@@ -40,8 +39,8 @@ TEST_F(RoadNetworkTest, FindLaneletById) {
 }
 
 TEST_F(RoadNetworkTest, FindLaneByShape) {
-    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonOne)->getId(), 6);
-    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonOne)->getId(), 6);
-    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonTwo)->getId(), 6);
+    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonOne)->getId(), 16);
+    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonOne)->getId(), 16);
+    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonTwo)->getId(), 16);
     EXPECT_THROW(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonThree), std::domain_error);
 }

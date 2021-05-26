@@ -38,7 +38,7 @@ int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::st
         boost::program_options::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
         po::notify(vm);
 
-        if (vm.count("help")) {
+        if (vm.count("help") != 0u) {
             std::cout << desc << "\n";
             return 0;
         }

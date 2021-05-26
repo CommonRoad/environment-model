@@ -4,9 +4,8 @@
 #include "lanelet.h"
 #include <utility>
 
-Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
-                 std::vector<LaneletType> type, std::vector<ObstacleType> oneWay,
-                 std::vector<ObstacleType> userBidirectional)
+Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::set<LaneletType> type,
+                 std::set<ObstacleType> oneWay, std::set<ObstacleType> userBidirectional)
     : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)}, laneletType{std::move(type)},
       userOneWay{std::move(oneWay)}, userBidirectional{std::move(userBidirectional)} {
     createCenterVertices();
@@ -15,9 +14,8 @@ Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> 
 
 Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
                  std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
-                 std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::vector<LaneletType> type,
-                 std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
-                 std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>())
+                 std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::set<LaneletType> type,
+                 std::set<ObstacleType> oneWay = {}, std::set<ObstacleType> userBidirectional = {})
     : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)},
       predecessorLanelets{std::move(predecessorLanelets)}, successorLanelets{std::move(successorLanelets)},
       laneletType{std::move(type)}, userOneWay{std::move(oneWay)}, userBidirectional{std::move(userBidirectional)} {
@@ -43,11 +41,11 @@ void Lanelet::setRightBorderVertices(const std::vector<vertex> &rightBorderVerti
     rightBorder = rightBorderVertices;
 }
 
-void Lanelet::setLaneletType(const std::vector<LaneletType> &laType) { laneletType = laType; }
+void Lanelet::setLaneletType(const std::set<LaneletType> &laType) { laneletType = laType; }
 
-void Lanelet::setUserOneWay(const std::vector<ObstacleType> &user) { userOneWay = user; }
+void Lanelet::setUserOneWay(const std::set<ObstacleType> &user) { userOneWay = user; }
 
-void Lanelet::setUserBidirectional(const std::vector<ObstacleType> &user) { userBidirectional = user; }
+void Lanelet::setUserBidirectional(const std::set<ObstacleType> &user) { userBidirectional = user; }
 
 void Lanelet::setStopLine(const std::shared_ptr<StopLine> &sl) { stopLine = sl; }
 
@@ -85,11 +83,11 @@ const polygon_type &Lanelet::getOuterPolygon() const { return outerPolygon; }
 
 const box &Lanelet::getBoundingBox() const { return boundingBox; }
 
-const std::vector<LaneletType> &Lanelet::getLaneletType() const { return laneletType; }
+const std::set<LaneletType> &Lanelet::getLaneletType() const { return laneletType; }
 
-const std::vector<ObstacleType> &Lanelet::getUserOneWay() const { return userOneWay; }
+const std::set<ObstacleType> &Lanelet::getUserOneWay() const { return userOneWay; }
 
-const std::vector<ObstacleType> &Lanelet::getUserBidirectional() const { return userBidirectional; }
+const std::set<ObstacleType> &Lanelet::getUserBidirectional() const { return userBidirectional; }
 
 const Lanelet::adjacent &Lanelet::getAdjacentLeft() const { return adjacentLeft; }
 
@@ -174,7 +172,7 @@ bool Lanelet::hasLaneletType(LaneletType laType) {
     return std::any_of(laneletType.begin(), laneletType.end(), [laType](auto ty) { return ty == laType; });
 }
 
-void Lanelet::addLaneletType(LaneletType laType) { laneletType.push_back(laType); }
+void Lanelet::addLaneletType(LaneletType laType) { laneletType.insert(laType); }
 
 LineMarking Lanelet::getLineMarkingLeft() const { return lineMarkingLeft; }
 
