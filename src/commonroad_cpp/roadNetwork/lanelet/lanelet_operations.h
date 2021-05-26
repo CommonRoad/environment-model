@@ -33,8 +33,7 @@ LineMarking matchStringToLineMarking(const std::string &type);
  * @return lane spanned by concatenated lanelets
  */
 std::vector<std::shared_ptr<Lane>>
-combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet,
-                                              Lanelet curLaneLanelet = {},
+combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet, Lanelet curLaneLanelet = {},
                                               std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
 #endif // ENV_MODEL_LANELET_OPERATIONS_H

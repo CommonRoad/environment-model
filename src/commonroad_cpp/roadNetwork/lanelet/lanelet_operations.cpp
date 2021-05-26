@@ -55,8 +55,7 @@ LineMarking matchStringToLineMarking(const std::string &type) {
 }
 
 std::vector<std::shared_ptr<Lane>>
-combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet,
-                                              Lanelet curLaneLanelet,
+combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet, Lanelet curLaneLanelet,
                                               std::vector<std::shared_ptr<Lanelet>> containedLanelets) {
     // initialize lanelet elements
     static size_t id;
@@ -100,8 +99,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanele
         Lanelet newLanelet = Lanelet(id, leftBorderVertices, rightBorderVertices, predecessorLanelets,
                                      successorLanelets, typeList, userOneWay, userBidirectional);
         for (const auto &la : curLanelet->getSuccessors()) {
-            auto newLanes{
-                combineLaneletAndSuccessorsWithSameTypeToLane(la, newLanelet, laneletList)};
+            auto newLanes{combineLaneletAndSuccessorsWithSameTypeToLane(la, newLanelet, laneletList)};
             lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
         }
     } else {
