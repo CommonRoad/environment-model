@@ -13,7 +13,7 @@ std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xm
     std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
 
     if (!doc->load_file(xmlFile.c_str()))
-        throw std::runtime_error("Couldn't load XML-File");
+        throw std::runtime_error("Couldn't load XML-File: " + xmlFile);
 
     const auto version = doc->child("commonRoad").attribute("commonRoadVersion").value();
     if (!strcmp(version, "2017a") || !strcmp(version, "2018b"))

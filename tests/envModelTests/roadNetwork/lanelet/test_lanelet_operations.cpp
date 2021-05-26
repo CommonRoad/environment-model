@@ -38,10 +38,8 @@ TEST_F(LaneletOperationsTest, MatchStringToLineMarking) {
 }
 
 TEST_F(LaneletOperationsTest, CombineLaneletAndSuccessorsWithSameTypeToLane) {
-    compareVerticesVector(
-        combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree).at(0)->getCenterVertices(),
-        roadNetwork->getLanes().at(0)->getCenterVertices());
-    compareVerticesVector(
-        combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree).at(1)->getCenterVertices(),
-        roadNetwork->getLanes().at(1)->getCenterVertices());
+    compareVerticesVector(combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree).at(0)->getCenterVertices(),
+                          roadNetwork->getLanes().at(0)->getCenterVertices());
+    compareVerticesVector(combineLaneletAndSuccessorsWithSameTypeToLane(laneletThree).at(1)->getCenterVertices(),
+                          roadNetwork->getLanes().at(1)->getCenterVertices());
 }
