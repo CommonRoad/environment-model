@@ -25,7 +25,7 @@ RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network,
         rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
 
     createLanes(network);
-    setDynamicIntersectionLabels();
+    //setDynamicIntersectionLabels();
 }
 
 const std::vector<std::shared_ptr<Lanelet>> &RoadNetwork::getLaneletNetwork() const { return laneletNetwork; }
