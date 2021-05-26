@@ -9,7 +9,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/obstacle/test_state.cpp
         envModelTests/obstacle/test_obstacle_operations.cpp
         envModelTests/geometry/test_rectangle.cpp
-        envModelTests/geometry/test_safe_distance.cpp
         envModelTests/geometry/test_geometric_operations.cpp
         envModelTests/interfaces/test_interfaces.cpp
         envModelTests/predicates/braking/test_safe_distance_predicate.cpp

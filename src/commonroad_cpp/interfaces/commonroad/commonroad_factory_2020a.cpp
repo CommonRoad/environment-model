@@ -37,9 +37,9 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;
          roadElements = roadElements.next_sibling()) {
         if ((strcmp(roadElements.name(), "lanelet")) == 0) {
-            std::vector<LaneletType> laneletType;
-            std::vector<ObstacleType> userOneWay;
-            std::vector<ObstacleType> userBidirectional;
+            std::set<LaneletType> laneletType;
+            std::set<ObstacleType> userOneWay;
+            std::set<ObstacleType> userBidirectional;
             for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
                 // set left bound
                 if ((strcmp(child.name(), "leftBound")) == 0) {
@@ -73,13 +73,13 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                 }
                 // set lanelet type
                 if (!(strcmp(child.name(), "laneletType")))
-                    laneletType.push_back(matchStringToLaneletType(child.first_child().value()));
+                    laneletType.insert(matchStringToLaneletType(child.first_child().value()));
                 // set user one way
                 if (!(strcmp(child.name(), "userOneWay")))
-                    userOneWay.push_back(matchStringToObstacleType(child.first_child().value()));
+                    userOneWay.insert(matchStringToObstacleType(child.first_child().value()));
                 // set user bidirectional
                 if (!(strcmp(child.name(), "userBidirectional")))
-                    userBidirectional.push_back(matchStringToObstacleType((child.first_child().value())));
+                    userBidirectional.insert(matchStringToObstacleType((child.first_child().value())));
                 // add traffic signs to temporary list
                 if ((strcmp(child.name(), "trafficSign")) == 0) {
                     for (const auto &sign : trafficSigns) {

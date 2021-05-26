@@ -61,8 +61,9 @@ void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>> &netwo
     }
     // create lanes
     for (const auto &la : startLanelets) {
-        laneletType = extractClassifyingLaneletType(la);
-        lanes.push_back(combineLaneletAndSuccessorsWithSameTypeToLane(la, laneletType));
+        //  laneletType = extractClassifyingLaneletType(la);
+        auto newLanes{combineLaneletAndSuccessorsWithSameTypeToLane(la)};
+        lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
     }
 }
 
@@ -88,7 +89,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
     rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())), std::back_inserter(relevantLanelets));
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for (auto la : relevantLanelets)
-        lanelets.push_back(findLaneletById(static_cast<int>(la.second)));
+        lanelets.push_back(findLaneletById(static_cast<size_t>(la.second)));
 
     // check intersection with relevant lanelets
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;

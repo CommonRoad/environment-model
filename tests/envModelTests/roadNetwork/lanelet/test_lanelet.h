@@ -11,26 +11,26 @@
 
 class LaneletTestInitialization {
   protected:
-    int idLaneletOne;
-    std::vector<LaneletType> laneletTypeLaneletOne;
-    std::vector<ObstacleType> userOneWayLaneletOne;
-    std::vector<ObstacleType> userBidirectionalLaneletOne;
+    size_t idLaneletOne;
+    std::set<LaneletType> laneletTypeLaneletOne;
+    std::set<ObstacleType> userOneWayLaneletOne;
+    std::set<ObstacleType> userBidirectionalLaneletOne;
     std::vector<vertex> centerVerticesLaneletOne;
     std::vector<vertex> leftBorderLaneletOne;
     std::vector<vertex> rightBorderLaneletOne;
     std::shared_ptr<Lanelet> laneletOne;
 
-    int idLaneletTwo;
-    std::vector<LaneletType> laneletTypeLaneletTwo;
+    size_t idLaneletTwo;
+    std::set<LaneletType> laneletTypeLaneletTwo;
     std::vector<vertex> centerVerticesLaneletTwo;
     std::vector<vertex> leftBorderLaneletTwo;
     std::vector<vertex> rightBorderLaneletTwo;
     std::shared_ptr<Lanelet> laneletTwo;
-    std::vector<ObstacleType> userOneWayLaneletTwo;
-    std::vector<ObstacleType> userBidirectionalLaneletTwo;
+    std::set<ObstacleType> userOneWayLaneletTwo;
+    std::set<ObstacleType> userBidirectionalLaneletTwo;
 
-    int idLaneletThree;
-    std::vector<LaneletType> laneletTypeLaneletThree;
+    size_t idLaneletThree;
+    std::set<LaneletType> laneletTypeLaneletThree;
     std::vector<vertex> centerVerticesLaneletThree;
     std::vector<vertex> leftBorderLaneletThree;
     std::vector<vertex> rightBorderLaneletThree;

@@ -39,9 +39,8 @@ class Lanelet {
      * @param oneWay List of road users one way.
      * @param userBidirectional List of road users bidirectional.
      */
-    Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::vector<LaneletType> type,
-            std::vector<ObstacleType> oneWay = std::vector<ObstacleType>(),
-            std::vector<ObstacleType> userBidirectional = std::vector<ObstacleType>());
+    Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::set<LaneletType> type,
+            std::set<ObstacleType> oneWay = {}, std::set<ObstacleType> userBidirectional = {});
 
     /**
      * Constructor initializing borders, lanelet typ, road users, predecessor lanelets, and successor lanelets.
@@ -57,8 +56,8 @@ class Lanelet {
      */
     Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
             std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
-            std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::vector<LaneletType> laneletType,
-            std::vector<ObstacleType> userOneWay, std::vector<ObstacleType> userBidirectional);
+            std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::set<LaneletType> laneletType,
+            std::set<ObstacleType> userOneWay, std::set<ObstacleType> userBidirectional);
 
     /*
      *   Adjacency struct containing a pointer to the adjacent lanelet and information about its driving direction.
@@ -112,21 +111,21 @@ class Lanelet {
      *
      * @param laneletType list of types classifying lanelet.
      */
-    void setLaneletType(const std::vector<LaneletType> &laneletType);
+    void setLaneletType(const std::set<LaneletType> &laneletType);
 
     /**
      * Setter for road users one way.
      *
      * @param userOneWay List of road users one way.
      */
-    void setUserOneWay(const std::vector<ObstacleType> &userOneWay);
+    void setUserOneWay(const std::set<ObstacleType> &userOneWay);
 
     /**
      * Setter for road users bidirectional.
      *
      * @param userBidirectional List of road users bidirectional.
      */
-    void setUserBidirectional(const std::vector<ObstacleType> &userBidirectional);
+    void setUserBidirectional(const std::set<ObstacleType> &userBidirectional);
 
     /**
      * Setter for stop line.
@@ -273,21 +272,21 @@ class Lanelet {
      *
      * @return List of lanelet types.
      */
-    [[nodiscard]] const std::vector<LaneletType> &getLaneletType() const;
+    [[nodiscard]] const std::set<LaneletType> &getLaneletType() const;
 
     /**
      * Getter for road users one way.
      *
      * @return List of road users one way.
      */
-    [[nodiscard]] const std::vector<ObstacleType> &getUserOneWay() const;
+    [[nodiscard]] const std::set<ObstacleType> &getUserOneWay() const;
 
     /**
      * Getter for road users bidirectional.
      *
      * @return List of road users bidirectional.
      */
-    [[nodiscard]] const std::vector<ObstacleType> &getUserBidirectional() const;
+    [[nodiscard]] const std::set<ObstacleType> &getUserBidirectional() const;
 
     /**
      * Getter for adjacent left lanelet.
@@ -390,13 +389,13 @@ class Lanelet {
     std::vector<std::shared_ptr<TrafficLight>>
         trafficLights; //**< list of pointers to traffic lights assigned to lanelet*/
     std::vector<std::shared_ptr<TrafficSign>>
-        trafficSigns;                            //**< list of pointers to traffic signs assigned to lanelet*/
-    std::vector<LaneletType> laneletType;        //**< list of relevant lanelet types*/
-    std::vector<ObstacleType> userOneWay;        //**< list of relevant allowed users one way*/
-    std::vector<ObstacleType> userBidirectional; //**< list of relevant allowed users bidirectional*/
-    std::shared_ptr<StopLine> stopLine;          //**< stopLine assigned to lanelet*/
-    LineMarking lineMarkingLeft;                 //**< Line marking of left boundary*/
-    LineMarking lineMarkingRight;                //**< Line marking of right boundary*/
+        trafficSigns;                         //**< list of pointers to traffic signs assigned to lanelet*/
+    std::set<LaneletType> laneletType;        //**< list of relevant lanelet types*/
+    std::set<ObstacleType> userOneWay;        //**< list of relevant allowed users one way*/
+    std::set<ObstacleType> userBidirectional; //**< list of relevant allowed users bidirectional*/
+    std::shared_ptr<StopLine> stopLine;       //**< stopLine assigned to lanelet*/
+    LineMarking lineMarkingLeft;              //**< Line marking of left boundary*/
+    LineMarking lineMarkingRight;             //**< Line marking of right boundary*/
 };
 
 #endif // ENVIRONMENT_MODEL_LANELET_H
