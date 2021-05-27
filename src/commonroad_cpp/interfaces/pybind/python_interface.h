@@ -5,15 +5,15 @@
 #ifndef ENV_MODEL_PYTHON_INTERFACE_H
 #define ENV_MODEL_PYTHON_INTERFACE_H
 
-#include "commonroad_cpp/predicates/predicate_evaluation.h"
+#include "commonroad_cpp/commonroad_container.h"
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;
 
-uint8_t py_registerScenario(size_t scenarioId, size_t timeStep, const py::handle &py_laneletNetwork,
-                            const py::list &py_obstacles, const py::list &py_egoVehicles);
+void py_registerScenario(size_t scenarioId, size_t timeStep, const py::handle &py_laneletNetwork,
+                         const py::list &py_obstacles, const py::list &py_egoVehicles);
 
-uint8_t py_removeScenario(size_t scenarioId);
+void py_removeScenario(size_t scenarioId);
 
 bool py_safe_distance_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
                                          size_t py_obstacleId);
