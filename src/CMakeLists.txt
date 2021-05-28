@@ -48,7 +48,6 @@ target_link_libraries(${LIBRARY_NAME} PUBLIC
 
 # Create environment model test node
 add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
-
 target_link_libraries(env_model_example_node PRIVATE ${LIBRARY_NAME})
 
 

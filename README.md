@@ -49,7 +49,7 @@ cmake -DCRCCOSY_LIBRARY_DIR=absolutPathToCurvilinearCoordinateSystem/Drivability
 
 To use the environment model within Python, run 
 ```bash
-python setup.py install --crccosy absolutPathToCurvilinearCoordinateSystem/DrivabilityChecker
+python setup.py develop --crccosy absolutPathToCurvilinearCoordinateSystem/DrivabilityChecker
 ```
 from the root directory.
 

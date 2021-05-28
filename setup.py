@@ -73,7 +73,6 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
-
 setup(
     name='cpp_env_model',
     version='0.0.1',
@@ -92,5 +91,5 @@ setup(
         'tests': ['numpy>=1.20.0',
                   'pytest>=5.3.2', ],
     },
-
+    include_package_data=True,
 )
