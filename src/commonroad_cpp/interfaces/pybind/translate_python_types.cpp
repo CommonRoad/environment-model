@@ -351,7 +351,7 @@ std::shared_ptr<State> createInitialState(py::handle py_singleObstacle) {
 
 std::shared_ptr<Obstacle> createCommonObstaclePart(py::handle py_singleObstacle) {
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
-    tempObstacle->setId(py_singleObstacle.attr("obstacle_id").cast<int>());
+    tempObstacle->setId(py_singleObstacle.attr("obstacle_id").cast<size_t>());
     tempObstacle->setObstacleType(
         matchStringToObstacleType(py_singleObstacle.attr("obstacle_type").attr("value").cast<std::string>()));
     py::handle py_obstacleShape = py_singleObstacle.attr("obstacle_shape");
@@ -372,14 +372,16 @@ std::shared_ptr<Obstacle> createCommonObstaclePart(py::handle py_singleObstacle)
 }
 
 std::shared_ptr<State> extractState(py::handle py_state) {
-    auto xPosition = py_state.attr("position").cast<py::list>()[0].cast<double>();
-    auto yPosition = py_state.attr("position").cast<py::list>()[1].cast<double>();
-    auto orientation = py_state.attr("orientation").cast<double>();
-    auto velocity = py_state.attr("velocity").cast<double>();
-    auto acceleration = py_state.attr("acceleration").cast<double>();
-    auto timeStep = py_state.attr("time_step").cast<int>();
+    auto state{std::make_shared<State>()};
+    state->setXPosition(py_state.attr("position").cast<py::list>()[0].cast<double>());
+    state->setYPosition(py_state.attr("position").cast<py::list>()[1].cast<double>());
+    state->setGlobalOrientation(py_state.attr("orientation").cast<double>());
+    state->setVelocity(py_state.attr("velocity").cast<double>());
+    state->setTimeStep(py_state.attr("time_step").cast<size_t>());
+    if (py::hasattr(py_state, "acceleration"))
+      state->setXPosition(py_state.attr("acceleration").cast<double>());
 
-    return std::make_shared<State>(timeStep, xPosition, yPosition, velocity, acceleration, orientation);
+    return state;
 }
 
 std::shared_ptr<Obstacle> createDynamicObstacle(py::handle py_singleObstacle) {
