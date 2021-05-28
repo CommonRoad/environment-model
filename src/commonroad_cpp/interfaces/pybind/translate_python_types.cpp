@@ -379,7 +379,7 @@ std::shared_ptr<State> extractState(py::handle py_state) {
     state->setVelocity(py_state.attr("velocity").cast<double>());
     state->setTimeStep(py_state.attr("time_step").cast<size_t>());
     if (py::hasattr(py_state, "acceleration"))
-        state->setXPosition(py_state.attr("acceleration").cast<double>());
+        state->setAcceleration(py_state.attr("acceleration").cast<double>());
 
     return state;
 }
