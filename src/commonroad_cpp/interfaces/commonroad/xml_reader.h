@@ -41,6 +41,14 @@ std::vector<std::shared_ptr<Lanelet>> createLaneletFromXML(const std::string &xm
 std::vector<std::shared_ptr<TrafficSign>> createTrafficSignFromXML(const std::string &xmlFile);
 
 /**
+ * Extract country from XML benchmark ID.
+ *
+ * @param xmlFile Loaded CommonRoad XML file.
+ * @return List of pointers to created traffic signs.
+ */
+SupportedTrafficSignCountry extractCountryFromXML(const std::string &xmlFile);
+
+/**
  * Function for creating traffic lights.
  *
  * @param xmlFile Loaded CommonRoad XML file.

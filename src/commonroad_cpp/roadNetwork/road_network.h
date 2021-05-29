@@ -36,6 +36,7 @@ class RoadNetwork {
      */
     explicit RoadNetwork(
         const std::vector<std::shared_ptr<Lanelet>> &network,
+        SupportedTrafficSignCountry cou = SupportedTrafficSignCountry::ZAMUNDA,
         std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{},
         std::vector<std::shared_ptr<TrafficSign>> signs = std::vector<std::shared_ptr<TrafficSign>>{},
         std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{});
@@ -60,6 +61,13 @@ class RoadNetwork {
      * @return list of pointers to intersections.
      */
     [[nodiscard]] const std::vector<std::shared_ptr<Intersection>> &getIntersections() const;
+
+    /**
+     * Getter for country.
+     *
+     * @return Country where road network is located.
+     */
+    [[nodiscard]] SupportedTrafficSignCountry getCountry() const;
 
     /**
      * Given a polygon shape, finds the list of lanelets within the road network which intersect with the shape.
@@ -105,6 +113,7 @@ class RoadNetwork {
 
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
+    SupportedTrafficSignCountry country;                      //**< country where road network is located */
     std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;   //**< set of traffic signs contained in road network */
     std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< set of traffic lights contained in road network */

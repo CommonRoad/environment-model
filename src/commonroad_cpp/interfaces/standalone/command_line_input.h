@@ -70,14 +70,18 @@ auto getDataFromCommonRoad(const std::string &xmlFilePath) {
     std::vector<std::shared_ptr<Obstacle>> obstacles = XMLReader::createObstacleFromXML(xmlFilePath);
     std::vector<std::shared_ptr<Intersection>> intersections =
         XMLReader::createIntersectionFromXML(xmlFilePath, lanelets);
+    auto country{XMLReader::extractCountryFromXML(xmlFilePath)};
 
     std::shared_ptr<RoadNetwork> roadNetwork{
-        std::make_shared<RoadNetwork>(RoadNetwork(lanelets, intersections, trafficSigns, trafficLights))};
+        std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, intersections, trafficSigns, trafficLights))};
 
     for (const auto &obs : obstacles) {
-        for (size_t i = obs->getFirstTrajectoryTimeStep(); i < obs->getLastTrajectoryTimeStep(); ++i) {
-            obs->setOwnLane(roadNetwork->getLanes(), i);
-        }
+        if (obs->getIsStatic())
+            obs->setOwnLane(roadNetwork->getLanes(), 0);
+        else
+            for (size_t i = obs->getFirstTrajectoryTimeStep(); i < obs->getLastTrajectoryTimeStep(); ++i) {
+                obs->setOwnLane(roadNetwork->getLanes(), i);
+            }
     }
 
     return std::make_tuple(obstacles, roadNetwork);

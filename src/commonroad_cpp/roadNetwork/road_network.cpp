@@ -14,11 +14,11 @@
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
-RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network,
+RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, SupportedTrafficSignCountry cou,
                          std::vector<std::shared_ptr<Intersection>> inters,
                          std::vector<std::shared_ptr<TrafficSign>> signs,
                          std::vector<std::shared_ptr<TrafficLight>> lights)
-    : laneletNetwork(network), intersections(std::move(inters)), trafficSigns(std::move(signs)),
+    : laneletNetwork(network), country(cou), intersections(std::move(inters)), trafficSigns(std::move(signs)),
       trafficLights(std::move(lights)) {
     // construct Rtree out of lanelets
     for (const std::shared_ptr<Lanelet> &la : network)
@@ -165,3 +165,5 @@ std::shared_ptr<Incoming> RoadNetwork::incomingOfLanelet(const std::shared_ptr<L
                 return inco;
     return nullptr;
 }
+
+SupportedTrafficSignCountry RoadNetwork::getCountry() const { return country; }

@@ -11,12 +11,12 @@ std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles()
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
     // iterate over all nodes and continue working with dynamic and static obstacles
-    for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements;
+    for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;
          roadElements = roadElements.next_sibling()) {
-        if (!(strcmp(roadElements.name(), "obstacle"))) {
-            if (!(strcmp(roadElements.first_child().text().as_string(), "dynamic"))) {
+        if ((strcmp(roadElements.name(), "obstacle")) == 0) {
+            if ((strcmp(roadElements.first_child().text().as_string(), "dynamic")) == 0) {
                 XMLReader::createDynamicObstacle(obstacleList, roadElements);
-            } else if (!(strcmp(roadElements.first_child().text().as_string(), "static"))) {
+            } else if ((strcmp(roadElements.first_child().text().as_string(), "static")) == 0) {
                 XMLReader::extractStaticObstacle(obstacleList, roadElements);
             }
         }

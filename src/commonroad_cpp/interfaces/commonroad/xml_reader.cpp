@@ -8,6 +8,7 @@
 #include "commonroad_factory_2018b.h"
 #include "commonroad_factory_2020a.h"
 #include "xml_reader.h"
+#include <sstream>
 
 std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xmlFile) {
     std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
@@ -39,6 +40,23 @@ XMLReader::createLaneletFromXML(const std::string &xmlFile, std::vector<std::sha
 std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(const std::string &xmlFile) {
     const auto factory = createCommonRoadFactory(xmlFile);
     return factory->createTrafficSigns();
+}
+
+SupportedTrafficSignCountry XMLReader::extractCountryFromXML(const std::string &xmlFile) {
+    std::vector<std::string> result;
+    std::stringstream stream{xmlFile}; // create string stream from the string
+    while (stream.good()) {
+        std::string substr;
+        getline(stream, substr, '/'); // get first string delimited by comma
+        result.push_back(substr);
+    }
+    auto name{result.back().substr(0, 3)};
+    if (name == "DEU")
+        return SupportedTrafficSignCountry::GERMANY;
+    else if (name == "USA")
+        return SupportedTrafficSignCountry::USA;
+    else
+        return SupportedTrafficSignCountry::ZAMUNDA;
 }
 
 std::vector<std::shared_ptr<TrafficLight>> XMLReader::createTrafficLightFromXML(const std::string &xmlFile) {
@@ -81,7 +99,7 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
 
     // extract ID, type, shape, initial state, and trajectory
-    tempObstacle->setId(roadElements.first_attribute().as_int());
+    tempObstacle->setId(roadElements.first_attribute().as_ullong());
     tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
         if ((strcmp(child.name(), "shape")) == 0) { // TODO: other shape types
@@ -111,7 +129,7 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
 
     // extract ID, type, shape, and initial state
-    tempObstacle->setId(roadElements.first_attribute().as_int());
+    tempObstacle->setId(roadElements.first_attribute().as_ullong());
     tempObstacle->setIsStatic(true);
     tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {

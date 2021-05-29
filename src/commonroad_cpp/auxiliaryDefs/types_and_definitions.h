@@ -71,7 +71,7 @@ enum class TrafficSignIDGermany {
     ADDITION_RIGHT_TRAFFIC_PRIORITY_WITH_STRAIGHT_YIELD = 100224,
 };
 
-enum class SupportedTrafficSignCountry { GERMANY, ZAMUNDA };
+enum class SupportedTrafficSignCountry { GERMANY, ZAMUNDA, USA };
 
 const double reactionTimeObstacles = 0.3;
 
