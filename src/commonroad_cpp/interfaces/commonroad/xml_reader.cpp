@@ -51,12 +51,7 @@ SupportedTrafficSignCountry XMLReader::extractCountryFromXML(const std::string &
         result.push_back(substr);
     }
     auto name{result.back().substr(0, 3)};
-    if (name == "DEU")
-        return SupportedTrafficSignCountry::GERMANY;
-    else if (name == "USA")
-        return SupportedTrafficSignCountry::USA;
-    else
-        return SupportedTrafficSignCountry::ZAMUNDA;
+    return RoadNetwork::matchStringToCountry(name);
 }
 
 std::vector<std::shared_ptr<TrafficLight>> XMLReader::createTrafficLightFromXML(const std::string &xmlFile) {

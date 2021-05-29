@@ -9,8 +9,9 @@
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include "translate_python_types.h"
 
-void py_registerScenario(size_t scenarioId, size_t timeStep, const py::handle &py_laneletNetwork,
-                         const py::list &py_obstacles, const py::list &py_egoVehicles) {
+void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &country,
+                         const py::handle &py_laneletNetwork, const py::list &py_obstacles,
+                         const py::list &py_egoVehicles) {
 
     auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
     auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
@@ -18,7 +19,8 @@ void py_registerScenario(size_t scenarioId, size_t timeStep, const py::handle &p
         TranslatePythonTypes::convertLanelets(py_laneletNetwork, tempTrafficSignContainer, tempTrafficLightContainer);
     auto tempIntersectionContainer =
         TranslatePythonTypes::convertIntersections(py_laneletNetwork, tempLaneletContainer);
-    auto roadNetwork = std::make_shared<RoadNetwork>(tempLaneletContainer, tempIntersectionContainer,
+    auto convertedCountry{RoadNetwork::matchStringToCountry(country)};
+    auto roadNetwork = std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempIntersectionContainer,
                                                      tempTrafficSignContainer, tempTrafficLightContainer);
     auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
     for (const auto &obs : tempObstacleContainer) {

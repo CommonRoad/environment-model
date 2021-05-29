@@ -10,8 +10,9 @@
 
 namespace py = pybind11;
 
-void py_registerScenario(size_t scenarioId, size_t timeStep, const py::handle &py_laneletNetwork,
-                         const py::list &py_obstacles, const py::list &py_egoVehicles);
+void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &country,
+                         const py::handle &py_laneletNetwork, const py::list &py_obstacles,
+                         const py::list &py_egoVehicles);
 
 void py_removeScenario(size_t scenarioId);
 
@@ -56,7 +57,8 @@ double py_unnecessary_braking_robust_evaluation(size_t scenarioId, size_t timeSt
 PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
     m.def("register_scenario", &py_registerScenario, "Add new scenario to C++ environment model", py::arg("scenarioId"),
-          py::arg("timeStep"), py::arg("py_lanelets"), py::arg("py_obstacles"), py::arg("py_egoVehicles"));
+          py::arg("timeStep"), py::arg("country"), py::arg("py_lanelets"), py::arg("py_obstacles"),
+          py::arg("py_egoVehicles"));
 
     m.def("remove_scenario", &py_removeScenario, "Remove scenario to C++ environment model", py::arg("scenarioId"));
 

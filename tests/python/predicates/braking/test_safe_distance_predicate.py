@@ -38,7 +38,7 @@ class TestBrakingPredicates(unittest.TestCase):
                                              State(time_step=1, position=np.array([30, 0]), velocity=0, acceleration=0,
                                                    orientation=0)]), Rectangle(5, 2)))
 
-        cpp_env_model.register_scenario(123, 0, self.lanelet_network, [other_obstacle], [ego_obstacle])
+        cpp_env_model.register_scenario(123, 0, "DEU", self.lanelet_network, [other_obstacle], [ego_obstacle])
 
         # Monitor-Mode
         sol_monitor_mode_1_obstacles = cpp_env_model.safe_distance_boolean_evaluation(123, 0, 1, 2)

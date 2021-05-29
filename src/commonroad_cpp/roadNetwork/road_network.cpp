@@ -167,3 +167,12 @@ std::shared_ptr<Incoming> RoadNetwork::incomingOfLanelet(const std::shared_ptr<L
 }
 
 SupportedTrafficSignCountry RoadNetwork::getCountry() const { return country; }
+
+SupportedTrafficSignCountry RoadNetwork::matchStringToCountry(const std::string &name) {
+    if (name == "DEU")
+        return SupportedTrafficSignCountry::GERMANY;
+    else if (name == "USA")
+        return SupportedTrafficSignCountry::USA;
+    else
+        return SupportedTrafficSignCountry::ZAMUNDA;
+}

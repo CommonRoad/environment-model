@@ -69,6 +69,7 @@ std::vector<std::shared_ptr<Intersection>> convertIntersections(const py::handle
 std::shared_ptr<StopLine> convertStopLine(const py::handle &py_stopLine,
                                           const std::vector<std::shared_ptr<TrafficSign>> &trafficSigns,
                                           const std::vector<std::shared_ptr<TrafficLight>> &trafficLights);
+
 } // namespace TranslatePythonTypes
 
 #endif // ENV_MODEL_TRANSLATE_PYTHON_TYPES_H

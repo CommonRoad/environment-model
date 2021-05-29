@@ -111,6 +111,14 @@ class RoadNetwork {
 
     std::shared_ptr<Incoming> incomingOfLanelet(const std::shared_ptr<Lanelet> &lanelet);
 
+    /**
+     * Matches a string to Country enum.
+     *
+     * @param name Name of country.
+     * @return Country enum.
+     */
+    static SupportedTrafficSignCountry matchStringToCountry(const std::string &name);
+
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
     SupportedTrafficSignCountry country;                      //**< country where road network is located */
