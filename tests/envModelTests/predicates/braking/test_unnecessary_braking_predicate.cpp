@@ -27,7 +27,6 @@ void UnnecessaryBrakingPredicateTest::SetUp() {
 
     std::shared_ptr<State> stateFiveObstacleOne = std::make_shared<State>(5, 50, 2, 10, 2, 0, 0, 50, 0);
 
-
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),

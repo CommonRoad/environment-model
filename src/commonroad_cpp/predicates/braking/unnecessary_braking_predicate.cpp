@@ -56,7 +56,7 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
         }
     }
     if (robustnessValues.size())
-      return *max_element(robustnessValues.begin(), robustnessValues.end());
+        return *max_element(robustnessValues.begin(), robustnessValues.end());
     else
         return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt;
 }

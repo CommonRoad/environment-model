@@ -9,14 +9,13 @@ State::State(size_t timeStep, double xPosition, double yPosition, double velocit
     : xPosition(xPosition), yPosition(yPosition), velocity(velocity), acceleration(acceleration),
       lonPosition(lonPosition), latPosition(latPosition), globalOrientation(globalOrientation),
       curvilinearOrientation(curvilinearOrientation),
-      validStates(ValidStates{true, true, true, true, true, true, true, true}),
-      timeStep(timeStep) {}
+      validStates(ValidStates{true, true, true, true, true, true, true, true}), timeStep(timeStep) {}
 
 State::State(size_t timeStep, double xPosition, double yPosition, double velocity, double acceleration,
              double orientation)
     : xPosition(xPosition), yPosition(yPosition), velocity(velocity), acceleration(acceleration),
       globalOrientation(orientation), validStates(ValidStates{true, true, true, true, false, false, true, false}),
-      timeStep(timeStep){}
+      timeStep(timeStep) {}
 
 double State::getXPosition() const { return xPosition; }
 
@@ -40,9 +39,9 @@ void State::setVelocity(double vel) {
 }
 
 double State::getAcceleration() const {
-  if(!validStates.acceleration)
-    throw std::runtime_error("State:: acceleration not initialized");
-  return acceleration;
+    if (!validStates.acceleration)
+        throw std::runtime_error("State:: acceleration not initialized");
+    return acceleration;
 }
 
 void State::setAcceleration(double acc) {

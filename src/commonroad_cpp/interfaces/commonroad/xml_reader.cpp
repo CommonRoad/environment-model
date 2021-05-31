@@ -85,7 +85,7 @@ std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
     st.setYPosition(states.child("position").child("point").child("y").text().as_double());
     st.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
     st.setVelocity(states.child("velocity").child("exact").text().as_double());
-    if(states.child("acceleration").child("exact").text() != nullptr)
+    if (states.child("acceleration").child("exact").text() != nullptr)
         st.setAcceleration(states.child("acceleration").child("exact").text().as_double());
     return std::make_shared<State>(st);
 }
