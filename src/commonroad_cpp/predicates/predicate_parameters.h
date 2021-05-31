@@ -31,6 +31,7 @@ struct PredicateParameters {
     double slightlyHigherSpeedDifference{5.55}; // indicator for slightly higher speed
     double uTurn{1.57};                         // angle [rad] indicating u-turn
     double aboveCenterlineTh{0.1};              // indicator for necessary distance to be classified above centerline
+    double epsilon{1e-6};                       // small value for robustness value
 
     void checkParameterValidity() const;
 };

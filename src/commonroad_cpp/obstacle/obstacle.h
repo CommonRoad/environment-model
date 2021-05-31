@@ -361,6 +361,8 @@ class Obstacle {
 
     bool timeStepExists(size_t timeStep);
 
+    void interpolateAcceleration(size_t timeStep);
+
   private:
     size_t id{};                                      //**< unique ID of lanelet */
     bool isStatic{false};                             //**< true if Obstacle is static */

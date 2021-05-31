@@ -41,17 +41,22 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
     InFrontOfPredicate inFrontOfPredicate;
     InSameLanePredicate inSameLanePredicate;
     SafeDistancePredicate safeDistancePredicate;
+    if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
+        obstacleK->interpolateAcceleration(timeStep);
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
         if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obs, obstacleK) and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
-            safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
+            safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs)) {
+            if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)
+                obs->interpolateAcceleration(timeStep);
             robustnessValues.push_back(parameters.aAbrupt - obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
                                        obs->getStateByTimeStep(timeStep)->getAcceleration());
+        }
     }
     if (robustnessValues.size())
-        return *max_element(robustnessValues.begin(), robustnessValues.end());
+      return *max_element(robustnessValues.begin(), robustnessValues.end());
     else
         return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt;
 }

@@ -6,15 +6,17 @@
 
 State::State(size_t timeStep, double xPosition, double yPosition, double velocity, double acceleration,
              double globalOrientation, double curvilinearOrientation, double lonPosition, double latPosition)
-    : timeStep(timeStep), xPosition(xPosition), yPosition(yPosition), velocity(velocity), acceleration(acceleration),
+    : xPosition(xPosition), yPosition(yPosition), velocity(velocity), acceleration(acceleration),
       lonPosition(lonPosition), latPosition(latPosition), globalOrientation(globalOrientation),
       curvilinearOrientation(curvilinearOrientation),
-      validStates(ValidStates{true, true, true, true, true, true, true, true}) {}
+      validStates(ValidStates{true, true, true, true, true, true, true, true}),
+      timeStep(timeStep) {}
 
 State::State(size_t timeStep, double xPosition, double yPosition, double velocity, double acceleration,
              double orientation)
-    : timeStep(timeStep), xPosition(xPosition), yPosition(yPosition), velocity(velocity), acceleration(acceleration),
-      globalOrientation(orientation), validStates(ValidStates{true, true, true, true, false, false, true, false}) {}
+    : xPosition(xPosition), yPosition(yPosition), velocity(velocity), acceleration(acceleration),
+      globalOrientation(orientation), validStates(ValidStates{true, true, true, true, false, false, true, false}),
+      timeStep(timeStep){}
 
 double State::getXPosition() const { return xPosition; }
 
@@ -37,7 +39,11 @@ void State::setVelocity(double vel) {
     State::velocity = vel;
 }
 
-double State::getAcceleration() const { return acceleration; }
+double State::getAcceleration() const {
+  if(!validStates.acceleration)
+    throw std::runtime_error("State:: acceleration not initialized");
+  return acceleration;
+}
 
 void State::setAcceleration(double acc) {
     validStates.acceleration = true;
@@ -46,7 +52,7 @@ void State::setAcceleration(double acc) {
 
 double State::getLonPosition() const {
     if (!validStates.lonPosition)
-        throw std::runtime_error("State:: longitudinal state not initialized");
+        throw std::runtime_error("State:: longitudinal position not initialized");
     return lonPosition;
 }
 
@@ -57,7 +63,7 @@ void State::setLonPosition(double s) {
 
 double State::getLatPosition() const {
     if (!validStates.latPosition)
-        throw std::runtime_error("State:: lateral state not initialized");
+        throw std::runtime_error("State:: lateral position not initialized");
     return latPosition;
 }
 
