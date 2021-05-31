@@ -52,7 +52,6 @@ double SafeDistancePredicate::robustEvaluation(size_t timeStep, const std::share
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
     double deltaS{obstacleP->rearS(timeStep) - obstacleK->frontS(timeStep)};
-
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive robustness
     if (deltaS < 0)
         return abs(deltaS);
@@ -65,7 +64,6 @@ double SafeDistancePredicate::robustEvaluation(double lonPosK, double lonPosP, d
                                                double lengthK, double lengthP) {
     double dSafe{computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact)};
     double deltaS = (lonPosP - 0.5 * lengthP) - (lonPosK + 0.5 * lengthK);
-
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive robustness
     if (deltaS < 0)
         return abs(deltaS);

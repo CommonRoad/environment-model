@@ -23,7 +23,7 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, co
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obs, obstacleK) and
+        if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt);
@@ -46,7 +46,7 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obs, obstacleK) and
+        if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs)) {
             if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)

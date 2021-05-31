@@ -7,20 +7,20 @@
 #include "commonroad_cpp/obstacle/state.h"
 
 void TestInFrontOfPredicate::SetUp() {
-    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 10, -6, 0, 0, 0, 0);
-    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 8, 0, 10, -1, 0, 0, 8, 0);
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 8, 0, 10, -1, 0, 0, 8, 0);
+    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 0, 0, 10, -6, 0, 0, 0, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 10, 0, 4, 6, 0, 0, 10, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 10, 0, 10, 0, 0, 0, 10, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 10, 0, 10, 0, 0, 0, 10, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 10, 0, 4, 6, 0, 0, 10, 0);
 
-    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 14, 0, 10, -5, 0, 0, 14, 0);
-    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 12, 0, 10, 0, 0, 0, 12, 0);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 12, 0, 10, 0, 0, 0, 12, 0);
+    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 14, 0, 10, -5, 0, 0, 14, 0);
 
-    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 24, 0, 5, 0, 0, 0, 24, 0);
-    std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 14, 0, 10, 0, 0, 0, 14, 0);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 14, 0, 10, 0, 0, 0, 14, 0);
+    std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 24, 0, 5, 0, 0, 0, 24, 0);
 
-    std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 29, 0, 5, -8, 0, 0, 29, 0);
-    std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(4, 10, 0, 10, 0, 0, 0, 10, 0);
+    std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 10, 0, 10, 0, 0, 0, 10, 0);
+    std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(4, 29, 0, 5, -8, 0, 0, 29, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
@@ -61,11 +61,11 @@ TEST_F(TestInFrontOfPredicate, BooleanEvaluationObjects) {
 }
 
 TEST_F(TestInFrontOfPredicate, BooleanEvaluationValues) {
-    EXPECT_FALSE(pred.booleanEvaluation(0, 8, 5, 5));
+    EXPECT_FALSE(pred.booleanEvaluation(8, 0, 5, 5));
     EXPECT_FALSE(pred.booleanEvaluation(10, 10, 5, 5));
-    EXPECT_FALSE(pred.booleanEvaluation(14, 12, 5, 5));
-    EXPECT_TRUE(pred.booleanEvaluation(24, 14, 5, 5));
-    EXPECT_TRUE(pred.booleanEvaluation(29, 10, 5, 5));
+    EXPECT_FALSE(pred.booleanEvaluation(12, 14, 5, 5));
+    EXPECT_TRUE(pred.booleanEvaluation(14, 24, 5, 5));
+    EXPECT_TRUE(pred.booleanEvaluation(10, 29, 5, 5));
 }
 
 TEST_F(TestInFrontOfPredicate, ConstraintEvaluationObjects) {
@@ -93,11 +93,11 @@ TEST_F(TestInFrontOfPredicate, RobustEvaluationObjects) {
 }
 
 TEST_F(TestInFrontOfPredicate, RobustEvaluationValues) {
-    EXPECT_NEAR(pred.robustEvaluation(0, 8, 5, 5), -13.0, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(8, 0, 5, 5), -13.0, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(10, 10, 5, 5), -5.0, 0.001);
-    EXPECT_NEAR(pred.robustEvaluation(14, 12, 5, 5), -3.0, 0.001);
-    EXPECT_NEAR(pred.robustEvaluation(24, 14, 5, 5), 5.0, 0.001);
-    EXPECT_NEAR(pred.robustEvaluation(29, 10, 5, 5), 14.0, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(12, 14, 5, 5), -3.0, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(14, 24, 5, 5), 5.0, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(10, 29, 5, 5), 14.0, 0.001);
 }
 
 TEST_F(TestInFrontOfPredicate, StatisticBooleanEvaluation) {

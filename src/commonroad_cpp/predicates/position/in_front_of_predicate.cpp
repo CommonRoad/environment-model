@@ -5,18 +5,18 @@
 #include "in_front_of_predicate.h"
 
 bool InFrontOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                           const std::shared_ptr<Obstacle> &obstacleK,
-                                           const std::shared_ptr<Obstacle> &obstacleP) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
+                                           const std::shared_ptr<Obstacle> &obstacleP,
+                                           const std::shared_ptr<Obstacle> &obstacleK) {
+    return robustEvaluation(timeStep, world, obstacleP, obstacleK) > 0;
 }
 
-bool InFrontOfPredicate::booleanEvaluation(double lonPositionK, double lonPositionP, double lengthK, double lengthP) {
-    return robustEvaluation(lonPositionK, lonPositionP, lengthK, lengthP) > 0;
+bool InFrontOfPredicate::booleanEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {
+    return robustEvaluation(lonPositionP, lonPositionK, lengthP, lengthK) > 0;
 }
 
 Constraint InFrontOfPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                    const std::shared_ptr<Obstacle> &obstacleK,
-                                                    const std::shared_ptr<Obstacle> &obstacleP) {
+                                                    const std::shared_ptr<Obstacle> &obstacleP,
+                                                    const std::shared_ptr<Obstacle> &obstacleK) {
     return {obstacleP->frontS(timeStep) + 0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength()};
 }
 
@@ -25,11 +25,11 @@ Constraint InFrontOfPredicate::constraintEvaluation(double lonPositionP, double 
 }
 
 double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                            const std::shared_ptr<Obstacle> &obstacleK,
-                                            const std::shared_ptr<Obstacle> &obstacleP) {
+                                            const std::shared_ptr<Obstacle> &obstacleP,
+                                            const std::shared_ptr<Obstacle> &obstacleK) {
     return obstacleK->rearS(timeStep) - obstacleP->frontS(timeStep);
 }
 
-double InFrontOfPredicate::robustEvaluation(double lonPositionK, double lonPositionP, double lengthK, double lengthP) {
+double InFrontOfPredicate::robustEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {
     return (lonPositionK - 0.5 * lengthK) - (lonPositionP + 0.5 * lengthP);
 }
