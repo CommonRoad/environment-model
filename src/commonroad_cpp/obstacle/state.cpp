@@ -79,9 +79,9 @@ void State::setGlobalOrientation(double theta) {
 }
 
 double State::getCurvilinearOrientation() const {
-  if (!validStates.curvilinearOrientation)
-    throw std::runtime_error("State:: curvilinear orientation not initialized");
-  return curvilinearOrientation;
+    if (!validStates.curvilinearOrientation)
+        throw std::runtime_error("State:: curvilinear orientation not initialized");
+    return curvilinearOrientation;
 }
 
 void State::setCurvilinearOrientation(double theta) {
