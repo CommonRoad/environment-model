@@ -301,7 +301,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             }
             incomings[incomignIndex]->setSuccessorsStraight(successorStraightLanelets);
             // left of
-            if (py_incoming.attr("left_of").get_type().attr("__name__").cast<std::string>() == "int"){
+            if (py_incoming.attr("left_of").get_type().attr("__name__").cast<std::string>() == "int") {
                 size_t py_isLeftOf = py_incoming.attr("left_of").cast<size_t>();
                 for (auto &inc : incomings) {
                     if (inc->getId() == py_isLeftOf) {
