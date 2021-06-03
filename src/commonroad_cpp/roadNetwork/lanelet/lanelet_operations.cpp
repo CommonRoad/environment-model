@@ -4,6 +4,24 @@
 
 #include "lanelet_operations.h"
 
+DrivingDirection matchStringToDrivingDirection(const std::string &type){
+    if (type == "same")
+        return DrivingDirection::same;
+    else if (type == "opposite")
+        return DrivingDirection::opposite;
+    else
+        return DrivingDirection::invalid;
+}
+
+std::string matchDrivingDirectionToString(const DrivingDirection &type){
+    if (type == DrivingDirection::same)
+        return "same";
+    else if (type == DrivingDirection::opposite)
+        return "opposite";
+    else
+        return "invalid";
+}
+
 LaneletType matchStringToLaneletType(const std::string &type) {
     if (type == "interstate")
         return LaneletType::interstate;
