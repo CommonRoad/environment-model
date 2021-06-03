@@ -358,7 +358,7 @@ class Lanelet {
      * @param positionY y-position of point
      * @return orientation in interval [-pi, pi]
      */
-    double getOrientationAtPosition(double positionX, double positionY);
+    double getOrientationAtPosition(double positionX, double positionY) const;
 
     /**
      * Evaluates whether a lanelet has a specific lanelet type.

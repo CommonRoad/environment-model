@@ -153,7 +153,7 @@ void Lanelet::createCenterVertices() {
     }
 }
 
-double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
+double Lanelet::getOrientationAtPosition(double positionX, double positionY) const {
     // find closest vertex to the given position
     std::vector<double> dif(centerVertices.size() - 1);
     for (unsigned long i = 0; i < centerVertices.size() - 1; ++i) {
