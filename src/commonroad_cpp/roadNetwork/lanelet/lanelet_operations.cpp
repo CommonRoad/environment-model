@@ -94,7 +94,9 @@ combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanele
         typeList = curLaneLanelet.getLaneletType();
     }
 
-    if (curLanelet->getSuccessors().size() > 0) {
+    if (curLanelet->getSuccessors().size() > 0 and
+        !std::any_of(containedLanelets.begin(), containedLanelets.end(),
+                     [curLanelet](std::shared_ptr<Lanelet> la) { return curLanelet->getId() == la->getId(); })) {
         // create new lane
         Lanelet newLanelet = Lanelet(id, leftBorderVertices, rightBorderVertices, predecessorLanelets,
                                      successorLanelets, typeList, userOneWay, userBidirectional);
