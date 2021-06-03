@@ -68,22 +68,31 @@ std::shared_ptr<StopLine>
 TranslatePythonTypes::convertStopLine(const py::handle &py_stopLine,
                                       const std::vector<std::shared_ptr<TrafficSign>> &trafficSigns,
                                       const std::vector<std::shared_ptr<TrafficLight>> &trafficLights) {
-    std::shared_ptr<StopLine> sl;
-    sl->setLineMarking(matchStringToLineMarking(py::cast<std::string>(py_stopLine.attr("line_marking"))));
-    py::object py_trafficSigns = py_stopLine.attr("_traffic_sign_ref");
-    for (const auto &sign : trafficSigns) {
-        if (sign->getId() == py_trafficSigns.cast<int>()) {
-            sl->setTrafficSign(sign);
-            break;
+    std::shared_ptr<StopLine> sl = std::make_shared<StopLine>();
+    sl->setLineMarking(
+        matchStringToLineMarking(py::cast<std::string>(py_stopLine.attr("_line_marking").attr("value"))));
+    if (!py_stopLine.attr("_traffic_sign_ref").is_none()) {
+        py::set py_trafficSigns = py_stopLine.attr("_traffic_sign_ref");
+        for (const auto &sign : trafficSigns) {
+            for (py::handle py_ref : py_trafficSigns)
+                if (sign->getId() == py_ref.cast<int>()) {
+                    sl->addTrafficSign(sign);
+                    break;
+                }
         }
     }
-    py::object py_trafficLights = py_stopLine.attr("_traffic_light_ref");
-    for (const auto &light : trafficLights) {
-        if (light->getId() == py_trafficLights.cast<int>()) {
-            sl->setTrafficLight(light);
-            break;
+
+    if (!py_stopLine.attr("_traffic_light_ref").is_none()) {
+        py::set py_trafficLights = py_stopLine.attr("_traffic_light_ref");
+        for (const auto &light : trafficLights) {
+            for (py::handle py_ref : py_trafficLights)
+                if (light->getId() == py_ref.cast<int>()) {
+                    sl->addTrafficLight(light);
+                    break;
+                }
         }
     }
+
     py::array_t<double> py_stopLineStartPosition = py::getattr(py_stopLine, "_start");
     py::array_t<double> py_stopLineEndPosition = py::getattr(py_stopLine, "_end");
     sl->setPoints({{py_stopLineStartPosition.at(0), py_stopLineStartPosition.at(1)},
@@ -148,7 +157,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         tempLaneletContainer[arrayIndex]->setLineMarkingLeft(matchStringToLineMarking(
             py::cast<std::string>(py_singleLanelet.attr("line_marking_left_vertices").attr("value"))));
         tempLaneletContainer[arrayIndex]->setLineMarkingRight(matchStringToLineMarking(
-            py::cast<std::string>(py_singleLanelet.attr("line_marking_left_vertices").attr("value"))));
+            py::cast<std::string>(py_singleLanelet.attr("line_marking_right_vertices").attr("value"))));
         // set successors
         py::object py_successors = py_singleLanelet.attr("successor");
         for (py::handle py_item : py_successors) {

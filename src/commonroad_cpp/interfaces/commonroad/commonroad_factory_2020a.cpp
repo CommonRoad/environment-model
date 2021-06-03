@@ -112,14 +112,14 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                         if ((strcmp(elem.name(), "trafficSignRef")) == 0) {
                             for (const auto &sign : trafficSigns) {
                                 if (child.attribute("ref").as_int() == sign->getId()) {
-                                    sl->setTrafficSign(sign);
+                                    sl->addTrafficSign(sign);
                                 }
                             }
                         }
                         if ((strcmp(elem.name(), "trafficLightRef")) == 0) {
                             for (const auto &light : trafficLights) {
                                 if (child.attribute("ref").as_int() == light->getId()) {
-                                    sl->setTrafficLight(light);
+                                    sl->addTrafficLight(light);
                                 }
                             }
                         }

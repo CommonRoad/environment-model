@@ -22,18 +22,18 @@ class StopLine {
     [[nodiscard]] const std::vector<vertex> &getPoints() const;
 
     /**
-     * Getter for traffic sign referenced by stop line.
+     * Getter for traffic signs referenced by stop line.
      *
-     * @return Pointer to traffic sign.
+     * @return List of pointers to traffic signs.
      */
-    [[nodiscard]] std::shared_ptr<TrafficSign> getTrafficSign() const;
+    [[nodiscard]] std::vector<std::shared_ptr<TrafficSign>> getTrafficSigns() const;
 
     /**
-     * Getter for traffic light referenced by stop line.
+     * Getter for traffic lights referenced by stop line.
      *
-     * @return Pointer to traffic light.
+     * @return List of pointers to traffic lights.
      */
-    [[nodiscard]] std::shared_ptr<TrafficLight> getTrafficLight() const;
+    [[nodiscard]] std::vector<std::shared_ptr<TrafficLight>> getTrafficLights() const;
 
     /**
      * Getter for line marking type of stop line.
@@ -50,18 +50,32 @@ class StopLine {
     void setPoints(const std::vector<vertex> &points);
 
     /**
-     * Setter for traffic sign referenced by stop line.
+     * Setter for traffic signs referenced by stop line.
+     *
+     * @param trafficSign List of pointers to traffic signs.
+     */
+    void setTrafficSigns(std::vector<std::shared_ptr<TrafficSign>> trafficSign);
+
+    /**
+     * Setter for traffic lights referenced by stop line.
+     *
+     * @param trafficLight List of pointers to traffic lights.
+     */
+    void setTrafficLights(std::vector<std::shared_ptr<TrafficLight>> trafficLight);
+
+    /**
+     * Adds single traffic sign referenced by stop line.
      *
      * @param trafficSign Pointer to traffic sign.
      */
-    void setTrafficSign(std::shared_ptr<TrafficSign> trafficSign);
+    void addTrafficSign(const std::shared_ptr<TrafficSign> &trafficSign);
 
     /**
-     * Setter for traffic light referenced by stop line.
+     * Adds traffic light referenced by stop line.
      *
      * @param trafficLight Pointer to traffic light.
      */
-    void setTrafficLight(std::shared_ptr<TrafficLight> trafficLight);
+    void addTrafficLight(const std::shared_ptr<TrafficLight> &trafficLight);
 
     /**
      * Setter for line marking of stop line.
@@ -71,10 +85,10 @@ class StopLine {
     void setLineMarking(LineMarking lineMarking);
 
   private:
-    std::vector<vertex> points;                 //**< start and end vertex of stop line */
-    std::shared_ptr<TrafficSign> trafficSign;   //**< pointer to traffic sign referenced by stop line */
-    std::shared_ptr<TrafficLight> trafficLight; //**< pointer to traffic light referenced by stop line */
-    LineMarking lineMarking;                    //**< type of line marking */
+    std::vector<vertex> points;                              //**< start and end vertex of stop line */
+    std::vector<std::shared_ptr<TrafficSign>> trafficSign;   //**< pointer to traffic signs referenced by stop line */
+    std::vector<std::shared_ptr<TrafficLight>> trafficLight; //**< pointer to traffic lights referenced by stop line */
+    LineMarking lineMarking;                                 //**< type of line marking */
 };
 
 #endif // ENV_MODEL_STOP_LINE_H

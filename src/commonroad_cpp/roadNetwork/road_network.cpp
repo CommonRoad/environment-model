@@ -109,7 +109,8 @@ std::shared_ptr<Lane> RoadNetwork::findLaneByShape(const std::vector<std::shared
     for (auto &possibleLane : possibleLanes)
         if (possibleLane->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED))
             return possibleLane;
-    throw std::domain_error("shape does not occupy any of the provided lanes");
+    return {}; // TODO think about better solution
+    // throw std::domain_error("shape does not occupy any of the provided lanes");
 }
 
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double xPos, double yPos) {

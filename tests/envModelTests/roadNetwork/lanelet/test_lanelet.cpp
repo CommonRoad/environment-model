@@ -128,8 +128,8 @@ void LaneletTestInitialization::setUpLanelets() {
     StopLine sl = StopLine();
     sl.setLineMarking(LineMarking::broad_solid);
     sl.setPoints(std::vector<vertex>{vertex{1, 2}, vertex{3, 4}});
-    sl.setTrafficSign(ts);
-    sl.setTrafficLight(tl);
+    sl.addTrafficSign(ts);
+    sl.addTrafficLight(tl);
 
     // add successors, predecessors, adjacent, traffic sign, traffic light, and stop line to lanelet one
     laneletOne->addSuccessor(laneletTwo);
