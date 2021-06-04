@@ -68,6 +68,10 @@ CommonRoadFactory2018b::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                     XMLReader::extractLaneletAdjacency(tempLaneletContainer, arrayIndex, child, "adjacentRight");
                     continue;
                 }
+                // extract speed limit description
+                if (!(strcmp(child.name(), "speedLimit")))
+                    tempLaneletContainer[arrayIndex]->setSpeedLimit(std::stod(child.child_value()));
+
             }
             tempLaneletContainer[arrayIndex]->createCenterVertices();
             tempLaneletContainer[arrayIndex]->constructOuterPolygon();

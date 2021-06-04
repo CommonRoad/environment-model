@@ -181,3 +181,7 @@ void Lanelet::setLineMarkingLeft(LineMarking marking) { lineMarkingLeft = markin
 LineMarking Lanelet::getLineMarkingRight() const { return lineMarkingRight; }
 
 void Lanelet::setLineMarkingRight(LineMarking marking) { lineMarkingRight = marking; }
+
+void Lanelet::setSpeedLimit(double lmt) {speedLimit = lmt;}
+
+double Lanelet::getSpeedLimit() { return speedLimit; }

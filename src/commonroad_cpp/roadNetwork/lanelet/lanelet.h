@@ -375,6 +375,19 @@ class Lanelet {
      */
     void addLaneletType(LaneletType laType);
 
+    /**
+     * Set speed limit of a lanelet.
+     * @param lmt speed limit
+     */
+     void setSpeedLimit(double lmt);
+
+     /**
+      * Get speed limit of lanelet. In case of 0 the speed limit is not set(undefined).
+      * @return double speed limit of a lanelet.
+      *
+      */
+     double getSpeedLimit();
+
   private:
     size_t id{};                                               //**< unique ID of lanelet */
     std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
@@ -395,7 +408,9 @@ class Lanelet {
     std::set<ObstacleType> userBidirectional; //**< list of relevant allowed users bidirectional*/
     std::shared_ptr<StopLine> stopLine;       //**< stopLine assigned to lanelet*/
     LineMarking lineMarkingLeft;              //**< Line marking of left boundary*/
-    LineMarking lineMarkingRight;             //**< Line marking of right boundary*/
+    LineMarking lineMarkingRight;                //**< Line marking of right boundary*/
+    double speedLimit; //**< speed limit */
+
 };
 
 #endif // ENVIRONMENT_MODEL_LANELET_H
