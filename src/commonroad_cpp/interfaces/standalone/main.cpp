@@ -13,6 +13,7 @@ int main(int argc, char **argv) {
     int num_threads;
     std::string xmlFilePath;
     int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
+    xmlFilePath = "/home/wilhelm/Documents/spot-cpp/unitTests/unittest_data/DEU_Gar-2_1_T-1.xml";
     if (error_code != 0)
         return error_code;
 
