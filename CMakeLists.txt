@@ -28,12 +28,7 @@ if (CODE_COVERAGE)
     option(CodeCoverage "CodeCoverage" ON)
 endif()
 
-# Include Curvilinear Coordinate System
-if(NOT EXISTS "${CRCCOSY_LIBRARY_DIR}")
-    message(SEND_ERROR "Can't find the CommonRoad-Curvilinear-Coordinate System library in ${CRCCOSY_LIBRARY_DIR}")
-endif()
-set(CRCCOSY_LIBRARY ${CRCCOSY_LIBRARY_DIR}/build/lib/commonroad_dc/libcrccosy.a)
-set(LIB_CRCCOSY_INCLUDE ${CRCCOSY_LIBRARY_DIR}/cpp)
+find_package(DrivabilityChecker REQUIRED CONFIG)
 
 # Include Eigen3, Boost filesystem, and OpenMP
 find_package(Eigen3 REQUIRED)

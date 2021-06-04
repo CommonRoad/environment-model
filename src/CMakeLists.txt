@@ -38,13 +38,27 @@ target_compile_features(${LIBRARY_NAME}
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
 set_property(TARGET ${LIBRARY_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(${LIBRARY_NAME} PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
-target_link_libraries(${LIBRARY_NAME} PUBLIC
-        ${CRCCOSY_LIBRARY}
-        Boost::filesystem
+
+target_include_directories(env_model
+    PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+target_link_libraries(env_model
+    PUBLIC
+        Eigen3::Eigen
         Boost::program_options
+        DrivabilityChecker::crccosy
+    )
+
+target_link_libraries(env_model
+    PRIVATE
+        Boost::filesystem
         OpenMP::OpenMP_CXX
-        Eigen3::Eigen)
+    )
 
 # Create environment model test node
 add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
