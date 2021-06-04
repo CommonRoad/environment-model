@@ -7,7 +7,7 @@ stages:
   - docs
 
 
-image: $CI_REGISTRY/maierhofer/environment-model/ci:0.4.2
+image: $CI_REGISTRY/maierhofer/environment-model/ci-test:0.4.99
 
 before_script:
   - source activate commonroad
@@ -34,7 +34,7 @@ build-clang:
     - export CC=clang
     - export CXX=clang++
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
 
 build-gcc:
@@ -43,21 +43,21 @@ build-gcc:
     - export CC=gcc
     - export CXX=g++
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
 
 build-standalone:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_BUILD_TYPE=Release ..
     - make env_model_example_node -j4
 
 build-test:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Debug ..
+    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
   artifacts:
     paths:
@@ -70,7 +70,7 @@ build-run-coverage:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug ..
+    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_coverage -j4
   artifacts:
     paths:
@@ -105,5 +105,5 @@ docs:
   stage: docs
   script:
     - cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DBUILD_DOXYGEN=ON -DCMAKE_BUILD_TYPE=Debug ..
+    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DBUILD_DOXYGEN=ON -DCMAKE_BUILD_TYPE=Debug ..
     - make doc_doxygen ..
