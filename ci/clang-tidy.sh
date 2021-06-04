@@ -4,7 +4,10 @@
 # set -e
  
 exit_flag=false
- 
+
+clang_tidy_version='10'
+clang_tidy="clang-tidy-$clang_tidy_version"
+
 target_branch="master"
  
 # Retrieve list of cpp-files that were changed in source branch with respect to master (target branch)
@@ -32,7 +35,7 @@ function checkCPP(){
     return 1
 }
 
-clang-tidy-8 --version
+$clang_tidy --version
 echo
 
 
@@ -44,7 +47,7 @@ for f in ${filelist[*]}; do
     if checkCPP $f && [[ -n $(grep $f build/compile_commands.json) ]]; then
         echo "Checking matching file ${f}"
         touch output.txt
-        clang-tidy-8 -p=build ${f} --extra-arg=--cuda-host-only > output.txt
+        $clang_tidy -p=build ${f} --extra-arg=--cuda-host-only > output.txt
          
         # decide if error or warning fail
         if [[ -n $(grep "warning: " output.txt) ]] || [[ -n $(grep "error: " output.txt) ]]; then
