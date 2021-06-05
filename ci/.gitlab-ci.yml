@@ -7,7 +7,7 @@ stages:
   - docs
 
 
-image: $CI_REGISTRY/maierhofer/environment-model/ci-test:0.4.99
+image: $CI_REGISTRY/maierhofer/environment-model/ci-test:0.4.99.1
 
 before_script:
   - source activate commonroad
