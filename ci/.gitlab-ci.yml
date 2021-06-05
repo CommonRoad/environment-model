@@ -1,9 +1,9 @@
 stages:
-  - static-test
   - compile
   - test
   #  - sanitizer TODO
   - coverage
+  - static-test
   - docs
 
 
