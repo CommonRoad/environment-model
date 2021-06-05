@@ -32,6 +32,15 @@ clang-tidy:
     - bash ./ci/clang-tidy.sh
   dependencies: []
 
+cppcheck:
+  stage: static-test
+  script:
+    # run CMake in order to get compile_commands.json
+    - mkdir build && cd build
+    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug ..
+    - cd ..
+    - cppcheck --project=build/compile_commands.json -i"$(pwd)/external" -i"$(pwd)/src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp"
+  dependencies: []
 
 ### build project ###
 build-clang:
