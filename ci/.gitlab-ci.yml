@@ -81,7 +81,6 @@ build-run-coverage:
   artifacts:
     paths:
       - ./build/
-      - ./env_model_coverage
     expire_in: 20 minutes
 
 
