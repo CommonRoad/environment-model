@@ -115,7 +115,7 @@ test-python:
   allow_failure: true
 
 ### coverage ###
-publish-coverage:
+coverage-analyze:
   stage: coverage
   script:
     - gcovr --version
@@ -135,6 +135,28 @@ publish-coverage:
     reports:
       cobertura: coverage.xml
 
+coverage-report:
+  stage: coverage
+  script:
+    - gcovr --version
+    - gcovr
+      -f src/
+      -e src/commonroad_cpp/interfaces/commonroad/pugi_xml
+      -e src/commonroad_cpp/interfaces/standalone/main.cpp
+      -e src/commonroad_cpp/interfaces/pybind/
+      --print-summary
+      --exclude-unreachable-branches
+      --output coverage.html
+      --html
+      --html-details
+  dependencies:
+    - build-run-coverage
+  artifacts:
+    paths:
+      - coverage.html
+      - coverage.*.html
+    expose_as: 'Coverage Report (open coverage.html)'
+    expire_in: 20 minutes
 
 ### create documentation ###
 docs:
@@ -147,5 +169,5 @@ docs:
   artifacts:
     paths:
       - build/doc_doxygen/html/
-    expose_as: 'Doxygen Documentation'
+    expose_as: 'Doxygen Documentation (open index.html)'
     expire_in: 20 minutes
