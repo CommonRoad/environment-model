@@ -88,13 +88,20 @@ test:
   stage: test
   script:
     - build/env_model_test --gtest_output="xml:report.xml"
-    - python setup.py develop --crccosy /commonroad/commonroad-drivability-checker
-    - python -m pytest tests/python
   dependencies:
     - build-test
   artifacts:
     reports:
       junit: ./report.xml
+
+test-python:
+  stage: test
+  script:
+    - python setup.py develop --crccosy /commonroad/commonroad-drivability-checker
+    - python -m pytest tests/python
+  dependencies:
+    - build-test
+  allow_failure: true
 
 ### coverage ###
 publish-coverage:
