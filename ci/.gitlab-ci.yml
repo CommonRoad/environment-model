@@ -117,9 +117,18 @@ test-python:
 publish-coverage:
   stage: coverage
   script:
-    - gcovr -e src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.hpp -e src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp -e src/commonroad_cpp/interfaces/standalone/main.cpp -e src/commonroad_cpp/interfaces/pybind/ -e external/ -e 'cmake-(.+/)?/' -e tests/ -e build/CMakeFiles/
+    - gcovr \
+      --xml coverage.xml \
+      -f src/ \
+      -e src/commonroad_cpp/interfaces/commonroad/pugi_xml \
+      -e src/commonroad_cpp/interfaces/standalone/main.cpp \
+      -e src/commonroad_cpp/interfaces/pybind/
   dependencies:
     - build-run-coverage
+  artifacts:
+    reports:
+      cobertura: coverage.xml
+
 
 ### create documentation ###
 docs:
