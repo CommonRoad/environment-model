@@ -138,3 +138,8 @@ docs:
     - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DBUILD_DOXYGEN=ON -DCMAKE_BUILD_TYPE=Debug ..
     - make doc_doxygen ..
   dependencies: []
+  artifacts:
+    paths:
+      - build/doc_doxygen/html/
+    expose_as: 'Doxygen Documentation'
+    expire_in: 20 minutes
