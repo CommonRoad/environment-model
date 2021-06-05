@@ -124,10 +124,13 @@ publish-coverage:
       -e src/commonroad_cpp/interfaces/commonroad/pugi_xml
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
       -e src/commonroad_cpp/interfaces/pybind/
+      --print-summary
+      --exclude-unreachable-branches
       --output coverage.xml
       --xml
   dependencies:
     - build-run-coverage
+  coverage: /^\s*lines:\s*\d+.\d+\%/
   artifacts:
     reports:
       cobertura: coverage.xml
