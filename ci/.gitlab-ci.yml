@@ -149,12 +149,13 @@ coverage-report:
       --output coverage.html
       --html
       --html-details
+    - mkdir coverage
+    - mv coverage*.html coverage
   dependencies:
     - build-run-coverage
   artifacts:
     paths:
-      - coverage.html
-      - coverage.*.html
+      - coverage
     expose_as: 'Coverage Report (open coverage.html)'
     expire_in: 20 minutes
 
