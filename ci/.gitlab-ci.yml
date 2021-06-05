@@ -9,7 +9,7 @@ stages:
 
 image: $CI_REGISTRY/maierhofer/environment-model/ci-test:0.4.99.1
 
-before_script:
+.python-prepare: &python-prepare
   - source activate commonroad
   - pip install tox coverage
   - pip install -r ./requirements.txt
@@ -106,6 +106,8 @@ test:
 
 test-python:
   stage: test
+  before_script:
+    - *python-prepare
   script:
     - python setup.py develop --crccosy /commonroad/commonroad-drivability-checker
     - python -m pytest tests/python
