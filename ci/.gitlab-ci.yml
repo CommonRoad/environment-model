@@ -156,7 +156,7 @@ coverage-report:
   artifacts:
     paths:
       - coverage
-    expose_as: 'Coverage Report (open coverage.html)'
+    expose_as: 'Coverage Report'
     expire_in: 20 minutes
 
 ### create documentation ###
@@ -170,5 +170,5 @@ docs:
   artifacts:
     paths:
       - build/doc_doxygen/html/
-    expose_as: 'Doxygen Documentation (open index.html)'
+    expose_as: 'Doxygen Documentation'
     expire_in: 20 minutes
