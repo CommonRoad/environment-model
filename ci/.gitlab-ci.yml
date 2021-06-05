@@ -20,6 +20,7 @@ clang-format:
   stage: static-test
   script:
     bash ./ci/clang-format.sh
+  dependencies: []
 
 clang-tidy:
   stage: static-test
@@ -29,6 +30,7 @@ clang-tidy:
     - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug ..
     - cd ..
     - bash ./ci/clang-tidy.sh
+  dependencies: []
 
 
 ### build project ###
@@ -115,6 +117,7 @@ publish-coverage:
 docs:
   stage: docs
   script:
-    - cd build
+    - mkdir -p build && cd build
     - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DBUILD_DOXYGEN=ON -DCMAKE_BUILD_TYPE=Debug ..
     - make doc_doxygen ..
+  dependencies: []
