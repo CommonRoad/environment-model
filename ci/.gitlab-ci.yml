@@ -78,7 +78,6 @@ build-test:
     paths:
       - build/env_model_test
       - build/libenv_model.so
-      - ./tests/testScenarios/*
     expire_in: 20 minutes
 
 build-run-coverage:
