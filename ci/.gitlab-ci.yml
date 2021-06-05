@@ -65,8 +65,8 @@ build-test:
     - make env_model_test -j4
   artifacts:
     paths:
-      - ./env_model_test
-      - ./libenv_model.so
+      - build/env_model_test
+      - build/libenv_model.so
       - ./tests/testScenarios/*
     expire_in: 20 minutes
 
@@ -87,7 +87,7 @@ build-run-coverage:
 test:
   stage: test
   script:
-    - ./env_model_test --gtest_output="xml:report.xml"
+    - build/env_model_test --gtest_output="xml:report.xml"
     - python setup.py develop --crccosy /commonroad/commonroad-drivability-checker
     - python -m pytest tests/python
   dependencies:
