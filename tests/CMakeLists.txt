@@ -55,7 +55,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
         target_link_libraries(env_model_test_coverage PUBLIC
                 env_model
-                ${CRCCOSY_LIBRARY}
+                DrivabilityChecker::crccosy
                 gtest
                 Boost::filesystem
                 Boost::program_options
