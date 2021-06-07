@@ -65,8 +65,8 @@ RUN mkdir dist && \
     cd commonroad-drivability-checker && \
     mkdir build-cpp && cd build-cpp && \
     cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=RelWithDebInfo .. && \
-    make -j4 && \
-    make install && \
+    cmake --build . && \
+    cmake --install . && \
     cd .. && rm -rf build-cpp
 
 RUN /bin/bash -c "source activate commonroad"
