@@ -27,7 +27,7 @@ clang-tidy:
   script:
     # run CMake in order to get compile_commands.json
     - mkdir build && cd build
-    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
     - cd ..
     - bash ./ci/clang-tidy.sh
   dependencies: []
@@ -37,7 +37,7 @@ cppcheck:
   script:
     # run CMake in order to get compile_commands.json
     - mkdir build && cd build
-    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
     - cd ..
     - cppcheck --project=build/compile_commands.json -i"$(pwd)/external" -i"$(pwd)/src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp"
   dependencies: []
@@ -49,7 +49,7 @@ build-clang:
     - export CC=clang
     - export CXX=clang++
     - mkdir build && cd build
-    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
 
 build-gcc:
@@ -58,21 +58,21 @@ build-gcc:
     - export CC=gcc
     - export CXX=g++
     - mkdir build && cd build
-    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
 
 build-standalone:
   stage: compile
   script:
     - mkdir build && cd build
-    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model_example_node -j4
 
 build-test:
   stage: compile
   script:
     - mkdir build && cd build
-    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
   artifacts:
     paths:
@@ -84,7 +84,7 @@ build-run-coverage:
   stage: compile
   script:
     - mkdir build && cd build
-    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
     - make env_model_coverage -j4
   artifacts:
     paths:
@@ -108,7 +108,7 @@ test-python:
   before_script:
     - *python-prepare
   script:
-    - python setup.py develop --crccosy /commonroad/commonroad-drivability-checker
+    - python setup.py develop --cmake-prefix /commonroad/dist
     - python -m pytest tests/python
   dependencies:
     - build-test
@@ -164,7 +164,7 @@ docs:
   stage: docs
   script:
     - mkdir -p build && cd build
-    - DrivabilityChecker_DIR=/commonroad/commonroad-drivability-checker/build cmake -DBUILD_DOXYGEN=ON -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DBUILD_DOXYGEN=ON  ..
     - make doc_doxygen ..
   dependencies: []
   artifacts:
