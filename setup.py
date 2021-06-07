@@ -10,11 +10,11 @@ from distutils.core import setup
 from distutils.version import LooseVersion
 
 
-crccosy = "./"
-if '--crccosy' in sys.argv:
-    index = sys.argv.index('--crccosy')
+cmake_prefix = "./"
+if '--cmake-prefix' in sys.argv:
+    index = sys.argv.index('--cmake-prefix')
     sys.argv.pop(index)
-    crccosy = sys.argv.pop(index)
+    cmake_prefix = sys.argv.pop(index)
 
 
 class CMakeExtension(Extension):
@@ -48,7 +48,8 @@ class CMakeBuild(build_ext):
 
         cmake_args = ["-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
                       "-DPYTHON_EXECUTABLE={}".format(sys.executable),
-                      "-DCRCCOSY_LIBRARY_DIR={}".format(crccosy),
+                      "-DCMAKE_PREFIX_PATH={}".format(cmake_prefix),
+                      "-DINSTALL_GTEST=OFF",
                       "-DBUILD_TESTS=OFF",
                       "-DBUILD_DOXYGEN=OFF",
                       "-DBUILD_PYBIND=ON"]
