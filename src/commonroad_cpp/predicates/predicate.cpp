@@ -4,9 +4,9 @@
 
 #include "predicate.h"
 
-bool Predicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                           const std::shared_ptr<Obstacle> &obstacleK,
-                                           const std::shared_ptr<Obstacle> &obstacleP) {
+bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                     const std::shared_ptr<Obstacle> &obstacleK,
+                                                     const std::shared_ptr<Obstacle> &obstacleP) {
     statistics.numExecutions++;
     auto startTime{Timer::start()};
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
@@ -20,14 +20,14 @@ bool Predicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_pt
     return result;
 }
 
-const PredicateParameters &Predicate::getParameters() const { return parameters; }
+const PredicateParameters &CommonRoadPredicate::getParameters() const { return parameters; }
 
-void Predicate::setParameters(const PredicateParameters &params) { parameters = params; }
+void CommonRoadPredicate::setParameters(const PredicateParameters &params) { parameters = params; }
 
-Predicate::Predicate(const PredicateParameters &parameters) : parameters(parameters) {}
+CommonRoadPredicate::CommonRoadPredicate(const PredicateParameters &parameters) : parameters(parameters) {}
 
-const PredicateStatistics &Predicate::getStatistics() const { return statistics; }
+const PredicateStatistics &CommonRoadPredicate::getStatistics() const { return statistics; }
 
-const Timer &Predicate::getEvaluationTimer() const { return evaluationTimer; }
+const Timer &CommonRoadPredicate::getEvaluationTimer() const { return evaluationTimer; }
 
-Predicate::Predicate() = default;
+CommonRoadPredicate::CommonRoadPredicate() = default;

@@ -10,7 +10,7 @@
 /**
  * Predicate for the safe distance between two vehicles.
  */
-class SafeDistancePredicate : public Predicate {
+class SafeDistancePredicate : public CommonRoadPredicate {
   public:
     /**
      * Safe distance between the kth and the pth obstacle using objects.

@@ -10,7 +10,7 @@
 /**
  * Evaluates whether the kth and pth vehicle occupy the same lane.
  */
-class InSameLanePredicate : public Predicate {
+class InSameLanePredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using objects.

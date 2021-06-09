@@ -10,7 +10,7 @@
 /**
  * Evaluates whether the kth vehicle is in front of the pth vehicle.
  */
-class InFrontOfPredicate : public Predicate {
+class InFrontOfPredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using parameter values.
