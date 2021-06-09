@@ -112,7 +112,6 @@ test-python:
     - python -m pytest tests/python
   dependencies:
     - build-test
-  allow_failure: true
 
 ### coverage ###
 coverage-analyze:
