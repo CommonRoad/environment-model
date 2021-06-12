@@ -47,8 +47,7 @@ void py_removeScenario(size_t scenarioId) {
 }
 
 template <typename T>
-bool py_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                         size_t py_obstacleId) {
+bool py_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId) {
     T pred;
     std::shared_ptr<CommonRoadContainer> CommonRoadContainer = CommonRoadContainer::getInstance();
     auto world = CommonRoadContainer->findWorld(scenarioId);
@@ -65,8 +64,7 @@ bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double 
 }
 
 template <typename T>
-double py_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                          size_t py_obstacleId) {
+double py_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId) {
     T pred;
     std::shared_ptr<CommonRoadContainer> CommonRoadContainer = CommonRoadContainer::getInstance();
     auto world = CommonRoadContainer->findWorld(scenarioId);

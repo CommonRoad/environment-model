@@ -12,9 +12,9 @@
 
 #include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
+#include "commonroad_cpp/predicates/general/cut_in_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
-#include "commonroad_cpp/predicates/general/cut_in_predicate.h"
 
 namespace py = pybind11;
 
@@ -24,11 +24,11 @@ void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &
 
 void py_removeScenario(size_t scenarioId);
 
-template <typename T>
-bool py_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId = 123456789);
+template <typename T> bool py_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                                 size_t py_obstacleId = 123456789);
 
-template <typename T>
-double py_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId = 123456789);
+template <typename T> double py_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                                  size_t py_obstacleId = 123456789);
 
 bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double lonPosP, double velocityK,
                                                          double velocityP, double minAccelerationK,
@@ -46,7 +46,6 @@ double py_safe_distance(double velocityK, double velocityP, double minAccelerati
 bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP);
 
 double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP);
-
 
 PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
