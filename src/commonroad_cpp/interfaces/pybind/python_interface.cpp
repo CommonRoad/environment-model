@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 23.02.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "python_interface.h"
@@ -85,8 +88,26 @@ double py_safe_distance(double velocityK, double velocityP, double minAccelerati
     return SafeDistancePredicate::computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact);
 }
 
+bool py_in_front_of_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                       size_t py_obstacleId) {
+    InFrontOfPredicate pred;
+    std::shared_ptr<CommonRoadContainer> CommonRoadContainer = CommonRoadContainer::getInstance();
+    auto world = CommonRoadContainer->findWorld(scenarioId);
+    return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
+                                  world->findObstacle(py_obstacleId));
+}
+
 bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP) {
     return InFrontOfPredicate::booleanEvaluation(lonPosK, lonPosP, lengthK, lengthP);
+}
+
+double py_in_front_of_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                        size_t py_obstacleId) {
+    InFrontOfPredicate pred;
+    std::shared_ptr<CommonRoadContainer> CommonRoadContainer = CommonRoadContainer::getInstance();
+    auto world = CommonRoadContainer->findWorld(scenarioId);
+    return pred.robustEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
+                                 world->findObstacle(py_obstacleId));
 }
 
 double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK,
@@ -94,3 +115,27 @@ double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double l
     return InFrontOfPredicate::robustEvaluation(lonPosK, lonPosP, lengthK, lengthP);
 }
 
+bool py_in_same_lane_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                        size_t py_obstacleId) {
+    InSameLanePredicate pred;
+    std::shared_ptr<CommonRoadContainer> CommonRoadContainer = CommonRoadContainer::getInstance();
+    auto world = CommonRoadContainer->findWorld(scenarioId);
+    return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
+                                  world->findObstacle(py_obstacleId));
+}
+
+bool py_unnecessary_braking_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                               size_t py_obstacleId) {
+    UnnecessaryBrakingPredicate pred;
+    std::shared_ptr<CommonRoadContainer> CommonRoadContainer = CommonRoadContainer::getInstance();
+    auto world = CommonRoadContainer->findWorld(scenarioId);
+    return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId));
+}
+
+double py_unnecessary_braking_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                                size_t py_obstacleId) {
+    UnnecessaryBrakingPredicate pred;
+    std::shared_ptr<CommonRoadContainer> CommonRoadContainer = CommonRoadContainer::getInstance();
+    auto world = CommonRoadContainer->findWorld(scenarioId);
+    return pred.robustEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId));
+}

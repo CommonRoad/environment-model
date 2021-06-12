@@ -9,7 +9,7 @@ from commonroad.prediction.prediction import TrajectoryPrediction, Trajectory
 from ..predicate_test_utils import create_lanelet_network
 
 
-class TestBrakingPredicates(unittest.TestCase):
+class TestInSameLanePredicate(unittest.TestCase):
     def setUp(self):
         self.lanelet_network = create_lanelet_network()
 
