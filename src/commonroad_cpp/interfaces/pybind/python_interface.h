@@ -14,6 +14,7 @@
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
+#include "commonroad_cpp/predicates/general/cut_in_predicate.h"
 
 namespace py = pybind11;
 
@@ -46,8 +47,6 @@ bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lo
 
 double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP);
 
-
-bool py_cut_in_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId);
 
 PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
@@ -106,6 +105,6 @@ PYBIND11_MODULE(cpp_env_model, m) {
           "Robust evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 123456789);
 
-    m.def("cut_in_boolean_evaluation", &py_cut_in_boolean_evaluation, "Boolean evaluation of cut-in predicate",
+    m.def("cut_in_boolean_evaluation", &py_boolean_evaluation<CutInPredicate>, "Boolean evaluation of cut-in predicate",
           py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 }
