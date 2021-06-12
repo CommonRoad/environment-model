@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_SAFE_DISTANCE_PREDICATE_H
 #define ENV_MODEL_SAFE_DISTANCE_PREDICATE_H
 
-#include "commonroad_cpp/predicates/predicate.h"
+#include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
  * Predicate for the safe distance between two vehicles.
@@ -28,13 +28,10 @@ class SafeDistancePredicate : public CommonRoadPredicate {
     /**
      * Boolean evaluation of predicate using objects.
      *
-     * @param lonPosK Longitudinal position in the curvilinear coordinate system of the kth vehicle [m].
-     * @param lonPosP Longitudinal position in the curvilinear coordinate system of the pth vehicle [m].
-     * @param velocityK Velocity of the kth vehicle [m/s].
-     * @param velocityP Velocity of the pth vehicle [m/s].
-     * @param minAccelerationK Minimum (longitudinal) acceleration of the kth obstacle [m/s^2].
-     * @param minAccelerationP Minimum (longitudinal) acceleration of the pth obstacle [m/s^2].
-     * @param tReact Reaction time of the kth obstacle [s].
+     * @param timeStep Time step of interest.
+     * @param world World object.
+     * @param obstacleK The kth obstacle.
+     * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Boolean indicating satisfaction of the predicate.
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -95,7 +92,6 @@ class SafeDistancePredicate : public CommonRoadPredicate {
      * @param world World object.
      * @param obstacleK The kth obstacle.
      * @param obstacleP The pth obstacle. This is an optional parameter.
-     * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

@@ -9,7 +9,7 @@ from commonroad.scenario.obstacle import State, ObstacleType, DynamicObstacle
 from commonroad.prediction.prediction import TrajectoryPrediction, Trajectory
 
 
-class TestBrakingPredicates(unittest.TestCase):
+class TestUnnecessaryBrakingPredicate(unittest.TestCase):
     def setUp(self):
         right_vertices = np.array([[0, 0], [10, 0], [20, 0], [30, 0], [40, 0], [50, 0], [60, 0], [70, 0], [80, 0]])
         left_vertices = np.array([[0, 4], [10, 4], [20, 4], [30, 4], [40, 4], [50, 4], [60, 4], [70, 4], [80, 4]])

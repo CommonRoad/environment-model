@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 23.02.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_PYTHON_INTERFACE_H
-#define ENV_MODEL_PYTHON_INTERFACE_H
+#pragma once
 
 #include "commonroad_cpp/commonroad_container.h"
 #include <pybind11/pybind11.h>
@@ -53,6 +55,8 @@ bool py_unnecessary_braking_boolean_evaluation(size_t scenarioId, size_t timeSte
 
 double py_unnecessary_braking_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
                                                 size_t py_obstacleId = 123456789);
+
+bool py_cut_in_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId);
 
 PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
@@ -110,6 +114,7 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("unnecessary_braking_robust_evaluation", &py_unnecessary_braking_robust_evaluation,
           "Robust evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 123456789);
-}
 
-#endif // ENV_MODEL_PYTHON_INTERFACE_H
+    m.def("cut_in_boolean_evaluation", &py_cut_in_boolean_evaluation, "Boolean evaluation of cut-in predicate",
+          py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
+}

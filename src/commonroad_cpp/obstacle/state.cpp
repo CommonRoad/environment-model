@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 01.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "state.h"
@@ -40,7 +43,7 @@ void State::setVelocity(double vel) {
 
 double State::getAcceleration() const {
     if (!validStates.acceleration)
-        throw std::runtime_error("State:: acceleration not initialized");
+        throw std::runtime_error("State::getAcceleration acceleration not initialized");
     return acceleration;
 }
 
@@ -51,7 +54,7 @@ void State::setAcceleration(double acc) {
 
 double State::getLonPosition() const {
     if (!validStates.lonPosition)
-        throw std::runtime_error("State:: longitudinal position not initialized");
+        throw std::runtime_error("State::getLonPosition longitudinal position not initialized");
     return lonPosition;
 }
 
@@ -62,7 +65,7 @@ void State::setLonPosition(double s) {
 
 double State::getLatPosition() const {
     if (!validStates.latPosition)
-        throw std::runtime_error("State:: lateral position not initialized");
+        throw std::runtime_error("State::getLatPosition lateral position not initialized");
     return latPosition;
 }
 
@@ -80,7 +83,7 @@ void State::setGlobalOrientation(double theta) {
 
 double State::getCurvilinearOrientation() const {
     if (!validStates.curvilinearOrientation)
-        throw std::runtime_error("State:: curvilinear orientation not initialized");
+        throw std::runtime_error("State::getCurvilinearOrientation curvilinear orientation not initialized");
     return curvilinearOrientation;
 }
 

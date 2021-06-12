@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 01.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_OBSTACLE_H
-#define ENV_MODEL_OBSTACLE_H
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
@@ -312,6 +314,14 @@ class Obstacle {
     [[nodiscard]] double getLatPosition(size_t timeStep) const;
 
     /**
+     * Computes the curvilinear orientation of obstacle based on Cartesian state and assigned lane
+     *
+     * @param timeStep time step of interest
+     * @return curvilinear orientation of obstacle state
+     */
+    [[nodiscard]] double getCurvilinearOrientation(size_t timeStep) const; // Todo create test case
+
+    /**
      * Extracts the lanes from the road network the obstacle occupies at a certain time step
      *
      * @param timeStep time step of interest
@@ -391,5 +401,3 @@ class Obstacle {
     std::vector<std::shared_ptr<Lanelet>>
         oncomings; //**< set of pointers to oncoming lanelets to which obstacle belongs */
 };
-
-#endif // ENV_MODEL_OBSTACLE_H
