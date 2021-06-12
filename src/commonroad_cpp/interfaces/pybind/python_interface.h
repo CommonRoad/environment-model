@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 23.02.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_PYTHON_INTERFACE_H
-#define ENV_MODEL_PYTHON_INTERFACE_H
+#pragma once
 
 #include "commonroad_cpp/commonroad_container.h"
 #include <pybind11/pybind11.h>
@@ -116,5 +118,3 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("cut_in_boolean_evaluation", &py_cut_in_boolean_evaluation, "Boolean evaluation of cut-in predicate",
           py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 }
-
-#endif // ENV_MODEL_PYTHON_INTERFACE_H

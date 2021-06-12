@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 01.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_OBSTACLE_H
-#define ENV_MODEL_OBSTACLE_H
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
@@ -399,5 +401,3 @@ class Obstacle {
     std::vector<std::shared_ptr<Lanelet>>
         oncomings; //**< set of pointers to oncoming lanelets to which obstacle belongs */
 };
-
-#endif // ENV_MODEL_OBSTACLE_H
