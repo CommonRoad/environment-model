@@ -54,6 +54,8 @@ bool py_unnecessary_braking_boolean_evaluation(size_t scenarioId, size_t timeSte
 double py_unnecessary_braking_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
                                                 size_t py_obstacleId = 123456789);
 
+bool py_cut_in_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId);
+
 PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
     m.def("register_scenario", &py_registerScenario, "Add new scenario to C++ environment model", py::arg("scenarioId"),
@@ -110,6 +112,9 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("unnecessary_braking_robust_evaluation", &py_unnecessary_braking_robust_evaluation,
           "Robust evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 123456789);
+
+    m.def("cut_in_boolean_evaluation", &py_cut_in_boolean_evaluation, "Boolean evaluation of cut-in predicate",
+          py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 }
 
 #endif // ENV_MODEL_PYTHON_INTERFACE_H

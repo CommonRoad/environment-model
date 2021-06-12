@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_UNNECESSARY_BRAKING_PREDICATE_H
 #define ENV_MODEL_UNNECESSARY_BRAKING_PREDICATE_H
 
-#include "commonroad_cpp/predicates/predicate.h"
+#include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
  * Predicate for unnecessary braking of a vehicle.

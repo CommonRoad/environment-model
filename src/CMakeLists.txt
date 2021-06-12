@@ -22,11 +22,13 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2020a.cpp
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
         commonroad_cpp/world.cpp
-        commonroad_cpp/predicates/predicate.cpp
+        commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
+        commonroad_cpp/predicates/general/cut_in_predicate.cpp
+        commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/predicates/predicate_parameters.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp

@@ -2,7 +2,7 @@
 // Created by Sebastian Maierhofer on 19.02.21.
 //
 
-#include "predicate.h"
+#include "commonroad_predicate.h"
 
 bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,

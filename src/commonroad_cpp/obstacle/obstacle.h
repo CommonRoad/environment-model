@@ -312,6 +312,14 @@ class Obstacle {
     [[nodiscard]] double getLatPosition(size_t timeStep) const;
 
     /**
+     * Computes the curvilinear orientation of obstacle based on Cartesian state and assigned lane
+     *
+     * @param timeStep time step of interest
+     * @return curvilinear orientation of obstacle state
+     */
+    [[nodiscard]] double getCurvilinearOrientation(size_t timeStep) const; // Todo create test case
+
+    /**
      * Extracts the lanes from the road network the obstacle occupies at a certain time step
      *
      * @param timeStep time step of interest

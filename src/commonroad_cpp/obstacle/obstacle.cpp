@@ -203,6 +203,13 @@ double Obstacle::getLatPosition(size_t timeStep) const {
     return getStateByTimeStep(timeStep)->getLatPosition();
 }
 
+double Obstacle::getCurvilinearOrientation(size_t timeStep) const {
+    if (getStateByTimeStep(timeStep)->getValidStates().curvilinearOrientation)
+        return getStateByTimeStep(timeStep)->getCurvilinearOrientation();
+    convertPointToCurvilinear(timeStep);
+    return getStateByTimeStep(timeStep)->getCurvilinearOrientation();
+}
+
 std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                               size_t timeStep) {
     if (occupiedLanes.find(timeStep) != occupiedLanes.end())

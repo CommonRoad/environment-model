@@ -5,6 +5,7 @@
 #include "python_interface.h"
 #include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
+#include "commonroad_cpp/predicates/general/cut_in_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include "translate_python_types.h"
@@ -137,4 +138,12 @@ double py_unnecessary_braking_robust_evaluation(size_t scenarioId, size_t timeSt
     std::shared_ptr<CommonRoadContainer> CommonRoadContainer = CommonRoadContainer::getInstance();
     auto world = CommonRoadContainer->findWorld(scenarioId);
     return pred.robustEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId));
+}
+
+bool py_cut_in_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId) {
+    CutInPredicate pred;
+    std::shared_ptr<CommonRoadContainer> CommonRoadContainer = CommonRoadContainer::getInstance();
+    auto world = CommonRoadContainer->findWorld(scenarioId);
+    return pred.booleanEvaluation(timeStep, world, world->findObstacle(py_egoVehicleId),
+                                  world->findObstacle(py_obstacleId));
 }
