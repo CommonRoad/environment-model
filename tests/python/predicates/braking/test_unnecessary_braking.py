@@ -62,7 +62,7 @@ class TestUnnecessaryBrakingPredicate(unittest.TestCase):
                                          State(time_step=3, position=np.array([40, 0]), velocity=10, acceleration=-1.5,
                                                orientation=0)]), Rectangle(5, 2)))
 
-        obstacle_3 = DynamicObstacle(2, ObstacleType.CAR, Rectangle(5, 2),
+        obstacle_3 = DynamicObstacle(3, ObstacleType.CAR, Rectangle(5, 2),
                                      State(time_step=0, position=np.array([20, 0]), velocity=10,
                                            acceleration=1, orientation=0),
                                      TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[

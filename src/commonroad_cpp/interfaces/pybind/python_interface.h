@@ -24,11 +24,17 @@ void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &
 
 void py_removeScenario(size_t scenarioId);
 
-template <typename T> bool py_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                                 size_t py_obstacleId = 123456789);
+template <typename T>
+bool py_boolean_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId);
 
-template <typename T> double py_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
-                                                  size_t py_obstacleId = 123456789);
+template <typename T>
+bool py_boolean_single_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId = 0);
+
+template <typename T>
+double py_robust_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId, size_t py_obstacleId);
+
+template <typename T> double py_robust_single_evaluation(size_t scenarioId, size_t timeStep, size_t py_egoVehicleId,
+                                                         size_t py_obstacleId = 0);
 
 bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double lonPosP, double velocityK,
                                                          double velocityP, double minAccelerationK,
@@ -96,13 +102,13 @@ PYBIND11_MODULE(cpp_env_model, m) {
           "Boolean evaluation of in same lane predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
-    m.def("unnecessary_braking_boolean_evaluation", &py_boolean_evaluation<UnnecessaryBrakingPredicate>,
+    m.def("unnecessary_braking_boolean_evaluation", &py_boolean_single_evaluation<UnnecessaryBrakingPredicate>,
           "Boolean evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 123456789);
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
-    m.def("unnecessary_braking_robust_evaluation", &py_robust_evaluation<UnnecessaryBrakingPredicate>,
+    m.def("unnecessary_braking_robust_evaluation", &py_robust_single_evaluation<UnnecessaryBrakingPredicate>,
           "Robust evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 123456789);
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("cut_in_boolean_evaluation", &py_boolean_evaluation<CutInPredicate>, "Boolean evaluation of cut-in predicate",
           py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
