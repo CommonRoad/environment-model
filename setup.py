@@ -3,7 +3,7 @@ import re
 import sys
 import platform
 import subprocess
-import pathlib
+from pathlib import Path
 
 from setuptools import Extension
 from setuptools.command.build_ext import build_ext
@@ -50,8 +50,6 @@ class CMakeBuild(build_ext):
         if not extdir.endswith(os.path.sep):
             extdir += os.path.sep
 
-        print('extdir={}'.format(extdir))
-
         cmake_args = ["-DPYTHON_EXECUTABLE={}".format(sys.executable),
                       "-DCMAKE_PREFIX_PATH={}".format(cmake_prefix),
                       "-DINSTALL_GTEST=OFF",
@@ -70,32 +68,30 @@ class CMakeBuild(build_ext):
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             build_args += ['--', '-j4']
 
-
-        dist_dir = os.path.abspath(os.path.join(self.build_temp, 'dist'))
-        build_dir = os.path.abspath(os.path.join(self.build_temp, 'build'))
-        lib_python_dir = os.path.join(dist_dir, 'lib', 'python')
-        install_path = pathlib.Path(self.get_ext_fullpath(ext.name))
-        print('installpath={}'.format(install_path))
-        install_dir = install_path.parent.resolve()
-        #extension_install_dir = pathlib.Path(install_dir).parent.joinpath(ext.name).resolve()
-        #extension_install_dir = install_dir
+        build_temp_dir = Path(self.build_temp)
+        dist_dir = build_temp_dir / 'dist'
+        build_dir =  build_temp_dir / 'build'
+        lib_dir = dist_dir / 'lib'
+        lib_python_dir = lib_dir / 'python'
+        install_path = Path(self.get_ext_fullpath(ext.name))
+        install_dir = install_path.parent
 
         for p in [dist_dir, build_dir, install_dir]:
-            if not os.path.exists(p):
-                os.makedirs(p)
+            p.mkdir(exist_ok=True)
 
         cmake_args += [ '-DCMAKE_INSTALL_PREFIX:PATH={}'.format(dist_dir) ]
 
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=build_dir)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=build_dir)
-        subprocess.check_call(['cmake', '--install', '.'], cwd=build_dir)
+        subprocess.check_call(['cmake', '--install', '.'] + build_args, cwd=build_dir)
 
-        #for file in os.listdir(lib_python_dir):
-        extension_file = pathlib.Path(lib_python_dir) / install_path.name
-        if extension_file.exists():
-            self.copy_file(extension_file, install_path)
-        else:
+        extension_file = lib_python_dir / install_path.name
+        if not extension_file.exists():
             raise RuntimeError('Expected Python extension module \'{}\', but no such file exists'.format(extension_file))
+
+        for file in lib_python_dir.iterdir():
+            if file.suffix == '.so':
+                self.copy_file(file, install_dir)
 
 setup(
     name='cpp_env_model',
