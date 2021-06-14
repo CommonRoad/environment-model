@@ -11,13 +11,6 @@ from distutils.core import setup
 from distutils.version import LooseVersion
 
 
-cmake_prefix = None
-if '--cmake-prefix' in sys.argv:
-    index = sys.argv.index('--cmake-prefix')
-    sys.argv.pop(index)
-    cmake_prefix = sys.argv.pop(index)
-
-
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[])
@@ -25,6 +18,17 @@ class CMakeExtension(Extension):
 
 
 class CMakeBuild(build_ext):
+    user_options = build_ext.user_options + [
+        ('cmake-prefix=', None, 'path to use as CMAKE_PREFIX_PATH')
+    ]
+
+    def initialize_options(self):
+        super().initialize_options()
+        self.cmake_prefix = None
+
+    def finalize_options(self):
+        super().finalize_options()
+
     def run(self):
         try:
             out = subprocess.check_output(['cmake', '--version'])
@@ -41,8 +45,8 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
-        if not cmake_prefix:
-            raise RuntimeError("CMake Prefix is required for building this package (set using --cmake-prefix)")
+        if not self.cmake_prefix:
+            print ('WARNING: No CMake prefix path set! (set using --cmake-prefix)')
 
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
 
@@ -51,7 +55,7 @@ class CMakeBuild(build_ext):
             extdir += os.path.sep
 
         cmake_args = ["-DPYTHON_EXECUTABLE={}".format(sys.executable),
-                      "-DCMAKE_PREFIX_PATH={}".format(cmake_prefix),
+                      "-DCMAKE_PREFIX_PATH={}".format(self.cmake_prefix),
                       "-DINSTALL_GTEST=OFF",
                       "-DBUILD_TESTS=OFF",
                       "-DBUILD_DOXYGEN=OFF",
