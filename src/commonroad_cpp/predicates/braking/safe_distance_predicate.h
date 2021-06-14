@@ -116,4 +116,3 @@ class SafeDistancePredicate : public CommonRoadPredicate {
                                    double minAccelerationK, double minAccelerationP, double tReact, double lengthK,
                                    double lengthP);
 };
-
