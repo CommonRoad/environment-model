@@ -58,3 +58,16 @@ TEST_F(TestInSameLanePredicate, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(4, world, obstacleOne,
                                        obstacleThree)); // vehicles completely on same lane, but other vehicle is behind
 }
+
+TEST_F(TestInSameLanePredicate, StatisticBooleanEvaluation) {
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo)); // vehicles completely on same lane
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo)); // ego vehicle partially in another lane
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(2, world, obstacleOne, obstacleTwo)); // other vehicle partially in another lane
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(3, world, obstacleOne, obstacleTwo)); // vehicles not in same lane
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(
+        4, world, obstacleOne,
+        obstacleThree)); // vehicles completely on same lane, but other vehicle is behind
+}

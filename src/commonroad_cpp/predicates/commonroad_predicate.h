@@ -14,21 +14,21 @@
 /**
  * Interface for a predicate.
  */
-class Predicate {
+class CommonRoadPredicate {
   public:
     /**
      * Constructor for predicate class.
      *
      * @param parameters Struct containing parameters of all predicates.
      */
-    explicit Predicate(const PredicateParameters &parameters);
+    explicit CommonRoadPredicate(const PredicateParameters &parameters);
 
     /**
      * Default constructor for predicate class without parameter.
      *
      * @param parameters Struct containing parameters of all predicates.
      */
-    Predicate();
+    CommonRoadPredicate();
 
     /**
      * Virtual function for the boolean evaluation of a predicate.

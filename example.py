@@ -69,39 +69,45 @@ lanelet_network.add_lanelet(lanelet_4)
 lanelet_network.add_lanelet(lanelet_5)
 
 obstacle_1 = DynamicObstacle(1, ObstacleType.CAR, Rectangle(5, 2),
-                             State(time_step=0, position=np.array([0, 2]), velocity=10, acceleration=0,
+                             State(time_step=0, position=np.array([0, 0]), velocity=10, acceleration=1,
                                    orientation=0),
                              TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
-                                 State(time_step=1, position=np.array([10, 4]), velocity=10,
-                                       acceleration=0, orientation=0),
-                                 State(time_step=2, position=np.array([20, 2]), velocity=10,
-                                       acceleration=0, orientation=0),
-                                 State(time_step=3, position=np.array([30, 2]), velocity=10,
-                                       acceleration=0, orientation=0),
-                                 State(time_step=4, position=np.array([40, 2]), velocity=10,
-                                       acceleration=0, orientation=0)]), Rectangle(5, 2)))
+                                 State(time_step=1, position=np.array([10, 0]), velocity=10,
+                                       acceleration=-5, orientation=0),
+                                 State(time_step=2, position=np.array([20, 0]), velocity=10,
+                                       acceleration=-7, orientation=0),
+                                 State(time_step=3, position=np.array([30, 0]), velocity=10,
+                                       acceleration=-3, orientation=0),
+                                 State(time_step=4, position=np.array([40, 0]), velocity=10,
+                                       acceleration=-8, orientation=0),
+                                 State(time_step=5, position=np.array([50, 0]), velocity=10,
+                                       acceleration=2, orientation=0)]), Rectangle(5, 2)))
 
 obstacle_2 = DynamicObstacle(2, ObstacleType.CAR, Rectangle(5, 2),
-                             State(time_step=0, position=np.array([10, 2]), velocity=2,
-                                   acceleration=0, orientation=0),
+                             State(time_step=0, position=np.array([10, 0]), velocity=10, acceleration=1,
+                                   orientation=0),
                              TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
-                                 State(time_step=1, position=np.array([20, 2]), velocity=10, acceleration=0,
+                                 State(time_step=1, position=np.array([20, 0]), velocity=10, acceleration=-4,
                                        orientation=0),
-                                 State(time_step=2, position=np.array([30, 4]), velocity=10, acceleration=0,
+                                 State(time_step=2, position=np.array([30, 0]), velocity=10, acceleration=-2,
                                        orientation=0),
-                                 State(time_step=3, position=np.array([40, 6]), velocity=10, acceleration=0,
+                                 State(time_step=3, position=np.array([40, 0]), velocity=10, acceleration=-1.5,
                                        orientation=0)]), Rectangle(5, 2)))
 
 obstacle_3 = DynamicObstacle(3, ObstacleType.CAR, Rectangle(5, 2),
-                             State(time_step=3, position=np.array([0, 0]), velocity=10,
-                                   acceleration=0, orientation=0),
-                             TrajectoryPrediction(Trajectory(initial_time_step=4, state_list=[
-                                 State(time_step=4, position=np.array([20, 2]), velocity=10, acceleration=0,
+                             State(time_step=0, position=np.array([20, 0]), velocity=10,
+                                   acceleration=1, orientation=0),
+                             TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
+                                 State(time_step=1, position=np.array([30, 0]), velocity=10, acceleration=-1,
+                                       orientation=0),
+                                 State(time_step=2, position=np.array([40, 0]), velocity=10, acceleration=-3,
+                                       orientation=0),
+                                 State(time_step=3, position=np.array([50, 0]), velocity=10, acceleration=-2,
                                        orientation=0)]), Rectangle(5, 2)))
 
 cpp_env_model.register_scenario(123, 0, "DEU", lanelet_network, [obstacle_2, obstacle_3], [obstacle_1])
 
 
-print("Safe Distance satisfied: {}".format(cpp_env_model.in_same_lane_boolean_evaluation(123, 4, 1, 3)))
+print("Safe Distance satisfied: {}".format(cpp_env_model.unnecessary_braking_boolean_evaluation(123, 5, 1, 123215667)))
 
 cpp_env_model.remove_scenario(123)

@@ -12,6 +12,9 @@ env_model_example_node
 *.a
 *.so
 
+# Log files
+*.log
+
 # Exclude Python directories
 .idea/
 .ipynb_checkpoints/

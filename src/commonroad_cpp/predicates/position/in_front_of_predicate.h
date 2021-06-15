@@ -5,12 +5,12 @@
 #ifndef ENV_MODEL_IN_FRONT_OF_PREDICATE_H
 #define ENV_MODEL_IN_FRONT_OF_PREDICATE_H
 
-#include "commonroad_cpp/predicates/predicate.h"
+#include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
  * Evaluates whether the kth vehicle is in front of the pth vehicle.
  */
-class InFrontOfPredicate : public Predicate {
+class InFrontOfPredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using parameter values.
