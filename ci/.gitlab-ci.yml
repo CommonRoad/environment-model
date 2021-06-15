@@ -96,6 +96,15 @@ build-run-coverage:
       - ./build/
     expire_in: 20 minutes
 
+build-python:
+  stage: compile
+  script:
+    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py build
+  needs: []
+  artifacts:
+    paths:
+      - ./build/
+    expire_in: 20 minutes
 
 ### tests ###
 test:
@@ -114,10 +123,10 @@ test-python:
   before_script:
     - *python-prepare
   script:
-    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py develop
+    - python setup.py develop
     - python -m pytest tests/python
   needs:
-    - job: build-test
+    - job: build-python
       artifacts: true
 
 ### coverage ###
