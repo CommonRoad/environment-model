@@ -8,6 +8,7 @@ from pathlib import Path
 from setuptools import Extension
 from setuptools.command.build_ext import build_ext
 from distutils.core import setup
+from distutils import log
 from distutils.version import LooseVersion
 
 
@@ -18,17 +19,6 @@ class CMakeExtension(Extension):
 
 
 class CMakeBuild(build_ext):
-    user_options = build_ext.user_options + [
-        ('cmake-prefix=', None, 'path to use as CMAKE_PREFIX_PATH')
-    ]
-
-    def initialize_options(self):
-        super().initialize_options()
-        self.cmake_prefix = None
-
-    def finalize_options(self):
-        super().finalize_options()
-
     def run(self):
         try:
             out = subprocess.check_output(['cmake', '--version'])
@@ -45,8 +35,10 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
-        if not self.cmake_prefix:
-            print ('WARNING: No CMake prefix path set! (set using --cmake-prefix)')
+        if "CMAKE_PREFIX_PATH" not in os.environ:
+            log.log(log.WARN,
+                'WARNING: The CMAKE_PREFIX_PATH environment variable is not set!'
+                'Consider setting it to the DrivabilityChecker installation prefix.')
 
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
 
@@ -55,7 +47,6 @@ class CMakeBuild(build_ext):
             extdir += os.path.sep
 
         cmake_args = ["-DPYTHON_EXECUTABLE={}".format(sys.executable),
-                      "-DCMAKE_PREFIX_PATH={}".format(self.cmake_prefix),
                       "-DINSTALL_GTEST=OFF",
                       "-DBUILD_TESTS=OFF",
                       "-DBUILD_DOXYGEN=OFF",
