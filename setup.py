@@ -62,7 +62,10 @@ class CMakeBuild(build_ext):
                       "-DBUILD_PYBIND=ON"]
 
         cfg = 'Debug' if self.debug else 'Release'
-        build_args = ['--config', cfg]
+        config_arg = ['--config', cfg]
+
+        build_args = []
+        build_args += config_arg
 
         if platform.system() == "Windows":
             if sys.maxsize > 2**32:
@@ -81,13 +84,13 @@ class CMakeBuild(build_ext):
         install_dir = install_path.parent
 
         for p in [dist_dir, build_dir, install_dir]:
-            p.mkdir(exist_ok=True)
+            p.mkdir(parents=True, exist_ok=True)
 
-        cmake_args += [ '-DCMAKE_INSTALL_PREFIX:PATH={}'.format(dist_dir) ]
+        cmake_args += [ '-DCMAKE_INSTALL_PREFIX:PATH={}'.format(dist_dir.resolve()) ]
 
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=build_dir)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=build_dir)
-        subprocess.check_call(['cmake', '--install', '.'] + build_args, cwd=build_dir)
+        subprocess.check_call(['cmake', '--install', '.'] + config_arg, cwd=build_dir)
 
         extension_file = lib_python_dir / install_path.name
         if not extension_file.exists():
