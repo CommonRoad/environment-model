@@ -22,7 +22,7 @@ class TrafficLight {
      *
      * @param num Traffic light ID.
      */
-    void setId(int num);
+    void setId(size_t num);
 
     /**
      * Setter for traffic light cycle.
@@ -36,7 +36,7 @@ class TrafficLight {
      *
      * @param ofst Time offset.
      */
-    void setOffset(int ofst);
+    void setOffset(size_t ofst);
 
     /**
      * Setter for traffic light direction.
@@ -71,7 +71,7 @@ class TrafficLight {
      *
      * @return ID of traffic light.
      */
-    [[nodiscard]] int getId() const;
+    [[nodiscard]] size_t getId() const;
 
     /**
      * Getter for traffic light cycle.
@@ -85,7 +85,7 @@ class TrafficLight {
      *
      * @return Time offset of traffic light.
      */
-    [[nodiscard]] int getOffset() const;
+    [[nodiscard]] size_t getOffset() const;
 
     /**
      * Getter for traffic light direction.
@@ -114,7 +114,7 @@ class TrafficLight {
      * @param time Time step of interest.
      * @return Traffic light cycle element which is active at the provided time step.
      */
-    TrafficLightCycleElement getElementAtTime(int time);
+    TrafficLightCycleElement getElementAtTime(size_t time);
 
     /**
      * Matches turning direction given as string to the corresponding enum value.
@@ -132,9 +132,9 @@ class TrafficLight {
      */
     [[nodiscard]] static TrafficLightState matchTrafficLightState(const std::string &trafficLightState);
 
-    int id;                                      //**< unique ID of traffic light */
+    size_t id;                                   //**< unique ID of traffic light */
     std::vector<TrafficLightCycleElement> cycle; //**< cycle of traffic light */
-    int offset;                                  //**< time offset of traffic light */
+    size_t offset;                               //**< time offset of traffic light */
     TurningDirections direction;                 //**< direction for which traffic light is valid */
     bool active{};                               //**< boolean indicating whether traffic light is valid */
     vertex position{};                           //**< position of traffic light */

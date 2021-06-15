@@ -4,24 +4,24 @@
 
 #include "traffic_light.h"
 
-TrafficLight::TrafficLight() : id(0), offset(0), direction(TurningDirections::all), active(false) {}
+TrafficLight::TrafficLight() : id(0), offset(0), direction(TurningDirections::all) {}
 
-void TrafficLight::setId(const int num) { id = num; }
+void TrafficLight::setId(const size_t num) { id = num; }
 
 void TrafficLight::setCycle(const std::vector<TrafficLightCycleElement> &light_cycle) { cycle = light_cycle; }
 
-void TrafficLight::setOffset(const int ofst) { offset = ofst; }
+void TrafficLight::setOffset(const size_t ofst) { offset = ofst; }
 
-int TrafficLight::getId() const { return id; }
+size_t TrafficLight::getId() const { return id; }
 
-int TrafficLight::getOffset() const { return offset; }
+size_t TrafficLight::getOffset() const { return offset; }
 
 std::vector<TrafficLightCycleElement> TrafficLight::getCycle() const { return cycle; }
 
-TrafficLightCycleElement TrafficLight::getElementAtTime(int time) {
+TrafficLightCycleElement TrafficLight::getElementAtTime(size_t time) {
     time += offset;
     TrafficLightCycleElement current = cycle.front();
-    unsigned long i = 0;
+    size_t i = 0;
     while (time > 0) {
         if (i >= cycle.size()) {
             i = 0;
