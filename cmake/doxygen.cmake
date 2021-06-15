@@ -1,6 +1,4 @@
 # Code taken from https://vicrucann.github.io/tutorials/quick-cmake-doxygen/
-# first we can indicate the documentation build as an option and set it to ON by default
-option(BUILD_DOC "Build documentation" ON)
 
 # check if Doxygen is installed
 find_package(Doxygen)

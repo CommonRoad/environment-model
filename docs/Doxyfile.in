@@ -10,15 +10,16 @@ FILE_PATTERNS          = *.h \
                          *.cpp \
                          *.cu \
                          *.md
-EXCLUDE                = ../docs \
-                         ../external \
-                         ../ci \
-                         ../build \
-                         ../cmake \
-                         ../cmake-build-debug \
-                         ../cmake-build-debug-coverage \
-                         ../cmake-build-release \
-                         ../cmake-build-release-coverage
+EXCLUDE                = @PROJECT_SOURCE_DIR@/docs \
+                         @PROJECT_SOURCE_DIR@/external \
+                         @PROJECT_SOURCE_DIR@/ci \
+                         @PROJECT_SOURCE_DIR@/src/commonroad_cpp/interfaces/commonroad/pugi_xml \
+                         @PROJECT_SOURCE_DIR@/build \
+                         @PROJECT_SOURCE_DIR@/cmake \
+                         @PROJECT_SOURCE_DIR@/cmake-build-debug \
+                         @PROJECT_SOURCE_DIR@/cmake-build-debug-coverage \
+                         @PROJECT_SOURCE_DIR@/cmake-build-release \
+                         @PROJECT_SOURCE_DIR@/cmake-build-release-coverage
 # This would enable documentation of the CUDA code.
 #EXTENSION_MAPPING      = h=c++ cpp=c++ cuh=c++ cu=c++
 RECURSIVE              = YES

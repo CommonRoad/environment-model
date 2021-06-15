@@ -124,9 +124,8 @@ polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
     if (this->getGeoShape().getType() == ShapeType::rectangle) {
         // p are vertices of the bounding rectangle
         // vertices p represent the occupancy with vehicle dimensions (Theorem 1 in SPOT paper)
-        const Rectangle &geoRectangle = dynamic_cast<Rectangle &>(this->getGeoShape());
-        boundingRectangleVertices = addObjectDimensions(std::vector<vertex>{vertex{0.0, 0.0}}, geoRectangle.getLength(),
-                                                        geoRectangle.getWidth());
+        boundingRectangleVertices = addObjectDimensions(
+            std::vector<vertex>{vertex{0.0, 0.0}}, this->getGeoShape().getLength(), this->getGeoShape().getWidth());
 
         /*
          * rotate and translate the vertices of the occupancy set in local

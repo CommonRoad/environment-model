@@ -37,7 +37,7 @@ target_compile_features(env_model_test
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
 set_property(TARGET env_model_test PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(env_model_test PUBLIC env_model gtest)
+target_link_libraries(env_model_test PRIVATE env_model gtest Boost::filesystem)
 
 include(GoogleTest)
 # queries the compiled executable for tests, this requires the executable to be runnable. if you are
@@ -55,7 +55,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
         target_link_libraries(env_model_test_coverage PUBLIC
                 env_model
-                ${CRCCOSY_LIBRARY}
+                DrivabilityChecker::crccosy
                 gtest
                 Boost::filesystem
                 Boost::program_options

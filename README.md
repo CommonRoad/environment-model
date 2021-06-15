@@ -29,33 +29,52 @@ For development the IDE [Clion](https://www.jetbrains.com/clion/?gclid=EAIaIQobC
 You can also take a look at the Docker container, or the .gitlab-ci.yml file to see how the software can be installed. Both are located in the *ci* directory.
   
 ### C++
-Make a build folder:
+
+1. Make a build folder and change into it:
 ```bash
-mkdir build
+mkdir build-debug && cd build-debug
+```
+**NB:** You can in theory use `build` as a name
+for the build folder, however keep in mind that Python's setuptools will always use the `build` folder for
+their build process.
+This normally shouldn't cause any issues since the file names
+used by setuptools don't clash with any names CMake uses currently, but you should still consider using separate folders just in case.
+
+
+Generate the build files with `cmake`.
+Consider specifying the following options:
+ * Specify the path where you installed the CommonRoad Drivability Checker using `-DCMAKE_PREFIX_PATH`.
+ * Optionally specify an installation prefix where you want to install the Environment Model
+   using `-DCMAKE_INSTALL_PREFIX`.
+ * The recommended approach is to use a user-writable folder as the installation prefix.
+   It is totally fine to use the same installation prefix for both the Drivability Checker and
+   the Environment Model.
+
+Example invocation:
+```bash
+cmake \
+  -DCMAKE_PREFIX_PATH=/path/to/DrivabilityChecker/install/prefix \
+  -DCMAKE_INSTALL_PREFIX=/path/to/install/prefix \
+  -DCMAKE_BUILD_TYPE=Debug \
+  ..
 ```
 
-Go into build folder:
-```bash
-cd build
-```
-
-Generate the build files with `cmake` and specify paths to external dependencies:
-```bash
-cmake -DCRCCOSY_LIBRARY_DIR=absolutPathToCurvilinearCoordinateSystem/DrivabilityChecker ..
-```
 Afterward build with make,
 ```bash
-make -j4 ..
+make -j4
 ```
-where you can replace *-j4* in case more/less threads are available for the build.
+where you can replace `-j4` in case more/less threads are available for the build.
 
 ### Python
 
 To use the environment model within Python, run 
 ```bash
-python setup.py develop --crccosy absolutPathToCurvilinearCoordinateSystem/DrivabilityChecker
+CMAKE_PREFIX_PATH=/path/to/DrivabilityChecker/install/prefix python setup.py develop
 ```
-from the root directory.  
+from the root directory, giving the
+path to the Drivability Checker's install prefix
+in the `CMAKE_PREFIX_PATH` environment variable.
+
 It is not necessary to build the C++ standalone version first.
 
 ## Usage:
@@ -80,16 +99,16 @@ You can also take a look at the Python test cases for further examples.
 
 For debugging the Python interface you can use the methods described [here](https://www.jetbrains.com/help/clion/debugging-python-extensions.html#debug-custom-py). 
 For example, edit Run/Debug configurations for crenvmodel_python as follows:
-- target: cpp_env_model
-- executable: /your/python3/binary (path to anaconda environment)
-- program arguments: example.py (python file which should be executed)
-- working directory: $ProjectFileDir$
-- environment variables: PYTHONPATH=$ROOT/cmake-build
+- target: `cpp_env_model`
+- executable: `/your/python3/binary` (path to anaconda environment)
+- program arguments: `example.py` (Python file which should be executed)
+- working directory: `$ProjectFileDir$`
+- environment variables: `PYTHONPATH=$ROOT/cmake-build`
 
 ## Documentation
-Add the *-DBUILD_DOXYGEN=ON* to the cmake command above.
+Add the `-DBUILD_DOXYGEN=ON` to the cmake command above.
 Afterward, the documentation can be generated with
 ```bash
-cd build
+cd build-debug
 make doc_doxygen
 ```

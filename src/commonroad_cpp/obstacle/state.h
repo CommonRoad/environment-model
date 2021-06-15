@@ -6,9 +6,6 @@
 #define ENV_MODEL_STATE_H
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include "geometry/curvilinear_coordinate_system.h"
-
-typedef geometry::CurvilinearCoordinateSystem CurvilinearCoordinateSystem;
 
 /**
  * Class representing a state.

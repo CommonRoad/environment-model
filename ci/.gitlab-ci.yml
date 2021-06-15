@@ -1,15 +1,15 @@
 stages:
-  - static-test
   - compile
   - test
   #  - sanitizer TODO
   - coverage
+  - static-test
   - docs
 
 
-image: $CI_REGISTRY/maierhofer/environment-model/ci:0.4.2
+image: $CI_REGISTRY/maierhofer/environment-model/ci:0.5.0
 
-before_script:
+.python-prepare: &python-prepare
   - source activate commonroad
   - pip install tox coverage
   - pip install -r ./requirements.txt
@@ -18,24 +18,50 @@ before_script:
 ### static test ###
 clang-format:
   stage: static-test
-  script:
-    bash ./ci/clang-format.sh
+  script: ./ci/clang-format.sh
+  needs: []
 
 clang-tidy:
   stage: static-test
-  script:
-    bash ./ci/clang-tidy.sh
+  script: ./ci/clang-tidy.sh
+  needs:
+    - job: build-compile-commands
+      artifacts: true
 
+cppcheck:
+  stage: static-test
+  script:
+    cppcheck
+    --project=build/compile_commands.json
+    -i"$(pwd)/external"
+    -i"$(pwd)/src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp"
+  needs:
+    - job: build-compile-commands
+      artifacts: true
 
 ### build project ###
+build-compile-commands:
+  stage: compile
+  script:
+    # run CMake in order to get compile_commands.json
+    - mkdir build && cd build
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
+    - cd ..
+  needs: []
+  artifacts:
+    paths:
+      - ./build/compile_commands.json
+    expire_in: 20 minutes
+
 build-clang:
   stage: compile
   script:
     - export CC=clang
     - export CXX=clang++
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
+  needs: []
 
 build-gcc:
   stage: compile
@@ -43,67 +69,133 @@ build-gcc:
     - export CC=gcc
     - export CXX=g++
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
+  needs: []
 
 build-standalone:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model_example_node -j4
+  needs: []
 
 build-test:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
+  needs: []
   artifacts:
     paths:
-      - ./env_model_test
-      - ./libenv_model.so
-      - ./tests/testScenarios/*
+      - build/env_model_test
+      - build/libenv_model.so
     expire_in: 20 minutes
 
 build-run-coverage:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
     - make env_model_coverage -j4
+  needs: []
   artifacts:
     paths:
       - ./build/
-      - ./env_model_coverage
     expire_in: 20 minutes
 
+build-python:
+  stage: compile
+  script:
+    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py build
+  needs: []
+  artifacts:
+    paths:
+      - ./build/
+    expire_in: 20 minutes
 
 ### tests ###
 test:
   stage: test
   script:
-    - ./env_model_test --gtest_output="xml:report.xml"
-    - python setup.py develop --crccosy /commonroad/commonroad-drivability-checker
-    - python -m pytest tests/python
-  dependencies:
-    - build-test
+    - build/env_model_test --gtest_output="xml:report.xml"
+  needs:
+    - job: build-test
+      artifacts: true
   artifacts:
     reports:
       junit: ./report.xml
 
+test-python:
+  stage: test
+  before_script:
+    - *python-prepare
+  script:
+    - python setup.py develop
+    - python -m pytest tests/python
+  needs:
+    - job: build-python
+      artifacts: true
+
 ### coverage ###
-publish-coverage:
+coverage-analyze:
   stage: coverage
   script:
-    - gcovr -e src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.hpp -e src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp -e src/commonroad_cpp/interfaces/standalone/main.cpp -e src/commonroad_cpp/interfaces/pybind/ -e external/ -e 'cmake-(.+/)?/' -e tests/ -e build/CMakeFiles/
-  dependencies:
-    - build-run-coverage
+    - gcovr --version
+    - gcovr
+      -f src/
+      -e src/commonroad_cpp/interfaces/commonroad/pugi_xml
+      -e src/commonroad_cpp/interfaces/standalone/main.cpp
+      -e src/commonroad_cpp/interfaces/pybind/
+      --print-summary
+      --exclude-unreachable-branches
+      --output coverage.xml
+      --xml
+  needs:
+    - job: build-run-coverage
+      artifacts: true
+  coverage: /^\s*lines:\s*\d+.\d+\%/
+  artifacts:
+    reports:
+      cobertura: coverage.xml
+
+coverage-report:
+  stage: coverage
+  script:
+    - gcovr --version
+    - gcovr
+      -f src/
+      -e src/commonroad_cpp/interfaces/commonroad/pugi_xml
+      -e src/commonroad_cpp/interfaces/standalone/main.cpp
+      -e src/commonroad_cpp/interfaces/pybind/
+      --print-summary
+      --exclude-unreachable-branches
+      --output coverage.html
+      --html
+      --html-details
+    - mkdir coverage
+    - mv coverage*.html coverage
+  needs:
+    - job: build-run-coverage
+      artifacts: true
+  artifacts:
+    paths:
+      - coverage
+    expose_as: 'Coverage Report'
+    expire_in: 20 minutes
 
 ### create documentation ###
 docs:
   stage: docs
   script:
-    - cd build
-    - cmake -DCRCCOSY_LIBRARY_DIR=/commonroad/commonroad-drivability-checker -DBUILD_DOXYGEN=ON -DCMAKE_BUILD_TYPE=Debug ..
+    - mkdir -p build && cd build
+    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DBUILD_DOXYGEN=ON  ..
     - make doc_doxygen ..
+  dependencies: []
+  artifacts:
+    paths:
+      - build/doc_doxygen/html/
+    expose_as: 'Doxygen Documentation'
+    expire_in: 20 minutes
