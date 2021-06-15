@@ -18,31 +18,41 @@ image: $CI_REGISTRY/maierhofer/environment-model/ci:0.5.0
 ### static test ###
 clang-format:
   stage: static-test
-  script:
-    bash ./ci/clang-format.sh
+  script: ./ci/clang-format.sh
   needs: []
 
 clang-tidy:
   stage: static-test
-  script:
-    # run CMake in order to get compile_commands.json
-    - mkdir build && cd build
-    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
-    - cd ..
-    - bash ./ci/clang-tidy.sh
-  needs: []
+  script: ./ci/clang-tidy.sh
+  needs:
+    - job: build-compile-commands
+      artifacts: true
 
 cppcheck:
   stage: static-test
   script:
+    cppcheck
+    --project=build/compile_commands.json
+    -i"$(pwd)/external"
+    -i"$(pwd)/src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp"
+  needs:
+    - job: build-compile-commands
+      artifacts: true
+
+### build project ###
+build-compile-commands:
+  stage: compile
+  script:
     # run CMake in order to get compile_commands.json
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
     - cd ..
-    - cppcheck --project=build/compile_commands.json -i"$(pwd)/external" -i"$(pwd)/src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp"
   needs: []
+  artifacts:
+    paths:
+      - ./build/compile_commands.json
+    expire_in: 20 minutes
 
-### build project ###
 build-clang:
   stage: compile
   script:
