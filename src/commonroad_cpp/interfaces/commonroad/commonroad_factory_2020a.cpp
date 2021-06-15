@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 04.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "commonroad_factory_2020a.h"
@@ -91,7 +94,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                 // add traffic lights to temporary list
                 if ((strcmp(child.name(), "trafficLightRef")) == 0) {
                     for (const auto &light : trafficLights) {
-                        if (child.attribute("ref").as_int() == light->getId()) {
+                        if (child.attribute("ref").as_ullong() == light->getId()) {
                             tempLaneletContainer[arrayIndex]->addTrafficLight(light);
                         }
                     }
@@ -118,7 +121,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                         }
                         if ((strcmp(elem.name(), "trafficLightRef")) == 0) {
                             for (const auto &light : trafficLights) {
-                                if (child.attribute("ref").as_int() == light->getId()) {
+                                if (child.attribute("ref").as_ullong() == light->getId()) {
                                     sl->addTrafficLight(light);
                                 }
                             }
@@ -210,7 +213,7 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
         if ((strcmp(roadElements.name(), "trafficLight")) == 0) {
             std::shared_ptr<TrafficLight> tempTrafficLight = std::make_shared<TrafficLight>();
             tempLaneletContainer.emplace_back(tempTrafficLight);
-            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
+            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_ullong());
             for (pugi::xml_node trafficLightChildElement = roadElements.first_child();
                  trafficLightChildElement != nullptr;
                  trafficLightChildElement = trafficLightChildElement.next_sibling()) {
@@ -224,11 +227,11 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                             std::string color =
                                 trafficLightCycleChildElement.first_child().next_sibling().first_child().value();
                             tempLaneletContainer[arrayIndex]->addCycleElement(
-                                {TrafficLight::matchTrafficLightState(color), std::stoi(duration)});
+                                {TrafficLight::matchTrafficLightState(color), std::stoul(duration)});
                         }
                         if ((strcmp(trafficLightCycleChildElement.name(), "timeOffset")) == 0) {
                             tempLaneletContainer[arrayIndex]->setOffset(
-                                std::stoi(trafficLightCycleChildElement.first_child().value()));
+                                std::stoul(trafficLightCycleChildElement.first_child().value()));
                         }
                     }
                 }
