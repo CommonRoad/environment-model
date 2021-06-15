@@ -9,18 +9,18 @@
 #include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 
 bool AtRedRightTrafficLightPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                               const std::shared_ptr<Obstacle> &obstacleK,
-                                               const std::shared_ptr<Obstacle> &obstacleP) {
+                                                        const std::shared_ptr<Obstacle> &obstacleK,
+                                                        const std::shared_ptr<Obstacle> &obstacleP) {
     return regulatory_elements_utils::atRedTrafficLight(timeStep, obstacleK, world->getRoadNetwork(),
                                                         TurningDirections::right);
 }
 double AtRedRightTrafficLightPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                const std::shared_ptr<Obstacle> &obstacleK,
-                                                const std::shared_ptr<Obstacle> &obstacleP) {
+                                                         const std::shared_ptr<Obstacle> &obstacleK,
+                                                         const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("AtRedRightTrafficLight does not support robust evaluation!");
 }
 Constraint AtRedRightTrafficLightPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                        const std::shared_ptr<Obstacle> &obstacleK,
-                                                        const std::shared_ptr<Obstacle> &obstacleP) {
+                                                                 const std::shared_ptr<Obstacle> &obstacleK,
+                                                                 const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("AtRedRightTrafficLight does not support constraint evaluation!");
 }

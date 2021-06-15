@@ -54,16 +54,16 @@ void CutInPredicateTest::SetUp() {
 }
 
 TEST_F(CutInPredicateTest, BooleanEvaluation) {
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne,
-                                            obstacleTwo)); // before cut-in -> ego vehicle occupies only single lane
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo)); // during cut-in
-        EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo)); // after cut-in
-        EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo)); // driving back to initial lane
-        EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne,
-                                            obstacleThree)); // during cut-in -> but other vehicles is in another lane
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne,
+                                        obstacleTwo)); // before cut-in -> ego vehicle occupies only single lane
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo));  // during cut-in
+    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo)); // after cut-in
+    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo)); // driving back to initial lane
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne,
+                                        obstacleThree)); // during cut-in -> but other vehicles is in another lane
 }
 
- TEST_F(CutInPredicateTest, StatisticBooleanEvaluation) {
+TEST_F(CutInPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_FALSE(pred.statisticBooleanEvaluation(
         0, world, obstacleOne, obstacleTwo)); // before cut-in -> ego vehicle occupies only single lane
     EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo));  // during cut-in
