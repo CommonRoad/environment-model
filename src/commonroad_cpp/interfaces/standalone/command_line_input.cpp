@@ -2,20 +2,23 @@
 // Created by Sebastian Maierhofer on 02.11.20.
 //
 
-#ifndef ENV_MODEL_COMMAND_LINE_INPUT_H
-#define ENV_MODEL_COMMAND_LINE_INPUT_H
-
 #include <boost/program_options.hpp>
 #include <iostream>
 
-#include "commonroad_cpp/interfaces/commonroad/xml_reader.h"
+#include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
 #include "command_line_input.h"
 
-namespace po = boost::program_options;
-
 namespace CommandLine {
 
+/**
+ * Reads the arguments provided via command line.
+ *
+ * @param argc Argument count: Number of arguments.
+ * @param argv Argument vector: List of arguments. (Argument at position 0 is the executable)
+ * @param num_threads Reference where number of threads should be stored.
+ * @param xmlFilePath Reference where file path to CommonRoad xml should be stored.
+ */
 int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath) {
     try {
         std::string xmlFileName;
@@ -33,7 +36,7 @@ int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::st
         boost::program_options::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
         po::notify(vm);
 
-        if (vm.count("help")) {
+        if (vm.count("help") != 0u) {
             std::cout << desc << "\n";
             return 0;
         }
@@ -51,6 +54,11 @@ int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::st
     }
 }
 
+/**
+ * Loads and sets up CR scenario.
+ * @param xmlFilePath Path to CommonRoad xml file
+ * @return Tuple of obstacles and roadNetwork.
+ */
 std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>>
 getDataFromCommonRoad(const std::string &xmlFilePath) {
     // Read and parse CommonRoad scenario file
@@ -78,6 +86,6 @@ getDataFromCommonRoad(const std::string &xmlFilePath) {
 
     return std::make_tuple(obstacles, roadNetwork);
 }
+
 } // namespace CommandLine
 
-#endif // ENV_MODEL_COMMAND_LINE_INPUT_H
