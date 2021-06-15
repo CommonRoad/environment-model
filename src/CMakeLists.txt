@@ -32,13 +32,15 @@ set(ENV_MODEL_SRC_FILES
         )
 
 # Create environment model library
-add_library(env_model_obj OBJECT ${ENV_MODEL_SRC_FILES})
-target_compile_features(env_model_obj
+add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
+
+target_compile_features(env_model
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
-set_property(TARGET env_model_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-target_include_directories(env_model_obj
+set_property(TARGET env_model PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+target_include_directories(env_model
     PUBLIC
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
@@ -46,20 +48,18 @@ target_include_directories(env_model_obj
         ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
-target_link_libraries(env_model_obj
+target_link_libraries(env_model
     PUBLIC
         Eigen3::Eigen
         DrivabilityChecker::crccosy
     )
 
-target_link_libraries(env_model_obj
+target_link_libraries(env_model
     PRIVATE
         Boost::program_options
         Boost::filesystem
         OpenMP::OpenMP_CXX
     )
-
-add_library(env_model SHARED $<TARGET_OBJECTS:env_model_obj>)
 
 
 # Create environment model test node
@@ -67,7 +67,7 @@ add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.
 
 target_link_libraries(env_model_example_node
     PRIVATE
-        env_model_obj
+        env_model
         Boost::program_options
     )
 
@@ -79,18 +79,31 @@ if(BUILD_PYBIND)
             commonroad_cpp/interfaces/pybind/python_interface.h
             commonroad_cpp/interfaces/pybind/translate_python_types.cpp
             commonroad_cpp/interfaces/pybind/translate_python_types.h)
-    target_link_libraries(cpp_env_model PRIVATE env_model_obj)
+
+    target_link_libraries(cpp_env_model PRIVATE env_model)
+
+    # $ORIGIN is a special value: It represents the location of the shared object
+    # being loaded itself. By setting the RPATH of the installed Python module
+    # to $ORIGIN, the loader will automatically look for shared libraries in the
+    # same directory as the module file itself.
+    #
+    # This is required here so that the loader finds e.g. libcrcc.so which is
+    # installed next to the Python module, even if the Python module got moved
+    # during installation.
+
+    set_property(TARGET cpp_env_model PROPERTY INSTALL_RPATH "$ORIGIN")
+
 endif(BUILD_PYBIND)
 
 # this adds many warnings to the build. They usually help to find some bugs
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     target_compile_options(env_model_example_node PRIVATE -Wall -Wextra -Wconversion -pedantic
             -Wfatal-errors)
-    target_compile_options(env_model_obj PRIVATE -Wall -Wextra -Wconversion
+    target_compile_options(env_model PRIVATE -Wall -Wextra -Wconversion
             -pedantic -Wfatal-errors)
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    target_compile_options(env_model_obj PRIVATE /W3 /WX)
+    target_compile_options(env_model PRIVATE /W3 /WX)
     target_compile_options(HW01Main PRIVATE /W3 /WX)
 endif()
 
