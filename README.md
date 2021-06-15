@@ -69,11 +69,11 @@ where you can replace `-j4` in case more/less threads are available for the buil
 
 To use the environment model within Python, run 
 ```bash
-python setup.py develop --cmake-prefix /path/to/DrivabilityChecker/install/prefix
+CMAKE_PREFIX_PATH=/path/to/DrivabilityChecker/install/prefix python setup.py develop
 ```
 from the root directory, giving the
 path to the Drivability Checker's install prefix
-to `--cmake-prefix`.
+in the `CMAKE_PREFIX_PATH` environment variable.
 
 It is not necessary to build the C++ standalone version first.
 

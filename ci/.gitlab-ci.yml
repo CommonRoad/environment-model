@@ -18,31 +18,41 @@ image: $CI_REGISTRY/maierhofer/environment-model/ci:0.5.0
 ### static test ###
 clang-format:
   stage: static-test
-  script:
-    bash ./ci/clang-format.sh
-  dependencies: []
+  script: ./ci/clang-format.sh
+  needs: []
 
 clang-tidy:
   stage: static-test
-  script:
-    # run CMake in order to get compile_commands.json
-    - mkdir build && cd build
-    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
-    - cd ..
-    - bash ./ci/clang-tidy.sh
-  dependencies: []
+  script: ./ci/clang-tidy.sh
+  needs:
+    - job: build-compile-commands
+      artifacts: true
 
 cppcheck:
   stage: static-test
   script:
+    cppcheck
+    --project=build/compile_commands.json
+    -i"$(pwd)/external"
+    -i"$(pwd)/src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp"
+  needs:
+    - job: build-compile-commands
+      artifacts: true
+
+### build project ###
+build-compile-commands:
+  stage: compile
+  script:
     # run CMake in order to get compile_commands.json
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
     - cd ..
-    - cppcheck --project=build/compile_commands.json -i"$(pwd)/external" -i"$(pwd)/src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp"
-  dependencies: []
+  needs: []
+  artifacts:
+    paths:
+      - ./build/compile_commands.json
+    expire_in: 20 minutes
 
-### build project ###
 build-clang:
   stage: compile
   script:
@@ -51,6 +61,7 @@ build-clang:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
+  needs: []
 
 build-gcc:
   stage: compile
@@ -60,6 +71,7 @@ build-gcc:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
+  needs: []
 
 build-standalone:
   stage: compile
@@ -67,6 +79,7 @@ build-standalone:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model_example_node -j4
+  needs: []
 
 build-test:
   stage: compile
@@ -74,6 +87,7 @@ build-test:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
+  needs: []
   artifacts:
     paths:
       - build/env_model_test
@@ -86,19 +100,30 @@ build-run-coverage:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
     - make env_model_coverage -j4
+  needs: []
   artifacts:
     paths:
       - ./build/
     expire_in: 20 minutes
 
+build-python:
+  stage: compile
+  script:
+    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py build
+  needs: []
+  artifacts:
+    paths:
+      - ./build/
+    expire_in: 20 minutes
 
 ### tests ###
 test:
   stage: test
   script:
     - build/env_model_test --gtest_output="xml:report.xml"
-  dependencies:
-    - build-test
+  needs:
+    - job: build-test
+      artifacts: true
   artifacts:
     reports:
       junit: ./report.xml
@@ -108,10 +133,11 @@ test-python:
   before_script:
     - *python-prepare
   script:
-    - python setup.py develop --cmake-prefix /commonroad/dist
+    - python setup.py develop
     - python -m pytest tests/python
-  dependencies:
-    - build-test
+  needs:
+    - job: build-python
+      artifacts: true
 
 ### coverage ###
 coverage-analyze:
@@ -127,8 +153,9 @@ coverage-analyze:
       --exclude-unreachable-branches
       --output coverage.xml
       --xml
-  dependencies:
-    - build-run-coverage
+  needs:
+    - job: build-run-coverage
+      artifacts: true
   coverage: /^\s*lines:\s*\d+.\d+\%/
   artifacts:
     reports:
@@ -150,8 +177,9 @@ coverage-report:
       --html-details
     - mkdir coverage
     - mv coverage*.html coverage
-  dependencies:
-    - build-run-coverage
+  needs:
+    - job: build-run-coverage
+      artifacts: true
   artifacts:
     paths:
       - coverage

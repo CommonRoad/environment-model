@@ -80,7 +80,7 @@ install(TARGETS env_model
 )
 
 if(BUILD_PYBIND)
-    install(TARGETS cpp_env_model
+    install(TARGETS cpp_env_model env_model
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/python
     )
 endif(BUILD_PYBIND)
