@@ -1,8 +1,12 @@
 //
-// Created by Sebastian Maierhofer on 31.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "traffic_light.h"
+#include <algorithm>
 
 TrafficLight::TrafficLight() : id(0), offset(0), direction(TurningDirections::all) {}
 
@@ -19,18 +23,18 @@ size_t TrafficLight::getOffset() const { return offset; }
 std::vector<TrafficLightCycleElement> TrafficLight::getCycle() const { return cycle; }
 
 TrafficLightCycleElement TrafficLight::getElementAtTime(size_t time) {
-    time += offset;
-    TrafficLightCycleElement current = cycle.front();
-    size_t i = 0;
-    while (time > 0) {
-        if (i >= cycle.size()) {
-            i = 0;
-        }
-        current = cycle[i];
-        time -= current.duration;
-        i++;
+    std::vector<size_t> cycleInitTimeSteps{offset};
+    for(size_t i{0}; i < cycle.size(); ++i){
+        if(i == 0)
+            cycleInitTimeSteps.push_back(cycle.at(i).duration + offset);
+        else
+            cycleInitTimeSteps.push_back(cycle.at(i).duration + offset + cycleInitTimeSteps.back());
     }
-    return current;
+
+    size_t timeStepMod{((time - offset) % (cycleInitTimeSteps.back() - offset)) + offset};
+
+    auto cycleIndex{std::distance(cycleInitTimeSteps.begin(), std::find_if(cycleInitTimeSteps.begin(), cycleInitTimeSteps.end(), [timeStepMod](size_t cyc){return timeStepMod < cyc;})) - 1};
+    return cycle.at(static_cast<unsigned long>(cycleIndex));
 }
 
 TurningDirections TrafficLight::getDirection() const { return direction; }

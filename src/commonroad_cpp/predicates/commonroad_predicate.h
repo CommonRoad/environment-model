@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 19.02.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_PREDICATE_H
-#define ENV_MODEL_PREDICATE_H
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/timer.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
@@ -106,5 +108,3 @@ class CommonRoadPredicate {
     PredicateStatistics statistics; //**< Struct storing statistics of a predicate, e.g., average computation
                                     // time,  number of calls, etc. */
 };
-
-#endif // ENV_MODEL_PREDICATE_H

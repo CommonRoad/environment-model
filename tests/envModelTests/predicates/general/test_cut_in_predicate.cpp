@@ -12,7 +12,6 @@
 void CutInPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 10, 0, 0, 0, 10, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 0, 2, 10, 0, 0, 0, 0, 4);
-    // std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(0, 20, 2, 10, 1, 0, 0, 20, 0);
 
     std::shared_ptr<State> stateOneObstacleOne =
         std::make_shared<State>(1, 20, 4, 10, 0, (1.0 / 4.0) * M_PI, (1.0 / 4.0) * M_PI, 20, 2);

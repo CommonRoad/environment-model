@@ -11,7 +11,7 @@
 /**
  * Predicate which checks whether the kth vehicle is in front of a red traffic light.
  */
-class AtRedRightTrafficLightPredicate : CommonRoadPredicate {
+class AtRedRightTrafficLightPredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using objects.
@@ -24,7 +24,7 @@ class AtRedRightTrafficLightPredicate : CommonRoadPredicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP) override;
+                           const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Robustness evaluation of predicate using objects.
@@ -37,7 +37,7 @@ class AtRedRightTrafficLightPredicate : CommonRoadPredicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP) override;
+                            const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Constraint evaluation of predicate using objects.
@@ -50,5 +50,5 @@ class AtRedRightTrafficLightPredicate : CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP) override;
+                                    const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 };

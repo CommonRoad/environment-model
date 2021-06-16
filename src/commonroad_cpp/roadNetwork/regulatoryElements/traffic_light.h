@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 31.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TRAFFIC_LIGHT_H
-#define ENV_MODEL_TRAFFIC_LIGHT_H
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 
@@ -139,5 +141,3 @@ class TrafficLight {
     bool active{};                               //**< boolean indicating whether traffic light is valid */
     vertex position{};                           //**< position of traffic light */
 };
-
-#endif // ENV_MODEL_TRAFFIC_LIGHT_H

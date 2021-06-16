@@ -4,6 +4,7 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
+
 #include "regulatory_elements_utils.h"
 #include "../intersection/intersection_operations.h"
 
@@ -51,9 +52,7 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
     }
 
     // use all when no other relevant TL is active
-    const TurningDirections tlDirectionAll{TurningDirections::all};
-    const TrafficLightState tlStateGreen{TrafficLightState::green};
     return std::any_of(activeTl.begin(), activeTl.end(), [timeStep](const std::shared_ptr<TrafficLight> &tl) {
-        return tlDirectionAll == tl->getDirection() and tl->getElementAtTime(timeStep).color != tlStateGreen;
+        return TurningDirections::all == tl->getDirection() and tl->getElementAtTime(timeStep).color != TrafficLightState::green;
     });
 }
