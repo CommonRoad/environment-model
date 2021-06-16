@@ -19,14 +19,10 @@ void TrafficSignElement::setAdditionalValues(const std::vector<std::string> &val
 std::string TrafficSignElement::mapTrafficSignNameToCountryID(const std::string &trafficSignName,
                                                               SupportedTrafficSignCountry country) {
     if (trafficSignName == "green_arrow")
-        if (country == SupportedTrafficSignCountry::GERMANY)
-            return convertGermanTrafficSignIdToString(TrafficSignIDGermany::GREEN_ARROW);
+        return TrafficSignIDGermany.at(TrafficSignTypes::GREEN_ARROW);
     return "206"; // Stop sign in Germany
 }
 
-std::string TrafficSignElement::convertGermanTrafficSignIdToString(TrafficSignIDGermany signId) {
-    if (signId == TrafficSignIDGermany::GREEN_ARROW)
-        return "720";
-    else
-        return "206"; // Stop sign in Germany
+std::string TrafficSignElement::convertGermanTrafficSignIdToString(TrafficSignTypes signId) {
+    return TrafficSignIDGermany.at(signId);
 }

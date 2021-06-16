@@ -69,7 +69,7 @@ class TrafficSignElement {
      * @param signId Traffic sign ID from corresponding enum.
      * @return String which corresponds to traffic sign ID.
      */
-    static std::string convertGermanTrafficSignIdToString(TrafficSignIDGermany signId);
+    static std::string convertGermanTrafficSignIdToString(TrafficSignTypes signId);
 
   private:
     std::string id; //**< official national traffic sign ID of a country */

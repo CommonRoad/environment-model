@@ -25,11 +25,17 @@ TEST_F(InterfacesTest, Read2018bFileSingleThread) {
     std::vector<std::shared_ptr<Intersection>> intersections =
         XMLReader::createIntersectionFromXML(xmlFilePath, lanelets);
 
-    EXPECT_EQ(trafficSigns.size(), 0);
+
+    EXPECT_EQ(trafficSigns.size(), 2); // virtual speed limit signs for lanes who have a speed limit
     EXPECT_EQ(trafficLights.size(), 0);
     EXPECT_EQ(intersections.size(), 0);
     EXPECT_EQ(obstacles.size(), 5);
     EXPECT_EQ(lanelets.size(), 2);
+
+    auto lanelet34782 = *std::find_if(lanelets.begin(), lanelets.end(), [](auto &lptr){return lptr->getId() == 34782;});
+    auto virtualSpeedLimitElem = lanelet34782->getTrafficSigns()[0]->getTrafficSignElements()[0];
+    EXPECT_EQ(virtualSpeedLimitElem->getId(), TrafficSignIDGermany.at(TrafficSignTypes::MAX_SPEED));
+    EXPECT_EQ(virtualSpeedLimitElem->getAdditionalValues()[0], "14");
 }
 
 TEST_F(InterfacesTest, Read2018bFileMultiThread) {
@@ -52,7 +58,7 @@ TEST_F(InterfacesTest, Read2018bFileMultiThread) {
     std::vector<std::shared_ptr<Intersection>> intersections =
         XMLReader::createIntersectionFromXML(xmlFilePath, lanelets);
 
-    EXPECT_EQ(trafficSigns.size(), 0);
+    EXPECT_EQ(trafficSigns.size(), 2);
     EXPECT_EQ(trafficLights.size(), 0);
     EXPECT_EQ(intersections.size(), 0);
     EXPECT_EQ(obstacles.size(), 5);
