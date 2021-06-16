@@ -52,7 +52,7 @@ TEST_F(TrafficSignInterpreterTest, SpeedLimit2020a) {
 
     EXPECT_NEAR(interp.speedLimit(*lanelet3419), 13.4112, 0.001);
     EXPECT_NEAR(interp.speedLimit(*lanelet3489), 11.176, 0.001);
-    EXPECT_NEAR(interp.speedLimit(ids, roadNetwork2018b), 911.176, 0.001);
+    EXPECT_NEAR(interp.speedLimit(ids, roadNetwork2020a), 11.176, 0.001);
 }
 
 TEST_F(TrafficSignInterpreterTest, RequiredSpeed2020a) {

@@ -19,7 +19,7 @@ double TrafficSignInterpreter::speedLimit(const Lanelet &lanelet) {
     for (std::shared_ptr<TrafficSign> signptr : trafficSigns) {
         for (std::shared_ptr<TrafficSignElement> elemptr : signptr->getTrafficSignElements()) {
             if (elemptr->getId() == trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED)) {
-                int signLimit = std::stoi(elemptr->getAdditionalValues()[0]);
+                double signLimit = std::stod(elemptr->getAdditionalValues()[0]);
                 if (limit > signLimit)
                     limit = signLimit;
             }
@@ -53,7 +53,7 @@ double TrafficSignInterpreter::requiredSpeed(const Lanelet &lanelet) {
     for (std::shared_ptr<TrafficSign> signptr : trafficSigns) {
         for (std::shared_ptr<TrafficSignElement> elemptr : signptr->getTrafficSignElements()) {
             if (elemptr->getId() == trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED)) {
-                int signLimit = std::stoi(elemptr->getAdditionalValues()[0]);
+                double signLimit = std::stod(elemptr->getAdditionalValues()[0]);
                 if (limit < signLimit)
                     limit = signLimit;
             }
