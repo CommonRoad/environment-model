@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 07.04.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "in_same_lane_predicate.h"

@@ -14,17 +14,30 @@ void Incoming::setIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>> &
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsRight() const { return successorsRight; }
 
-void Incoming::setSuccessorsRight(const std::vector<std::shared_ptr<Lanelet>> &sucRight) { successorsRight = sucRight; }
+void Incoming::setSuccessorsRight(const std::vector<std::shared_ptr<Lanelet>> &sucRight) {
+  successorsRight = sucRight;
+  // each successor lanelet should be of type intersection
+  for(const auto &la : sucRight)
+    la->addLaneletType(LaneletType::intersection);
+}
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsStraight() const { return successorsStraight; }
 
 void Incoming::setSuccessorsStraight(const std::vector<std::shared_ptr<Lanelet>> &sucStraight) {
     successorsStraight = sucStraight;
+  // each successor lanelet should be of type intersection
+  for(const auto &la : sucStraight)
+    la->addLaneletType(LaneletType::intersection);
 }
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsLeft() const { return successorsLeft; }
 
-void Incoming::setSuccessorsLeft(const std::vector<std::shared_ptr<Lanelet>> &sucLeft) { successorsLeft = sucLeft; }
+void Incoming::setSuccessorsLeft(const std::vector<std::shared_ptr<Lanelet>> &sucLeft) {
+  successorsLeft = sucLeft;
+  // each successor lanelet should be of type intersection
+  for(const auto &la : sucLeft)
+    la->addLaneletType(LaneletType::intersection);
+}
 
 const std::shared_ptr<Incoming> &Incoming::getIsLeftOf() const { return isLeftOf; }
 

@@ -16,7 +16,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/position/test_in_front_of_predicate.cpp
         envModelTests/predicates/position/test_in_same_lane_predicate.cpp
         envModelTests/predicates/general/test_cut_in_predicate.cpp
-        envModelTests/predicates/regulatory/test_at_red_right_traffic_light.cpp
+        envModelTests/predicates/regulatory/test_in_intersection_main_area_predicate.cpp
         envModelTests/predicates/utils_predicate_test.cpp
         )
 
