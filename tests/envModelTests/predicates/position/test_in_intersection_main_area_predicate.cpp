@@ -7,7 +7,7 @@
 #include "test_in_intersection_main_area_predicate.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 
-void AtRedRightTrafficLightPredicateTest::SetUp() {
+void InIntersectionMainAreaPredicateTest::SetUp() {
   std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
   const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(pathToTestFile);
 
@@ -34,16 +34,16 @@ void AtRedRightTrafficLightPredicateTest::SetUp() {
   world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo},{}));
 }
 
-TEST_F(AtRedRightTrafficLightPredicateTest, BooleanEvaluation) {
-  EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
+TEST_F(InIntersectionMainAreaPredicateTest, BooleanEvaluation) {
+  EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne)); // in front of intersection / completely on incoming
   EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));  // standing on stop line -> partially in intersection
-  EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo));  // inside intersection
+  EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleTwo));  // inside intersection
   EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleTwo)); // left intersection
 }
 
-TEST_F(AtRedRightTrafficLightPredicateTest, StatisticBooleanEvaluation) {
-  EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
+TEST_F(InIntersectionMainAreaPredicateTest, StatisticBooleanEvaluation) {
+  EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne)); // in front of intersection / completely on incoming
   EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne));  // standing on stop line -> partially in intersection
-  EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleTwo));  // inside intersection
+  EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleTwo));  // inside intersection
   EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleTwo)); // left intersection
 }

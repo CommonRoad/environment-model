@@ -111,7 +111,7 @@
       <lineMarking>solid</lineMarking>
       <trafficLightRef ref="26"/>
     </stopLine>
-    <laneletType>intersection</laneletType>
+    <laneletType>urban</laneletType>
     <userOneWay>vehicle</userOneWay>
     <trafficLightRef ref="26"/>
   </lanelet>
@@ -206,7 +206,7 @@
     <predecessor ref="4"/>
     <predecessor ref="6"/>
     <adjacentLeft ref="1" drivingDir="opposite"/>
-    <laneletType>intersection</laneletType>
+    <laneletType>urban</laneletType>
     <userOneWay>vehicle</userOneWay>
   </lanelet>
   <lanelet id="3">
@@ -832,7 +832,7 @@
     <predecessor ref="14"/>
     <predecessor ref="12"/>
     <adjacentLeft ref="8" drivingDir="opposite"/>
-    <laneletType>intersection</laneletType>
+    <laneletType>urban</laneletType>
     <userOneWay>vehicle</userOneWay>
   </lanelet>
   <lanelet id="8">
@@ -938,7 +938,7 @@
       <lineMarking>solid</lineMarking>
       <trafficLightRef ref="29"/>
     </stopLine>
-    <laneletType>intersection</laneletType>
+    <laneletType>urban</laneletType>
     <userOneWay>vehicle</userOneWay>
     <trafficLightRef ref="29"/>
   </lanelet>
@@ -1033,7 +1033,7 @@
     <predecessor ref="11"/>
     <predecessor ref="18"/>
     <adjacentLeft ref="10" drivingDir="opposite"/>
-    <laneletType>intersection</laneletType>
+    <laneletType>urban</laneletType>
     <userOneWay>vehicle</userOneWay>
   </lanelet>
   <lanelet id="10">
@@ -1139,7 +1139,7 @@
       <lineMarking>solid</lineMarking>
       <trafficLightRef ref="27"/>
     </stopLine>
-    <laneletType>intersection</laneletType>
+    <laneletType></laneletType>
     <userOneWay>vehicle</userOneWay>
     <trafficLightRef ref="27"/>
   </lanelet>
@@ -1766,7 +1766,7 @@
     <predecessor ref="17"/>
     <predecessor ref="20"/>
     <adjacentLeft ref="16" drivingDir="opposite"/>
-    <laneletType>intersection</laneletType>
+    <laneletType>urban</laneletType>
     <userOneWay>vehicle</userOneWay>
   </lanelet>
   <lanelet id="16">
@@ -1872,7 +1872,7 @@
       <lineMarking>solid</lineMarking>
       <trafficLightRef ref="28"/>
     </stopLine>
-    <laneletType>intersection</laneletType>
+    <laneletType>urban</laneletType>
     <userOneWay>vehicle</userOneWay>
     <trafficLightRef ref="28"/>
   </lanelet>
