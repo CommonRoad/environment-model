@@ -15,6 +15,8 @@
 #include "commonroad_cpp/predicates/general/cut_in_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
+#include "commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.h"
+#include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
 
 namespace py = pybind11;
 
@@ -112,4 +114,10 @@ PYBIND11_MODULE(cpp_env_model, m) {
 
     m.def("cut_in_boolean_evaluation", &py_boolean_evaluation<CutInPredicate>, "Boolean evaluation of cut-in predicate",
           py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
+
+    m.def("in_intersection_main_area_boolean_evaluation", &py_boolean_single_evaluation<InIntersectionMainAreaPredicate>, "Boolean evaluation of intersection-main-area predicate",
+          py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
+
+    m.def("at_red_right_traffic_light_boolean_evaluation", &py_boolean_single_evaluation<AtRedRightTrafficLightPredicate>, "Boolean evaluation of at red right traffic light predicate",
+          py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 }

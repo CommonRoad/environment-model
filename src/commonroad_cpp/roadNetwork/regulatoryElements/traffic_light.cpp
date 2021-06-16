@@ -24,8 +24,8 @@ std::vector<TrafficLightCycleElement> TrafficLight::getCycle() const { return cy
 
 TrafficLightCycleElement TrafficLight::getElementAtTime(size_t time) {
     std::vector<size_t> cycleInitTimeSteps{offset};
-    for(size_t i{0}; i < cycle.size(); ++i){
-        if(i == 0)
+    for (size_t i{0}; i < cycle.size(); ++i) {
+        if (i == 0)
             cycleInitTimeSteps.push_back(cycle.at(i).duration + offset);
         else
             cycleInitTimeSteps.push_back(cycle.at(i).duration + offset + cycleInitTimeSteps.back());
@@ -33,7 +33,10 @@ TrafficLightCycleElement TrafficLight::getElementAtTime(size_t time) {
 
     size_t timeStepMod{((time - offset) % (cycleInitTimeSteps.back() - offset)) + offset};
 
-    auto cycleIndex{std::distance(cycleInitTimeSteps.begin(), std::find_if(cycleInitTimeSteps.begin(), cycleInitTimeSteps.end(), [timeStepMod](size_t cyc){return timeStepMod < cyc;})) - 1};
+    auto cycleIndex{std::distance(cycleInitTimeSteps.begin(),
+                                  std::find_if(cycleInitTimeSteps.begin(), cycleInitTimeSteps.end(),
+                                               [timeStepMod](size_t cyc) { return timeStepMod < cyc; })) -
+                    1};
     return cycle.at(static_cast<unsigned long>(cycleIndex));
 }
 

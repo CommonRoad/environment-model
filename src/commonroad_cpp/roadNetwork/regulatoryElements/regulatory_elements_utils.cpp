@@ -53,6 +53,7 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
 
     // use all when no other relevant TL is active
     return std::any_of(activeTl.begin(), activeTl.end(), [timeStep](const std::shared_ptr<TrafficLight> &tl) {
-        return TurningDirections::all == tl->getDirection() and tl->getElementAtTime(timeStep).color != TrafficLightState::green;
+        return TurningDirections::all == tl->getDirection() and
+               tl->getElementAtTime(timeStep).color != TrafficLightState::green;
     });
 }

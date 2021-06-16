@@ -1139,7 +1139,7 @@
       <lineMarking>solid</lineMarking>
       <trafficLightRef ref="27"/>
     </stopLine>
-    <laneletType></laneletType>
+    <laneletType>urban</laneletType>
     <userOneWay>vehicle</userOneWay>
     <trafficLightRef ref="27"/>
   </lanelet>

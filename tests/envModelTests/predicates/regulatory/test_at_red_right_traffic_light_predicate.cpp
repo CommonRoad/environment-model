@@ -8,42 +8,45 @@
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 
 void AtRedRightTrafficLightPredicateTest::SetUp() {
-  std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
-  const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(pathToTestFile);
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
+    const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(pathToTestFile);
 
-  std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -7.5, 0, 0, M_PI/2, 0, 15, 0);
-  std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 26., 3, 0, 0, -M_PI/2, 0, 25, 0);
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -7.5, 0, 0, M_PI / 2, 0, 15, 0);
+    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 26.5, 3, 0, 0, -M_PI, 0, 25, 0);
 
-  std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(0, 26.5, -3.5, 0, 0, M_PI/2, 0, 20, 0);
-  std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(0, 7.0, 3, 0, 0, -M_PI/2, 0, 43, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(0, 26.5, -3.5, 0, 0, M_PI / 2, 0, 20, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(0, 7.0, 3, 0, 0, -M_PI, 0, 43, 0);
 
+    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
 
-  std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
-      std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-      std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
+    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
 
-  std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
-      std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
-      std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
+    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
+                                                      0.3, trajectoryPredictionObstacleOne, 5, 2));
+    obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
+                                                      0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
-  obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
-                                                    0.3, trajectoryPredictionObstacleOne, 5, 2));
-  obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
-                                                    0.3, trajectoryPredictionObstacleTwo, 5, 2));
-
-  world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo},{}));
+    world = std::make_shared<World>(
+        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}));
 }
 
 TEST_F(AtRedRightTrafficLightPredicateTest, BooleanEvaluation) {
-  EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
-  EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));  // standing on stop line -> partially in intersection
-  EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo));  // inside intersection
-  EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleTwo)); // left intersection
+    EXPECT_TRUE(pred.booleanEvaluation(
+        0, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));  // standing on stop line -> partially in intersection
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo)); // inside intersection
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleTwo)); // left intersection
 }
 
 TEST_F(AtRedRightTrafficLightPredicateTest, StatisticBooleanEvaluation) {
-  EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
-  EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne));  // standing on stop line -> partially in intersection
-  EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleTwo));  // inside intersection
-  EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleTwo)); // left intersection
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(
+        0, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(1, world, obstacleOne)); // standing on stop line -> partially in intersection
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleTwo)); // inside intersection
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleTwo)); // left intersection
 }
