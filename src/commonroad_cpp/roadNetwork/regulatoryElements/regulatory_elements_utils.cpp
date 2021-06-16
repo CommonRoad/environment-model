@@ -40,8 +40,10 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
         relevantTrafficLightDirections = {TurningDirections::straight, TurningDirections::leftStraight,
                                           TurningDirections::straightRight};
     }
+    std::cout << "slfjksf" << '\n';
     auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
     for (const auto &tl : activeTl) {
+      std::cout << tl.get();
         auto trafficLightState{tl->getElementAtTime(timeStep).color};
         if (std::any_of(relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
                         [tl](const TurningDirections &relevantDirection) {
@@ -50,7 +52,7 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
             trafficLightState != TrafficLightState::green)
             return true;
     }
-
+  std::cout << "asfsdf" << '\n';
     // use all when no other relevant TL is active
     return std::any_of(activeTl.begin(), activeTl.end(), [timeStep](const std::shared_ptr<TrafficLight> &tl) {
         return TurningDirections::all == tl->getDirection() and

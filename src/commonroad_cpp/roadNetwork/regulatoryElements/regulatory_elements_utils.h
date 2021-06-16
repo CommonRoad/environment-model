@@ -34,4 +34,4 @@ std::set<std::shared_ptr<TrafficLight>> activeTrafficLights(size_t timeStep, con
 bool atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs, std::shared_ptr<RoadNetwork> roadNetwork,
                        TurningDirections turnDir);
 
-}; // namespace regulatory_elements_utils
+} // namespace regulatory_elements_utils

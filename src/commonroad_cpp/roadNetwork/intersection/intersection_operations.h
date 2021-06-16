@@ -20,4 +20,4 @@ namespace intersection_operations {
  */
 bool onIncoming(size_t timeStep, const std::shared_ptr<Obstacle> &obs, std::shared_ptr<RoadNetwork> roadNetwork);
 
-}; // namespace intersection_operations
+} // namespace intersection_operations

@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 23.02.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "translate_python_types.h"
@@ -46,13 +49,13 @@ TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) 
 
     for (const auto &py_trafficLight : py_trafficLights) {
         std::shared_ptr<TrafficLight> tempTrafficLight = std::make_shared<TrafficLight>();
-        tempTrafficLight->setId(py_trafficLight.attr("traffic_light_id").cast<int>());
-        tempTrafficLight->setOffset(py_trafficLight.attr("time_offset").cast<int>());
+        tempTrafficLight->setId(py_trafficLight.attr("traffic_light_id").cast<size_t>());
+        tempTrafficLight->setOffset(py_trafficLight.attr("time_offset").cast<size_t>());
         const py::list &py_trafficLightCycle = py_trafficLight.attr("cycle").cast<py::list>();
         std::vector<TrafficLightCycleElement> cycle;
         for (const py::handle &py_cycleElement : py_trafficLightCycle) {
             cycle.push_back({TrafficLight::matchTrafficLightState(py_cycleElement.attr("state").cast<py::str>()),
-                             py_cycleElement.attr("duration").cast<int>()});
+                             py_cycleElement.attr("duration").cast<size_t>()});
         }
         tempTrafficLight->setActive(py_trafficLight.attr("active").cast<bool>());
         py::array_t<double> py_trafficLightPosition = py::getattr(py_trafficLight, "position");
@@ -125,13 +128,13 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
     for (py::handle py_singleLanelet : py_lanelets) {
         // add left vertices
         py::handle py_leftVertices = py_singleLanelet.attr("left_vertices");
-        for (auto &el : py_leftVertices) {
+        for (const auto &el : py_leftVertices) {
             vertex newVertex{el.cast<py::array_t<double>>().at(0), el.cast<py::array_t<double>>().at(1)};
             tempLaneletContainer[arrayIndex]->addLeftVertex(newVertex);
         }
         // add right vertices
         py::array_t<double> py_rightVertices = py::getattr(py_singleLanelet, "right_vertices");
-        for (auto &el : py_rightVertices) {
+        for (const auto &el : py_rightVertices) {
             vertex newVertex{el.cast<py::array_t<double>>().at(0), el.cast<py::array_t<double>>().at(1)};
             tempLaneletContainer[arrayIndex]->addRightVertex(newVertex);
         }
@@ -213,7 +216,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
                     break;
                 }
         }
-        // add traffic signs
+        // add traffic light
         py::object py_trafficLights = py_singleLanelet.attr("traffic_lights");
         for (const auto &light : trafficLights) {
             for (const auto &py_light : py_trafficLights)
@@ -261,7 +264,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             // incoming lanelets
             auto py_incomingLanelets = py_incoming.attr("incoming_lanelets").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> incomingLanelets;
-            for (auto &incomingLaneletId : py_incomingLanelets) {
+            for (const auto &incomingLaneletId : py_incomingLanelets) {
                 size_t incId{incomingLaneletId.cast<size_t>()};
                 for (const auto &la : lanelets) {
                     if (la->getId() == incId) {
@@ -270,10 +273,11 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
+            incomings[incomignIndex]->setIncomingLanelets(incomingLanelets);
             // successor right lanelets
             auto py_successorRight = py_incoming.attr("successors_right").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> successorRightLanelets;
-            for (auto &successorRightLaneletId : py_successorRight) {
+            for (const auto &successorRightLaneletId : py_successorRight) {
                 size_t incId{successorRightLaneletId.cast<size_t>()};
                 for (const auto &la : lanelets) {
                     if (la->getId() == incId) {
@@ -286,7 +290,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             // successor left lanelets
             auto py_successorLeft = py_incoming.attr("successors_left").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> successorLeftLanelets;
-            for (auto &successorLeftLaneletId : py_successorLeft) {
+            for (const auto &successorLeftLaneletId : py_successorLeft) {
                 size_t incId{successorLeftLaneletId.cast<size_t>()};
                 for (const auto &la : lanelets) {
                     if (la->getId() == incId) {
@@ -299,7 +303,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             // successor straight lanelets
             auto py_successorStraight = py_incoming.attr("successors_straight").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> successorStraightLanelets;
-            for (auto &successorStraightLaneletId : py_successorStraight) {
+            for (const auto &successorStraightLaneletId : py_successorStraight) {
                 size_t incId{successorStraightLaneletId.cast<size_t>()};
                 for (const auto &la : lanelets) {
                     if (la->getId() == incId) {
@@ -311,7 +315,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             incomings[incomignIndex]->setSuccessorsStraight(successorStraightLanelets);
             // left of
             if (py_incoming.attr("left_of").get_type().attr("__name__").cast<std::string>() == "int") {
-                size_t py_isLeftOf = py_incoming.attr("left_of").cast<size_t>();
+                auto py_isLeftOf = py_incoming.attr("left_of").cast<size_t>();
                 for (auto &inc : incomings) {
                     if (inc->getId() == py_isLeftOf) {
                         incomings[incomignIndex]->setIsLeftOf(inc);
@@ -325,7 +329,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
         // add crossings
         auto py_crossings = py_intersection.attr("crossings").cast<py::list>();
         std::vector<std::shared_ptr<Lanelet>> crossings;
-        for (auto &crossing : py_crossings) {
+        for (const auto &crossing : py_crossings) {
             size_t crossingId{crossing.cast<size_t>()};
             for (const auto &la : lanelets) {
                 if (la->getId() == crossingId) {

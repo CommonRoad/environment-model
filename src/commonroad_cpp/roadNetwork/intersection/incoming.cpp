@@ -10,7 +10,12 @@ void Incoming::setId(size_t index) { id = index; }
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getIncomingLanelets() const { return incomingLanelets; }
 
-void Incoming::setIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>> &incLa) { incomingLanelets = incLa; }
+void Incoming::setIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>> &incLa) {
+    // each incoming lanelet should be of type incoming
+    for (const auto &la : incLa)
+        la->addLaneletType(LaneletType::incoming);
+    incomingLanelets = incLa;
+}
 
 const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsRight() const { return successorsRight; }
 

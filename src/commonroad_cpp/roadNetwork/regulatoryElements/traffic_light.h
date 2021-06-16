@@ -8,6 +8,7 @@
 #pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include <iostream>
 
 /**
  * Class representing a CommonRoad traffic light.

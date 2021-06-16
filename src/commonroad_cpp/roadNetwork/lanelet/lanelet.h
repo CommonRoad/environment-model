@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 23.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENVIRONMENT_MODEL_LANELET_H
-#define ENVIRONMENT_MODEL_LANELET_H
+#pragma once
 
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
@@ -397,5 +399,3 @@ class Lanelet {
     LineMarking lineMarkingLeft;              //**< Line marking of left boundary*/
     LineMarking lineMarkingRight;             //**< Line marking of right boundary*/
 };
-
-#endif // ENVIRONMENT_MODEL_LANELET_H
