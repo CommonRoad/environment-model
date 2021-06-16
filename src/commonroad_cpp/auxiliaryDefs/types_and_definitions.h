@@ -551,8 +551,7 @@ static const std::unordered_map<TrafficSignTypes, std::string> TrafficSignIDGerm
     {TrafficSignTypes::ADDITION_NO_WATER_POLLUTANTS_LOADED, "1052-31"},
     {TrafficSignTypes::ALLOWED_MASS_7_5_TONS, "1053-33"},
     {TrafficSignTypes::ADDITION_VALID_ON_SHOULDER, "1053-34"},
-    {TrafficSignTypes::ADDITION_VALID_WHEN_WET, "1053-35"}
-};
+    {TrafficSignTypes::ADDITION_VALID_WHEN_WET, "1053-35"}};
 
 static const std::unordered_map<TrafficSignTypes, std::string> TrafficSignIDZamunda = {
     {TrafficSignTypes::WARNING_DANGER_SPOT, "101"},
@@ -659,8 +658,7 @@ static const std::unordered_map<TrafficSignTypes, std::string> TrafficSignIDZamu
     {TrafficSignTypes::ADDITION_FOREST_PERMITTED, "1026-37"},
     {TrafficSignTypes::ADDITION_AGRICULTURE_FOREST_PERMITTED, "1026-38"},
     {TrafficSignTypes::ADDITION_TIME_PERIOD_PERMITTED, "1040-30"},
-    {TrafficSignTypes::ALLOWED_MASS_7_5_TONS, "1053-33"}
-};
+    {TrafficSignTypes::ALLOWED_MASS_7_5_TONS, "1053-33"}};
 
 static const std::unordered_map<TrafficSignTypes, std::string> TrafficSignIDUSA = {
     {TrafficSignTypes::MAX_SPEED, "R2-1"},
@@ -712,10 +710,10 @@ enum class SupportedTrafficSignCountry { GERMANY, ZAMUNDA, USA, SPAIN };
 
 static const std::unordered_map<SupportedTrafficSignCountry, const std::unordered_map<TrafficSignTypes, std::string> *>
     TrafficSignLookupTableByCountry = {
-    {SupportedTrafficSignCountry::GERMANY, &TrafficSignIDGermany},
-    {SupportedTrafficSignCountry::ZAMUNDA, &TrafficSignIDZamunda},
-    {SupportedTrafficSignCountry::USA, &TrafficSignIDUSA},
-    {SupportedTrafficSignCountry::SPAIN, &TrafficSignIDSpain},
+        {SupportedTrafficSignCountry::GERMANY, &TrafficSignIDGermany},
+        {SupportedTrafficSignCountry::ZAMUNDA, &TrafficSignIDZamunda},
+        {SupportedTrafficSignCountry::USA, &TrafficSignIDUSA},
+        {SupportedTrafficSignCountry::SPAIN, &TrafficSignIDSpain},
 };
 
 const double reactionTimeObstacles = 0.3;

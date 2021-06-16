@@ -24,7 +24,7 @@ class TrafficSignInterpreter {
      * @param lanelet lanelet whose speed_limit is to be determined.
      * @return speed limit of provided lanelets or 3e8 if no limit exists
      */
-    double speedLimit(const Lanelet& lanelet);
+    double speedLimit(const Lanelet &lanelet);
 
     /**
      * Extracts the required minimum speed of provided lanelets
@@ -39,7 +39,7 @@ class TrafficSignInterpreter {
      * @param lanelet lanelet whose speed_limit is to be determined.
      * @return speed limit of provided lanelets or 0 if no limit exists
      */
-    double requiredSpeed(const Lanelet& lanelet);
+    double requiredSpeed(const Lanelet &lanelet);
 
   private:
     SupportedTrafficSignCountry country;

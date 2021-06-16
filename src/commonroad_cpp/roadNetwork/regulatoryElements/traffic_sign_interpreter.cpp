@@ -7,13 +7,13 @@
 #include <vector>
 TrafficSignInterpreter::TrafficSignInterpreter(SupportedTrafficSignCountry ruleCountry) : country(ruleCountry) {
     trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(ruleCountry);
-//    switch (ruleCountry) {
-//    case SupportedTrafficSignCountry::GERMANY:
-//        trafficSignIDLookupTable = &TrafficSignIDGermany;
-//        break;
-//    }
+    //    switch (ruleCountry) {
+    //    case SupportedTrafficSignCountry::GERMANY:
+    //        trafficSignIDLookupTable = &TrafficSignIDGermany;
+    //        break;
+    //    }
 }
-double TrafficSignInterpreter::speedLimit(const Lanelet& lanelet) {
+double TrafficSignInterpreter::speedLimit(const Lanelet &lanelet) {
     double limit = 3e8; // TODO maybe another return value?
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet.getTrafficSigns();
     for (std::shared_ptr<TrafficSign> signptr : trafficSigns) {
@@ -60,5 +60,4 @@ double TrafficSignInterpreter::requiredSpeed(const Lanelet &lanelet) {
         }
     }
     return limit;
-
 }

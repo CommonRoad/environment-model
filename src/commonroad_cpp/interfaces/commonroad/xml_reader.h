@@ -28,9 +28,9 @@ std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &
  * @param trafficLights List of pointers to traffic lights.
  * @return List of pointers to created lanelets.
  */
-std::vector<std::shared_ptr<Lanelet>> createLaneletFromXML(const std::string &xmlFile,
-                                                           std::vector<std::shared_ptr<TrafficSign>> trafficSigns = {},
-                                                           std::vector<std::shared_ptr<TrafficLight>> trafficLights = {});
+std::vector<std::shared_ptr<Lanelet>>
+createLaneletFromXML(const std::string &xmlFile, std::vector<std::shared_ptr<TrafficSign>> trafficSigns = {},
+                     std::vector<std::shared_ptr<TrafficLight>> trafficLights = {});
 
 /*
  * Convenient function for creating a world from XML. Note: EgoVehicle is not initialized.

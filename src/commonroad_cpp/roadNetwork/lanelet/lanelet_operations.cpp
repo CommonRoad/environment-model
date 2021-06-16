@@ -4,7 +4,7 @@
 
 #include "lanelet_operations.h"
 
-DrivingDirection matchStringToDrivingDirection(const std::string &type){
+DrivingDirection matchStringToDrivingDirection(const std::string &type) {
     if (type == "same")
         return DrivingDirection::same;
     else if (type == "opposite")
@@ -13,7 +13,7 @@ DrivingDirection matchStringToDrivingDirection(const std::string &type){
         return DrivingDirection::invalid;
 }
 
-std::string matchDrivingDirectionToString(const DrivingDirection &type){
+std::string matchDrivingDirectionToString(const DrivingDirection &type) {
     if (type == DrivingDirection::same)
         return "same";
     else if (type == DrivingDirection::opposite)

@@ -79,7 +79,6 @@ CommonRoadFactory2018b::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                     }
                     continue;
                 }
-
             }
             tempLaneletContainer[arrayIndex]->createCenterVertices();
             tempLaneletContainer[arrayIndex]->constructOuterPolygon();
@@ -94,33 +93,34 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2018b::createTrafficS
 
     std::vector<std::shared_ptr<TrafficSign>> tempSignContainer{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
-    std::string benchmarkID {doc->child("commonRoad").attribute("benchmarkID").value()};
+    std::string benchmarkID{doc->child("commonRoad").attribute("benchmarkID").value()};
     auto country = RoadNetwork::matchStringToCountry(benchmarkID.substr(0, 3));
 
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;
          roadElements = roadElements.next_sibling()) {
 
-            if ((strcmp(roadElements.name(), "lanelet")) == 0) {
-                for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
-                    if ((strcmp(child.name(), "speedLimit")) == 0) {
-                        int laneletId = roadElements.first_attribute().as_int();
-                        std::string speedLimit = child.child_value();
-                        std::string speedLimitSignId = TrafficSignLookupTableByCountry.at(country)->at(TrafficSignTypes::MAX_SPEED);
+        if ((strcmp(roadElements.name(), "lanelet")) == 0) {
+            for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
+                if ((strcmp(child.name(), "speedLimit")) == 0) {
+                    int laneletId = roadElements.first_attribute().as_int();
+                    std::string speedLimit = child.child_value();
+                    std::string speedLimitSignId =
+                        TrafficSignLookupTableByCountry.at(country)->at(TrafficSignTypes::MAX_SPEED);
 
-                        std::shared_ptr<TrafficSignElement> signElem = std::make_shared<TrafficSignElement>(speedLimitSignId);
-                        signElem->setAdditionalValues(std::vector{std::move(speedLimit)});
-                        std::shared_ptr<TrafficSign> sign = std::make_shared<TrafficSign>();
-                        sign->setId(laneletId + 4000); // hopefully this does not cause conflicts
-                        sign->setVirtualElement(true);
-                        sign->addTrafficSignElement(signElem);
-                        tempSignContainer.push_back(sign);
-                        break;
-                    }
+                    std::shared_ptr<TrafficSignElement> signElem =
+                        std::make_shared<TrafficSignElement>(speedLimitSignId);
+                    signElem->setAdditionalValues(std::vector{std::move(speedLimit)});
+                    std::shared_ptr<TrafficSign> sign = std::make_shared<TrafficSign>();
+                    sign->setId(laneletId + 4000); // hopefully this does not cause conflicts
+                    sign->setVirtualElement(true);
+                    sign->addTrafficSignElement(signElem);
+                    tempSignContainer.push_back(sign);
+                    break;
                 }
             }
         }
+    }
     return tempSignContainer;
-
 }
 
 std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2018b::createTrafficLights() {

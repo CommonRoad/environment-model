@@ -395,8 +395,7 @@ class Lanelet {
     std::set<ObstacleType> userBidirectional; //**< list of relevant allowed users bidirectional*/
     std::shared_ptr<StopLine> stopLine;       //**< stopLine assigned to lanelet*/
     LineMarking lineMarkingLeft;              //**< Line marking of left boundary*/
-    LineMarking lineMarkingRight;                //**< Line marking of right boundary*/
-
+    LineMarking lineMarkingRight;             //**< Line marking of right boundary*/
 };
 
 #endif // ENVIRONMENT_MODEL_LANELET_H
