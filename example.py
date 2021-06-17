@@ -1,4 +1,3 @@
-import unittest
 import numpy as np
 import math
 import os
@@ -14,7 +13,6 @@ path = os.path.dirname(os.path.realpath(__file__))
 filename = path + '/tests/scenarios/DEU_TrafficLightTest-1_1_T-1.xml'
 scenario, _ = CommonRoadFileReader(filename).open()
 lanelet_network = scenario.lanelet_network
-
 
 # expected solutions
 exp_sol_monitor_mode_1 = True  # in front of intersection/traffic light -> completely on incoming
@@ -40,8 +38,5 @@ cpp_env_model.register_scenario(123, 0, "DEU", lanelet_network, [obstacle_1, obs
 
 # Monitor-Mode
 print(cpp_env_model.at_red_right_traffic_light_boolean_evaluation(123, 0, 1))
-#sol_monitor_mode_2 = cpp_env_model.at_red_right_traffic_light_boolean_evaluation(123, 1, 1)
-#sol_monitor_mode_3 = cpp_env_model.at_red_right_traffic_light_boolean_evaluation(123, 0, 2)
-#sol_monitor_mode_4 = cpp_env_model.at_red_right_traffic_light_boolean_evaluation(123, 1, 2)
 
 cpp_env_model.remove_scenario(123)
