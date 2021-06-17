@@ -10,7 +10,7 @@
 
 std::set<std::shared_ptr<TrafficLight>>
 regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                                               const std::shared_ptr<RoadNetwork>& roadNetwork) {
+                                               const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::set<std::shared_ptr<TrafficLight>> trafficLights;
     auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
     for (const auto &la : lanelets) {
@@ -23,7 +23,8 @@ regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::share
 }
 
 bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                                                  const std::shared_ptr<RoadNetwork>& roadNetwork, TurningDirections turnDir) {
+                                                  const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                  TurningDirections turnDir) {
     if (!intersection_operations::onIncoming(timeStep, obs, roadNetwork))
         return false;
     std::vector<TurningDirections> relevantTrafficLightDirections;
