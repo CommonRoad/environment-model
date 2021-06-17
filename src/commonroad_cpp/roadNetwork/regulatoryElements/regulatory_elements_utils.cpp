@@ -10,7 +10,7 @@
 
 std::set<std::shared_ptr<TrafficLight>>
 regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                                               std::shared_ptr<RoadNetwork> roadNetwork) {
+                                               const std::shared_ptr<RoadNetwork>& roadNetwork) {
     std::set<std::shared_ptr<TrafficLight>> trafficLights;
     auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
     for (const auto &la : lanelets) {
@@ -23,7 +23,7 @@ regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::share
 }
 
 bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                                                  std::shared_ptr<RoadNetwork> roadNetwork, TurningDirections turnDir) {
+                                                  const std::shared_ptr<RoadNetwork>& roadNetwork, TurningDirections turnDir) {
     if (!intersection_operations::onIncoming(timeStep, obs, roadNetwork))
         return false;
     std::vector<TurningDirections> relevantTrafficLightDirections;
@@ -40,10 +40,8 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
         relevantTrafficLightDirections = {TurningDirections::straight, TurningDirections::leftStraight,
                                           TurningDirections::straightRight};
     }
-    std::cout << "slfjksf" << '\n';
     auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
     for (const auto &tl : activeTl) {
-      std::cout << tl.get();
         auto trafficLightState{tl->getElementAtTime(timeStep).color};
         if (std::any_of(relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
                         [tl](const TurningDirections &relevantDirection) {
@@ -52,7 +50,6 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
             trafficLightState != TrafficLightState::green)
             return true;
     }
-  std::cout << "asfsdf" << '\n';
     // use all when no other relevant TL is active
     return std::any_of(activeTl.begin(), activeTl.end(), [timeStep](const std::shared_ptr<TrafficLight> &tl) {
         return TurningDirections::all == tl->getDirection() and

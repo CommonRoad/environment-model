@@ -57,6 +57,7 @@ TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) 
             cycle.push_back({TrafficLight::matchTrafficLightState(py_cycleElement.attr("state").cast<py::str>()),
                              py_cycleElement.attr("duration").cast<size_t>()});
         }
+        tempTrafficLight->setCycle(cycle);
         tempTrafficLight->setActive(py_trafficLight.attr("active").cast<bool>());
         py::array_t<double> py_trafficLightPosition = py::getattr(py_trafficLight, "position");
         tempTrafficLight->setPosition({py_trafficLightPosition.at(0), py_trafficLightPosition.at(1)});
