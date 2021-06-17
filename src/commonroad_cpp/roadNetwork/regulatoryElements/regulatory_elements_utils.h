@@ -20,7 +20,7 @@ namespace regulatory_elements_utils {
  * @return Set of pointers to traffic lights.
  */
 std::set<std::shared_ptr<TrafficLight>> activeTrafficLights(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                                                            const std::shared_ptr<RoadNetwork>& roadNetwork);
+                                                            const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 /**
  * Evaluates whether obstacle is at red traffic light for defined turning direction.
@@ -31,7 +31,7 @@ std::set<std::shared_ptr<TrafficLight>> activeTrafficLights(size_t timeStep, con
  * @param turnDir Turning direction which should be considered.
  * @return Boolean indicating whether obstacle is at red traffic light.
  */
-bool atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs, const std::shared_ptr<RoadNetwork>& roadNetwork,
-                       TurningDirections turnDir);
+bool atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
+                       const std::shared_ptr<RoadNetwork> &roadNetwork, TurningDirections turnDir);
 
 } // namespace regulatory_elements_utils
