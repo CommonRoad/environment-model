@@ -2572,19 +2572,19 @@
     <cycle>
       <cycleElement>
         <duration>100</duration>
-        <color>green</color>
-      </cycleElement>
-      <cycleElement>
-        <duration>30</duration>
-        <color>yellow</color>
-      </cycleElement>
-      <cycleElement>
-        <duration>100</duration>
         <color>red</color>
       </cycleElement>
       <cycleElement>
         <duration>30</duration>
         <color>redYellow</color>
+      </cycleElement>
+      <cycleElement>
+        <duration>100</duration>
+        <color>green</color>
+      </cycleElement>
+      <cycleElement>
+        <duration>30</duration>
+        <color>yellow</color>
       </cycleElement>
     </cycle>
     <position>
@@ -2593,18 +2593,11 @@
         <y>-3.5</y>
       </point>
     </position>
+    <direction>right</direction>
     <active>true</active>
   </trafficLight>
   <trafficLight id="27">
     <cycle>
-      <cycleElement>
-        <duration>100</duration>
-        <color>green</color>
-      </cycleElement>
-      <cycleElement>
-        <duration>30</duration>
-        <color>yellow</color>
-      </cycleElement>
       <cycleElement>
         <duration>100</duration>
         <color>red</color>
@@ -2613,6 +2606,14 @@
         <duration>30</duration>
         <color>redYellow</color>
       </cycleElement>
+      <cycleElement>
+        <duration>100</duration>
+        <color>green</color>
+      </cycleElement>
+      <cycleElement>
+        <duration>30</duration>
+        <color>yellow</color>
+      </cycleElement>
     </cycle>
     <position>
       <point>
@@ -2620,6 +2621,7 @@
         <y>6.5</y>
       </point>
     </position>
+    <direction>straight</direction>
     <active>true</active>
   </trafficLight>
   <trafficLight id="28">
@@ -2648,6 +2650,7 @@
       </point>
     </position>
     <active>true</active>
+    <direction>left</direction>
   </trafficLight>
   <trafficLight id="29">
     <cycle>
@@ -2674,6 +2677,7 @@
         <y>8.5</y>
       </point>
     </position>
+    <direction>all</direction>
     <active>true</active>
   </trafficLight>
   <intersection id="25">

@@ -31,29 +31,29 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
     switch (turnDir) {
     case TurningDirections::left:
         relevantTrafficLightDirections = {TurningDirections::left, TurningDirections::leftStraight,
-                                          TurningDirections::leftRight};
+                                          TurningDirections::leftRight, TurningDirections::all};
         break;
     case TurningDirections::right:
-        relevantTrafficLightDirections = {TurningDirections::leftRight, TurningDirections::straightRight,
-                                          TurningDirections::straightRight};
+        relevantTrafficLightDirections = {TurningDirections::leftRight, TurningDirections::right,
+                                          TurningDirections::straightRight, TurningDirections::all};
         break;
-    default:
-        relevantTrafficLightDirections = {TurningDirections::straight, TurningDirections::leftStraight,
-                                          TurningDirections::straightRight};
+    case TurningDirections::straight:
+        relevantTrafficLightDirections = {TurningDirections::straight, TurningDirections::straightRight,
+                                          TurningDirections::leftStraight, TurningDirections::all};
+        break;
+    case TurningDirections::all:
+        relevantTrafficLightDirections = {TurningDirections::all};
+        break;
+      default:
+        relevantTrafficLightDirections = {TurningDirections::all};
     }
     auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
     for (const auto &tl : activeTl) {
-        auto trafficLightState{tl->getElementAtTime(timeStep).color};
         if (std::any_of(relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
                         [tl](const TurningDirections &relevantDirection) {
                             return relevantDirection == tl->getDirection();
                         }) and
-            trafficLightState != TrafficLightState::green)
+            tl->getElementAtTime(timeStep).color == TrafficLightState::red)
             return true;
     }
-    // use all when no other relevant TL is active
-    return std::any_of(activeTl.begin(), activeTl.end(), [timeStep](const std::shared_ptr<TrafficLight> &tl) {
-        return TurningDirections::all == tl->getDirection() and
-               tl->getElementAtTime(timeStep).color != TrafficLightState::green;
-    });
 }

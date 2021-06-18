@@ -11,15 +11,21 @@ void AtRedRightTrafficLightPredicateTest::SetUp() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
     const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(pathToTestFile);
 
-    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -7.5, 0, 0, M_PI / 2, 0, 15, 0);
-    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 26.5, 3, 0, 0, -M_PI, 0, 25, 0);
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 15.0, 0.0, 0, 0, 0, 0, 15.0, 0);
+    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 26.5, -13.5, 0, 0, M_PI/2, 0, 10, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(0, 26.5, -3.5, 0, 0, M_PI / 2, 0, 20, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(0, 7.0, 3, 0, 0, -M_PI, 0, 43, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 20.0, 0.0, 0, 0, 0, 0, 20, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 26.5, -3.5, 0, 0, M_PI/2, 0, 20, 0);
+
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 25.0, 0.0, 0, 0, 0, 0, 25.0, 0);
+
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 40.0, 0.0, 0, 0, 0, 0, 40.0, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
@@ -37,9 +43,14 @@ void AtRedRightTrafficLightPredicateTest::SetUp() {
 TEST_F(AtRedRightTrafficLightPredicateTest, BooleanEvaluation) {
     EXPECT_TRUE(pred.booleanEvaluation(
         0, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));  // standing on stop line -> partially in intersection
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo)); // inside intersection
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleTwo)); // left intersection
+    EXPECT_TRUE(
+        pred.booleanEvaluation(1, world, obstacleOne)); // standing on stop line -> partially in intersection
+    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne)); // inside intersection
+    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne)); // left intersection
+    EXPECT_FALSE(pred.booleanEvaluation(
+        0, world, obstacleTwo)); // in front of intersection/traffic light with another direction -> completely on incoming
+    EXPECT_FALSE(
+        pred.booleanEvaluation(1, world, obstacleTwo)); // standing on stop line -> partially in intersection, traffic light has another direction
 }
 
 TEST_F(AtRedRightTrafficLightPredicateTest, StatisticBooleanEvaluation) {
@@ -47,6 +58,10 @@ TEST_F(AtRedRightTrafficLightPredicateTest, StatisticBooleanEvaluation) {
         0, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
     EXPECT_TRUE(
         pred.statisticBooleanEvaluation(1, world, obstacleOne)); // standing on stop line -> partially in intersection
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleTwo)); // inside intersection
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleTwo)); // left intersection
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(2, world, obstacleOne)); // inside intersection
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(3, world, obstacleOne)); // left intersection
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(
+      0, world, obstacleTwo)); // in front of intersection/traffic light with another direction -> completely on incoming
+    EXPECT_FALSE(
+      pred.statisticBooleanEvaluation(1, world, obstacleTwo)); // standing on stop line -> partially in intersection, traffic light has another direction
 }
