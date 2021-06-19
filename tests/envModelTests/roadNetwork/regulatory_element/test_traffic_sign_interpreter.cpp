@@ -1,5 +1,8 @@
 //
-// Created by wilhelm on 6/15/21.
+// Created by Bowen Wu.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "test_traffic_sign_interpreter.h"
@@ -7,7 +10,7 @@
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_interpreter.h"
 void TrafficSignInterpreterTest::SetUp() {
-
+    // TODO replace with custom road network without loading xml files
     // Read and parse CommonRoad scenario file
     std::string xmlFilePath;
     std::string pathToTestFile;
@@ -29,32 +32,20 @@ void TrafficSignInterpreterTest::SetUp() {
     roadNetwork2018b = std::make_shared<RoadNetwork>(lanelets2018b, SupportedTrafficSignCountry::GERMANY,
                                                      intersections2018b, trafficSigns2018b, trafficLights2018b);
 }
-TEST_F(TrafficSignInterpreterTest, SpeedLimit2018b) {
-    TrafficSignInterpreter interp(SupportedTrafficSignCountry::GERMANY);
-    std::shared_ptr<Lanelet> lanelet34782 =
-        *std::find_if(lanelets2018b.begin(), lanelets2018b.end(), [](auto &lptr) { return lptr->getId() == 34782; });
-    std::shared_ptr<Lanelet> lanelet34784 =
-        *std::find_if(lanelets2018b.begin(), lanelets2018b.end(), [](auto &lptr) { return lptr->getId() == 34784; });
-    std::set<int> ids{34782, 34784};
 
-    EXPECT_NEAR(interp.speedLimit(*lanelet34784), 14, 0.001);
-    EXPECT_NEAR(interp.speedLimit(*lanelet34782), 14, 0.001);
-    EXPECT_NEAR(interp.speedLimit(ids, roadNetwork2018b), 14, 0.001);
-}
-
-TEST_F(TrafficSignInterpreterTest, SpeedLimit2020a) {
+TEST_F(TrafficSignInterpreterTest, SpeedLimit) {
     TrafficSignInterpreter interp(SupportedTrafficSignCountry::USA);
     std::shared_ptr<Lanelet> lanelet3419 =
         *std::find_if(lanelets2020a.begin(), lanelets2020a.end(), [](auto &lptr) { return lptr->getId() == 3419; });
     std::shared_ptr<Lanelet> lanelet3489 =
         *std::find_if(lanelets2020a.begin(), lanelets2020a.end(), [](auto &lptr) { return lptr->getId() == 3489; });
-    std::set<int> ids{3432, 3440, 3492};
+    std::set<size_t> ids{3432, 3440, 3492};
 
     EXPECT_NEAR(interp.speedLimit(*lanelet3419), 13.4112, 0.001);
     EXPECT_NEAR(interp.speedLimit(*lanelet3489), 11.176, 0.001);
     EXPECT_NEAR(interp.speedLimit(ids, roadNetwork2020a), 11.176, 0.001);
 }
 
-TEST_F(TrafficSignInterpreterTest, RequiredSpeed2020a) {
-    // TODO: env model does not seem to have a scenario with min speed
-}
+// TEST_F(TrafficSignInterpreterTest, RequiredSpeed) {
+//    // TODO: env model does not seem to have a scenario with min speed
+//}

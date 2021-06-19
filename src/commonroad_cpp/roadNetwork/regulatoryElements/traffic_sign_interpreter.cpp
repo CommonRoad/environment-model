@@ -1,5 +1,8 @@
 //
-// Created by wilhelm on 5/16/21.
+// Created by Bowen Wu.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "traffic_sign_interpreter.h"
@@ -7,19 +10,14 @@
 #include <vector>
 TrafficSignInterpreter::TrafficSignInterpreter(SupportedTrafficSignCountry ruleCountry) : country(ruleCountry) {
     trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(ruleCountry);
-    //    switch (ruleCountry) {
-    //    case SupportedTrafficSignCountry::GERMANY:
-    //        trafficSignIDLookupTable = &TrafficSignIDGermany;
-    //        break;
-    //    }
 }
 double TrafficSignInterpreter::speedLimit(const Lanelet &lanelet) {
-    double limit = 3e8; // TODO maybe another return value?
+    double limit = 3e8; // Very large value as default
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet.getTrafficSigns();
-    for (std::shared_ptr<TrafficSign> signptr : trafficSigns) {
-        for (std::shared_ptr<TrafficSignElement> elemptr : signptr->getTrafficSignElements()) {
-            if (elemptr->getId() == trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED)) {
-                double signLimit = std::stod(elemptr->getAdditionalValues()[0]);
+    for (std::shared_ptr<TrafficSign> signPtr : trafficSigns) {
+        for (std::shared_ptr<TrafficSignElement> elemPtr : signPtr->getTrafficSignElements()) {
+            if (elemPtr->getId() == trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED)) {
+                double signLimit = std::stod(elemPtr->getAdditionalValues()[0]);
                 if (limit > signLimit)
                     limit = signLimit;
             }
@@ -28,32 +26,32 @@ double TrafficSignInterpreter::speedLimit(const Lanelet &lanelet) {
     return limit;
 }
 
-double TrafficSignInterpreter::speedLimit(const std::set<int> &lanelet_ids, std::shared_ptr<RoadNetwork> roadNetwork) {
+double TrafficSignInterpreter::speedLimit(const std::set<size_t> &lanelet_ids, std::shared_ptr<RoadNetwork> network) {
     std::vector<double> speedLimits;
-    for (int lanelet_id : lanelet_ids) {
-        std::shared_ptr<Lanelet> lanelet = roadNetwork->findLaneletById(lanelet_id);
+    for (const auto &laneletId : lanelet_ids) {
+        std::shared_ptr<Lanelet> lanelet = network->findLaneletById(laneletId);
         speedLimits.push_back(speedLimit(*lanelet));
     }
     return *std::min_element(speedLimits.begin(), speedLimits.end());
 }
 
-double TrafficSignInterpreter::requiredSpeed(const std::set<int> &lanelet_ids, std::shared_ptr<RoadNetwork> network) {
+double TrafficSignInterpreter::requiredSpeed(const std::set<size_t> &lanelet_ids,
+                                             std::shared_ptr<RoadNetwork> network) {
     std::vector<double> speedLimits;
-    for (int lanelet_id : lanelet_ids) {
-        std::shared_ptr<Lanelet> lanelet = roadNetwork->findLaneletById(lanelet_id);
+    for (const auto &laneletId : lanelet_ids) {
+        std::shared_ptr<Lanelet> lanelet = network->findLaneletById(laneletId);
         speedLimits.push_back(speedLimit(*lanelet));
     }
     return *std::max_element(speedLimits.begin(), speedLimits.end());
 }
 
 double TrafficSignInterpreter::requiredSpeed(const Lanelet &lanelet) {
-
     double limit = 0;
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet.getTrafficSigns();
-    for (std::shared_ptr<TrafficSign> signptr : trafficSigns) {
-        for (std::shared_ptr<TrafficSignElement> elemptr : signptr->getTrafficSignElements()) {
-            if (elemptr->getId() == trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED)) {
-                double signLimit = std::stod(elemptr->getAdditionalValues()[0]);
+    for (std::shared_ptr<TrafficSign> signPtr : trafficSigns) {
+        for (std::shared_ptr<TrafficSignElement> elemPtr : signPtr->getTrafficSignElements()) {
+            if (elemPtr->getId() == trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED)) {
+                double signLimit = std::stod(elemPtr->getAdditionalValues()[0]);
                 if (limit < signLimit)
                     limit = signLimit;
             }

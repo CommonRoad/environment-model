@@ -1,5 +1,11 @@
-#ifndef ENV_MODEL_TRAFFICSIGNINTERPRETER_H
-#define ENV_MODEL_TRAFFICSIGNINTERPRETER_H
+//
+// Created by Bowen Wu.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
+//
+
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
@@ -14,10 +20,10 @@ class TrafficSignInterpreter {
      * Extracts the maximum speed limit of provided lanelets
      * @note
      * @param lanelet_ids set of lanelets which should be considered
-     * @param roadnetwork roadNetwork that should contain lanelets
+     * @param network roadNetwork that should contain lanelets
      * @return speed limit of provided lanelets or 3e8 if no limit exists
      */
-    double speedLimit(const std::set<int> &lanelet_ids, std::shared_ptr<RoadNetwork> network);
+    double speedLimit(const std::set<size_t> &lanelet_ids, std::shared_ptr<RoadNetwork> network);
 
     /**
      * Extracts the maximum speed limit of provided lanelet
@@ -28,11 +34,11 @@ class TrafficSignInterpreter {
 
     /**
      * Extracts the required minimum speed of provided lanelets
-     * @param lanelet_ids set of lanelets which should be considered
-     * @param roadnetwork roadNetwork that should contain lanelets
+     * @param laneletIds set of lanelets which should be considered
+     * @param network roadNetwork that should contain lanelets
      * @return speed limit of provided lanelets or 0 if no limit exists
      */
-    double requiredSpeed(const std::set<int> &lanelet_ids, std::shared_ptr<RoadNetwork> network);
+    double requiredSpeed(const std::set<size_t> &laneletIds, std::shared_ptr<RoadNetwork> network);
 
     /**
      * Extracts the required minimum speed of provided lanelet
@@ -44,7 +50,4 @@ class TrafficSignInterpreter {
   private:
     SupportedTrafficSignCountry country;
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable;
-    std::shared_ptr<RoadNetwork> roadNetwork;
 };
-
-#endif // ENV_MODEL_TRAFFICSIGNINTERPRETER_H

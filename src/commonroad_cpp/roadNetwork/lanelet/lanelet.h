@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 23.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENVIRONMENT_MODEL_LANELET_H
-#define ENVIRONMENT_MODEL_LANELET_H
+#pragma once
 
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
@@ -209,14 +211,14 @@ class Lanelet {
      *
      * @return List of pointers to predecessor lanelets.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getPredecessors() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getPredecessors() const;
 
     /**
      * Getter for successor lanelets.
      *
      * @return List of pointers to successor lanelets.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getSuccessors() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getSuccessors() const;
 
     /**
      * Getter for center vertices of lanelet.
@@ -244,14 +246,14 @@ class Lanelet {
      *
      * @return List of pointers to traffic lights.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<TrafficLight>> getTrafficLights() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<TrafficLight>> &getTrafficLights() const;
 
     /**
      * Getter for traffic signs referenced to lanelet.
      *
      * @return List of pointers to traffic signs.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<TrafficSign>> getTrafficSigns() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<TrafficSign>> &getTrafficSigns() const;
 
     /**
      * Getter for polygon spanning the lanelet.
@@ -397,5 +399,3 @@ class Lanelet {
     LineMarking lineMarkingLeft;              //**< Line marking of left boundary*/
     LineMarking lineMarkingRight;             //**< Line marking of right boundary*/
 };
-
-#endif // ENVIRONMENT_MODEL_LANELET_H
