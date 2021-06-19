@@ -44,7 +44,7 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
     case TurningDirections::all:
         relevantTrafficLightDirections = {TurningDirections::all};
         break;
-      default:
+    default:
         relevantTrafficLightDirections = {TurningDirections::all};
     }
     auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
