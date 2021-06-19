@@ -54,8 +54,9 @@ TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) 
         const py::list &py_trafficLightCycle = py_trafficLight.attr("cycle").cast<py::list>();
         std::vector<TrafficLightCycleElement> cycle;
         for (const py::handle &py_cycleElement : py_trafficLightCycle) {
-            cycle.push_back({TrafficLight::matchTrafficLightState(py_cycleElement.attr("state").attr("value").cast<py::str>()),
-                             py_cycleElement.attr("duration").cast<size_t>()});
+            cycle.push_back(
+                {TrafficLight::matchTrafficLightState(py_cycleElement.attr("state").attr("value").cast<py::str>()),
+                 py_cycleElement.attr("duration").cast<size_t>()});
         }
         tempTrafficLight->setCycle(cycle);
         tempTrafficLight->setActive(py_trafficLight.attr("active").cast<bool>());
