@@ -84,7 +84,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                 if (!(strcmp(child.name(), "userBidirectional")))
                     userBidirectional.insert(matchStringToObstacleType((child.first_child().value())));
                 // add traffic signs to temporary list
-                if ((strcmp(child.name(), "trafficSign")) == 0) {
+                if ((strcmp(child.name(), "trafficSignRef")) == 0) {
                     for (const auto &sign : trafficSigns) {
                         if (child.attribute("ref").as_int() == sign->getId()) {
                             tempLaneletContainer[arrayIndex]->addTrafficSign(sign);

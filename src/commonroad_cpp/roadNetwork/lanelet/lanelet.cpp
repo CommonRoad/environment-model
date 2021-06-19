@@ -1,6 +1,10 @@
 //
-// Created by Sebastian Maierhofer on 23.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
+
 #include "lanelet.h"
 #include <utility>
 
@@ -65,9 +69,9 @@ void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign> &sign) { traffic
 
 size_t Lanelet::getId() const { return id; }
 
-std::vector<std::shared_ptr<Lanelet>> Lanelet::getPredecessors() const { return predecessorLanelets; }
+const std::vector<std::shared_ptr<Lanelet>> &Lanelet::getPredecessors() const { return predecessorLanelets; }
 
-std::vector<std::shared_ptr<Lanelet>> Lanelet::getSuccessors() const { return successorLanelets; }
+const std::vector<std::shared_ptr<Lanelet>> &Lanelet::getSuccessors() const { return successorLanelets; }
 
 const std::vector<vertex> &Lanelet::getCenterVertices() const { return centerVertices; }
 
@@ -75,9 +79,9 @@ const std::vector<vertex> &Lanelet::getLeftBorderVertices() const { return leftB
 
 const std::vector<vertex> &Lanelet::getRightBorderVertices() const { return rightBorder; }
 
-std::vector<std::shared_ptr<TrafficLight>> Lanelet::getTrafficLights() const { return trafficLights; }
+const std::vector<std::shared_ptr<TrafficLight>> &Lanelet::getTrafficLights() const { return trafficLights; }
 
-std::vector<std::shared_ptr<TrafficSign>> Lanelet::getTrafficSigns() const { return trafficSigns; }
+const std::vector<std::shared_ptr<TrafficSign>> &Lanelet::getTrafficSigns() const { return trafficSigns; }
 
 const polygon_type &Lanelet::getOuterPolygon() const { return outerPolygon; }
 
@@ -153,7 +157,7 @@ void Lanelet::createCenterVertices() {
     }
 }
 
-double Lanelet::getOrientationAtPosition(double positionX, double positionY) {
+double Lanelet::getOrientationAtPosition(double positionX, double positionY) const {
     // find closest vertex to the given position
     std::vector<double> dif(centerVertices.size() - 1);
     for (unsigned long i = 0; i < centerVertices.size() - 1; ++i) {

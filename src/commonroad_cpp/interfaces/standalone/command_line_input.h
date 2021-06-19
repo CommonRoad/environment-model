@@ -10,6 +10,7 @@
 namespace po = boost::program_options;
 
 namespace CommandLine {
+
 /**
  * Reads the arguments provided via command line.
  *

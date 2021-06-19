@@ -22,6 +22,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/regulatory/test_at_red_straight_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_traffic_light_predicate.cpp
         envModelTests/predicates/utils_predicate_test.cpp
+        envModelTests/roadNetwork/regulatory_element/test_traffic_sign_interpreter.cpp
         )
 
 # Add google-test

@@ -211,14 +211,14 @@ class Lanelet {
      *
      * @return List of pointers to predecessor lanelets.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getPredecessors() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getPredecessors() const;
 
     /**
      * Getter for successor lanelets.
      *
      * @return List of pointers to successor lanelets.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getSuccessors() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getSuccessors() const;
 
     /**
      * Getter for center vertices of lanelet.
@@ -246,14 +246,14 @@ class Lanelet {
      *
      * @return List of pointers to traffic lights.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<TrafficLight>> getTrafficLights() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<TrafficLight>> &getTrafficLights() const;
 
     /**
      * Getter for traffic signs referenced to lanelet.
      *
      * @return List of pointers to traffic signs.
      */
-    [[nodiscard]] std::vector<std::shared_ptr<TrafficSign>> getTrafficSigns() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<TrafficSign>> &getTrafficSigns() const;
 
     /**
      * Getter for polygon spanning the lanelet.
@@ -360,7 +360,7 @@ class Lanelet {
      * @param positionY y-position of point
      * @return orientation in interval [-pi, pi]
      */
-    double getOrientationAtPosition(double positionX, double positionY);
+    double getOrientationAtPosition(double positionX, double positionY) const;
 
     /**
      * Evaluates whether a lanelet has a specific lanelet type.
