@@ -88,4 +88,3 @@ getDataFromCommonRoad(const std::string &xmlFilePath) {
 }
 
 } // namespace CommandLine
-

@@ -30,4 +30,3 @@ std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>>
 getDataFromCommonRoad(const std::string &xmlFilePath);
 
 } // namespace CommandLine
-
