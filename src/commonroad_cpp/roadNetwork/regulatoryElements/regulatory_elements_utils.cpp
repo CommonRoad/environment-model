@@ -56,4 +56,5 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
             tl->getElementAtTime(timeStep).color == TrafficLightState::red)
             return true;
     }
+    return false;
 }

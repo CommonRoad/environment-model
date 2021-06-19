@@ -133,7 +133,7 @@ PYBIND11_MODULE(cpp_env_model, m) {
           "Boolean evaluation of at red straight traffic light predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
-    m.def("at_red_traffic_light_boolean_evaluation", &py_boolean_single_evaluation<AtRedRightTrafficLightPredicate>,
+    m.def("at_red_traffic_light_boolean_evaluation", &py_boolean_single_evaluation<AtRedTrafficLightPredicate>,
           "Boolean evaluation of at red traffic light predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 

@@ -15,7 +15,7 @@ void AtRedTrafficLightPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 40.0, 3.5, 0, 0, -M_PI, 0, 10, 0);
 
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 23.5, 6.5, 0, 0, -M_PI / 2, 0, 20, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 30.0, 3.5, 0, 0, M_PI, 0, 20, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 30.0, 3.5, 0, 0, -M_PI, 0, 20, 0);
 
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 23.5, 1.5, 0, 0, -M_PI / 2, 0, 25.0, 0);
 

@@ -54,7 +54,7 @@ TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) 
         const py::list &py_trafficLightCycle = py_trafficLight.attr("cycle").cast<py::list>();
         std::vector<TrafficLightCycleElement> cycle;
         for (const py::handle &py_cycleElement : py_trafficLightCycle) {
-            cycle.push_back({TrafficLight::matchTrafficLightState(py_cycleElement.attr("state").cast<py::str>()),
+            cycle.push_back({TrafficLight::matchTrafficLightState(py_cycleElement.attr("state").attr("value").cast<py::str>()),
                              py_cycleElement.attr("duration").cast<size_t>()});
         }
         tempTrafficLight->setCycle(cycle);
@@ -62,7 +62,7 @@ TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) 
         py::array_t<double> py_trafficLightPosition = py::getattr(py_trafficLight, "position");
         tempTrafficLight->setPosition({py_trafficLightPosition.at(0), py_trafficLightPosition.at(1)});
         tempTrafficLight->setDirection(
-            TrafficLight::matchTurningDirections(py_trafficLight.attr("direction").cast<py::str>()));
+            TrafficLight::matchTurningDirections(py_trafficLight.attr("direction").attr("value").cast<py::str>()));
         trafficLightContainer.emplace_back(tempTrafficLight);
     }
     return trafficLightContainer;
