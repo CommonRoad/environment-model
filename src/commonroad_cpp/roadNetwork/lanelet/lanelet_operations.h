@@ -10,6 +10,22 @@
 #include "lanelet.h"
 
 /**
+ * Matches a string to a driving direction
+ *
+ * @param string for which driving direction should be extracted
+ * @return driving direction type which corresponds to string or unknown type if string does not match
+ */
+DrivingDirection matchStringToDrivingDirection(const std::string &type);
+
+/**
+ * Matches a driving direction to a string
+ *
+ * @param driving direction for which string should be extracted
+ * @return string which corresponds to driving direction
+ */
+std::string matchDrivingDirectionToString(const DrivingDirection &type);
+
+/**
  * Matches a string to a lanelet type
  *
  * @param string for which lanelet type should be extracted

@@ -17,6 +17,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/position/test_in_same_lane_predicate.cpp
         envModelTests/predicates/general/test_cut_in_predicate.cpp
         envModelTests/predicates/utils_predicate_test.cpp
+        envModelTests/roadNetwork/regulatory_element/test_traffic_sign_interpreter.cpp
         )
 
 # Add google-test

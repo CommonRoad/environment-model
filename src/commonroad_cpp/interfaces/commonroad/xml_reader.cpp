@@ -36,6 +36,17 @@ XMLReader::createLaneletFromXML(const std::string &xmlFile, std::vector<std::sha
     const auto factory = createCommonRoadFactory(xmlFile);
     return factory->createLanelets(std::move(trafficSigns), std::move(trafficLights));
 }
+std::shared_ptr<World> XMLReader::createWorldFromXML(const std::string &xmlFile) {
+    auto obstacle = createObstacleFromXML(xmlFile);
+    auto network = createLaneletFromXML(xmlFile);
+    std::vector<std::shared_ptr<Obstacle>> dummyEgo;
+    auto cou = extractCountryFromXML(xmlFile);
+    auto inters = createIntersectionFromXML(xmlFile, network);
+    auto signs = createTrafficSignFromXML(xmlFile);
+    auto lights = createTrafficLightFromXML(xmlFile);
+    auto roadNetwork = std::make_shared<RoadNetwork>(network, cou, inters, signs, lights);
+    return std::make_shared<World>(0, roadNetwork, dummyEgo, obstacle);
+}
 
 std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(const std::string &xmlFile) {
     const auto factory = createCommonRoadFactory(xmlFile);

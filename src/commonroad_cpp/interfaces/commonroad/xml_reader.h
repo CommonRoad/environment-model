@@ -10,7 +10,7 @@
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
-
+#include "commonroad_cpp/world.h"
 namespace XMLReader {
 /**
  * Function for creating obstacles.
@@ -28,9 +28,15 @@ std::vector<std::shared_ptr<Obstacle>> createObstacleFromXML(const std::string &
  * @param trafficLights List of pointers to traffic lights.
  * @return List of pointers to created lanelets.
  */
-std::vector<std::shared_ptr<Lanelet>> createLaneletFromXML(const std::string &xmlFile,
-                                                           std::vector<std::shared_ptr<TrafficSign>> trafficSigns,
-                                                           std::vector<std::shared_ptr<TrafficLight>> trafficLights);
+std::vector<std::shared_ptr<Lanelet>>
+createLaneletFromXML(const std::string &xmlFile, std::vector<std::shared_ptr<TrafficSign>> trafficSigns = {},
+                     std::vector<std::shared_ptr<TrafficLight>> trafficLights = {});
+
+/*
+ * Convenient function for creating a world from XML. Note: EgoVehicle is not initialized.
+ * @param xmlFile Loaded CommonRoad XML file.
+ */
+std::shared_ptr<World> createWorldFromXML(const std::string &xmlFile);
 
 /**
  * Function for creating traffic signs.

@@ -7,6 +7,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.cpp
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_interpreter.cpp
         commonroad_cpp/roadNetwork/intersection/incoming.cpp
         commonroad_cpp/roadNetwork/intersection/intersection.cpp
         commonroad_cpp/obstacle/obstacle.cpp
