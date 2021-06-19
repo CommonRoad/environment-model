@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 07.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TYPES_AND_DEFINITIONS_H
-#define ENV_MODEL_TYPES_AND_DEFINITIONS_H
+#pragma once
 
 #include "memory"
 #include "vector"
@@ -736,5 +738,3 @@ const std::map<std::string, std::vector<int>> priorityTable{
     std::pair<std::string, std::vector<int>>("102", {3, 3, 3}),
     std::pair<std::string, std::vector<int>>("720", {-1, -1, 0}),
 };
-
-#endif // ENV_MODEL_TYPES_AND_DEFINITIONS_H

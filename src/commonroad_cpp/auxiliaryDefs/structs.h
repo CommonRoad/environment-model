@@ -10,7 +10,7 @@
 
 struct TrafficLightCycleElement {
     TrafficLightState color;
-    int duration;
+    size_t duration;
 };
 
 struct vertex {

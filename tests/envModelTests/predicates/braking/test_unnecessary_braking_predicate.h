@@ -1,9 +1,11 @@
 //
-// Created by sebastian on 26.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TEST_SAFE_DISTANCE_PREDICATE_H
-#define ENV_MODEL_TEST_SAFE_DISTANCE_PREDICATE_H
+#pragma once
 
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
@@ -23,5 +25,3 @@ class UnnecessaryBrakingPredicateTest : public testing::Test {
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_SAFE_DISTANCE_PREDICATE_H

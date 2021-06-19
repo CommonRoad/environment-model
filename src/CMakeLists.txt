@@ -7,9 +7,11 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.cpp
+        commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_interpreter.cpp
         commonroad_cpp/roadNetwork/intersection/incoming.cpp
         commonroad_cpp/roadNetwork/intersection/intersection.cpp
+        commonroad_cpp/roadNetwork/intersection/intersection_operations.cpp
         commonroad_cpp/obstacle/obstacle.cpp
         commonroad_cpp/obstacle/obstacle_operations.cpp
         commonroad_cpp/obstacle/state.cpp
@@ -29,6 +31,11 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/general/cut_in_predicate.cpp
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/position/in_intersection_main_area_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/predicates/predicate_parameters.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp

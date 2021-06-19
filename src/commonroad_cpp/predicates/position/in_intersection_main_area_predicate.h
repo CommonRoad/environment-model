@@ -12,7 +12,7 @@
 /**
  * Evaluates whether the kth and pth vehicle occupy the same lane.
  */
-class InSameLanePredicate : public CommonRoadPredicate {
+class InIntersectionMainAreaPredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using objects.
@@ -25,7 +25,7 @@ class InSameLanePredicate : public CommonRoadPredicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP) override;
+                           const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Constraint evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -38,7 +38,7 @@ class InSameLanePredicate : public CommonRoadPredicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP) override;
+                            const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Robustness evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -51,5 +51,5 @@ class InSameLanePredicate : public CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP) override;
+                                    const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 };

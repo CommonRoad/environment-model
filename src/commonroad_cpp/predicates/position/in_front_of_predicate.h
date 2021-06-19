@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 07.04.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_IN_FRONT_OF_PREDICATE_H
-#define ENV_MODEL_IN_FRONT_OF_PREDICATE_H
+#pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
@@ -83,5 +85,3 @@ class InFrontOfPredicate : public CommonRoadPredicate {
      */
     static double robustEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK);
 };
-
-#endif // ENV_MODEL_IN_FRONT_OF_PREDICATE_H
