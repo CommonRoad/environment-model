@@ -11,7 +11,7 @@
 /**
  * Predicate for evaluating traffic flow
  */
-class PreservesTrafficFlowPredicate : public CommonRoadPredicate {
+class SlowLeadingVehiclePredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using objects.

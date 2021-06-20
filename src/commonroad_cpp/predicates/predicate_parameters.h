@@ -1,12 +1,17 @@
 //
-// Created by Sebastian Maierhofer on 24.05.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_SRC_COMMONROAD_CPP_PREDICATES_PREDICATE_PARAMETERS_H_
-#define ENV_MODEL_SRC_COMMONROAD_CPP_PREDICATES_PREDICATE_PARAMETERS_H_
+#pragma once
 
 #include <cassert>
 #include <cstdint>
+#include <unordered_map>
+#include <limits>
+#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 
 struct PredicateParameters {
     PredicateParameters() { checkParameterValidity(); }
@@ -31,9 +36,9 @@ struct PredicateParameters {
     double slightlyHigherSpeedDifference{5.55}; // indicator for slightly higher speed
     double uTurn{1.57};                         // angle [rad] indicating u-turn
     double aboveCenterlineTh{0.1};              // indicator for necessary distance to be classified above centerline
-    double epsilon{1e-6};                       // small value for robustness value
+    double epsilon{1e-6};                       // small value close to zero for different purposes
+    double maxPositiveDouble{std::numeric_limits<double>::max()}; // max double value close to zero for different purposes
+    std::unordered_map<TrafficSignTypes, std::string> trafficSignIDLookupTable;
 
     void checkParameterValidity() const;
 };
-
-#endif // ENV_MODEL_SRC_COMMONROAD_CPP_PREDICATES_PREDICATE_PARAMETERS_H_

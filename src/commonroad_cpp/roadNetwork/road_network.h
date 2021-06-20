@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 08.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_ROAD_NETWORK_H
-#define ENV_MODEL_ROAD_NETWORK_H
+#pragma once
 
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lane.h"
@@ -129,6 +131,8 @@ class RoadNetwork {
     bgi::rtree<value, bgi::quadratic<16>>
         rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
 
+  //**< interpreter for certain traffic signs*
+
     /**
      * Given a set of lanelets, creates the corresponding interstate-based lanes
      *
@@ -149,5 +153,3 @@ class RoadNetwork {
     extractOutgoingsFromIncoming(const LaneletType &intersectionLaneletType,
                                  const std::vector<std::shared_ptr<Lanelet>> &incomingSuccessors);
 };
-
-#endif // ENV_MODEL_ROAD_NETWORK_H

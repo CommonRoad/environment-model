@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 08.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "road_network.h"
@@ -19,7 +22,7 @@ RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, S
                          std::vector<std::shared_ptr<TrafficSign>> signs,
                          std::vector<std::shared_ptr<TrafficLight>> lights)
     : laneletNetwork(network), country(cou), intersections(std::move(inters)), trafficSigns(std::move(signs)),
-      trafficLights(std::move(lights)) {
+      trafficLights(std::move(lights)){
     // construct Rtree out of lanelets
     for (const std::shared_ptr<Lanelet> &la : network)
         rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));

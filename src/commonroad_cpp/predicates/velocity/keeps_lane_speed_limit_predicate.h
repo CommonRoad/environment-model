@@ -11,8 +11,15 @@
 /**
  * Predicate for evaluating traffic flow
  */
-class PreservesTrafficFlowPredicate : public CommonRoadPredicate {
+class KeepsLaneSpeedLimitPredicate : public CommonRoadPredicate {
   public:
+
+     double speedLimit(const std::shared_ptr<Lanelet> &lanelet);
+
+     double speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets);
+
+     double speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets);
+
     /**
      * Boolean evaluation of predicate using objects.
      *

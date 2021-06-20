@@ -11,8 +11,13 @@
 /**
  * Predicate for evaluating traffic flow
  */
-class PreservesTrafficFlowPredicate : public CommonRoadPredicate {
+class RequiredSpeedPredicate : public CommonRoadPredicate {
   public:
+
+     double requiredVelocity(const std::shared_ptr<Lanelet> &lanelet);
+
+     double requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets);
+
     /**
      * Boolean evaluation of predicate using objects.
      *
