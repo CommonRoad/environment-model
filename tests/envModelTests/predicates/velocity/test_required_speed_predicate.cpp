@@ -12,22 +12,21 @@
 void RequiredSpeedPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 5, 0, 0, 0, 0, 0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 5, 2, 10, 0, 0, 0, 5, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(2, 15, 2, 15, 0, 0, 0, 15, 0);
-    std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(3, 30, 6, 5, 0, 0, 0, 30, 4);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 15, 2, 15, 0, 0, 0, 15, 0);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 6, 5, 0, 0, 0, 30, 4);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateOneObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(3, stateOneObstacleThree)};
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
-                                          std::vector<std::shared_ptr<Obstacle>>{obstacleTwo}));
+    world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}));
 }
 
 TEST_F(RequiredSpeedPredicateTest, BooleanEvaluationObjects) {

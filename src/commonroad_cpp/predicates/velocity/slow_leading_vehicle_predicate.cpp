@@ -25,7 +25,7 @@ bool SlowLeadingVehiclePredicate::booleanEvaluation(size_t timeStep, const std::
         double vMaxLane{keepsLaneSpeedLimitPredicate.speedLimitSuggested(
             obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep),
             world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED))};
-        if (vMaxLane - obstacleP->getStateByTimeStep(timeStep)->getVelocity() >= parameters.minVelocityDif)
+        if (vMaxLane - obs->getStateByTimeStep(timeStep)->getVelocity() >= parameters.minVelocityDif)
             return true;
     }
     return false;

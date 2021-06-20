@@ -17,7 +17,6 @@
 class KeepsLaneSpeedLimitPredicateTest : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> obstacleOne;
-    std::shared_ptr<Obstacle> obstacleTwo;
     KeepsLaneSpeedLimitPredicate pred;
     std::shared_ptr<World> world;
 

@@ -9,15 +9,15 @@
 
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/predicates/velocity/required_speed_predicate.h"
+#include "commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
 #include <gtest/gtest.h>
 
-class RequiredSpeedPredicateTest : public testing::Test {
+class PreservesTrafficFlowPredicateTest : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> obstacleOne;
-    RequiredSpeedPredicate pred;
+    PreservesTrafficFlowPredicate pred;
     std::shared_ptr<World> world;
 
   private:
