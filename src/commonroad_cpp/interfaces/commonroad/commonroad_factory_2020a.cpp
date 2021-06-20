@@ -114,7 +114,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                             sl->setLineMarking(matchStringToLineMarking(elem.first_child().value()));
                         if ((strcmp(elem.name(), "trafficSignRef")) == 0) {
                             for (const auto &sign : trafficSigns) {
-                                if (child.attribute("ref").as_int() == sign->getId()) {
+                                if (child.attribute("ref").as_ullong() == sign->getId()) {
                                     sl->addTrafficSign(sign);
                                 }
                             }

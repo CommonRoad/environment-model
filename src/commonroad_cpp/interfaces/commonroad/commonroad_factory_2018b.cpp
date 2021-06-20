@@ -102,7 +102,7 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2018b::createTrafficS
         if ((strcmp(roadElements.name(), "lanelet")) == 0) {
             for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
                 if ((strcmp(child.name(), "speedLimit")) == 0) {
-                    int laneletId = roadElements.first_attribute().as_int();
+                    size_t laneletId = roadElements.first_attribute().as_ullong();
                     std::string speedLimit = child.child_value();
                     std::string speedLimitSignId =
                         TrafficSignLookupTableByCountry.at(country)->at(TrafficSignTypes::MAX_SPEED);

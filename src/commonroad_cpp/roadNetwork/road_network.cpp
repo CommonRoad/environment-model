@@ -18,15 +18,15 @@ namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, SupportedTrafficSignCountry cou,
-                         std::vector<std::shared_ptr<Intersection>> inters,
                          std::vector<std::shared_ptr<TrafficSign>> signs,
-                         std::vector<std::shared_ptr<TrafficLight>> lights)
-    : laneletNetwork(network), country(cou), intersections(std::move(inters)), trafficSigns(std::move(signs)),
-      trafficLights(std::move(lights)){
+                         std::vector<std::shared_ptr<TrafficLight>> lights,
+                         std::vector<std::shared_ptr<Intersection>> inters)
+    : laneletNetwork(network), country(cou), trafficSigns(std::move(signs)), trafficLights(std::move(lights)),
+      intersections(std::move(inters)) {
     // construct Rtree out of lanelets
     for (const std::shared_ptr<Lanelet> &la : network)
         rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
-
+    trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(cou);
     createLanes(network);
     // setDynamicIntersectionLabels();
 }
@@ -177,6 +177,11 @@ SupportedTrafficSignCountry RoadNetwork::matchStringToCountry(const std::string 
         return SupportedTrafficSignCountry::GERMANY;
     else if (name == "USA")
         return SupportedTrafficSignCountry::USA;
+    else if (name == "ESP")
+        return SupportedTrafficSignCountry::SPAIN;
     else
         return SupportedTrafficSignCountry::ZAMUNDA;
+}
+std::string RoadNetwork::extractTrafficSignIDForCountry(TrafficSignTypes type) {
+    return trafficSignIDLookupTable->at(type);
 }

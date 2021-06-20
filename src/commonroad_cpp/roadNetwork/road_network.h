@@ -17,6 +17,7 @@
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/range/adaptor/indexed.hpp>
 #include <boost/range/adaptor/transformed.hpp>
+//#include <unordered_map>
 
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
@@ -39,9 +40,9 @@ class RoadNetwork {
     explicit RoadNetwork(
         const std::vector<std::shared_ptr<Lanelet>> &network,
         SupportedTrafficSignCountry cou = SupportedTrafficSignCountry::ZAMUNDA,
-        std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{},
         std::vector<std::shared_ptr<TrafficSign>> signs = std::vector<std::shared_ptr<TrafficSign>>{},
-        std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{});
+        std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{},
+        std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{});
 
     /**
      * Getter for lanelet network.
@@ -121,17 +122,20 @@ class RoadNetwork {
      */
     static SupportedTrafficSignCountry matchStringToCountry(const std::string &name);
 
+    std::string extractTrafficSignIDForCountry(TrafficSignTypes type);
+
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
     SupportedTrafficSignCountry country;                      //**< country where road network is located */
-    std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;   //**< set of traffic signs contained in road network */
     std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< set of traffic lights contained in road network */
+    std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
     std::vector<std::shared_ptr<Lane>> lanes; //**< set of interstate-based lanes contained in road network */
     bgi::rtree<value, bgi::quadratic<16>>
         rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
+    const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
 
-  //**< interpreter for certain traffic signs*
+    //**< interpreter for certain traffic signs*
 
     /**
      * Given a set of lanelets, creates the corresponding interstate-based lanes

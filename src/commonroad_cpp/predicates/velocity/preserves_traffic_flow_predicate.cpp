@@ -8,24 +8,26 @@
 #include "keeps_lane_speed_limit_predicate.h"
 
 bool PreservesTrafficFlowPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                             const std::shared_ptr<Obstacle> &obstacleK,
-                                             const std::shared_ptr<Obstacle> &obstacleP) {
+                                                      const std::shared_ptr<Obstacle> &obstacleK,
+                                                      const std::shared_ptr<Obstacle> &obstacleP) {
     // TODO consider other speed limit types -> see Python predicate
     KeepsLaneSpeedLimitPredicate pred;
-    double vMaxLane{pred.speedLimitSuggested(obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep))};
+    double vMaxLane{
+        pred.speedLimitSuggested(obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep),
+                                 world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED))};
     return (vMaxLane - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.minVelocityDif;
 }
 
 double PreservesTrafficFlowPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                              const std::shared_ptr<Obstacle> &obstacleK,
-                                              const std::shared_ptr<Obstacle> &obstacleP) {
+                                                       const std::shared_ptr<Obstacle> &obstacleK,
+                                                       const std::shared_ptr<Obstacle> &obstacleP) {
     // TODO add robust mode
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support robust evaluation!");
 }
 
 Constraint PreservesTrafficFlowPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                      const std::shared_ptr<Obstacle> &obstacleK,
-                                                      const std::shared_ptr<Obstacle> &obstacleP) {
-  // TODO add constraint mode
+                                                               const std::shared_ptr<Obstacle> &obstacleK,
+                                                               const std::shared_ptr<Obstacle> &obstacleP) {
+    // TODO add constraint mode
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support constraint evaluation!");
 }

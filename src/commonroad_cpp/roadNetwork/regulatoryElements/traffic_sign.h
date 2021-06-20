@@ -14,11 +14,26 @@
 class TrafficSign {
   public:
     /**
+     * Constructor of traffic sign.
+     * @param id Traffic sign id.
+     * @param traffic_sign_element List of traffic sign elements assigned to traffic sign.
+     * @param position Position of traffic sign.
+     * @param virtual_element Boolean indicating whether traffic sign is virtual.
+     */
+    TrafficSign(size_t id, std::vector<std::shared_ptr<TrafficSignElement>> traffic_sign_element,
+                const vertex &position, bool virtual_element = false);
+
+    /**
+     * Default constructor of traffic sign.
+     */
+    TrafficSign() = default;
+
+    /**
      * Setter for the ID of a traffic sign.
      *
      * @param num Traffic sign ID.
      */
-    void setId(int num);
+    void setId(size_t num);
 
     /**
      * Adds traffic sign element to traffic sign.
@@ -53,7 +68,7 @@ class TrafficSign {
      *
      * @return
      */
-    [[nodiscard]] int getId() const;
+    [[nodiscard]] size_t getId() const;
 
     /**
      * Getter for virtual indicator.
@@ -77,11 +92,11 @@ class TrafficSign {
     [[nodiscard]] vertex getPosition() const;
 
   private:
-    int id;              //**< unique ID of traffic sign */
-    bool virtualElement; //**< indicator whether traffic sign is artificially added */
+    size_t id; //**< unique ID of traffic sign */
     std::vector<std::shared_ptr<TrafficSignElement>>
         trafficSignElement; //**< list of traffic sign elements represented by traffic sign */
     vertex position{};      //**< position of traffic sign */
+    bool virtualElement;    //**< indicator whether traffic sign is artificially added */
 };
 
 #endif // ENV_MODEL_TRAFFIC_SIGN_H

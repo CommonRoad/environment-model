@@ -9,9 +9,7 @@
 
 #include <cassert>
 #include <cstdint>
-#include <unordered_map>
 #include <limits>
-#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 
 struct PredicateParameters {
     PredicateParameters() { checkParameterValidity(); }
@@ -37,8 +35,8 @@ struct PredicateParameters {
     double uTurn{1.57};                         // angle [rad] indicating u-turn
     double aboveCenterlineTh{0.1};              // indicator for necessary distance to be classified above centerline
     double epsilon{1e-6};                       // small value close to zero for different purposes
-    double maxPositiveDouble{std::numeric_limits<double>::max()}; // max double value close to zero for different purposes
-    std::unordered_map<TrafficSignTypes, std::string> trafficSignIDLookupTable;
+    double maxPositiveDouble{
+        std::numeric_limits<double>::max()}; // max double value close to zero for different purposes
 
     void checkParameterValidity() const;
 };

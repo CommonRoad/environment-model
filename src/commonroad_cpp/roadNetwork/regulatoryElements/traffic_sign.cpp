@@ -4,13 +4,15 @@
 
 #include "traffic_sign.h"
 
-void TrafficSign::setId(const int num) { id = num; }
+#include <utility>
+
+void TrafficSign::setId(const size_t num) { id = num; }
 
 void TrafficSign::addTrafficSignElement(const std::shared_ptr<TrafficSignElement> &elem) {
     trafficSignElement.push_back(elem);
 }
 
-int TrafficSign::getId() const { return id; }
+size_t TrafficSign::getId() const { return id; }
 
 void TrafficSign::setTrafficSignElement(const std::vector<std::shared_ptr<TrafficSignElement>> &newTrafficSignElement) {
     trafficSignElement = newTrafficSignElement;
@@ -27,3 +29,8 @@ std::vector<std::shared_ptr<TrafficSignElement>> TrafficSign::getTrafficSignElem
 void TrafficSign::setPosition(vertex pos) { position = pos; }
 
 vertex TrafficSign::getPosition() const { return position; }
+
+TrafficSign::TrafficSign(size_t id, std::vector<std::shared_ptr<TrafficSignElement>> traffic_sign_element,
+                         const vertex &position, bool virtual_element)
+    : id(id), trafficSignElement(std::move(traffic_sign_element)), position(position), virtualElement(virtual_element) {
+}
