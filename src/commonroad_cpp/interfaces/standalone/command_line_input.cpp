@@ -72,7 +72,7 @@ getDataFromCommonRoad(const std::string &xmlFilePath) {
     auto country{XMLReader::extractCountryFromXML(xmlFilePath)};
 
     std::shared_ptr<RoadNetwork> roadNetwork{
-        std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, intersections, trafficSigns, trafficLights))};
+        std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, trafficSigns, trafficLights, intersections))};
 
     for (const auto &obs : obstacles) {
         if (obs->getIsStatic())

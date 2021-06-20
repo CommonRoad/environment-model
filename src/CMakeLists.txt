@@ -8,7 +8,6 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.cpp
-        commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_interpreter.cpp
         commonroad_cpp/roadNetwork/intersection/incoming.cpp
         commonroad_cpp/roadNetwork/intersection/intersection.cpp
         commonroad_cpp/roadNetwork/intersection/intersection_operations.cpp
@@ -31,6 +30,9 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/general/cut_in_predicate.cpp
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
+        commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp
+        commonroad_cpp/predicates/velocity/required_speed_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp

@@ -21,8 +21,11 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/regulatory/test_at_red_left_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_straight_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_traffic_light_predicate.cpp
+        envModelTests/predicates/velocity/test_keeps_lane_speed_limit_predicate.cpp
+        envModelTests/predicates/velocity/test_required_speed_predicate.cpp
+        envModelTests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
+        envModelTests/predicates/velocity/test_slow_leading_vehicle_predicate.cpp
         envModelTests/predicates/utils_predicate_test.cpp
-        envModelTests/roadNetwork/regulatory_element/test_traffic_sign_interpreter.cpp
         )
 
 # Add google-test

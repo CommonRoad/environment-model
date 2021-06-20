@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 31.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TRAFFIC_SIGN_ELEMENT_H
-#define ENV_MODEL_TRAFFIC_SIGN_ELEMENT_H
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 
@@ -18,7 +20,7 @@ class TrafficSignElement {
      * @param id ID of traffic sign element. Note this ID corresponds to the official national traffic sign ID of a
      * country.
      */
-    explicit TrafficSignElement(std::string id);
+    explicit TrafficSignElement(std::string id, std::vector<std::string> values = {});
 
     /**
      * Copy constructor of traffic sign element.
@@ -55,15 +57,6 @@ class TrafficSignElement {
     void setAdditionalValues(const std::vector<std::string> &values);
 
     /**
-     *
-     * @param trafficSignName CommonRoad name of traffic sign.
-     * @param country Country for which traffic sign number should be extracted.
-     * @return String corresponding to traffic sign ID of country.
-     */
-    static std::string mapTrafficSignNameToCountryID(const std::string &trafficSignName,
-                                                     SupportedTrafficSignCountry country);
-
-    /**
      * Converts German traffic sign ID to string.
      *
      * @param signId Traffic sign ID from corresponding enum.
@@ -76,5 +69,3 @@ class TrafficSignElement {
     std::vector<std::string>
         additionalValues; //**< list of additional values classifying traffic sign, e.g., velocity, weight, time */
 };
-
-#endif // ENV_MODEL_TRAFFIC_SIGN_ELEMENT_H
