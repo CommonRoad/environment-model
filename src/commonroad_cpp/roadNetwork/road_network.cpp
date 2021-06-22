@@ -6,7 +6,9 @@
 //
 
 #include "road_network.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+
+#include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/box.hpp>

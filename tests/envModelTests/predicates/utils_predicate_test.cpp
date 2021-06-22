@@ -5,6 +5,8 @@
 // Credits: BMW Car@TUM
 //
 
+#include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
+
 #include "utils_predicate_test.h"
 
 namespace utils_predicate_test {

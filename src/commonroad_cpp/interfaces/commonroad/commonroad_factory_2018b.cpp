@@ -4,6 +4,7 @@
 
 #include "commonroad_factory_2018b.h"
 #include "xml_reader.h"
+#include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles() {

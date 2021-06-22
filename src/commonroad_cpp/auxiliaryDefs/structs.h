@@ -5,8 +5,10 @@
 #ifndef ENV_MODEL_STRUCTS_H
 #define ENV_MODEL_STRUCTS_H
 
-#include "types_and_definitions.h"
+#include <cstddef>
 #include <climits>
+
+#include "types_and_definitions.h"
 
 struct TrafficLightCycleElement {
     TrafficLightState color;
