@@ -86,7 +86,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                 // add traffic signs to temporary list
                 if ((strcmp(child.name(), "trafficSignRef")) == 0) {
                     for (const auto &sign : trafficSigns) {
-                        if (child.attribute("ref").as_int() == sign->getId()) {
+                        if (child.attribute("ref").as_ullong()  == sign->getId()) {
                             tempLaneletContainer[arrayIndex]->addTrafficSign(sign);
                         }
                     }

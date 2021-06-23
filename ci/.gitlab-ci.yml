@@ -11,7 +11,6 @@ image: $CI_REGISTRY/maierhofer/environment-model/ci:0.5.0
 
 .python-prepare: &python-prepare
   - source activate commonroad
-  - pip install tox coverage
   - pip install -r ./requirements.txt
   - pip install -r ./test_requirements.txt
 
