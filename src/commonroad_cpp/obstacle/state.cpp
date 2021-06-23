@@ -6,6 +6,7 @@
 //
 
 #include "state.h"
+#include <stdexcept>
 
 State::State(size_t timeStep, double xPosition, double yPosition, double velocity, double acceleration,
              double globalOrientation, double curvilinearOrientation, double lonPosition, double latPosition)

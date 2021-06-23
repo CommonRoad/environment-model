@@ -8,6 +8,8 @@
 #pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include <memory>
+#include <vector>
 
 /**
  * Class representing a CommonRoad traffic sign element.
