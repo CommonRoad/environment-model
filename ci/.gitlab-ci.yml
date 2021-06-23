@@ -91,7 +91,7 @@ build-test:
     paths:
       - build/env_model_test
       - build/libenv_model.so
-    expire_in: 20 minutes
+    expire_in: 30 minutes
 
 build-run-coverage:
   stage: compile
@@ -103,7 +103,7 @@ build-run-coverage:
   artifacts:
     paths:
       - ./build/
-    expire_in: 20 minutes
+    expire_in: 30 minutes
 
 build-python:
   stage: compile
@@ -113,7 +113,7 @@ build-python:
   artifacts:
     paths:
       - ./build/
-    expire_in: 20 minutes
+    expire_in: 30 minutes
 
 ### tests ###
 test:
@@ -183,7 +183,7 @@ coverage-report:
     paths:
       - coverage
     expose_as: 'Coverage Report'
-    expire_in: 20 minutes
+    expire_in: 30 minutes
 
 ### create documentation ###
 docs:
@@ -197,4 +197,4 @@ docs:
     paths:
       - build/doc_doxygen/html/
     expose_as: 'Doxygen Documentation'
-    expire_in: 20 minutes
+    expire_in: 30 minutes
