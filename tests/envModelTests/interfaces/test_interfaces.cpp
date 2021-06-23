@@ -3,7 +3,8 @@
 //
 
 #include "test_interfaces.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
+#include <commonroad_cpp/interfaces/standalone/command_line_input.h>
 
 TEST_F(InterfacesTest, Read2018bFileSingleThread) {
     // Read command line parameters; if none are provided, use default values (specified in read_command_line_values)

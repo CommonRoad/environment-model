@@ -7,8 +7,11 @@
 
 #pragma once
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include <iostream>
+#include <cstddef>
+#include <string>
+#include <vector>
+
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
 
 /**
  * Class representing a CommonRoad traffic light.

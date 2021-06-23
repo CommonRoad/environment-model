@@ -3,6 +3,7 @@
 //
 
 #include "rectangle.h"
+#include <iostream>
 
 void Rectangle::setLength(const double len) { length = len; }
 
