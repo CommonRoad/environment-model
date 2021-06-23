@@ -8,8 +8,8 @@
 #pragma once
 
 #include <cstddef>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
 

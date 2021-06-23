@@ -5,8 +5,8 @@
 #ifndef ENV_MODEL_STRUCTS_H
 #define ENV_MODEL_STRUCTS_H
 
-#include <cstddef>
 #include <climits>
+#include <cstddef>
 
 #include "types_and_definitions.h"
 

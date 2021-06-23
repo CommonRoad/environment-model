@@ -11,8 +11,8 @@
 #include <map>
 #include <unordered_map>
 
-#include "types_and_definitions.h"
 #include "traffic_signs.h"
+#include "types_and_definitions.h"
 
 // automatically generated from commonroad-io with:
 // sed -r 's/([A-Z_0-9]+) = '\''([^'\'']+)'\''/ {TrafficSignTypes::\1, "\2"}, /'
@@ -407,12 +407,11 @@ TrafficSignTable TrafficSignIDSpain = {
     {TrafficSignTypes::PEDESTRIANS_CROSSING, "s13"},
 };
 
-const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *>
-    TrafficSignLookupTableByCountry = {
-        {SupportedTrafficSignCountry::GERMANY, &TrafficSignIDGermany},
-        {SupportedTrafficSignCountry::ZAMUNDA, &TrafficSignIDZamunda},
-        {SupportedTrafficSignCountry::USA, &TrafficSignIDUSA},
-        {SupportedTrafficSignCountry::SPAIN, &TrafficSignIDSpain},
+const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> TrafficSignLookupTableByCountry = {
+    {SupportedTrafficSignCountry::GERMANY, &TrafficSignIDGermany},
+    {SupportedTrafficSignCountry::ZAMUNDA, &TrafficSignIDZamunda},
+    {SupportedTrafficSignCountry::USA, &TrafficSignIDUSA},
+    {SupportedTrafficSignCountry::SPAIN, &TrafficSignIDSpain},
 };
 
 const std::unordered_map<std::string, std::vector<int>> priorityTable{

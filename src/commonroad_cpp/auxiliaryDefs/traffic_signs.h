@@ -8,11 +8,11 @@
 #pragma once
 
 #include <memory>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
-#include "types_and_definitions.h"
 #include "traffic_signs.h"
+#include "types_and_definitions.h"
 
 using TrafficSignTable = const std::unordered_map<TrafficSignTypes, std::string>;
 
@@ -21,8 +21,6 @@ extern TrafficSignTable TrafficSignIDZamunda;
 extern TrafficSignTable TrafficSignIDUSA;
 extern TrafficSignTable TrafficSignIDSpain;
 
-extern const std::unordered_map<SupportedTrafficSignCountry,
-    TrafficSignTable *>
-    TrafficSignLookupTableByCountry;
+extern const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> TrafficSignLookupTableByCountry;
 
 extern const std::unordered_map<std::string, std::vector<int>> priorityTable;
