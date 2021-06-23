@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 09.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_LANELET_OPERATIONS_H
-#define ENV_MODEL_LANELET_OPERATIONS_H
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 #include "lane.h"
@@ -49,7 +51,6 @@ LineMarking matchStringToLineMarking(const std::string &type);
  * @return lane spanned by concatenated lanelets
  */
 std::vector<std::shared_ptr<Lane>>
-combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet, Lanelet curLaneLanelet = {},
+combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &curLanelet,
+                                              const Lanelet &curLaneLanelet = {},
                                               std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
-
-#endif // ENV_MODEL_LANELET_OPERATIONS_H
