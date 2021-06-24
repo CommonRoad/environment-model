@@ -49,6 +49,7 @@ Consider specifying the following options:
  * The recommended approach is to use a user-writable folder as the installation prefix.
    It is totally fine to use the same installation prefix for both the Drivability Checker and
    the Environment Model.
+ * Replace the build type if necessary
 
 Example invocation:
 ```bash
@@ -61,9 +62,14 @@ cmake \
 
 Afterward build with make,
 ```bash
-make -j4
+cmake --build . -- parallel 4
 ```
-where you can replace `-j4` in case more/less threads are available for the build.
+where you can replace `4` in case more/less threads are available for the build.
+
+Install the CommonRoad Drivability Checker library by running
+```bash
+cmake --install .
+```
 
 ### Python
 

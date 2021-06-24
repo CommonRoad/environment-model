@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 09.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "lanelet_operations.h"
@@ -73,7 +76,7 @@ LineMarking matchStringToLineMarking(const std::string &type) {
 }
 
 std::vector<std::shared_ptr<Lane>>
-combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanelet, Lanelet curLaneLanelet,
+combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &curLanelet, const Lanelet &curLaneLanelet,
                                               std::vector<std::shared_ptr<Lanelet>> containedLanelets) {
     // initialize lanelet elements
     static size_t id;
@@ -88,7 +91,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanele
     std::vector<std::shared_ptr<Lanelet>> successorLanelets{curLanelet->getSuccessors()};
     std::set<LaneletType> typeList;
     laneletList.push_back(curLanelet);
-    if (curLaneLanelet.getCenterVertices().size() == 0) {
+    if (curLaneLanelet.getCenterVertices().empty()) { // first lanelet of lane
         userOneWay = curLanelet->getUserOneWay();
         userBidirectional = curLanelet->getUserBidirectional();
         centerVertices = curLanelet->getCenterVertices();
@@ -96,7 +99,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanele
         rightBorderVertices = curLanelet->getRightBorderVertices();
         predecessorLanelets = curLanelet->getPredecessors();
         typeList = curLanelet->getLaneletType();
-    } else {
+    } else { // merge with predecessor lanelets
         userOneWay = curLaneLanelet.getUserOneWay();
         userBidirectional = curLaneLanelet.getUserBidirectional();
         centerVertices = curLaneLanelet.getCenterVertices();
@@ -112,15 +115,33 @@ combineLaneletAndSuccessorsWithSameTypeToLane(std::shared_ptr<Lanelet> curLanele
         typeList = curLaneLanelet.getLaneletType();
     }
 
-    if (curLanelet->getSuccessors().size() > 0 and
+    std::set<LaneletType> classifyinglaneletTypes{LaneletType::incoming, LaneletType::shoulder, LaneletType::accessRamp,
+                                                  LaneletType::exitRamp}; // TODO find common place for storage
+    // check whether it is the last lanelet of the lane
+    if (!curLanelet->getSuccessors().empty() and
+        !std::any_of(curLanelet->getLaneletType().begin(), curLanelet->getLaneletType().end(),
+                     [](LaneletType t) { return t == LaneletType::incoming; }) and
         !std::any_of(containedLanelets.begin(), containedLanelets.end(),
-                     [curLanelet](std::shared_ptr<Lanelet> la) { return curLanelet->getId() == la->getId(); })) {
+                     [curLanelet](const std::shared_ptr<Lanelet> &la) { return curLanelet->getId() == la->getId(); })) {
+
         // create new lane
         Lanelet newLanelet = Lanelet(id, leftBorderVertices, rightBorderVertices, predecessorLanelets,
                                      successorLanelets, typeList, userOneWay, userBidirectional);
+
+        std::set<LaneletType> intersectingLa;
+        std::set_intersection(curLanelet->getLaneletType().begin(), curLanelet->getLaneletType().end(),
+                              classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
+                              std::inserter(intersectingLa, intersectingLa.begin()));
         for (const auto &la : curLanelet->getSuccessors()) {
-            auto newLanes{combineLaneletAndSuccessorsWithSameTypeToLane(la, newLanelet, laneletList)};
-            lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
+            std::set<LaneletType> intersectingSuc;
+            std::set_intersection(la->getLaneletType().begin(), la->getLaneletType().end(),
+                                  classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
+                                  std::inserter(intersectingSuc, intersectingSuc.begin()));
+
+            if (intersectingLa == intersectingSuc) {
+                auto newLanes{combineLaneletAndSuccessorsWithSameTypeToLane(la, newLanelet, laneletList)};
+                lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
+            }
         }
     } else {
         Lanelet newLanelet = Lanelet(id++, leftBorderVertices, rightBorderVertices, predecessorLanelets,
