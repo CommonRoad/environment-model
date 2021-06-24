@@ -91,7 +91,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &cu
     std::vector<std::shared_ptr<Lanelet>> successorLanelets{curLanelet->getSuccessors()};
     std::set<LaneletType> typeList;
     laneletList.push_back(curLanelet);
-    if (curLaneLanelet.getCenterVertices().empty()) {
+    if (curLaneLanelet.getCenterVertices().empty()) { // first lanelet of lane
         userOneWay = curLanelet->getUserOneWay();
         userBidirectional = curLanelet->getUserBidirectional();
         centerVertices = curLanelet->getCenterVertices();
@@ -99,7 +99,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &cu
         rightBorderVertices = curLanelet->getRightBorderVertices();
         predecessorLanelets = curLanelet->getPredecessors();
         typeList = curLanelet->getLaneletType();
-    } else {
+    } else {  // merge with predecessor lanelets
         userOneWay = curLaneLanelet.getUserOneWay();
         userBidirectional = curLaneLanelet.getUserBidirectional();
         centerVertices = curLaneLanelet.getCenterVertices();
@@ -117,6 +117,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &cu
 
     std::set<LaneletType> classifyinglaneletTypes{LaneletType::incoming, LaneletType::shoulder, LaneletType::accessRamp,
                                                   LaneletType::exitRamp}; // TODO find common place for storage
+    // check whether it is the last lanelet of the lane
     if (!curLanelet->getSuccessors().empty() and
         !std::any_of(curLanelet->getLaneletType().begin(), curLanelet->getLaneletType().end(),
                      [](LaneletType t) { return t == LaneletType::incoming; }) and
