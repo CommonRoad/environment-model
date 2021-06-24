@@ -1,5 +1,8 @@
 //
-// Created by sebastian on 08.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "test_road_network.h"
@@ -74,10 +77,9 @@ TEST_F(RoadNetworkTest, CreateLanesInterstate) {
 }
 
 TEST_F(RoadNetworkTest, CreateLanesUrban) {
-        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
-        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
-        CommandLine::getDataFromCommonRoad(pathToTestFileOne); EXPECT_EQ(roadNetworkScenarioOne->getLanes().size(),
-        37);
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+    EXPECT_EQ(roadNetworkScenarioOne->getLanes().size(), 37);
 
     std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
     const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
