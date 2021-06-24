@@ -23,7 +23,8 @@ TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {
         tempTrafficSign->setId(py_trafficSign.attr("traffic_sign_id").cast<int>());
         const py::list &py_trafficSignElements = py_trafficSign.attr("traffic_sign_elements").cast<py::list>();
         for (const py::handle &py_trafficSignElement : py_trafficSignElements) {
-            std::string trafficSignElementId = py_trafficSignElement.attr("traffic_sign_element_id").cast<py::str>();
+            std::string trafficSignElementId =
+                py_trafficSignElement.attr("traffic_sign_element_id").attr("value").cast<py::str>();
             std::shared_ptr<TrafficSignElement> newTrafficSignElement =
                 std::make_shared<TrafficSignElement>(trafficSignElementId);
             const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
@@ -31,6 +32,7 @@ TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {
             for (const auto &py_additional_value : additionalValues)
                 additionalValuesList.push_back(py_additional_value.cast<std::string>());
             newTrafficSignElement->setAdditionalValues(additionalValuesList);
+            tempTrafficSign->addTrafficSignElement(newTrafficSignElement);
         }
         tempTrafficSign->setVirtualElement(py_trafficSign.attr("virtual").cast<bool>());
         py::array_t<double> py_trafficSignPosition = py::getattr(py_trafficSign, "position");
@@ -210,19 +212,19 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
             }
         }
         // add traffic signs
-        py::object py_trafficSigns = py_singleLanelet.attr("traffic_signs");
+        py::object py_trafficSigns = py_singleLanelet.attr("_traffic_signs");
         for (const auto &sign : trafficSigns) {
             for (const auto &py_sign : py_trafficSigns)
-                if (sign->getId() == py_sign.cast<int>()) {
+                if (sign->getId() == py_sign.cast<size_t>()) {
                     tempLaneletContainer[arrayIndex]->addTrafficSign(sign);
                     break;
                 }
         }
         // add traffic light
-        py::object py_trafficLights = py_singleLanelet.attr("traffic_lights");
+        py::object py_trafficLights = py_singleLanelet.attr("_traffic_lights");
         for (const auto &light : trafficLights) {
             for (const auto &py_light : py_trafficLights)
-                if (light->getId() == py_light.cast<int>()) {
+                if (light->getId() == py_light.cast<size_t>()) {
                     tempLaneletContainer[arrayIndex]->addTrafficLight(light);
                     break;
                 }
