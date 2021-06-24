@@ -99,7 +99,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &cu
         rightBorderVertices = curLanelet->getRightBorderVertices();
         predecessorLanelets = curLanelet->getPredecessors();
         typeList = curLanelet->getLaneletType();
-    } else {  // merge with predecessor lanelets
+    } else { // merge with predecessor lanelets
         userOneWay = curLaneLanelet.getUserOneWay();
         userBidirectional = curLaneLanelet.getUserBidirectional();
         centerVertices = curLaneLanelet.getCenterVertices();
