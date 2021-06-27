@@ -17,6 +17,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/position/test_in_same_lane_predicate.cpp
         envModelTests/predicates/general/test_cut_in_predicate.cpp
         envModelTests/predicates/position/test_in_intersection_main_area_predicate.cpp
+        envModelTests/predicates/position/test_stop_line_in_front_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_right_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_left_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_straight_traffic_light_predicate.cpp
@@ -25,6 +26,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/velocity/test_required_speed_predicate.cpp
         envModelTests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
         envModelTests/predicates/velocity/test_slow_leading_vehicle_predicate.cpp
+        envModelTests/predicates/velocity/test_in_standstill_predicate.cpp
         envModelTests/predicates/utils_predicate_test.cpp
         )
 

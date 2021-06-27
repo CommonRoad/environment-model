@@ -29,11 +29,13 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
+        commonroad_cpp/predicates/position/stop_line_in_front_predicate.cpp
         commonroad_cpp/predicates/general/cut_in_predicate.cpp
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
         commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/required_speed_predicate.cpp
+        commonroad_cpp/predicates/velocity/in_standstill_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp
