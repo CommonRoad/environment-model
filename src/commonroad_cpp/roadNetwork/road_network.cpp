@@ -11,6 +11,8 @@
 #include <boost/geometry/algorithms/intersects.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
+#include <boost/geometry/index/rtree.hpp>
+#include <boost/geometry/index/parameters.hpp>
 
 #include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
@@ -24,15 +26,23 @@
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
+struct RoadNetwork::impl {
+    bgi::rtree<value, bgi::quadratic<16>> rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
+};
+
+RoadNetwork::RoadNetwork(RoadNetwork&&) = default;
+RoadNetwork::~RoadNetwork() = default;
+RoadNetwork& RoadNetwork::operator=(RoadNetwork&&) = default;
+
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, SupportedTrafficSignCountry cou,
                          std::vector<std::shared_ptr<TrafficSign>> signs,
                          std::vector<std::shared_ptr<TrafficLight>> lights,
                          std::vector<std::shared_ptr<Intersection>> inters)
     : laneletNetwork(network), country(cou), trafficSigns(std::move(signs)), trafficLights(std::move(lights)),
-      intersections(std::move(inters)) {
+      intersections(std::move(inters)), pImpl(std::make_unique<impl>()) {
     // construct Rtree out of lanelets
     for (const std::shared_ptr<Lanelet> &la : network)
-        rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
+        pImpl->rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
     trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(cou);
     createLanes(network);
 }
@@ -85,7 +95,7 @@ void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>> &netwo
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
     // find all relevant lanelets by making use of the rtree
     std::vector<value> relevantLanelets;
-    rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())), std::back_inserter(relevantLanelets));
+    pImpl->rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())), std::back_inserter(relevantLanelets));
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for (auto la : relevantLanelets)
         lanelets.push_back(findLaneletById(static_cast<size_t>(la.second)));
