@@ -14,11 +14,7 @@ bool PassesStopLinePredicate::booleanEvaluation(size_t timeStep, const std::shar
     auto lanelets{obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep)};
     for (const auto &la : lanelets) {
         std::shared_ptr<StopLine> stopLine{la->getStopLine()};
-        auto signs{stopLine->getTrafficSigns()};
-        if (stopLine == nullptr or !std::any_of(signs.begin(), signs.end(), [world](std::shared_ptr<TrafficSign> sign) {
-                return regulatory_elements_utils::trafficSignReferencesStopSign(sign,
-                                                                                world->getRoadNetwork()->getCountry());
-            }))
+        if (stopLine == nullptr)
             continue;
         Eigen::Vector2d stopLineLonPosOne =
             obstacleK->getOwnLane()->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(

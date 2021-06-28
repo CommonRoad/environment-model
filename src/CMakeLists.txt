@@ -41,6 +41,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.cpp
         commonroad_cpp/predicates/position/in_intersection_main_area_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/predicates/predicate_parameters.cpp

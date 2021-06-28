@@ -28,10 +28,10 @@ void StopLineInFrontPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionObstacleOne, 5, 2));
@@ -41,7 +41,7 @@ void StopLineInFrontPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
     obstacleOne->setOwnLane(roadNetwork->getLanes(), 0);
-    obstacleTwo->setOwnLane(roadNetwork->getLanes(), 1);
+    obstacleTwo->setOwnLane(roadNetwork->getLanes(), 0);
 
     world = std::make_shared<World>(
         World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}));
