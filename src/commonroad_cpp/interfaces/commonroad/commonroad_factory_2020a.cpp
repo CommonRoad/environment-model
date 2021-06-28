@@ -76,7 +76,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                 }
                 // set lanelet type
                 if (!(strcmp(child.name(), "laneletType")))
-                    laneletType.insert(matchStringToLaneletType(child.first_child().value()));
+                    laneletType.insert(lanelet_operations::matchStringToLaneletType(child.first_child().value()));
                 // set user one way
                 if (!(strcmp(child.name(), "userOneWay")))
                     userOneWay.insert(matchStringToObstacleType(child.first_child().value()));
@@ -111,7 +111,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                             points.push_back(newVertice);
                         }
                         if (!(strcmp(elem.name(), "lineMarking")))
-                            sl->setLineMarking(matchStringToLineMarking(elem.first_child().value()));
+                            sl->setLineMarking(lanelet_operations::matchStringToLineMarking(elem.first_child().value()));
                         if ((strcmp(elem.name(), "trafficSignRef")) == 0) {
                             for (const auto &sign : trafficSigns) {
                                 if (child.attribute("ref").as_ullong() == sign->getId()) {

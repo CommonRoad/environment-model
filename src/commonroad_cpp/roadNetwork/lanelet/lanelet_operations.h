@@ -11,6 +11,7 @@
 #include "lane.h"
 #include "lanelet.h"
 
+namespace lanelet_operations {
 /**
  * Matches a string to a driving direction
  *
@@ -50,7 +51,26 @@ LineMarking matchStringToLineMarking(const std::string &type);
  * @param type specifies the lanelet type the concatenated lanelets should have in common
  * @return lane spanned by concatenated lanelets
  */
-std::vector<std::shared_ptr<Lane>>
+std::vector<std::vector<std::shared_ptr<Lanelet>>>
 combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &curLanelet,
-                                              const Lanelet &curLaneLanelet = {},
+                                              std::set<LaneletType> classifyingLaneletTypes = {},
                                               std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
+
+std::vector<std::vector<std::shared_ptr<Lanelet>>> combineLaneletAndPredecessorsWithSameTypeToLane(
+    const std::shared_ptr<Lanelet> &curLanelet,
+    std::set<LaneletType> classifyingLaneletTypes = {},
+    std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
+
+std::vector<std::shared_ptr<Lane>> createInterstateLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork, size_t newId);
+
+std::vector<std::shared_ptr<Lane>> createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t newId);
+
+std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, size_t newId);
+
+void setLaneAdjacency(std::vector<std::shared_ptr<Lane>> &lanes);
+
+std::shared_ptr<Lane> mergeLanes(std::shared_ptr<Lane> predecessorLane, std::shared_ptr<Lane> successorLane, size_t newId);
+
+bool containsLaneletType(LaneletType type, std::set<LaneletType> baseTypesSet);
+
+} // namespace lanelet_operations

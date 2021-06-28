@@ -129,13 +129,4 @@ class RoadNetwork {
     bgi::rtree<value, bgi::quadratic<16>>
         rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
-
-    //**< interpreter for certain traffic signs*
-
-    /**
-     * Given a set of lanelets, creates the corresponding interstate-based lanes
-     *
-     * @param laneletNetwork set of lanelets
-     */
-    void createLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
 };

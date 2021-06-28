@@ -196,7 +196,7 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
                 tempLaneletContainer[arrayIndex]->addLeftVertex(newVertex);
         }
         if ((strcmp(points.name(), "lineMarking")) == 0) {
-            lineMarking = matchStringToLineMarking(points.value());
+            lineMarking = lanelet_operations::matchStringToLineMarking(points.value());
             if (!(strcmp(side, "rightBound")))
                 tempLaneletContainer[arrayIndex]->setLineMarkingRight(lineMarking);
             else if (!(strcmp(side, "leftBound")))

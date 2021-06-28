@@ -27,7 +27,6 @@ RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, S
     for (const std::shared_ptr<Lanelet> &la : network)
         rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
     trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(cou);
-    createLanes(network);
 }
 
 const std::vector<std::shared_ptr<Lanelet>> &RoadNetwork::getLaneletNetwork() const { return laneletNetwork; }
@@ -35,45 +34,6 @@ const std::vector<std::shared_ptr<Lanelet>> &RoadNetwork::getLaneletNetwork() co
 std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() { return lanes; }
 
 const std::vector<std::shared_ptr<Intersection>> &RoadNetwork::getIntersections() const { return intersections; }
-
-void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>> &network) {
-    std::vector<std::shared_ptr<Lanelet>> startLanelets;
-    std::set<LaneletType> classifyinglaneletTypes{LaneletType::incoming, LaneletType::shoulder, LaneletType::accessRamp,
-                                                  LaneletType::exitRamp};
-
-    for (const auto &la : network) {
-        if (la->getPredecessors().empty()) // if no predecessor -> use as start lanelet
-            startLanelets.push_back(la);
-        else {
-            std::vector<std::shared_ptr<Lanelet>> predecessors;
-            for (const std::shared_ptr<Lanelet> &pre : la->getPredecessors()) {
-                predecessors.push_back(pre);
-            }
-
-            // if no predecessor with same classifying type exist -> use this lanelet as start lanelet
-            std::set<LaneletType> intersectingLa;
-            std::set_intersection(la->getLaneletType().begin(), la->getLaneletType().end(),
-                                  classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
-                                  std::inserter(intersectingLa, intersectingLa.begin()));
-            for (const auto &pred : la->getPredecessors()) {
-                std::set<LaneletType> intersectingPred;
-                std::set_intersection(pred->getLaneletType().begin(), pred->getLaneletType().end(),
-                                      classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
-                                      std::inserter(intersectingPred, intersectingPred.begin()));
-                if (intersectingPred.empty() != intersectingLa.empty()) {
-                    startLanelets.push_back(la);
-                    break;
-                }
-            }
-        }
-    }
-    // create lanes
-    for (const auto &la : startLanelets) {
-        //  laneletType = extractClassifyingLaneletType(la);
-        auto newLanes{combineLaneletAndSuccessorsWithSameTypeToLane(la)};
-        lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
-    }
-}
 
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
     // find all relevant lanelets by making use of the rtree
@@ -117,7 +77,7 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
     auto it = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork),
                            [id](auto val) { return val->getId() == id; });
     if (it == std::end(laneletNetwork))
-        throw std::domain_error(std::to_string(id));
+        throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID" + std::to_string(id) + " does not exist in road netowrk!");
 
     return *it;
 }
