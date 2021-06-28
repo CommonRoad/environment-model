@@ -13,6 +13,8 @@
 
 #include <Eigen/Core>                                      // for Vector2d
 
+#include <geometry/curvilinear_coordinate_system.h>
+
 #include <boost/geometry/geometries/ring.hpp>              // for ring
 
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
@@ -278,7 +280,7 @@ void Obstacle::setOncomings(const std::vector<std::shared_ptr<Lanelet>> &onc) { 
 
 void Obstacle::convertPointToCurvilinear(size_t timeStep) const {
     try {
-        Eigen::Vector2d convertedPoint = referenceLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+        Eigen::Vector2d convertedPoint = referenceLane->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
             getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
         getStateByTimeStep(timeStep)->setLonPosition(convertedPoint.x());
         getStateByTimeStep(timeStep)->setLatPosition(convertedPoint.y());

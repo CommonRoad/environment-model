@@ -5,6 +5,8 @@
 // Credits: BMW Car@TUM
 //
 
+#include <geometry/curvilinear_coordinate_system.h>
+
 #include "lanelet_operations.h"
 
 DrivingDirection matchStringToDrivingDirection(const std::string &type) {
@@ -152,8 +154,9 @@ combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &cu
 
         geometry::util::resample_polyline(reference_path, 2, reference_path);
 
+        auto ccs = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
         std::shared_ptr<Lane> lane =
-            std::make_shared<Lane>(laneletList, newLanelet, CurvilinearCoordinateSystem(reference_path));
+            std::make_shared<Lane>(laneletList, newLanelet, ccs);
         lanes.push_back(lane);
     }
     return lanes;
