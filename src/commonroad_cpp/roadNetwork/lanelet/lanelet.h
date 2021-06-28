@@ -12,8 +12,6 @@
 #include <vector>
 #include <set>
 
-#include <boost/geometry/core/static_assert.hpp>
-
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 
