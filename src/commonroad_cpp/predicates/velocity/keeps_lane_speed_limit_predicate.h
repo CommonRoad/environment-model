@@ -6,6 +6,11 @@
 //
 #pragma once
 
+#include <memory>
+#include <vector>
+
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+
 #include "../commonroad_predicate.h"
 
 /**

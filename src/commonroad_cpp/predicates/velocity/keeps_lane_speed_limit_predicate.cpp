@@ -4,6 +4,13 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
+
+#include <algorithm>
+
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/world.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+
 #include "keeps_lane_speed_limit_predicate.h"
 
 double KeepsLaneSpeedLimitPredicate::speedLimit(const std::shared_ptr<Lanelet> &lanelet,

@@ -1,8 +1,13 @@
 #ifndef ENV_MODEL_COMMONROAD_CONTAINER_H
 #define ENV_MODEL_COMMONROAD_CONTAINER_H
 
-#include "commonroad_cpp/world.h"
 #include <memory>
+#include <map>
+#include <vector>
+
+class World;
+class RoadNetwork;
+class Obstacle;
 
 /**
  * Class for storing world objects based on CommonRoad scenarios.

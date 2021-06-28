@@ -2,6 +2,8 @@
 // Created by sebastian on 20.12.20.
 //
 
+#include <cmath>
+
 #include "test_state.h"
 
 void StateTestInitialization::setUpStates() {

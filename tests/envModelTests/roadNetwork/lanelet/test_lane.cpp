@@ -2,6 +2,8 @@
 // Created by sebastian on 07.12.20.
 //
 
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+
 #include "test_lane.h"
 
 void LaneTestInitialization::setUpLane() {

@@ -1,14 +1,23 @@
 //
 // Created by Sebastian Maierhofer on 30.10.20.
 //
-#include <utility>
 
+#include <utility>
+#include <sstream>
+
+#include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include "commonroad_cpp/world.h"
+
 #include "commonroad_factory_2018b.h"
 #include "commonroad_factory_2020a.h"
+
 #include "xml_reader.h"
-#include <sstream>
 
 std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xmlFile) {
     std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();

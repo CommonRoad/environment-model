@@ -2,10 +2,21 @@
 // Created by Sebastian Maierhofer on 08.11.20.
 //
 
+#include <cstring>
+#include <string>
+#include <memory>
+#include <vector>
+
+#include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
+#include "commonroad_cpp/obstacle/obstacle.h"
+#include <commonroad_cpp/obstacle/obstacle_operations.h>
+#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
+#include "commonroad_cpp/world.h"
+
 #include "commonroad_factory_2018b.h"
 #include "xml_reader.h"
-#include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
-#include <commonroad_cpp/obstacle/obstacle_operations.h>
 
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles() {
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};

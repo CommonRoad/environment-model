@@ -5,7 +5,7 @@
 #ifndef ENV_MODEL_TESTS_ENV_MODEL_TESTS_PREDICATES_UTILS_PREDICATE_TEST_H_
 #define ENV_MODEL_TESTS_ENV_MODEL_TESTS_PREDICATES_UTILS_PREDICATE_TEST_H_
 
-#include "commonroad_cpp/roadNetwork/road_network.h"
+class RoadNetwork;
 
 namespace utils_predicate_test {
 std::shared_ptr<RoadNetwork> create_road_network();

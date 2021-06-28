@@ -5,6 +5,12 @@
 // Credits: BMW Car@TUM
 //
 
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/world.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+
 #include "in_same_lane_predicate.h"
 
 bool InSameLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

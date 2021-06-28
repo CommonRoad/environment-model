@@ -7,13 +7,6 @@
 
 #pragma once
 
-// #include "commonroad_cpp/auxiliaryDefs/structs.h"
-// #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
-// #include "commonroad_cpp/geometry/rectangle.h"
-// #include "commonroad_cpp/geometry/shape.h"
-// #include "commonroad_cpp/roadNetwork/lanelet/lane.h"
-// #include "commonroad_cpp/roadNetwork/road_network.h"
-
 #include <cstddef>
 #include <vector>
 #include <memory>
@@ -21,21 +14,10 @@
 
 #include "state.h"
 
-// #include <boost/geometry/geometry.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
-
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/rectangle.h>
-
-/*
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-#include <commonroad_cpp/roadNetwork/road_network.h>
-*/
-using point_type = boost::geometry::model::d2::point_xy<double>;
-using polygon_type = boost::geometry::model::polygon<point_type>;
+#include <commonroad_cpp/geometry/types.h>
 
 class Lanelet;
 class Lane;

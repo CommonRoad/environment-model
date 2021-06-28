@@ -4,6 +4,10 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
+
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+
 #include "intersection_operations.h"
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 

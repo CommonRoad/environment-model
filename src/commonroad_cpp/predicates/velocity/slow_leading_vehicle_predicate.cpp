@@ -4,6 +4,11 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
+
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/world.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+
 #include "slow_leading_vehicle_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"

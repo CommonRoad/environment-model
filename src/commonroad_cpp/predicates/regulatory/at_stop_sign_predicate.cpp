@@ -5,8 +5,14 @@
 // Credits: BMW Car@TUM
 //
 
+#include <memory>
+
+#include <commonroad_cpp/world.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
+
 #include "at_stop_sign_predicate.h"
-#include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 
 bool AtStopSignPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,

@@ -5,14 +5,20 @@
 // Credits: BMW Car@TUM
 //
 
-#include "road_network.h"
+#include <utility>
+
+#include <boost/geometry/algorithms/intersects.hpp>
+#include <boost/geometry/geometries/point.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
 
 #include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/box.hpp>
-#include <utility>
+#include "road_network.h"
 
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;

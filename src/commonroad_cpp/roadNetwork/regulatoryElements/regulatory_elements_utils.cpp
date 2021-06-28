@@ -5,6 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+
 #include "regulatory_elements_utils.h"
 #include "../intersection/intersection_operations.h"
 #include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"

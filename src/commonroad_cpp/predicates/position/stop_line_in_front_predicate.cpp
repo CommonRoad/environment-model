@@ -5,8 +5,16 @@
 // Credits: BMW Car@TUM
 //
 
+#include <Eigen/Dense>
+
+#include <commonroad_cpp/world.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
+
 #include "stop_line_in_front_predicate.h"
-#include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 
 bool StopLineInFrontPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,

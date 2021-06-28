@@ -5,8 +5,11 @@
 #ifndef ENV_MODEL_TEST_LANE_H
 #define ENV_MODEL_TEST_LANE_H
 
+#include <memory>
+
 #include "../lanelet/test_lanelet.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lane.h"
+
+class Lane;
 
 class LaneTestInitialization : public LaneletTestInitialization {
   protected:

@@ -14,32 +14,20 @@
 #include <utility>
 #include <vector>
 
-#include <boost/core/addressof.hpp>
-#include <boost/core/ignore_unused.hpp>
-#include <boost/geometry/core/static_assert.hpp>
-// #include <boost/geometry.hpp>
-#include <boost/geometry/geometries/box.hpp>
-#include <boost/geometry/geometries/point.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/geometry/index/parameters.hpp>
-#include <boost/range/adaptor/indexed.hpp>
-#include <boost/range/adaptor/transformed.hpp>
-#include <boost/variant/detail/apply_visitor_unary.hpp>
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
+#include <commonroad_cpp/geometry/types.h>
 
-
-//#include <unordered_map>
-
-namespace bg = boost::geometry;
-namespace bgi = boost::geometry::index;
-
-using point = bg::model::point<float, 2, bg::cs::cartesian>;
 using value = std::pair<box, unsigned>;
+
+class Lanelet;
+class Lane;
+class Incoming;
+class TrafficLight;
+class TrafficSign;
+class Intersection;
 
 /**
  * Class representing a road network.
@@ -142,7 +130,7 @@ class RoadNetwork {
     std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< set of traffic lights contained in road network */
     std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
     std::vector<std::shared_ptr<Lane>> lanes; //**< set of interstate-based lanes contained in road network */
-    bgi::rtree<value, bgi::quadratic<16>>
+    boost::geometry::index::rtree<value, boost::geometry::index::quadratic<16>>
         rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
 

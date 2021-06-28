@@ -5,9 +5,13 @@
 #include <boost/program_options.hpp>
 #include <iostream>
 
+#include "commonroad_cpp/obstacle/obstacle.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
 #include "command_line_input.h"
+
+namespace po = boost::program_options;
 
 namespace CommandLine {
 

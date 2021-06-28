@@ -20,6 +20,7 @@
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/obstacle/state.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>

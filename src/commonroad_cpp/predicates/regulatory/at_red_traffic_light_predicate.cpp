@@ -5,6 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/world.h>
+
 #include "at_red_traffic_light_predicate.h"
 #include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 
