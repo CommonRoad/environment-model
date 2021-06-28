@@ -7,9 +7,9 @@
 
 #include <cstring>
 
-#include "commonroad_factory_2020a.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include "commonroad_factory_2020a.h"
 #include "xml_reader.h"
 
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2020a::createObstacles() {

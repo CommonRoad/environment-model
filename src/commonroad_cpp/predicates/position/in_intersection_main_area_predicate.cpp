@@ -9,8 +9,8 @@
 #include <map>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/world.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/world.h>
 
 #include "in_intersection_main_area_predicate.h"
 

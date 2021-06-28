@@ -12,10 +12,10 @@
 
 #include <commonroad_cpp/geometry/circle.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
 std::vector<std::shared_ptr<TrafficSign>>
 TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {

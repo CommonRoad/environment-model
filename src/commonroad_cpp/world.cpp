@@ -2,9 +2,9 @@
 // Created by Sebastian Maierhofer on 06.04.21.
 //
 
+#include <memory>
 #include <utility>
 #include <vector>
-#include <memory>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
 

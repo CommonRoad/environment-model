@@ -8,10 +8,10 @@
 #include <utility>
 
 #include <boost/geometry.hpp>
+#include <boost/geometry/algorithms/correct.hpp>
 #include <boost/geometry/algorithms/intersects.hpp>
 #include <boost/geometry/algorithms/simplify.hpp>
 #include <boost/geometry/algorithms/unique.hpp>
-#include <boost/geometry/algorithms/correct.hpp>
 
 #include "lanelet.h"
 

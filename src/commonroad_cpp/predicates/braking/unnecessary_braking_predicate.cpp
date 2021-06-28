@@ -5,15 +5,15 @@
 // Credits: BMW Car@TUM
 //
 
+#include <algorithm>
 #include <memory>
 #include <vector>
-#include <algorithm>
 
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
 #include <commonroad_cpp/predicates/position/in_front_of_predicate.h>
 #include <commonroad_cpp/predicates/position/in_same_lane_predicate.h>
-#include <commonroad_cpp/obstacle/state.h>
-#include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/world.h>
 
 #include "unnecessary_braking_predicate.h"

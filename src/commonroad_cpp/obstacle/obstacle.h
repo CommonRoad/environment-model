@@ -8,15 +8,15 @@
 #pragma once
 
 #include <cstddef>
-#include <vector>
-#include <memory>
 #include <map>
+#include <memory>
+#include <vector>
 
 #include "state.h"
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
-#include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/rectangle.h>
+#include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
 
 class Lanelet;

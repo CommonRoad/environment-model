@@ -5,8 +5,8 @@
 #ifndef ENV_MODEL_XML_READER_H
 #define ENV_MODEL_XML_READER_H
 
-#include <string>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"

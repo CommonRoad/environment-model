@@ -45,12 +45,12 @@ class RoadNetwork {
         std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{},
         std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{});
 
-    RoadNetwork(RoadNetwork&&);
+    RoadNetwork(RoadNetwork &&);
     ~RoadNetwork();
-    RoadNetwork& operator=(RoadNetwork&&);
+    RoadNetwork &operator=(RoadNetwork &&);
 
-    RoadNetwork(const RoadNetwork&) = delete;
-    RoadNetwork& operator=(const RoadNetwork&) = delete;
+    RoadNetwork(const RoadNetwork &) = delete;
+    RoadNetwork &operator=(const RoadNetwork &) = delete;
 
     /**
      * Getter for lanelet network.

@@ -2,8 +2,8 @@
 // Created by Sebastian Maierhofer on 19.02.21.
 //
 
-#include <stdexcept>
 #include <cmath>
+#include <stdexcept>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
 

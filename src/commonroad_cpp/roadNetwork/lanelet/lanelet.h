@@ -9,19 +9,18 @@
 
 #include <cstddef>
 #include <memory>
-#include <vector>
 #include <set>
+#include <vector>
 
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 
-#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
+#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/types.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
-
 
 /**
  * Class representing a lanelet.

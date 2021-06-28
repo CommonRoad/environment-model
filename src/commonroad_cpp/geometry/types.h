@@ -1,11 +1,11 @@
 #pragma once
 
-#include <boost/geometry/geometries/register/box.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
+#include <boost/geometry/geometries/register/box.hpp>
 
 /*
- * Note: 
+ * Note:
  * The point_type_alias definition below is required because Boost.Geometry
  * already defines a point_type, but we also want to define a point_type.
  * Our point_type is going to shadow Boost's, however that doesn't work with
@@ -24,24 +24,19 @@ using polygon_type = boost::geometry::model::polygon<point_type_alias>;
  * Note: We don't use Boost's box model because the include is quite heavy and
  * boxes are (in)directly used almost everywhere.
  */
-struct box_type
-{
+struct box_type {
     point_type_alias ll; //**< lower left corner */
     point_type_alias ur; //**< upper right corner */
 
-	/**
-	  * Getter for lower left corner
-	  */
-    point_type_alias min_corner() const noexcept {
-    	return ll;
-    }
+    /**
+     * Getter for lower left corner
+     */
+    point_type_alias min_corner() const noexcept { return ll; }
 
-	/**
-	  * Getter for upper right corner
-	  */
-    point_type_alias max_corner() const noexcept {
-    	return ur;
-    }
+    /**
+     * Getter for upper right corner
+     */
+    point_type_alias max_corner() const noexcept { return ur; }
 };
 
 // Register the box type for Boost

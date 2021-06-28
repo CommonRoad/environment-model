@@ -155,8 +155,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &cu
         geometry::util::resample_polyline(reference_path, 2, reference_path);
 
         auto ccs = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
-        std::shared_ptr<Lane> lane =
-            std::make_shared<Lane>(laneletList, newLanelet, ccs);
+        std::shared_ptr<Lane> lane = std::make_shared<Lane>(laneletList, newLanelet, ccs);
         lanes.push_back(lane);
     }
     return lanes;

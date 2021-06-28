@@ -8,8 +8,8 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/world.h>
 
-#include "at_red_left_traffic_light_predicate.h"
 #include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
+#include "at_red_left_traffic_light_predicate.h"
 
 bool AtRedLeftTrafficLightPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,

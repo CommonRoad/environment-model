@@ -5,8 +5,8 @@
 #ifndef ENV_MODEL_LANE_H
 #define ENV_MODEL_LANE_H
 
-#include <memory>                                    // for shared_ptr
-#include <vector>                                    // for vector
+#include <memory> // for shared_ptr
+#include <vector> // for vector
 
 #include "lanelet.h"
 
@@ -28,7 +28,8 @@ class Lane : public Lanelet {
      * @param lanelet Lanelet object spanning lane.
      * @param ccs Curvilinear coordinate system object.
      */
-    Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet lanelet, std::shared_ptr<CurvilinearCoordinateSystem> ccs);
+    Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet lanelet,
+         std::shared_ptr<CurvilinearCoordinateSystem> ccs);
 
     /**
      * Getter for curvilinear coordinate system using center line of lane as reference.
@@ -46,7 +47,8 @@ class Lane : public Lanelet {
 
   private:
     std::vector<std::shared_ptr<Lanelet>> containedLanelets; //**< list of pointers to lanelets constructing lane */
-    std::shared_ptr<CurvilinearCoordinateSystem> curvilinearCoordinateSystem; //**< curvilinear coordinate system defined by lane */
+    std::shared_ptr<CurvilinearCoordinateSystem>
+        curvilinearCoordinateSystem; //**< curvilinear coordinate system defined by lane */
 };
 
 #endif // ENV_MODEL_LANE_H

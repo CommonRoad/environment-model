@@ -6,13 +6,13 @@
 //
 
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/world.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
+#include <commonroad_cpp/world.h>
 
-#include "slow_leading_vehicle_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include "keeps_lane_speed_limit_predicate.h"
+#include "slow_leading_vehicle_predicate.h"
 
 bool SlowLeadingVehiclePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,

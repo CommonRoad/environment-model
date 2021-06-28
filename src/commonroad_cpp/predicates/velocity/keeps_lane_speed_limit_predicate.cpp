@@ -8,8 +8,8 @@
 #include <algorithm>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/world.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
+#include <commonroad_cpp/world.h>
 
 #include "keeps_lane_speed_limit_predicate.h"
 

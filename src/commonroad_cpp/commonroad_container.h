@@ -1,8 +1,8 @@
 #ifndef ENV_MODEL_COMMONROAD_CONTAINER_H
 #define ENV_MODEL_COMMONROAD_CONTAINER_H
 
-#include <memory>
 #include <map>
+#include <memory>
 #include <vector>
 
 class World;

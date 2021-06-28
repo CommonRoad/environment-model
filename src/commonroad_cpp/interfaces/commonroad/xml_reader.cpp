@@ -3,17 +3,17 @@
 //
 
 #include <cstring>
-#include <utility>
 #include <sstream>
+#include <utility>
 
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
 #include "commonroad_factory_2018b.h"
 #include "commonroad_factory_2020a.h"

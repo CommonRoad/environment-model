@@ -5,12 +5,12 @@
 // Credits: BMW Car@TUM
 //
 
-#include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
 
-#include "test_road_network.h"
 #include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include "test_road_network.h"
 
 void RoadNetworkTestInitialization::setUpRoadNetwork() {
     std::vector<std::shared_ptr<Lanelet>> lanelets{laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive};
