@@ -7,6 +7,8 @@
 
 #include <Eigen/Dense>
 
+#include <geometry/curvilinear_coordinate_system.h>
+
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
@@ -25,10 +27,10 @@ bool PassesStopLinePredicate::booleanEvaluation(size_t timeStep, const std::shar
         if (stopLine == nullptr)
             continue;
         Eigen::Vector2d stopLineLonPosOne =
-            obstacleK->getOwnLane()->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+            obstacleK->getOwnLane()->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
                 stopLine->getPoints().at(0).x, stopLine->getPoints().at(0).y);
         Eigen::Vector2d stopLineLonPosTwo =
-            obstacleK->getOwnLane()->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+            obstacleK->getOwnLane()->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
                 stopLine->getPoints().at(1).x, stopLine->getPoints().at(1).y);
         auto stopLineMinPos{std::min(stopLineLonPosOne.x(), stopLineLonPosTwo.x())};
 
