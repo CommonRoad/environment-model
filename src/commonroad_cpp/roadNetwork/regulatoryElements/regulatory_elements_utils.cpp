@@ -7,6 +7,7 @@
 
 #include "regulatory_elements_utils.h"
 #include "../intersection/intersection_operations.h"
+#include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
 
 std::set<std::shared_ptr<TrafficLight>>
 regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
@@ -57,4 +58,12 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
             return true;
     }
     return false;
+}
+
+bool regulatory_elements_utils::trafficSignReferencesStopSign(std::shared_ptr<TrafficSign> sign,
+                                                              SupportedTrafficSignCountry country) {
+    const auto signId{TrafficSignLookupTableByCountry.at(country)->at(TrafficSignTypes::STOP)};
+    auto elements{sign->getTrafficSignElements()};
+    return std::any_of(elements.begin(), elements.end(),
+                       [signId](std::shared_ptr<TrafficSignElement> elem) { return elem->getId() == signId; });
 }

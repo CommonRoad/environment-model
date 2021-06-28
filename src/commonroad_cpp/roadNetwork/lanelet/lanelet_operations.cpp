@@ -115,7 +115,7 @@ combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &cu
         typeList = curLaneLanelet.getLaneletType();
     }
 
-    std::set<LaneletType> classifyinglaneletTypes{LaneletType::incoming, LaneletType::shoulder, LaneletType::accessRamp,
+    std::set<LaneletType> classifyingLaneletTypes{LaneletType::incoming, LaneletType::shoulder, LaneletType::accessRamp,
                                                   LaneletType::exitRamp}; // TODO find common place for storage
     // check whether it is the last lanelet of the lane
     if (!curLanelet->getSuccessors().empty() and
@@ -130,12 +130,12 @@ combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &cu
 
         std::set<LaneletType> intersectingLa;
         std::set_intersection(curLanelet->getLaneletType().begin(), curLanelet->getLaneletType().end(),
-                              classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
+                              classifyingLaneletTypes.begin(), classifyingLaneletTypes.end(),
                               std::inserter(intersectingLa, intersectingLa.begin()));
         for (const auto &la : curLanelet->getSuccessors()) {
             std::set<LaneletType> intersectingSuc;
             std::set_intersection(la->getLaneletType().begin(), la->getLaneletType().end(),
-                                  classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
+                                  classifyingLaneletTypes.begin(), classifyingLaneletTypes.end(),
                                   std::inserter(intersectingSuc, intersectingSuc.begin()));
 
             if (intersectingLa == intersectingSuc) {

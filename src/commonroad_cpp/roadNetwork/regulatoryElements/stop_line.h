@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 01.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_STOP_LINE_H
-#define ENV_MODEL_STOP_LINE_H
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 #include "traffic_light.h"
@@ -14,6 +16,42 @@
  */
 class StopLine {
   public:
+    /**
+     * Constructor.
+     *
+     * @param points Left and right vertex of stop line.
+     * @param traffic_sign List of pointers to associated traffic signs.
+     * @param traffic_light List of pointers to associated traffic lights.
+     * @param line_marking Line marking type of stop line.
+     */
+    StopLine(std::vector<vertex> points, std::vector<std::shared_ptr<TrafficSign>> traffic_sign,
+             std::vector<std::shared_ptr<TrafficLight>> traffic_light, LineMarking line_marking);
+
+    /**
+     * Constructor.
+     *
+     * @param points Left and right vertex of stop line.
+     * @param traffic_sign List of pointers to associated traffic signs.
+     * @param line_marking Line marking type of stop line.
+     */
+    StopLine(std::vector<vertex> points, std::vector<std::shared_ptr<TrafficSign>> traffic_sign,
+             LineMarking line_marking);
+
+    /**
+     * Constructor.
+     *
+     * @param points Left and right vertex of stop line.
+     * @param traffic_light List of pointers to associated traffic lights.
+     * @param line_marking Line marking type of stop line.
+     */
+    StopLine(std::vector<vertex> points, std::vector<std::shared_ptr<TrafficLight>> traffic_light,
+             LineMarking line_marking);
+
+    /**
+     * Default constructor.
+     */
+    StopLine() = default;
+
     /**
      * Getter for start and end point of stop line.
      *
@@ -85,10 +123,8 @@ class StopLine {
     void setLineMarking(LineMarking lineMarking);
 
   private:
-    std::vector<vertex> points;                              //**< start and end vertex of stop line */
-    std::vector<std::shared_ptr<TrafficSign>> trafficSign;   //**< pointer to traffic signs referenced by stop line */
-    std::vector<std::shared_ptr<TrafficLight>> trafficLight; //**< pointer to traffic lights referenced by stop line */
-    LineMarking lineMarking;                                 //**< type of line marking */
+    std::vector<vertex> points;                               //**< start and end vertex of stop line */
+    std::vector<std::shared_ptr<TrafficSign>> trafficSigns;   //**< pointer to traffic signs referenced by stop line */
+    std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< pointer to traffic lights referenced by stop line */
+    LineMarking lineMarking;                                  //**< type of line marking */
 };
-
-#endif // ENV_MODEL_STOP_LINE_H

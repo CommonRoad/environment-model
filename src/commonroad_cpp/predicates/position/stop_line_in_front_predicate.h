@@ -10,9 +10,9 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- * Evaluates whether the kth and pth vehicle occupy the same lane.
+ * Evaluates whether the a vehicle has a stop line directly in front.
  */
-class InIntersectionMainAreaPredicate : public CommonRoadPredicate {
+class StopLineInFrontPredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using objects.
@@ -51,5 +51,5 @@ class InIntersectionMainAreaPredicate : public CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &) override;
+                                    const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 };
