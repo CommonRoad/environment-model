@@ -6,6 +6,8 @@
 //
 #pragma once
 
+#include <set>
+
 #include "../../obstacle/obstacle.h"
 #include "../road_network.h"
 

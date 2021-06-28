@@ -7,6 +7,7 @@
 
 #include <utility>
 
+#include <boost/geometry/strategies/cartesian.hpp>
 #include <boost/geometry/algorithms/intersects.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/polygon.hpp>

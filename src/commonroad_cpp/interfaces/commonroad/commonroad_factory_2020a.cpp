@@ -5,6 +5,8 @@
 // Credits: BMW Car@TUM
 //
 
+#include <cstring>
+
 #include "commonroad_factory_2020a.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"

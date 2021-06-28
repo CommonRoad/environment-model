@@ -2,6 +2,7 @@
 // Created by Sebastian Maierhofer on 30.10.20.
 //
 
+#include <cstring>
 #include <utility>
 #include <sstream>
 
