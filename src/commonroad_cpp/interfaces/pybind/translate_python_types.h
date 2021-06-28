@@ -5,8 +5,12 @@
 #ifndef ENV_MODEL_TRANSLATE_PYTHON_TYPES_H
 #define ENV_MODEL_TRANSLATE_PYTHON_TYPES_H
 
-#include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
+
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;

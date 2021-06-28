@@ -5,6 +5,12 @@
 // Credits: BMW Car@TUM
 //
 
+#include <memory>
+#include <string>
+
+#include <commonroad_cpp/world.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+
 #include "python_interface.h"
 #include "translate_python_types.h"
 
