@@ -7,16 +7,32 @@
 
 #pragma once
 
-#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lane.h"
+#include <cstddef>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
-#include <boost/geometry.hpp>
+#include <boost/core/addressof.hpp>
+#include <boost/core/ignore_unused.hpp>
+#include <boost/geometry/core/static_assert.hpp>
+// #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/index/rtree.hpp>
+#include <boost/geometry/index/parameters.hpp>
 #include <boost/range/adaptor/indexed.hpp>
 #include <boost/range/adaptor/transformed.hpp>
+#include <boost/variant/detail/apply_visitor_unary.hpp>
+
+#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
+
+
 //#include <unordered_map>
 
 namespace bg = boost::geometry;

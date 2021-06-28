@@ -5,11 +5,27 @@
 // Credits: BMW Car@TUM
 //
 
-#include "obstacle.h"
-#include "commonroad_cpp/geometry/geometric_operations.h"
-
+#include <algorithm>                                       // for max, min
 #include <cmath>
 #include <utility>
+#include <stdexcept>                                       // for logic_error
+#include <string>                                          // for operator+
+
+#include <Eigen/Core>                                      // for Vector2d
+
+#include <boost/geometry/geometries/ring.hpp>              // for ring
+
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
+#include <commonroad_cpp/geometry/rectangle.h>
+#include <commonroad_cpp/geometry/shape.h>
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/obstacle/state.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+
+#include "obstacle.h"
+
 
 Obstacle::Obstacle(size_t id, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
                    double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,

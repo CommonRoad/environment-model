@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include <memory>
 #include <vector>

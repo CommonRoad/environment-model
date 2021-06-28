@@ -5,6 +5,8 @@
 #ifndef ENV_MODEL_GEOMETRIC_OPERATIONS_H
 #define ENV_MODEL_GEOMETRIC_OPERATIONS_H
 
+#include <vector>
+
 #include "circle.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include <vector>

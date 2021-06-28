@@ -7,15 +7,39 @@
 
 #pragma once
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
-#include "commonroad_cpp/geometry/rectangle.h"
-#include "commonroad_cpp/geometry/shape.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lane.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
+// #include "commonroad_cpp/auxiliaryDefs/structs.h"
+// #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
+// #include "commonroad_cpp/geometry/rectangle.h"
+// #include "commonroad_cpp/geometry/shape.h"
+// #include "commonroad_cpp/roadNetwork/lanelet/lane.h"
+// #include "commonroad_cpp/roadNetwork/road_network.h"
+
+#include <cstddef>
+#include <vector>
+#include <memory>
+#include <map>
+
 #include "state.h"
 
-#include <map>
+// #include <boost/geometry/geometry.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
+
+#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
+#include <commonroad_cpp/geometry/shape.h>
+#include <commonroad_cpp/geometry/rectangle.h>
+
+/*
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+*/
+using point_type = boost::geometry::model::d2::point_xy<double>;
+using polygon_type = boost::geometry::model::polygon<point_type>;
+
+class Lanelet;
+class Lane;
+class RoadNetwork;
 
 /**
  * Class representing an obstacle.

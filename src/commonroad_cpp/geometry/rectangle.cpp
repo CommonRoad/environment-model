@@ -2,6 +2,8 @@
 // Created by Sebastian Maierhofer on 08.11.20.
 //
 
+#include <iostream>
+
 #include "rectangle.h"
 #include <iostream>
 

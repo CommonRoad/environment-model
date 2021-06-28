@@ -5,8 +5,11 @@
 // Credits: BMW Car@TUM
 //
 
-#include "lanelet.h"
 #include <utility>
+
+#include <boost/geometry.hpp>
+
+#include "lanelet.h"
 
 Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::set<LaneletType> type,
                  std::set<ObstacleType> oneWay, std::set<ObstacleType> userBidirectional)

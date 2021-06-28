@@ -5,7 +5,11 @@
 #ifndef ENV_MODEL_LANE_H
 #define ENV_MODEL_LANE_H
 
-#include "geometry/curvilinear_coordinate_system.h"
+#include <memory>                                    // for shared_ptr
+#include <vector>                                    // for vector
+
+#include <geometry/curvilinear_coordinate_system.h>
+
 #include "lanelet.h"
 
 using CurvilinearCoordinateSystem = geometry::CurvilinearCoordinateSystem;

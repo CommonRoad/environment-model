@@ -7,14 +7,24 @@
 
 #pragma once
 
-#include <boost/geometry.hpp>
+#include <cstddef>
+#include <memory>
+#include <vector>
+#include <set>
+
+#include <boost/geometry/core/static_assert.hpp>
+
+// #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
+#include <boost/geometry/geometries/box.hpp>
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include "commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h"
-#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
-#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h"
+#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
+// class StopLine;
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
 namespace bg = boost::geometry;
 using point_type = bg::model::d2::point_xy<double>;
