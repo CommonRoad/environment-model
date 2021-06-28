@@ -49,8 +49,8 @@ void PassesStopLinePredicateTest::SetUp() {
 
 TEST_F(PassesStopLinePredicateTest, BooleanEvaluation) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne)); // stop line completely in front
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne));  // stop line exactly at obstacle front
-    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne)); // obstacle on stop line
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne)); // stop line exactly at obstacle front
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne));  // obstacle on stop line
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne)); // stop line behind obstacle
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo)); // stop line completely in front
     EXPECT_FALSE(pred.booleanEvaluation(

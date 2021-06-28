@@ -9,8 +9,8 @@
 #include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 
 bool PassesStopLinePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                 const std::shared_ptr<Obstacle> &obstacleK,
-                                                 const std::shared_ptr<Obstacle> &obstacleP) {
+                                                const std::shared_ptr<Obstacle> &obstacleK,
+                                                const std::shared_ptr<Obstacle> &obstacleP) {
     auto lanelets{obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep)};
     for (const auto &la : lanelets) {
         std::shared_ptr<StopLine> stopLine{la->getStopLine()};
@@ -36,13 +36,13 @@ bool PassesStopLinePredicate::booleanEvaluation(size_t timeStep, const std::shar
 }
 
 double PassesStopLinePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                  const std::shared_ptr<Obstacle> &obstacleK,
-                                                  const std::shared_ptr<Obstacle> &obstacleP) {
+                                                 const std::shared_ptr<Obstacle> &obstacleK,
+                                                 const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("PassesStopLinePredicate does not support robust evaluation!");
 }
 
 Constraint PassesStopLinePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                          const std::shared_ptr<Obstacle> &obstacleK,
-                                                          const std::shared_ptr<Obstacle> &obstacleP) {
+                                                         const std::shared_ptr<Obstacle> &obstacleK,
+                                                         const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("PassesStopLinePredicate does not support constraint evaluation!");
 }
