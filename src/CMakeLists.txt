@@ -30,6 +30,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/position/stop_line_in_front_predicate.cpp
+        commonroad_cpp/predicates/position/passes_stop_line_predicate.cpp
         commonroad_cpp/predicates/general/cut_in_predicate.cpp
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
         commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.cpp
