@@ -77,7 +77,8 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
     auto it = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork),
                            [id](auto val) { return val->getId() == id; });
     if (it == std::end(laneletNetwork))
-        throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID" + std::to_string(id) + " does not exist in road netowrk!");
+        throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID" + std::to_string(id) +
+                                " does not exist in road netowrk!");
 
     return *it;
 }

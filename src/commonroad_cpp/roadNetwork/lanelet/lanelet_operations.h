@@ -56,20 +56,24 @@ combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &cu
                                               std::set<LaneletType> classifyingLaneletTypes = {},
                                               std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
-std::vector<std::vector<std::shared_ptr<Lanelet>>> combineLaneletAndPredecessorsWithSameTypeToLane(
-    const std::shared_ptr<Lanelet> &curLanelet,
-    std::set<LaneletType> classifyingLaneletTypes = {},
-    std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
+std::vector<std::vector<std::shared_ptr<Lanelet>>>
+combineLaneletAndPredecessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &curLanelet,
+                                                std::set<LaneletType> classifyingLaneletTypes = {},
+                                                std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
-std::vector<std::shared_ptr<Lane>> createInterstateLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork, size_t newId);
+std::vector<std::shared_ptr<Lane>> createInterstateLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork,
+                                                         size_t newId);
 
-std::vector<std::shared_ptr<Lane>> createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t newId);
+std::vector<std::shared_ptr<Lane>>
+createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t newId);
 
-std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, size_t newId);
+std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets,
+                                                    size_t newId);
 
 void setLaneAdjacency(std::vector<std::shared_ptr<Lane>> &lanes);
 
-std::shared_ptr<Lane> mergeLanes(std::shared_ptr<Lane> predecessorLane, std::shared_ptr<Lane> successorLane, size_t newId);
+std::shared_ptr<Lane> mergeLanes(std::shared_ptr<Lane> predecessorLane, std::shared_ptr<Lane> successorLane,
+                                 size_t newId);
 
 bool containsLaneletType(LaneletType type, std::set<LaneletType> baseTypesSet);
 

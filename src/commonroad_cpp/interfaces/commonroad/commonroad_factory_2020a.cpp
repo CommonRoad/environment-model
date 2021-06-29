@@ -79,10 +79,10 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                     laneletType.insert(lanelet_operations::matchStringToLaneletType(child.first_child().value()));
                 // set user one way
                 if (!(strcmp(child.name(), "userOneWay")))
-                    userOneWay.insert(matchStringToObstacleType(child.first_child().value()));
+                    userOneWay.insert(obstacle_operations::matchStringToObstacleType(child.first_child().value()));
                 // set user bidirectional
                 if (!(strcmp(child.name(), "userBidirectional")))
-                    userBidirectional.insert(matchStringToObstacleType((child.first_child().value())));
+                    userBidirectional.insert(obstacle_operations::matchStringToObstacleType((child.first_child().value())));
                 // add traffic signs to temporary list
                 if ((strcmp(child.name(), "trafficSignRef")) == 0) {
                     for (const auto &sign : trafficSigns) {
@@ -111,7 +111,8 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                             points.push_back(newVertice);
                         }
                         if (!(strcmp(elem.name(), "lineMarking")))
-                            sl->setLineMarking(lanelet_operations::matchStringToLineMarking(elem.first_child().value()));
+                            sl->setLineMarking(
+                                lanelet_operations::matchStringToLineMarking(elem.first_child().value()));
                         if ((strcmp(elem.name(), "trafficSignRef")) == 0) {
                             for (const auto &sign : trafficSigns) {
                                 if (child.attribute("ref").as_ullong() == sign->getId()) {
