@@ -22,19 +22,7 @@ void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &
     auto roadNetwork = std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempTrafficSignContainer,
                                                      tempTrafficLightContainer, tempIntersectionContainer);
     auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
-    for (const auto &obs : tempObstacleContainer) {
-        for (unsigned long i = 0; i < obs->getTrajectoryLength(); ++i) {
-            obs->setOwnLane(roadNetwork->getLanes(), i);
-            obs->setReferenceLane(obs->getOwnLane());
-        }
-    }
     auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles);
-    for (const auto &obs : tempEgoVehicleContainer) {
-        for (unsigned long i = 0; i < obs->getTrajectoryLength(); ++i) {
-            obs->setOwnLane(roadNetwork->getLanes(), i);
-            obs->setReferenceLane(obs->getOwnLane());
-        }
-    }
 
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
 

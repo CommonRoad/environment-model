@@ -31,7 +31,13 @@ RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, S
 
 const std::vector<std::shared_ptr<Lanelet>> &RoadNetwork::getLaneletNetwork() const { return laneletNetwork; }
 
-std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() { return lanes; }
+std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() {
+    std::vector<std::shared_ptr<Lane>> collectedLanes;
+    for (const auto &containedLanes : lanes) {
+        collectedLanes.push_back(std::get<1>(containedLanes.second));
+    }
+    return collectedLanes;
+}
 
 const std::vector<std::shared_ptr<Intersection>> &RoadNetwork::getIntersections() const { return intersections; }
 
@@ -104,6 +110,19 @@ SupportedTrafficSignCountry RoadNetwork::matchStringToCountry(const std::string 
     else
         return SupportedTrafficSignCountry::ZAMUNDA;
 }
+
 std::string RoadNetwork::extractTrafficSignIDForCountry(TrafficSignTypes type) {
     return trafficSignIDLookupTable->at(type);
+}
+
+bool RoadNetwork::isInterstate() const { return interstate; }
+
+void RoadNetwork::setIsInterstate(bool interstateRoadNetwork) { interstate = interstateRoadNetwork; }
+
+void RoadNetwork::addLanes(std::vector<std::shared_ptr<Lane>> newLanes, std::set<size_t> initialLanelets) {
+    for (const auto &la : newLanes) {
+        if (initialLanelets.empty())
+            initialLanelets = {la->getContainedLanelets().front()->getId()};
+        lanes[la->getContainedLaneletIDs()] = {initialLanelets, la};
+    }
 }

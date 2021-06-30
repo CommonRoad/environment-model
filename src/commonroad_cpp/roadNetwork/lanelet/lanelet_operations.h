@@ -77,4 +77,6 @@ std::shared_ptr<Lane> mergeLanes(std::shared_ptr<Lane> predecessorLane, std::sha
 
 bool containsLaneletType(LaneletType type, std::set<LaneletType> baseTypesSet);
 
+std::set<size_t> extractIds(std::vector<std::shared_ptr<Lanelet>> lanelets);
+
 } // namespace lanelet_operations

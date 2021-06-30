@@ -74,15 +74,7 @@ getDataFromCommonRoad(const std::string &xmlFilePath) {
     std::shared_ptr<RoadNetwork> roadNetwork{
         std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, trafficSigns, trafficLights, intersections))};
 
-    for (const auto &obs : obstacles) {
-        if (obs->getIsStatic())
-            obs->setOwnLane(roadNetwork->getLanes(), 0);
-        else {
-            for (size_t i = obs->getFirstTrajectoryTimeStep(); i < obs->getLastTrajectoryTimeStep(); ++i) {
-                obs->setOwnLane(roadNetwork->getLanes(), i);
-            }
-        }
-    }
+    // TODO maybe return world object
 
     return std::make_tuple(obstacles, roadNetwork);
 }

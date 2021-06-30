@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 08.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_LANE_H
-#define ENV_MODEL_LANE_H
+#pragma once
 
 #include "geometry/curvilinear_coordinate_system.h"
 #include "lanelet.h"
@@ -38,9 +40,15 @@ class Lane : public Lanelet {
      */
     [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getContainedLanelets() const;
 
+    /**
+     * Getter for lanelet IDs contained in lane.
+     *
+     * @return Set of IDs of the lanelets contained in lane.
+     */
+    [[nodiscard]] std::set<size_t> getContainedLaneletIDs();
+
   private:
     std::vector<std::shared_ptr<Lanelet>> containedLanelets; //**< list of pointers to lanelets constructing lane */
     CurvilinearCoordinateSystem curvilinearCoordinateSystem; //**< curvilinear coordinate system defined by lane */
+    std::set<size_t> containedLaneletIds;                    //**< set of IDs of the lanelets constructing lane */
 };
-
-#endif // ENV_MODEL_LANE_H

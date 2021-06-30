@@ -11,7 +11,7 @@ bool intersection_operations::onIncoming(size_t timeStep, const std::shared_ptr<
                                          std::shared_ptr<RoadNetwork> roadNetwork) {
     auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
     for (const auto &la : lanelets)
-        if (std::any_of(la->getLaneletType().begin(), la->getLaneletType().end(),
+        if (std::any_of(la->getLaneletTypes().begin(), la->getLaneletTypes().end(),
                         [](const LaneletType ty) { return ty == LaneletType::incoming; }))
             return true;
 

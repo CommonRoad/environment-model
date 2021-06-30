@@ -76,8 +76,8 @@ TranslatePythonTypes::convertStopLine(const py::handle &py_stopLine,
                                       const std::vector<std::shared_ptr<TrafficSign>> &trafficSigns,
                                       const std::vector<std::shared_ptr<TrafficLight>> &trafficLights) {
     std::shared_ptr<StopLine> sl = std::make_shared<StopLine>();
-    sl->setLineMarking(
-        lanelet_operations::matchStringToLineMarking(py::cast<std::string>(py_stopLine.attr("_line_marking").attr("value"))));
+    sl->setLineMarking(lanelet_operations::matchStringToLineMarking(
+        py::cast<std::string>(py_stopLine.attr("_line_marking").attr("value"))));
     if (!py_stopLine.attr("_traffic_sign_ref").is_none()) {
         py::set py_trafficSigns = py_stopLine.attr("_traffic_sign_ref");
         for (const auto &sign : trafficSigns) {
@@ -146,20 +146,23 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
         const py::list &py_laneletUserOneWay = py_singleLanelet.attr("user_one_way").cast<py::list>();
         std::set<ObstacleType> usersOneWay;
         for (py::handle py_user : py_laneletUserOneWay)
-            usersOneWay.insert(obstacle_operations::matchStringToObstacleType(py::cast<std::string>(py_user.attr("value"))));
-        tempLaneletContainer[arrayIndex]->setUserOneWay(usersOneWay);
+            usersOneWay.insert(
+                obstacle_operations::matchStringToObstacleType(py::cast<std::string>(py_user.attr("value"))));
+        tempLaneletContainer[arrayIndex]->setUsersOneWay(usersOneWay);
         // add users bidirectional
         const py::list &py_laneletUserBidirectional = py_singleLanelet.attr("user_bidirectional").cast<py::list>();
         std::set<ObstacleType> usersBidirectional;
         for (py::handle py_user : py_laneletUserBidirectional)
-            usersBidirectional.insert(obstacle_operations::matchStringToObstacleType(py::cast<std::string>(py_user.attr("value"))));
-        tempLaneletContainer[arrayIndex]->setUserBidirectional(usersBidirectional);
+            usersBidirectional.insert(
+                obstacle_operations::matchStringToObstacleType(py::cast<std::string>(py_user.attr("value"))));
+        tempLaneletContainer[arrayIndex]->setUsersBidirectional(usersBidirectional);
         // add lanelet types
         const py::list &py_laneletTypes = py_singleLanelet.attr("lanelet_type").cast<py::list>();
         std::set<LaneletType> laneletTypes;
         for (py::handle py_type : py_laneletTypes)
-            laneletTypes.insert(lanelet_operations::matchStringToLaneletType(py::cast<std::string>(py_type.attr("value"))));
-        tempLaneletContainer[arrayIndex]->setLaneletType(laneletTypes);
+            laneletTypes.insert(
+                lanelet_operations::matchStringToLaneletType(py::cast<std::string>(py_type.attr("value"))));
+        tempLaneletContainer[arrayIndex]->setLaneletTypes(laneletTypes);
         // set line markings
         tempLaneletContainer[arrayIndex]->setLineMarkingLeft(lanelet_operations::matchStringToLineMarking(
             py::cast<std::string>(py_singleLanelet.attr("line_marking_left_vertices").attr("value"))));
@@ -370,8 +373,8 @@ std::shared_ptr<State> createInitialState(py::handle py_singleObstacle) {
 std::shared_ptr<Obstacle> createCommonObstaclePart(py::handle py_singleObstacle) {
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
     tempObstacle->setId(py_singleObstacle.attr("obstacle_id").cast<size_t>());
-    tempObstacle->setObstacleType(
-        obstacle_operations::matchStringToObstacleType(py_singleObstacle.attr("obstacle_type").attr("value").cast<std::string>()));
+    tempObstacle->setObstacleType(obstacle_operations::matchStringToObstacleType(
+        py_singleObstacle.attr("obstacle_type").attr("value").cast<std::string>()));
     py::handle py_obstacleShape = py_singleObstacle.attr("obstacle_shape");
     std::string commonroadShape{py_obstacleShape.get_type().attr("__name__").cast<std::string>()};
 

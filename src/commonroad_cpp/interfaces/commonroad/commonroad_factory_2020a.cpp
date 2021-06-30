@@ -82,7 +82,8 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                     userOneWay.insert(obstacle_operations::matchStringToObstacleType(child.first_child().value()));
                 // set user bidirectional
                 if (!(strcmp(child.name(), "userBidirectional")))
-                    userBidirectional.insert(obstacle_operations::matchStringToObstacleType((child.first_child().value())));
+                    userBidirectional.insert(
+                        obstacle_operations::matchStringToObstacleType((child.first_child().value())));
                 // add traffic signs to temporary list
                 if ((strcmp(child.name(), "trafficSignRef")) == 0) {
                     for (const auto &sign : trafficSigns) {
@@ -134,9 +135,9 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
             }
             tempLaneletContainer[arrayIndex]->createCenterVertices();
             tempLaneletContainer[arrayIndex]->constructOuterPolygon();
-            tempLaneletContainer[arrayIndex]->setLaneletType(laneletType);
-            tempLaneletContainer[arrayIndex]->setUserOneWay(userOneWay);
-            tempLaneletContainer[arrayIndex]->setUserBidirectional(userBidirectional);
+            tempLaneletContainer[arrayIndex]->setLaneletTypes(laneletType);
+            tempLaneletContainer[arrayIndex]->setUsersOneWay(userOneWay);
+            tempLaneletContainer[arrayIndex]->setUsersBidirectional(userBidirectional);
             arrayIndex++;
         }
     }
@@ -160,7 +161,7 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
         if ((strcmp(roadElements.name(), "trafficSign")) == 0) {
             std::shared_ptr<TrafficSign> tempTrafficSign = std::make_shared<TrafficSign>();
             tempLaneletContainer.emplace_back(tempTrafficSign);
-            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
+            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_ullong());
             for (pugi::xml_node trafficSignChildElement = roadElements.first_child();
                  trafficSignChildElement != nullptr; trafficSignChildElement = trafficSignChildElement.next_sibling()) {
                 // get traffic sign elements

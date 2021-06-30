@@ -13,12 +13,19 @@
 
 Obstacle::Obstacle(size_t id, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
                    double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
-                   std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width)
+                   std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width,
+                   std::vector<vertex> route)
     : id(id), isStatic(isStatic), currentState(std::move(currentState)), obstacleType(obstacleType), vMax(vMax),
       aMax(aMax), aMaxLong(aMaxLong), aMinLong(aMinLong), reactionTime(reactionTime),
-      trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(Rectangle(length, width)) {
+      trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(Rectangle(length, width)), route(route) {
     if (isStatic)
         setIsStatic(isStatic);
+    if (route.empty()) {
+        route.reserve(trajectoryPrediction.size());
+        size_t idx{0};
+        for (const auto &state : trajectoryPrediction)
+            route[idx] = {state.second->getXPosition(), state.second->getYPosition()};
+    }
 }
 
 void Obstacle::setId(const size_t obstacleId) { id = obstacleId; }
@@ -46,18 +53,6 @@ void Obstacle::setAmaxLong(const double amax) { aMaxLong = isStatic ? 0.0 : amax
 void Obstacle::setAminLong(const double amin) { aMinLong = isStatic ? 0.0 : amin; }
 
 void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 0.0 : tReact; }
-
-void Obstacle::setOwnLane(const std::vector<std::shared_ptr<Lane>> &possibleLanes, size_t timeStep) {
-    if (ownLane != nullptr and
-        ownLane->checkIntersection(getOccupancyPolygonShape(timeStep), ContainmentType::PARTIALLY_CONTAINED)) {
-        return; // old reference lane is still valid
-    }
-    // assign new reference lane
-    else {
-        polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
-        ownLane = RoadNetwork::findLaneByShape(possibleLanes, polygonShape);
-    }
-}
 
 void Obstacle::setTrajectoryPrediction(const std::map<size_t, std::shared_ptr<State>> &trajPrediction) {
     trajectoryPrediction = trajPrediction;
@@ -108,9 +103,30 @@ double Obstacle::getAminLong() const { return aMinLong; }
 
 double Obstacle::getReactionTime() const { return reactionTime; }
 
-std::shared_ptr<Lane> Obstacle::getOwnLane() const { return ownLane; }
-
-void Obstacle::setReferenceLane(const std::shared_ptr<Lane> &lane) { referenceLane = lane; }
+void Obstacle::setReferenceLane(bool useFirstTimeStep) {
+    referenceLane = nullptr;
+    if (useFirstTimeStep)
+        referenceLane = occupiedLanes.at(getFirstTrajectoryTimeStep()).at(0);
+    else {
+        std::map<size_t, size_t> numOccupancies;
+        for (const auto &timeStep : occupiedLanes) {
+            for (const auto &la : timeStep.second)
+                numOccupancies[la->getId()]++;
+        }
+        auto pr = std::max_element(
+            std::begin(numOccupancies), std::end(numOccupancies),
+            [](std::pair<size_t, size_t> p1, const std::pair<size_t, size_t> &p2) { return p1.second < p2.second; });
+        for (const auto &timeStep : occupiedLanes) {
+            for (const auto &la : timeStep.second)
+                if (la->getId() == pr->second) {
+                    referenceLane = la;
+                    break;
+                }
+            if (referenceLane != nullptr)
+                break;
+        }
+    }
+}
 
 std::map<size_t, std::shared_ptr<State>> Obstacle::getTrajectoryPrediction() const { return trajectoryPrediction; }
 
@@ -218,6 +234,7 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
         return occupiedLanes.at(timeStep);
     std::vector<std::shared_ptr<Lane>> occupied;
     std::vector<std::shared_ptr<Lanelet>> lanelets{getOccupiedLanelets(roadNetwork, timeStep)};
+
     for (const auto &lane : roadNetwork->getLanes()) {
         bool laneIsOccupied{false};
         for (const auto &laneletLane : lane->getContainedLanelets()) {
@@ -242,22 +259,6 @@ size_t Obstacle::getLastTrajectoryTimeStep() {
 }
 
 std::shared_ptr<Lane> Obstacle::getReferenceLane() const { return referenceLane; }
-
-const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getStraightOutgoings() const { return straightOutgoings; }
-
-void Obstacle::setStraightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &stroug) { straightOutgoings = stroug; }
-
-const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getLeftOutgoings() const { return leftOutgoings; }
-
-void Obstacle::setLeftOutgoings(const std::vector<std::shared_ptr<Lanelet>> &leftoug) { leftOutgoings = leftoug; }
-
-const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getRightOutgoings() const { return rightOutgoings; }
-
-void Obstacle::setRightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &rightoug) { rightOutgoings = rightoug; }
-
-const std::vector<std::shared_ptr<Lanelet>> &Obstacle::getOncomings() const { return oncomings; }
-
-void Obstacle::setOncomings(const std::vector<std::shared_ptr<Lanelet>> &onc) { oncomings = onc; }
 
 void Obstacle::convertPointToCurvilinear(size_t timeStep) const {
     try {
@@ -284,4 +285,12 @@ void Obstacle::interpolateAcceleration(size_t timeStep) {
     double curVelocity{getStateByTimeStep(timeStep)->getVelocity()};
     double prevVelocity{getStateByTimeStep(timeStep - 1)->getVelocity()};
     getStateByTimeStep(timeStep)->setAcceleration((curVelocity - prevVelocity) / dt);
+}
+
+const std::vector<vertex> &Obstacle::getRoute() const { return route; }
+
+void Obstacle::setRoute(const std::vector<vertex> &newRoute) { route = newRoute; }
+
+void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes, size_t timeStep) {
+    occupiedLanes[timeStep] = lanes;
 }

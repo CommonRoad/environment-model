@@ -43,10 +43,12 @@ class Obstacle {
      * @param trajectoryPrediction Map matching time step to state.
      * @param length Length of the obstacle [m].
      * @param width Width of the obstacle [m].
+     * @param route Planned route of obstacle.
      */
     Obstacle(size_t id, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType, double vMax,
              double aMax, double aMaxLong, double aMinLong, double reactionTime,
-             std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width);
+             std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width,
+             std::vector<vertex> route = {});
 
     /**
      * Setter for ID of obstacle.
@@ -112,21 +114,13 @@ class Obstacle {
     void setReactionTime(double tReact);
 
     /**
-     * Setter for own lane.
-     *
-     * @param possibleLanes Lanes which should be considered for finding possible assigned lane.
-     * @param timeStep Current time step.
-     */
-    void setOwnLane(const std::vector<std::shared_ptr<Lane>> &possibleLanes, size_t timeStep);
-
-    /**
      * Setter for reference lane.
      *
      * @param lane Lane which should be used as reference lane for curvilinear coordinate system. Usually, this is the
      * ego vehicle's lane.
      * @param timeStep Current time step.
      */
-    void setReferenceLane(const std::shared_ptr<Lane> &lane); // TODO add unit test
+    void setReferenceLane(bool useFirstTimeStep = false); // TODO add unit test
 
     /**
      * Setter for trajectory prediction.
@@ -156,6 +150,13 @@ class Obstacle {
      * @param state Pointer to state object.
      */
     void appendStateToHistory(const std::shared_ptr<State> &state);
+
+    /**
+     * Setter for route.
+     *
+     * @param newRoute New route of obstacle.
+     */
+    void setRoute(const std::vector<vertex> &newRoute);
 
     /**
      * Getter for obstacle ID.
@@ -225,7 +226,7 @@ class Obstacle {
      *
      * @return Pointer to lane object.
      */
-    [[nodiscard]] std::shared_ptr<Lane> getOwnLane() const;
+    [[nodiscard]] std::vector<std::shared_ptr<Lane>> getLanes() const;
 
     /**
      * Getter for reference lane.
@@ -331,6 +332,14 @@ class Obstacle {
                                                                       size_t timeStep); // TODO create test case
 
     /**
+     * Sets the lanes from the road network the obstacle occupies at a certain time step
+     *
+     * @param timeStep time step of interest
+     * @return list of pointers to occupied lanes
+     */
+    void setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes, size_t timeStep); // TODO create test case
+
+    /**
      * Extracts first time step of trajectory
      *
      * @param timeStep time step of interest
@@ -347,34 +356,35 @@ class Obstacle {
     [[nodiscard]] size_t getLastTrajectoryTimeStep(); // TODO create test case
 
     /**
+     * Getter for route.
+     * @return Route as list of vertices.
+     */
+    const std::vector<vertex> &getRoute() const;
+
+    /**
      * Converts the x- and y-coordinate into the Curvilinear domain.
      *
      * @param timeStep Time step for which the coordinates should me transformed.
      */
     void convertPointToCurvilinear(size_t timeStep) const;
 
-    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getStraightOutgoings() const;
-
-    void setStraightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &straightOutgoings);
-
-    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getLeftOutgoings() const;
-
-    void setLeftOutgoings(const std::vector<std::shared_ptr<Lanelet>> &leftOutgoings);
-
-    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getRightOutgoings() const;
-
-    void setRightOutgoings(const std::vector<std::shared_ptr<Lanelet>> &rightOutgoings);
-
-    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getOncomings() const;
-
-    void setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings);
-
+    /**
+     * Checks whether time steps exists in trajectory prediction or current state.
+     *
+     * @param timeStep Time step of interest.
+     * @return Boolean indicating whether time step exists.
+     */
     bool timeStepExists(size_t timeStep);
 
+    /**
+     * Interpolates acceleration based on velocity.
+     *
+     * @param timeStep Time step for which acceleration should be interpolated.
+     */
     void interpolateAcceleration(size_t timeStep);
 
   private:
-    size_t id{};                                      //**< unique ID of lanelet */
+    size_t id;                                        //**< unique ID of lanelet */
     bool isStatic{false};                             //**< true if Obstacle is static */
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
@@ -387,17 +397,9 @@ class Obstacle {
     std::map<size_t, std::shared_ptr<State>> history{};              //**< previous states of the obstacle */
     Rectangle geoShape; // TODO make general                                          //**< shape of the obstacle */
     std::map<size_t, std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLanelets{};                       //**< map of time steps to lanelets occupied by the obstacle */
-    std::shared_ptr<Lane> ownLane{nullptr};       //**< lane to which obstacle is assigned to */
+        occupiedLanelets;                         //**< map of time steps to lanelets occupied by the obstacle */
     std::shared_ptr<Lane> referenceLane{nullptr}; //**< lane which is used as reference for curvilinear projection */
     std::map<size_t, std::vector<std::shared_ptr<Lane>>>
-        occupiedLanes{}; //**< map of time steps to lanes occupied by the obstacle */
-    std::vector<std::shared_ptr<Lanelet>>
-        straightOutgoings; //**< set of pointers to straight outgoing lanelets to which obstacle belongs */
-    std::vector<std::shared_ptr<Lanelet>>
-        leftOutgoings; //**< set of pointers to left outgoing lanelets to which obstacle belongs */
-    std::vector<std::shared_ptr<Lanelet>>
-        rightOutgoings; //**< set of pointers to right outgoing lanelets to which obstacle belongs */
-    std::vector<std::shared_ptr<Lanelet>>
-        oncomings; //**< set of pointers to oncoming lanelets to which obstacle belongs */
+        occupiedLanes;         //**< map of time steps to lanes occupied by the obstacle */
+    std::vector<vertex> route; //**< planned route of the obstacle */
 };

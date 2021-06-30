@@ -11,25 +11,25 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/geometry/test_rectangle.cpp
         envModelTests/geometry/test_geometric_operations.cpp
         envModelTests/interfaces/test_interfaces.cpp
-        envModelTests/predicates/braking/test_safe_distance_predicate.cpp
-        envModelTests/predicates/braking/test_unnecessary_braking_predicate.cpp
-        envModelTests/predicates/position/test_in_front_of_predicate.cpp
-        envModelTests/predicates/position/test_in_same_lane_predicate.cpp
-        envModelTests/predicates/general/test_cut_in_predicate.cpp
-        envModelTests/predicates/position/test_in_intersection_main_area_predicate.cpp
-        envModelTests/predicates/position/test_stop_line_in_front_predicate.cpp
-        envModelTests/predicates/position/test_passes_stop_line_predicate.cpp
-        envModelTests/predicates/regulatory/test_at_red_right_traffic_light_predicate.cpp
-        envModelTests/predicates/regulatory/test_at_red_left_traffic_light_predicate.cpp
-        envModelTests/predicates/regulatory/test_at_red_straight_traffic_light_predicate.cpp
-        envModelTests/predicates/regulatory/test_at_red_traffic_light_predicate.cpp
-        envModelTests/predicates/regulatory/test_at_stop_sign_predicate.cpp
-        envModelTests/predicates/velocity/test_keeps_lane_speed_limit_predicate.cpp
-        envModelTests/predicates/velocity/test_required_speed_predicate.cpp
-        envModelTests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
-        envModelTests/predicates/velocity/test_slow_leading_vehicle_predicate.cpp
-        envModelTests/predicates/velocity/test_in_standstill_predicate.cpp
         envModelTests/predicates/utils_predicate_test.cpp
+#        envModelTests/predicates/braking/test_safe_distance_predicate.cpp
+#        envModelTests/predicates/braking/test_unnecessary_braking_predicate.cpp
+#        envModelTests/predicates/position/test_in_front_of_predicate.cpp
+#        envModelTests/predicates/position/test_in_same_lane_predicate.cpp
+#        envModelTests/predicates/general/test_cut_in_predicate.cpp
+#        envModelTests/predicates/position/test_in_intersection_main_area_predicate.cpp
+#        envModelTests/predicates/position/test_stop_line_in_front_predicate.cpp
+#        envModelTests/predicates/position/test_passes_stop_line_predicate.cpp
+#        envModelTests/predicates/regulatory/test_at_red_right_traffic_light_predicate.cpp
+#        envModelTests/predicates/regulatory/test_at_red_left_traffic_light_predicate.cpp
+#        envModelTests/predicates/regulatory/test_at_red_straight_traffic_light_predicate.cpp
+#        envModelTests/predicates/regulatory/test_at_red_traffic_light_predicate.cpp
+#        envModelTests/predicates/regulatory/test_at_stop_sign_predicate.cpp
+#        envModelTests/predicates/velocity/test_keeps_lane_speed_limit_predicate.cpp
+#        envModelTests/predicates/velocity/test_required_speed_predicate.cpp
+#        envModelTests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
+#        envModelTests/predicates/velocity/test_slow_leading_vehicle_predicate.cpp
+#        envModelTests/predicates/velocity/test_in_standstill_predicate.cpp
         )
 
 # Add google-test

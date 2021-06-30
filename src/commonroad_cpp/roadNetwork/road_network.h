@@ -119,14 +119,22 @@ class RoadNetwork {
 
     std::string extractTrafficSignIDForCountry(TrafficSignTypes type);
 
+    bool isInterstate() const;
+
+    void setIsInterstate(bool interstateRoadNetwork);
+
+    void addLanes(std::vector<std::shared_ptr<Lane>> newLanes, std::set<size_t> initialLanelets = {});
+
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
     SupportedTrafficSignCountry country;                      //**< country where road network is located */
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;   //**< set of traffic signs contained in road network */
     std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< set of traffic lights contained in road network */
     std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
-    std::vector<std::shared_ptr<Lane>> lanes; //**< set of interstate-based lanes contained in road network */
+    std::map<std::set<size_t>, std::tuple<std::set<size_t>, std::shared_ptr<Lane>>> lanes;
+    //**< set of interstate-based lanes contained in road network */
     bgi::rtree<value, bgi::quadratic<16>>
         rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
+    bool interstate;
 };

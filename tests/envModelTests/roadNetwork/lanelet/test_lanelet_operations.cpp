@@ -124,7 +124,6 @@ TEST_F(RoadNetworkTest, CreateLanesByLanelets) {
     EXPECT_EQ(3561, lanes.at(0)->getContainedLanelets().front()->getId());
     EXPECT_EQ(3481, lanes.at(0)->getContainedLanelets().back()->getId());
 
-
     std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
     const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
     lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioTwo->findLaneletById(10)}, 1234);

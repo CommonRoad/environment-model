@@ -84,16 +84,16 @@ std::vector<std::vector<std::shared_ptr<Lanelet>>> lanelet_operations::combineLa
     laneletList.push_back(curLanelet);
 
     // check whether it is the last lanelet of the lane
-    if (!curLanelet->getSuccessors().empty() and classifyingLaneletTypes != curLanelet->getLaneletType() and
+    if (!curLanelet->getSuccessors().empty() and classifyingLaneletTypes != curLanelet->getLaneletTypes() and
         !std::any_of(containedLanelets.begin(), containedLanelets.end(),
                      [curLanelet](const std::shared_ptr<Lanelet> &la) { return curLanelet->getId() == la->getId(); })) {
         std::set<LaneletType> intersectingLa;
-        std::set_intersection(curLanelet->getLaneletType().begin(), curLanelet->getLaneletType().end(),
+        std::set_intersection(curLanelet->getLaneletTypes().begin(), curLanelet->getLaneletTypes().end(),
                               classifyingLaneletTypes.begin(), classifyingLaneletTypes.end(),
                               std::inserter(intersectingLa, intersectingLa.begin()));
         for (const auto &la : curLanelet->getSuccessors()) {
             std::set<LaneletType> intersectingSuc;
-            std::set_intersection(la->getLaneletType().begin(), la->getLaneletType().end(),
+            std::set_intersection(la->getLaneletTypes().begin(), la->getLaneletTypes().end(),
                                   classifyingLaneletTypes.begin(), classifyingLaneletTypes.end(),
                                   std::inserter(intersectingSuc, intersectingSuc.begin()));
 
@@ -116,17 +116,17 @@ std::vector<std::vector<std::shared_ptr<Lanelet>>> lanelet_operations::combineLa
     laneletList.push_back(curLanelet);
 
     // check whether it is the last lanelet of the lane
-    if (!curLanelet->getPredecessors().empty() and classifyingLaneletTypes != curLanelet->getLaneletType() and
+    if (!curLanelet->getPredecessors().empty() and classifyingLaneletTypes != curLanelet->getLaneletTypes() and
         !std::any_of(containedLanelets.begin(), containedLanelets.end(),
                      [curLanelet](const std::shared_ptr<Lanelet> &la) { return curLanelet->getId() == la->getId(); })) {
 
         std::set<LaneletType> intersectingLa;
-        std::set_intersection(curLanelet->getLaneletType().begin(), curLanelet->getLaneletType().end(),
+        std::set_intersection(curLanelet->getLaneletTypes().begin(), curLanelet->getLaneletTypes().end(),
                               classifyingLaneletTypes.begin(), classifyingLaneletTypes.end(),
                               std::inserter(intersectingLa, intersectingLa.begin()));
         for (const auto &la : curLanelet->getPredecessors()) {
             std::set<LaneletType> intersectingSuc;
-            std::set_intersection(la->getLaneletType().begin(), la->getLaneletType().end(),
+            std::set_intersection(la->getLaneletTypes().begin(), la->getLaneletTypes().end(),
                                   classifyingLaneletTypes.begin(), classifyingLaneletTypes.end(),
                                   std::inserter(intersectingSuc, intersectingSuc.begin()));
 
@@ -159,12 +159,12 @@ lanelet_operations::createInterstateLanes(const std::vector<std::shared_ptr<Lane
 
             // if no predecessor with same classifying type exist -> use this lanelet as start lanelet
             std::set<LaneletType> intersectingLaTypes;
-            std::set_intersection(la->getLaneletType().begin(), la->getLaneletType().end(),
+            std::set_intersection(la->getLaneletTypes().begin(), la->getLaneletTypes().end(),
                                   classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
                                   std::inserter(intersectingLaTypes, intersectingLaTypes.begin()));
             for (const auto &pred : la->getPredecessors()) {
                 std::set<LaneletType> intersectingTypesPred;
-                std::set_intersection(pred->getLaneletType().begin(), pred->getLaneletType().end(),
+                std::set_intersection(pred->getLaneletTypes().begin(), pred->getLaneletTypes().end(),
                                       classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
                                       std::inserter(intersectingTypesPred, intersectingTypesPred.begin()));
                 if (intersectingTypesPred.empty() != intersectingLaTypes.empty()) {
@@ -192,10 +192,10 @@ lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_pt
     for (const auto &la : initialLanelets) {
         std::set<LaneletType> classifyinglaneletTypesSuccessor;
         std::set<LaneletType> classifyinglaneletTypesPredecessor;
-        if (containsLaneletType(LaneletType::incoming, la->getLaneletType())) {
+        if (containsLaneletType(LaneletType::incoming, la->getLaneletTypes())) {
             classifyinglaneletTypesPredecessor = {LaneletType::intersection};
             classifyinglaneletTypesSuccessor = {LaneletType::intersection};
-        } else if (containsLaneletType(LaneletType::intersection, la->getLaneletType())) {
+        } else if (containsLaneletType(LaneletType::intersection, la->getLaneletTypes())) {
             classifyinglaneletTypesPredecessor = {LaneletType::incoming};
             classifyinglaneletTypesSuccessor = {
                 LaneletType::intersection}; // should be successor of intersection (outgoing)
@@ -234,11 +234,11 @@ lanelet_operations::createLaneByContainedLanelets(const std::vector<std::shared_
     std::vector<vertex> rightVertices;
     std::set<LaneletType> typeList;
     for (const auto &la : containedLanelets) {
-        std::set_intersection(userOneWay.begin(), userOneWay.end(), la->getUserOneWay().begin(),
-                              la->getUserOneWay().end(), std::inserter(userOneWay, userOneWay.begin()));
+        std::set_intersection(userOneWay.begin(), userOneWay.end(), la->getUsersOneWay().begin(),
+                              la->getUsersOneWay().end(), std::inserter(userOneWay, userOneWay.begin()));
 
-        std::set_intersection(userBidirectional.begin(), userBidirectional.end(), la->getUserBidirectional().begin(),
-                              la->getUserBidirectional().end(),
+        std::set_intersection(userBidirectional.begin(), userBidirectional.end(), la->getUsersBidirectional().begin(),
+                              la->getUsersBidirectional().end(),
                               std::inserter(userBidirectional, userBidirectional.begin()));
 
         centerVertices.insert(centerVertices.end(), la->getCenterVertices().begin() + 1, la->getCenterVertices().end());
@@ -249,8 +249,8 @@ lanelet_operations::createLaneByContainedLanelets(const std::vector<std::shared_
         rightVertices.insert(rightVertices.end(), la->getRightBorderVertices().begin() + 1,
                              la->getRightBorderVertices().end());
 
-        std::set_intersection(typeList.begin(), typeList.end(), la->getLaneletType().begin(),
-                              la->getLaneletType().end(), std::inserter(typeList, typeList.begin()));
+        std::set_intersection(typeList.begin(), typeList.end(), la->getLaneletTypes().begin(),
+                              la->getLaneletTypes().end(), std::inserter(typeList, typeList.begin()));
     }
 
     Lanelet newLanelet = Lanelet(newId, leftVertices, rightVertices, {}, {}, typeList, userOneWay, userBidirectional);
@@ -268,13 +268,13 @@ lanelet_operations::createLaneByContainedLanelets(const std::vector<std::shared_
 std::shared_ptr<Lane> lanelet_operations::mergeLanes(std::shared_ptr<Lane> predecessorLane,
                                                      std::shared_ptr<Lane> successorLane, size_t newId) {
     std::set<ObstacleType> userOneWay;
-    std::set_intersection(predecessorLane->getUserOneWay().begin(), predecessorLane->getUserOneWay().end(),
-                          successorLane->getUserOneWay().begin(), successorLane->getUserOneWay().end(),
+    std::set_intersection(predecessorLane->getUsersOneWay().begin(), predecessorLane->getUsersOneWay().end(),
+                          successorLane->getUsersOneWay().begin(), successorLane->getUsersOneWay().end(),
                           std::inserter(userOneWay, userOneWay.begin()));
     std::set<ObstacleType> userBidirectional;
-    std::set_intersection(predecessorLane->getUserBidirectional().begin(),
-                          predecessorLane->getUserBidirectional().end(), successorLane->getUserBidirectional().begin(),
-                          successorLane->getUserBidirectional().end(),
+    std::set_intersection(predecessorLane->getUsersBidirectional().begin(),
+                          predecessorLane->getUsersBidirectional().end(),
+                          successorLane->getUsersBidirectional().begin(), successorLane->getUsersBidirectional().end(),
                           std::inserter(userBidirectional, userBidirectional.begin()));
     auto centerVertices = predecessorLane->getCenterVertices();
     centerVertices.insert(centerVertices.end(), successorLane->getCenterVertices().begin() + 1,
@@ -288,8 +288,8 @@ std::shared_ptr<Lane> lanelet_operations::mergeLanes(std::shared_ptr<Lane> prede
     auto predecessorLanelets = predecessorLane->getPredecessors();
     auto successorLanelets = successorLane->getSuccessors();
     std::set<LaneletType> typeList;
-    std::set_intersection(predecessorLane->getLaneletType().begin(), predecessorLane->getLaneletType().end(),
-                          successorLane->getLaneletType().begin(), successorLane->getLaneletType().end(),
+    std::set_intersection(predecessorLane->getLaneletTypes().begin(), predecessorLane->getLaneletTypes().end(),
+                          successorLane->getLaneletTypes().begin(), successorLane->getLaneletTypes().end(),
                           std::inserter(typeList, typeList.begin()));
     std::vector<std::shared_ptr<Lanelet>> containedLanelets;
     containedLanelets.insert(containedLanelets.begin(), predecessorLane->getContainedLanelets().begin(),
@@ -312,4 +312,11 @@ std::shared_ptr<Lane> lanelet_operations::mergeLanes(std::shared_ptr<Lane> prede
 
 bool lanelet_operations::containsLaneletType(LaneletType type, std::set<LaneletType> baseTypesSet) {
     return std::any_of(baseTypesSet.begin(), baseTypesSet.end(), [type](LaneletType t) { return t == type; });
+}
+
+std::set<size_t> lanelet_operations::extractIds(std::vector<std::shared_ptr<Lanelet>> lanelets) {
+    std::set<size_t> ids;
+    for (const auto &la : lanelets)
+        ids.insert(la->getId());
+    return ids;
 }

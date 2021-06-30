@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 06.04.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_WORLD_H
-#define ENV_MODEL_WORLD_H
+#pragma once
 
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
@@ -19,7 +21,7 @@ class World {
      * @param egoVehicles List of ego vehicles.
      * @param obstacles List of obstacles.
      */
-    World(int timeStep, std::shared_ptr<RoadNetwork> roadNetwork, std::vector<std::shared_ptr<Obstacle>> egoVehicles,
+    World(size_t timeStep, std::shared_ptr<RoadNetwork> roadNetwork, std::vector<std::shared_ptr<Obstacle>> egoVehicles,
           std::vector<std::shared_ptr<Obstacle>> obstacles);
 
     /**
@@ -27,7 +29,7 @@ class World {
      *
      * @return Time step of world.
      */
-    [[nodiscard]] int getTimeStep() const;
+    [[nodiscard]] size_t getTimeStep() const;
 
     /**
      * Getter for pointer to road network object.
@@ -64,11 +66,12 @@ class World {
      */
     [[nodiscard]] std::shared_ptr<Obstacle> findObstacle(size_t obstacleId) const;
 
+    void setInitialLanes();
+
   private:
-    int timeStep;
+    size_t timeStep;
+    size_t idCounter;
     std::shared_ptr<RoadNetwork> roadNetwork;           //**< road network containing lanelets, traffic signs, etc. */
     std::vector<std::shared_ptr<Obstacle>> egoVehicles; //**< pointers to ego vehicle objects */
     std::vector<std::shared_ptr<Obstacle>> obstacles;   //**< pointers to obstacles*
 };
-
-#endif // ENV_MODEL_WORLD_H
