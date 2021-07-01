@@ -1,8 +1,11 @@
 //
-// Created by sebastian on 26.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
-
 #include "test_geometric_operations.h"
+#include "commonroad_cpp/geometry/geometric_operations.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 
 #include <cmath>
@@ -17,7 +20,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVertice) {
     q.push_back(temp);
     double length = 2;
     double width = 3;
-    p = addObjectDimensions(q, length, width);
+    p = geometric_operations::addObjectDimensions(q, length, width);
     bool rightResults{false};
     if (p[0].x == 0 && p[0].y == 2.5 && p[1].x == 2 && p[1].y == 2.5 && p[2].x == 2 && p[2].y == -0.5 && p[3].x == 0 &&
         p[3].y == -0.5) {
@@ -34,7 +37,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVerticeDetailed) {
     q.push_back(temp);
     double length = 5.4864;
     double width = 1.6459;
-    p = addObjectDimensions(q, length, width);
+    p = geometric_operations::addObjectDimensions(q, length, width);
     bool rightResults{false};
     if (p[0].x == -2.7432 && p[0].y == 0.82295 && p[1].x == 2.7432 && p[1].y == 0.82295 && p[2].x == 2.7432 &&
         p[2].y == -0.82295 && p[3].x == -2.7432 && p[3].y == -0.82295) {
@@ -59,7 +62,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVertices) {
     q.push_back(temp);
     double length = 2;
     double width = 3;
-    p = addObjectDimensions(q, length, width);
+    p = geometric_operations::addObjectDimensions(q, length, width);
 
     EXPECT_EQ(p[0].x, 0);
     EXPECT_EQ(p[0].y, 3.5);
@@ -90,7 +93,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsFourVertices) {
     q.push_back(temp);
     double length = 2;
     double width = 3;
-    p = addObjectDimensions(q, length, width);
+    p = geometric_operations::addObjectDimensions(q, length, width);
     EXPECT_EQ(p[0].x, 0);
     EXPECT_EQ(p[0].y, -0.5);
     EXPECT_EQ(p[1].x, 0);
@@ -117,7 +120,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVerticesDetailed) {
     q.push_back(temp);
     double length = 5.334;
     double width = 1.7983;
-    p = addObjectDimensions(q, length, width);
+    p = geometric_operations::addObjectDimensions(q, length, width);
     // TODO use result
 }
 
@@ -144,7 +147,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsSixVertices) {
     q.push_back(temp);
     double length = 5.4864;
     double width = 1.6459;
-    p = addObjectDimensions(q, length, width);
+    p = geometric_operations::addObjectDimensions(q, length, width);
     EXPECT_NEAR(p[0].x, -2.7432, epsilon);
     EXPECT_NEAR(p[0].y, 0.82295, epsilon);
     EXPECT_NEAR(p[0].y, 0.82295, epsilon);
@@ -166,7 +169,8 @@ TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesRotate90Degree) {
     std::vector<vertex> initialVector{vertex{1, 1}};
     std::vector<vertex> expectedVector{vertex{-1, 1}};
 
-    std::vector<vertex> result{rotateAndTranslateVertices(initialVector, translation, rotationAngle)};
+    std::vector<vertex> result{
+        geometric_operations::rotateAndTranslateVertices(initialVector, translation, rotationAngle)};
 
     EXPECT_NEAR(result.at(0).x, expectedVector.at(0).x, epsilon);
     EXPECT_NEAR(result.at(0).y, expectedVector.at(0).y, epsilon);
@@ -178,7 +182,8 @@ TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesTranslate) {
     std::vector<vertex> initialVector{vertex{1, 1}};
     std::vector<vertex> expectedVector{vertex{6.52, -1.2}};
 
-    std::vector<vertex> result{rotateAndTranslateVertices(initialVector, translation, rotationAngle)};
+    std::vector<vertex> result{
+        geometric_operations::rotateAndTranslateVertices(initialVector, translation, rotationAngle)};
 
     EXPECT_NEAR(result.at(0).x, expectedVector.at(0).x, epsilon);
     EXPECT_NEAR(result.at(0).y, expectedVector.at(0).y, epsilon);

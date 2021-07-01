@@ -1,9 +1,14 @@
 //
-// Created by Sebastian Maierhofer on 23.05.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "test_in_same_lane_predicate.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/obstacle/state.h"
 
 void TestInSameLanePredicate::SetUp() {
@@ -36,7 +41,7 @@ void TestInSameLanePredicate::SetUp() {
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleThree{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleThree)};
+        std::pair<int, std::shared_ptr<State>>(4, stateZeroObstacleThree)};
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionObstacleOne, 5, 2));
@@ -70,4 +75,21 @@ TEST_F(TestInSameLanePredicate, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(
         4, world, obstacleOne,
         obstacleThree)); // vehicles completely on same lane, but other vehicle is behind
+}
+
+TEST_F(TestInSameLanePredicate, BooleanEvaluationObjectsInIntersection) {
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+    std::vector<std::shared_ptr<Obstacle>> egoObstacles{
+        obstacle_operations::getObstacleById(obstaclesScenarioOne, 1219)};
+    std::vector<std::shared_ptr<Obstacle>> relevantObstacles{
+        obstacle_operations::getObstacleById(obstaclesScenarioOne, 1230),
+        obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
+    auto world{std::make_shared<World>(0, roadNetworkScenarioOne, egoObstacles, relevantObstacles)};
+    EXPECT_FALSE(pred.booleanEvaluation(
+        0, world, egoObstacles.at(0),
+        relevantObstacles.at(0))); // vehicles on right turning lane, but ego vehicle drives straight
+    EXPECT_TRUE(
+        pred.booleanEvaluation(0, world, egoObstacles.at(0),
+                               relevantObstacles.at(1))); // vehicle on straight lane and ego vehicle drives straight
 }

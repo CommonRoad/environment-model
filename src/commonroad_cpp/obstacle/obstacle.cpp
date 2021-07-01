@@ -104,6 +104,7 @@ double Obstacle::getAminLong() const { return aMinLong; }
 double Obstacle::getReactionTime() const { return reactionTime; }
 
 void Obstacle::setReferenceLane(bool useFirstTimeStep) {
+    // TODO consider orientation
     referenceLane = nullptr;
     if (useFirstTimeStep)
         referenceLane = occupiedLanes.at(getFirstTrajectoryTimeStep()).at(0);
@@ -118,7 +119,7 @@ void Obstacle::setReferenceLane(bool useFirstTimeStep) {
             [](std::pair<size_t, size_t> p1, const std::pair<size_t, size_t> &p2) { return p1.second < p2.second; });
         for (const auto &timeStep : occupiedLanes) {
             for (const auto &la : timeStep.second)
-                if (la->getId() == pr->second) {
+                if (la->getId() == pr->first) {
                     referenceLane = la;
                     break;
                 }
@@ -140,16 +141,16 @@ polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
     if (this->getGeoShape().getType() == ShapeType::rectangle) {
         // p are vertices of the bounding rectangle
         // vertices p represent the occupancy with vehicle dimensions (Theorem 1 in SPOT paper)
-        boundingRectangleVertices = addObjectDimensions(
+        boundingRectangleVertices = geometric_operations::addObjectDimensions(
             std::vector<vertex>{vertex{0.0, 0.0}}, this->getGeoShape().getLength(), this->getGeoShape().getWidth());
 
         /*
          * rotate and translate the vertices of the occupancy set in local
          * coordinates to the object's reference position and rotation
          */
-        std::vector<vertex> adjustedBoundingRectangleVertices =
-            rotateAndTranslateVertices(boundingRectangleVertices, vertex{state->getXPosition(), state->getYPosition()},
-                                       state->getGlobalOrientation());
+        std::vector<vertex> adjustedBoundingRectangleVertices = geometric_operations::rotateAndTranslateVertices(
+            boundingRectangleVertices, vertex{state->getXPosition(), state->getYPosition()},
+            state->getGlobalOrientation());
 
         polygonShape.outer().resize(adjustedBoundingRectangleVertices.size() + 1);
 
@@ -228,29 +229,7 @@ double Obstacle::getCurvilinearOrientation(size_t timeStep) const {
     return getStateByTimeStep(timeStep)->getCurvilinearOrientation();
 }
 
-std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                              size_t timeStep) {
-    if (occupiedLanes.find(timeStep) != occupiedLanes.end())
-        return occupiedLanes.at(timeStep);
-    std::vector<std::shared_ptr<Lane>> occupied;
-    std::vector<std::shared_ptr<Lanelet>> lanelets{getOccupiedLanelets(roadNetwork, timeStep)};
-
-    for (const auto &lane : roadNetwork->getLanes()) {
-        bool laneIsOccupied{false};
-        for (const auto &laneletLane : lane->getContainedLanelets()) {
-            for (const auto &laneletOccupied : lanelets) {
-                if (laneletLane->getId() == laneletOccupied->getId()) {
-                    occupied.push_back(lane);
-                    laneIsOccupied = true;
-                    break;
-                }
-            }
-            if (laneIsOccupied)
-                break;
-        }
-    }
-    return occupied;
-}
+std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(size_t timeStep) { return occupiedLanes.at(timeStep); }
 
 size_t Obstacle::getFirstTrajectoryTimeStep() { return trajectoryPrediction.begin()->second->getTimeStep(); }
 
@@ -293,4 +272,30 @@ void Obstacle::setRoute(const std::vector<vertex> &newRoute) { route = newRoute;
 
 void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes, size_t timeStep) {
     occupiedLanes[timeStep] = lanes;
+}
+
+void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> roadNetwork, size_t timeStep) {
+    if (occupiedLanes.count(timeStep))
+        return; // time step was already computed
+    std::vector<std::shared_ptr<Lane>> occupied;
+    std::vector<std::shared_ptr<Lanelet>> lanelets{getOccupiedLanelets(roadNetwork, timeStep)};
+    for (const auto &lane : roadNetwork->getLanes()) {
+        bool laneIsOccupied{false};
+        for (const auto &laneletLane : lane->getContainedLanelets()) {
+            for (const auto &laneletOccupied : lanelets) {
+                if (laneletLane->getId() == laneletOccupied->getId()) {
+                    occupied.push_back(lane);
+                    laneIsOccupied = true;
+                    break;
+                }
+            }
+            if (laneIsOccupied)
+                break;
+        }
+    }
+    occupiedLanes[timeStep] = occupied;
+}
+
+std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(size_t timeStep) {
+    return {referenceLane}; // TODO change to realDrivingPath
 }

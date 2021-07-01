@@ -51,4 +51,5 @@ class Lane : public Lanelet {
     std::vector<std::shared_ptr<Lanelet>> containedLanelets; //**< list of pointers to lanelets constructing lane */
     CurvilinearCoordinateSystem curvilinearCoordinateSystem; //**< curvilinear coordinate system defined by lane */
     std::set<size_t> containedLaneletIds;                    //**< set of IDs of the lanelets constructing lane */
+    std::vector<double> orientation;                         //**< orientation along reference path */
 };

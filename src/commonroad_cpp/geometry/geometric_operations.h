@@ -1,13 +1,17 @@
 //
-// Created by Sebastian Maierhofer on 08.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_GEOMETRIC_OPERATIONS_H
-#define ENV_MODEL_GEOMETRIC_OPERATIONS_H
+#pragma once
 
 #include "circle.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include <vector>
+
+namespace geometric_operations {
 
 /**
  * Add the dimensions of the object (length and width) to the polygon vertices q in the object's coordinate frame.
@@ -31,4 +35,12 @@ std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, do
 std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
                                                double refOrientation);
 
-#endif // ENV_MODEL_GEOMETRIC_OPERATIONS_H
+/**
+ * Computes orientation along polyline.
+ *
+ * @param polyline Polyline for which orientation should be calculated.
+ * @return List of orientations along polyline.
+ */
+std::vector<double> computeOrientationFromPolyline(std::vector<vertex> polyline);
+
+} // namespace geometric_operations

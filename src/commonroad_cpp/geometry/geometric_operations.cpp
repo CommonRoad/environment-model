@@ -1,3 +1,10 @@
+//
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
+//
+
 #include "geometric_operations.h"
 
 #include <boost/geometry.hpp>
@@ -9,7 +16,7 @@ using point_type = boost::geometry::model::d2::point_xy<double>;
 using polygon_type = boost::geometry::model::polygon<point_type>;
 using boost::geometry::get;
 
-std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, double width) {
+std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex> q, double length, double width) {
     std::vector<vertex> p;
 
     // check for special cases
@@ -91,7 +98,7 @@ std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, do
             p_RD[i].x += 0.5 * length;
             p_RD[i].y -= 0.5 * width;
         }
-        int idx = 0;
+        size_t idx = 0;
         for (size_t i = 0; i < q.size(); i++) {
             p_all[idx] = p_LU[i];
             idx++;
@@ -131,7 +138,7 @@ std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, do
     return p;
 }
 
-std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
+std::vector<vertex> geometric_operations::rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
                                                double refOrientation) {
     double cosine = cos(refOrientation);
     double sinus = sin(refOrientation);
@@ -143,10 +150,26 @@ std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, ve
     }
 
     // translation
-    for (auto &transVertice : transVertices) {
-        transVertice.x = transVertice.x + refPosition.x;
-        transVertice.y = transVertice.y + refPosition.y;
+    for (auto &transVertex : transVertices) {
+        transVertex.x = transVertex.x + refPosition.x;
+        transVertex.y = transVertex.y + refPosition.y;
     }
 
     return transVertices;
+}
+
+std::vector<double> geometric_operations::computeOrientationFromPolyline(std::vector<vertex> polyline) {
+    if (polyline.size() < 2)
+        throw std::logic_error("geometric_operations computeOrientationFromPolyline: "
+                               "Cannot create orientation from polyline of length < 2");
+    std::vector<double> orientation;
+    orientation.reserve(polyline.size());
+
+    for (size_t idx{0}; idx < polyline.size() - 1; ++idx)
+        orientation.push_back(atan2(polyline[idx + 1].y - polyline[idx].y, polyline[idx + 1].x - polyline[idx].x));
+
+    for (size_t idx{polyline.size() - 1}; idx < polyline.size(); ++idx)
+        orientation.push_back(atan2(polyline[idx].y - polyline[idx - 1].y, polyline[idx].x - polyline[idx - 1].x));
+
+    return orientation;
 }

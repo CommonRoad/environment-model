@@ -212,14 +212,28 @@ lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_pt
                     std::vector<std::shared_ptr<Lanelet>> containedLanelets{lanePre};
                     std::reverse(containedLanelets.begin(), containedLanelets.end());
                     containedLanelets.insert(containedLanelets.end(), laneSuc.begin() + 1, laneSuc.end());
-                    lanes.push_back(createLaneByContainedLanelets(containedLanelets, newId++));
+                    auto newLane{createLaneByContainedLanelets(containedLanelets, newId++)};
+                    if (!std::any_of(lanes.begin(), lanes.end(), [newLane](std::shared_ptr<Lane> existingLane) {
+                            return newLane->getContainedLaneletIDs() == existingLane->getContainedLaneletIDs();
+                        }))
+                        lanes.push_back(newLane);
                 }
         else if (!newLaneSuccessorParts.empty())
-            for (const auto &laneSuc : newLaneSuccessorParts)
-                lanes.push_back(createLaneByContainedLanelets(laneSuc, newId++));
+            for (const auto &laneSuc : newLaneSuccessorParts) {
+                auto newLane{createLaneByContainedLanelets(laneSuc, newId++)};
+                if (!std::any_of(lanes.begin(), lanes.end(), [newLane](std::shared_ptr<Lane> existingLane) {
+                        return newLane->getContainedLaneletIDs() == existingLane->getContainedLaneletIDs();
+                    }))
+                    lanes.push_back(newLane);
+            }
         else
-            for (const auto &lanePre : newLanePredecessorParts)
-                lanes.push_back(createLaneByContainedLanelets(lanePre, newId++));
+            for (const auto &lanePre : newLanePredecessorParts) {
+                auto newLane{createLaneByContainedLanelets(lanePre, newId++)};
+                if (!std::any_of(lanes.begin(), lanes.end(), [newLane](std::shared_ptr<Lane> existingLane) {
+                        return newLane->getContainedLaneletIDs() == existingLane->getContainedLaneletIDs();
+                    }))
+                    lanes.push_back(newLane);
+            }
     }
     return lanes;
 }

@@ -322,14 +322,7 @@ class Obstacle {
      */
     [[nodiscard]] double getCurvilinearOrientation(size_t timeStep) const; // Todo create test case
 
-    /**
-     * Extracts the lanes from the road network the obstacle occupies at a certain time step
-     *
-     * @param timeStep time step of interest
-     * @return list of pointers to occupied lanes
-     */
-    [[nodiscard]] std::vector<std::shared_ptr<Lane>> getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                                      size_t timeStep); // TODO create test case
+    void setOccupiedLanes(const std::shared_ptr<RoadNetwork> roadNetwork, size_t timeStep);
 
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
@@ -354,6 +347,10 @@ class Obstacle {
      * @return lateral position of obstacle state
      */
     [[nodiscard]] size_t getLastTrajectoryTimeStep(); // TODO create test case
+
+    std::vector<std::shared_ptr<Lane>> getOccupiedLanes(size_t timeStep); // TODO create test case
+
+    std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(size_t timeStep); // TODO create test case
 
     /**
      * Getter for route.
