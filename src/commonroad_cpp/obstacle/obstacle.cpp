@@ -106,19 +106,23 @@ double Obstacle::getReactionTime() const { return reactionTime; }
 void Obstacle::setReferenceLane(bool useFirstTimeStep) {
     // TODO consider orientation
     referenceLane = nullptr;
-    if (useFirstTimeStep)
-        referenceLane = occupiedLanes.at(getFirstTrajectoryTimeStep()).at(0);
-    else {
+
+    // only one lane is occupied over complete trajectory -> this is reference
+    auto allOccupiedLanes{getOccupiedLanes()};
+    if(allOccupiedLanes.size() == 1) {
+        referenceLane = allOccupiedLanes.at(0);
+        return;
+    } else{
         std::map<size_t, size_t> numOccupancies;
-        for (const auto &timeStep : occupiedLanes) {
-            for (const auto &la : timeStep.second)
+        for (const auto &laneAtTimeStep : occupiedLanes) {
+            for (const auto &la : laneAtTimeStep.second)
                 numOccupancies[la->getId()]++;
         }
         auto pr = std::max_element(
             std::begin(numOccupancies), std::end(numOccupancies),
             [](std::pair<size_t, size_t> p1, const std::pair<size_t, size_t> &p2) { return p1.second < p2.second; });
-        for (const auto &timeStep : occupiedLanes) {
-            for (const auto &la : timeStep.second)
+        for (const auto &laneAtTimeStep : occupiedLanes) {
+            for (const auto &la : laneAtTimeStep.second)
                 if (la->getId() == pr->first) {
                     referenceLane = la;
                     break;
@@ -298,4 +302,13 @@ void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> roadNetwork, 
 
 std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(size_t timeStep) {
     return {referenceLane}; // TODO change to realDrivingPath
+}
+
+std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes() {
+    std::vector<std::shared_ptr<Lane>> lanes;
+    for (const auto &laneAtTimeStep : occupiedLanes)
+        for (const auto &la : laneAtTimeStep.second)
+            lanes.push_back(la);
+
+    return lanes;
 }

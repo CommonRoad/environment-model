@@ -65,7 +65,8 @@ std::vector<std::shared_ptr<Lane>> createInterstateLanes(const std::vector<std::
                                                          size_t newId);
 
 std::vector<std::shared_ptr<Lane>>
-createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t newId);
+createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t newId,
+                            const std::map<std::set<size_t>, std::tuple<std::set<size_t>, std::shared_ptr<Lane>>> &existingLanes = {});
 
 std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets,
                                                     size_t newId);

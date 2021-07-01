@@ -125,6 +125,8 @@ class RoadNetwork {
 
     void addLanes(std::vector<std::shared_ptr<Lane>> newLanes, std::set<size_t> initialLanelets = {});
 
+    std::map<std::set<size_t>, std::tuple<std::set<size_t>, std::shared_ptr<Lane>>> &getLaneMapping();
+
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
     SupportedTrafficSignCountry country;                      //**< country where road network is located */

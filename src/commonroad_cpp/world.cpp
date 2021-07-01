@@ -88,7 +88,7 @@ void World::setInitialLanes() {
         for (auto &obs : egoVehicles) {
             for (const auto &state : obs->getTrajectoryPrediction()) {
                 auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, state.first)};
-                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter)};
+                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter, roadNetwork->getLaneMapping())};
                 roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
                 obs->setOccupiedLanes(lanes, state.first);
             }
@@ -97,7 +97,7 @@ void World::setInitialLanes() {
         for (auto &obs : obstacles) {
             for (const auto &state : obs->getTrajectoryPrediction()) {
                 auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, state.first)};
-                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter)};
+                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter, roadNetwork->getLaneMapping())};
                 roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
                 obs->setOccupiedLanes(lanes, state.first);
             }

@@ -350,6 +350,8 @@ class Obstacle {
 
     std::vector<std::shared_ptr<Lane>> getOccupiedLanes(size_t timeStep); // TODO create test case
 
+    std::vector<std::shared_ptr<Lane>> getOccupiedLanes(); // TODO create test case
+
     std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(size_t timeStep); // TODO create test case
 
     /**

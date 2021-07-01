@@ -39,6 +39,10 @@ std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() {
     return collectedLanes;
 }
 
+std::map<std::set<size_t>, std::tuple<std::set<size_t>, std::shared_ptr<Lane>>> &RoadNetwork::getLaneMapping() {
+    return lanes;
+}
+
 const std::vector<std::shared_ptr<Intersection>> &RoadNetwork::getIntersections() const { return intersections; }
 
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {

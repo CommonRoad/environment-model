@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 08.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_COMMONROAD_FACTORY_2018B_H
-#define ENV_MODEL_COMMONROAD_FACTORY_2018B_H
+#pragma once
 
 #include "commonroad_factory.h"
 
@@ -61,5 +63,3 @@ class CommonRoadFactory2018b : public CommonRoadFactory {
     std::vector<std::shared_ptr<Intersection>>
     createIntersections(const std::vector<std::shared_ptr<Lanelet>> &lanelets) override;
 };
-
-#endif // ENV_MODEL_COMMONROAD_FACTORY_2018B_H
