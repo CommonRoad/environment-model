@@ -43,4 +43,22 @@ std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, ve
  */
 std::vector<double> computeOrientationFromPolyline(std::vector<vertex> polyline);
 
+/**
+ * Computes path length along polyline.
+ *
+ * @param polyline Polyline for which orientation should be calculated.
+ * @return Path length along polyline.
+ */
+std::vector<double> computePathLengthFromPolyline(const std::vector<vertex>& polyline);
+
+/**
+ * Interpolates value based on two polylines.
+ * @param value Position where to evaluate value.
+ * @param x x-coordinates of data points. Must be in ascending order.
+ * @param y y-coordinates of data points.
+ *
+ * @return Interpolated value.
+ */
+double interpolate(double value, const std::vector<double>& x, const std::vector<double>& y);
+
 } // namespace geometric_operations
