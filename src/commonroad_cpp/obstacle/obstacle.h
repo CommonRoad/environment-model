@@ -120,7 +120,7 @@ class Obstacle {
      * ego vehicle's lane.
      * @param timeStep Current time step.
      */
-    void setReferenceLane(bool useFirstTimeStep = false); // TODO add unit test
+    void setReferenceLane(std::shared_ptr<RoadNetwork> roadNetwork); // TODO add unit test
 
     /**
      * Setter for trajectory prediction.
@@ -322,7 +322,7 @@ class Obstacle {
      */
     [[nodiscard]] double getCurvilinearOrientation(size_t timeStep) const; // Todo create test case
 
-    void setOccupiedLanes(const std::shared_ptr<RoadNetwork> roadNetwork, size_t timeStep);
+    void setOccupiedLanes(std::shared_ptr<RoadNetwork> roadNetwork, size_t timeStep);
 
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step

@@ -44,7 +44,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
     obstacleOne->setOccupiedLanes({laneOne}, obstacleOne->getFirstTrajectoryTimeStep());
-    obstacleOne->setReferenceLane(true);
+    obstacleOne->setReferenceLane(roadNetwork);
     obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);
 
     idObstacleTwo = 2;
@@ -64,7 +64,7 @@ void ObstacleTestInitialization::setUpObstacles() {
                  aMaxObstacleTwo, aMaxLongObstacleTwo, aMinLongObstacleTwo, reactionTimeObstacleTwo,
                  trajectoryPredictionObstacleTwo, lengthObstacleTwo, widthObstacleTwo));
     obstacleTwo->setOccupiedLanes({laneOne}, obstacleTwo->getFirstTrajectoryTimeStep());
-    obstacleTwo->setReferenceLane(true);
+    obstacleTwo->setReferenceLane(roadNetwork);
 
     obstacleList.push_back(obstacleOne);
     obstacleList.push_back(obstacleTwo);

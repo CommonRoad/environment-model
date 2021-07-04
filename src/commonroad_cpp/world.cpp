@@ -77,31 +77,33 @@ void World::setInitialLanes() {
         for (auto &obs : egoVehicles) {
             for (const auto &state : obs->getTrajectoryPrediction())
                 obs->setOccupiedLanes(roadNetwork, state.first);
-            obs->setReferenceLane(true);
+            obs->setReferenceLane(roadNetwork);
         }
         for (auto &obs : obstacles) {
             for (const auto &state : obs->getTrajectoryPrediction())
                 obs->setOccupiedLanes(roadNetwork, state.first);
-            obs->setReferenceLane(true);
+            obs->setReferenceLane(roadNetwork);
         }
     } else {
         for (auto &obs : egoVehicles) {
             for (const auto &state : obs->getTrajectoryPrediction()) {
                 auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, state.first)};
-                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter, roadNetwork->getLaneMapping())};
+                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter,
+                                                                           roadNetwork->getLaneMapping())};
                 roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
                 obs->setOccupiedLanes(lanes, state.first);
             }
-            obs->setReferenceLane();
+            obs->setReferenceLane(roadNetwork);
         }
         for (auto &obs : obstacles) {
             for (const auto &state : obs->getTrajectoryPrediction()) {
                 auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, state.first)};
-                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter, roadNetwork->getLaneMapping())};
+                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter,
+                                                                           roadNetwork->getLaneMapping())};
                 roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
                 obs->setOccupiedLanes(lanes, state.first);
             }
-            obs->setReferenceLane();
+            obs->setReferenceLane(roadNetwork);
         }
     }
 }

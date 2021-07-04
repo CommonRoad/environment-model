@@ -5,8 +5,8 @@
 // Credits: BMW Car@TUM
 //
 #include "test_geometric_operations.h"
-#include "commonroad_cpp/geometry/geometric_operations.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include "commonroad_cpp/geometry/geometric_operations.h"
 
 #include <cmath>
 

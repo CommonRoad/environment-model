@@ -49,7 +49,7 @@ std::vector<double> computeOrientationFromPolyline(std::vector<vertex> polyline)
  * @param polyline Polyline for which orientation should be calculated.
  * @return Path length along polyline.
  */
-std::vector<double> computePathLengthFromPolyline(const std::vector<vertex>& polyline);
+std::vector<double> computePathLengthFromPolyline(const std::vector<vertex> &polyline);
 
 /**
  * Interpolates value based on two polylines.
@@ -59,6 +59,6 @@ std::vector<double> computePathLengthFromPolyline(const std::vector<vertex>& pol
  *
  * @return Interpolated value.
  */
-double interpolate(double value, const std::vector<double>& x, const std::vector<double>& y);
+double interpolate(double value, const std::vector<double> &x, const std::vector<double> &y);
 
 } // namespace geometric_operations

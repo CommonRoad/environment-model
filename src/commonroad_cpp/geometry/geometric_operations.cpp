@@ -139,7 +139,7 @@ std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex
 }
 
 std::vector<vertex> geometric_operations::rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
-                                               double refOrientation) {
+                                                                     double refOrientation) {
     double cosine = cos(refOrientation);
     double sinus = sin(refOrientation);
     std::vector<vertex> transVertices(vertices.size());
@@ -174,52 +174,51 @@ std::vector<double> geometric_operations::computeOrientationFromPolyline(std::ve
     return orientation;
 }
 
-std::vector<double> geometric_operations::computePathLengthFromPolyline(const std::vector<vertex>& polyline) {
+std::vector<double> geometric_operations::computePathLengthFromPolyline(const std::vector<vertex> &polyline) {
     std::vector<double> distance(polyline.size(), 0.0);
-    for(size_t idx{1}; idx < polyline.size(); ++idx) {
+    for (size_t idx{1}; idx < polyline.size(); ++idx) {
         double x{polyline[idx].x - polyline[idx - 1].x};
         double y{polyline[idx].y - polyline[idx - 1].y};
-        distance[idx] = distance[idx - 1] + std::sqrt((x*x + y*y));
+        distance[idx] = distance[idx - 1] + std::sqrt((x * x + y * y));
     }
     return distance;
 }
 
-double interpolate(double x, const std::vector<double>& polyline1, const std::vector<double>& polyline2)  {
+double interpolate(double x, const std::vector<double> &polyline1, const std::vector<double> &polyline2) {
     // taken from https://bulldozer00.blog/2016/05/10/linear-interpolation-in-c/
 
-    //Ensure that no 2 adjacent x values are equal,
-    //lest we try to divide by zero when we interpolate.
+    // Ensure that no 2 adjacent x values are equal,
+    // lest we try to divide by zero when we interpolate.
     const double EPSILON{1.0E-8};
-    for(size_t i{1}; i < polyline1.size(); ++i) {
-        double deltaX{std::abs(polyline1[i] - polyline1[i-1])};
-        if(deltaX < EPSILON ) {
-            std::string err{"Potential Divide By Zero: Points " +
-                std::to_string(i-1) + " And " +
-                std::to_string(i) + " Are Too Close In Value"};
+    for (size_t i{1}; i < polyline1.size(); ++i) {
+        double deltaX{std::abs(polyline1[i] - polyline1[i - 1])};
+        if (deltaX < EPSILON) {
+            std::string err{"Potential Divide By Zero: Points " + std::to_string(i - 1) + " And " + std::to_string(i) +
+                            " Are Too Close In Value"};
             throw std::range_error(err);
         }
     }
 
-    //Define a lambda that returns true if the x value
-    //of a point pair is < the caller's x value
-    auto lessThan = [](const double value, double x){return value < x;};
+    // Define a lambda that returns true if the x value
+    // of a point pair is < the caller's x value
+    auto lessThan = [](const double value, double x) { return value < x; };
 
-    //Find the first table entry whose value is >= caller's x value
+    // Find the first table entry whose value is >= caller's x value
     auto index = static_cast<size_t>(
         std::distance(polyline1.begin(), std::lower_bound(polyline1.begin(), polyline1.end(), x, lessThan)));
 
-    //If the caller's X value is greater than the largest
-    //X value in the table, we can't interpolate.
-    if(index == polyline1.size() - 1)
+    // If the caller's X value is greater than the largest
+    // X value in the table, we can't interpolate.
+    if (index == polyline1.size() - 1)
         return (polyline2[polyline2.size() - 1]);
 
-    //If the caller's X value is less than the smallest X value in the table,
-    //we can't interpolate.
-    if(index == 0 and x <= polyline1.front()) {
+    // If the caller's X value is less than the smallest X value in the table,
+    // we can't interpolate.
+    if (index == 0 and x <= polyline1.front()) {
         return polyline2.front();
     }
 
-    //We can interpolate!
+    // We can interpolate!
     double upperX{polyline1[index]};
     double upperY{polyline2[index]};
     double lowerX{polyline1[index - 1]};
@@ -228,7 +227,5 @@ double interpolate(double x, const std::vector<double>& polyline1, const std::ve
     double deltaY{upperY - lowerY};
     double deltaX{upperX - lowerX};
 
-    return lowerY + ((x - lowerX)/ deltaX) * deltaY;
+    return lowerY + ((x - lowerX) / deltaX) * deltaY;
 }
-
-
