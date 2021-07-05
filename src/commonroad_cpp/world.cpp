@@ -75,35 +75,35 @@ void World::setInitialLanes() {
     if (interstate) {
         roadNetwork->addLanes(lanelet_operations::createInterstateLanes(roadNetwork->getLaneletNetwork(), ++idCounter));
         for (auto &obs : egoVehicles) {
-            for (const auto &state : obs->getTrajectoryPrediction())
-                obs->setOccupiedLanes(roadNetwork, state.first);
+            for (const auto &timeStamp : obs->getPredictionTimeSteps())
+                obs->setOccupiedLanes(roadNetwork, timeStamp);
             obs->setReferenceLane(roadNetwork);
         }
-        for (auto &obs : obstacles) {
-            for (const auto &state : obs->getTrajectoryPrediction())
-                obs->setOccupiedLanes(roadNetwork, state.first);
-            obs->setReferenceLane(roadNetwork);
-        }
+//        for (auto &obs : obstacles) {
+//            for (const auto &timeStamp : obs->getPredictionTimeSteps())
+//                obs->setOccupiedLanes(roadNetwork, timeStamp);
+//            obs->setReferenceLane(roadNetwork);
+//        }
     } else {
         for (auto &obs : egoVehicles) {
-            for (const auto &state : obs->getTrajectoryPrediction()) {
-                auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, state.first)};
+            for (const auto &timeStamp : obs->getPredictionTimeSteps()) {
+                auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, timeStamp)};
                 auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter,
                                                                            roadNetwork->getLaneMapping())};
                 roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
-                obs->setOccupiedLanes(lanes, state.first);
+                obs->setOccupiedLanes(lanes, timeStamp);
             }
             obs->setReferenceLane(roadNetwork);
         }
-        for (auto &obs : obstacles) {
-            for (const auto &state : obs->getTrajectoryPrediction()) {
-                auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, state.first)};
-                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter,
-                                                                           roadNetwork->getLaneMapping())};
-                roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
-                obs->setOccupiedLanes(lanes, state.first);
-            }
-            obs->setReferenceLane(roadNetwork);
-        }
+//        for (auto &obs : obstacles) {
+//            for (const auto &timeStamp : obs->getPredictionTimeSteps()) {
+//                auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
+//                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter,
+//                                                                           roadNetwork->getLaneMapping())};
+//                roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
+//                obs->setOccupiedLanes(lanes, timeStamp);
+//            }
+//            obs->setReferenceLane(roadNetwork);
+//        }
     }
 }

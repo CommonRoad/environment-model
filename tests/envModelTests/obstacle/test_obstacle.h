@@ -1,9 +1,11 @@
 //
-// Created by sebastian on 16.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TEST_OBSTACLE_H
-#define ENV_MODEL_TEST_OBSTACLE_H
+#pragma once
 
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "test_state.h"
@@ -51,5 +53,3 @@ class ObstacleTest : public ObstacleTestInitialization, public testing::Test {
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_OBSTACLE_H

@@ -222,13 +222,6 @@ class Obstacle {
     [[nodiscard]] double getReactionTime() const;
 
     /**
-     * Getter for assigned own lane.
-     *
-     * @return Pointer to lane object.
-     */
-    [[nodiscard]] std::vector<std::shared_ptr<Lane>> getLanes() const;
-
-    /**
      * Getter for reference lane.
      *
      * @return Pointer to lane object.
@@ -352,7 +345,8 @@ class Obstacle {
 
     std::vector<std::shared_ptr<Lane>> getOccupiedLanes(); // TODO create test case
 
-    std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(size_t timeStep); // TODO create test case
+    std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(std::shared_ptr<RoadNetwork> roadNetwork,
+                                                           size_t timeStep); // TODO create test case
 
     /**
      * Getter for route.
@@ -381,6 +375,8 @@ class Obstacle {
      * @param timeStep Time step for which acceleration should be interpolated.
      */
     void interpolateAcceleration(size_t timeStep);
+
+    std::vector<size_t> getPredictionTimeSteps();
 
   private:
     size_t id;                                        //**< unique ID of lanelet */

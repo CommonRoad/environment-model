@@ -6,6 +6,7 @@
 //
 
 #include "test_in_same_lane_predicate.h"
+#include "../../interfaces/utility_functions.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
@@ -89,7 +90,8 @@ TEST_F(TestInSameLanePredicate, BooleanEvaluationObjectsInIntersection) {
     EXPECT_FALSE(pred.booleanEvaluation(
         0, world, egoObstacles.at(0),
         relevantObstacles.at(0))); // vehicles on right turning lane, but ego vehicle drives straight
-    EXPECT_TRUE(
-        pred.booleanEvaluation(0, world, egoObstacles.at(0),
-                               relevantObstacles.at(1))); // vehicle on straight lane and ego vehicle drives straight
+        EXPECT_TRUE(
+            pred.booleanEvaluation(0, world, egoObstacles.at(0),
+                                   relevantObstacles.at(1))); // vehicle on straight lane and ego vehicle drives
+        // straight
 }

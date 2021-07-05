@@ -1,9 +1,14 @@
 //
-// Created by sebastian on 16.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
-
 #include "test_obstacle.h"
-
+#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include "../interfaces/utility_functions.h"
 #include <cmath>
 #include <map>
 
@@ -192,4 +197,47 @@ TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
     obstacleOne->convertPointToCurvilinear(0);
     EXPECT_NEAR(stateOne->getLonPosition(), 7.5, 0.0005);
     EXPECT_EQ(stateOne->getLatPosition(), -1.25);
+}
+
+TEST_F(ObstacleTest, SetReferenceGeneral) {
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+    size_t globalID{1234};
+    auto obsOneScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1219)};
+    for (const auto &timeStep : obsOneScenarioOne->getPredictionTimeSteps()) {
+        auto occupiedLanelets{obsOneScenarioOne->getOccupiedLanelets(roadNetworkScenarioOne, timeStep)};
+        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID,
+                                                                   roadNetworkScenarioOne->getLaneMapping())};
+        roadNetworkScenarioOne->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
+        obsOneScenarioOne->setOccupiedLanes(lanes, timeStep);
+    }
+    obsOneScenarioOne->setReferenceLane(roadNetworkScenarioOne);
+    std::set<size_t> expRefLaneletsObsOneScenarioOne{3570, 3632, 3652, 3616, 3456, 3462, 3470};
+    EXPECT_EQ(expRefLaneletsObsOneScenarioOne, obsOneScenarioOne->getReferenceLane()->getContainedLaneletIDs());
+
+    auto obsTwoScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
+    for (const auto &timeStep : obsTwoScenarioOne->getPredictionTimeSteps()) {
+        auto occupiedLanelets{obsTwoScenarioOne->getOccupiedLanelets(roadNetworkScenarioOne, timeStep)};
+        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID,
+                                                                   roadNetworkScenarioOne->getLaneMapping())};
+        roadNetworkScenarioOne->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
+        obsTwoScenarioOne->setOccupiedLanes(lanes, timeStep);
+    }
+    obsTwoScenarioOne->setReferenceLane(roadNetworkScenarioOne);
+    std::set<size_t> expRefLaneletsObsTwoScenarioOne{3570, 3632, 3652, 3616, 3456, 3462, 3470};
+    EXPECT_EQ(expRefLaneletsObsTwoScenarioOne, obsTwoScenarioOne->getReferenceLane()->getContainedLaneletIDs());
+
+    std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
+    const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
+    auto obsOneScenarioTwo{obstacle_operations::getObstacleById(obstaclesScenarioTwo, 325)};
+    for (const auto &timeStep : obsOneScenarioTwo->getPredictionTimeSteps()) {
+        auto occupiedLanelets{obsOneScenarioTwo->getOccupiedLanelets(roadNetworkScenarioTwo, timeStep)};
+        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID,
+                                                                   roadNetworkScenarioTwo->getLaneMapping())};
+        roadNetworkScenarioTwo->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
+        obsOneScenarioTwo->setOccupiedLanes(lanes, timeStep);
+    }
+    obsOneScenarioTwo->setReferenceLane(roadNetworkScenarioTwo);
+    std::set<size_t> expRefLaneletsObsOneScenarioTwo{77695, 82817, 77065, 80956};
+    EXPECT_EQ(expRefLaneletsObsOneScenarioTwo, obsOneScenarioTwo->getReferenceLane()->getContainedLaneletIDs());
 }

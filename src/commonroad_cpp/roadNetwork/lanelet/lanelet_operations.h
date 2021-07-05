@@ -53,13 +53,13 @@ LineMarking matchStringToLineMarking(const std::string &type);
  */
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
 combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &curLanelet,
-                                              std::set<LaneletType> classifyingLaneletTypes = {},
-                                              std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
+                                              std::set<std::tuple<LaneletType, LaneletType, LaneletType>> = {},
+                                              std::vector<std::shared_ptr<Lanelet>> containedLanelets = {}, bool startLanelets = false);
 
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
 combineLaneletAndPredecessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &curLanelet,
-                                                std::set<LaneletType> classifyingLaneletTypes = {},
-                                                std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
+                                                std::set<std::tuple<LaneletType, LaneletType, LaneletType>> classifyingLaneletTypes = {},
+                                                std::vector<std::shared_ptr<Lanelet>> containedLanelets = {}, bool startLanelets = false);
 
 std::vector<std::shared_ptr<Lane>> createInterstateLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork,
                                                          size_t newId);
@@ -85,5 +85,17 @@ std::vector<std::shared_ptr<Lanelet>> laneletsRightOfLanelet(std::shared_ptr<Lan
 std::vector<std::shared_ptr<Lanelet>> laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet);
 
 std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(std::shared_ptr<Lanelet> lanelet);
+
+bool adjacentLanes(std::shared_ptr<Lane> laneOne, std::shared_ptr<Lane> laneTwo,
+                   std::vector<std::shared_ptr<Lanelet>> relevantLanelets);
+
+bool containsClassifyingLaneletType(std::shared_ptr<Lanelet> lanelet, std::set<std::tuple<LaneletType,LaneletType,
+                                                                                          LaneletType>> classifyingLaneletTypes);
+
+bool checkClassifyingLaneletTypeTemplate(std::tuple<LaneletType,LaneletType, LaneletType> laneletTypeTemplate, std::set<LaneletType> typesLaneletOne, std::set<LaneletType> typesLaneletTwo, std::set<LaneletType> typesLaneletThree);
+
+bool checkClassifyingLaneletTypeTemplate(std::tuple<LaneletType,LaneletType, LaneletType> laneletTypeTemplate, std::set<LaneletType> typesLaneletOne, std::set<LaneletType> typesLaneletTwo);
+
+bool checkClassifyingLaneletTypeTemplate(std::tuple<LaneletType,LaneletType, LaneletType> laneletTypeTemplate, std::set<LaneletType> typesLaneletOne);
 
 } // namespace lanelet_operations
