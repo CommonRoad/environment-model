@@ -61,4 +61,15 @@ std::vector<double> computePathLengthFromPolyline(const std::vector<vertex> &pol
  */
 double interpolate(double value, const std::vector<double> &x, const std::vector<double> &y);
 
+/**
+ * Return the signed difference between angles lhs and rhs
+ *
+ * @param lhs Left-hand side of the subtraction
+ * @param rhs Right-hand side of the subtraction
+ * @return  ``(lhs - rhs)``, the value will be within ``[-math.pi, math.pi)``.
+    Both ``lhs`` and ``rhs`` may either be zero-based (within
+    ``[0, 2*math.pi]``), or ``-pi``-based (within ``[-math.pi, math.pi]``).
+ */
+double subtractOrientations(double lhs, double rhs);
+
 } // namespace geometric_operations

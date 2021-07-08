@@ -74,8 +74,6 @@ getDataFromCommonRoad(const std::string &xmlFilePath) {
     std::shared_ptr<RoadNetwork> roadNetwork{
         std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, trafficSigns, trafficLights, intersections))};
 
-    // TODO maybe return world object
-
     return std::make_tuple(obstacles, roadNetwork);
 }
 

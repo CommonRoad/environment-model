@@ -378,6 +378,8 @@ class Obstacle {
 
     std::vector<size_t> getPredictionTimeSteps();
 
+    void computeLanes(std::shared_ptr<RoadNetwork> roadNetwork, size_t &idCounter);
+
   private:
     size_t id;                                        //**< unique ID of lanelet */
     bool isStatic{false};                             //**< true if Obstacle is static */

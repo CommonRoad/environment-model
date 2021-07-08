@@ -5,10 +5,10 @@
 // Credits: BMW Car@TUM
 //
 #include "test_obstacle.h"
+#include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
-#include "../interfaces/utility_functions.h"
 #include <cmath>
 #include <map>
 
@@ -202,42 +202,21 @@ TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
 TEST_F(ObstacleTest, SetReferenceGeneral) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
-    size_t globalID{1234};
+    size_t globalID{123456789};
     auto obsOneScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1219)};
-    for (const auto &timeStep : obsOneScenarioOne->getPredictionTimeSteps()) {
-        auto occupiedLanelets{obsOneScenarioOne->getOccupiedLanelets(roadNetworkScenarioOne, timeStep)};
-        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID, 300,
-                                                                   roadNetworkScenarioOne->getLaneMapping())};
-        roadNetworkScenarioOne->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
-        obsOneScenarioOne->setOccupiedLanes(lanes, timeStep);
-    }
-    obsOneScenarioOne->setReferenceLane(roadNetworkScenarioOne);
+    obsOneScenarioOne->computeLanes(roadNetworkScenarioOne, globalID);
     std::set<size_t> expRefLaneletsObsOneScenarioOne{3570, 3632, 3652, 3616, 3456, 3462, 3470};
     EXPECT_EQ(expRefLaneletsObsOneScenarioOne, obsOneScenarioOne->getReferenceLane()->getContainedLaneletIDs());
 
-    auto obsTwoScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
-    for (const auto &timeStep : obsTwoScenarioOne->getPredictionTimeSteps()) {
-        auto occupiedLanelets{obsTwoScenarioOne->getOccupiedLanelets(roadNetworkScenarioOne, timeStep)};
-        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID, 300,
-                                                                   roadNetworkScenarioOne->getLaneMapping())};
-        roadNetworkScenarioOne->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
-        obsTwoScenarioOne->setOccupiedLanes(lanes, timeStep);
-    }
-    obsTwoScenarioOne->setReferenceLane(roadNetworkScenarioOne);
+    const auto obsTwoScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
+    obsTwoScenarioOne->computeLanes(roadNetworkScenarioOne, globalID);
     std::set<size_t> expRefLaneletsObsTwoScenarioOne{3570, 3632, 3652, 3616, 3456, 3462, 3470};
     EXPECT_EQ(expRefLaneletsObsTwoScenarioOne, obsTwoScenarioOne->getReferenceLane()->getContainedLaneletIDs());
 
     std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
     const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
     auto obsOneScenarioTwo{obstacle_operations::getObstacleById(obstaclesScenarioTwo, 325)};
-    for (const auto &timeStep : obsOneScenarioTwo->getPredictionTimeSteps()) {
-        auto occupiedLanelets{obsOneScenarioTwo->getOccupiedLanelets(roadNetworkScenarioTwo, timeStep)};
-        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID, 300,
-                                                                   roadNetworkScenarioTwo->getLaneMapping())};
-        roadNetworkScenarioTwo->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
-        obsOneScenarioTwo->setOccupiedLanes(lanes, timeStep);
-    }
-    obsOneScenarioTwo->setReferenceLane(roadNetworkScenarioTwo);
-    std::set<size_t> expRefLaneletsObsOneScenarioTwo{77065, 77068, 77298, 77301, 77695, 80823, 80956, 82673, 82817 };
+    obsOneScenarioTwo->computeLanes(roadNetworkScenarioTwo, globalID);
+    std::set<size_t> expRefLaneletsObsOneScenarioTwo{77065, 77068, 77071, 77074, 77695, 80618, 80821, 80956, 82817};
     EXPECT_EQ(expRefLaneletsObsOneScenarioTwo, obsOneScenarioTwo->getReferenceLane()->getContainedLaneletIDs());
 }

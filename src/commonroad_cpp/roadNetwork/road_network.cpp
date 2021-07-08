@@ -119,14 +119,21 @@ std::string RoadNetwork::extractTrafficSignIDForCountry(TrafficSignTypes type) {
     return trafficSignIDLookupTable->at(type);
 }
 
-bool RoadNetwork::isInterstate() const { return interstate; }
-
-void RoadNetwork::setIsInterstate(bool interstateRoadNetwork) { interstate = interstateRoadNetwork; }
-
-void RoadNetwork::addLanes(std::vector<std::shared_ptr<Lane>> newLanes, std::set<size_t> initialLanelets) {
+void RoadNetwork::addLanes(std::vector<std::shared_ptr<Lane>> newLanes, size_t initialLanelet) {
     for (const auto &la : newLanes) {
-        if (initialLanelets.empty())
-            initialLanelets = {la->getContainedLanelets().front()->getId()};
-        lanes[la->getContainedLaneletIDs()] = {initialLanelets, la};
+        if (lanes.find(la->getContainedLaneletIDs()) != lanes.end() and std::get<0>(lanes[la->getContainedLaneletIDs()]).find(initialLanelet) != std::get<0>(lanes[la->getContainedLaneletIDs()]).end())
+            continue;
+        else if(lanes.find(la->getContainedLaneletIDs()) != lanes.end())
+            std::get<0>(lanes[la->getContainedLaneletIDs()]).insert(initialLanelet);
+        else
+            lanes[la->getContainedLaneletIDs()] = {{initialLanelet}, la};
     }
+}
+
+std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesSpannedByLanelet(size_t laneletID){
+    std::vector<std::shared_ptr<Lane>> relevantLanes;
+    for(const auto &[laneIDs, laneMap] : lanes)
+        if(laneIDs.find(laneletID) != laneIDs.end() and std::get<0>(laneMap).find(laneletID) != std::get<0>(laneMap).end())
+            relevantLanes.push_back(std::get<1>(laneMap) );
+    return relevantLanes;
 }

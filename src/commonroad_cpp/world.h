@@ -68,6 +68,8 @@ class World {
 
     void setInitialLanes();
 
+    size_t getIdCounter() const;
+
   private:
     size_t timeStep;
     size_t idCounter;

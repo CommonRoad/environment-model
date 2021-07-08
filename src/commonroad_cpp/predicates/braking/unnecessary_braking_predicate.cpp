@@ -7,8 +7,7 @@
 
 #include "unnecessary_braking_predicate.h"
 #include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
-#include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
-#include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
+#include "commonroad_cpp/predicates/position/succeeds_predicate.h"
 
 bool UnnecessaryBrakingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
@@ -20,14 +19,12 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, co
                                                              const std::shared_ptr<Obstacle> &obstacleK,
                                                              const std::shared_ptr<Obstacle> &obstacleP) {
     std::vector<double> constraintValues;
-    InFrontOfPredicate inFrontOfPredicate;
-    InSameLanePredicate inSameLanePredicate;
+    SucceedsPredicate succeedsPredicate;
     SafeDistancePredicate safeDistancePredicate;
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
-            inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+        if (succeedsPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt);
     }
@@ -41,16 +38,14 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
     std::vector<double> robustnessValues;
-    InFrontOfPredicate inFrontOfPredicate;
-    InSameLanePredicate inSameLanePredicate;
+    SucceedsPredicate succeedsPredicate;
     SafeDistancePredicate safeDistancePredicate;
     if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
         obstacleK->interpolateAcceleration(timeStep);
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
-            inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+        if (succeedsPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs)) {
             if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)
                 obs->interpolateAcceleration(timeStep);

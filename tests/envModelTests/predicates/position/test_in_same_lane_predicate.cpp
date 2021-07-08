@@ -90,8 +90,7 @@ TEST_F(TestInSameLanePredicate, BooleanEvaluationObjectsInIntersection) {
     EXPECT_FALSE(pred.booleanEvaluation(
         0, world, egoObstacles.at(0),
         relevantObstacles.at(0))); // vehicles on right turning lane, but ego vehicle drives straight
-        EXPECT_TRUE(
-            pred.booleanEvaluation(0, world, egoObstacles.at(0),
-                                   relevantObstacles.at(1))); // vehicle on straight lane and ego vehicle drives
-        // straight
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, egoObstacles.at(0),
+                                       relevantObstacles.at(1))); // vehicle on straight lane and ego vehicle drives
+                                                                  // straight
 }

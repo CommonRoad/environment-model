@@ -106,7 +106,7 @@ double Obstacle::getAminLong() const { return aMinLong; }
 
 double Obstacle::getReactionTime() const { return reactionTime; }
 
-std::vector<size_t> Obstacle::getPredictionTimeSteps(){
+std::vector<size_t> Obstacle::getPredictionTimeSteps() {
     std::vector<size_t> timeSteps;
     boost::copy(trajectoryPrediction | boost::adaptors::map_keys, std::back_inserter(timeSteps));
     return timeSteps;
@@ -115,18 +115,26 @@ std::vector<size_t> Obstacle::getPredictionTimeSteps(){
 void Obstacle::setReferenceLane(std::shared_ptr<RoadNetwork> roadNetwork) {
     referenceLane = nullptr;
     // only one lane is occupied over complete trajectory -> this is reference
-    auto allOccupiedLanes{getOccupiedLanes()};
-    if (allOccupiedLanes.size() == 1) {
-        referenceLane = allOccupiedLanes.at(0);
+    auto relevantOccupiedLanes{occupiedLanes[getFirstTrajectoryTimeStep()]};
+    for(const auto &la : occupiedLanes[getLastTrajectoryTimeStep()])
+        if(!std::any_of(relevantOccupiedLanes.begin(), relevantOccupiedLanes.end(), [la](std::shared_ptr<Lane> rel){return rel->getId() == la->getId();}))
+            relevantOccupiedLanes.push_back(la);
+    if (relevantOccupiedLanes.size() == 1) {
+        referenceLane = relevantOccupiedLanes.at(0);
         return;
     } else { // iterate over all time steps and check whether orientation fits and choose lane with most occupancies; if
              // initial lane is adjacent use this lane
         std::map<size_t, size_t> numOccupancies;
         for (const auto &timeStep : getPredictionTimeSteps()) {
             for (const auto &la : occupiedLanes[timeStep]) {
-                auto curPointOrientation{la->getOrientationAtPosition(
-                    getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition())};
-                if (abs(curPointOrientation - getStateByTimeStep(timeStep)->getGlobalOrientation()) < 0.35) //update this since orientation representation is two-folded
+                if(!std::any_of(relevantOccupiedLanes.begin(), relevantOccupiedLanes.end(), [la](std::shared_ptr<Lane> rel){return rel->getId() == la->getId();}))
+                    continue;
+                auto curPointOrientation{la->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                                                      getStateByTimeStep(timeStep)->getYPosition())};
+                if(getId() == 1)
+                    std::cout << timeStep  << " - " << la->getId() << " - " << curPointOrientation << " - " << getStateByTimeStep(timeStep)->getGlobalOrientation() << '\n';
+                if (abs(geometric_operations::subtractOrientations(curPointOrientation, getStateByTimeStep(timeStep)->getGlobalOrientation())) <
+                    0.35)
                     numOccupancies[la->getId()]++;
             }
         }
@@ -145,17 +153,26 @@ void Obstacle::setReferenceLane(std::shared_ptr<RoadNetwork> roadNetwork) {
         // if lane is not occupied at first and last time step -> error
         auto occupiedLaneletsFirstTimeStep{getOccupiedLanelets(roadNetwork, getFirstTrajectoryTimeStep())};
         auto occupiedLaneletsLastTimeStep{getOccupiedLanelets(roadNetwork, getLastTrajectoryTimeStep())};
+        std::vector<std::shared_ptr<Lanelet>> occupiedLaneletsLastTimeStepAdjacent{occupiedLaneletsLastTimeStep};
+        for(const auto &la : occupiedLaneletsLastTimeStep){
+            auto adjacent{lanelet_operations::adjacentLanelets(la)};
+            for(const auto &adj : adjacent)
+                if(std::find(occupiedLaneletsLastTimeStep.begin(), occupiedLaneletsLastTimeStep.end(), adj) == occupiedLaneletsLastTimeStep.end())
+                    occupiedLaneletsLastTimeStepAdjacent.push_back(adj);
+        }
         if (referenceLane == nullptr)
             throw std::runtime_error("Obstacle::setReferenceLane: No referenceLane found! Obstacle ID " +
                                      std::to_string(getId()));
         else {
             auto refIDs{referenceLane->getContainedLaneletIDs()};
-            if (!std::any_of(
+            if ((!std::any_of(
                     occupiedLaneletsFirstTimeStep.begin(), occupiedLaneletsFirstTimeStep.end(),
                     [refIDs](std::shared_ptr<Lanelet> la) { return refIDs.find(la->getId()) != refIDs.end(); }) or
-                !std::any_of(
+                !((std::any_of(
                     occupiedLaneletsLastTimeStep.begin(), occupiedLaneletsLastTimeStep.end(),
-                    [refIDs](std::shared_ptr<Lanelet> la) { return refIDs.find(la->getId()) != refIDs.end(); }))
+                    [refIDs](std::shared_ptr<Lanelet> la) { return refIDs.find(la->getId()) != refIDs.end(); })) or std::any_of(
+                    occupiedLaneletsLastTimeStepAdjacent.begin(), occupiedLaneletsLastTimeStepAdjacent.end(),
+                [refIDs](std::shared_ptr<Lanelet> la) { return refIDs.find(la->getId()) != refIDs.end(); }))) and trajectoryPrediction.size() > 1)
                 throw std::runtime_error("Obstacle::setReferenceLane: No valid referenceLane found! Obstacle ID " +
                                          std::to_string(getId()));
         }
@@ -360,4 +377,13 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes() {
             }
 
     return lanes;
+}
+
+void Obstacle::computeLanes(std::shared_ptr<RoadNetwork> roadNetwork, size_t &idCounter){
+    for (const auto &timeStamp : getPredictionTimeSteps()) {
+        auto lanelets{getOccupiedLanelets(roadNetwork, timeStamp)};
+        auto lanes{lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfView)};
+        setOccupiedLanes(lanes, timeStamp);
+    }
+    setReferenceLane(roadNetwork);
 }

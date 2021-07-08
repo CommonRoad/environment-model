@@ -8,6 +8,7 @@
 #pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
+#include "../road_network.h"
 #include "lane.h"
 #include "lanelet.h"
 
@@ -52,19 +53,16 @@ LineMarking matchStringToLineMarking(const std::string &type);
  * @return lane spanned by concatenated lanelets
  */
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
-combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fieldOfView = 250,
-                                              std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
+combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov = 250,
+                                  std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
-combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fieldOfView = 250,
-                                                std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
-
-std::vector<std::shared_ptr<Lane>> createInterstateLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork,
-                                                         size_t newId, double fieldOfView = 250);
+combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov = 250,
+                                    std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
 std::vector<std::shared_ptr<Lane>> createLanesBySingleLanelets(
-    const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t newId, double fieldOfView = 250,
-    const std::map<std::set<size_t>, std::tuple<std::set<size_t>, std::shared_ptr<Lane>>> &existingLanes = {});
+    const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t &idCounter,
+    std::shared_ptr<RoadNetwork> roadNetwork, double fov = 250);
 
 std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets,
                                                     size_t newId);
@@ -74,7 +72,7 @@ std::shared_ptr<Lane> mergeLanes(std::shared_ptr<Lane> predecessorLane, std::sha
 
 bool containsLaneletType(LaneletType type, std::set<LaneletType> baseTypesSet);
 
-std::set<size_t> extractIds(std::vector<std::shared_ptr<Lanelet>> lanelets);
+std::vector<size_t> extractIds(std::vector<std::shared_ptr<Lanelet>> lanelets);
 
 std::vector<std::shared_ptr<Lanelet>> laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet);
 
@@ -84,6 +82,5 @@ std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(std::shared_ptr<Lanelet> 
 
 bool adjacentLanes(std::shared_ptr<Lane> laneOne, std::shared_ptr<Lane> laneTwo,
                    std::vector<std::shared_ptr<Lanelet>> relevantLanelets);
-
 
 } // namespace lanelet_operations

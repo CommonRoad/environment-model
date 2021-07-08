@@ -17,10 +17,10 @@ bool StopLineInFrontPredicate::booleanEvaluation(size_t timeStep, const std::sha
         if (stopLine == nullptr)
             continue;
         Eigen::Vector2d stopLineLonPosOne =
-            obstacleK->getLanes()->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+            obstacleK->getReferenceLane()->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
                 stopLine->getPoints().at(0).x, stopLine->getPoints().at(0).y);
         Eigen::Vector2d stopLineLonPosTwo =
-            obstacleK->getLanes()->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+            obstacleK->getReferenceLane()->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
                 stopLine->getPoints().at(1).x, stopLine->getPoints().at(1).y);
         auto stopLineMinPos{std::min(stopLineLonPosOne.x(), stopLineLonPosTwo.x())};
 

@@ -60,14 +60,7 @@ std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
 }
 
 void World::setInitialLanes() {
-        for (auto &obs : egoVehicles) {
-            for (const auto &timeStamp : obs->getPredictionTimeSteps()) {
-                auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, timeStamp)};
-                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter, 500,
-                                                                           roadNetwork->getLaneMapping())};
-                roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
-                obs->setOccupiedLanes(lanes, timeStamp);
-            }
-            obs->setReferenceLane(roadNetwork);
-    }
+    for (auto &obs : egoVehicles)
+        obs->computeLanes(roadNetwork, idCounter);
 }
+size_t World::getIdCounter() const { return idCounter; }

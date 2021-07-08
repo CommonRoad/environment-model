@@ -401,6 +401,6 @@ class Lanelet {
     std::shared_ptr<StopLine> stopLine;        //**< stopLine assigned to lanelet*/
     LineMarking lineMarkingLeft;               //**< Line marking of left boundary*/
     LineMarking lineMarkingRight;              //**< Line marking of right boundary*/
-    std::vector<double> orientation;                         //**< orientation along center line */
-    std::vector<double> pathLength;                          //**< path length along center line */
+    std::vector<double> orientation;           //**< orientation along center line */
+    std::vector<double> pathLength;            //**< path length along center line */
 };

@@ -174,9 +174,7 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) con
     return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
 }
 
-bool Lanelet::hasLaneletType(LaneletType laType) {
-    return laneletTypes.find(laType) != laneletTypes.end();
-}
+bool Lanelet::hasLaneletType(LaneletType laType) { return laneletTypes.find(laType) != laneletTypes.end(); }
 
 void Lanelet::addLaneletType(LaneletType laType) { laneletTypes.insert(laType); }
 
@@ -189,13 +187,13 @@ LineMarking Lanelet::getLineMarkingRight() const { return lineMarkingRight; }
 void Lanelet::setLineMarkingRight(LineMarking marking) { lineMarkingRight = marking; }
 
 const std::vector<double> &Lanelet::getOrientation() {
-    if(orientation.empty())
+    if (orientation.empty())
         orientation = geometric_operations::computeOrientationFromPolyline(centerVertices);
     return orientation;
 }
 
 const std::vector<double> &Lanelet::getPathLength() {
-    if(pathLength.empty())
+    if (pathLength.empty())
         pathLength = geometric_operations::computePathLengthFromPolyline(centerVertices);
     return pathLength;
 }

@@ -11,7 +11,7 @@
 bool CutInPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                        const std::shared_ptr<Obstacle> &obstacleK,
                                        const std::shared_ptr<Obstacle> &obstacleP) {
-    if (obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep).size() == 1)
+    if (obstacleK->getOccupiedLanes(timeStep).size() == 1)
         return false;
 
     InSameLanePredicate inSameLanePredicate;
