@@ -206,7 +206,7 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     auto obsOneScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1219)};
     for (const auto &timeStep : obsOneScenarioOne->getPredictionTimeSteps()) {
         auto occupiedLanelets{obsOneScenarioOne->getOccupiedLanelets(roadNetworkScenarioOne, timeStep)};
-        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID,
+        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID, 300,
                                                                    roadNetworkScenarioOne->getLaneMapping())};
         roadNetworkScenarioOne->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
         obsOneScenarioOne->setOccupiedLanes(lanes, timeStep);
@@ -218,7 +218,7 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     auto obsTwoScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
     for (const auto &timeStep : obsTwoScenarioOne->getPredictionTimeSteps()) {
         auto occupiedLanelets{obsTwoScenarioOne->getOccupiedLanelets(roadNetworkScenarioOne, timeStep)};
-        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID,
+        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID, 300,
                                                                    roadNetworkScenarioOne->getLaneMapping())};
         roadNetworkScenarioOne->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
         obsTwoScenarioOne->setOccupiedLanes(lanes, timeStep);
@@ -232,12 +232,12 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     auto obsOneScenarioTwo{obstacle_operations::getObstacleById(obstaclesScenarioTwo, 325)};
     for (const auto &timeStep : obsOneScenarioTwo->getPredictionTimeSteps()) {
         auto occupiedLanelets{obsOneScenarioTwo->getOccupiedLanelets(roadNetworkScenarioTwo, timeStep)};
-        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID,
+        auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++globalID, 300,
                                                                    roadNetworkScenarioTwo->getLaneMapping())};
         roadNetworkScenarioTwo->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
         obsOneScenarioTwo->setOccupiedLanes(lanes, timeStep);
     }
     obsOneScenarioTwo->setReferenceLane(roadNetworkScenarioTwo);
-    std::set<size_t> expRefLaneletsObsOneScenarioTwo{77695, 82817, 77065, 80956};
+    std::set<size_t> expRefLaneletsObsOneScenarioTwo{77065, 77068, 77298, 77301, 77695, 80823, 80956, 82673, 82817 };
     EXPECT_EQ(expRefLaneletsObsOneScenarioTwo, obsOneScenarioTwo->getReferenceLane()->getContainedLaneletIDs());
 }

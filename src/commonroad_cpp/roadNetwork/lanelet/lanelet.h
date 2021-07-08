@@ -377,6 +377,9 @@ class Lanelet {
      */
     void addLaneletType(LaneletType laType);
 
+    const std::vector<double> &getOrientation();
+    const std::vector<double> &getPathLength();
+
   private:
     size_t id{};                                               //**< unique ID of lanelet */
     std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
@@ -398,4 +401,6 @@ class Lanelet {
     std::shared_ptr<StopLine> stopLine;        //**< stopLine assigned to lanelet*/
     LineMarking lineMarkingLeft;               //**< Line marking of left boundary*/
     LineMarking lineMarkingRight;              //**< Line marking of right boundary*/
+    std::vector<double> orientation;                         //**< orientation along center line */
+    std::vector<double> pathLength;                          //**< path length along center line */
 };

@@ -52,26 +52,22 @@ LineMarking matchStringToLineMarking(const std::string &type);
  * @return lane spanned by concatenated lanelets
  */
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
-combineLaneletAndSuccessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &curLanelet,
-                                              std::set<std::tuple<LaneletType, LaneletType, LaneletType>> = {},
-                                              std::vector<std::shared_ptr<Lanelet>> containedLanelets = {}, bool startLanelets = false);
+combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fieldOfView = 250,
+                                              std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
-combineLaneletAndPredecessorsWithSameTypeToLane(const std::shared_ptr<Lanelet> &curLanelet,
-                                                std::set<std::tuple<LaneletType, LaneletType, LaneletType>> classifyingLaneletTypes = {},
-                                                std::vector<std::shared_ptr<Lanelet>> containedLanelets = {}, bool startLanelets = false);
+combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fieldOfView = 250,
+                                                std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
 std::vector<std::shared_ptr<Lane>> createInterstateLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork,
-                                                         size_t newId);
+                                                         size_t newId, double fieldOfView = 250);
 
 std::vector<std::shared_ptr<Lane>> createLanesBySingleLanelets(
-    const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t newId,
+    const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t newId, double fieldOfView = 250,
     const std::map<std::set<size_t>, std::tuple<std::set<size_t>, std::shared_ptr<Lane>>> &existingLanes = {});
 
 std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets,
                                                     size_t newId);
-
-void setLaneAdjacency(std::vector<std::shared_ptr<Lane>> &lanes);
 
 std::shared_ptr<Lane> mergeLanes(std::shared_ptr<Lane> predecessorLane, std::shared_ptr<Lane> successorLane,
                                  size_t newId);
@@ -89,13 +85,5 @@ std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(std::shared_ptr<Lanelet> 
 bool adjacentLanes(std::shared_ptr<Lane> laneOne, std::shared_ptr<Lane> laneTwo,
                    std::vector<std::shared_ptr<Lanelet>> relevantLanelets);
 
-bool containsClassifyingLaneletType(std::shared_ptr<Lanelet> lanelet, std::set<std::tuple<LaneletType,LaneletType,
-                                                                                          LaneletType>> classifyingLaneletTypes);
-
-bool checkClassifyingLaneletTypeTemplate(std::tuple<LaneletType,LaneletType, LaneletType> laneletTypeTemplate, std::set<LaneletType> typesLaneletOne, std::set<LaneletType> typesLaneletTwo, std::set<LaneletType> typesLaneletThree);
-
-bool checkClassifyingLaneletTypeTemplate(std::tuple<LaneletType,LaneletType, LaneletType> laneletTypeTemplate, std::set<LaneletType> typesLaneletOne, std::set<LaneletType> typesLaneletTwo);
-
-bool checkClassifyingLaneletTypeTemplate(std::tuple<LaneletType,LaneletType, LaneletType> laneletTypeTemplate, std::set<LaneletType> typesLaneletOne);
 
 } // namespace lanelet_operations

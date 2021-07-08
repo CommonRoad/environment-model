@@ -6,6 +6,7 @@
 //
 
 #include "lanelet.h"
+#include "../../geometry/geometric_operations.h"
 #include <utility>
 
 Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::set<LaneletType> type,
@@ -174,7 +175,7 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) con
 }
 
 bool Lanelet::hasLaneletType(LaneletType laType) {
-    return std::any_of(laneletTypes.begin(), laneletTypes.end(), [laType](auto ty) { return ty == laType; });
+    return laneletTypes.find(laType) != laneletTypes.end();
 }
 
 void Lanelet::addLaneletType(LaneletType laType) { laneletTypes.insert(laType); }
@@ -186,3 +187,15 @@ void Lanelet::setLineMarkingLeft(LineMarking marking) { lineMarkingLeft = markin
 LineMarking Lanelet::getLineMarkingRight() const { return lineMarkingRight; }
 
 void Lanelet::setLineMarkingRight(LineMarking marking) { lineMarkingRight = marking; }
+
+const std::vector<double> &Lanelet::getOrientation() {
+    if(orientation.empty())
+        orientation = geometric_operations::computeOrientationFromPolyline(centerVertices);
+    return orientation;
+}
+
+const std::vector<double> &Lanelet::getPathLength() {
+    if(pathLength.empty())
+        pathLength = geometric_operations::computePathLengthFromPolyline(centerVertices);
+    return pathLength;
+}

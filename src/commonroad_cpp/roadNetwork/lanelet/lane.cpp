@@ -9,9 +9,7 @@
 #include "../../geometry/geometric_operations.h"
 
 Lane::Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet lanelet, CurvilinearCoordinateSystem ccs)
-    : Lanelet(lanelet), containedLanelets(std::move(containedLanelets)), curvilinearCoordinateSystem(std::move(ccs)),
-      orientation(geometric_operations::computeOrientationFromPolyline(lanelet.getCenterVertices())),
-      pathLength(geometric_operations::computePathLengthFromPolyline(lanelet.getCenterVertices())) {
+    : Lanelet(lanelet), containedLanelets(std::move(containedLanelets)), curvilinearCoordinateSystem(std::move(ccs)) {
     for (const auto &la : containedLanelets)
         containedLaneletIds.insert(la->getId());
 }

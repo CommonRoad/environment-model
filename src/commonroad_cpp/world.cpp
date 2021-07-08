@@ -60,50 +60,14 @@ std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
 }
 
 void World::setInitialLanes() {
-    bool interstate{false};
-    for (auto &obs : egoVehicles) {
-        for (const auto &la : obs->getOccupiedLanelets(roadNetwork, timeStep))
-            if (la->hasLaneletType(LaneletType::interstate) or la->hasLaneletType(LaneletType::mainCarriageWay) or
-                la->hasLaneletType(LaneletType::accessRamp) or la->hasLaneletType(LaneletType::exitRamp)) {
-                interstate = true;
-                roadNetwork->setIsInterstate(true);
-                break;
-            }
-        if (interstate)
-            break;
-    }
-    if (interstate) {
-        roadNetwork->addLanes(lanelet_operations::createInterstateLanes(roadNetwork->getLaneletNetwork(), ++idCounter));
-        for (auto &obs : egoVehicles) {
-            for (const auto &timeStamp : obs->getPredictionTimeSteps())
-                obs->setOccupiedLanes(roadNetwork, timeStamp);
-            obs->setReferenceLane(roadNetwork);
-        }
-//        for (auto &obs : obstacles) {
-//            for (const auto &timeStamp : obs->getPredictionTimeSteps())
-//                obs->setOccupiedLanes(roadNetwork, timeStamp);
-//            obs->setReferenceLane(roadNetwork);
-//        }
-    } else {
         for (auto &obs : egoVehicles) {
             for (const auto &timeStamp : obs->getPredictionTimeSteps()) {
                 auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, timeStamp)};
-                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter,
+                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter, 500,
                                                                            roadNetwork->getLaneMapping())};
                 roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
                 obs->setOccupiedLanes(lanes, timeStamp);
             }
             obs->setReferenceLane(roadNetwork);
-        }
-//        for (auto &obs : obstacles) {
-//            for (const auto &timeStamp : obs->getPredictionTimeSteps()) {
-//                auto occupiedLanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
-//                auto lanes{lanelet_operations::createLanesBySingleLanelets(occupiedLanelets, ++idCounter,
-//                                                                           roadNetwork->getLaneMapping())};
-//                roadNetwork->addLanes(lanes, lanelet_operations::extractIds(occupiedLanelets));
-//                obs->setOccupiedLanes(lanes, timeStamp);
-//            }
-//            obs->setReferenceLane(roadNetwork);
-//        }
     }
 }
