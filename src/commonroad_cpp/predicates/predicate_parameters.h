@@ -38,6 +38,7 @@ struct PredicateParameters {
     double maxPositiveDouble{
         std::numeric_limits<double>::max()}; // max double value close to zero for different purposes
     double stopLineDistance{1.0};            // maximum distance vehicle waiting in front of stop line has to wait
+    double laneMatchingOrientation{0.35};   // orientation threshold for following a lane
 
     void checkParameterValidity() const;
 };

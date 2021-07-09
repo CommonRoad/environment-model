@@ -119,9 +119,9 @@ class RoadNetwork {
 
     std::string extractTrafficSignIDForCountry(TrafficSignTypes type);
 
-    void addLanes(std::vector<std::shared_ptr<Lane>> newLanes, size_t initialLanelet);
+    std::vector<std::shared_ptr<Lane>> addLanes(std::vector<std::shared_ptr<Lane>> newLanes, size_t initialLanelet);
 
-    std::map<std::set<size_t>, std::tuple<std::set<size_t>, std::shared_ptr<Lane>>> &getLaneMapping();
+    std::map<std::set<size_t>, std::pair<std::set<size_t>, std::shared_ptr<Lane>>> &getLaneMapping();
 
     std::vector<std::shared_ptr<Lane>> findLanesSpannedByLanelet(size_t laneletID);
 
@@ -131,7 +131,7 @@ class RoadNetwork {
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;   //**< set of traffic signs contained in road network */
     std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< set of traffic lights contained in road network */
     std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
-    std::map<std::set<size_t>, std::tuple<std::set<size_t>, std::shared_ptr<Lane>>> lanes;
+    std::map<std::set<size_t>, std::pair<std::set<size_t>, std::shared_ptr<Lane>>> lanes;
     //**< set of interstate-based lanes contained in road network */
     bgi::rtree<value, bgi::quadratic<16>>
         rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/

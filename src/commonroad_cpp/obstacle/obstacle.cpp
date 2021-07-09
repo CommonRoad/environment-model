@@ -131,8 +131,6 @@ void Obstacle::setReferenceLane(std::shared_ptr<RoadNetwork> roadNetwork) {
                     continue;
                 auto curPointOrientation{la->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
                                                                       getStateByTimeStep(timeStep)->getYPosition())};
-                if(getId() == 1)
-                    std::cout << timeStep  << " - " << la->getId() << " - " << curPointOrientation << " - " << getStateByTimeStep(timeStep)->getGlobalOrientation() << '\n';
                 if (abs(geometric_operations::subtractOrientations(curPointOrientation, getStateByTimeStep(timeStep)->getGlobalOrientation())) <
                     0.35)
                     numOccupancies[la->getId()]++;

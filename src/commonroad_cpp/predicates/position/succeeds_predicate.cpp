@@ -8,6 +8,7 @@
 #include "succeeds_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
+#include "../../geometry/geometric_operations.h"
 
 bool SucceedsPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                           const std::shared_ptr<Obstacle> &obstacleP,
@@ -18,7 +19,9 @@ bool SucceedsPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr
         obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
         obstacleK->getStateByTimeStep(timeStep)->getYPosition())};
     return inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleP, obstacleK) and
-           abs(curPointOrientation - obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation()) < 0.35 and
+        abs(geometric_operations::subtractOrientations(curPointOrientation, obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation())) <
+            parameters.laneMatchingOrientation
+           and
            inFrontOfPredicate.booleanEvaluation(
                timeStep, world, obstacleP,
                obstacleK); // TODO update orientation part since orientation representation is two-folded)

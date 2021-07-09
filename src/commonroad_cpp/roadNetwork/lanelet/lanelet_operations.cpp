@@ -171,7 +171,7 @@ std::vector<std::shared_ptr<Lane>> lanelet_operations::createLanesBySingleLanele
                     }))
                     newLanes.push_back(newLane);
             }
-        roadNetwork->addLanes(newLanes, la->getId());
+        newLanes = roadNetwork->addLanes(newLanes, la->getId());
         lanes.insert( lanes.end(), newLanes.begin(), newLanes.end() );
     }
     return lanes;

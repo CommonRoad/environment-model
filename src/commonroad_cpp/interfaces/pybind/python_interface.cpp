@@ -9,8 +9,8 @@
 #include "translate_python_types.h"
 
 void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &country,
-                         const py::handle &py_laneletNetwork, const py::list &py_obstacles,
-                         const py::list &py_egoVehicles) {
+                         const py::handle &py_laneletNetwork, const py::list &py_egoVehicles,
+                         const py::list &py_obstacles) {
 
     auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
     auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
