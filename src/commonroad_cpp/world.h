@@ -21,8 +21,8 @@ class World {
      * @param egoVehicles List of ego vehicles.
      * @param obstacles List of obstacles.
      */
-    World(size_t timeStep, std::shared_ptr<RoadNetwork> roadNetwork, std::vector<std::shared_ptr<Obstacle>> egoVehicles,
-          std::vector<std::shared_ptr<Obstacle>> obstacles);
+    World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+          std::vector<std::shared_ptr<Obstacle>> egoVehicles, std::vector<std::shared_ptr<Obstacle>> obstacles);
 
     /**
      * Getter for world time step.

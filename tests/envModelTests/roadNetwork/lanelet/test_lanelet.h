@@ -1,9 +1,10 @@
 //
-// Created by sebastian on 03.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
-
-#ifndef ENV_MODEL_TEST_LANELET_H
-#define ENV_MODEL_TEST_LANELET_H
+#pragma once
 
 #include <gtest/gtest.h>
 
@@ -68,5 +69,3 @@ void LaneletTestInitialization::evaluateTypes(std::vector<T> typeVectorOne, std:
         EXPECT_EQ(typeValid, true);
     }
 }
-
-#endif // ENV_MODEL_TEST_LANELET_H

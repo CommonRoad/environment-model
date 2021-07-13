@@ -1,9 +1,10 @@
 //
-// Created by Sebastian Maierhofer on 31.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
-
-#ifndef ENV_MODEL_TEST_INCOMING_H
-#define ENV_MODEL_TEST_INCOMING_H
+#pragma once
 
 #include "commonroad_cpp/roadNetwork/intersection/incoming.h"
 #include <gtest/gtest.h>
@@ -20,5 +21,3 @@ class IncomingTest : public IncomingTestInitialization, public testing::Test {
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_INCOMING_H

@@ -1,6 +1,7 @@
 set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/interfaces/utility_functions.cpp
         allTests.cpp
+        envModelTests/test_world.cpp
         envModelTests/roadNetwork/test_road_network.cpp
         envModelTests/roadNetwork/lanelet/test_lanelet_operations.cpp
         envModelTests/roadNetwork/lanelet/test_lane.cpp

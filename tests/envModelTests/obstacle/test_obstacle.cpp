@@ -13,6 +13,7 @@
 #include <map>
 
 void ObstacleTestInitialization::setUpObstacles() {
+    size_t globalId{1234};
     obstacleOne = std::make_shared<Obstacle>(Obstacle());
     idObstacleOne = 1;
     isStaticObstacleOne = false;
@@ -26,6 +27,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     widthObstacleOne = 2.0;
     lengthObstacleOne = 4.0;
     occupiedLaneObstacleOne.insert(std::pair<int, std::shared_ptr<Lane>>(0, laneOne));
+    trajectoryPredictionObstacleOne.insert(std::pair<int, std::shared_ptr<State>>(1, stateTwo));
     trajectoryPredictionObstacleOne.insert(std::pair<int, std::shared_ptr<State>>(2, stateThree));
     trajectoryPredictionObstacleOne.insert(std::pair<int, std::shared_ptr<State>>(3, stateFour));
     historyObstacleOne.insert(std::pair<int, std::shared_ptr<State>>(0, stateOne));
@@ -49,12 +51,11 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
     obstacleOne->setOccupiedLanes({laneOne}, obstacleOne->getFirstTrajectoryTimeStep());
-    obstacleOne->setReferenceLane(roadNetwork);
+    obstacleOne->computeLanes(roadNetwork, globalId);
     obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);
 
     idObstacleTwo = 2;
     isStaticObstacleTwo = true;
-    trajectoryPredictionObstacleTwo.insert(std::pair<int, std::shared_ptr<State>>(stateSix->getTimeStep(), stateSix));
     obstacleTypeObstacleTwo = ObstacleType::bus;
     vMaxObstacleTwo = 30.0;
     aMaxObstacleTwo = 2.5;
@@ -68,8 +69,7 @@ void ObstacleTestInitialization::setUpObstacles() {
         Obstacle(idObstacleTwo, isStaticObstacleTwo, stateFive, obstacleTypeObstacleTwo, vMaxObstacleTwo,
                  aMaxObstacleTwo, aMaxLongObstacleTwo, aMinLongObstacleTwo, reactionTimeObstacleTwo,
                  trajectoryPredictionObstacleTwo, lengthObstacleTwo, widthObstacleTwo));
-    obstacleTwo->setOccupiedLanes({laneOne}, obstacleTwo->getFirstTrajectoryTimeStep());
-    obstacleTwo->setReferenceLane(roadNetwork);
+    obstacleTwo->computeLanes(roadNetwork, globalId);
 
     obstacleList.push_back(obstacleOne);
     obstacleList.push_back(obstacleTwo);
@@ -124,12 +124,13 @@ TEST_F(ObstacleTest, InitializationComplete) {
     EXPECT_EQ(obstacleOne->getReactionTime(), reactionTimeObstacleOne);
     EXPECT_EQ(obstacleTwo->getReactionTime(), reactionTimeObstacleTwo);
     EXPECT_EQ(obstacleOne->getId(), laneOne->getId());
-    compareVerticesVector(obstacleOne->getReferenceLane()->getCenterVertices(), laneOne->getCenterVertices());
+    compareVerticesVector({obstacleOne->getReferenceLane()->getCenterVertices().front(),
+                           obstacleOne->getReferenceLane()->getCenterVertices().back()},
+                          {laneletThree->getCenterVertices().front(), laneletTwo->getCenterVertices().back()});
     for (size_t i = 2; i <= 3; ++i)
         compareStates(trajectoryPredictionObstacleOne.at(i), obstacleOne->getTrajectoryPrediction().at(i));
-    compareStates(trajectoryPredictionObstacleTwo.at(5), obstacleTwo->getTrajectoryPrediction().at(5));
-    EXPECT_EQ(obstacleOne->getTrajectoryLength(), 2);
-    EXPECT_EQ(obstacleTwo->getTrajectoryLength(), 1);
+    EXPECT_EQ(obstacleOne->getTrajectoryLength(), 3);
+    EXPECT_EQ(obstacleTwo->getTrajectoryLength(), 0);
 }
 
 TEST_F(ObstacleTest, SetIsStatic) {
@@ -217,6 +218,22 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
     auto obsOneScenarioTwo{obstacle_operations::getObstacleById(obstaclesScenarioTwo, 325)};
     obsOneScenarioTwo->computeLanes(roadNetworkScenarioTwo, globalID);
-    //std::set<size_t> expRefLaneletsObsOneScenarioTwo{77062, 77065, 77068, 77071, 77074, 80618, 80821, 80836, 80956};
-    //EXPECT_EQ(expRefLaneletsObsOneScenarioTwo, obsOneScenarioTwo->getReferenceLane()->getContainedLaneletIDs());
+    EXPECT_EQ(77695, obsOneScenarioTwo->getReferenceLane()->getContainedLanelets().front()->getId());
+    EXPECT_EQ(77074, obsOneScenarioTwo->getReferenceLane()->getContainedLanelets().back()->getId());
+
+    std::string pathToTestFileThree{TestUtils::getTestScenarioDirectory() + "/USA_Peach-2_1_T-1.xml"};
+    const auto &[obstaclesScenarioThree, roadNetworkScenarioThree] =
+        CommandLine::getDataFromCommonRoad(pathToTestFileThree);
+    auto obsOneScenarioThree{obstacle_operations::getObstacleById(obstaclesScenarioThree, 500)};
+    obsOneScenarioThree->computeLanes(roadNetworkScenarioThree, globalID);
+    EXPECT_EQ(53758, obsOneScenarioThree->getReferenceLane()->getContainedLanelets().front()->getId());
+    EXPECT_EQ(53788, obsOneScenarioThree->getReferenceLane()->getContainedLanelets().back()->getId());
+
+    std::string pathToTestFileFour{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4_1_T-1.xml"};
+    const auto &[obstaclesScenarioFour, roadNetworkScenarioFour] =
+        CommandLine::getDataFromCommonRoad(pathToTestFileFour);
+    auto obsOneScenarioFour{obstacle_operations::getObstacleById(obstaclesScenarioFour, 88)};
+    obsOneScenarioFour->computeLanes(roadNetworkScenarioFour, globalID);
+    EXPECT_EQ(43349, obsOneScenarioFour->getReferenceLane()->getContainedLanelets().front()->getId());
+    EXPECT_EQ(43486, obsOneScenarioFour->getReferenceLane()->getContainedLanelets().back()->getId());
 }

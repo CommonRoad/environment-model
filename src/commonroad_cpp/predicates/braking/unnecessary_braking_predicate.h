@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 17.05.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_UNNECESSARY_BRAKING_PREDICATE_H
-#define ENV_MODEL_UNNECESSARY_BRAKING_PREDICATE_H
+#pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
@@ -52,5 +54,3 @@ class UnnecessaryBrakingPredicate : public CommonRoadPredicate {
                             const std::shared_ptr<Obstacle> &obstacleK,
                             const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 };
-
-#endif // ENV_MODEL_UNNECESSARY_BRAKING_PREDICATE_H

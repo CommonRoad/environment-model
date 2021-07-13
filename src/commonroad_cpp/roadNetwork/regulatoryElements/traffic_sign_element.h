@@ -9,6 +9,7 @@
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include <memory>
+#include <string>
 #include <vector>
 
 /**

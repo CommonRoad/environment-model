@@ -1,9 +1,10 @@
 //
-// Created by sebastian on 25.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
-
-#ifndef ENV_MODEL_TEST_OBSTACLE_OPERATIONS_H
-#define ENV_MODEL_TEST_OBSTACLE_OPERATIONS_H
+#pragma once
 
 #include "test_obstacle.h"
 
@@ -11,5 +12,3 @@ class ObstacleOperationsTest : public ObstacleTestInitialization, public testing
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_OBSTACLE_OPERATIONS_H

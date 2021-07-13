@@ -9,7 +9,7 @@
 #include "roadNetwork/lanelet/lanelet_operations.h"
 #include <utility>
 
-World::World(size_t timeStep, std::shared_ptr<RoadNetwork> roadNetwork,
+World::World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
              std::vector<std::shared_ptr<Obstacle>> egoVehicles, std::vector<std::shared_ptr<Obstacle>> obstacles)
     : timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egoVehicles)),
       obstacles(std::move(obstacles)) {

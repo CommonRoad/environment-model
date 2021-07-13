@@ -24,7 +24,8 @@ class Lane : public Lanelet {
      * @param lanelet Lanelet object spanning lane.
      * @param ccs Curvilinear coordinate system object.
      */
-    Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet lanelet, CurvilinearCoordinateSystem ccs);
+    Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
+         CurvilinearCoordinateSystem ccs);
 
     /**
      * Getter for curvilinear coordinate system using center line of lane as reference.
@@ -45,7 +46,7 @@ class Lane : public Lanelet {
      *
      * @return Set of IDs of the lanelets contained in lane.
      */
-    [[nodiscard]] std::set<size_t> getContainedLaneletIDs();
+    [[nodiscard]] const std::set<size_t> &getContainedLaneletIDs() const;
 
   private:
     std::vector<std::shared_ptr<Lanelet>> containedLanelets; //**< list of pointers to lanelets constructing lane */

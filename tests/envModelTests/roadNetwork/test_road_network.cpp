@@ -47,7 +47,8 @@ TEST_F(RoadNetworkTest, AddLanes) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
     const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
-    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, globalID, roadNetworkScenario)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, globalID,
+                                                               roadNetworkScenario)};
     auto updatedLanes{roadNetworkScenario->addLanes(lanes, 10)};
     EXPECT_EQ(lanes.size(), 3);
     EXPECT_EQ(lanes.size(), updatedLanes.size());
@@ -55,13 +56,16 @@ TEST_F(RoadNetworkTest, AddLanes) {
     EXPECT_EQ(lanes.at(1)->getId(), 123456789 + 2);
     EXPECT_EQ(lanes.at(2)->getId(), 123456789 + 3);
 
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, globalID, roadNetworkScenario);
-    Lanelet la{100000, lanes.at(0)->getLeftBorderVertices(), lanes.at(0)->getRightBorderVertices(), lanes.at(0)->getLaneletTypes()};
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, globalID,
+                                                            roadNetworkScenario);
+    Lanelet la{100000, lanes.at(0)->getLeftBorderVertices(), lanes.at(0)->getRightBorderVertices(),
+               lanes.at(0)->getLaneletTypes()};
     geometry::EigenPolyline reference_path;
     for (auto vert : la.getCenterVertices())
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     geometry::util::resample_polyline(reference_path, 2, reference_path);
-    auto newLane{std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), la, CurvilinearCoordinateSystem(reference_path))};
+    auto newLane{
+        std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), la, CurvilinearCoordinateSystem(reference_path))};
     std::vector<std::shared_ptr<Lane>> testLanes{newLane};
     updatedLanes = roadNetworkScenario->addLanes(testLanes, 4);
     EXPECT_EQ(lanes.size(), 1);

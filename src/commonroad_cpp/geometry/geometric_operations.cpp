@@ -230,6 +230,6 @@ double interpolate(double x, const std::vector<double> &polyline1, const std::ve
     return lowerY + ((x - lowerX) / deltaX) * deltaY;
 }
 
-double geometric_operations::subtractOrientations(double lhs, double rhs){
+double geometric_operations::subtractOrientations(double lhs, double rhs) {
     return std::fmod((lhs - rhs) + M_PI * 3, 2 * M_PI) - M_PI;
 }

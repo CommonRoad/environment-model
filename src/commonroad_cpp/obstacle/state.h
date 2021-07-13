@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 01.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_STATE_H
-#define ENV_MODEL_STATE_H
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 
@@ -194,5 +196,3 @@ class State {
                             false, false, false, false, false, false};
     size_t timeStep{0}; //**< time step of the state variables */
 };
-
-#endif // ENV_MODEL_STATE_H

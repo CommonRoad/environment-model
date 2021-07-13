@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 28.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_STRUCTS_H
-#define ENV_MODEL_STRUCTS_H
+#pragma once
 
 #include <climits>
 #include <cstddef>
@@ -42,5 +44,3 @@ struct PredicateStatistics {
 struct Constraint {
     double realValuedConstraint;
 };
-
-#endif // ENV_MODEL_STRUCTS_H

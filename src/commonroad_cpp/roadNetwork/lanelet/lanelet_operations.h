@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 #include "../road_network.h"
+#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 #include "lane.h"
 #include "lanelet.h"
 
@@ -60,27 +60,27 @@ std::vector<std::vector<std::shared_ptr<Lanelet>>>
 combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov = 250,
                                     std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
-std::vector<std::shared_ptr<Lane>> createLanesBySingleLanelets(
-    const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t &idCounter,
-    std::shared_ptr<RoadNetwork> roadNetwork, double fov = 250);
+std::vector<std::shared_ptr<Lane>>
+createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t &idCounter,
+                            const std::shared_ptr<RoadNetwork> &roadNetwork, double fov = 250);
 
 std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets,
                                                     size_t newId);
 
-std::shared_ptr<Lane> mergeLanes(std::shared_ptr<Lane> predecessorLane, std::shared_ptr<Lane> successorLane,
-                                 size_t newId);
+std::shared_ptr<Lane> mergeLanes(const std::shared_ptr<Lane> &predecessorLane,
+                                 const std::shared_ptr<Lane> &successorLane, size_t newId);
 
 bool containsLaneletType(LaneletType type, std::set<LaneletType> baseTypesSet);
 
-std::vector<size_t> extractIds(std::vector<std::shared_ptr<Lanelet>> lanelets);
+std::vector<size_t> extractIds(const std::vector<std::shared_ptr<Lanelet>> &lanelets);
 
 std::vector<std::shared_ptr<Lanelet>> laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet);
 
 std::vector<std::shared_ptr<Lanelet>> laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet);
 
-std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(std::shared_ptr<Lanelet> lanelet);
+std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet);
 
-bool adjacentLanes(std::shared_ptr<Lane> laneOne, std::shared_ptr<Lane> laneTwo,
-                   std::vector<std::shared_ptr<Lanelet>> relevantLanelets);
+bool adjacentLanes(const std::shared_ptr<Lane> &laneOne, const std::shared_ptr<Lane> &laneTwo,
+                   const std::vector<std::shared_ptr<Lanelet>> &relevantLanelets);
 
 } // namespace lanelet_operations

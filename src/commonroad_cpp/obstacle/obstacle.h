@@ -120,7 +120,7 @@ class Obstacle {
      * ego vehicle's lane.
      * @param timeStep Current time step.
      */
-    void setReferenceLane(std::shared_ptr<RoadNetwork> roadNetwork); // TODO add unit test
+    void setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork); // TODO add unit test
 
     /**
      * Setter for trajectory prediction.
@@ -315,7 +315,7 @@ class Obstacle {
      */
     [[nodiscard]] double getCurvilinearOrientation(size_t timeStep) const; // Todo create test case
 
-    void setOccupiedLanes(std::shared_ptr<RoadNetwork> roadNetwork, size_t timeStep);
+    void setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
@@ -345,7 +345,7 @@ class Obstacle {
 
     std::vector<std::shared_ptr<Lane>> getOccupiedLanes(); // TODO create test case
 
-    std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(std::shared_ptr<RoadNetwork> roadNetwork,
+    std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                            size_t timeStep); // TODO create test case
 
     /**
@@ -378,7 +378,7 @@ class Obstacle {
 
     std::vector<size_t> getPredictionTimeSteps();
 
-    void computeLanes(std::shared_ptr<RoadNetwork> roadNetwork, size_t &idCounter);
+    void computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t &idCounter);
 
   private:
     size_t id;                                        //**< unique ID of lanelet */
@@ -397,6 +397,9 @@ class Obstacle {
         occupiedLanelets;                         //**< map of time steps to lanelets occupied by the obstacle */
     std::shared_ptr<Lane> referenceLane{nullptr}; //**< lane which is used as reference for curvilinear projection */
     std::map<size_t, std::vector<std::shared_ptr<Lane>>>
-        occupiedLanes;         //**< map of time steps to lanes occupied by the obstacle */
-    std::vector<vertex> route; //**< planned route of the obstacle */
+        occupiedLanes;                           //**< map of time steps to lanes occupied by the obstacle */
+    std::vector<vertex> route;                   //**< planned route of the obstacle */
+    const double laneOrientationThreshold{0.35}; //**< orientation threshold for assigning lanes */
+    const double laneOrientationThresholdInitial{
+        1.58}; //**< orientation threshold for assigning lanes at initial time step */
 };

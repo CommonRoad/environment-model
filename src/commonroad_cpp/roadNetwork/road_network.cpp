@@ -88,7 +88,7 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
                            [id](auto val) { return val->getId() == id; });
     if (it == std::end(laneletNetwork))
         throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID" + std::to_string(id) +
-                                " does not exist in road netowrk!");
+                                " does not exist in road network!");
 
     return *it;
 }
@@ -119,28 +119,29 @@ std::string RoadNetwork::extractTrafficSignIDForCountry(TrafficSignTypes type) {
     return trafficSignIDLookupTable->at(type);
 }
 
-std::vector<std::shared_ptr<Lane>> RoadNetwork::addLanes(std::vector<std::shared_ptr<Lane>> newLanes, size_t initialLanelet) {
-    std::vector<std::shared_ptr<Lane>> updatedLanes{newLanes};
-    for (size_t i{0}; i < newLanes.size(); ++i) {
-        auto la{newLanes.at(i)};
-        if (lanes.find(la->getContainedLaneletIDs()) != lanes.end() and lanes[la->getContainedLaneletIDs()].first.find(initialLanelet) != lanes[la->getContainedLaneletIDs()].first.end()) {
-            updatedLanes.at(i) = lanes.at(la->getContainedLaneletIDs()).second;
+std::vector<std::shared_ptr<Lane>> RoadNetwork::addLanes(const std::vector<std::shared_ptr<Lane>> &newLanes,
+                                                         size_t initialLanelet) {
+    std::vector<std::shared_ptr<Lane>> updatedLanes;
+    for (const auto &la : newLanes) {
+        if (lanes.count(la->getContainedLaneletIDs()) != 0u and
+            lanes[la->getContainedLaneletIDs()].first.count(initialLanelet) != 0u) {
+            updatedLanes.push_back(lanes.at(la->getContainedLaneletIDs()).second);
             continue;
-        }
-        else if(lanes.find(la->getContainedLaneletIDs()) != lanes.end()) {
+        } else if (lanes.count(la->getContainedLaneletIDs()) != 0u) {
             lanes[la->getContainedLaneletIDs()].first.insert(initialLanelet);
-            updatedLanes.at(i) = lanes.at(la->getContainedLaneletIDs()).second;
-        }
-        else
+            updatedLanes.push_back(lanes.at(la->getContainedLaneletIDs()).second);
+        } else {
             lanes[la->getContainedLaneletIDs()] = {{initialLanelet}, la};
+            updatedLanes.push_back(la);
+        }
     }
     return updatedLanes;
 }
 
-std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesSpannedByLanelet(size_t laneletID){
+std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesSpannedByLanelet(size_t laneletID) {
     std::vector<std::shared_ptr<Lane>> relevantLanes;
-    for(const auto &[laneIDs, laneMap] : lanes)
-        if(laneIDs.find(laneletID) != laneIDs.end() and laneMap.first.find(laneletID) != laneMap.first.end())
+    for (const auto &[laneIDs, laneMap] : lanes)
+        if (laneIDs.count(laneletID) != 0u and laneMap.first.count(laneletID) != 0u)
             relevantLanes.push_back(laneMap.second);
     return relevantLanes;
 }

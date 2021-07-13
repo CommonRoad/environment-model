@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 26.04.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "commonroad_container.h"
@@ -8,7 +11,8 @@
 std::shared_ptr<CommonRoadContainer> CommonRoadContainer::instance =
     nullptr; // with static declaration, this can live outside of class instance
 
-void CommonRoadContainer::registerScenario(const size_t id, size_t timeStep, std::shared_ptr<RoadNetwork> roadNetwork,
+void CommonRoadContainer::registerScenario(const size_t id, size_t timeStep,
+                                           const std::shared_ptr<RoadNetwork> &roadNetwork,
                                            std::vector<std::shared_ptr<Obstacle>> &obstacleList,
                                            std::vector<std::shared_ptr<Obstacle>> &egoVehicles) {
     if (worldList.find(id) != worldList.end())

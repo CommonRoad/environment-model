@@ -7,6 +7,8 @@
 
 #include "lanelet_operations.h"
 
+#include <utility>
+
 DrivingDirection lanelet_operations::matchStringToDrivingDirection(const std::string &type) {
     if (type == "same")
         return DrivingDirection::same;
@@ -127,17 +129,18 @@ lanelet_operations::combineLaneletAndPredecessorsToLane(const std::shared_ptr<La
     return lanes;
 }
 
-std::vector<std::shared_ptr<Lane>> lanelet_operations::createLanesBySingleLanelets(
-    const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t &idCounter,
-    std::shared_ptr<RoadNetwork> roadNetwork, double fov) {
+std::vector<std::shared_ptr<Lane>>
+lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets,
+                                                size_t &idCounter, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                double fov) {
     std::vector<std::shared_ptr<Lane>> lanes;
-    
+
     // create lanes
     for (const auto &la : initialLanelets) {
         // lane was already created based on this initial lanelet -> continue with next lanelet
         auto newLanes{roadNetwork->findLanesSpannedByLanelet(la->getId())};
-        if(!newLanes.empty()){
-            lanes.insert( lanes.end(), newLanes.begin(), newLanes.end() );
+        if (!newLanes.empty()) {
+            lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
             continue;
         }
 
@@ -149,30 +152,22 @@ std::vector<std::shared_ptr<Lane>> lanelet_operations::createLanesBySingleLanele
                     std::vector<std::shared_ptr<Lanelet>> containedLanelets{lanePre};
                     std::reverse(containedLanelets.begin(), containedLanelets.end());
                     containedLanelets.insert(containedLanelets.end(), laneSuc.begin() + 1, laneSuc.end());
-                    auto newLane{createLaneByContainedLanelets(containedLanelets, ++idCounter)};
-                    if (!std::any_of(lanes.begin(), lanes.end(), [newLane](std::shared_ptr<Lane> existingLane) {
-                            return newLane->getContainedLaneletIDs() == existingLane->getContainedLaneletIDs();
-                        }))
-                        newLanes.push_back(newLane);
+                    newLanes.push_back(createLaneByContainedLanelets(containedLanelets, ++idCounter));
                 }
         else if (!newLaneSuccessorParts.empty())
             for (const auto &laneSuc : newLaneSuccessorParts) {
-                auto newLane{createLaneByContainedLanelets(laneSuc, ++idCounter)};
-                if (!std::any_of(lanes.begin(), lanes.end(), [newLane](std::shared_ptr<Lane> existingLane) {
-                        return newLane->getContainedLaneletIDs() == existingLane->getContainedLaneletIDs();
-                    }))
-                    newLanes.push_back(newLane);
+                newLanes.push_back(createLaneByContainedLanelets(laneSuc, ++idCounter));
             }
         else
             for (const auto &lanePre : newLanePredecessorParts) {
-                auto newLane{createLaneByContainedLanelets(lanePre, ++idCounter)};
-                if (!std::any_of(lanes.begin(), lanes.end(), [newLane](std::shared_ptr<Lane> existingLane) {
-                        return newLane->getContainedLaneletIDs() == existingLane->getContainedLaneletIDs();
-                    }))
-                    newLanes.push_back(newLane);
+                newLanes.push_back(createLaneByContainedLanelets(lanePre, ++idCounter));
             }
         newLanes = roadNetwork->addLanes(newLanes, la->getId());
-        lanes.insert( lanes.end(), newLanes.begin(), newLanes.end() );
+        for (const auto &newLane : newLanes)
+            if (!std::any_of(lanes.begin(), lanes.end(), [newLane](const std::shared_ptr<Lane> &lane) {
+                    return newLane->getId() == lane->getId();
+                }))
+                lanes.push_back(newLane);
     }
     return lanes;
 }
@@ -186,9 +181,7 @@ lanelet_operations::createLaneByContainedLanelets(const std::vector<std::shared_
     std::vector<vertex> leftVertices;
     std::vector<vertex> rightVertices;
     std::set<LaneletType> typeList;
-    long shift{1};
-    if(containedLanelets.size() == 1)
-        shift = 0;
+    long shift{0};
 
     for (const auto &la : containedLanelets) {
         std::set_intersection(userOneWay.begin(), userOneWay.end(), la->getUsersOneWay().begin(),
@@ -198,7 +191,8 @@ lanelet_operations::createLaneByContainedLanelets(const std::vector<std::shared_
                               la->getUsersBidirectional().end(),
                               std::inserter(userBidirectional, userBidirectional.begin()));
 
-        centerVertices.insert(centerVertices.end(), la->getCenterVertices().begin() + shift, la->getCenterVertices().end());
+        centerVertices.insert(centerVertices.end(), la->getCenterVertices().begin() + shift,
+                              la->getCenterVertices().end());
 
         leftVertices.insert(leftVertices.end(), la->getLeftBorderVertices().begin() + shift,
                             la->getLeftBorderVertices().end());
@@ -208,6 +202,7 @@ lanelet_operations::createLaneByContainedLanelets(const std::vector<std::shared_
 
         std::set_intersection(typeList.begin(), typeList.end(), la->getLaneletTypes().begin(),
                               la->getLaneletTypes().end(), std::inserter(typeList, typeList.begin()));
+        shift = 1;
     }
 
     Lanelet newLanelet = Lanelet(newId, leftVertices, rightVertices, {}, {}, typeList, userOneWay, userBidirectional);
@@ -222,8 +217,8 @@ lanelet_operations::createLaneByContainedLanelets(const std::vector<std::shared_
     return lane;
 }
 
-std::shared_ptr<Lane> lanelet_operations::mergeLanes(std::shared_ptr<Lane> predecessorLane,
-                                                     std::shared_ptr<Lane> successorLane, size_t newId) {
+std::shared_ptr<Lane> lanelet_operations::mergeLanes(const std::shared_ptr<Lane> &predecessorLane,
+                                                     const std::shared_ptr<Lane> &successorLane, size_t newId) {
     std::set<ObstacleType> userOneWay;
     std::set_intersection(predecessorLane->getUsersOneWay().begin(), predecessorLane->getUsersOneWay().end(),
                           successorLane->getUsersOneWay().begin(), successorLane->getUsersOneWay().end(),
@@ -271,7 +266,7 @@ bool lanelet_operations::containsLaneletType(LaneletType type, std::set<LaneletT
     return baseTypesSet.find(type) != baseTypesSet.end();
 }
 
-std::vector<size_t> lanelet_operations::extractIds(std::vector<std::shared_ptr<Lanelet>> lanelets) {
+std::vector<size_t> lanelet_operations::extractIds(const std::vector<std::shared_ptr<Lanelet>> &lanelets) {
     std::vector<size_t> ids;
     for (const auto &la : lanelets)
         ids.push_back(la->getId());
@@ -280,9 +275,10 @@ std::vector<size_t> lanelet_operations::extractIds(std::vector<std::shared_ptr<L
 
 std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet) {
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
-    auto curLanelet{lanelet};
+    auto curLanelet{std::move(lanelet)};
 
-    while (curLanelet->getAdjacentRight().adj != nullptr and curLanelet->getAdjacentLeft().dir != DrivingDirection::opposite) {
+    while (curLanelet->getAdjacentRight().adj != nullptr and
+           curLanelet->getAdjacentLeft().dir != DrivingDirection::opposite) {
         adjacentLanelets.push_back(curLanelet->getAdjacentRight().adj);
         curLanelet = curLanelet->getAdjacentRight().adj;
     }
@@ -291,16 +287,17 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet
 
 std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet) {
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
-    auto curLanelet{lanelet};
+    auto curLanelet{std::move(lanelet)};
 
-    while (curLanelet->getAdjacentLeft().adj != nullptr and curLanelet->getAdjacentLeft().dir != DrivingDirection::opposite) {
+    while (curLanelet->getAdjacentLeft().adj != nullptr and
+           curLanelet->getAdjacentLeft().dir != DrivingDirection::opposite) {
         adjacentLanelets.push_back(curLanelet->getAdjacentLeft().adj);
         curLanelet = curLanelet->getAdjacentLeft().adj;
     }
     return adjacentLanelets;
 }
 
-std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(std::shared_ptr<Lanelet> lanelet) {
+std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet) {
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets{lanelet};
     auto leftLanelets{laneletsLeftOfLanelet(lanelet)};
     auto rightLanelets{laneletsRightOfLanelet(lanelet)};
@@ -309,8 +306,8 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(std::
     return relevantLanelets;
 }
 
-bool lanelet_operations::adjacentLanes(std::shared_ptr<Lane> laneOne, std::shared_ptr<Lane> laneTwo,
-                                       std::vector<std::shared_ptr<Lanelet>> relevantLanelets) {
+bool lanelet_operations::adjacentLanes(const std::shared_ptr<Lane> &laneOne, const std::shared_ptr<Lane> &laneTwo,
+                                       const std::vector<std::shared_ptr<Lanelet>> &relevantLanelets) {
     for (const auto &la1 : relevantLanelets) {
         for (const auto &la2 : relevantLanelets) {
             if (la1->getId() == la2->getId())

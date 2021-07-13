@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 08.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_SHAPE_H
-#define ENV_MODEL_SHAPE_H
+#pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include <string>
@@ -92,5 +94,3 @@ class Shape {
      */
     virtual void printParameters(){};
 };
-
-#endif // ENV_MODEL_SHAPE_H

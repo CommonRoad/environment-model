@@ -6,10 +6,13 @@
 //
 
 #include "lane.h"
-#include "../../geometry/geometric_operations.h"
 
-Lane::Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet lanelet, CurvilinearCoordinateSystem ccs)
-    : Lanelet(lanelet), containedLanelets(std::move(containedLanelets)), curvilinearCoordinateSystem(std::move(ccs)) {
+#include "../../geometry/geometric_operations.h"
+#include <utility>
+
+Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
+           CurvilinearCoordinateSystem ccs)
+    : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets), curvilinearCoordinateSystem(std::move(ccs)) {
     for (const auto &la : containedLanelets)
         containedLaneletIds.insert(la->getId());
 }
@@ -18,9 +21,4 @@ const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const 
 
 const CurvilinearCoordinateSystem &Lane::getCurvilinearCoordinateSystem() const { return curvilinearCoordinateSystem; }
 
-std::set<size_t> Lane::getContainedLaneletIDs() {
-    std::set<size_t> idSet;
-    for (const auto &la : containedLanelets)
-        idSet.insert(la->getId());
-    return idSet;
-}
+const std::set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }

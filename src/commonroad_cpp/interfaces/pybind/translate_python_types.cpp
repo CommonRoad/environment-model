@@ -416,6 +416,7 @@ std::shared_ptr<Obstacle> createDynamicObstacle(py::handle py_singleObstacle) {
 
 std::shared_ptr<Obstacle> createStaticObstacle(py::handle py_singleObstacle) {
     std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
+    tempObstacle->setIsStatic(true);
     return tempObstacle;
 }
 

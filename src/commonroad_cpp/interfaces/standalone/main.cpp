@@ -1,10 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 28.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "command_line_input.h"
-//#include "../../predicates/predicates.h"
-
 #include <chrono>
 
 int main(int argc, char **argv) {

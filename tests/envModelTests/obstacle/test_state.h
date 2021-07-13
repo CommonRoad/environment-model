@@ -1,9 +1,10 @@
 //
-// Created by sebastian on 20.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
-
-#ifndef ENV_MODEL_TEST_STATE_H
-#define ENV_MODEL_TEST_STATE_H
+#pragma once
 
 #include <gtest/gtest.h>
 
@@ -92,5 +93,3 @@ class StateTest : public StateTestInitialization, public testing::Test {
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_STATE_H

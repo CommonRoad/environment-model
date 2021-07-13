@@ -4,11 +4,8 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
+#pragma once
 
-#include "test_incoming.h"
+#include <gtest/gtest.h>
 
-void IncomingTestInitialization::setUpIncoming() {}
-
-void IncomingTest::SetUp() {}
-
-TEST_F(IncomingTest, InitializationComplete) {}
+class WorldTest : public testing::Test {};
