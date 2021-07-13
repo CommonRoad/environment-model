@@ -2,8 +2,10 @@
 // Created by sebastian on 07.12.20.
 //
 
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+
 #include "test_lanelet_operations.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 
 void LaneletOperationsTest::SetUp() {
     setUpLane();

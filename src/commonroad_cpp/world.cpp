@@ -2,9 +2,13 @@
 // Created by Sebastian Maierhofer on 06.04.21.
 //
 
-#include "world.h"
-
+#include <memory>
 #include <utility>
+#include <vector>
+
+#include <commonroad_cpp/obstacle/obstacle.h>
+
+#include "world.h"
 
 World::World(int timeStep, std::shared_ptr<RoadNetwork> roadNetwork, std::vector<std::shared_ptr<Obstacle>> egoVehicles,
              std::vector<std::shared_ptr<Obstacle>> obstacles)

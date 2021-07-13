@@ -5,11 +5,29 @@
 // Credits: BMW Car@TUM
 //
 
-#include "obstacle.h"
-#include "commonroad_cpp/geometry/geometric_operations.h"
-
+#include <algorithm> // for max, min
 #include <cmath>
+#include <stdexcept> // for logic_error
+#include <string>    // for operator+
 #include <utility>
+
+#include <Eigen/Core> // for Vector2d
+
+#include <geometry/curvilinear_coordinate_system.h>
+
+#include <boost/geometry/geometries/ring.hpp> // for ring
+
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/geometry/rectangle.h>
+#include <commonroad_cpp/geometry/shape.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/obstacle/state.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+
+#include "obstacle.h"
 
 Obstacle::Obstacle(size_t id, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
                    double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
@@ -261,7 +279,7 @@ void Obstacle::setOncomings(const std::vector<std::shared_ptr<Lanelet>> &onc) { 
 
 void Obstacle::convertPointToCurvilinear(size_t timeStep) const {
     try {
-        Eigen::Vector2d convertedPoint = referenceLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+        Eigen::Vector2d convertedPoint = referenceLane->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
             getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
         getStateByTimeStep(timeStep)->setLonPosition(convertedPoint.x());
         getStateByTimeStep(timeStep)->setLatPosition(convertedPoint.y());

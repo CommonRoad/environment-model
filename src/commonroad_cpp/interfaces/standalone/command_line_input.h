@@ -2,12 +2,16 @@
 // Created by Sebastian Maierhofer on 02.11.20.
 //
 
+#include <string>
+#include <tuple>
+#include <vector>
+
 #include <boost/program_options.hpp>
-#include <iostream>
+//#include "commonroad_cpp/roadNetwork/road_network.h"
 
 #include "commonroad_cpp/interfaces/commonroad/xml_reader.h"
 
-namespace po = boost::program_options;
+class RoadNetwork;
 
 namespace CommandLine {
 

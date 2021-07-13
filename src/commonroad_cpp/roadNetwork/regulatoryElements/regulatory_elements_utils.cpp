@@ -5,9 +5,14 @@
 // Credits: BMW Car@TUM
 //
 
-#include "regulatory_elements_utils.h"
+#include <algorithm>
+
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+
 #include "../intersection/intersection_operations.h"
 #include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
+#include "regulatory_elements_utils.h"
 
 std::set<std::shared_ptr<TrafficLight>>
 regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::shared_ptr<Obstacle> &obs,

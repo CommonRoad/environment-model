@@ -5,8 +5,18 @@
 // Credits: BMW Car@TUM
 //
 
-#include "lanelet.h"
 #include <utility>
+
+#include <boost/geometry.hpp>
+#include <boost/geometry/algorithms/correct.hpp>
+#include <boost/geometry/algorithms/intersects.hpp>
+#include <boost/geometry/algorithms/simplify.hpp>
+#include <boost/geometry/algorithms/unique.hpp>
+
+#include "lanelet.h"
+
+namespace bg = boost::geometry;
+// using box = bg::model::box<point_type>;
 
 Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::set<LaneletType> type,
                  std::set<ObstacleType> oneWay, std::set<ObstacleType> userBidirectional)

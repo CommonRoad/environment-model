@@ -7,15 +7,21 @@
 
 #pragma once
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
-#include "commonroad_cpp/geometry/rectangle.h"
-#include "commonroad_cpp/geometry/shape.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lane.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
+#include <cstddef>
+#include <map>
+#include <memory>
+#include <vector>
+
 #include "state.h"
 
-#include <map>
+#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
+#include <commonroad_cpp/geometry/rectangle.h>
+#include <commonroad_cpp/geometry/shape.h>
+#include <commonroad_cpp/geometry/types.h>
+
+class Lanelet;
+class Lane;
+class RoadNetwork;
 
 /**
  * Class representing an obstacle.

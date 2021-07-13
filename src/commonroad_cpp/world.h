@@ -5,9 +5,11 @@
 #ifndef ENV_MODEL_WORLD_H
 #define ENV_MODEL_WORLD_H
 
-#include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
 #include <memory>
+#include <vector>
+
+class RoadNetwork;
+class Obstacle;
 
 class World {
   public:
