@@ -7,9 +7,8 @@
 
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
-
+#include "commonroad_cpp/world.h"
 #include "command_line_input.h"
-#include <chrono>
 
 int main(int argc, char **argv) {
 

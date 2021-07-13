@@ -7,7 +7,7 @@
 
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
-
+#include <geometry/curvilinear_coordinate_system.h>
 #include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
@@ -67,8 +67,9 @@ TEST_F(RoadNetworkTest, AddLanes) {
     for (auto vert : la.getCenterVertices())
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     geometry::util::resample_polyline(reference_path, 2, reference_path);
+    auto ccs{std::make_shared<CurvilinearCoordinateSystem>(reference_path)};
     auto newLane{
-        std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), la, CurvilinearCoordinateSystem(reference_path))};
+        std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), la, ccs)};
     std::vector<std::shared_ptr<Lane>> testLanes{newLane};
     updatedLanes = roadNetworkScenario->addLanes(testLanes, 4);
     EXPECT_EQ(lanes.size(), 1);

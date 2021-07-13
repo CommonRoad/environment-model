@@ -31,9 +31,9 @@ struct RoadNetwork::impl {
         rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
 };
 
-RoadNetwork::RoadNetwork(RoadNetwork &&) = default;
+RoadNetwork::RoadNetwork(RoadNetwork &&) noexcept = default;
 RoadNetwork::~RoadNetwork() = default;
-RoadNetwork &RoadNetwork::operator=(RoadNetwork &&) = default;
+RoadNetwork &RoadNetwork::operator=(RoadNetwork &&) noexcept = default;
 
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, SupportedTrafficSignCountry cou,
                          std::vector<std::shared_ptr<TrafficSign>> signs,
