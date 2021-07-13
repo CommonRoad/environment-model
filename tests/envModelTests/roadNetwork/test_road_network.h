@@ -5,8 +5,11 @@
 #ifndef ENV_MODEL_TEST_ROAD_NETWORK_H
 #define ENV_MODEL_TEST_ROAD_NETWORK_H
 
-#include "commonroad_cpp/roadNetwork/road_network.h"
+#include <memory>
+
 #include "lanelet/test_lane.h"
+
+class RoadNetwork;
 
 class RoadNetworkTestInitialization : public LaneTestInitialization {
   protected:

@@ -5,6 +5,8 @@
 // Credits: BMW Car@TUM
 //
 
+#include <geometry/curvilinear_coordinate_system.h>
+
 #include "lanelet_operations.h"
 
 #include <utility>
@@ -257,8 +259,9 @@ std::shared_ptr<Lane> lanelet_operations::mergeLanes(const std::shared_ptr<Lane>
 
     geometry::util::resample_polyline(reference_path, 2, reference_path);
 
-    std::shared_ptr<Lane> lane =
-        std::make_shared<Lane>(containedLanelets, newLanelet, CurvilinearCoordinateSystem(reference_path));
+    auto ccs = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
+    std::shared_ptr<Lane> lane = std::make_shared<Lane>(laneletList, newLanelet, ccs);
+
     return lane;
 }
 

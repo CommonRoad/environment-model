@@ -7,9 +7,11 @@
 
 #pragma once
 
-#include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
 #include <memory>
+#include <vector>
+
+class RoadNetwork;
+class Obstacle;
 
 class World {
   public:

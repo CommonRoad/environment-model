@@ -5,6 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+
 #include "test_lanelet_operations.h"
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"

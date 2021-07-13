@@ -7,19 +7,20 @@
 
 #pragma once
 
-#include <boost/geometry.hpp>
+#include <cstddef>
+#include <memory>
+#include <set>
+#include <vector>
+
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include "commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h"
-#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
-#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h"
-
-namespace bg = boost::geometry;
-using point_type = bg::model::d2::point_xy<double>;
-using polygon_type = bg::model::polygon<point_type>;
-using box = bg::model::box<point_type>;
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
+#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
+#include <commonroad_cpp/geometry/types.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
 /**
  * Class representing a lanelet.

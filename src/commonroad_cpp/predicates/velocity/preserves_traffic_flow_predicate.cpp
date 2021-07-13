@@ -4,8 +4,13 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "preserves_traffic_flow_predicate.h"
+
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+#include <commonroad_cpp/world.h>
+
 #include "keeps_lane_speed_limit_predicate.h"
+#include "preserves_traffic_flow_predicate.h"
 
 bool PreservesTrafficFlowPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                       const std::shared_ptr<Obstacle> &obstacleK,

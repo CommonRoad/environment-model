@@ -5,6 +5,10 @@
 // Credits: BMW Car@TUM
 //
 
+#include <stdexcept>
+
+#include <commonroad_cpp/world.h>
+
 #include "commonroad_container.h"
 
 // Global static pointer used to ensure a single instance of the class.

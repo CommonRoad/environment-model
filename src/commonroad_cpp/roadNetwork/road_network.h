@@ -7,23 +7,24 @@
 
 #pragma once
 
-#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lane.h"
+#include <cstddef>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/box.hpp>
-#include <boost/geometry/geometries/point.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
-#include <boost/geometry/index/rtree.hpp>
-#include <boost/range/adaptor/indexed.hpp>
-#include <boost/range/adaptor/transformed.hpp>
-//#include <unordered_map>
+#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
+#include <commonroad_cpp/geometry/types.h>
 
-namespace bg = boost::geometry;
-namespace bgi = boost::geometry::index;
-
-using point = bg::model::point<float, 2, bg::cs::cartesian>;
 using value = std::pair<box, unsigned>;
+
+class Lanelet;
+class Lane;
+class Incoming;
+class TrafficLight;
+class TrafficSign;
+class Intersection;
 
 /**
  * Class representing a road network.
@@ -43,6 +44,13 @@ class RoadNetwork {
         std::vector<std::shared_ptr<TrafficSign>> signs = std::vector<std::shared_ptr<TrafficSign>>{},
         std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{},
         std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{});
+
+    RoadNetwork(RoadNetwork &&);
+    ~RoadNetwork();
+    RoadNetwork &operator=(RoadNetwork &&);
+
+    RoadNetwork(const RoadNetwork &) = delete;
+    RoadNetwork &operator=(const RoadNetwork &) = delete;
 
     /**
      * Getter for lanelet network.
@@ -134,7 +142,9 @@ class RoadNetwork {
     std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
     std::map<std::set<size_t>, std::pair<std::set<size_t>, std::shared_ptr<Lane>>> lanes;
     //**< set of lanes contained in road network: contained lanelet IDs, <already created base lanelet, lane> */
-    bgi::rtree<value, bgi::quadratic<16>>
-        rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
+
+    //**< Struct for private fields including R-Tree */
+    struct impl;
+    std::unique_ptr<impl> pImpl;
 };

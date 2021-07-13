@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "circle.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include <vector>

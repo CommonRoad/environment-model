@@ -5,6 +5,8 @@
 // Credits: BMW Car@TUM
 //
 
+#include <commonroad_cpp/obstacle/obstacle.h>
+
 #include "in_front_of_predicate.h"
 
 bool InFrontOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

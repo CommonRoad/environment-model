@@ -5,6 +5,11 @@
 // Credits: BMW Car@TUM
 //
 
+#include <cmath>
+#include <stdexcept>
+
+#include <commonroad_cpp/obstacle/obstacle.h>
+
 #include "safe_distance_predicate.h"
 
 double SafeDistancePredicate::computeSafeDistance(double velocityK, double velocityP, double minAccelerationK,
@@ -57,7 +62,7 @@ double SafeDistancePredicate::robustEvaluation(size_t timeStep, const std::share
     double deltaS{obstacleP->rearS(timeStep) - obstacleK->frontS(timeStep)};
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive robustness
     if (deltaS < 0)
-        return abs(deltaS);
+        return std::abs(deltaS);
     else
         return (deltaS - dSafe);
 }
@@ -69,7 +74,7 @@ double SafeDistancePredicate::robustEvaluation(double lonPosK, double lonPosP, d
     double deltaS = (lonPosP - 0.5 * lengthP) - (lonPosK + 0.5 * lengthK);
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive robustness
     if (deltaS < 0)
-        return abs(deltaS);
+        return std::abs(deltaS);
     else
         return (deltaS - dSafe);
 }

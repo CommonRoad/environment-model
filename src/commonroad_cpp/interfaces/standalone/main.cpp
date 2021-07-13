@@ -5,6 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+
 #include "command_line_input.h"
 #include <chrono>
 

@@ -5,8 +5,16 @@
 // Credits: BMW Car@TUM
 //
 
+#include <algorithm>
+#include <memory>
+#include <vector>
+
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/obstacle/state.h>
+#include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
+#include <commonroad_cpp/world.h>
+
 #include "unnecessary_braking_predicate.h"
-#include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
 #include "commonroad_cpp/predicates/position/succeeds_predicate.h"
 
 bool UnnecessaryBrakingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

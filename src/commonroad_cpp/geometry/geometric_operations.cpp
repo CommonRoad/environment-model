@@ -12,8 +12,8 @@
 #include <boost/geometry/geometries/polygon.hpp>
 #include <cmath>
 
-using point_type = boost::geometry::model::d2::point_xy<double>;
-using polygon_type = boost::geometry::model::polygon<point_type>;
+#include <commonroad_cpp/geometry/types.h>
+
 using boost::geometry::get;
 
 std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex> q, double length, double width) {

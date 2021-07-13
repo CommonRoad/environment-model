@@ -5,9 +5,13 @@
 // Credits: BMW Car@TUM
 //
 
-#include "world.h"
-#include "roadNetwork/lanelet/lanelet_operations.h"
+#include <memory>
 #include <utility>
+#include <vector>
+#include "roadNetwork/lanelet/lanelet_operations.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
+
+#include "world.h"
 
 World::World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
              std::vector<std::shared_ptr<Obstacle>> egoVehicles, std::vector<std::shared_ptr<Obstacle>> obstacles)

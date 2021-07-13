@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "commonroad_cpp/roadNetwork/road_network.h"
+class RoadNetwork;
 
 namespace utils_predicate_test {
 std::shared_ptr<RoadNetwork> create_road_network();

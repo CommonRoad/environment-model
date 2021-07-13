@@ -5,6 +5,8 @@
 // Credits: BMW Car@TUM
 //
 
+#include <cmath>
+
 #include "test_state.h"
 
 void StateTestInitialization::setUpStates() {

@@ -4,6 +4,10 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
+
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
+
 #include "in_standstill_predicate.h"
 
 bool InStandstillPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

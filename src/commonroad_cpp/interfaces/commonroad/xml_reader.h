@@ -5,12 +5,21 @@
 #ifndef ENV_MODEL_XML_READER_H
 #define ENV_MODEL_XML_READER_H
 
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.hpp"
-#include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
-#include "commonroad_cpp/world.h"
+
+class Intersection;
+class Obstacle;
+class State;
+class World;
+class Lanelet;
+class TrafficSign;
+class TrafficLight;
+
 namespace XMLReader {
 /**
  * Function for creating obstacles.

@@ -7,11 +7,16 @@
 
 #pragma once
 
-#include "commonroad_cpp/auxiliaryDefs/timer.h"
-#include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
-#include "commonroad_cpp/world.h"
+#include <memory>
+
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
+#include <commonroad_cpp/auxiliaryDefs/timer.h>
+
 #include "predicate_parameters.h"
+
+class Obstacle;
+class World;
+// struct Constraint;
 
 /**
  * Interface for a predicate.

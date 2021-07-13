@@ -5,8 +5,11 @@
 // Credits: BMW Car@TUM
 //
 
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/position/in_same_lane_predicate.h>
+#include <commonroad_cpp/world.h>
+
 #include "cut_in_predicate.h"
-#include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 
 bool CutInPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                        const std::shared_ptr<Obstacle> &obstacleK,

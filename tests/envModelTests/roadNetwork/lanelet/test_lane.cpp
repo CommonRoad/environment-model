@@ -5,6 +5,10 @@
 // Credits: BMW Car@TUM
 //
 
+#include <geometry/curvilinear_coordinate_system.h>
+
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+
 #include "test_lane.h"
 
 void LaneTestInitialization::setUpLane() {
@@ -21,7 +25,7 @@ void LaneTestInitialization::setUpLane() {
     }
 
     laneOne = std::make_shared<Lane>(Lane(std::vector<std::shared_ptr<Lanelet>>{laneletOne}, *laneletOne,
-                                          CurvilinearCoordinateSystem(reference_path)));
+                                          std::make_shared<CurvilinearCoordinateSystem>(reference_path)));
 }
 
 void LaneTest::SetUp() { setUpLane(); }
@@ -36,9 +40,9 @@ TEST_F(LaneTest, ConvertPoint) {
 
     Eigen::Vector2d originalPoint{3, 2};
     Eigen::Vector2d convertedPoint =
-        laneOne->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(originalPoint.x(), originalPoint.y());
+        laneOne->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(originalPoint.x(), originalPoint.y());
     Eigen::Vector2d convertedBack =
-        laneOne->getCurvilinearCoordinateSystem().convertToCartesianCoords(convertedPoint.x(), convertedPoint.y());
+        laneOne->getCurvilinearCoordinateSystem()->convertToCartesianCoords(convertedPoint.x(), convertedPoint.y());
     EXPECT_NEAR(originalPoint.x(), convertedBack.x(), 0.0005);
     EXPECT_EQ(originalPoint.y(), convertedBack.y());
 }

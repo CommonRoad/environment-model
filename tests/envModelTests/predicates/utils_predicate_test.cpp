@@ -5,7 +5,10 @@
 // Credits: BMW Car@TUM
 //
 
-#include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
+#include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
 
 #include "utils_predicate_test.h"
 
