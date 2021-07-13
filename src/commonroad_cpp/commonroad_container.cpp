@@ -13,8 +13,8 @@ std::shared_ptr<CommonRoadContainer> CommonRoadContainer::instance =
 
 void CommonRoadContainer::registerScenario(const size_t id, size_t timeStep,
                                            const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                           std::vector<std::shared_ptr<Obstacle>> &obstacleList,
-                                           std::vector<std::shared_ptr<Obstacle>> &egoVehicles) {
+                                           std::vector<std::shared_ptr<Obstacle>> &egoVehicles,
+                                           std::vector<std::shared_ptr<Obstacle>> &obstacleList) {
     if (worldList.find(id) != worldList.end())
         return; // ID does already exist
     worldList.insert({id, std::make_shared<World>(timeStep, roadNetwork, egoVehicles, obstacleList)});
