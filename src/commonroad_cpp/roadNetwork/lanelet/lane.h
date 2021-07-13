@@ -30,7 +30,7 @@ class Lane : public Lanelet {
      * @param lanelet Lanelet object spanning lane.
      * @param ccs Curvilinear coordinate system object.
      */
-    Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet lanelet,
+    Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
          std::shared_ptr<CurvilinearCoordinateSystem> ccs);
 
     /**

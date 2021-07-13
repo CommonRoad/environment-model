@@ -8,9 +8,6 @@
 #include <utility>
 
 #include <boost/geometry.hpp>
-#include <boost/geometry/algorithms/intersects.hpp>
-#include <boost/geometry/geometries/point.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/index/parameters.hpp>
 #include <boost/geometry/index/rtree.hpp>
 
@@ -18,7 +15,6 @@
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 
 #include "road_network.h"
@@ -69,8 +65,9 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
     pImpl->rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())),
                        std::back_inserter(relevantLanelets));
     std::vector<std::shared_ptr<Lanelet>> lanelets;
+    lanelets.reserve(relevantLanelets.size());
     for (auto la : relevantLanelets)
-        lanelets.push_back(findLaneletById(static_cast<size_t>(la.second)));
+            lanelets.push_back(findLaneletById(static_cast<size_t>(la.second)));
 
     // check intersection with relevant lanelets
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
