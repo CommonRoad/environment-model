@@ -5,10 +5,10 @@
 // Credits: BMW Car@TUM
 //
 
+#include "command_line_input.h"
+#include "commonroad_cpp/world.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
-#include "commonroad_cpp/world.h"
-#include "command_line_input.h"
 
 int main(int argc, char **argv) {
 

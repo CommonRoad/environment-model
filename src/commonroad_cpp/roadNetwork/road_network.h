@@ -8,13 +8,13 @@
 #pragma once
 
 #include <cstddef>
+#include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <set>
-#include <map>
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/types.h>
@@ -47,9 +47,9 @@ class RoadNetwork {
         std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{},
         std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{});
 
-    RoadNetwork(RoadNetwork &&) noexcept ;
+    RoadNetwork(RoadNetwork &&) noexcept;
     ~RoadNetwork();
-    RoadNetwork &operator=(RoadNetwork &&) noexcept ;
+    RoadNetwork &operator=(RoadNetwork &&) noexcept;
 
     RoadNetwork(const RoadNetwork &) = delete;
     RoadNetwork &operator=(const RoadNetwork &) = delete;

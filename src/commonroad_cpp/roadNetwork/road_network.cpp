@@ -67,7 +67,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     lanelets.reserve(relevantLanelets.size());
     for (auto la : relevantLanelets)
-            lanelets.push_back(findLaneletById(static_cast<size_t>(la.second)));
+        lanelets.push_back(findLaneletById(static_cast<size_t>(la.second)));
 
     // check intersection with relevant lanelets
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;

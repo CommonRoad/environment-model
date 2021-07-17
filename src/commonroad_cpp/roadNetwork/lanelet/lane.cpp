@@ -5,9 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
-#include <geometry/curvilinear_coordinate_system.h>
 #include "lane.h"
 #include "../../geometry/geometric_operations.h"
+#include <geometry/curvilinear_coordinate_system.h>
 #include <utility>
 
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
