@@ -5,11 +5,11 @@
 // Credits: BMW Car@TUM
 //
 
+#include "roadNetwork/lanelet/lanelet_operations.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
 #include <memory>
 #include <utility>
 #include <vector>
-#include "roadNetwork/lanelet/lanelet_operations.h"
-#include <commonroad_cpp/obstacle/obstacle.h>
 
 #include "world.h"
 
@@ -65,6 +65,7 @@ std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
 
 void World::setInitialLanes() {
     for (auto &obs : egoVehicles)
-        obs->computeLanes(roadNetwork, idCounter);
+        obs->computeLanes(roadNetwork, std::make_shared<size_t>(idCounter));
 }
-size_t World::getIdCounter() const { return idCounter; }
+
+std::shared_ptr<size_t> World::getIdCounterRef() const { return std::make_shared<size_t>(idCounter); }

@@ -14,8 +14,8 @@
 #include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
 #include <commonroad_cpp/world.h>
 
-#include "unnecessary_braking_predicate.h"
 #include "commonroad_cpp/predicates/position/succeeds_predicate.h"
+#include "unnecessary_braking_predicate.h"
 
 bool UnnecessaryBrakingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
@@ -36,7 +36,7 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, co
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt);
     }
-    if (constraintValues.size())
+    if (!constraintValues.empty())
         return {*max_element(constraintValues.begin(), constraintValues.end())};
     else
         return {parameters.aAbrupt};
@@ -61,7 +61,7 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
                                        obs->getStateByTimeStep(timeStep)->getAcceleration());
         }
     }
-    if (robustnessValues.size())
+    if (!robustnessValues.empty())
         return *max_element(robustnessValues.begin(), robustnessValues.end());
     else
         return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt;

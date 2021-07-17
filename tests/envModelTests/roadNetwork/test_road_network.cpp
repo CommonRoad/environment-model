@@ -5,13 +5,13 @@
 // Credits: BMW Car@TUM
 //
 
-#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-#include <commonroad_cpp/roadNetwork/road_network.h>
-#include <geometry/curvilinear_coordinate_system.h>
+#include "test_road_network.h"
 #include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
-#include "test_road_network.h"
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 void RoadNetworkTestInitialization::setUpRoadNetwork() {
     std::vector<std::shared_ptr<Lanelet>> lanelets{laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive};
@@ -50,7 +50,8 @@ TEST_F(RoadNetworkTest, AddLanes) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
     const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
-    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, globalID,
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, globalIdRef,
                                                                roadNetworkScenario)};
     auto updatedLanes{roadNetworkScenario->addLanes(lanes, 10)};
     EXPECT_EQ(lanes.size(), 3);
@@ -59,7 +60,7 @@ TEST_F(RoadNetworkTest, AddLanes) {
     EXPECT_EQ(lanes.at(1)->getId(), 123456789 + 2);
     EXPECT_EQ(lanes.at(2)->getId(), 123456789 + 3);
 
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, globalIdRef,
                                                             roadNetworkScenario);
     Lanelet la{100000, lanes.at(0)->getLeftBorderVertices(), lanes.at(0)->getRightBorderVertices(),
                lanes.at(0)->getLaneletTypes()};
@@ -68,8 +69,7 @@ TEST_F(RoadNetworkTest, AddLanes) {
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     geometry::util::resample_polyline(reference_path, 2, reference_path);
     auto ccs{std::make_shared<CurvilinearCoordinateSystem>(reference_path)};
-    auto newLane{
-        std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), la, ccs)};
+    auto newLane{std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), la, ccs)};
     std::vector<std::shared_ptr<Lane>> testLanes{newLane};
     updatedLanes = roadNetworkScenario->addLanes(testLanes, 4);
     EXPECT_EQ(lanes.size(), 1);

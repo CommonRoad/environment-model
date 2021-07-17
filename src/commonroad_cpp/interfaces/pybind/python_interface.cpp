@@ -32,7 +32,7 @@ void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &
 
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
 
-    eval->registerScenario(scenarioId, timeStep, roadNetwork, tempObstacleContainer, tempEgoVehicleContainer);
+    eval->registerScenario(scenarioId, timeStep, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer);
 }
 
 void py_removeScenario(size_t scenarioId) {

@@ -61,8 +61,9 @@ combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, 
                                     std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
 std::vector<std::shared_ptr<Lane>>
-createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, size_t &idCounter,
-                            const std::shared_ptr<RoadNetwork> &roadNetwork, double fov = 250);
+createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets,
+                            std::shared_ptr<size_t> idCounter, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                            double fov = 250);
 
 std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets,
                                                     size_t newId);

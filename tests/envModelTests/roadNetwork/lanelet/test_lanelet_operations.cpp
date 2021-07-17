@@ -8,10 +8,10 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
-#include "test_lanelet_operations.h"
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include "test_lanelet_operations.h"
 
 void LaneletOperationsTest::SetUp() {
     setUpLane();
@@ -49,14 +49,15 @@ TEST_F(RoadNetworkTest, CreateInterstateLanes) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/DEU_TestOvertakingExitRamp-1_1_T-1.xml"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
-    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioOne->findLaneletById(3)}, globalID,
-                                                               roadNetworkScenarioOne)};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioOne->findLaneletById(3)},
+                                                               globalIdRef, roadNetworkScenarioOne)};
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 10);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().front()->getId(), 11);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().back()->getId(), 9);
 
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioOne->findLaneletById(11)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioOne->findLaneletById(11)}, globalIdRef,
                                                             roadNetworkScenarioOne);
     EXPECT_EQ(lanes.size(), 2);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 10);
@@ -68,7 +69,7 @@ TEST_F(RoadNetworkTest, CreateInterstateLanes) {
 
     std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() + "/DEU_test_safe_distance.xml"};
     const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioTwo->findLaneletById(22)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioTwo->findLaneletById(22)}, globalIdRef,
                                                             roadNetworkScenarioTwo);
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 10);
@@ -79,7 +80,7 @@ TEST_F(RoadNetworkTest, CreateInterstateLanes) {
     const auto &[obstaclesScenarioThree, roadNetworkScenarioThree] =
         CommandLine::getDataFromCommonRoad(pathToTestFileThree);
     lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioThree->findLaneletById(34782)},
-                                                            globalID, roadNetworkScenarioThree);
+                                                            globalIdRef, roadNetworkScenarioThree);
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 1);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().front()->getId(), 34782);
@@ -89,13 +90,13 @@ TEST_F(RoadNetworkTest, CreateInterstateLanes) {
                                    "/DEU_test_consider_entering_vehicles_for_lane_change.xml"};
     const auto &[obstaclesScenarioFour, roadNetworkScenarioFour] =
         CommandLine::getDataFromCommonRoad(pathToTestFileFour);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioFour->findLaneletById(3)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioFour->findLaneletById(3)}, globalIdRef,
                                                             roadNetworkScenarioFour);
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 10);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().front()->getId(), 1);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().back()->getId(), 20);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioFour->findLaneletById(20)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioFour->findLaneletById(20)}, globalIdRef,
                                                             roadNetworkScenarioFour);
     EXPECT_EQ(lanes.size(), 2);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 10);
@@ -110,7 +111,8 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleSimpleIntersection) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
     const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
-    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, globalID,
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, globalIdRef,
                                                                roadNetworkScenario)};
     EXPECT_EQ(lanes.size(), 3);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 3);
@@ -124,13 +126,13 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleSimpleIntersection) {
                             lanes.at(2)->getContainedLanelets().back()->getId()};
     std::set<size_t> expEndIds{2, 7, 15};
     EXPECT_EQ(endIds, expEndIds);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, globalIdRef,
                                                             roadNetworkScenario);
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 3);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().front()->getId(), 10);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().back()->getId(), 2);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(2)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(2)}, globalIdRef,
                                                             roadNetworkScenario);
     EXPECT_EQ(lanes.size(), 3);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 3);
@@ -150,13 +152,14 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection1) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
     const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
-    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3454)}, globalID,
-                                                               roadNetworkScenario)};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3454)},
+                                                               globalIdRef, roadNetworkScenario)};
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 7);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().front()->getId(), 3567);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().back()->getId(), 3467);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3502)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3502)}, globalIdRef,
                                                             roadNetworkScenario);
     EXPECT_EQ(lanes.size(), 2);
     std::set<size_t> expLaneSizes{7};
@@ -170,7 +173,7 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection1) {
                                  lanes.at(1)->getContainedLanelets().back()->getId()}};
     auto expEndIds{std::set<size_t>{3470, 3484}};
     EXPECT_EQ(endIds, expEndIds);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3638)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3638)}, globalIdRef,
                                                             roadNetworkScenario);
     EXPECT_EQ(lanes.size(), 2);
     expLaneSizes = {7, 5};
@@ -183,7 +186,7 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection1) {
     endIds = {lanes.at(0)->getContainedLanelets().back()->getId(), lanes.at(1)->getContainedLanelets().back()->getId()};
     expEndIds = {3481};
     EXPECT_EQ(endIds, expEndIds);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3530)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3530)}, globalIdRef,
                                                             roadNetworkScenario);
     EXPECT_EQ(lanes.size(), 2);
     expLaneSizes = {5, 7};
@@ -196,7 +199,7 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection1) {
     endIds = {lanes.at(0)->getContainedLanelets().back()->getId(), lanes.at(1)->getContainedLanelets().back()->getId()};
     expEndIds = {3536, 3481};
     EXPECT_EQ(endIds, expEndIds);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3671)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3671)}, globalIdRef,
                                                             roadNetworkScenario);
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 5);
@@ -206,7 +209,7 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection1) {
         {roadNetworkScenario->findLaneletById(3664), roadNetworkScenario->findLaneletById(3492),
          roadNetworkScenario->findLaneletById(3680), roadNetworkScenario->findLaneletById(3678),
          roadNetworkScenario->findLaneletById(3495), roadNetworkScenario->findLaneletById(3676)},
-        globalID, roadNetworkScenario);
+        globalIdRef, roadNetworkScenario);
     EXPECT_EQ(lanes.size(), 4);
 }
 
@@ -214,8 +217,9 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection2) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4_1_T-1.xml"};
     const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
-    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(43205)}, globalID,
-                                                               roadNetworkScenario)};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(43205)},
+                                                               globalIdRef, roadNetworkScenario)};
     EXPECT_EQ(lanes.size(), 2);
 }
 
@@ -223,8 +227,9 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSeveralComplexIntersections) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
     const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
-    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(82817)}, globalID,
-                                                               roadNetworkScenario)};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(82817)},
+                                                               globalIdRef, roadNetworkScenario)};
     EXPECT_EQ(lanes.size(), 6);
     std::set<size_t> expLaneSizes{5, 9, 10};
     std::set<size_t> laneSizes{lanes.at(0)->getContainedLanelets().size(), lanes.at(1)->getContainedLanelets().size(),
@@ -243,7 +248,7 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSeveralComplexIntersections) {
         lanes.at(4)->getContainedLanelets().back()->getId(), lanes.at(5)->getContainedLanelets().back()->getId()}};
     auto expEndIds{std::set<size_t>{77029, 77074, 77236, 77298, 80980, 80983}};
     EXPECT_EQ(endIds, expEndIds);
-    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(77065)}, globalID,
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(77065)}, globalIdRef,
                                                             roadNetworkScenario);
     EXPECT_EQ(lanes.size(), 12);
     expLaneSizes = {5, 9, 11};

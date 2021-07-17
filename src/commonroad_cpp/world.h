@@ -70,7 +70,7 @@ class World {
 
     void setInitialLanes();
 
-    size_t getIdCounter() const;
+    std::shared_ptr<size_t> getIdCounterRef() const;
 
   private:
     size_t timeStep;

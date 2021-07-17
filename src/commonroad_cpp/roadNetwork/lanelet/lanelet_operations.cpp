@@ -133,8 +133,8 @@ lanelet_operations::combineLaneletAndPredecessorsToLane(const std::shared_ptr<La
 
 std::vector<std::shared_ptr<Lane>>
 lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets,
-                                                size_t &idCounter, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                double fov) {
+                                                std::shared_ptr<size_t> idCounter,
+                                                const std::shared_ptr<RoadNetwork> &roadNetwork, double fov) {
     std::vector<std::shared_ptr<Lane>> lanes;
 
     // create lanes
@@ -154,15 +154,15 @@ lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_pt
                     std::vector<std::shared_ptr<Lanelet>> containedLanelets{lanePre};
                     std::reverse(containedLanelets.begin(), containedLanelets.end());
                     containedLanelets.insert(containedLanelets.end(), laneSuc.begin() + 1, laneSuc.end());
-                    newLanes.push_back(createLaneByContainedLanelets(containedLanelets, ++idCounter));
+                    newLanes.push_back(createLaneByContainedLanelets(containedLanelets, ++*idCounter));
                 }
         else if (!newLaneSuccessorParts.empty())
             for (const auto &laneSuc : newLaneSuccessorParts) {
-                newLanes.push_back(createLaneByContainedLanelets(laneSuc, ++idCounter));
+                newLanes.push_back(createLaneByContainedLanelets(laneSuc, ++*idCounter));
             }
         else
             for (const auto &lanePre : newLanePredecessorParts) {
-                newLanes.push_back(createLaneByContainedLanelets(lanePre, ++idCounter));
+                newLanes.push_back(createLaneByContainedLanelets(lanePre, ++*idCounter));
             }
         newLanes = roadNetwork->addLanes(newLanes, la->getId());
         for (const auto &newLane : newLanes)

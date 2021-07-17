@@ -9,11 +9,10 @@
 
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
 #include <cmath>
-
 #include <commonroad_cpp/geometry/types.h>
 
+using CurvilinearCoordinateSystem = geometry::CurvilinearCoordinateSystem;
 using boost::geometry::get;
 
 std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex> q, double length, double width) {

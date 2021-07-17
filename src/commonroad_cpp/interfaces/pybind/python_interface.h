@@ -115,8 +115,9 @@ PYBIND11_MODULE(cpp_env_model, m) {
           "Robust evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
-    m.def("cut_in_boolean_evaluation", &py_boolean_evaluation<CutInPredicate>, "Boolean evaluation of cut-in predicate",
-          py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
+    //    m.def("cut_in_boolean_evaluation", &py_boolean_evaluation<CutInPredicate>, "Boolean evaluation of cut-in
+    //    predicate",
+    //          py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
     m.def("in_intersection_main_area_boolean_evaluation",
           &py_boolean_single_evaluation<InIntersectionMainAreaPredicate>,

@@ -8,9 +8,9 @@
 #include "succeeds_predicate.h"
 #include "../../geometry/geometric_operations.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lane.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lane.h"
 #include <stdexcept>
 
 bool SucceedsPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -25,19 +25,17 @@ bool SucceedsPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr
            std::abs(geometric_operations::subtractOrientations(
                curPointOrientation, obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation())) <
                parameters.laneMatchingOrientation and
-           inFrontOfPredicate.booleanEvaluation(
-               timeStep, world, obstacleP,
-               obstacleK); // TODO update orientation part since orientation representation is two-folded)
+           inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleP, obstacleK);
 }
 
 Constraint SucceedsPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                    const std::shared_ptr<Obstacle> &obstacleP,
                                                    const std::shared_ptr<Obstacle> &obstacleK) {
-    throw std::runtime_error("StopLineInFrontPredicate does not support constraint evaluation!");
+    throw std::runtime_error("SucceedsPredicate does not support constraint evaluation!");
 }
 
 double SucceedsPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                            const std::shared_ptr<Obstacle> &obstacleP,
                                            const std::shared_ptr<Obstacle> &obstacleK) {
-    throw std::runtime_error("StopLineInFrontPredicate does not support robust evaluation!");
+    throw std::runtime_error("SucceedsPredicate does not support robust evaluation!");
 }

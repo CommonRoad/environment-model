@@ -11,7 +11,10 @@
 
 #include "circle.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include <geometry/curvilinear_coordinate_system.h>
 #include <vector>
+
+using CurvilinearCoordinateSystem = geometry::CurvilinearCoordinateSystem;
 
 namespace geometric_operations {
 
