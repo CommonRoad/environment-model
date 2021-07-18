@@ -27,7 +27,7 @@ Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanel
 const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const { return containedLanelets; }
 
 const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordinateSystem() {
-    if(curvilinearCoordinateSystem == nullptr) {
+    if (curvilinearCoordinateSystem == nullptr) {
         geometry::EigenPolyline reference_path;
         for (auto vert : getCenterVertices())
             reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
