@@ -17,9 +17,24 @@ Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanel
         containedLaneletIds.insert(la->getId());
 }
 
+Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet)
+    : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets) {
+    curvilinearCoordinateSystem = nullptr;
+    for (const auto &la : containedLanelets)
+        containedLaneletIds.insert(la->getId());
+}
+
 const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const { return containedLanelets; }
 
-const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordinateSystem() const {
+const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordinateSystem() {
+    if(curvilinearCoordinateSystem == nullptr) {
+        geometry::EigenPolyline reference_path;
+        for (auto vert : getCenterVertices())
+            reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+
+        geometry::util::resample_polyline(reference_path, 2, reference_path);
+        curvilinearCoordinateSystem = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
+    }
     return curvilinearCoordinateSystem;
 }
 

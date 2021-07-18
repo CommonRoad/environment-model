@@ -4,11 +4,8 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-
-#include <geometry/curvilinear_coordinate_system.h>
-
 #include "lanelet_operations.h"
-
+#include <algorithm>
 #include <utility>
 
 DrivingDirection lanelet_operations::matchStringToDrivingDirection(const std::string &type) {
@@ -208,14 +205,7 @@ lanelet_operations::createLaneByContainedLanelets(const std::vector<std::shared_
     }
 
     Lanelet newLanelet = Lanelet(newId, leftVertices, rightVertices, {}, {}, typeList, userOneWay, userBidirectional);
-    geometry::EigenPolyline reference_path;
-    for (auto vert : centerVertices)
-        reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
-
-    geometry::util::resample_polyline(reference_path, 2, reference_path);
-
-    auto ccs = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
-    std::shared_ptr<Lane> lane = std::make_shared<Lane>(containedLanelets, newLanelet, ccs);
+    std::shared_ptr<Lane> lane = std::make_shared<Lane>(containedLanelets, newLanelet);
 
     return lane;
 }
@@ -254,14 +244,7 @@ std::shared_ptr<Lane> lanelet_operations::mergeLanes(const std::shared_ptr<Lane>
 
     Lanelet newLanelet = Lanelet(newId, leftBorderVertices, rightBorderVertices, predecessorLanelets, successorLanelets,
                                  typeList, userOneWay, userBidirectional);
-    geometry::EigenPolyline reference_path;
-    for (auto vert : centerVertices)
-        reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
-
-    geometry::util::resample_polyline(reference_path, 2, reference_path);
-
-    auto ccs = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
-    std::shared_ptr<Lane> lane = std::make_shared<Lane>(containedLanelets, newLanelet, ccs);
+    std::shared_ptr<Lane> lane = std::make_shared<Lane>(containedLanelets, newLanelet);
 
     return lane;
 }
