@@ -397,6 +397,8 @@ class Obstacle {
 
     std::vector<size_t> getPredictionTimeSteps();
 
+    std::vector<size_t> getTimeSteps();
+
     void computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, std::shared_ptr<size_t> idCounter);
 
   private:
