@@ -129,10 +129,9 @@ std::vector<size_t> Obstacle::getPredictionTimeSteps() {
 
 std::vector<size_t> Obstacle::getTimeSteps() {
     std::vector<size_t> timeSteps{getPredictionTimeSteps()};
-    if(timeSteps.front() != currentState->getTimeStep())
+    if (timeSteps.front() != currentState->getTimeStep())
         timeSteps.insert(timeSteps.begin(), currentState->getTimeStep());
     return timeSteps;
-
 }
 
 void Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork) {
@@ -211,7 +210,7 @@ void Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork)
                 std::distance(avgLaneOrientationChange.begin(),
                               std::min_element(avgLaneOrientationChange.begin(), avgLaneOrientationChange.end()))};
             referenceLane = referenceLaneCandidates.at(static_cast<unsigned long>(laneIdx));
-        } else if(referenceLaneCandidates.size() == 1)
+        } else if (referenceLaneCandidates.size() == 1)
             referenceLane = referenceLaneCandidates.front();
 
         if (referenceLane == nullptr)
