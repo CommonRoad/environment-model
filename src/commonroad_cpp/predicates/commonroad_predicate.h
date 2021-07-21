@@ -103,13 +103,23 @@ class CommonRoadPredicate {
      */
     void setParameters(const PredicateParameters &parameters);
 
+    /**
+     * Getter for statistics of predicate.
+     *
+     * @return Statistics of predicate.
+     */
     const PredicateStatistics &getStatistics() const;
 
+    /**
+     * Getter for timer of predicate.
+     *
+     * @return Timer of predicate.
+     */
     const Timer &getEvaluationTimer() const;
 
   protected:
     PredicateParameters parameters; //**< Struct containing parameters of all predicates. */
-    Timer evaluationTimer;
+    Timer evaluationTimer;          //**< Time measuring object for predicates. */
     PredicateStatistics statistics; //**< Struct storing statistics of a predicate, e.g., average computation
                                     // time,  number of calls, etc. */
 };

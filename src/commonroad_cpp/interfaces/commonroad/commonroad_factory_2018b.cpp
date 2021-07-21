@@ -7,16 +7,13 @@
 
 #include <cstring>
 #include <memory>
-#include <string>
 #include <vector>
 
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "commonroad_cpp/world.h"
 #include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
-#include <commonroad_cpp/obstacle/obstacle_operations.h>
 
 #include "commonroad_factory_2018b.h"
 #include "xml_reader.h"

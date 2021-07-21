@@ -460,18 +460,6 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shar
     }
 }
 
-std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes() {
-    std::set<size_t> ids;
-    std::vector<std::shared_ptr<Lane>> lanes;
-    for (const auto &laneAtTimeStep : occupiedLanes)
-        for (const auto &la : laneAtTimeStep.second)
-            if (ids.find(la->getId()) == ids.end()) {
-                lanes.push_back(la);
-                ids.insert(la->getId());
-            }
-    return lanes;
-}
-
 std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                               size_t timeStep, std::shared_ptr<size_t> idCounter) {
     if (occupiedLanes[timeStep].empty())

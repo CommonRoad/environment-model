@@ -5,8 +5,6 @@
 // Credits: BMW Car@TUM
 //
 
-#include <stdexcept>
-
 #include "state.h"
 #include <stdexcept>
 

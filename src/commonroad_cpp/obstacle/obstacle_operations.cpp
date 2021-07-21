@@ -10,7 +10,7 @@
 std::shared_ptr<Obstacle>
 obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t id) {
     std::shared_ptr<Obstacle> temp{nullptr};
-    for (auto &obs : obstacleList) {
+    for (const auto &obs : obstacleList) {
         if (obs->getId() == id) {
             temp = obs;
             break;

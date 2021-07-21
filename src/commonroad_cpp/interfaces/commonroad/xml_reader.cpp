@@ -29,10 +29,10 @@ std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xm
     if (!doc->load_file(xmlFile.c_str()))
         throw std::runtime_error("Couldn't load XML-File: " + xmlFile);
 
-    const auto version = doc->child("commonRoad").attribute("commonRoadVersion").value();
-    if (!strcmp(version, "2017a") || !strcmp(version, "2018b"))
+    const auto *const version = doc->child("commonRoad").attribute("commonRoadVersion").value();
+    if ((strcmp(version, "2017a") == 0) || (strcmp(version, "2018b") == 0))
         return std::make_unique<CommonRoadFactory2018b>(std::move(doc));
-    else if (!strcmp(version, "2020a"))
+    else if (strcmp(version, "2020a") == 0)
         return std::make_unique<CommonRoadFactory2020a>(std::move(doc));
     else
         throw std::runtime_error("This CommonRoad version is not supported.");

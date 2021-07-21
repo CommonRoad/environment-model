@@ -16,7 +16,7 @@ class State {
   public:
     /**
      * Default Constructor for a state without parameters. Everything state variable is set to
-     * 0.0 and all validities are set to false.
+     * 0.0 and all validity values are set to false.
      */
     State() = default;
 

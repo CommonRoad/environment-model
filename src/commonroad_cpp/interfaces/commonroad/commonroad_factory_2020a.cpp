@@ -77,13 +77,13 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                     continue;
                 }
                 // set lanelet type
-                if (!(strcmp(child.name(), "laneletType")))
+                if ((strcmp(child.name(), "laneletType")) == 0)
                     laneletType.insert(lanelet_operations::matchStringToLaneletType(child.first_child().value()));
                 // set user one way
-                if (!(strcmp(child.name(), "userOneWay")))
+                if ((strcmp(child.name(), "userOneWay")) == 0)
                     userOneWay.insert(obstacle_operations::matchStringToObstacleType(child.first_child().value()));
                 // set user bidirectional
-                if (!(strcmp(child.name(), "userBidirectional")))
+                if ((strcmp(child.name(), "userBidirectional")) == 0)
                     userBidirectional.insert(
                         obstacle_operations::matchStringToObstacleType((child.first_child().value())));
                 // add traffic signs to temporary list
@@ -113,7 +113,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                             newVertice.y = elem.child("y").text().as_double();
                             points.push_back(newVertice);
                         }
-                        if (!(strcmp(elem.name(), "lineMarking")))
+                        if ((strcmp(elem.name(), "lineMarking")) == 0)
                             sl->setLineMarking(
                                 lanelet_operations::matchStringToLineMarking(elem.first_child().value()));
                         if ((strcmp(elem.name(), "trafficSignRef")) == 0) {
@@ -326,7 +326,7 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
                             }
                             inc->setSuccessorsLeft(successorLeft);
                         }
-                        if (!(strcmp(incomingChildElementChild.name(), "isLeftOf")))
+                        if ((strcmp(incomingChildElementChild.name(), "isLeftOf")) == 0)
                             tmpLeftOf.insert_or_assign(inc->getId(),
                                                        incomingChildElementChild.attribute("ref").as_ullong());
                     }
