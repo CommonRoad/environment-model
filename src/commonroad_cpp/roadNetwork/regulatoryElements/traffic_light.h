@@ -40,9 +40,9 @@ class TrafficLight {
     /**
      * Setter for traffic light offset.
      *
-     * @param ofst Time offset.
+     * @param timeStepsOffset Time offset.
      */
-    void setOffset(size_t ofst);
+    void setOffset(size_t timeStepsOffset);
 
     /**
      * Setter for traffic light direction.

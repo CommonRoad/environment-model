@@ -66,10 +66,8 @@ class Lanelet {
      *   Adjacency struct containing a pointer to the adjacent lanelet and information about its driving direction.
      */
     struct adjacent {
-        adjacent() : dir(DrivingDirection::invalid) {}
-
         std::shared_ptr<Lanelet> adj;
-        DrivingDirection dir;
+        DrivingDirection dir{DrivingDirection::invalid};
     };
 
     /**
@@ -378,7 +376,18 @@ class Lanelet {
      */
     void addLaneletType(LaneletType laType);
 
+    /**
+     * Computes list of orientation values along lanelet center line or returns already computed values.
+     *
+     * @return List of orientation values.
+     */
     const std::vector<double> &getOrientation();
+
+    /**
+     * Computes list of path length values along lanelet center line or returns already computed values.
+     *
+     * @return List of path length values.
+     */
     const std::vector<double> &getPathLength();
 
   private:

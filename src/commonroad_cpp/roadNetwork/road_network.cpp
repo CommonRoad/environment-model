@@ -132,7 +132,7 @@ std::vector<std::shared_ptr<Lane>> RoadNetwork::addLanes(const std::vector<std::
     return updatedLanes;
 }
 
-std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesSpannedByLanelet(size_t laneletID) {
+std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesByLanelet(size_t laneletID) {
     std::vector<std::shared_ptr<Lane>> relevantLanes;
     for (const auto &[laneIDs, laneMap] : lanes)
         if (laneIDs.count(laneletID) != 0u and laneMap.first.count(laneletID) != 0u)

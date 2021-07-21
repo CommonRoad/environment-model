@@ -43,6 +43,6 @@ bool atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
  * @param country Country for which ID should be checked.
  * @return Boolean indicating whether traffic sign is a stop sign.
  */
-bool trafficSignReferencesStopSign(const std::shared_ptr<TrafficSign>& sign, SupportedTrafficSignCountry country);
+bool trafficSignReferencesStopSign(const std::shared_ptr<TrafficSign> &sign, SupportedTrafficSignCountry country);
 
 } // namespace regulatory_elements_utils
