@@ -62,7 +62,7 @@ cmake \
 
 Afterward build with make,
 ```bash
-cmake --build . --parallel 4
+cmake --build . --parallel**
 ```
 where you can replace `4` in case more/fewer threads are available for the build.
 

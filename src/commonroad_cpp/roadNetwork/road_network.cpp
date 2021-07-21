@@ -53,10 +53,6 @@ std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() {
     return collectedLanes;
 }
 
-std::map<std::set<size_t>, std::pair<std::set<size_t>, std::shared_ptr<Lane>>> &RoadNetwork::getLaneMapping() {
-    return lanes;
-}
-
 const std::vector<std::shared_ptr<Intersection>> &RoadNetwork::getIntersections() const { return intersections; }
 
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
@@ -82,15 +78,6 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
     return occupiedLanelets;
 }
 
-std::shared_ptr<Lane> RoadNetwork::findLaneByShape(const std::vector<std::shared_ptr<Lane>> &possibleLanes,
-                                                   const polygon_type &polygonShape) {
-    for (const auto &possibleLane : possibleLanes)
-        if (possibleLane->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED))
-            return possibleLane;
-    return {}; // TODO think about better solution
-    // throw std::domain_error("shape does not occupy any of the provided lanes");
-}
-
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double xPos, double yPos) {
     std::vector<Lanelet> lanelet;
     polygon_type polygonPos;
@@ -107,15 +94,6 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
                                 " does not exist in road network!");
 
     return *it;
-}
-
-std::shared_ptr<Incoming> RoadNetwork::incomingOfLanelet(const std::shared_ptr<Lanelet> &lanelet) {
-    for (const auto &inter : intersections)
-        for (const auto &inco : inter->getIncomings())
-            if (std::any_of(inco->getIncomingLanelets().begin(), inco->getIncomingLanelets().end(),
-                            [lanelet](const std::shared_ptr<Lanelet> &la) { return la->getId() == lanelet->getId(); }))
-                return inco;
-    return nullptr;
 }
 
 SupportedTrafficSignCountry RoadNetwork::getCountry() const { return country; }

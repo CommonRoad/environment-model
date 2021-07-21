@@ -68,13 +68,20 @@ class World {
      */
     [[nodiscard]] std::shared_ptr<Obstacle> findObstacle(size_t obstacleId) const;
 
+    /**
+     * Computes for all ego vehicles occupied lanes per time step and sets reference lane.
+     */
     void setInitialLanes();
 
+    /**
+     * Creates pointer to ID counter so that it can be increased by other classes.
+     * @return Pointer to ID counter.
+     */
     std::shared_ptr<size_t> getIdCounterRef() const;
 
   private:
-    size_t timeStep;
-    size_t idCounter;
+    size_t timeStep;                                    //**< reference time step where world was created. */
+    size_t idCounter;                                   //**< counter to ensure unique IDs among all objects. */
     std::shared_ptr<RoadNetwork> roadNetwork;           //**< road network containing lanelets, traffic signs, etc. */
     std::vector<std::shared_ptr<Obstacle>> egoVehicles; //**< pointers to ego vehicle objects */
     std::vector<std::shared_ptr<Obstacle>> obstacles;   //**< pointers to obstacles*
