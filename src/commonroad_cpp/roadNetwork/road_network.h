@@ -149,7 +149,7 @@ class RoadNetwork {
     std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
     std::map<std::set<size_t>, std::pair<std::set<size_t>, std::shared_ptr<Lane>>> lanes;
     //**< map of lanes contained in road network with the following structure: contained lanelet IDs, <base lanelets
-    //used for creation of lane, lane object> */
+    // used for creation of lane, lane object> */
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
 
     //**< Struct for private fields including R-Tree */
