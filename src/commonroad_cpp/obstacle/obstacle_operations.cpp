@@ -1,12 +1,16 @@
 //
-// Created by Sebastian Maierhofer on 01.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "obstacle_operations.h"
 
-std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t id) {
+std::shared_ptr<Obstacle>
+obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t id) {
     std::shared_ptr<Obstacle> temp{nullptr};
-    for (auto &obs : obstacleList) {
+    for (const auto &obs : obstacleList) {
         if (obs->getId() == id) {
             temp = obs;
             break;
@@ -15,7 +19,7 @@ std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obst
     return temp;
 }
 
-ObstacleType matchStringToObstacleType(std::string type) {
+ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &type) {
     if (type == "car")
         return ObstacleType::car;
     else if (type == "truck")

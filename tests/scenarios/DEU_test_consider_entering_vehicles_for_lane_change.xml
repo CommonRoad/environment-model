@@ -1866,7 +1866,8 @@
             <lineMarking>solid</lineMarking>
         </rightBound>
         <predecessor ref="8"/>
-        <adjacentLeft ref="20" drivingDir="same"/>
+        <successor ref="20"/>
+        <adjacentLeft ref="19" drivingDir="same"/>
         <laneletType>interstate</laneletType>
         <laneletType>accessRamp</laneletType>
         <userOneWay>vehicle</userOneWay>
@@ -3511,7 +3512,7 @@
         <predecessor ref="18"/>
         <successor ref="20"/>
         <adjacentLeft ref="29" drivingDir="same"/>
-        <adjacentRight ref="8" drivingDir="same"/>
+        <adjacentRight ref="9" drivingDir="same"/>
         <laneletType>interstate</laneletType>
         <laneletType>mainCarriageWay</laneletType>
         <userOneWay>vehicle</userOneWay>
@@ -3691,6 +3692,7 @@
             </point>
             <lineMarking>solid</lineMarking>
         </rightBound>
+        <predecessor ref="9"/>
         <predecessor ref="19"/>
         <adjacentLeft ref="30" drivingDir="same"/>
         <laneletType>interstate</laneletType>

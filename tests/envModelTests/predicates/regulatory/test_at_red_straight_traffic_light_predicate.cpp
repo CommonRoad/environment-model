@@ -1,5 +1,5 @@
 //
-// Created by Sebastian Maierhofer on 12.06.21.
+// Created by Sebastian Maierhofer.
 // Technical University of Munich - Cyber-Physical Systems Group
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
@@ -11,15 +11,15 @@ void AtRedStraightTrafficLightPredicateTest::SetUp() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
     const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(pathToTestFile);
 
-    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 40.0, 3.0, 0, 0, -M_PI, 0, 10.0, 0);
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 40.0, 3.0, 0, 0, M_PI, 0, 10.0, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 10.0, 0.0, 0, 0, 0, 0, 10, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 30.0, 3.0, 0, 0, -M_PI, 0, 20, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 30.0, 3.0, 0, 0, M_PI, 0, 20, 0);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 20.0, 0.0, 0, 0, 0, 0, 20, 0);
 
-    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 25.0, 3.0, 0, 0, -M_PI, 0, 25.0, 0);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 25.0, 3.0, 0, 0, M_PI, 0, 25.0, 0);
 
-    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 10.0, 3.0, 0, 0, -M_PI, 0, 40.0, 0);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 10.0, 3.0, 0, 0, M_PI, 0, 40.0, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),

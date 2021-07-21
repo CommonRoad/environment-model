@@ -10,23 +10,23 @@
 #include "commonroad_cpp/obstacle/state.h"
 
 void SlowLeadingVehiclePredicateTest::SetUp() {
-    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 2, 0, 0, 0, 0, 0);
-    std::shared_ptr<State> stateZeroObstacleFive = std::make_shared<State>(1, -10, 6, 60, 0, 0, 0, -10, 0);
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 2, 0, 0, 0, 10, 0);
+    std::shared_ptr<State> stateZeroObstacleFive = std::make_shared<State>(1, 0, 6, 60, 0, 0, 0, 0, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 2, 2, 2, 0, 0, 0, 2, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 12, 2, 50, 0, 0, 0, 12, 0);
-    std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 22, 2, 36, 0, 0, 0, 22, 0);
-    std::shared_ptr<State> stateOneObstacleFive = std::make_shared<State>(1, 50, 9.5, 0, 0, 0, 0, 50, 1.5);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 12, 2, 2, 0, 0, 0, 12, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 22, 2, 50, 0, 0, 0, 22, 0);
+    std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 32, 2, 36, 0, 0, 0, 32, 0);
+    std::shared_ptr<State> stateOneObstacleFive = std::make_shared<State>(1, 60, 9.5, 0, 0, 0, 0, 60, 1.5);
 
-    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 4, 2, 2, 0, 0, 0, 4, 0);
-    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 62, 2, 12, 0, 0, 0, 62, 0);
-    std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 58, 2, 36, 0, 0, 0, 58, 0);
-    std::shared_ptr<State> stateTwoObstacleFour = std::make_shared<State>(2, 34, 2, 50, 0, 0, 0, 34, 0);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 14, 2, 2, 0, 0, 0, 14, 0);
+    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 72, 2, 12, 0, 0, 0, 72, 0);
+    std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 68, 2, 36, 0, 0, 0, 68, 0);
+    std::shared_ptr<State> stateTwoObstacleFour = std::make_shared<State>(2, 44, 2, 50, 0, 0, 0, 44, 0);
 
-    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 6, 2, 2, 0, 0, 0, 6, 0);
-    std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 74, 2, 2, 0, 0, 0, 74, 0);
-    std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 88, 2, 36, 0, 0, 0, 88, 0);
-    std::shared_ptr<State> stateThreeObstacleFour = std::make_shared<State>(3, 84, 2, 0, 0, 0, 0, 84, 0);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 16, 2, 2, 0, 0, 0, 16, 0);
+    std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 84, 2, 2, 0, 0, 0, 84, 0);
+    std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 98, 2, 36, 0, 0, 0, 98, 0);
+    std::shared_ptr<State> stateThreeObstacleFour = std::make_shared<State>(3, 94, 2, 0, 0, 0, 0, 94, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
@@ -54,13 +54,13 @@ void SlowLeadingVehiclePredicateTest::SetUp() {
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionEgoVehicle, 5, 2));
-    obstacleTwo = std::make_shared<Obstacle>(Obstacle(1, false, stateOneObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
+    obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, false, stateOneObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionObstacleTwo, 5, 2));
-    obstacleThree = std::make_shared<Obstacle>(Obstacle(1, false, stateOneObstacleThree, ObstacleType::car, 50, 10, 3,
+    obstacleThree = std::make_shared<Obstacle>(Obstacle(3, false, stateOneObstacleThree, ObstacleType::car, 50, 10, 3,
                                                         -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
-    obstacleFour = std::make_shared<Obstacle>(Obstacle(1, false, stateTwoObstacleFour, ObstacleType::car, 50, 10, 3,
+    obstacleFour = std::make_shared<Obstacle>(Obstacle(4, false, stateTwoObstacleFour, ObstacleType::car, 50, 10, 3,
                                                        -10, 0.3, trajectoryPredictionObstacleFour, 5, 2));
-    obstacleFive = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleFive, ObstacleType::car, 50, 10, 3,
+    obstacleFive = std::make_shared<Obstacle>(Obstacle(5, false, stateZeroObstacleFive, ObstacleType::car, 50, 10, 3,
                                                        -10, 0.3, trajectoryPredictionObstacleFive, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};

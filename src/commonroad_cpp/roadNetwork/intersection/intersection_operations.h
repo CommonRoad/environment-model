@@ -18,6 +18,6 @@ namespace intersection_operations {
  * @param roadNetwork Pointer to road network.
  * @return Boolean indicating whether incoming is occupied by obstacle.
  */
-bool onIncoming(size_t timeStep, const std::shared_ptr<Obstacle> &obs, std::shared_ptr<RoadNetwork> roadNetwork);
+bool onIncoming(size_t timeStep, const std::shared_ptr<Obstacle> &obs, const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 } // namespace intersection_operations

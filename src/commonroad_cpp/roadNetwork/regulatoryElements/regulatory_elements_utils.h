@@ -36,6 +36,13 @@ std::set<std::shared_ptr<TrafficLight>> activeTrafficLights(size_t timeStep, con
 bool atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
                        const std::shared_ptr<RoadNetwork> &roadNetwork, TurningDirections turnDir);
 
-bool trafficSignReferencesStopSign(std::shared_ptr<TrafficSign> sign, SupportedTrafficSignCountry country);
+/**
+ * Evaluates whether traffic sign is a stop sign.
+ *
+ * @param sign Traffic sign which should be evaluated.
+ * @param country Country for which ID should be checked.
+ * @return Boolean indicating whether traffic sign is a stop sign.
+ */
+bool trafficSignReferencesStopSign(const std::shared_ptr<TrafficSign> &sign, SupportedTrafficSignCountry country);
 
 } // namespace regulatory_elements_utils

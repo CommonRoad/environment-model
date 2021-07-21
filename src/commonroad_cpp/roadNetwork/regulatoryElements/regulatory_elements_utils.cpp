@@ -65,10 +65,10 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
     return false;
 }
 
-bool regulatory_elements_utils::trafficSignReferencesStopSign(std::shared_ptr<TrafficSign> sign,
+bool regulatory_elements_utils::trafficSignReferencesStopSign(const std::shared_ptr<TrafficSign> &sign,
                                                               SupportedTrafficSignCountry country) {
     const auto signId{TrafficSignLookupTableByCountry.at(country)->at(TrafficSignTypes::STOP)};
     auto elements{sign->getTrafficSignElements()};
     return std::any_of(elements.begin(), elements.end(),
-                       [signId](std::shared_ptr<TrafficSignElement> elem) { return elem->getId() == signId; });
+                       [signId](const std::shared_ptr<TrafficSignElement> &elem) { return elem->getId() == signId; });
 }

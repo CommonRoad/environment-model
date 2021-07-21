@@ -1,15 +1,21 @@
+//
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
+//
+
 #include "geometric_operations.h"
 
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
 #include <cmath>
-
 #include <commonroad_cpp/geometry/types.h>
 
+using CurvilinearCoordinateSystem = geometry::CurvilinearCoordinateSystem;
 using boost::geometry::get;
 
-std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, double width) {
+std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex> q, double length, double width) {
     std::vector<vertex> p;
 
     // check for special cases
@@ -91,7 +97,7 @@ std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, do
             p_RD[i].x += 0.5 * length;
             p_RD[i].y -= 0.5 * width;
         }
-        int idx = 0;
+        size_t idx = 0;
         for (size_t i = 0; i < q.size(); i++) {
             p_all[idx] = p_LU[i];
             idx++;
@@ -131,8 +137,8 @@ std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, do
     return p;
 }
 
-std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
-                                               double refOrientation) {
+std::vector<vertex> geometric_operations::rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
+                                                                     double refOrientation) {
     double cosine = cos(refOrientation);
     double sinus = sin(refOrientation);
     std::vector<vertex> transVertices(vertices.size());
@@ -143,10 +149,86 @@ std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, ve
     }
 
     // translation
-    for (auto &transVertice : transVertices) {
-        transVertice.x = transVertice.x + refPosition.x;
-        transVertice.y = transVertice.y + refPosition.y;
+    for (auto &transVertex : transVertices) {
+        transVertex.x = transVertex.x + refPosition.x;
+        transVertex.y = transVertex.y + refPosition.y;
     }
 
     return transVertices;
+}
+
+std::vector<double> geometric_operations::computeOrientationFromPolyline(std::vector<vertex> polyline) {
+    if (polyline.size() < 2)
+        throw std::logic_error("geometric_operations computeOrientationFromPolyline: "
+                               "Cannot create orientation from polyline of length < 2");
+    std::vector<double> orientation;
+    orientation.reserve(polyline.size());
+
+    for (size_t idx{0}; idx < polyline.size() - 1; ++idx)
+        orientation.push_back(atan2(polyline[idx + 1].y - polyline[idx].y, polyline[idx + 1].x - polyline[idx].x));
+
+    for (size_t idx{polyline.size() - 1}; idx < polyline.size(); ++idx)
+        orientation.push_back(atan2(polyline[idx].y - polyline[idx - 1].y, polyline[idx].x - polyline[idx - 1].x));
+
+    return orientation;
+}
+
+std::vector<double> geometric_operations::computePathLengthFromPolyline(const std::vector<vertex> &polyline) {
+    std::vector<double> distance(polyline.size(), 0.0);
+    for (size_t idx{1}; idx < polyline.size(); ++idx) {
+        double x{polyline[idx].x - polyline[idx - 1].x};
+        double y{polyline[idx].y - polyline[idx - 1].y};
+        distance[idx] = distance[idx - 1] + std::sqrt((x * x + y * y));
+    }
+    return distance;
+}
+
+double interpolate(double x, const std::vector<double> &polyline1, const std::vector<double> &polyline2) {
+    // taken from https://bulldozer00.blog/2016/05/10/linear-interpolation-in-c/
+
+    // Ensure that no 2 adjacent x values are equal,
+    // lest we try to divide by zero when we interpolate.
+    const double EPSILON{1.0E-8};
+    for (size_t i{1}; i < polyline1.size(); ++i) {
+        double deltaX{std::abs(polyline1[i] - polyline1[i - 1])};
+        if (deltaX < EPSILON) {
+            std::string err{"Potential Divide By Zero: Points " + std::to_string(i - 1) + " And " + std::to_string(i) +
+                            " Are Too Close In Value"};
+            throw std::range_error(err);
+        }
+    }
+
+    // Define a lambda that returns true if the x value
+    // of a point pair is < the caller's x value
+    auto lessThan = [](const double value, double x) { return value < x; };
+
+    // Find the first table entry whose value is >= caller's x value
+    auto index = static_cast<size_t>(
+        std::distance(polyline1.begin(), std::lower_bound(polyline1.begin(), polyline1.end(), x, lessThan)));
+
+    // If the caller's X value is greater than the largest
+    // X value in the table, we can't interpolate.
+    if (index == polyline1.size() - 1)
+        return (polyline2[polyline2.size() - 1]);
+
+    // If the caller's X value is less than the smallest X value in the table,
+    // we can't interpolate.
+    if (index == 0 and x <= polyline1.front()) {
+        return polyline2.front();
+    }
+
+    // We can interpolate!
+    double upperX{polyline1[index]};
+    double upperY{polyline2[index]};
+    double lowerX{polyline1[index - 1]};
+    double lowerY{polyline2[index - 1]};
+
+    double deltaY{upperY - lowerY};
+    double deltaX{upperX - lowerX};
+
+    return lowerY + ((x - lowerX) / deltaX) * deltaY;
+}
+
+double geometric_operations::subtractOrientations(double lhs, double rhs) {
+    return std::fmod((lhs - rhs) + M_PI * 3, 2 * M_PI) - M_PI;
 }

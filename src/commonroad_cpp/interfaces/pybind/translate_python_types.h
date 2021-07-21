@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 23.02.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TRANSLATE_PYTHON_TYPES_H
-#define ENV_MODEL_TRANSLATE_PYTHON_TYPES_H
+#pragma once
 
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
@@ -75,5 +77,3 @@ std::shared_ptr<StopLine> convertStopLine(const py::handle &py_stopLine,
                                           const std::vector<std::shared_ptr<TrafficLight>> &trafficLights);
 
 } // namespace TranslatePythonTypes
-
-#endif // ENV_MODEL_TRANSLATE_PYTHON_TYPES_H

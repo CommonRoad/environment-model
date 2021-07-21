@@ -1,11 +1,12 @@
 //
-// Created by Sebastian Maierhofer on 23.05.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TESTS_ENVMODELTESTS_PREDICATES_POSITION_TEST_IN_SAME_LANE_PREDICATE_H_
-#define ENV_MODEL_TESTS_ENVMODELTESTS_PREDICATES_POSITION_TEST_IN_SAME_LANE_PREDICATE_H_
+#pragma once
 
-#include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
@@ -23,5 +24,3 @@ class TestInSameLanePredicate : public testing::Test {
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TESTS_ENVMODELTESTS_PREDICATES_POSITION_TEST_IN_SAME_LANE_PREDICATE_H_

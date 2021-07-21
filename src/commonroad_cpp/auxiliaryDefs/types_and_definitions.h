@@ -9,6 +9,8 @@
 
 const double dt{0.1};
 
+const double fieldOfView{250.0};
+
 const double reactionTimeObstacles = 0.3;
 
 enum class ObstacleType { car, truck, pedestrian, bus, unknown, vehicle };

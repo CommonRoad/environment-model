@@ -1,9 +1,10 @@
 //
-// Created by sebastian on 07.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
-
-#ifndef ENV_MODEL_TEST_LANE_H
-#define ENV_MODEL_TEST_LANE_H
+#pragma once
 
 #include <memory>
 
@@ -21,5 +22,3 @@ class LaneTest : public LaneTestInitialization, public testing::Test {
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_LANE_H

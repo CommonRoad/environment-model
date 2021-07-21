@@ -5,12 +5,13 @@
 // Credits: BMW Car@TUM
 //
 
-#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-#include <commonroad_cpp/roadNetwork/road_network.h>
-
+#include "test_road_network.h"
 #include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
-#include "test_road_network.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 void RoadNetworkTestInitialization::setUpRoadNetwork() {
     std::vector<std::shared_ptr<Lanelet>> lanelets{laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive};
@@ -26,7 +27,6 @@ void RoadNetworkTest::SetUp() {
 
 TEST_F(RoadNetworkTest, InitializationComplete) {
     EXPECT_EQ(roadNetwork->getLaneletNetwork().size(), 5);
-    EXPECT_EQ(roadNetwork->getLanes().size(), 4);
     EXPECT_EQ(roadNetwork->getLaneletNetwork().at(0)->getId(), 1);
 }
 
@@ -46,45 +46,33 @@ TEST_F(RoadNetworkTest, FindLaneletById) {
     EXPECT_THROW(roadNetwork->findLaneletById(123)->getId(), std::domain_error);
 }
 
-TEST_F(RoadNetworkTest, FindLaneByShape) {
-    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonOne)->getId(), 16);
-    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonOne)->getId(), 16);
-    EXPECT_EQ(RoadNetwork::findLaneByShape(roadNetwork->getLanes(), polygonTwo)->getId(), 16);
-}
+TEST_F(RoadNetworkTest, AddLanes) {
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
+    const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
+    size_t globalID{123456789};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, globalIdRef,
+                                                               roadNetworkScenario)};
+    auto updatedLanes{roadNetworkScenario->addLanes(lanes, 10)};
+    EXPECT_EQ(lanes.size(), 3);
+    EXPECT_EQ(lanes.size(), updatedLanes.size());
+    EXPECT_EQ(lanes.at(0)->getId(), 123456789 + 1);
+    EXPECT_EQ(lanes.at(1)->getId(), 123456789 + 2);
+    EXPECT_EQ(lanes.at(2)->getId(), 123456789 + 3);
 
-TEST_F(RoadNetworkTest, CreateLanesInterstate) {
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/DEU_TestOvertakingExitRamp-1_1_T-1.xml"};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
-    EXPECT_EQ(roadNetworkScenarioOne->getLanes().size(), 3);
-    EXPECT_EQ(roadNetworkScenarioOne->getLanes().at(0)->getContainedLanelets().size(), 9);
-    EXPECT_EQ(roadNetworkScenarioOne->getLanes().at(1)->getContainedLanelets().size(), 10);
-    EXPECT_EQ(roadNetworkScenarioOne->getLanes().at(2)->getContainedLanelets().size(), 10);
-
-    std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() + "/DEU_test_safe_distance.xml"};
-    const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
-    EXPECT_EQ(roadNetworkScenarioTwo->getLanes().size(), 5);
-
-    std::string pathToTestFileThree{TestUtils::getTestScenarioDirectory() + "/DEU_Muc-2_1_T-1.xml"};
-    const auto &[obstaclesScenarioThree, roadNetworkScenarioThree] =
-        CommandLine::getDataFromCommonRoad(pathToTestFileThree);
-    EXPECT_EQ(roadNetworkScenarioThree->getLanes().size(), 2);
-
-    std::string pathToTestFileFour{TestUtils::getTestScenarioDirectory() +
-                                   "/DEU_test_consider_entering_vehicles_for_lane_change.xml"};
-    const auto &[obstaclesScenarioFour, roadNetworkScenarioFour] =
-        CommandLine::getDataFromCommonRoad(pathToTestFileFour);
-    EXPECT_EQ(roadNetworkScenarioFour->getLanes().size(), 3);
-    EXPECT_EQ(roadNetworkScenarioFour->getLanes().at(0)->getContainedLanelets().size(), 9);
-    EXPECT_EQ(roadNetworkScenarioFour->getLanes().at(1)->getContainedLanelets().size(), 10);
-    EXPECT_EQ(roadNetworkScenarioFour->getLanes().at(2)->getContainedLanelets().size(), 10);
-}
-
-TEST_F(RoadNetworkTest, CreateLanesUrban) {
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
-    EXPECT_EQ(roadNetworkScenarioOne->getLanes().size(), 37);
-
-    std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
-    const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
-    EXPECT_EQ(roadNetworkScenarioTwo->getLanes().size(), 16);
+    lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, globalIdRef,
+                                                            roadNetworkScenario);
+    Lanelet la{100000, lanes.at(0)->getLeftBorderVertices(), lanes.at(0)->getRightBorderVertices(),
+               lanes.at(0)->getLaneletTypes()};
+    geometry::EigenPolyline reference_path;
+    for (auto vert : la.getCenterVertices())
+        reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+    geometry::util::resample_polyline(reference_path, 2, reference_path);
+    auto ccs{std::make_shared<CurvilinearCoordinateSystem>(reference_path)};
+    auto newLane{std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), la, ccs)};
+    std::vector<std::shared_ptr<Lane>> testLanes{newLane};
+    updatedLanes = roadNetworkScenario->addLanes(testLanes, 4);
+    EXPECT_EQ(lanes.size(), 1);
+    EXPECT_EQ(lanes.size(), updatedLanes.size());
+    EXPECT_NE(testLanes.at(0)->getId(), updatedLanes.at(0)->getId());
 }

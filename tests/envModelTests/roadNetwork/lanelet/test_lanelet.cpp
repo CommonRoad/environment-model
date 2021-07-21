@@ -1,5 +1,8 @@
 //
-// Created by sebastian on 03.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include "test_lanelet.h"
@@ -45,11 +48,11 @@ void LaneletTestInitialization::setUpLanelets() {
     rightBorderLaneletTwo =
         std::vector<vertex>{vertex{6, 0}, vertex{7, 0}, vertex{8, 0}, vertex{9, 0.0}, vertex{10, 0.0}, vertex{11, 0.0}};
     laneletTwo->setId(idLaneletTwo);
-    laneletTwo->setLaneletType(laneletTypeLaneletTwo);
+    laneletTwo->setLaneletTypes(laneletTypeLaneletTwo);
     laneletTwo->setRightBorderVertices(rightBorderLaneletTwo);
     laneletTwo->setLeftBorderVertices(leftBorderLaneletTwo);
-    laneletTwo->setUserBidirectional(userBidirectionalLaneletTwo);
-    laneletTwo->setUserOneWay(userOneWayLaneletTwo);
+    laneletTwo->setUsersBidirectional(userBidirectionalLaneletTwo);
+    laneletTwo->setUsersOneWay(userOneWayLaneletTwo);
     laneletTwo->createCenterVertices();
     laneletTwo->constructOuterPolygon();
     laneletTwo->addLeftVertex(vertex{12, 2.0});
@@ -71,7 +74,7 @@ void LaneletTestInitialization::setUpLanelets() {
                                                   vertex{-2, 0.0}, vertex{-1, 0.0}, vertex{0, 0.0}};
     Lanelet laneletThreeTmp = Lanelet();
     laneletThreeTmp.setId(idLaneletThree);
-    laneletThreeTmp.setLaneletType(laneletTypeLaneletThree);
+    laneletThreeTmp.setLaneletTypes(laneletTypeLaneletThree);
     laneletThreeTmp.setLeftBorderVertices(leftBorderLaneletThree);
     laneletThreeTmp.setRightBorderVertices(rightBorderLaneletThree);
     laneletThreeTmp.createCenterVertices();
@@ -161,9 +164,9 @@ TEST_F(LaneletTest, InitializationComplete) {
     compareVerticesVector(laneletOne->getLeftBorderVertices(), leftBorderLaneletOne);
     compareVerticesVector(laneletOne->getRightBorderVertices(), rightBorderLaneletOne);
     EXPECT_EQ(laneletOne->getId(), idLaneletOne);
-    EXPECT_EQ(laneletOne->getLaneletType(), laneletTypeLaneletOne);
-    EXPECT_EQ(laneletOne->getUserOneWay(), userOneWayLaneletOne);
-    EXPECT_EQ(laneletOne->getUserBidirectional(), userBidirectionalLaneletOne);
+    EXPECT_EQ(laneletOne->getLaneletTypes(), laneletTypeLaneletOne);
+    EXPECT_EQ(laneletOne->getUsersOneWay(), userOneWayLaneletOne);
+    EXPECT_EQ(laneletOne->getUsersBidirectional(), userBidirectionalLaneletOne);
     EXPECT_EQ(laneletOne->getSuccessors()[0]->getId(), 2);
     EXPECT_EQ(laneletOne->getSuccessors()[1]->getId(), 6);
     EXPECT_EQ(laneletOne->getPredecessors()[0]->getId(), 3);
@@ -178,9 +181,9 @@ TEST_F(LaneletTest, InitializationComplete) {
 TEST_F(LaneletTest, InitializationManual) {
     // front lanelet
     EXPECT_EQ(laneletTwo->getId(), idLaneletTwo);
-    EXPECT_EQ(laneletTwo->getLaneletType(), laneletTypeLaneletTwo);
-    EXPECT_EQ(laneletTwo->getUserOneWay(), userOneWayLaneletTwo);
-    EXPECT_EQ(laneletTwo->getUserBidirectional(), userBidirectionalLaneletTwo);
+    EXPECT_EQ(laneletTwo->getLaneletTypes(), laneletTypeLaneletTwo);
+    EXPECT_EQ(laneletTwo->getUsersOneWay(), userOneWayLaneletTwo);
+    EXPECT_EQ(laneletTwo->getUsersBidirectional(), userBidirectionalLaneletTwo);
     compareVerticesVector(laneletTwo->getCenterVertices(), centerVerticesLaneletTwo);
     compareVerticesVector(laneletTwo->getLeftBorderVertices(), leftBorderLaneletTwo);
     compareVerticesVector(laneletTwo->getRightBorderVertices(), rightBorderLaneletTwo);
@@ -189,7 +192,7 @@ TEST_F(LaneletTest, InitializationManual) {
 TEST_F(LaneletTest, InitializationEnd) {
     // rear lanelet
     EXPECT_EQ(laneletThree->getId(), idLaneletThree);
-    EXPECT_EQ(laneletThree->getLaneletType(), laneletTypeLaneletThree);
+    EXPECT_EQ(laneletThree->getLaneletTypes(), laneletTypeLaneletThree);
     compareVerticesVector(laneletThree->getCenterVertices(), centerVerticesLaneletThree);
     compareVerticesVector(laneletThree->getLeftBorderVertices(), leftBorderLaneletThree);
     compareVerticesVector(laneletThree->getRightBorderVertices(), rightBorderLaneletThree);

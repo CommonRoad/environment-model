@@ -51,7 +51,7 @@ class TestCutInPredicates(unittest.TestCase):
                                          State(time_step=1, position=np.array([0, 12]), velocity=10, acceleration=0,
                                                orientation=0)]), Rectangle(5, 2)))
 
-        cpp_env_model.register_scenario(123, 0, "DEU", self.lanelet_network, [obstacle_2, obstacle_3], [obstacle_1])
+        cpp_env_model.register_scenario(123, 0, "DEU", self.lanelet_network, [obstacle_1], [obstacle_2, obstacle_3])
 
         # Monitor-Mode
         sol_monitor_mode_1 = cpp_env_model.cut_in_boolean_evaluation(123, 0, 1, 2)

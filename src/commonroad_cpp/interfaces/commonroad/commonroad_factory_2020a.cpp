@@ -77,14 +77,15 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                     continue;
                 }
                 // set lanelet type
-                if (!(strcmp(child.name(), "laneletType")))
-                    laneletType.insert(matchStringToLaneletType(child.first_child().value()));
+                if ((strcmp(child.name(), "laneletType")) == 0)
+                    laneletType.insert(lanelet_operations::matchStringToLaneletType(child.first_child().value()));
                 // set user one way
-                if (!(strcmp(child.name(), "userOneWay")))
-                    userOneWay.insert(matchStringToObstacleType(child.first_child().value()));
+                if ((strcmp(child.name(), "userOneWay")) == 0)
+                    userOneWay.insert(obstacle_operations::matchStringToObstacleType(child.first_child().value()));
                 // set user bidirectional
-                if (!(strcmp(child.name(), "userBidirectional")))
-                    userBidirectional.insert(matchStringToObstacleType((child.first_child().value())));
+                if ((strcmp(child.name(), "userBidirectional")) == 0)
+                    userBidirectional.insert(
+                        obstacle_operations::matchStringToObstacleType((child.first_child().value())));
                 // add traffic signs to temporary list
                 if ((strcmp(child.name(), "trafficSignRef")) == 0) {
                     for (const auto &sign : trafficSigns) {
@@ -112,8 +113,9 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                             newVertice.y = elem.child("y").text().as_double();
                             points.push_back(newVertice);
                         }
-                        if (!(strcmp(elem.name(), "lineMarking")))
-                            sl->setLineMarking(matchStringToLineMarking(elem.first_child().value()));
+                        if ((strcmp(elem.name(), "lineMarking")) == 0)
+                            sl->setLineMarking(
+                                lanelet_operations::matchStringToLineMarking(elem.first_child().value()));
                         if ((strcmp(elem.name(), "trafficSignRef")) == 0) {
                             for (const auto &sign : trafficSigns) {
                                 if (child.attribute("ref").as_ullong() == sign->getId()) {
@@ -135,9 +137,9 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
             }
             tempLaneletContainer[arrayIndex]->createCenterVertices();
             tempLaneletContainer[arrayIndex]->constructOuterPolygon();
-            tempLaneletContainer[arrayIndex]->setLaneletType(laneletType);
-            tempLaneletContainer[arrayIndex]->setUserOneWay(userOneWay);
-            tempLaneletContainer[arrayIndex]->setUserBidirectional(userBidirectional);
+            tempLaneletContainer[arrayIndex]->setLaneletTypes(laneletType);
+            tempLaneletContainer[arrayIndex]->setUsersOneWay(userOneWay);
+            tempLaneletContainer[arrayIndex]->setUsersBidirectional(userBidirectional);
             arrayIndex++;
         }
     }
@@ -161,7 +163,7 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
         if ((strcmp(roadElements.name(), "trafficSign")) == 0) {
             std::shared_ptr<TrafficSign> tempTrafficSign = std::make_shared<TrafficSign>();
             tempLaneletContainer.emplace_back(tempTrafficSign);
-            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
+            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_ullong());
             for (pugi::xml_node trafficSignChildElement = roadElements.first_child();
                  trafficSignChildElement != nullptr; trafficSignChildElement = trafficSignChildElement.next_sibling()) {
                 // get traffic sign elements
@@ -324,7 +326,7 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
                             }
                             inc->setSuccessorsLeft(successorLeft);
                         }
-                        if (!(strcmp(incomingChildElementChild.name(), "isLeftOf")))
+                        if ((strcmp(incomingChildElementChild.name(), "isLeftOf")) == 0)
                             tmpLeftOf.insert_or_assign(inc->getId(),
                                                        incomingChildElementChild.attribute("ref").as_ullong());
                     }

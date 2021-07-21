@@ -40,8 +40,6 @@ void StopLineInFrontPredicateTest::SetUp() {
                                                       0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
-    obstacleOne->setOwnLane(roadNetwork->getLanes(), 0);
-    obstacleTwo->setOwnLane(roadNetwork->getLanes(), 0);
 
     world = std::make_shared<World>(
         World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}));

@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 06.04.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_WORLD_H
-#define ENV_MODEL_WORLD_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -21,15 +23,15 @@ class World {
      * @param egoVehicles List of ego vehicles.
      * @param obstacles List of obstacles.
      */
-    World(int timeStep, std::shared_ptr<RoadNetwork> roadNetwork, std::vector<std::shared_ptr<Obstacle>> egoVehicles,
-          std::vector<std::shared_ptr<Obstacle>> obstacles);
+    World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+          std::vector<std::shared_ptr<Obstacle>> egoVehicles, std::vector<std::shared_ptr<Obstacle>> obstacles);
 
     /**
      * Getter for world time step.
      *
      * @return Time step of world.
      */
-    [[nodiscard]] int getTimeStep() const;
+    [[nodiscard]] size_t getTimeStep() const;
 
     /**
      * Getter for pointer to road network object.
@@ -66,11 +68,21 @@ class World {
      */
     [[nodiscard]] std::shared_ptr<Obstacle> findObstacle(size_t obstacleId) const;
 
+    /**
+     * Computes for all ego vehicles occupied lanes per time step and sets reference lane.
+     */
+    void setInitialLanes();
+
+    /**
+     * Creates pointer to ID counter so that it can be increased by other classes.
+     * @return Pointer to ID counter.
+     */
+    std::shared_ptr<size_t> getIdCounterRef() const;
+
   private:
-    int timeStep;
+    size_t timeStep;                                    //**< reference time step where world was created. */
+    size_t idCounter;                                   //**< counter to ensure unique IDs among all objects. */
     std::shared_ptr<RoadNetwork> roadNetwork;           //**< road network containing lanelets, traffic signs, etc. */
     std::vector<std::shared_ptr<Obstacle>> egoVehicles; //**< pointers to ego vehicle objects */
     std::vector<std::shared_ptr<Obstacle>> obstacles;   //**< pointers to obstacles*
 };
-
-#endif // ENV_MODEL_WORLD_H

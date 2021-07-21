@@ -16,12 +16,12 @@
 bool InSameLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP) {
-    for (const auto &laneP : obstacleP->getOccupiedLanes(world->getRoadNetwork(), timeStep)) {
-        for (const auto &laneK : obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)) {
-            if (laneP->getId() == laneK->getId()) {
+    for (const auto &laneK :
+         obstacleK->getDrivingPathLanes(world->getRoadNetwork(), timeStep, world->getIdCounterRef())) {
+        auto relevantIDs{laneK->getContainedLaneletIDs()};
+        for (const auto &laneletP : obstacleP->getOccupiedLanelets(world->getRoadNetwork(), timeStep))
+            if (relevantIDs.find(laneletP->getId()) != relevantIDs.end())
                 return true;
-            }
-        }
     }
     return false;
 }

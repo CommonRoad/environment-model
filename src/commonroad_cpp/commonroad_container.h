@@ -24,7 +24,7 @@ class CommonRoadContainer {
      * @param obstacleList List of obstacles.
      * @param egoVehicles List of ego vehicles.
      */
-    void registerScenario(size_t id, size_t timeStep, std::shared_ptr<RoadNetwork> roadNetwork,
+    void registerScenario(size_t id, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
                           std::vector<std::shared_ptr<Obstacle>> &obstacleList,
                           std::vector<std::shared_ptr<Obstacle>> &egoVehicles);
 

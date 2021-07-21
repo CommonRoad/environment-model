@@ -1,14 +1,14 @@
 //
-// Created by Sebastian Maierhofer on 28.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
+#include "command_line_input.h"
+#include "commonroad_cpp/world.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
-
-#include "command_line_input.h"
-//#include "../../predicates/predicates.h"
-
-#include <chrono>
 
 int main(int argc, char **argv) {
 
@@ -22,47 +22,7 @@ int main(int argc, char **argv) {
     // Read and parse CommonRoad scenario file
     const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(xmlFilePath);
 
-    for (const auto &obs : obstacles) {
-        for (size_t i = 0; i < obs->getTrajectoryLength(); ++i) {
-            obs->setOwnLane(roadNetwork->getLanes(), i);
-            obs->setReferenceLane(obs->getOwnLane());
-        }
-    }
-
-    //    Predicates predicates{Predicates(roadNetwork)};
-    //
-    //    // Start measuring time
-    //    auto begin = std::chrono::high_resolution_clock::now();
-    //
-    //    for (const auto &obs : obstacles) {
-    //        std::cout << obs->getId() << '\n';
-    //        for (int i = 0; i < obs->getTrajectoryLength(); ++i) {
-    //            if (predicates.onMainCarriageWay(i, obs))
-    //                std::cout << "time step " << i << ": onMainCarriageWay: true \n";
-    //            else
-    //                std::cout << "time step " << i << ": onMainCarriageWay: false \n";
-    //            if (predicates.onMainCarriageWayRightLane(i, obs))
-    //                std::cout << "time step " << i << ": onMainCarriageWayRightLane: true \n";
-    //            else
-    //                std::cout << "time step " << i << ": onMainCarriageWayRightLane: false \n";
-    //            if (predicates.onAccessRamp(i, obs))
-    //                std::cout << "time step " << i << ": onAccessRamp: true \n";
-    //            else
-    //                std::cout << "time step " << i << ": onAccessRamp: false \n";
-    //            for (const auto &obs2 : obstacles) {
-    //                if (obs->getId() == obs2->getId())
-    //                    continue;
-    //                if (predicates.inFrontOf(i, obs, obs2))
-    //                    std::cout << "time step " << i << ": obs " << obs2->getId() << " inFrontOf: true \n";
-    //                else
-    //                    std::cout << "time step " << i << ": obs " << obs2->getId() << " inFrontOf: false \n";
-    //            }
-    //        }
-    //    }
-    //    auto end = std::chrono::high_resolution_clock::now();
-    //    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
-    //
-    //    printf("Time measured: %.3f seconds.\n", elapsed.count() * 1e-9);
+    auto world{World(0, roadNetwork, obstacles, {})};
 
     return 0;
 }

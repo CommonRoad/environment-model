@@ -1,9 +1,11 @@
 //
-// Created by sebastian on 07.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TEST_LANELET_OPERATIONS_H
-#define ENV_MODEL_TEST_LANELET_OPERATIONS_H
+#pragma once
 
 #include "../test_road_network.h"
 
@@ -11,5 +13,3 @@ class LaneletOperationsTest : public ::RoadNetworkTestInitialization, public tes
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_LANELET_OPERATIONS_H

@@ -15,8 +15,8 @@
 #include "translate_python_types.h"
 
 void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &country,
-                         const py::handle &py_laneletNetwork, const py::list &py_obstacles,
-                         const py::list &py_egoVehicles) {
+                         const py::handle &py_laneletNetwork, const py::list &py_egoVehicles,
+                         const py::list &py_obstacles) {
 
     auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
     auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
@@ -28,23 +28,11 @@ void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &
     auto roadNetwork = std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempTrafficSignContainer,
                                                      tempTrafficLightContainer, tempIntersectionContainer);
     auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
-    for (const auto &obs : tempObstacleContainer) {
-        for (unsigned long i = 0; i < obs->getTrajectoryLength(); ++i) {
-            obs->setOwnLane(roadNetwork->getLanes(), i);
-            obs->setReferenceLane(obs->getOwnLane());
-        }
-    }
     auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles);
-    for (const auto &obs : tempEgoVehicleContainer) {
-        for (unsigned long i = 0; i < obs->getTrajectoryLength(); ++i) {
-            obs->setOwnLane(roadNetwork->getLanes(), i);
-            obs->setReferenceLane(obs->getOwnLane());
-        }
-    }
 
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
 
-    eval->registerScenario(scenarioId, timeStep, roadNetwork, tempObstacleContainer, tempEgoVehicleContainer);
+    eval->registerScenario(scenarioId, timeStep, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer);
 }
 
 void py_removeScenario(size_t scenarioId) {

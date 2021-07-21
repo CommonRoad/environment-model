@@ -81,6 +81,9 @@ std::shared_ptr<RoadNetwork> create_road_network() {
                                           laneletTypeLaneletTwo, userOneWayLaneletTwo, userBidirectionalLaneletTwo));
     laneletTwo->setStopLine(stopLineTwo);
 
+    laneletOne->setLeftAdjacent(laneletTwo, DrivingDirection::same);
+    laneletTwo->setRightAdjacent(laneletOne, DrivingDirection::same);
+
     return std::make_shared<RoadNetwork>(
         RoadNetwork({laneletOne, laneletTwo}, SupportedTrafficSignCountry::GERMANY, {trafficSignOne, trafficSignTwo}));
 }

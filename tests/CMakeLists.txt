@@ -1,6 +1,7 @@
 set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/interfaces/utility_functions.cpp
         allTests.cpp
+        envModelTests/test_world.cpp
         envModelTests/roadNetwork/test_road_network.cpp
         envModelTests/roadNetwork/lanelet/test_lanelet_operations.cpp
         envModelTests/roadNetwork/lanelet/test_lane.cpp
@@ -11,11 +12,12 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/geometry/test_rectangle.cpp
         envModelTests/geometry/test_geometric_operations.cpp
         envModelTests/interfaces/test_interfaces.cpp
+        envModelTests/predicates/utils_predicate_test.cpp
         envModelTests/predicates/braking/test_safe_distance_predicate.cpp
         envModelTests/predicates/braking/test_unnecessary_braking_predicate.cpp
         envModelTests/predicates/position/test_in_front_of_predicate.cpp
         envModelTests/predicates/position/test_in_same_lane_predicate.cpp
-        envModelTests/predicates/general/test_cut_in_predicate.cpp
+   #     envModelTests/predicates/general/test_cut_in_predicate.cpp
         envModelTests/predicates/position/test_in_intersection_main_area_predicate.cpp
         envModelTests/predicates/position/test_stop_line_in_front_predicate.cpp
         envModelTests/predicates/position/test_passes_stop_line_predicate.cpp
@@ -29,7 +31,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
         envModelTests/predicates/velocity/test_slow_leading_vehicle_predicate.cpp
         envModelTests/predicates/velocity/test_in_standstill_predicate.cpp
-        envModelTests/predicates/utils_predicate_test.cpp
         )
 
 # Add google-test

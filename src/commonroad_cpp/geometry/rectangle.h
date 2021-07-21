@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 08.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_RECTANGLE_H
-#define ENV_MODEL_RECTANGLE_H
+#pragma once
 
 #include "shape.h"
 
@@ -71,5 +73,3 @@ class Rectangle : public Shape {
     double length{}; //**< Length of shape. */
     double width{};  //**< Width of shape. */
 };
-
-#endif // ENV_MODEL_RECTANGLE_H

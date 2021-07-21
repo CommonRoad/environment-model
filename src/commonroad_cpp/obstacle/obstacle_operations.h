@@ -1,11 +1,15 @@
 //
-// Created by Sebastian Maierhofer on 01.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_OBSTACLE_OPERATIONS_H
-#define ENV_MODEL_OBSTACLE_OPERATIONS_H
+#pragma once
 
 #include "obstacle.h"
+
+namespace obstacle_operations {
 
 /**
  * Returns the obstacle which corresponds to a given obstacle ID.
@@ -21,6 +25,6 @@ std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obst
  * @param string for which obstacle type should be extracted
  * @return obstacle type which corresponds to string or unknown type if string does not match
  */
-ObstacleType matchStringToObstacleType(std::string type);
+ObstacleType matchStringToObstacleType(const std::string &type);
 
-#endif // ENV_MODEL_OBSTACLE_OPERATIONS_H
+} // namespace obstacle_operations

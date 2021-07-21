@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 30.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include <cstring>
@@ -26,10 +29,10 @@ std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xm
     if (!doc->load_file(xmlFile.c_str()))
         throw std::runtime_error("Couldn't load XML-File: " + xmlFile);
 
-    const auto version = doc->child("commonRoad").attribute("commonRoadVersion").value();
-    if (!strcmp(version, "2017a") || !strcmp(version, "2018b"))
+    const auto *const version = doc->child("commonRoad").attribute("commonRoadVersion").value();
+    if ((strcmp(version, "2017a") == 0) || (strcmp(version, "2018b") == 0))
         return std::make_unique<CommonRoadFactory2018b>(std::move(doc));
-    else if (!strcmp(version, "2020a"))
+    else if (strcmp(version, "2020a") == 0)
         return std::make_unique<CommonRoadFactory2020a>(std::move(doc));
     else
         throw std::runtime_error("This CommonRoad version is not supported.");
@@ -117,11 +120,12 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
 
     // extract ID, type, shape, initial state, and trajectory
     tempObstacle->setId(roadElements.first_attribute().as_ullong());
-    tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
+    tempObstacle->setObstacleType(
+        obstacle_operations::matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
         if ((strcmp(child.name(), "shape")) == 0) { // TODO: other shape types
             if ((strcmp(child.first_child().name(), "rectangle")) == 0) {
-                Rectangle &geoRectangle = dynamic_cast<Rectangle &>(tempObstacle->getGeoShape());
+                auto &geoRectangle = dynamic_cast<Rectangle &>(tempObstacle->getGeoShape());
                 geoRectangle.setLength(child.first_child().child("length").text().as_double());
                 geoRectangle.setWidth(child.first_child().child("width").text().as_double());
             }
@@ -148,11 +152,12 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     // extract ID, type, shape, and initial state
     tempObstacle->setId(roadElements.first_attribute().as_ullong());
     tempObstacle->setIsStatic(true);
-    tempObstacle->setObstacleType(matchStringToObstacleType(roadElements.first_child().text().as_string()));
+    tempObstacle->setObstacleType(
+        obstacle_operations::matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
         if ((strcmp(child.name(), "shape")) == 0) {
             if ((strcmp(child.first_child().name(), "rectangle")) == 0) { // TODO: other shape types
-                Rectangle &geoRectangle = dynamic_cast<Rectangle &>(tempObstacle->getGeoShape());
+                auto &geoRectangle = dynamic_cast<Rectangle &>(tempObstacle->getGeoShape());
                 geoRectangle.setLength(child.first_child().child("length").text().as_double());
                 geoRectangle.setWidth(child.first_child().child("width").text().as_double());
             }
@@ -200,16 +205,16 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
         LineMarking lineMarking;
         if ((strcmp(points.name(), "point")) == 0) {
             newVertex = {points.child("x").text().as_double(), points.child("y").text().as_double()};
-            if (!(strcmp(side, "rightBound")))
+            if ((strcmp(side, "rightBound")) == 0)
                 tempLaneletContainer[arrayIndex]->addRightVertex(newVertex);
-            else if (!(strcmp(side, "leftBound")))
+            else if ((strcmp(side, "leftBound")) == 0)
                 tempLaneletContainer[arrayIndex]->addLeftVertex(newVertex);
         }
         if ((strcmp(points.name(), "lineMarking")) == 0) {
-            lineMarking = matchStringToLineMarking(points.value());
-            if (!(strcmp(side, "rightBound")))
+            lineMarking = lanelet_operations::matchStringToLineMarking(points.value());
+            if ((strcmp(side, "rightBound")) == 0)
                 tempLaneletContainer[arrayIndex]->setLineMarkingRight(lineMarking);
-            else if (!(strcmp(side, "leftBound")))
+            else if ((strcmp(side, "leftBound")) == 0)
                 tempLaneletContainer[arrayIndex]->setLineMarkingLeft(lineMarking);
         }
     }
@@ -220,9 +225,9 @@ void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>>
     size_t id{child.first_attribute().as_ullong()};
     for (size_t i{0}; i < tempLaneletContainer.size(); i++) {
         if (tempLaneletContainer[i]->getId() == id) {
-            if (!(strcmp(type, "successor")))
+            if ((strcmp(type, "successor")) == 0)
                 tempLaneletContainer[arrayIndex]->addSuccessor(tempLaneletContainer[i]);
-            else if (!(strcmp(type, "predecessor")))
+            else if ((strcmp(type, "predecessor")) == 0)
                 tempLaneletContainer[arrayIndex]->addPredecessor(tempLaneletContainer[i]);
             break;
         }
@@ -239,9 +244,9 @@ void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanele
         dir = DrivingDirection::opposite;
     for (size_t i{0}; i < tempLaneletContainer.size(); i++) {
         if (tempLaneletContainer[i]->getId() == adjacentId) {
-            if (!(strcmp(type, "adjacentLeft")))
+            if ((strcmp(type, "adjacentLeft")) == 0)
                 tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i], dir);
-            else if (!(strcmp(type, "adjacentRight")))
+            else if ((strcmp(type, "adjacentRight")) == 0)
                 tempLaneletContainer[arrayIndex]->setRightAdjacent(tempLaneletContainer[i], dir);
             break;
         }

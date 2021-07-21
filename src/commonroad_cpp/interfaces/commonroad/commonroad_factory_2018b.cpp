@@ -1,19 +1,19 @@
 //
-// Created by Sebastian Maierhofer on 08.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include <cstring>
 #include <memory>
-#include <string>
 #include <vector>
 
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "commonroad_cpp/world.h"
 #include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
-#include <commonroad_cpp/obstacle/obstacle_operations.h>
 
 #include "commonroad_factory_2018b.h"
 #include "xml_reader.h"
@@ -82,7 +82,7 @@ CommonRoadFactory2018b::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                 }
                 if ((strcmp(child.name(), "speedLimit")) == 0) {
                     // laneletId + 4000 is the id of the virtual traffic sign element.
-                    int id = tempLaneletContainer[arrayIndex]->getId();
+                    size_t id = tempLaneletContainer[arrayIndex]->getId();
                     for (const auto &sign : trafficSigns) {
                         if (sign->getId() == id + 4000) {
                             tempLaneletContainer[arrayIndex]->addTrafficSign(sign);

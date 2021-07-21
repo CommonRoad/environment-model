@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 01.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_INCOMING_H
-#define ENV_MODEL_INCOMING_H
+#pragma once
 
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 
@@ -170,5 +172,3 @@ class Incoming {
         rightOutgoings; //**< set of pointers to right outgoing lanelets of this incoming */
     std::vector<std::shared_ptr<Lanelet>> oncomings; //**< set of pointers to oncoming lanelets of this incoming */
 };
-
-#endif // ENV_MODEL_INCOMING_H

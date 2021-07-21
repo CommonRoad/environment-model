@@ -8,9 +8,6 @@
 #include <utility>
 
 #include <boost/geometry.hpp>
-#include <boost/geometry/algorithms/intersects.hpp>
-#include <boost/geometry/geometries/point.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/index/parameters.hpp>
 #include <boost/geometry/index/rtree.hpp>
 
@@ -18,7 +15,6 @@
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 
 #include "road_network.h"
@@ -31,9 +27,9 @@ struct RoadNetwork::impl {
         rtree; //**< rtree defined by lanelets of road network for faster occupancy calculation*/
 };
 
-RoadNetwork::RoadNetwork(RoadNetwork &&) = default;
+RoadNetwork::RoadNetwork(RoadNetwork &&) noexcept = default;
 RoadNetwork::~RoadNetwork() = default;
-RoadNetwork &RoadNetwork::operator=(RoadNetwork &&) = default;
+RoadNetwork &RoadNetwork::operator=(RoadNetwork &&) noexcept = default;
 
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, SupportedTrafficSignCountry cou,
                          std::vector<std::shared_ptr<TrafficSign>> signs,
@@ -45,53 +41,19 @@ RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, S
     for (const std::shared_ptr<Lanelet> &la : network)
         pImpl->rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
     trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(cou);
-    createLanes(network);
 }
 
 const std::vector<std::shared_ptr<Lanelet>> &RoadNetwork::getLaneletNetwork() const { return laneletNetwork; }
 
-std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() { return lanes; }
+std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() {
+    std::vector<std::shared_ptr<Lane>> collectedLanes;
+    for (const auto &containedLanes : lanes) {
+        collectedLanes.push_back(containedLanes.second.second);
+    }
+    return collectedLanes;
+}
 
 const std::vector<std::shared_ptr<Intersection>> &RoadNetwork::getIntersections() const { return intersections; }
-
-void RoadNetwork::createLanes(const std::vector<std::shared_ptr<Lanelet>> &network) {
-    std::vector<std::shared_ptr<Lanelet>> startLanelets;
-    std::set<LaneletType> classifyinglaneletTypes{LaneletType::incoming, LaneletType::shoulder, LaneletType::accessRamp,
-                                                  LaneletType::exitRamp};
-
-    for (const auto &la : network) {
-        if (la->getPredecessors().empty()) // if no predecessor -> use as start lanelet
-            startLanelets.push_back(la);
-        else {
-            std::vector<std::shared_ptr<Lanelet>> predecessors;
-            for (const std::shared_ptr<Lanelet> &pre : la->getPredecessors()) {
-                predecessors.push_back(pre);
-            }
-
-            // if no predecessor with same classifying type exist -> use this lanelet as start lanelet
-            std::set<LaneletType> intersectingLa;
-            std::set_intersection(la->getLaneletType().begin(), la->getLaneletType().end(),
-                                  classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
-                                  std::inserter(intersectingLa, intersectingLa.begin()));
-            for (const auto &pred : la->getPredecessors()) {
-                std::set<LaneletType> intersectingPred;
-                std::set_intersection(pred->getLaneletType().begin(), pred->getLaneletType().end(),
-                                      classifyinglaneletTypes.begin(), classifyinglaneletTypes.end(),
-                                      std::inserter(intersectingPred, intersectingPred.begin()));
-                if (intersectingPred.empty() != intersectingLa.empty()) {
-                    startLanelets.push_back(la);
-                    break;
-                }
-            }
-        }
-    }
-    // create lanes
-    for (const auto &la : startLanelets) {
-        //  laneletType = extractClassifyingLaneletType(la);
-        auto newLanes{combineLaneletAndSuccessorsWithSameTypeToLane(la)};
-        lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
-    }
-}
 
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
     // find all relevant lanelets by making use of the rtree
@@ -99,6 +61,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
     pImpl->rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())),
                        std::back_inserter(relevantLanelets));
     std::vector<std::shared_ptr<Lanelet>> lanelets;
+    lanelets.reserve(relevantLanelets.size());
     for (auto la : relevantLanelets)
         lanelets.push_back(findLaneletById(static_cast<size_t>(la.second)));
 
@@ -115,15 +78,6 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
     return occupiedLanelets;
 }
 
-std::shared_ptr<Lane> RoadNetwork::findLaneByShape(const std::vector<std::shared_ptr<Lane>> &possibleLanes,
-                                                   const polygon_type &polygonShape) {
-    for (const auto &possibleLane : possibleLanes)
-        if (possibleLane->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED))
-            return possibleLane;
-    return {}; // TODO think about better solution
-    // throw std::domain_error("shape does not occupy any of the provided lanes");
-}
-
 std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double xPos, double yPos) {
     std::vector<Lanelet> lanelet;
     polygon_type polygonPos;
@@ -136,18 +90,10 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
     auto it = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork),
                            [id](auto val) { return val->getId() == id; });
     if (it == std::end(laneletNetwork))
-        throw std::domain_error(std::to_string(id));
+        throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID" + std::to_string(id) +
+                                " does not exist in road network!");
 
     return *it;
-}
-
-std::shared_ptr<Incoming> RoadNetwork::incomingOfLanelet(const std::shared_ptr<Lanelet> &lanelet) {
-    for (const auto &inter : intersections)
-        for (const auto &inco : inter->getIncomings())
-            if (std::any_of(inco->getIncomingLanelets().begin(), inco->getIncomingLanelets().end(),
-                            [lanelet](const std::shared_ptr<Lanelet> &la) { return la->getId() == lanelet->getId(); }))
-                return inco;
-    return nullptr;
 }
 
 SupportedTrafficSignCountry RoadNetwork::getCountry() const { return country; }
@@ -162,6 +108,34 @@ SupportedTrafficSignCountry RoadNetwork::matchStringToCountry(const std::string 
     else
         return SupportedTrafficSignCountry::ZAMUNDA;
 }
+
 std::string RoadNetwork::extractTrafficSignIDForCountry(TrafficSignTypes type) {
     return trafficSignIDLookupTable->at(type);
+}
+
+std::vector<std::shared_ptr<Lane>> RoadNetwork::addLanes(const std::vector<std::shared_ptr<Lane>> &newLanes,
+                                                         size_t initialLanelet) {
+    std::vector<std::shared_ptr<Lane>> updatedLanes;
+    for (const auto &la : newLanes) {
+        if (lanes.count(la->getContainedLaneletIDs()) != 0u and
+            lanes[la->getContainedLaneletIDs()].first.count(initialLanelet) != 0u) {
+            updatedLanes.push_back(lanes.at(la->getContainedLaneletIDs()).second);
+            continue;
+        } else if (lanes.count(la->getContainedLaneletIDs()) != 0u) {
+            lanes[la->getContainedLaneletIDs()].first.insert(initialLanelet);
+            updatedLanes.push_back(lanes.at(la->getContainedLaneletIDs()).second);
+        } else {
+            lanes[la->getContainedLaneletIDs()] = {{initialLanelet}, la};
+            updatedLanes.push_back(la);
+        }
+    }
+    return updatedLanes;
+}
+
+std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesByLanelet(size_t laneletID) {
+    std::vector<std::shared_ptr<Lane>> relevantLanes;
+    for (const auto &[laneIDs, laneMap] : lanes)
+        if (laneIDs.count(laneletID) != 0u and laneMap.first.count(laneletID) != 0u)
+            relevantLanes.push_back(laneMap.second);
+    return relevantLanes;
 }

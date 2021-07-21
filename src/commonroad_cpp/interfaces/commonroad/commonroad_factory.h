@@ -1,8 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 04.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
-#ifndef ENV_MODEL_COMMONROAD_FACTORY_H
-#define ENV_MODEL_COMMONROAD_FACTORY_H
+
+#pragma once
 
 #include "commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.hpp"
 #include "commonroad_cpp/obstacle/obstacle.h"
@@ -65,5 +68,3 @@ class CommonRoadFactory {
   protected:
     std::unique_ptr<pugi::xml_document> doc; //**< Pointer to loaded CommonRoad XML. */
 };
-
-#endif // ENV_MODEL_COMMONROAD_FACTORY_H

@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 08.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_LANE_H
-#define ENV_MODEL_LANE_H
+#pragma once
 
 #include <memory> // for shared_ptr
 #include <vector> // for vector
@@ -28,15 +30,23 @@ class Lane : public Lanelet {
      * @param lanelet Lanelet object spanning lane.
      * @param ccs Curvilinear coordinate system object.
      */
-    Lane(std::vector<std::shared_ptr<Lanelet>> containedLanelets, Lanelet lanelet,
+    Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
          std::shared_ptr<CurvilinearCoordinateSystem> ccs);
+
+    /**
+     * Constructor initializing contained lanelet, lanelet describing lane, and Curvilinear coordinate system.
+     *
+     * @param containedLanelets Lanelets contained in lane.
+     * @param lanelet Lanelet object spanning lane.
+     */
+    Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet);
 
     /**
      * Getter for curvilinear coordinate system using center line of lane as reference.
      *
      * @return Curvilinear coordinate system object.
      */
-    [[nodiscard]] const std::shared_ptr<CurvilinearCoordinateSystem> &getCurvilinearCoordinateSystem() const;
+    [[nodiscard]] const std::shared_ptr<CurvilinearCoordinateSystem> &getCurvilinearCoordinateSystem();
 
     /**
      * Getter for lanelets contained in lane.
@@ -45,10 +55,16 @@ class Lane : public Lanelet {
      */
     [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getContainedLanelets() const;
 
+    /**
+     * Getter for lanelet IDs contained in lane.
+     *
+     * @return Set of IDs of the lanelets contained in lane.
+     */
+    [[nodiscard]] const std::set<size_t> &getContainedLaneletIDs() const;
+
   private:
     std::vector<std::shared_ptr<Lanelet>> containedLanelets; //**< list of pointers to lanelets constructing lane */
     std::shared_ptr<CurvilinearCoordinateSystem>
-        curvilinearCoordinateSystem; //**< curvilinear coordinate system defined by lane */
+        curvilinearCoordinateSystem;      //**< curvilinear coordinate system defined by lane */
+    std::set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
 };
-
-#endif // ENV_MODEL_LANE_H

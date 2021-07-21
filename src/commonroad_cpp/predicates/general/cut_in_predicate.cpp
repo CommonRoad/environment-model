@@ -14,15 +14,16 @@
 bool CutInPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                        const std::shared_ptr<Obstacle> &obstacleK,
                                        const std::shared_ptr<Obstacle> &obstacleP) {
-    if (obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep).size() == 1)
+    if (obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep, world->getIdCounterRef()).size() ==
+        1) // TODO adjacent lanes/lanelets
         return false;
 
     InSameLanePredicate inSameLanePredicate;
     if (!inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obstacleP))
         return false;
-    return (obstacleK->getLatPosition(timeStep) < obstacleP->getLatPosition(timeStep) and
+    return (obstacleK->getLatPosition(timeStep) < obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane()) and
             obstacleK->getCurvilinearOrientation(timeStep) > 0) or
-           (obstacleK->getLatPosition(timeStep) > obstacleP->getLatPosition(timeStep) and
+           (obstacleK->getLatPosition(timeStep) > obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane()) and
             obstacleK->getCurvilinearOrientation(timeStep) < 0);
 }
 

@@ -1,5 +1,8 @@
 //
-// Created by Sebastian Maierhofer on 02.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
 #include <boost/program_options.hpp>
@@ -77,16 +80,6 @@ getDataFromCommonRoad(const std::string &xmlFilePath) {
 
     std::shared_ptr<RoadNetwork> roadNetwork{
         std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, trafficSigns, trafficLights, intersections))};
-
-    for (const auto &obs : obstacles) {
-        if (obs->getIsStatic())
-            obs->setOwnLane(roadNetwork->getLanes(), 0);
-        else {
-            for (size_t i = obs->getFirstTrajectoryTimeStep(); i < obs->getLastTrajectoryTimeStep(); ++i) {
-                obs->setOwnLane(roadNetwork->getLanes(), i);
-            }
-        }
-    }
 
     return std::make_tuple(obstacles, roadNetwork);
 }

@@ -8,7 +8,9 @@
 #pragma once
 
 #include <cstddef>
+#include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -45,9 +47,9 @@ class RoadNetwork {
         std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{},
         std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{});
 
-    RoadNetwork(RoadNetwork &&);
+    RoadNetwork(RoadNetwork &&) noexcept;
     ~RoadNetwork();
-    RoadNetwork &operator=(RoadNetwork &&);
+    RoadNetwork &operator=(RoadNetwork &&) noexcept;
 
     RoadNetwork(const RoadNetwork &) = delete;
     RoadNetwork &operator=(const RoadNetwork &) = delete;
@@ -106,26 +108,38 @@ class RoadNetwork {
     std::shared_ptr<Lanelet> findLaneletById(size_t id);
 
     /**
-     * Given a set of lanes and a polygon shape, finds a single lane which intersect with the shape (interstate)
-     *
-     * @param possibleLanes set of lanes
-     * @param polygonShape boost polygon
-     * @return list of lane pointers
-     */
-    static std::shared_ptr<Lane> findLaneByShape(const std::vector<std::shared_ptr<Lane>> &possibleLanes,
-                                                 const polygon_type &polygonShape);
-
-    std::shared_ptr<Incoming> incomingOfLanelet(const std::shared_ptr<Lanelet> &lanelet);
-
-    /**
-     * Matches a string to Country enum.
+     * Matches a string to country enum.
      *
      * @param name Name of country.
      * @return Country enum.
      */
     static SupportedTrafficSignCountry matchStringToCountry(const std::string &name);
 
+    /**
+     * Extracts traffic sign ID string from type object
+     *
+     * @param type Traffic sign type
+     * @return Traffic sign ID string.
+     */
     std::string extractTrafficSignIDForCountry(TrafficSignTypes type);
+
+    /**
+     * Adds lanes to road network. It it is checked whether lane already exists.
+     *
+     * @param newLanes Pointers to lanes which should be added.
+     * @param initialLanelet Lanelet based on which the lanes were created.
+     * @return List of lanes which were added or already existed.
+     */
+    std::vector<std::shared_ptr<Lane>> addLanes(const std::vector<std::shared_ptr<Lane>> &newLanes,
+                                                size_t initialLanelet);
+
+    /**
+     * Searches for existing lanes which were created based on lanelet with provided ID.
+     *
+     * @param laneletID Lanelet ID to search for.
+     * @return Pointers to existing lanes.
+     */
+    std::vector<std::shared_ptr<Lane>> findLanesByLanelet(size_t laneletID);
 
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
@@ -133,19 +147,12 @@ class RoadNetwork {
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;   //**< set of traffic signs contained in road network */
     std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< set of traffic lights contained in road network */
     std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
-    std::vector<std::shared_ptr<Lane>> lanes; //**< set of interstate-based lanes contained in road network */
+    std::map<std::set<size_t>, std::pair<std::set<size_t>, std::shared_ptr<Lane>>> lanes;
+    //**< map of lanes contained in road network with the following structure: contained lanelet IDs, <base lanelets
+    // used for creation of lane, lane object> */
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
 
     //**< Struct for private fields including R-Tree */
     struct impl;
     std::unique_ptr<impl> pImpl;
-
-    //**< interpreter for certain traffic signs*
-
-    /**
-     * Given a set of lanelets, creates the corresponding interstate-based lanes
-     *
-     * @param laneletNetwork set of lanelets
-     */
-    void createLanes(const std::vector<std::shared_ptr<Lanelet>> &laneletNetwork);
 };

@@ -1,9 +1,11 @@
 //
-// Created by Sebastian Maierhofer on 01.11.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_INTERSECTION_H
-#define ENV_MODEL_INTERSECTION_H
+#pragma once
 
 #include "incoming.h"
 
@@ -67,5 +69,3 @@ class Intersection {
     std::vector<std::shared_ptr<Lanelet>>
         crossings; //**< List of pointers to crossing lanelets belonging to intersection. */
 };
-
-#endif // ENV_MODEL_INTERSECTION_H

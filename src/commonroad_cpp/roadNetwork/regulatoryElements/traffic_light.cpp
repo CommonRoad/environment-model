@@ -14,7 +14,7 @@ void TrafficLight::setId(const size_t num) { id = num; }
 
 void TrafficLight::setCycle(const std::vector<TrafficLightCycleElement> &light_cycle) { cycle = light_cycle; }
 
-void TrafficLight::setOffset(const size_t ofst) { offset = ofst; }
+void TrafficLight::setOffset(const size_t timeStepsOffset) { offset = timeStepsOffset; }
 
 size_t TrafficLight::getId() const { return id; }
 

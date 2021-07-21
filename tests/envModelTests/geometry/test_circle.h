@@ -1,9 +1,10 @@
 //
-// Created by sebastian on 26.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
-
-#ifndef ENV_MODEL_TEST_CIRCLE_H
-#define ENV_MODEL_TEST_CIRCLE_H
+#pragma once
 
 #include <gtest/gtest.h>
 
@@ -31,5 +32,3 @@ class CircleTest : public testing::Test, public CircleTestInitialization {
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_CIRCLE_H

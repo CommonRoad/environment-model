@@ -5,23 +5,21 @@
 // Credits: BMW Car@TUM
 //
 
+#include "lanelet.h"
+#include "../../geometry/geometric_operations.h"
 #include <utility>
 
-#include <boost/geometry.hpp>
 #include <boost/geometry/algorithms/correct.hpp>
 #include <boost/geometry/algorithms/intersects.hpp>
 #include <boost/geometry/algorithms/simplify.hpp>
 #include <boost/geometry/algorithms/unique.hpp>
 
-#include "lanelet.h"
-
 namespace bg = boost::geometry;
-// using box = bg::model::box<point_type>;
 
 Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::set<LaneletType> type,
-                 std::set<ObstacleType> oneWay, std::set<ObstacleType> userBidirectional)
-    : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)}, laneletType{std::move(type)},
-      userOneWay{std::move(oneWay)}, userBidirectional{std::move(userBidirectional)} {
+                 std::set<ObstacleType> oneWayUsers, std::set<ObstacleType> bidirectionalUsers)
+    : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)}, laneletTypes{std::move(type)},
+      usersOneWay{std::move(oneWayUsers)}, usersBidirectional{std::move(bidirectionalUsers)} {
     createCenterVertices();
     constructOuterPolygon();
 }
@@ -29,10 +27,11 @@ Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> 
 Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
                  std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
                  std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::set<LaneletType> type,
-                 std::set<ObstacleType> oneWay = {}, std::set<ObstacleType> userBidirectional = {})
+                 std::set<ObstacleType> oneWayUsers = {}, std::set<ObstacleType> bidirectionalUsers = {})
     : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)},
       predecessorLanelets{std::move(predecessorLanelets)}, successorLanelets{std::move(successorLanelets)},
-      laneletType{std::move(type)}, userOneWay{std::move(oneWay)}, userBidirectional{std::move(userBidirectional)} {
+      laneletTypes{std::move(type)}, usersOneWay{std::move(oneWayUsers)}, usersBidirectional{
+                                                                              std::move(bidirectionalUsers)} {
     createCenterVertices();
     constructOuterPolygon();
 }
@@ -55,11 +54,11 @@ void Lanelet::setRightBorderVertices(const std::vector<vertex> &rightBorderVerti
     rightBorder = rightBorderVertices;
 }
 
-void Lanelet::setLaneletType(const std::set<LaneletType> &laType) { laneletType = laType; }
+void Lanelet::setLaneletTypes(const std::set<LaneletType> &laType) { laneletTypes = laType; }
 
-void Lanelet::setUserOneWay(const std::set<ObstacleType> &user) { userOneWay = user; }
+void Lanelet::setUsersOneWay(const std::set<ObstacleType> &user) { usersOneWay = user; }
 
-void Lanelet::setUserBidirectional(const std::set<ObstacleType> &user) { userBidirectional = user; }
+void Lanelet::setUsersBidirectional(const std::set<ObstacleType> &user) { usersBidirectional = user; }
 
 void Lanelet::setStopLine(const std::shared_ptr<StopLine> &sl) { stopLine = sl; }
 
@@ -97,11 +96,11 @@ const polygon_type &Lanelet::getOuterPolygon() const { return outerPolygon; }
 
 const box &Lanelet::getBoundingBox() const { return boundingBox; }
 
-const std::set<LaneletType> &Lanelet::getLaneletType() const { return laneletType; }
+const std::set<LaneletType> &Lanelet::getLaneletTypes() const { return laneletTypes; }
 
-const std::set<ObstacleType> &Lanelet::getUserOneWay() const { return userOneWay; }
+const std::set<ObstacleType> &Lanelet::getUsersOneWay() const { return usersOneWay; }
 
-const std::set<ObstacleType> &Lanelet::getUserBidirectional() const { return userBidirectional; }
+const std::set<ObstacleType> &Lanelet::getUsersBidirectional() const { return usersBidirectional; }
 
 const Lanelet::adjacent &Lanelet::getAdjacentLeft() const { return adjacentLeft; }
 
@@ -182,11 +181,9 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) con
     return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
 }
 
-bool Lanelet::hasLaneletType(LaneletType laType) {
-    return std::any_of(laneletType.begin(), laneletType.end(), [laType](auto ty) { return ty == laType; });
-}
+bool Lanelet::hasLaneletType(LaneletType laType) { return laneletTypes.find(laType) != laneletTypes.end(); }
 
-void Lanelet::addLaneletType(LaneletType laType) { laneletType.insert(laType); }
+void Lanelet::addLaneletType(LaneletType laType) { laneletTypes.insert(laType); }
 
 LineMarking Lanelet::getLineMarkingLeft() const { return lineMarkingLeft; }
 
@@ -195,3 +192,15 @@ void Lanelet::setLineMarkingLeft(LineMarking marking) { lineMarkingLeft = markin
 LineMarking Lanelet::getLineMarkingRight() const { return lineMarkingRight; }
 
 void Lanelet::setLineMarkingRight(LineMarking marking) { lineMarkingRight = marking; }
+
+const std::vector<double> &Lanelet::getOrientation() {
+    if (orientation.empty())
+        orientation = geometric_operations::computeOrientationFromPolyline(centerVertices);
+    return orientation;
+}
+
+const std::vector<double> &Lanelet::getPathLength() {
+    if (pathLength.empty())
+        pathLength = geometric_operations::computePathLengthFromPolyline(centerVertices);
+    return pathLength;
+}
