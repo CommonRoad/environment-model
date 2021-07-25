@@ -183,39 +183,52 @@ void Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork)
                     numOccupancies[la->getId()]++;
             }
         }
-        if (numOccupancies.empty())
-            throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
-                                     std::to_string(getId()));
-        std::vector<size_t> ids;
-        std::multimap<int, size_t> m2;
-        for (auto &&i : numOccupancies)
-            m2.insert(std::make_pair(i.second, i.first));
-        auto it1 = m2.rbegin(); // get the elem with the highest key
-        auto range = m2.equal_range(it1->first);
-        for (auto it2 = range.first; it2 != range.second; ++it2)
-            ids.push_back(it2->second);
-        for (const auto &relLane : relevantOccupiedLanes)
-            for (const auto &canLaneId : ids)
-                if (relLane->getId() == canLaneId)
-                    referenceLaneCandidates.push_back(relLane);
-        if (referenceLaneCandidates.size() > 1) {
-            std::vector<double> avgLaneOrientationChange;
-            avgLaneOrientationChange.reserve(referenceLaneCandidates.size());
-            for (size_t i{0}; i < referenceLaneCandidates.size(); ++i) {
-                std::vector<double> orientation = referenceLaneCandidates[i]->getOrientation();
-                double tmp{0};
-                for (size_t j{1}; j < orientation.size(); ++j)
-                    tmp += abs(geometric_operations::subtractOrientations(orientation[j], orientation[i - 1]));
-                avgLaneOrientationChange.push_back(
-                    tmp / static_cast<double>(referenceLaneCandidates[i]->getCenterVertices().size()));
-            }
-            auto laneIdx{
-                std::distance(avgLaneOrientationChange.begin(),
-                              std::min_element(avgLaneOrientationChange.begin(), avgLaneOrientationChange.end()))};
-            referenceLane = referenceLaneCandidates.at(static_cast<unsigned long>(laneIdx));
-        } else if (referenceLaneCandidates.size() == 1)
-            referenceLane = referenceLaneCandidates.front();
+        if (!numOccupancies.empty()) {
+            std::vector<size_t> ids;
+            std::multimap<int, size_t> m2;
+            for (auto &&i : numOccupancies)
+                m2.insert(std::make_pair(i.second, i.first));
+            auto it1 = m2.rbegin(); // get the elem with the highest key
+            auto range = m2.equal_range(it1->first);
+            for (auto it2 = range.first; it2 != range.second; ++it2)
+                ids.push_back(it2->second);
+            for (const auto &relLane : relevantOccupiedLanes)
+                for (const auto &canLaneId : ids)
+                    if (relLane->getId() == canLaneId)
+                        referenceLaneCandidates.push_back(relLane);
+            if (referenceLaneCandidates.size() > 1) {
+                std::vector<double> avgLaneOrientationChange;
+                avgLaneOrientationChange.reserve(referenceLaneCandidates.size());
+                for (size_t i{0}; i < referenceLaneCandidates.size(); ++i) {
+                    std::vector<double> orientation = referenceLaneCandidates[i]->getOrientation();
+                    double tmp{0};
+                    for (size_t j{1}; j < orientation.size(); ++j)
+                        tmp += abs(geometric_operations::subtractOrientations(orientation[j], orientation[j - 1]));
+                    avgLaneOrientationChange.push_back(
+                        tmp / static_cast<double>(referenceLaneCandidates[i]->getCenterVertices().size()));
+                }
+                auto laneIdx{
+                    std::distance(avgLaneOrientationChange.begin(),
+                                  std::min_element(avgLaneOrientationChange.begin(), avgLaneOrientationChange.end()))};
+                referenceLane = referenceLaneCandidates.at(static_cast<unsigned long>(laneIdx));
 
+            } else if (referenceLaneCandidates.size() == 1)
+                referenceLane = referenceLaneCandidates.front();
+        } else {
+            // if at all time steps only a single lanelet is occupied -> use arbitrary lane
+            size_t laneletIDFirstTimeStep;
+            bool useArbitraryLane{true};
+            if (occupiedLaneletsFirstTimeStep.size() == 1)
+                laneletIDFirstTimeStep = occupiedLaneletsFirstTimeStep.at(0)->getId();
+            for (const auto &time : getPredictionTimeSteps())
+                if (!(getOccupiedLanelets(roadNetwork, time).size() == 1 and
+                      getOccupiedLanelets(roadNetwork, time).at(0)->getId() == laneletIDFirstTimeStep)) {
+                    useArbitraryLane = false;
+                    break;
+                }
+            if (useArbitraryLane)
+                referenceLane = relevantOccupiedLanes.at(0);
+        }
         if (referenceLane == nullptr)
             throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
                                      std::to_string(getId()));
