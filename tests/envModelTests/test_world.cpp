@@ -31,7 +31,7 @@ TEST_F(WorldTest, TestScenariosInValid) {
     for (const auto &sc : scenarios) {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + sc};
         const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
-        CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+            CommandLine::getDataFromCommonRoad(pathToTestFileOne);
         EXPECT_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})}, std::runtime_error);
     }
 }
@@ -51,7 +51,7 @@ TEST_F(WorldTest, TestSingleScenario) {
     EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})});
 }
 
-//TEST_F(WorldTest, TestAllScenarios) {
+// TEST_F(WorldTest, TestAllScenarios) {
 //    int numThreads{6};
 //    std::string path{"/media/sebastian/TUM/06_code/cps/scenarios/cr-scenarios/scenarios"};
 //    std::array<std::string, 1> scenarios{"/scenario-factory"};
@@ -66,8 +66,9 @@ TEST_F(WorldTest, TestSingleScenario) {
 ////        omp_set_num_threads(numThreads);
 ////#pragma omp parallel for schedule(guided) shared(fileNames, results) firstprivate(monitor) default(none)
 //        for (size_t i = 0; i < fileNames.size(); i++) {
-//            const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(fileNames.at(i));
-//            EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})});
+//            const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
+//            CommandLine::getDataFromCommonRoad(fileNames.at(i)); EXPECT_NO_THROW(auto world{World(0,
+//            roadNetworkScenarioOne, obstaclesScenarioOne, {})});
 //        }
 //    }
 //}

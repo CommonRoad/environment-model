@@ -183,9 +183,9 @@ void Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork)
                     numOccupancies[la->getId()]++;
             }
         }
-        if(numOccupancies.empty())
+        if (numOccupancies.empty())
             throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
-                std::to_string(getId()));
+                                     std::to_string(getId()));
         std::vector<size_t> ids;
         std::multimap<int, size_t> m2;
         for (auto &&i : numOccupancies)
