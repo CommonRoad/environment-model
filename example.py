@@ -7,7 +7,6 @@ import numpy as np
 import math
 
 
-
 def create_lanelet_network() -> LaneletNetwork:
     right_vertices_lane_1 = np.array([[0, 0], [10, 0], [20, 0], [30, 0], [40, 0], [50, 0], [60, 0], [70, 0],
                                       [80, 1], [90, 0], [100, 0], [110, 0]])
@@ -107,10 +106,10 @@ obstacle_3 = DynamicObstacle(3, ObstacleType.CAR, Rectangle(5, 2),
 cpp_env_model.register_scenario(123, 0, "DEU", lanelet_network, [obstacle_1], [obstacle_2, obstacle_3])
 
 # Monitor-Mode
-sol_monitor_mode_1 = cpp_env_model.cut_in_boolean_evaluation(123, 0, 1, 2)
-sol_monitor_mode_2 = cpp_env_model.cut_in_boolean_evaluation(123, 1, 1, 2)
-sol_monitor_mode_3 = cpp_env_model.cut_in_boolean_evaluation(123, 2, 1, 2)
-sol_monitor_mode_4 = cpp_env_model.cut_in_boolean_evaluation(123, 3, 1, 2)
-sol_monitor_mode_5 = cpp_env_model.cut_in_boolean_evaluation(123, 1, 1, 3)
+sol_monitor_mode_1 = cpp_env_model.safe_distance_boolean_evaluation(123, 0, 1, 2)
+sol_monitor_mode_2 = cpp_env_model.safe_distance_boolean_evaluation(123, 1, 1, 2)
+sol_monitor_mode_3 = cpp_env_model.safe_distance_boolean_evaluation(123, 2, 1, 2)
+sol_monitor_mode_4 = cpp_env_model.safe_distance_boolean_evaluation(123, 3, 1, 2)
+sol_monitor_mode_5 = cpp_env_model.safe_distance_boolean_evaluation(123, 1, 1, 3)
 
 cpp_env_model.remove_scenario(123)

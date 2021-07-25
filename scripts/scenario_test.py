@@ -29,10 +29,11 @@ def eval_scenario(scenario_path: str):
     try:
         sc, _ = CommonRoadFileReader(full_path).open()
         cpp_env_model.register_scenario(scenario_id, 0, "DEU", sc.lanelet_network, sc.obstacles, [])
-        cpp_env_model.remove_scenario(123)
+        cpp_env_model.remove_scenario(scenario_id)
         print("Successful - " + scenario_path)
     except:
         print("Failed - " + scenario_path)
+
 
 # collect scenarios
 for scenario in os.listdir(hand_crafted_2020a):
@@ -66,7 +67,7 @@ for scenario in os.listdir(bicycle_2020a):
     scenario_list.append(full_path)
 
 for scenario in os.listdir(factory_2020a):
-    if "_S-" in scenario:# or "ARG_Carcarana-11" in scenario or "ARG_Carcarana-12" in scenario or "ARG_Carcarana-13" in scenario:
+    if "_S-" in scenario:
         continue
     full_path = factory_2020a + "/" + scenario
     scenario_list.append(full_path)
