@@ -58,7 +58,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->setReactionTime(reactionTimeObstacleOne);
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
-    obstacleOne->setOccupiedLanes({laneOne}, obstacleOne->getFirstTrajectoryTimeStep());
+    // obstacleOne->setOccupiedLanes({laneOne}, obstacleOne->getFirstTrajectoryTimeStep());
     obstacleOne->computeLanes(roadNetwork, globalIdRef);
     obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);
 
@@ -228,7 +228,7 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     auto obsOneScenarioTwo{obstacle_operations::getObstacleById(obstaclesScenarioTwo, 325)};
     obsOneScenarioTwo->computeLanes(roadNetworkScenarioTwo, globalIdRef);
     EXPECT_EQ(77695, obsOneScenarioTwo->getReferenceLane()->getContainedLanelets().front()->getId());
-    EXPECT_EQ(77074, obsOneScenarioTwo->getReferenceLane()->getContainedLanelets().back()->getId());
+    EXPECT_EQ(77071, obsOneScenarioTwo->getReferenceLane()->getContainedLanelets().back()->getId());
 
     std::string pathToTestFileThree{TestUtils::getTestScenarioDirectory() + "/USA_Peach-2_1_T-1.xml"};
     const auto &[obstaclesScenarioThree, roadNetworkScenarioThree] =

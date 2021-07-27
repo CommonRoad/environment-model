@@ -36,11 +36,13 @@ LineMarking matchStringToLineMarking(const std::string &type);
  * @param curLanelet Lanelet which is currently at the end of list and for which successors should be added.
  * @param fov Field of view defining length of lane.
  * @param containedLanelets List of contained lanelets in lane. Required for recursive call.
+ * @param numIntersections Number of intersection which still can be considered for lane creation.
  * @return List containing a list of lanelets contained in lane.
  */
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
 combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov = 250,
-                                  std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
+                                  int numIntersections = 2,
+                                  const std::vector<std::shared_ptr<Lanelet>> &containedLanelets = {});
 
 /**
  * Combines a lanelet and all its predecessors to lanes. For each predecessor lanelet a new lane is created. The
@@ -49,10 +51,12 @@ combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, do
  * @param curLanelet Lanelet which is currently at the end of list and for which predecessors should be added.
  * @param fov Field of view defining length of lane.
  * @param containedLanelets List of contained lanelets in lane. Required for recursive call.
+ * @param numIntersections Number of intersection which still can be considered for lane creation.
  * @return List containing a list of lanelets contained in lane.
  */
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
 combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov = 250,
+                                    int numIntersections = 2,
                                     std::vector<std::shared_ptr<Lanelet>> containedLanelets = {});
 
 /**
@@ -61,13 +65,15 @@ combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, 
  * @param initialLanelets Initial lanelets based on which lanelets should be created.
  * @param idCounter Starting ID of new lanes.
  * @param roadNetwork Pointer to road network.
- * @param fov Field of view which defines length of lanes.
+ * @param fovRear Field of view behind obstacle which defines length of lanes.
+ * @param fovFront Field of view in front of obstacle which defines length of lanes.
+ * @param numIntersections Number of intersection which still can be considered for lane creation.
  * @return List of pointers to lanes originating from given lanelets.
  */
 std::vector<std::shared_ptr<Lane>>
 createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets,
                             const std::shared_ptr<size_t> &idCounter, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                            double fov = 250);
+                            double fovRear = 250, double fovFront = 250, int numIntersections = 2);
 
 /**
  * Creates lane objects given set of lanelets which form lane.

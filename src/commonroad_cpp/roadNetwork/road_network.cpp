@@ -125,6 +125,27 @@ std::vector<std::shared_ptr<Lane>> RoadNetwork::addLanes(const std::vector<std::
             lanes[la->getContainedLaneletIDs()].first.insert(initialLanelet);
             updatedLanes.push_back(lanes.at(la->getContainedLaneletIDs()).second);
         } else {
+            //            std::set<size_t> subset;
+            //            for(const auto &curLane : lanes){
+            //                std::set<size_t> tmp;
+            //                std::set_intersection(std::get<0>(curLane).begin(), std::get<0>(curLane).end(),
+            //                                      la->getContainedLaneletIDs().begin(),
+            //                                      la->getContainedLaneletIDs().end(),
+            //                                      std::inserter(tmp, tmp.begin()));
+            //                if(tmp == std::get<0>(curLane)) {
+            //                    subset = tmp;
+            //                    break;
+            //                }
+            //            }
+            //            if(!subset.empty()){
+            //                auto node = lanes.extract(subset);
+            //                node.key() = la->getContainedLaneletIDs();
+            //                node.mapped().first.insert(initialLanelet);
+            //                node.mapped().second = la;
+            //                lanes.insert(std::move(node));
+            //                continue;
+            //            }
+
             lanes[la->getContainedLaneletIDs()] = {{initialLanelet}, la};
             updatedLanes.push_back(la);
         }
@@ -132,10 +153,18 @@ std::vector<std::shared_ptr<Lane>> RoadNetwork::addLanes(const std::vector<std::
     return updatedLanes;
 }
 
-std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesByLanelet(size_t laneletID) {
+std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesByBaseLanelet(size_t laneletID) {
     std::vector<std::shared_ptr<Lane>> relevantLanes;
     for (const auto &[laneIDs, laneMap] : lanes)
         if (laneIDs.count(laneletID) != 0u and laneMap.first.count(laneletID) != 0u)
+            relevantLanes.push_back(laneMap.second);
+    return relevantLanes;
+}
+
+std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesByContainedLanelet(size_t laneletID) {
+    std::vector<std::shared_ptr<Lane>> relevantLanes;
+    for (const auto &[laneIDs, laneMap] : lanes)
+        if (laneIDs.count(laneletID) != 0u)
             relevantLanes.push_back(laneMap.second);
     return relevantLanes;
 }

@@ -139,7 +139,15 @@ class RoadNetwork {
      * @param laneletID Lanelet ID to search for.
      * @return Pointers to existing lanes.
      */
-    std::vector<std::shared_ptr<Lane>> findLanesByLanelet(size_t laneletID);
+    std::vector<std::shared_ptr<Lane>> findLanesByBaseLanelet(size_t laneletID);
+
+    /**
+     * Searches for existing lanes which contain lanelet with provided ID.
+     *
+     * @param laneletID Lanelet ID to search for.
+     * @return Pointers to existing lanes.
+     */
+    std::vector<std::shared_ptr<Lane>> findLanesByContainedLanelet(size_t laneletID);
 
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */

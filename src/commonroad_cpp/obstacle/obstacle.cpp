@@ -22,6 +22,7 @@
 #include <boost/geometry/geometries/ring.hpp> // for ring
 
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
+#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/obstacle/state.h>
@@ -446,14 +447,28 @@ const std::vector<vertex> &Obstacle::getRoute() const { return route; }
 void Obstacle::setRoute(const std::vector<vertex> &newRoute) { route = newRoute; }
 
 void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes, size_t timeStep) {
-    occupiedLanes[timeStep] = lanes;
+    if (occupiedLanes.count(timeStep) == 0)
+        occupiedLanes[timeStep] = lanes;
 }
 
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                                std::shared_ptr<size_t> idCounter) {
+                                std::shared_ptr<size_t> idCounter, double fovFront) {
     auto lanelets{getOccupiedLanelets(roadNetwork, timeStep)};
-    occupiedLanes[timeStep] =
-        lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfView);
+    std::vector<std::shared_ptr<Lane>> occLanes{
+        lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfViewRear, fovFront)};
+    occupiedLanes[timeStep] = occLanes;
+}
+double Obstacle::approximateFieldOfView() {
+    double fovFront{fieldOfViewFront};
+    if (fieldOfViewFront <
+        static_cast<double>(trajectoryPrediction.size()) * dt * currentState->getVelocity() * fovApproximationFactor) {
+        double maxV{0.0};
+        for (const auto &state : trajectoryPrediction)
+            if (state.second->getVelocity() > maxV)
+                maxV = state.second->getVelocity();
+        fovFront = maxV * static_cast<double>(trajectoryPrediction.size()) * dt;
+    }
+    return fovFront;
 }
 
 std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
@@ -478,20 +493,26 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shar
 
 std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                               size_t timeStep, std::shared_ptr<size_t> idCounter) {
-    if (occupiedLanes[timeStep].empty())
-        setOccupiedLanes(roadNetwork, timeStep, idCounter);
+    if (occupiedLanes[timeStep].empty()) {
+        double fovFront = approximateFieldOfView();
+        setOccupiedLanes(roadNetwork, timeStep, idCounter, fovFront);
+    }
     return occupiedLanes[timeStep];
 }
 
 void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, std::shared_ptr<size_t> idCounter) {
+    const size_t timeStamp{currentState->getTimeStep()};
+    auto lanelets{getOccupiedLanelets(roadNetwork, timeStamp)};
+    double fovFront = approximateFieldOfView();
+    auto lanes{
+        lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfViewRear, fovFront)};
+    setOccupiedLanes(lanes, timeStamp);
+    for (const auto &la : lanelets) // add initial adjacent lanelets to road network; ignore return value
+        lanelet_operations::createLanesBySingleLanelets(lanelet_operations::adjacentLanelets(la), idCounter,
+                                                        roadNetwork, fieldOfViewRear, fovFront);
     if (!isStatic) {
-        for (const auto &timeStamp : getTimeSteps())
-            setOccupiedLanes(roadNetwork, timeStamp, idCounter);
+        for (const auto &time : getPredictionTimeSteps())
+            setOccupiedLanes(roadNetwork, time, idCounter, fovFront);
         setReferenceLane(roadNetwork);
-    } else {
-        const size_t timeStamp{currentState->getTimeStep()};
-        auto lanelets{getOccupiedLanelets(roadNetwork, timeStamp)};
-        auto lanes{lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfView)};
-        setOccupiedLanes(lanes, timeStamp);
     }
 }

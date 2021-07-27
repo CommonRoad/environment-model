@@ -230,51 +230,38 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSeveralComplexIntersections) {
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(82817)},
                                                                globalIdRef, roadNetworkScenario)};
-    EXPECT_EQ(lanes.size(), 6);
-    std::set<size_t> expLaneSizes{5, 9, 10};
+    EXPECT_EQ(lanes.size(), 3);
+    std::set<size_t> expLaneSizes{5, 7};
     std::set<size_t> laneSizes{lanes.at(0)->getContainedLanelets().size(), lanes.at(1)->getContainedLanelets().size(),
-                               lanes.at(2)->getContainedLanelets().size(), lanes.at(3)->getContainedLanelets().size(),
-                               lanes.at(4)->getContainedLanelets().size(), lanes.at(5)->getContainedLanelets().size()};
+                               lanes.at(2)->getContainedLanelets().size()};
     EXPECT_EQ(expLaneSizes, laneSizes);
-    auto startIds{std::set<size_t>{
-        lanes.at(0)->getContainedLanelets().front()->getId(), lanes.at(1)->getContainedLanelets().front()->getId(),
-        lanes.at(2)->getContainedLanelets().front()->getId(), lanes.at(3)->getContainedLanelets().front()->getId(),
-        lanes.at(4)->getContainedLanelets().front()->getId(), lanes.at(5)->getContainedLanelets().front()->getId()}};
+    auto startIds{std::set<size_t>{lanes.at(0)->getContainedLanelets().front()->getId(),
+                                   lanes.at(1)->getContainedLanelets().front()->getId(),
+                                   lanes.at(2)->getContainedLanelets().front()->getId()}};
     auto expStartIds{std::set<size_t>{77695}};
     EXPECT_EQ(startIds, expStartIds);
-    auto endIds{std::set<size_t>{
-        lanes.at(0)->getContainedLanelets().back()->getId(), lanes.at(1)->getContainedLanelets().back()->getId(),
-        lanes.at(2)->getContainedLanelets().back()->getId(), lanes.at(3)->getContainedLanelets().back()->getId(),
-        lanes.at(4)->getContainedLanelets().back()->getId(), lanes.at(5)->getContainedLanelets().back()->getId()}};
-    auto expEndIds{std::set<size_t>{77029, 77074, 77236, 77298, 80980, 80983}};
+    auto endIds{std::set<size_t>{lanes.at(0)->getContainedLanelets().back()->getId(),
+                                 lanes.at(1)->getContainedLanelets().back()->getId(),
+                                 lanes.at(2)->getContainedLanelets().back()->getId()}};
+    auto expEndIds{std::set<size_t>{77071, 77236, 77301}};
     EXPECT_EQ(endIds, expEndIds);
     lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(77065)}, globalIdRef,
                                                             roadNetworkScenario);
-    EXPECT_EQ(lanes.size(), 12);
-    expLaneSizes = {5, 9, 11};
-    laneSizes = {lanes.at(0)->getContainedLanelets().size(),  lanes.at(1)->getContainedLanelets().size(),
-                 lanes.at(2)->getContainedLanelets().size(),  lanes.at(3)->getContainedLanelets().size(),
-                 lanes.at(4)->getContainedLanelets().size(),  lanes.at(5)->getContainedLanelets().size(),
-                 lanes.at(6)->getContainedLanelets().size(),  lanes.at(7)->getContainedLanelets().size(),
-                 lanes.at(8)->getContainedLanelets().size(),  lanes.at(9)->getContainedLanelets().size(),
-                 lanes.at(10)->getContainedLanelets().size(), lanes.at(11)->getContainedLanelets().size()};
+    EXPECT_EQ(lanes.size(), 6);
+    expLaneSizes = {5, 7};
+    laneSizes = {lanes.at(0)->getContainedLanelets().size(), lanes.at(1)->getContainedLanelets().size(),
+                 lanes.at(2)->getContainedLanelets().size(), lanes.at(3)->getContainedLanelets().size(),
+                 lanes.at(4)->getContainedLanelets().size(), lanes.at(5)->getContainedLanelets().size()};
     EXPECT_EQ(expLaneSizes, laneSizes);
     startIds = {
-        lanes.at(0)->getContainedLanelets().front()->getId(),  lanes.at(1)->getContainedLanelets().front()->getId(),
-        lanes.at(2)->getContainedLanelets().front()->getId(),  lanes.at(3)->getContainedLanelets().front()->getId(),
-        lanes.at(4)->getContainedLanelets().front()->getId(),  lanes.at(5)->getContainedLanelets().front()->getId(),
-        lanes.at(6)->getContainedLanelets().front()->getId(),  lanes.at(7)->getContainedLanelets().front()->getId(),
-        lanes.at(8)->getContainedLanelets().front()->getId(),  lanes.at(9)->getContainedLanelets().front()->getId(),
-        lanes.at(10)->getContainedLanelets().front()->getId(), lanes.at(11)->getContainedLanelets().front()->getId()};
+        lanes.at(0)->getContainedLanelets().front()->getId(), lanes.at(1)->getContainedLanelets().front()->getId(),
+        lanes.at(2)->getContainedLanelets().front()->getId(), lanes.at(3)->getContainedLanelets().front()->getId(),
+        lanes.at(4)->getContainedLanelets().front()->getId(), lanes.at(5)->getContainedLanelets().front()->getId()};
     expStartIds = {77062, 77695};
     EXPECT_EQ(startIds, expStartIds);
-    endIds = {
-        lanes.at(0)->getContainedLanelets().back()->getId(),  lanes.at(1)->getContainedLanelets().back()->getId(),
-        lanes.at(2)->getContainedLanelets().back()->getId(),  lanes.at(3)->getContainedLanelets().back()->getId(),
-        lanes.at(4)->getContainedLanelets().back()->getId(),  lanes.at(5)->getContainedLanelets().back()->getId(),
-        lanes.at(6)->getContainedLanelets().back()->getId(),  lanes.at(7)->getContainedLanelets().back()->getId(),
-        lanes.at(8)->getContainedLanelets().back()->getId(),  lanes.at(9)->getContainedLanelets().back()->getId(),
-        lanes.at(10)->getContainedLanelets().back()->getId(), lanes.at(11)->getContainedLanelets().back()->getId()};
-    expEndIds = {77029, 77074, 77236, 77298, 77304, 77315};
+    endIds = {lanes.at(0)->getContainedLanelets().back()->getId(), lanes.at(1)->getContainedLanelets().back()->getId(),
+              lanes.at(2)->getContainedLanelets().back()->getId(), lanes.at(3)->getContainedLanelets().back()->getId(),
+              lanes.at(4)->getContainedLanelets().back()->getId(), lanes.at(5)->getContainedLanelets().back()->getId()};
+    expEndIds = {77071, 77236, 77301};
     EXPECT_EQ(endIds, expEndIds);
 }

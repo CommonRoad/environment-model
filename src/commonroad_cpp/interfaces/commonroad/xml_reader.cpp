@@ -141,7 +141,6 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
             }
         }
     }
-    tempObstacle->setReactionTime(reactionTimeObstacles);
     obstacleList.emplace_back(tempObstacle);
 }
 

@@ -60,7 +60,8 @@ LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type
 
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
 lanelet_operations::combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov,
-                                                      std::vector<std::shared_ptr<Lanelet>> containedLanelets) {
+                                                      int numIntersections,
+                                                      const std::vector<std::shared_ptr<Lanelet>> &containedLanelets) {
 
     std::vector<std::vector<std::shared_ptr<Lanelet>>> lanes;
     std::vector<std::shared_ptr<Lanelet>> laneletList{containedLanelets};
@@ -68,15 +69,17 @@ lanelet_operations::combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lane
     double laneLength{0};
     for (const auto &la : laneletList)
         laneLength += la->getPathLength().back();
+    if (curLanelet->hasLaneletType(LaneletType::incoming))
+        --numIntersections;
 
     // check whether it is the last lanelet of the lane, the lane contains no loop, and max length is reached
     if (!curLanelet->getSuccessors().empty() and
         !std::any_of(
             containedLanelets.begin(), containedLanelets.end(),
             [curLanelet](const std::shared_ptr<Lanelet> &la) { return curLanelet->getId() == la->getId(); }) and
-        laneLength < fov) {
+        laneLength < fov and numIntersections >= 0) {
         for (const auto &la : curLanelet->getSuccessors()) {
-            auto newLanes{combineLaneletAndSuccessorsToLane(la, fov, laneletList)};
+            auto newLanes{combineLaneletAndSuccessorsToLane(la, fov, numIntersections, laneletList)};
             lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
         }
     } else
@@ -86,6 +89,7 @@ lanelet_operations::combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lane
 
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
 lanelet_operations::combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov,
+                                                        int numIntersections,
                                                         std::vector<std::shared_ptr<Lanelet>> containedLanelets) {
 
     std::vector<std::vector<std::shared_ptr<Lanelet>>> lanes;
@@ -94,15 +98,17 @@ lanelet_operations::combineLaneletAndPredecessorsToLane(const std::shared_ptr<La
     double laneLength{0};
     for (const auto &la : laneletList)
         laneLength += la->getPathLength().back();
+    if (curLanelet->hasLaneletType(LaneletType::incoming))
+        --numIntersections;
 
     // check whether it is the last lanelet of the lane, the lane contains no loop, and max length is reached
     if (!curLanelet->getPredecessors().empty() and
         !std::any_of(
             containedLanelets.begin(), containedLanelets.end(),
             [curLanelet](const std::shared_ptr<Lanelet> &la) { return curLanelet->getId() == la->getId(); }) and
-        laneLength < fov) {
+        laneLength < fov and numIntersections >= 0) {
         for (const auto &la : curLanelet->getPredecessors()) {
-            auto newLanes{combineLaneletAndPredecessorsToLane(la, fov, laneletList)};
+            auto newLanes{combineLaneletAndPredecessorsToLane(la, fov, numIntersections, laneletList)};
             lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
         }
     } else
@@ -110,23 +116,22 @@ lanelet_operations::combineLaneletAndPredecessorsToLane(const std::shared_ptr<La
     return lanes;
 }
 
-std::vector<std::shared_ptr<Lane>>
-lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets,
-                                                const std::shared_ptr<size_t> &idCounter,
-                                                const std::shared_ptr<RoadNetwork> &roadNetwork, double fov) {
+std::vector<std::shared_ptr<Lane>> lanelet_operations::createLanesBySingleLanelets(
+    const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, const std::shared_ptr<size_t> &idCounter,
+    const std::shared_ptr<RoadNetwork> &roadNetwork, double fovRear, double fovFront, int numIntersections) {
     std::vector<std::shared_ptr<Lane>> lanes;
 
     // create lanes
     for (const auto &la : initialLanelets) {
         // lane was already created based on this initial lanelet -> continue with next lanelet
-        auto newLanes{roadNetwork->findLanesByLanelet(la->getId())};
+        auto newLanes{roadNetwork->findLanesByBaseLanelet(la->getId())};
         if (!newLanes.empty()) {
             lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
             continue;
         }
 
-        auto newLaneSuccessorParts{combineLaneletAndSuccessorsToLane(la, fov)};
-        auto newLanePredecessorParts{combineLaneletAndPredecessorsToLane(la, fov)};
+        auto newLaneSuccessorParts{combineLaneletAndSuccessorsToLane(la, fovFront, numIntersections)};
+        auto newLanePredecessorParts{combineLaneletAndPredecessorsToLane(la, fovRear, numIntersections)};
         if (!newLaneSuccessorParts.empty() and !newLanePredecessorParts.empty())
             for (const auto &laneSuc : newLaneSuccessorParts)
                 for (const auto &lanePre : newLanePredecessorParts) {

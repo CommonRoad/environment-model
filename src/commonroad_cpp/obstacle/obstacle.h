@@ -372,10 +372,9 @@ class Obstacle {
      *
      * @param roadNetwork Pointer to road network.
      * @param timeStep Time step of interest.
-     * @param idCounter Starting ID for new lanes.
      */
     void setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                          std::shared_ptr<size_t> idCounter);
+                          std::shared_ptr<size_t> idCounter, double fovFront); // TODO create test case
 
     /**
      * Extracts first time step of trajectory
@@ -489,5 +488,16 @@ class Obstacle {
     std::vector<vertex> route;                   //**< planned route of the obstacle */
     const double laneOrientationThreshold{0.35}; //**< orientation threshold for assigning lanes */
     const double laneOrientationThresholdInitial{
-        1.58}; //**< orientation threshold for assigning lanes at initial time step */
+        1.58}; //**< orientation threshold for assigning lanes at initial time step, should be larger than other
+               // threshold since initial time step has special evaluation */
+    const double fieldOfViewRear{250.0};       //**< length of field of view provided by front sensors */
+    const double fieldOfViewFront{250.0};      //**< length of field of view provided by rear sensors */
+    const double fovApproximationFactor{0.75}; //**< length of field of view provided by rear sensors */
+
+    /**
+     *   Approximates field of view for long prediction horizons.
+     *
+     * @return Approximated field of view.
+     */
+    double approximateFieldOfView();
 };
