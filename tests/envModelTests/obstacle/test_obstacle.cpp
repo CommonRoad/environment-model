@@ -134,7 +134,7 @@ TEST_F(ObstacleTest, InitializationComplete) {
     EXPECT_EQ(obstacleOne->getId(), laneOne->getId());
     compareVerticesVector({obstacleOne->getReferenceLane()->getCenterVertices().front(),
                            obstacleOne->getReferenceLane()->getCenterVertices().back()},
-                          {laneletThree->getCenterVertices().front(), laneletTwo->getCenterVertices().back()});
+                          {laneletThree->getCenterVertices().front(), laneletSix->getCenterVertices().back()});
     for (size_t i = 2; i <= 3; ++i)
         compareStates(trajectoryPredictionObstacleOne.at(i), obstacleOne->getTrajectoryPrediction().at(i));
     EXPECT_EQ(obstacleOne->getTrajectoryLength(), 3);

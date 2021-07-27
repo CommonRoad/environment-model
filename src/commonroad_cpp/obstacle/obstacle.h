@@ -500,4 +500,14 @@ class Obstacle {
      * @return Approximated field of view.
      */
     double approximateFieldOfView();
+
+    /**
+     * Extracts the lanelets which are adjacent based on the occupied lanelets at given time step and have similar
+     * orientation. This is a helper function for extracting the reference.
+     * @param timeStep Time step of interest.
+     * @param roadNetwork Pointer to relevant road network.
+     * @param occupiedLaneletsAdjacent Reference to vector where pointers to lanelets should be stored.
+     */
+    std::vector<std::shared_ptr<Lanelet>> adjacentLaneletsInDirection(size_t timeStep,
+                                                                      std::shared_ptr<RoadNetwork> roadNetwork);
 };
