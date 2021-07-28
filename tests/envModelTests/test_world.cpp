@@ -27,16 +27,6 @@ TEST_F(WorldTest, TestScenariosValid) {
     }
 }
 
-TEST_F(WorldTest, TestScenariosInValid) {
-    std::array<std::string, 1> scenarios{"ARG_Carcarana-6_5_T-1.xml"};
-    for (const auto &sc : scenarios) {
-        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + sc};
-        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
-            CommandLine::getDataFromCommonRoad(pathToTestFileOne);
-        EXPECT_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})}, std::runtime_error);
-    }
-}
-
 TEST_F(WorldTest, TestSingleScenarioObstacle) {
     std::string scenario{"USA_Peach-2_1_T-1.xml"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
@@ -51,7 +41,7 @@ TEST_F(WorldTest, TestSingleScenario) {
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
     EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})});
 }
-//
+
 // TEST_F(WorldTest, TestAllScenarios) {
 //    int numThreads{6};
 //    //std::string path{"/media/sebastian/TUM/06_code/cps/scenarios/cr-scenarios/scenarios"};
@@ -65,13 +55,14 @@ TEST_F(WorldTest, TestSingleScenario) {
 //        for (directory_iterator itr(dir); itr != directory_iterator(); ++itr)
 //            if (boost::algorithm::ends_with(itr->path().string(), ".xml"))
 //                fileNames.push_back(itr->path().string());
-////        omp_set_num_threads(numThreads);
-////#pragma omp parallel for schedule(guided) shared(fileNames, results) firstprivate(monitor) default(none)
+//        omp_set_num_threads(numThreads);
+//#pragma omp parallel for schedule(guided) shared(fileNames) default(none)
 //        for (size_t i = 0; i < fileNames.size(); i++) {
 //            const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
 //            CommandLine::getDataFromCommonRoad(fileNames.at(i));
 //            try{
 //                auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})};
+//                std::cout << fileNames.at(i) << '\n';
 //            } catch (const std::runtime_error &re) {
 //                std::cerr << "Runtime error: " << re.what() << std::endl;
 //                std::cerr << "Scenario: " << fileNames.at(i) << std::endl;

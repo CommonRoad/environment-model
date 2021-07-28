@@ -18,7 +18,7 @@ bool SucceedsPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr
                                           const std::shared_ptr<Obstacle> &obstacleK) {
     InFrontOfPredicate inFrontOfPredicate;
     InSameLanePredicate inSameLanePredicate;
-    auto curPointOrientation{obstacleP->getReferenceLane()->getOrientationAtPosition(
+    auto curPointOrientation{obstacleP->getReferenceLane(timeStep)->getOrientationAtPosition(
         obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
         obstacleK->getStateByTimeStep(timeStep)->getYPosition())};
     return inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleP, obstacleK) and

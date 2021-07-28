@@ -65,7 +65,7 @@ lanelet_operations::combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lane
     std::vector<std::vector<std::shared_ptr<Lanelet>>> lanes;
     std::vector<std::shared_ptr<Lanelet>> laneletList{containedLanelets};
     laneletList.push_back(curLanelet);
-    double laneLength{-laneletList.at(0)->getPathLength().back()}; //neglect initial lanelet
+    double laneLength{-laneletList.at(0)->getPathLength().back()}; // neglect initial lanelet
     for (const auto &la : laneletList)
         laneLength += la->getPathLength().back();
     if (curLanelet->hasLaneletType(LaneletType::incoming))
@@ -94,7 +94,7 @@ lanelet_operations::combineLaneletAndPredecessorsToLane(const std::shared_ptr<La
     std::vector<std::vector<std::shared_ptr<Lanelet>>> lanes;
     std::vector<std::shared_ptr<Lanelet>> laneletList{containedLanelets};
     laneletList.push_back(curLanelet);
-    double laneLength{-laneletList.at(0)->getPathLength().back()}; //neglect initial lanelet
+    double laneLength{-laneletList.at(0)->getPathLength().back()}; // neglect initial lanelet
     for (const auto &la : laneletList)
         laneLength += la->getPathLength().back();
     if (curLanelet->hasLaneletType(LaneletType::incoming))

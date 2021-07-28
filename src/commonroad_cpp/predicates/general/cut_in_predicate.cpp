@@ -21,9 +21,11 @@ bool CutInPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<Wo
     InSameLanePredicate inSameLanePredicate;
     if (!inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obstacleP))
         return false;
-    return (obstacleK->getLatPosition(timeStep) < obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane()) and
+    return (obstacleK->getLatPosition(timeStep) <
+                obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)) and
             obstacleK->getCurvilinearOrientation(timeStep) > 0) or
-           (obstacleK->getLatPosition(timeStep) > obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane()) and
+           (obstacleK->getLatPosition(timeStep) >
+                obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)) and
             obstacleK->getCurvilinearOrientation(timeStep) < 0);
 }
 

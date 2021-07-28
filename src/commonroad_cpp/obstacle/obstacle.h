@@ -121,15 +121,6 @@ class Obstacle {
     void setReactionTime(double tReact);
 
     /**
-     * Setter for reference lane.
-     *
-     * @param lane Lane which should be used as reference lane for curvilinear coordinate system. Usually, this is the
-     * ego vehicle's lane.
-     * @param timeStep Current time step.
-     */
-    void setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork);
-
-    /**
      * Setter for trajectory prediction.
      *
      * @param trajPrediction Map matching time step to state.
@@ -231,9 +222,10 @@ class Obstacle {
     /**
      * Getter for reference lane.
      *
+     * @param timeStep Time step of interest.
      * @return Pointer to lane object.
      */
-    [[nodiscard]] std::shared_ptr<Lane> getReferenceLane() const;
+    [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(size_t timeStep);
 
     /**
      * Getter for trajectory prediction.
@@ -268,6 +260,14 @@ class Obstacle {
     getOccupiedLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
+     * Getter for occupied lanelets at a time steps. Occupied lanelets must be computed before calling this function.
+     *
+     * @param timeStep Time step of interest
+     * @return List of pointers to occupied lanelets.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getOccupiedLanelets(size_t timeStep);
+
+    /**
      * Provides state given a time step. The time step can belong to the current state, history, or prediction.
      *
      * @param timeStep Time step of interest.
@@ -280,7 +280,7 @@ class Obstacle {
      *
      * @return Length of trajectory prediction.
      */
-    [[nodiscard]] size_t getTrajectoryLength();
+    [[nodiscard]] size_t getTrajectoryLength() const;
 
     /**
      * Computes the maximum longitudinal front position of obstacle (for rectangle shapes)
@@ -323,7 +323,7 @@ class Obstacle {
      * @param timeStep time step of interest
      * @return longitudinal position of obstacle state
      */
-    [[nodiscard]] double getLonPosition(size_t timeStep) const;
+    [[nodiscard]] double getLonPosition(size_t timeStep);
 
     /**
      * Computes the longitudinal position of obstacle based on Cartesian state and provided reference lane.
@@ -332,7 +332,7 @@ class Obstacle {
      * @param refLane Pointer to reference lane.
      * @return longitudinal position of obstacle state
      */
-    [[nodiscard]] double getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane) const;
+    [[nodiscard]] double getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane);
 
     /**
      * Computes the lateral position of obstacle based on Cartesian state and assigned reference lane
@@ -340,7 +340,7 @@ class Obstacle {
      * @param timeStep time step of interest
      * @return lateral position of obstacle state
      */
-    [[nodiscard]] double getLatPosition(size_t timeStep) const;
+    [[nodiscard]] double getLatPosition(size_t timeStep);
 
     /**
      * Computes the lateral position of obstacle based on Cartesian state and assigned reference lane
@@ -349,7 +349,7 @@ class Obstacle {
      * @param refLane Pointer to reference lane.
      * @return lateral position of obstacle state
      */
-    [[nodiscard]] double getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane) const;
+    [[nodiscard]] double getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane);
 
     /**
      * Computes the curvilinear orientation of obstacle based on Cartesian state and assigned lane
@@ -357,7 +357,7 @@ class Obstacle {
      * @param timeStep time step of interest
      * @return curvilinear orientation of obstacle state
      */
-    [[nodiscard]] double getCurvilinearOrientation(size_t timeStep) const; // Todo create test case
+    [[nodiscard]] double getCurvilinearOrientation(size_t timeStep); // Todo create test case
 
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
@@ -390,7 +390,7 @@ class Obstacle {
      * @param timeStep time step of interest
      * @return lateral position of obstacle state
      */
-    [[nodiscard]] size_t getLastTrajectoryTimeStep(); // TODO create test case
+    [[nodiscard]] size_t getLastTrajectoryTimeStep() const; // TODO create test case
 
     /**
      * Getter for occupied lanes at a time step. Computes occupied lanes if not happened already.
@@ -403,6 +403,16 @@ class Obstacle {
     std::vector<std::shared_ptr<Lane>> getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                         size_t timeStep,
                                                         std::shared_ptr<size_t> idCounter); // TODO create test case
+
+    /**
+     * Getter for occupied lanes at a time step. Computes occupied lanes must be computed already.
+     *
+     * @param roadNetwork Pointer to road network.
+     * @param timeStep Time step of interest.
+     * @param idCounter Starting ID for new lanes.
+     * @return List of pointers to occupied lanes.
+     */
+    std::vector<std::shared_ptr<Lane>> getOccupiedLanes(size_t timeStep); // TODO create test case
 
     /**
      * Computes driving paths at time step. Driving path is defined by all lanes completely adjacent to reference lane.
@@ -428,7 +438,7 @@ class Obstacle {
      *
      * @param timeStep Time step for which the coordinates should me transformed.
      */
-    void convertPointToCurvilinear(size_t timeStep) const;
+    void convertPointToCurvilinear(size_t timeStep);
 
     /**
      * Checks whether time steps exists in trajectory prediction or current state.
@@ -453,6 +463,13 @@ class Obstacle {
     std::vector<size_t> getPredictionTimeSteps();
 
     /**
+     * Getter for all history time steps.
+     *
+     * @return List of time steps of prediction.
+     */
+    std::vector<size_t> getHistoryTimeSteps();
+
+    /**
      * Getter for list of time steps containing current time step and prediction time steps.
      *
      * @return List of time steps.
@@ -465,7 +482,8 @@ class Obstacle {
      * @param roadNetwork Pointer to road network.
      * @param idCounter Starting ID for new lanes.
      */
-    void computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, std::shared_ptr<size_t> idCounter);
+    void computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, std::shared_ptr<size_t> idCounter,
+                      bool considerHistory = false);
 
   private:
     size_t id;                                        //**< unique ID of lanelet */
@@ -481,8 +499,9 @@ class Obstacle {
     std::map<size_t, std::shared_ptr<State>> history{};              //**< previous states of the obstacle */
     Rectangle geoShape; // TODO make general                                          //**< shape of the obstacle */
     std::map<size_t, std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLanelets;                         //**< map of time steps to lanelets occupied by the obstacle */
-    std::shared_ptr<Lane> referenceLane{nullptr}; //**< lane which is used as reference for curvilinear projection */
+        occupiedLanelets; //**< map of time steps to lanelets occupied by the obstacle */
+    std::map<size_t, std::shared_ptr<Lane>>
+        referenceLane; //**< lane which is used as reference for curvilinear projection */
     std::map<size_t, std::vector<std::shared_ptr<Lane>>>
         occupiedLanes;                           //**< map of time steps to lanes occupied by the obstacle */
     std::vector<vertex> route;                   //**< planned route of the obstacle */
@@ -490,8 +509,8 @@ class Obstacle {
     const double laneOrientationThresholdInitial{
         1.58}; //**< orientation threshold for assigning lanes at initial time step, should be larger than other
                // threshold since initial time step has special evaluation */
-    const double fieldOfViewRear{250.0};       //**< length of field of view provided by front sensors */
-    const double fieldOfViewFront{250.0};      //**< length of field of view provided by rear sensors */
+    const double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
+    const double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
 
     /**
      *   Approximates field of view for long prediction horizons.
@@ -499,15 +518,4 @@ class Obstacle {
      * @return Approximated field of view.
      */
     double approximateFieldOfView();
-
-    /**
-     * Extracts the lanelets which are adjacent based on the occupied lanelets at given time step and have similar
-     * orientation. This is a helper function for extracting the reference.
-     * @param timeStep Time step of interest.
-     * @param roadNetwork Pointer to relevant road network.
-     * @param occupiedLaneletsAdjacent Reference to vector where pointers to lanelets should be stored.
-     */
-    std::vector<std::shared_ptr<Lanelet>> adjacentLaneletsInDirection(size_t timeStep,
-                                                                      std::shared_ptr<RoadNetwork> roadNetwork,
-                                                                      double orientationThreshold);
 };
