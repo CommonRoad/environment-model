@@ -12,6 +12,7 @@ ngsim_lankershim_2020a = scenarios_2020a + "/NGSIM/Lankershim"
 ngsim_us101_2020a = scenarios_2020a + "/NGSIM/US101"
 ngsim_peachtree_2020a = scenarios_2020a + "/NGSIM/Peachtree"
 bicycle_2020a = scenarios_2020a + "/THI-Bicycle"
+frankfurt_2020a = scenarios_2020a + "/../../Frankfurt"
 
 cooperative_2018b = scenarios_2018b + "/cooperative"
 bicycle_2018b = scenarios_2018b + "/THI-Bicycle"
@@ -36,6 +37,12 @@ def eval_scenario(scenario_path: str):
 
 
 # collect scenarios
+for scenario in os.listdir(frankfurt_2020a):
+    if "_S-" in scenario:
+        continue
+    full_path = frankfurt_2020a + "/" + scenario
+    scenario_list.append(full_path)
+
 for scenario in os.listdir(hand_crafted_2020a):
     if "_S-" in scenario:
         continue

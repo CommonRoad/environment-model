@@ -38,11 +38,11 @@ TEST_F(WorldTest, TestScenariosInValid) {
 }
 
 TEST_F(WorldTest, TestSingleScenarioObstacle) {
-    std::string scenario{"USA_Peach-4_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2_1_T-1.xml"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
     EXPECT_NO_THROW(auto world{
-        World(0, roadNetworkScenarioOne, {obstacle_operations::getObstacleById(obstaclesScenarioOne, 271)}, {})});
+        World(0, roadNetworkScenarioOne, {obstacle_operations::getObstacleById(obstaclesScenarioOne, 334)}, {})});
 }
 
 TEST_F(WorldTest, TestSingleScenario) {
@@ -51,11 +51,12 @@ TEST_F(WorldTest, TestSingleScenario) {
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
     EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})});
 }
-
+//
 // TEST_F(WorldTest, TestAllScenarios) {
 //    int numThreads{6};
-//    std::string path{"/media/sebastian/TUM/06_code/cps/scenarios/cr-scenarios/scenarios"};
-//    std::array<std::string, 1> scenarios{"/scenario-factory"};
+//    //std::string path{"/media/sebastian/TUM/06_code/cps/scenarios/cr-scenarios/scenarios"};
+//    std::string path{"/media/sebastian/TUM/06_code/cps/scenarios"};
+//    std::array<std::string, 1> scenarios{"/Frankfurt"};
 //    for (size_t i{0}; i < scenarios.size(); ++i)
 //        scenarios[i] = path + scenarios[i];
 //
@@ -68,8 +69,13 @@ TEST_F(WorldTest, TestSingleScenario) {
 ////#pragma omp parallel for schedule(guided) shared(fileNames, results) firstprivate(monitor) default(none)
 //        for (size_t i = 0; i < fileNames.size(); i++) {
 //            const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
-//            CommandLine::getDataFromCommonRoad(fileNames.at(i)); EXPECT_NO_THROW(auto world{World(0,
-//            roadNetworkScenarioOne, obstaclesScenarioOne, {})});
+//            CommandLine::getDataFromCommonRoad(fileNames.at(i));
+//            try{
+//                auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})};
+//            } catch (const std::runtime_error &re) {
+//                std::cerr << "Runtime error: " << re.what() << std::endl;
+//                std::cerr << "Scenario: " << fileNames.at(i) << std::endl;
+//            }
 //        }
 //    }
 //}

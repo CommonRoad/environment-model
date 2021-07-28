@@ -492,7 +492,6 @@ class Obstacle {
                // threshold since initial time step has special evaluation */
     const double fieldOfViewRear{250.0};       //**< length of field of view provided by front sensors */
     const double fieldOfViewFront{250.0};      //**< length of field of view provided by rear sensors */
-    const double fovApproximationFactor{0.75}; //**< length of field of view provided by rear sensors */
 
     /**
      *   Approximates field of view for long prediction horizons.
@@ -509,5 +508,6 @@ class Obstacle {
      * @param occupiedLaneletsAdjacent Reference to vector where pointers to lanelets should be stored.
      */
     std::vector<std::shared_ptr<Lanelet>> adjacentLaneletsInDirection(size_t timeStep,
-                                                                      std::shared_ptr<RoadNetwork> roadNetwork);
+                                                                      std::shared_ptr<RoadNetwork> roadNetwork,
+                                                                      double orientationThreshold);
 };

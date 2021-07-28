@@ -142,11 +142,16 @@ void Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork)
     // find relevant lanes -> occupied/adjacent at first time step + occupied/adjacent at last time step
     // only lanes created based on the initial time step are considered as reference
     std::vector<std::shared_ptr<Lane>> relevantOccupiedLanes;
+    std::vector<std::shared_ptr<Lane>> possibleLanes;
     std::vector<std::shared_ptr<Lanelet>> occupiedLaneletsFirstTimeStepAdjacent{
-        adjacentLaneletsInDirection(currentState->getTimeStep(), roadNetwork)};
+        adjacentLaneletsInDirection(currentState->getTimeStep(), roadNetwork, laneOrientationThresholdInitial)};
+    for(const auto &la : occupiedLaneletsFirstTimeStepAdjacent){
+        auto tmpLanes{roadNetwork->findLanesByBaseLanelet(la->getId())};
+        possibleLanes.insert(possibleLanes.end(), tmpLanes.begin(), tmpLanes.end());
+    }
     std::vector<std::shared_ptr<Lanelet>> occupiedLaneletsLastTimeStepAdjacent{
-        adjacentLaneletsInDirection(getLastTrajectoryTimeStep(), roadNetwork)};
-    for (const auto &laneFirst : occupiedLanes[currentState->getTimeStep()])
+        adjacentLaneletsInDirection(getLastTrajectoryTimeStep(), roadNetwork, laneOrientationThreshold)};
+    for (const auto &laneFirst : possibleLanes)
         for (const auto &laneletLast : occupiedLaneletsLastTimeStepAdjacent)
             if (laneFirst->getContainedLaneletIDs().count(laneletLast->getId()) != 0u)
                 relevantOccupiedLanes.push_back(laneFirst);
@@ -158,7 +163,7 @@ void Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork)
                                                    // initial lane is adjacent use this lane
         std::map<size_t, size_t> numOccupancies;
         for (const auto &timeStep : getTimeSteps()) {
-            for (const auto &la : occupiedLanes[currentState->getTimeStep()]) {
+            for (const auto &la : possibleLanes) {
                 if (!std::any_of(relevantOccupiedLanes.begin(), relevantOccupiedLanes.end(),
                                  [la](const std::shared_ptr<Lane> &rel) { return rel->getId() == la->getId(); }))
                     continue;
@@ -446,16 +451,15 @@ void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
     occupiedLanes[timeStep] = occLanes;
 }
 double Obstacle::approximateFieldOfView() {
-    double fovFront{fieldOfViewFront};
-    if (fieldOfViewFront <
-        static_cast<double>(trajectoryPrediction.size()) * dt * currentState->getVelocity() * fovApproximationFactor) {
-        double maxV{0.0};
-        for (const auto &state : trajectoryPrediction)
-            if (state.second->getVelocity() > maxV)
-                maxV = state.second->getVelocity();
-        fovFront = maxV * static_cast<double>(trajectoryPrediction.size()) * dt;
-    }
-    return fovFront;
+    double maxV{0.0};
+    for (const auto &state : trajectoryPrediction)
+        if (state.second->getVelocity() > maxV)
+            maxV = state.second->getVelocity();
+    double fovFront{maxV * static_cast<double>(trajectoryPrediction.size()) * dt};
+    if (fieldOfViewFront < fovFront)
+        return fovFront;
+    else
+        return fieldOfViewFront;
 }
 
 std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
@@ -505,14 +509,15 @@ void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, std
 }
 
 std::vector<std::shared_ptr<Lanelet>> Obstacle::adjacentLaneletsInDirection(size_t timeStep,
-                                                                            std::shared_ptr<RoadNetwork> roadNetwork) {
+                                                                            std::shared_ptr<RoadNetwork> roadNetwork,
+                                                                            double orientationThreshold) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLaneletsAdjacent;
     for (const auto &la : getOccupiedLanelets(roadNetwork, timeStep)) {
         auto curPointOrientation{
-            la->getOrientationAtPosition(this->currentState->getXPosition(), this->currentState->getYPosition())};
+            la->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition())};
         if (abs(geometric_operations::subtractOrientations(curPointOrientation,
-                                                           this->currentState->getGlobalOrientation())) >=
-            this->laneOrientationThresholdInitial)
+                                                           getStateByTimeStep(timeStep)->getGlobalOrientation())) >=
+            orientationThreshold)
             continue;
         auto adjacent{lanelet_operations::adjacentLanelets(la)};
         for (const auto &adj : adjacent)
