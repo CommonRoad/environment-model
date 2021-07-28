@@ -14,6 +14,7 @@
 #include <boost/filesystem.hpp>
 #include <omp.h>
 
+
 using namespace boost::filesystem;
 
 TEST_F(WorldTest, TestScenariosValid) {
@@ -44,9 +45,9 @@ TEST_F(WorldTest, TestSingleScenario) {
 
 // TEST_F(WorldTest, TestAllScenarios) {
 //    int numThreads{6};
-//    //std::string path{"/media/sebastian/TUM/06_code/cps/scenarios/cr-scenarios/scenarios"};
+//    //std::string path{"/media/sebastian/TUM/06_code/cps/scenarios"};
 //    std::string path{"/media/sebastian/TUM/06_code/cps/scenarios"};
-//    std::array<std::string, 1> scenarios{"/Frankfurt"};
+//    std::array<std::string, 1> scenarios{"/cr-scenarios/scenarios/scenario-factory"};
 //    for (size_t i{0}; i < scenarios.size(); ++i)
 //        scenarios[i] = path + scenarios[i];
 //
@@ -57,15 +58,15 @@ TEST_F(WorldTest, TestSingleScenario) {
 //                fileNames.push_back(itr->path().string());
 //        omp_set_num_threads(numThreads);
 //#pragma omp parallel for schedule(guided) shared(fileNames) default(none)
-//        for (size_t i = 0; i < fileNames.size(); i++) {
+//        for (auto & fileName : fileNames) {
 //            const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
-//            CommandLine::getDataFromCommonRoad(fileNames.at(i));
+//            CommandLine::getDataFromCommonRoad(fileName);
 //            try{
 //                auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})};
-//                std::cout << fileNames.at(i) << '\n';
+//                //std::cout << fileName << '\n';
 //            } catch (const std::runtime_error &re) {
-//                std::cerr << "Runtime error: " << re.what() << std::endl;
-//                std::cerr << "Scenario: " << fileNames.at(i) << std::endl;
+//               // std::cerr << "Runtime error: " << re.what() << std::endl;
+//              //  std::cerr << "Scenario: " << fileName << std::endl;
 //            }
 //        }
 //    }

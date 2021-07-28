@@ -39,10 +39,14 @@ Constraint SafeDistancePredicate::constraintEvaluation(size_t timeStep, const st
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
     double tReact{obstacleK->getReactionTime()};
-    return {obstacleP->rearS(timeStep, obstacleK->getReferenceLane(timeStep)) -
-            0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength() -
-            computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
-                                obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
+    try {
+        return {obstacleP->rearS(timeStep, obstacleK->getReferenceLane(timeStep)) -
+                0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength() -
+                computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
+                                    obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
+    } catch (std::runtime_error) {
+        return {0.0};
+    }
 }
 
 Constraint SafeDistancePredicate::constraintEvaluation(double lonPosP, double velocityK, double velocityP,
@@ -60,12 +64,16 @@ double SafeDistancePredicate::robustEvaluation(size_t timeStep, const std::share
     double tReact{obstacleK->getReactionTime()};
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
-    double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(timeStep)) - obstacleK->frontS(timeStep)};
-    // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive robustness
-    if (deltaS < 0)
-        return std::abs(deltaS);
-    else
-        return (deltaS - dSafe);
+    try {
+        double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(timeStep)) - obstacleK->frontS(timeStep)};
+        // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive robustness
+        if (deltaS < 0)
+            return std::abs(deltaS);
+        else
+            return (deltaS - dSafe);
+    } catch(std::runtime_error){
+        return 0.0;
+    }
 }
 
 double SafeDistancePredicate::robustEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP,
