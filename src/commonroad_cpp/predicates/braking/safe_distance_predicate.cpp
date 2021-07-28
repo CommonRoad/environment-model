@@ -66,12 +66,13 @@ double SafeDistancePredicate::robustEvaluation(size_t timeStep, const std::share
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
     try {
         double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(timeStep)) - obstacleK->frontS(timeStep)};
-        // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive robustness
+        // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
+        // robustness
         if (deltaS < 0)
             return std::abs(deltaS);
         else
             return (deltaS - dSafe);
-    } catch(std::runtime_error){
+    } catch (std::runtime_error) {
         return 0.0;
     }
 }

@@ -14,7 +14,6 @@
 #include <boost/filesystem.hpp>
 #include <omp.h>
 
-
 using namespace boost::filesystem;
 
 TEST_F(WorldTest, TestScenariosValid) {
