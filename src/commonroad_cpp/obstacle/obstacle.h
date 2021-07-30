@@ -503,9 +503,9 @@ class Obstacle {
     std::map<size_t, std::shared_ptr<Lane>>
         referenceLane; //**< lane which is used as reference for curvilinear projection */
     std::map<size_t, std::vector<std::shared_ptr<Lane>>>
-        occupiedLanes;                           //**< map of time steps to lanes occupied by the obstacle */
-    std::vector<vertex> route;                   //**< planned route of the obstacle */
-    const double laneOrientationThreshold{0.35}; //**< orientation threshold for assigning lanes */
+        occupiedLanes;                          //**< map of time steps to lanes occupied by the obstacle */
+    std::vector<vertex> route;                  //**< planned route of the obstacle */
+    const double laneOrientationThreshold{0.7}; //**< orientation threshold for assigning lanes */
     const double laneOrientationThresholdInitial{
         1.58}; //**< orientation threshold for assigning lanes at initial time step, should be larger than other
                // threshold since initial time step has special evaluation */

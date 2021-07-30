@@ -17,8 +17,9 @@
 using namespace boost::filesystem;
 
 TEST_F(WorldTest, TestScenariosValid) {
-    std::array<std::string, 5> scenarios{"ZAM_Urban-2_1.xml", "USA_Peach-2_1_T-1.xml", "USA_Peach-4_1_T-1.xml",
-                                         "ESP_Almansa-2_2_T-1.xml", "ITA_Foggia-7_2_T-1.xml"};
+    std::array<std::string, 6> scenarios{"ZAM_Urban-2_1.xml",      "USA_Peach-2_1_T-1.xml",
+                                         "USA_Peach-4_1_T-1.xml",  "ESP_Almansa-2_2_T-1.xml",
+                                         "ITA_Foggia-7_2_T-1.xml", "ARG_Carcarana-6_5_T-1.xml"};
     for (const auto &sc : scenarios) {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + sc};
         const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
@@ -27,17 +28,18 @@ TEST_F(WorldTest, TestScenariosValid) {
     }
 }
 
-TEST_F(WorldTest, TestScenariosInValid) {
-    std::string scenario{"ARG_Carcarana-6_5_T-1.xml"};
-    size_t obstacleId{31};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
-    auto world =
-        World(0, roadNetworkScenarioOne, {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {});
-    auto obs{world.findObstacle(obstacleId)};
-    for (const auto &t : obs->getTimeSteps())
-        EXPECT_THROW(auto ref{obs->getReferenceLane(t)}, std::runtime_error);
-}
+// TEST_F(WorldTest, TestScenariosInValid) {
+//    std::string scenario{"ARG_Carcarana-6_5_T-1.xml"};
+//    size_t obstacleId{31};
+//    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
+//    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
+//    CommandLine::getDataFromCommonRoad(pathToTestFileOne); auto world =
+//        World(0, roadNetworkScenarioOne, {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)},
+//        {});
+//    auto obs{world.findObstacle(obstacleId)};
+//    for (const auto &t : obs->getTimeSteps())
+//        EXPECT_THROW(auto ref{obs->getReferenceLane(t)}, std::runtime_error);
+//}
 
 TEST_F(WorldTest, TestSingleScenarioObstacle) {
     std::string scenario{"BEL_Zwevegem-1_5_T-1.xml"};
@@ -91,24 +93,3 @@ TEST_F(WorldTest, TestSingleScenario) {
 //        }
 //    }
 //}
-
-// lanelet missing:
-// Runtime error: Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID 30483 at time step 200
-// Scenario: /media/sebastian/TUM/06_code/cps/scenarios/Frankfurt/DEU_Frankfurt-90_11_I-1.xml
-// Runtime error: Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID 3227 at time step 197
-// Scenario: /media/sebastian/TUM/06_code/cps/scenarios/Frankfurt/DEU_Frankfurt-90_16_I-1.xml
-
-// Sharpe lane change:
-// Runtime error: Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID 3217 at time step 199
-// Scenario: /media/sebastian/TUM/06_code/cps/scenarios/Frankfurt/DEU_Frankfurt-5_2_I-1.xml
-
-// drive on bridge
-// Runtime error: Obstacle::setReferenceLane: No referenceLane found! Obstacle ID 30168 at time step 28
-// Scenario: /media/sebastian/TUM/06_code/cps/scenarios/Frankfurt/DEU_Frankfurt-63_4_I-1.xml
-
-// Runtime error: Obstacle::setReferenceLane: No referenceLane found! Obstacle ID 30118 at time step 154
-// Scenario: /media/sebastian/TUM/06_code/cps/scenarios/Frankfurt/DEU_Frankfurt-17_5_I-1.xml
-
-// Unclear
-// Runtime error: Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID 30484 at time step 181
-// Scenario: /media/sebastian/TUM/06_code/cps/scenarios/Frankfurt/DEU_Frankfurt-90_5_I-1.xml

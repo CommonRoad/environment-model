@@ -355,12 +355,19 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
         // choose lane with most occupancies; if initial lane is adjacent use this lane
         std::map<size_t, size_t> numOccupancies;
         for (size_t t{timeStep}; t <= getLastTrajectoryTimeStep(); ++t) {
+            std::multimap<double, size_t> bestOccupancies;
             for (const auto &lane : relevantOccupiedLanes) {
                 auto curPointOrientation{lane->getOrientationAtPosition(getStateByTimeStep(t)->getXPosition(),
                                                                         getStateByTimeStep(t)->getYPosition())};
-                if (abs(geometric_operations::subtractOrientations(
-                        curPointOrientation, getStateByTimeStep(t)->getGlobalOrientation())) < laneOrientationThreshold)
-                    numOccupancies[lane->getId()]++;
+                auto orientationDif{abs(geometric_operations::subtractOrientations(
+                    curPointOrientation, getStateByTimeStep(t)->getGlobalOrientation()))};
+                if (orientationDif < laneOrientationThreshold)
+                    bestOccupancies.insert({orientationDif, lane->getId()});
+            }
+            for (const auto &elem : bestOccupancies) {
+                if (elem.first != bestOccupancies.begin()->first)
+                    break;
+                numOccupancies[elem.second]++;
             }
         }
         if (!numOccupancies.empty()) { // find lane with most occupancies (orientation must also match)
@@ -450,15 +457,15 @@ void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
     occupiedLanes[timeStep] = occLanes;
 }
 double Obstacle::approximateFieldOfView() {
-    double maxV{0.0};
-    for (const auto &state : trajectoryPrediction)
-        if (state.second->getVelocity() > maxV)
-            maxV = state.second->getVelocity();
-    double fovFront{maxV * static_cast<double>(trajectoryPrediction.size()) * dt};
-    if (fieldOfViewFront < fovFront)
-        return fovFront;
-    else
-        return fieldOfViewFront;
+    //    double maxV{0.0};
+    //    for (const auto &state : trajectoryPrediction)
+    //        if (state.second->getVelocity() > maxV)
+    //            maxV = state.second->getVelocity();
+    //    double fovFront{maxV * static_cast<double>(trajectoryPrediction.size()) * dt};
+    //    if (fieldOfViewFront < fovFront)
+    //        return fovFront;
+    //    else
+    return fieldOfViewFront;
 }
 
 std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
