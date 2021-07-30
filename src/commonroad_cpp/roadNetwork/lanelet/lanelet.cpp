@@ -167,18 +167,23 @@ void Lanelet::createCenterVertices() {
 }
 
 double Lanelet::getOrientationAtPosition(double positionX, double positionY) const {
-    // find closest vertex to the given position
+    unsigned long closestIndex = findClosestIndex(positionX, positionY);
+
+    // calculate orientation at vertex using its successor vertex
+    vertex vert1{centerVertices[closestIndex]};
+    vertex vert2{centerVertices[closestIndex + 1]};
+    return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
+}
+
+unsigned long Lanelet::findClosestIndex(double positionX,
+                                        double positionY) const { // find closest vertex to the given position
     std::vector<double> dif(centerVertices.size() - 1);
     for (unsigned long i = 0; i < centerVertices.size() - 1; ++i) {
         vertex vert{centerVertices[i]};
         dif[i] = sqrt(pow(vert.x - positionX, 2) + pow(vert.y - positionY, 2));
     }
     unsigned long closestIndex{static_cast<unsigned long>(std::min_element(dif.begin(), dif.end()) - dif.begin())};
-
-    // calculate orientation at vertex using its successor vertex
-    vertex vert1{centerVertices[closestIndex]};
-    vertex vert2{centerVertices[closestIndex + 1]};
-    return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
+    return closestIndex;
 }
 
 bool Lanelet::hasLaneletType(LaneletType laType) { return laneletTypes.find(laType) != laneletTypes.end(); }

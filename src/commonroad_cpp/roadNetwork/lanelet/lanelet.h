@@ -390,6 +390,15 @@ class Lanelet {
      */
     const std::vector<double> &getPathLength();
 
+    /**
+     * Finds closest index on center line given 2D vertex.
+     *
+     * @param positionX X-position of point of interest.
+     * @param positionY Y-position of point of interest.
+     * @return Index of center line.
+     */
+    size_t findClosestIndex(double positionX, double positionY) const;
+
   private:
     size_t id{};                                               //**< unique ID of lanelet */
     std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
