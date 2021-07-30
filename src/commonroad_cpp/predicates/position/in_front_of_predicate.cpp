@@ -32,7 +32,11 @@ Constraint InFrontOfPredicate::constraintEvaluation(double lonPositionP, double 
 double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::shared_ptr<Obstacle> &obstacleK) {
-    return obstacleK->rearS(timeStep, obstacleP->getReferenceLane(timeStep)) - obstacleP->frontS(timeStep);
+    try {
+        return obstacleK->rearS(timeStep, obstacleP->getReferenceLane(timeStep)) - obstacleP->frontS(timeStep);
+    } catch (std::runtime_error) {
+        return -0.1;
+    }
 }
 
 double InFrontOfPredicate::robustEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {
