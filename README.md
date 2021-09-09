@@ -15,7 +15,7 @@ Note that the repository does not contain runtime verification algorithms and co
 
 ## Dependencies:
 - [commonroad-io](https://gitlab.lrz.de/cps/commonroad-io)
-- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker) (branch feature_cmake_export; follow C++ installation instructions)
+- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker) (branch feature_cmake_export; follow C++ installation instructions under doc/installation_cpp.rst)
 - **cmake > 3.16**
 
 ## Build and Compile
