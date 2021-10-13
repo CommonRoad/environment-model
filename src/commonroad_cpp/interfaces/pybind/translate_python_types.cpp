@@ -429,7 +429,7 @@ std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertObstacles(co
     std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer{};
     tempObstacleContainer.reserve(py_obstacle_list.size()); // Already know the size --> Faster memory allocation
     // all obstacles must be initialized first
-    for (size_t i = 0; i < py_obstacle_list.size(); i++) {
+    for (size_t i{0}; i < py_obstacle_list.size(); i++) {
         std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
         tempObstacleContainer.emplace_back(tempObstacle);
     }

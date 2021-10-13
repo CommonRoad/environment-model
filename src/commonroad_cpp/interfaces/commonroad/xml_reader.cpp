@@ -97,8 +97,10 @@ std::shared_ptr<State> XMLReader::extractInitialState(const pugi::xml_node &chil
     initialState.setXPosition(states.child("position").child("point").child("x").text().as_double());
     initialState.setYPosition(states.child("position").child("point").child("y").text().as_double());
     initialState.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
-    initialState.setVelocity(states.child("velocity").child("exact").text().as_double());
-    initialState.setAcceleration(states.child("acceleration").child("exact").text().as_double());
+    if (states.child("velocity").child("exact").text() != nullptr)
+        initialState.setVelocity(states.child("velocity").child("exact").text().as_double());
+    if (states.child("acceleration").child("exact").text() != nullptr)
+        initialState.setAcceleration(states.child("acceleration").child("exact").text().as_double());
     return std::make_shared<State>(initialState);
 }
 
@@ -134,7 +136,6 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
         if ((strcmp(child.name(), "initialState")) == 0) {
             std::shared_ptr<State> initialState{XMLReader::extractInitialState(child)};
             tempObstacle->setCurrentState(initialState);
-            tempObstacle->appendStateToTrajectoryPrediction(initialState);
         } else if ((strcmp(child.name(), "trajectory")) == 0) {
             for (pugi::xml_node states = child.first_child(); states != nullptr; states = states.next_sibling()) {
                 tempObstacle->appendStateToTrajectoryPrediction(XMLReader::extractState(states));
