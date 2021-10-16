@@ -22,6 +22,14 @@ class TrafficLight;
 
 namespace XMLReader {
 /**
+ * Function for extracting time step size.
+ *
+ * @param xmlFile Loaded CommonRoad XML file.
+ * @return Time step size of scenario [s].
+ */
+double extractTimeStepSize(const std::string &xmlFile);
+
+/**
  * Function for creating obstacles.
  *
  * @param xmlFile Loaded CommonRoad XML file.

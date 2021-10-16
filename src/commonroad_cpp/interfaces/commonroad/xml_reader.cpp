@@ -23,6 +23,11 @@
 
 #include "xml_reader.h"
 
+double XMLReader::extractTimeStepSize(const std::string &xmlFile) {
+    std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
+    return doc->child("commonRoad").attribute("dt").as_double();
+}
+
 std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xmlFile) {
     std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
 
@@ -58,7 +63,8 @@ std::shared_ptr<World> XMLReader::createWorldFromXML(const std::string &xmlFile)
     auto signs = createTrafficSignFromXML(xmlFile);
     auto lights = createTrafficLightFromXML(xmlFile);
     auto roadNetwork = std::make_shared<RoadNetwork>(network, cou, signs, lights, inters);
-    return std::make_shared<World>(0, roadNetwork, dummyEgo, obstacle, 0.1);
+    double dt{extractTimeStepSize(xmlFile)};
+    return std::make_shared<World>(0, roadNetwork, dummyEgo, obstacle, dt);
 }
 
 std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(const std::string &xmlFile) {

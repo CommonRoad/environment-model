@@ -17,7 +17,7 @@ class TestAtRedLeftTrafficLightPredicates(unittest.TestCase):
             sc, _ = CommonRoadFileReader(full_path).open()
             try:
                 print("Converting - " + full_path)
-                cpp_env_model.register_scenario(scenario_id, 0, "DEU", sc.lanelet_network, sc.obstacles, [])
+                cpp_env_model.register_scenario(scenario_id, 0, sc.dt, "DEU", sc.lanelet_network, sc.obstacles, [])
                 cpp_env_model.remove_scenario(123)
                 print("Successful")
             except:

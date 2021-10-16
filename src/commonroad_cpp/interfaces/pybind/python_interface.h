@@ -23,7 +23,7 @@
 
 namespace py = pybind11;
 
-void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &country,
+void py_registerScenario(size_t scenarioId, size_t timeStep, double dt, const std::string &country,
                          const py::handle &py_laneletNetwork, const py::list &py_egoVehicles,
                          const py::list &py_obstacles);
 
@@ -61,7 +61,7 @@ double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double l
 PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
     m.def("register_scenario", &py_registerScenario, "Add new scenario to C++ environment model", py::arg("scenarioId"),
-          py::arg("timeStep"), py::arg("country"), py::arg("py_lanelets"), py::arg("py_egoVehicles"),
+          py::arg("timeStep"), py::arg("dt"), py::arg("country"), py::arg("py_lanelets"), py::arg("py_egoVehicles"),
           py::arg("py_obstacles"));
 
     m.def("remove_scenario", &py_removeScenario, "Remove scenario to C++ environment model", py::arg("scenarioId"));

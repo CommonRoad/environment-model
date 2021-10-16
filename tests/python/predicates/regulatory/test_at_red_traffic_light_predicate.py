@@ -17,6 +17,7 @@ class TestAtRedTrafficLightPredicates(unittest.TestCase):
         filename = path + '/../../../scenarios/DEU_TrafficLightTest-1_1_T-1.xml'
         scenario, _ = CommonRoadFileReader(filename).open()
         self.lanelet_network = scenario.lanelet_network
+        self.dt = scenario.dt
 
     def test_at_red_traffic_light(self):
         # expected solutions
@@ -47,7 +48,7 @@ class TestAtRedTrafficLightPredicates(unittest.TestCase):
                                          State(time_step=1, position=np.array([30.0, 3.5]), velocity=0, acceleration=0,
                                                orientation=-math.pi)]), Rectangle(5, 2)))
 
-        cpp_env_model.register_scenario(123, 0, "DEU", self.lanelet_network, [obstacle_1, obstacle_2], [])
+        cpp_env_model.register_scenario(123, 0, self.dt, "DEU", self.lanelet_network, [obstacle_1, obstacle_2], [])
 
         # Monitor-Mode
         sol_monitor_mode_1 = cpp_env_model.at_red_traffic_light_boolean_evaluation(123, 0, 1)
