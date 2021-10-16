@@ -22,9 +22,9 @@ TEST_F(WorldTest, TestScenariosValid) {
                                          "ITA_Foggia-7_2_T-1.xml", "ARG_Carcarana-6_5_T-1.xml"};
     for (const auto &sc : scenarios) {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + sc};
-        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
+        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
             CommandLine::getDataFromCommonRoad(pathToTestFileOne);
-        EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1)});
+        EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
     }
 }
 
@@ -32,10 +32,10 @@ TEST_F(WorldTest, TestScenariosValid) {
 //    std::string scenario{"ARG_Carcarana-6_5_T-1.xml"};
 //    size_t obstacleId{31};
 //    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
-//    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] =
+//    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
 //    CommandLine::getDataFromCommonRoad(pathToTestFileOne); auto world =
 //        World(0, roadNetworkScenarioOne, {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)},
-//        {});
+//        {}, timeStepSizeOne);
 //    auto obs{world.findObstacle(obstacleId)};
 //    for (const auto &t : obs->getTimeSteps())
 //        EXPECT_THROW(auto ref{obs->getReferenceLane(t)}, std::runtime_error);
@@ -45,9 +45,10 @@ TEST_F(WorldTest, TestSingleScenarioObstacle) {
     std::string scenario{"BEL_Zwevegem-1_5_T-1.xml"};
     size_t obstacleId{325};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        CommandLine::getDataFromCommonRoad(pathToTestFileOne);
     auto world = World(0, roadNetworkScenarioOne,
-                       {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, 0.1);
+                       {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, timeStepSizeOne);
     auto obs{world.findObstacle(obstacleId)};
     for (const auto &t : obs->getTimeSteps())
         EXPECT_NO_THROW(auto ref{obs->getReferenceLane(t)});
@@ -56,8 +57,9 @@ TEST_F(WorldTest, TestSingleScenarioObstacle) {
 TEST_F(WorldTest, TestSingleScenario) {
     std::string scenario{"USA_Peach-2_1_T-1.xml"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
-    EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1)});
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+    EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
     for (const auto &obs : obstaclesScenarioOne)
         for (const auto &t : obs->getTimeSteps())
             EXPECT_NO_THROW(obs->getReferenceLane(t));
@@ -80,9 +82,9 @@ TEST_F(WorldTest, TestSingleScenario) {
 //        //        omp_set_num_threads(numThreads);
 //        //#pragma omp parallel for schedule(guided) shared(fileNames) default(none)
 //        for (auto &fileName : fileNames) {
-//            const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(fileName);
-//            auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {})};
-//            for (const auto &obs : obstaclesScenarioOne)
+//            const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+//            CommandLine::getDataFromCommonRoad(fileName); auto world{World(0, roadNetworkScenarioOne,
+//            obstaclesScenarioOne, {}, timeStepSizeOne)}; for (const auto &obs : obstaclesScenarioOne)
 //                for (const auto &t : obs->getTimeSteps())
 //                    try {
 //                        obs->getReferenceLane(t);

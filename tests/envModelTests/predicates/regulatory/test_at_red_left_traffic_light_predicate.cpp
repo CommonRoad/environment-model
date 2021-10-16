@@ -9,7 +9,7 @@
 
 void AtRedLeftTrafficLightPredicateTest::SetUp() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
-    const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize] = CommandLine::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -15.0, 0, 0, M_PI / 2, 0, 15.0, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 40.0, 2.5, 0, 0, 0, 0, 10, 0);
@@ -37,7 +37,7 @@ void AtRedLeftTrafficLightPredicateTest::SetUp() {
                                                       0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
     world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, 0.1));
+        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, timeStepSize));
 }
 
 TEST_F(AtRedLeftTrafficLightPredicateTest, BooleanEvaluation) {

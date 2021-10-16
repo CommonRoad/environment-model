@@ -80,13 +80,14 @@ TEST_F(TestInSameLanePredicate, StatisticBooleanEvaluation) {
 
 TEST_F(TestInSameLanePredicate, BooleanEvaluationObjectsInIntersection) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        CommandLine::getDataFromCommonRoad(pathToTestFileOne);
     std::vector<std::shared_ptr<Obstacle>> egoObstacles{
         obstacle_operations::getObstacleById(obstaclesScenarioOne, 1219)};
     std::vector<std::shared_ptr<Obstacle>> relevantObstacles{
         obstacle_operations::getObstacleById(obstaclesScenarioOne, 1230),
         obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
-    auto world{std::make_shared<World>(0, roadNetworkScenarioOne, egoObstacles, relevantObstacles, 0.1)};
+    auto world{std::make_shared<World>(0, roadNetworkScenarioOne, egoObstacles, relevantObstacles, timeStepSizeOne)};
     EXPECT_FALSE(pred.booleanEvaluation(
         0, world, egoObstacles.at(0),
         relevantObstacles.at(0))); // vehicles on right turning lane, but ego vehicle drives straight

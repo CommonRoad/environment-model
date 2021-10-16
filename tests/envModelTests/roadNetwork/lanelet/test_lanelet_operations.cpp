@@ -47,7 +47,8 @@ TEST_F(LaneletOperationsTest, MatchStringToLineMarking) {
 
 TEST_F(RoadNetworkTest, CreateInterstateLanes) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/DEU_TestOvertakingExitRamp-1_1_T-1.xml"};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        CommandLine::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioOne->findLaneletById(3)},
@@ -68,7 +69,8 @@ TEST_F(RoadNetworkTest, CreateInterstateLanes) {
     EXPECT_EQ(lanes.at(1)->getContainedLanelets().back()->getId(), 20);
 
     std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() + "/DEU_test_safe_distance.xml"};
-    const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
+    const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo, timeStepSizeTwo] =
+        CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
     lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioTwo->findLaneletById(22)}, globalIdRef,
                                                             roadNetworkScenarioTwo);
     EXPECT_EQ(lanes.size(), 1);
@@ -77,7 +79,7 @@ TEST_F(RoadNetworkTest, CreateInterstateLanes) {
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().back()->getId(), 30);
 
     std::string pathToTestFileThree{TestUtils::getTestScenarioDirectory() + "/DEU_Muc-2_1_T-1.xml"};
-    const auto &[obstaclesScenarioThree, roadNetworkScenarioThree] =
+    const auto &[obstaclesScenarioThree, roadNetworkScenarioThree, timeStepSizeThree] =
         CommandLine::getDataFromCommonRoad(pathToTestFileThree);
     lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioThree->findLaneletById(34782)},
                                                             globalIdRef, roadNetworkScenarioThree);
@@ -88,7 +90,7 @@ TEST_F(RoadNetworkTest, CreateInterstateLanes) {
 
     std::string pathToTestFileFour{TestUtils::getTestScenarioDirectory() +
                                    "/DEU_test_consider_entering_vehicles_for_lane_change.xml"};
-    const auto &[obstaclesScenarioFour, roadNetworkScenarioFour] =
+    const auto &[obstaclesScenarioFour, roadNetworkScenarioFour, timeStepSizeFour] =
         CommandLine::getDataFromCommonRoad(pathToTestFileFour);
     lanes = lanelet_operations::createLanesBySingleLanelets({roadNetworkScenarioFour->findLaneletById(3)}, globalIdRef,
                                                             roadNetworkScenarioFour);
@@ -109,7 +111,8 @@ TEST_F(RoadNetworkTest, CreateInterstateLanes) {
 
 TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleSimpleIntersection) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
-    const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+        CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, globalIdRef,
@@ -150,7 +153,8 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleSimpleIntersection) {
 
 TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection1) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
-    const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+        CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(3454)},
@@ -215,7 +219,8 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection1) {
 
 TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection2) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4_1_T-1.xml"};
-    const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+        CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(43205)},
@@ -225,7 +230,8 @@ TEST_F(RoadNetworkTest, CreateLanesByLaneletsSingleComplexIntersection2) {
 
 TEST_F(RoadNetworkTest, CreateLanesByLaneletsSeveralComplexIntersections) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
-    const auto &[obstaclesScenario, roadNetworkScenario] = CommandLine::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+        CommandLine::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(82817)},

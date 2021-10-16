@@ -20,9 +20,9 @@ int main(int argc, char **argv) {
         return error_code;
 
     // Read and parse CommonRoad scenario file
-    const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(xmlFilePath);
+    const auto &[obstacles, roadNetwork, timeStepSize] = CommandLine::getDataFromCommonRoad(xmlFilePath);
 
-    auto world{World(0, roadNetwork, obstacles, {}, 0.1)};
+    auto world{World(0, roadNetwork, obstacles, {}, timeStepSize)};
 
     return 0;
 }

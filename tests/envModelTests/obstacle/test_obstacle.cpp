@@ -212,7 +212,8 @@ TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
 TEST_F(ObstacleTest, SetReferenceGeneral) {
     size_t timeStep{0};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne] = CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        CommandLine::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     auto obsOneScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1219)};
@@ -226,13 +227,14 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     EXPECT_EQ(expRefLaneletsObsTwoScenarioOne, obsTwoScenarioOne->getReferenceLane(timeStep)->getContainedLaneletIDs());
 
     std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
-    const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo] = CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
+    const auto &[obstaclesScenarioTwo, roadNetworkScenarioTwo, timeStepSizeTwo] =
+        CommandLine::getDataFromCommonRoad(pathToTestFileTwo);
     auto obsOneScenarioTwo{obstacle_operations::getObstacleById(obstaclesScenarioTwo, 325)};
     obsOneScenarioTwo->computeLanes(roadNetworkScenarioTwo, globalIdRef);
     EXPECT_EQ(77695, obsOneScenarioTwo->getReferenceLane(timeStep)->getContainedLanelets().front()->getId());
 
     std::string pathToTestFileThree{TestUtils::getTestScenarioDirectory() + "/USA_Peach-2_1_T-1.xml"};
-    const auto &[obstaclesScenarioThree, roadNetworkScenarioThree] =
+    const auto &[obstaclesScenarioThree, roadNetworkScenarioThree, timeStepSizeThree] =
         CommandLine::getDataFromCommonRoad(pathToTestFileThree);
     auto obsOneScenarioThree{obstacle_operations::getObstacleById(obstaclesScenarioThree, 500)};
     obsOneScenarioThree->computeLanes(roadNetworkScenarioThree, globalIdRef);
@@ -240,7 +242,7 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     EXPECT_EQ(53788, obsOneScenarioThree->getReferenceLane(timeStep)->getContainedLanelets().back()->getId());
 
     std::string pathToTestFileFour{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4_1_T-1.xml"};
-    const auto &[obstaclesScenarioFour, roadNetworkScenarioFour] =
+    const auto &[obstaclesScenarioFour, roadNetworkScenarioFour, timeStepSizeFour] =
         CommandLine::getDataFromCommonRoad(pathToTestFileFour);
     auto obsOneScenarioFour{obstacle_operations::getObstacleById(obstaclesScenarioFour, 88)};
     obsOneScenarioFour->computeLanes(roadNetworkScenarioFour, globalIdRef);
@@ -249,7 +251,7 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
 
     timeStep = 200;
     std::string pathToTestFileFive{TestUtils::getTestScenarioDirectory() + "/DEU_Frankfurt-70_12_I-1.xml"};
-    const auto &[obstaclesScenarioFive, roadNetworkScenarioFive] =
+    const auto &[obstaclesScenarioFive, roadNetworkScenarioFive, timeStepSizeFive] =
         CommandLine::getDataFromCommonRoad(pathToTestFileFive);
     auto obsOneScenarioFive{obstacle_operations::getObstacleById(obstaclesScenarioFive, 30503)};
     obsOneScenarioFive->computeLanes(roadNetworkScenarioFive, globalIdRef);

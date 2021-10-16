@@ -66,7 +66,7 @@ int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::st
  * @param xmlFilePath Path to CommonRoad xml file
  * @return Tuple of obstacles and roadNetwork.
  */
-std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>>
+std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
 getDataFromCommonRoad(const std::string &xmlFilePath) {
     // Read and parse CommonRoad scenario file
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
@@ -81,7 +81,9 @@ getDataFromCommonRoad(const std::string &xmlFilePath) {
     std::shared_ptr<RoadNetwork> roadNetwork{
         std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, trafficSigns, trafficLights, intersections))};
 
-    return std::make_tuple(obstacles, roadNetwork);
+    auto timeStepSize{XMLReader::extractTimeStepSize(xmlFilePath)};
+
+    return std::make_tuple(obstacles, roadNetwork, timeStepSize);
 }
 
 } // namespace CommandLine
