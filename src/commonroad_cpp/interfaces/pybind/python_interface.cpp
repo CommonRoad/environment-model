@@ -14,7 +14,7 @@
 #include "python_interface.h"
 #include "translate_python_types.h"
 
-void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &country,
+void py_registerScenario(size_t scenarioId, size_t timeStep, double dt, const std::string &country,
                          const py::handle &py_laneletNetwork, const py::list &py_egoVehicles,
                          const py::list &py_obstacles) {
 
@@ -32,7 +32,7 @@ void py_registerScenario(size_t scenarioId, size_t timeStep, const std::string &
 
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
 
-    eval->registerScenario(scenarioId, timeStep, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer);
+    eval->registerScenario(scenarioId, timeStep, dt, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer);
 }
 
 void py_removeScenario(size_t scenarioId) {

@@ -42,7 +42,7 @@ void StopLineInFrontPredicateTest::SetUp() {
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
     world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}));
+        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, 0.1));
 }
 
 TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {

@@ -7,8 +7,6 @@
 
 #pragma once
 
-const double dt{0.1};
-
 enum class ObstacleType { car, truck, pedestrian, bus, unknown, vehicle };
 
 enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };

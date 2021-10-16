@@ -452,8 +452,9 @@ class Obstacle {
      * Interpolates acceleration based on velocity.
      *
      * @param timeStep Time step for which acceleration should be interpolated.
+     * @param dt Time step size [s].
      */
-    void interpolateAcceleration(size_t timeStep);
+    void interpolateAcceleration(size_t timeStep, double dt);
 
     /**
      * Getter for all prediction time steps.

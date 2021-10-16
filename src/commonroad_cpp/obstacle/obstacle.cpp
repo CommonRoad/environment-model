@@ -430,7 +430,7 @@ void Obstacle::convertPointToCurvilinear(size_t timeStep) {
     }
 }
 
-void Obstacle::interpolateAcceleration(size_t timeStep) {
+void Obstacle::interpolateAcceleration(size_t timeStep, double dt) {
     if (getStateByTimeStep(timeStep)->getValidStates().acceleration)
         return;
     if (!timeStepExists(timeStep - 1)) {

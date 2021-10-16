@@ -49,14 +49,14 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
     SucceedsPredicate succeedsPredicate;
     SafeDistancePredicate safeDistancePredicate;
     if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
-        obstacleK->interpolateAcceleration(timeStep);
+        obstacleK->interpolateAcceleration(timeStep, world->getDt());
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
         if (succeedsPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs)) {
             if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)
-                obs->interpolateAcceleration(timeStep);
+                obs->interpolateAcceleration(timeStep, world->getDt());
             robustnessValues.push_back(parameters.aAbrupt - obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
                                        obs->getStateByTimeStep(timeStep)->getAcceleration());
         }

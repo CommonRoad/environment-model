@@ -13,14 +13,14 @@ void CutInPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 10, 0, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 0, 2, 10, 0, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 20, 4, 10, 0, (1.0 / 4.0) * M_PI);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 20, 4, 10, 0, (1.0 / 5.0) * M_PI);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 10, 4.01, 10, 0, 0);
     std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 0, 12, 10, 0, 0);
 
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 30, 6, 10, 0, 0);
     std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 20, 2, 10, 0, 0);
 
-    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 40, 4, 10, 0, -(1.0 / 4.0) * M_PI);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 40, 4, 10, 0, -(1.0 / 5.0) * M_PI);
     std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 30, 2, 10, -0, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{

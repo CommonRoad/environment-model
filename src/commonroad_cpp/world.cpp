@@ -14,9 +14,10 @@
 #include "world.h"
 
 World::World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
-             std::vector<std::shared_ptr<Obstacle>> egoVehicles, std::vector<std::shared_ptr<Obstacle>> obstacles)
+             std::vector<std::shared_ptr<Obstacle>> egoVehicles, std::vector<std::shared_ptr<Obstacle>> obstacles,
+             double dt)
     : timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egoVehicles)),
-      obstacles(std::move(obstacles)) {
+      obstacles(std::move(obstacles)), dt(dt) {
     for (const auto &la : roadNetwork->getLanes())
         idCounter = std::max(idCounter, la->getId());
     for (const auto &la : roadNetwork->getLaneletNetwork())
@@ -69,3 +70,5 @@ void World::setInitialLanes() {
 }
 
 std::shared_ptr<size_t> World::getIdCounterRef() const { return std::make_shared<size_t>(idCounter); }
+
+double World::getDt() const { return dt; }

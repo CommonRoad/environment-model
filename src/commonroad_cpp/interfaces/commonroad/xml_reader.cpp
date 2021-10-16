@@ -58,7 +58,7 @@ std::shared_ptr<World> XMLReader::createWorldFromXML(const std::string &xmlFile)
     auto signs = createTrafficSignFromXML(xmlFile);
     auto lights = createTrafficLightFromXML(xmlFile);
     auto roadNetwork = std::make_shared<RoadNetwork>(network, cou, signs, lights, inters);
-    return std::make_shared<World>(0, roadNetwork, dummyEgo, obstacle);
+    return std::make_shared<World>(0, roadNetwork, dummyEgo, obstacle, 0.1);
 }
 
 std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(const std::string &xmlFile) {

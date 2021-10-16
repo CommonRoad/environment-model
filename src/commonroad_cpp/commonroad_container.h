@@ -20,11 +20,12 @@ class CommonRoadContainer {
      *
      * @param id ID under which CommonRoad scenario should be stored (not CommonRoad benchmark ID).
      * @param timeStep Time step the scenario (world representation) corresponds to.
+     * @param dt Time step size[s].
      * @param roadNetwork CommonRoad road network representation.
      * @param obstacleList List of obstacles.
      * @param egoVehicles List of ego vehicles.
      */
-    void registerScenario(size_t id, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+    void registerScenario(size_t id, size_t timeStep, double dt, const std::shared_ptr<RoadNetwork> &roadNetwork,
                           std::vector<std::shared_ptr<Obstacle>> &obstacleList,
                           std::vector<std::shared_ptr<Obstacle>> &egoVehicles);
 

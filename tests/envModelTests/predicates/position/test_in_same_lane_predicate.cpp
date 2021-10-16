@@ -53,7 +53,7 @@ void TestInSameLanePredicate::SetUp() {
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
     world = std::make_shared<World>(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
-                                    std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree});
+                                    std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1);
 }
 
 TEST_F(TestInSameLanePredicate, BooleanEvaluationObjects) {
@@ -86,7 +86,7 @@ TEST_F(TestInSameLanePredicate, BooleanEvaluationObjectsInIntersection) {
     std::vector<std::shared_ptr<Obstacle>> relevantObstacles{
         obstacle_operations::getObstacleById(obstaclesScenarioOne, 1230),
         obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
-    auto world{std::make_shared<World>(0, roadNetworkScenarioOne, egoObstacles, relevantObstacles)};
+    auto world{std::make_shared<World>(0, roadNetworkScenarioOne, egoObstacles, relevantObstacles, 0.1)};
     EXPECT_FALSE(pred.booleanEvaluation(
         0, world, egoObstacles.at(0),
         relevantObstacles.at(0))); // vehicles on right turning lane, but ego vehicle drives straight

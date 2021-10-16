@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
     // Read and parse CommonRoad scenario file
     const auto &[obstacles, roadNetwork] = CommandLine::getDataFromCommonRoad(xmlFilePath);
 
-    auto world{World(0, roadNetwork, obstacles, {})};
+    auto world{World(0, roadNetwork, obstacles, {}, 0.1)};
 
     return 0;
 }
