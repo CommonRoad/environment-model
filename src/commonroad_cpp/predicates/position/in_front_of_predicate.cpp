@@ -32,20 +32,20 @@ Constraint InFrontOfPredicate::constraintEvaluation(double lonPositionP, double 
 double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::shared_ptr<Obstacle> &obstacleK) {
-    try {
+  //  try {
         return obstacleK->rearS(timeStep, obstacleP->getReferenceLane(timeStep)) - obstacleP->frontS(timeStep);
-    } catch (std::runtime_error) { // not correct, quick-fix for bug in ccs
-        auto pathLengthK{obstacleP->getReferenceLane(timeStep)->getPathLength().at(
-            obstacleP->getReferenceLane(timeStep)->findClosestIndex(
-                obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                obstacleK->getStateByTimeStep(timeStep)->getYPosition()))};
-        auto pathLengthP{obstacleP->getReferenceLane(timeStep)->getPathLength().at(
-            obstacleP->getReferenceLane(timeStep)->findClosestIndex(
-                obstacleP->getStateByTimeStep(timeStep)->getXPosition(),
-                obstacleP->getStateByTimeStep(timeStep)->getYPosition()))};
-        return (pathLengthK - obstacleK->getGeoShape().getLength() / 2) -
-               (pathLengthP + obstacleP->getGeoShape().getLength() / 2);
-    }
+//    } catch (std::runtime_error) { // not correct, quick-fix for bug in ccs
+//        auto pathLengthK{obstacleP->getReferenceLane(timeStep)->getPathLength().at(
+//            obstacleP->getReferenceLane(timeStep)->findClosestIndex(
+//                obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+//                obstacleK->getStateByTimeStep(timeStep)->getYPosition()))};
+//        auto pathLengthP{obstacleP->getReferenceLane(timeStep)->getPathLength().at(
+//            obstacleP->getReferenceLane(timeStep)->findClosestIndex(
+//                obstacleP->getStateByTimeStep(timeStep)->getXPosition(),
+//                obstacleP->getStateByTimeStep(timeStep)->getYPosition()))};
+//        return (pathLengthK - obstacleK->getGeoShape().getLength() / 2) -
+//               (pathLengthP + obstacleP->getGeoShape().getLength() / 2);
+//    }
 }
 
 double InFrontOfPredicate::robustEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {

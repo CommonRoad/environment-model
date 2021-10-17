@@ -217,7 +217,7 @@ double Obstacle::frontS(size_t timeStep) {
 
 double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     try {
-        Eigen::Vector2d convertedPoint = refLane->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
+        Eigen::Vector2d convertedPoint = refLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
             getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
         double theta = getStateByTimeStep(timeStep)->getGlobalOrientation() -
                        refLane->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
@@ -240,7 +240,7 @@ double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
 
 double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     try {
-        Eigen::Vector2d convertedPoint = refLane->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
+        Eigen::Vector2d convertedPoint = refLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
             getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
         double theta = getStateByTimeStep(timeStep)->getGlobalOrientation() -
                        refLane->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
@@ -289,7 +289,7 @@ double Obstacle::getLatPosition(size_t timeStep) {
 
 double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     try {
-        Eigen::Vector2d convertedPoint = refLane->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
+        Eigen::Vector2d convertedPoint = refLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
             getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
         return convertedPoint.x();
     } catch (...) {
@@ -301,7 +301,7 @@ double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &re
 
 double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     try {
-        Eigen::Vector2d convertedPoint = refLane->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
+        Eigen::Vector2d convertedPoint = refLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
             getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
         return convertedPoint.y();
     } catch (...) {
@@ -415,7 +415,7 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
 void Obstacle::convertPointToCurvilinear(size_t timeStep) {
     try {
         Eigen::Vector2d convertedPoint =
-            getReferenceLane(timeStep)->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
+            getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
                 getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
         getStateByTimeStep(timeStep)->setLonPosition(convertedPoint.x());
         getStateByTimeStep(timeStep)->setLatPosition(convertedPoint.y());

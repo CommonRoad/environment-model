@@ -25,7 +25,9 @@
 
 double XMLReader::extractTimeStepSize(const std::string &xmlFile) {
     std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
-    return doc->child("commonRoad").attribute("dt").as_double();
+    if (!doc->load_file(xmlFile.c_str()))
+        throw std::runtime_error("Couldn't load XML-File: " + xmlFile);
+    return doc->child("commonRoad").attribute("timeStepSize").as_double();
 }
 
 std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xmlFile) {

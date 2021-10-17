@@ -7,7 +7,9 @@
 
 #pragma once
 
+#include <geometry/curvilinear_coordinate_system.h>
 #include <memory> // for shared_ptr
+#include <optional>
 #include <vector> // for vector
 
 #include "lanelet.h"
@@ -31,7 +33,7 @@ class Lane : public Lanelet {
      * @param ccs Curvilinear coordinate system object.
      */
     Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
-         std::shared_ptr<CurvilinearCoordinateSystem> ccs);
+         CurvilinearCoordinateSystem ccs);
 
     /**
      * Constructor initializing contained lanelet, lanelet describing lane, and Curvilinear coordinate system.
@@ -46,7 +48,7 @@ class Lane : public Lanelet {
      *
      * @return Curvilinear coordinate system object.
      */
-    [[nodiscard]] const std::shared_ptr<CurvilinearCoordinateSystem> &getCurvilinearCoordinateSystem();
+    [[nodiscard]] const CurvilinearCoordinateSystem &getCurvilinearCoordinateSystem();
 
     /**
      * Getter for lanelets contained in lane.
@@ -64,7 +66,6 @@ class Lane : public Lanelet {
 
   private:
     std::vector<std::shared_ptr<Lanelet>> containedLanelets; //**< list of pointers to lanelets constructing lane */
-    std::shared_ptr<CurvilinearCoordinateSystem>
-        curvilinearCoordinateSystem;      //**< curvilinear coordinate system defined by lane */
+    std::optional<CurvilinearCoordinateSystem> curvilinearCoordinateSystem;      //**< curvilinear coordinate system defined by lane */
     std::set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
 };

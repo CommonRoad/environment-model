@@ -47,6 +47,7 @@ TEST_F(WorldTest, TestSingleScenarioObstacle) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+    EXPECT_EQ(timeStepSizeOne, 0.1);
     auto world = World(0, roadNetworkScenarioOne,
                        {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, timeStepSizeOne);
     auto obs{world.findObstacle(obstacleId)};
