@@ -426,7 +426,9 @@ void Obstacle::convertPointToCurvilinear(size_t timeStep) {
     } catch (...) {
         throw std::runtime_error("Curvilinear Projection Error - Obstacle ID: " + std::to_string(id) +
                                  " - Time Step: " + std::to_string(timeStep) +
-                                 " - Reference Lane: " + std::to_string(getReferenceLane(timeStep)->getId()));
+                                 " - Reference Lane: " + std::to_string(getReferenceLane(timeStep)->getId()) +
+                                 " - x-position: " + std::to_string(getStateByTimeStep(timeStep)->getXPosition()) +
+                                 " - y-position: " + std::to_string(getStateByTimeStep(timeStep)->getYPosition()));
     }
 }
 
