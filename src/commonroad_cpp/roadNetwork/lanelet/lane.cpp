@@ -32,7 +32,7 @@ const CurvilinearCoordinateSystem &Lane::getCurvilinearCoordinateSystem() {
             reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
 
         geometry::util::resample_polyline(reference_path, 2, reference_path);
-        curvilinearCoordinateSystem = CurvilinearCoordinateSystem(reference_path, 20., 0.1, 0.00000001);
+        curvilinearCoordinateSystem = CurvilinearCoordinateSystem(reference_path);
     }
     return curvilinearCoordinateSystem.value();
 }
