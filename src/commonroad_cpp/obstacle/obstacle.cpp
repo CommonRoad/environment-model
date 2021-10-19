@@ -294,8 +294,8 @@ double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &re
         return convertedPoint.x();
     } catch (...) {
         std::string refInfo;
-        for(const auto& ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
-            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) +  "}";
+        for (const auto &ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
+            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}";
         throw std::runtime_error(
             "Obstacle::getLonPosition Custom CCS - Curvilinear Projection Error - Obstacle ID: " + std::to_string(id) +
             " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " + refInfo);
@@ -309,8 +309,8 @@ double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &re
         return convertedPoint.y();
     } catch (...) {
         std::string refInfo;
-        for(const auto& ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
-            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) +  "}";
+        for (const auto &ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
+            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}";
         throw std::runtime_error(
             "Obstacle::getLatPosition Custom CCS - Curvilinear Projection Error - Obstacle ID: " + std::to_string(id) +
             " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " + refInfo);
@@ -431,11 +431,10 @@ void Obstacle::convertPointToCurvilinear(size_t timeStep) {
         getStateByTimeStep(timeStep)->setCurvilinearOrientation(theta);
     } catch (...) {
         std::string refInfo;
-        for(const auto& ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
-            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) +  "}";
+        for (const auto &ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
+            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}";
         throw std::runtime_error("Curvilinear Projection Error - Obstacle ID: " + std::to_string(id) +
-                                 " - Time Step: " + std::to_string(timeStep) +
-                                 " - Reference Lane: " + refInfo +
+                                 " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " + refInfo +
                                  " - x-position: " + std::to_string(getStateByTimeStep(timeStep)->getXPosition()) +
                                  " - y-position: " + std::to_string(getStateByTimeStep(timeStep)->getYPosition()));
     }
