@@ -411,10 +411,12 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
         }
         if (referenceLane.count(timeStep) == 0 or referenceLane.at(timeStep) == nullptr)
             throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
-                                     std::to_string(getId()) + " at time step " + std::to_string(timeStep));
+                                     std::to_string(getId()) + " at time step " + std::to_string(timeStep) +
+                                     " and obstacle with " + std::to_string(getTrajectoryLength()) + " time steps");
     } else
         throw std::runtime_error("Obstacle::setReferenceLane: No referenceLane found! Obstacle ID " +
-                                 std::to_string(getId()) + " at time step " + std::to_string(timeStep));
+                                 std::to_string(getId()) + " at time step " + std::to_string(timeStep) +
+                                 " and obstacle with " + std::to_string(getTrajectoryLength()) + " time steps");
     return referenceLane.at(timeStep);
 }
 
