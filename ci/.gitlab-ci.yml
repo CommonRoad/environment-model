@@ -203,6 +203,6 @@ docs:
 build_docker:
   image: docker:20
   stage: docker
-  before_script:
+  script:
   - docker info
 
