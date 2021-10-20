@@ -5,6 +5,7 @@ stages:
   - coverage
   - static-test
   - docs
+  - docker
 
 
 image: $CI_REGISTRY/maierhofer/environment-model/ci:0.5.0
@@ -198,3 +199,10 @@ docs:
       - build/doc_doxygen/html/
     expose_as: 'Doxygen Documentation'
     expire_in: 30 minutes
+
+build_docker:
+  image: docker:20
+  stage: docker
+  before_script:
+  - docker info
+
