@@ -10,11 +10,11 @@ from commonroad.prediction.prediction import TrajectoryPrediction, Trajectory
 from ..predicate_test_utils import create_lanelet_network
 
 
-class TestCutInPredicates(unittest.TestCase):
+class TestOrientationTowardsPredicate(unittest.TestCase):
     def setUp(self):
         self.lanelet_network = create_lanelet_network()
 
-    def test_cut_in(self):
+    def test_orientation_towards(self):
         # expected solutions
         exp_sol_monitor_mode_1 = False  # ego vehicle drives straight
         exp_sol_monitor_mode_2 = True  # ego vehicle drives to other from left
