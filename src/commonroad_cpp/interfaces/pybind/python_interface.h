@@ -13,6 +13,7 @@
 #include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
 #include "commonroad_cpp/predicates/general/cut_in_predicate.h"
+#include "commonroad_cpp/predicates/general/orientation_towards_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
@@ -119,11 +120,9 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("unnecessary_braking_robust_evaluation", &py_robust_single_evaluation<UnnecessaryBrakingPredicate>,
           "Robust evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
-
-    //    m.def("cut_in_boolean_evaluation", &py_boolean_evaluation<CutInPredicate>, "Boolean evaluation of cut-in
-    //    predicate",
-    //          py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
-
+    m.def("orientation_towards_boolean_evaluation", &py_boolean_evaluation<OrientationTowardsPredicate>,
+          "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
     m.def("in_intersection_main_area_boolean_evaluation",
           &py_boolean_single_evaluation<InIntersectionMainAreaPredicate>,
           "Boolean evaluation of intersection-main-area predicate", py::arg("scenarioId"), py::arg("time_step"),

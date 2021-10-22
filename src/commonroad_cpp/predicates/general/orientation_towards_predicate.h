@@ -9,9 +9,9 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate which checks if the kth vehicle performs a cut-in into the pth vehicles lane.
+ * Predicate which checks if the kth vehicle drives towards the pth vehicle.
  */
-class CutInPredicate : public CommonRoadPredicate {
+class OrientationTowardsPredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using objects.

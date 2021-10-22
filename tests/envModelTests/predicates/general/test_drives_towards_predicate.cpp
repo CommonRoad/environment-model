@@ -4,12 +4,12 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "test_cut_in_predicate.h"
+#include "test_drives_towards_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
 #include <cmath>
 
-void CutInPredicateTest::SetUp() {
+void OrientationTowardsPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 10, 0, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 0, 2, 10, 0, 0);
 
@@ -47,25 +47,26 @@ void CutInPredicateTest::SetUp() {
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
     world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
-                                          std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}));
+                                          std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
 }
 
-TEST_F(CutInPredicateTest, BooleanEvaluation) {
-    //   EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne,
-    //                                       obstacleTwo)); // before cut-in -> ego vehicle occupies only single lane
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo)); // during cut-in
-    //   EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo)); // after cut-in
-    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo)); // driving back to initial lane
-    //   EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne,
-    //                                       obstacleThree)); // during cut-in -> but other vehicles is in another lane
+TEST_F(OrientationTowardsPredicateTest, BooleanEvaluation) {
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne,
+                                        obstacleTwo));                        // ego vehicle drives straight
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo));  // ego vehicle drives to other from left
+    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo)); // both drive straight
+    EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo));  // ego vehicle drives to other from right
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne,
+                                       obstacleThree)); // ego vehicle drives to other from right
 }
 
-TEST_F(CutInPredicateTest, StatisticBooleanEvaluation) {
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(
-        0, world, obstacleOne, obstacleTwo)); // before cut-in -> ego vehicle occupies only single lane
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo));  // during cut-in
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(2, world, obstacleOne, obstacleTwo)); // after cut-in
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(3, world, obstacleOne, obstacleTwo)); // driving back to initial lane
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(
-        1, world, obstacleOne, obstacleThree)); // during cut-in -> but other vehicles is in another lane
+TEST_F(OrientationTowardsPredicateTest, StatisticBooleanEvaluation) {
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo)); // ego vehicle drives straight
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo)); // ego vehicle drives to other from left
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(2, world, obstacleOne, obstacleTwo)); // both drive straight
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(3, world, obstacleOne, obstacleTwo)); // ego vehicle drives to other from right
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne,
+                                                obstacleThree)); // ego vehicle drives to other from right
 }
