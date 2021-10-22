@@ -37,11 +37,11 @@ class TestInSameLanePredicate(unittest.TestCase):
         cpp_env_model.register_scenario(123, 0, 0.1, "DEU", self.lanelet_network, [obstacle_1], [])
 
         # Monitor-Mode
-        sol_monitor_mode_1 = cpp_env_model.in_same_lane_boolean_evaluation(123, 0, 1)
-        sol_monitor_mode_2 = cpp_env_model.in_same_lane_boolean_evaluation(123, 1, 1)
-        sol_monitor_mode_3 = cpp_env_model.in_same_lane_boolean_evaluation(123, 2, 1)
-        sol_monitor_mode_4 = cpp_env_model.in_same_lane_boolean_evaluation(123, 3, 1)
-        sol_monitor_mode_5 = cpp_env_model.in_same_lane_boolean_evaluation(123, 4, 1)
+        sol_monitor_mode_1 = cpp_env_model.in_single_lane_boolean_evaluation(123, 0, 1)
+        sol_monitor_mode_2 = cpp_env_model.in_single_lane_boolean_evaluation(123, 1, 1)
+        sol_monitor_mode_3 = cpp_env_model.in_single_lane_boolean_evaluation(123, 2, 1)
+        sol_monitor_mode_4 = cpp_env_model.in_single_lane_boolean_evaluation(123, 3, 1)
+        sol_monitor_mode_5 = cpp_env_model.in_single_lane_boolean_evaluation(123, 4, 1)
 
         self.assertEqual(exp_sol_monitor_mode_1, sol_monitor_mode_1)
         self.assertEqual(exp_sol_monitor_mode_2, sol_monitor_mode_2)
