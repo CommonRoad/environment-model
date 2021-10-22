@@ -16,6 +16,7 @@
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
+#include "commonroad_cpp/predicates/position/in_single_lane_predicate.h"
 #include "commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.h"
 #include "commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.h"
 #include "commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.h"
@@ -106,6 +107,10 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("in_same_lane_boolean_evaluation", &py_boolean_evaluation<InSameLanePredicate>,
           "Boolean evaluation of in same lane predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
+
+    m.def("in_single_lane_boolean_evaluation", &py_boolean_evaluation<InSingleLanePredicate>,
+          "Boolean evaluation of in same lane predicate", py::arg("scenarioId"), py::arg("time_step"),
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("unnecessary_braking_boolean_evaluation", &py_boolean_single_evaluation<UnnecessaryBrakingPredicate>,
           "Boolean evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
