@@ -12,7 +12,6 @@
 
 #include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
-#include "commonroad_cpp/predicates/general/cut_in_predicate.h"
 #include "commonroad_cpp/predicates/general/orientation_towards_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
