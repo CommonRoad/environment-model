@@ -16,7 +16,7 @@
 
 namespace geometry {
 class CurvilinearCoordinateSystem;
-};
+}
 
 using CurvilinearCoordinateSystem = geometry::CurvilinearCoordinateSystem;
 
