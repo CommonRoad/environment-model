@@ -25,11 +25,11 @@ bool OrientationTowardsPredicate::booleanEvaluation(size_t timeStep, const std::
 double OrientationTowardsPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("CutInPredicate does not support robust evaluation!");
+    throw std::runtime_error("OrientationTowardsPredicate does not support robust evaluation!");
 }
 
 Constraint OrientationTowardsPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                              const std::shared_ptr<Obstacle> &obstacleK,
                                                              const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("CutInPredicate does not support constraint evaluation!");
+    throw std::runtime_error("OrientationTowardsPredicate does not support constraint evaluation!");
 }
