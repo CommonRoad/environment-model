@@ -14,7 +14,9 @@
 #include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
 #include <commonroad_cpp/world.h>
 
-#include "commonroad_cpp/predicates/position/succeeds_predicate.h"
+#include "commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h"
+#include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
+#include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include "unnecessary_braking_predicate.h"
 
 bool UnnecessaryBrakingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -27,12 +29,16 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, co
                                                              const std::shared_ptr<Obstacle> &obstacleK,
                                                              const std::shared_ptr<Obstacle> &obstacleP) {
     std::vector<double> constraintValues;
-    SucceedsPredicate succeedsPredicate;
+    InSameLanePredicate sameLanePredicate;
+    InFrontOfPredicate inFrontOfPredicate;
+    LaneBasedOrientationSimilarPredicate orientationPredicate;
     SafeDistancePredicate safeDistancePredicate;
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (succeedsPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+        if (sameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+            inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+            orientationPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt);
     }
@@ -46,14 +52,18 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
     std::vector<double> robustnessValues;
-    SucceedsPredicate succeedsPredicate;
+    InSameLanePredicate sameLanePredicate;
+    InFrontOfPredicate inFrontOfPredicate;
+    LaneBasedOrientationSimilarPredicate orientationPredicate;
     SafeDistancePredicate safeDistancePredicate;
     if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
         obstacleK->interpolateAcceleration(timeStep, world->getDt());
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (succeedsPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+        if (sameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+            inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+            orientationPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs)) {
             if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)
                 obs->interpolateAcceleration(timeStep, world->getDt());

@@ -324,6 +324,12 @@ double Obstacle::getCurvilinearOrientation(size_t timeStep) {
     return getStateByTimeStep(timeStep)->getCurvilinearOrientation();
 }
 
+double Obstacle::getCurvilinearOrientation(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
+    return getStateByTimeStep(timeStep)->getGlobalOrientation() -
+           refLane->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                             getStateByTimeStep(timeStep)->getYPosition());
+}
+
 size_t Obstacle::getFirstTrajectoryTimeStep() { return trajectoryPrediction.begin()->second->getTimeStep(); }
 
 size_t Obstacle::getLastTrajectoryTimeStep() const {

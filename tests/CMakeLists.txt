@@ -19,6 +19,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/position/test_in_same_lane_predicate.cpp
         envModelTests/predicates/position/test_in_single_lane_predicate.cpp
         envModelTests/predicates/general/test_orientation_towards_predicate.cpp
+        envModelTests/predicates/general/test_lane_based_orientation_similar_predicate.cpp
         envModelTests/predicates/position/test_in_intersection_main_area_predicate.cpp
         envModelTests/predicates/position/test_stop_line_in_front_predicate.cpp
         envModelTests/predicates/position/test_passes_stop_line_predicate.cpp

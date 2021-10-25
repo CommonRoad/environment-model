@@ -360,6 +360,16 @@ class Obstacle {
     [[nodiscard]] double getCurvilinearOrientation(size_t timeStep); // Todo create test case
 
     /**
+     * Computes the curvilinear orientation of obstacle based on Cartesian state and provided reference lane
+     *
+     * @param timeStep time step of interest
+     * @param refLane Reference lane based on which curvilinear orientation should be computed.
+     * @return curvilinear orientation of obstacle state
+     */
+    [[nodiscard]] double getCurvilinearOrientation(size_t timeStep,
+                                                   const std::shared_ptr<Lane> &refLane); // Todo create test case
+
+    /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
      *
      * @param timeStep time step of interest

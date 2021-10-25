@@ -13,7 +13,7 @@
  * Evaluates whether the kth vehicle is in front of the pth vehicle, withing the same lane, and drives in the same
  * direction.
  */
-class SucceedsPredicate : public CommonRoadPredicate {
+class LaneBasedOrientationSimilarPredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using objects.

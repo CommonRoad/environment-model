@@ -12,6 +12,7 @@
 
 #include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
+#include "commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h"
 #include "commonroad_cpp/predicates/general/orientation_towards_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
@@ -120,6 +121,10 @@ PYBIND11_MODULE(cpp_env_model, m) {
           "Robust evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
     m.def("orientation_towards_boolean_evaluation", &py_boolean_evaluation<OrientationTowardsPredicate>,
+          "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
+    m.def("lane_based_orientation_similar_boolean_evaluation",
+          &py_boolean_evaluation<LaneBasedOrientationSimilarPredicate>,
           "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
     m.def("in_intersection_main_area_boolean_evaluation",
