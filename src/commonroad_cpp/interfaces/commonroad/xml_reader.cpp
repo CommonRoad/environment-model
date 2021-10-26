@@ -104,7 +104,8 @@ std::shared_ptr<State> XMLReader::extractInitialState(const pugi::xml_node &chil
     initialState.setTimeStep(states.child("time").child("exact").text().as_ullong());
     initialState.setXPosition(states.child("position").child("point").child("x").text().as_double());
     initialState.setYPosition(states.child("position").child("point").child("y").text().as_double());
-    initialState.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
+    initialState.setGlobalOrientation(
+        checkOrientationRange(states.child("orientation").child("exact").text().as_double()));
     if (states.child("velocity").child("exact").text() != nullptr)
         initialState.setVelocity(states.child("velocity").child("exact").text().as_double());
     if (states.child("acceleration").child("exact").text() != nullptr)
@@ -117,7 +118,7 @@ std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
     st.setTimeStep(states.child("time").child("exact").text().as_ullong());
     st.setXPosition(states.child("position").child("point").child("x").text().as_double());
     st.setYPosition(states.child("position").child("point").child("y").text().as_double());
-    st.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
+    st.setGlobalOrientation(checkOrientationRange(states.child("orientation").child("exact").text().as_double()));
     st.setVelocity(states.child("velocity").child("exact").text().as_double());
     if (states.child("acceleration").child("exact").text() != nullptr)
         st.setAcceleration(states.child("acceleration").child("exact").text().as_double());
@@ -259,4 +260,14 @@ void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanele
             break;
         }
     }
+}
+
+double XMLReader::checkOrientationRange(double orientation) {
+    if (orientation < -M_PI or M_PI < orientation) {
+        while (orientation > M_PI)
+            orientation -= M_PI;
+        while (orientation < -M_PI)
+            orientation += M_PI;
+    }
+    return orientation;
 }

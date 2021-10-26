@@ -163,6 +163,8 @@ void extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLanel
  */
 void extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, size_t arrayIndex,
                              const pugi::xml_node &child, const char *type);
+
+double checkOrientationRange(double orientation);
 } // namespace XMLReader
 
 #endif // ENV_MODEL_XML_READER_H
