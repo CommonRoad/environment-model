@@ -76,6 +76,11 @@ class World {
     void setInitialLanes();
 
     /**
+     * Computes all curvilinear states for ego vehicles and obstacles.
+     */
+    void setCurvilinearStates();
+
+    /**
      * Creates pointer to ID counter so that it can be increased by other classes.
      * @return Pointer to ID counter.
      */

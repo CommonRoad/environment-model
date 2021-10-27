@@ -248,6 +248,9 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     obsOneScenarioFour->computeLanes(roadNetworkScenarioFour, globalIdRef);
     EXPECT_EQ(43349, obsOneScenarioFour->getReferenceLane(timeStep)->getContainedLanelets().front()->getId());
     EXPECT_EQ(43486, obsOneScenarioFour->getReferenceLane(timeStep)->getContainedLanelets().back()->getId());
+    timeStep = 1;
+    EXPECT_EQ(43349, obsOneScenarioFour->getReferenceLane(timeStep)->getContainedLanelets().front()->getId());
+    EXPECT_EQ(43486, obsOneScenarioFour->getReferenceLane(timeStep)->getContainedLanelets().back()->getId());
 
     timeStep = 200;
     std::string pathToTestFileFive{TestUtils::getTestScenarioDirectory() + "/DEU_Frankfurt-70_12_I-1.xml"};

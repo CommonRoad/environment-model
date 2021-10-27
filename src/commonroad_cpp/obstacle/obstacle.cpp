@@ -415,14 +415,17 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
             } else if (referenceLaneCandidates.size() == 1)
                 referenceLane[timeStep] = referenceLaneCandidates.front();
         }
-        if (referenceLane.count(timeStep) == 0 or referenceLane.at(timeStep) == nullptr)
-            throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
-                                     std::to_string(getId()) + " at time step " + std::to_string(timeStep) + " with " +
-                                     std::to_string(getTrajectoryLength()) + " time steps");
-    } else
-        throw std::runtime_error("Obstacle::setReferenceLane: No referenceLane found! Obstacle ID " +
-                                 std::to_string(getId()) + " at time step " + std::to_string(timeStep) + " with " +
-                                 std::to_string(getTrajectoryLength()) + " time steps");
+    }
+    // check previous reference lane, if no previous exist try to use future reference lane
+    if (referenceLane.count(timeStep - 1) == 1 and referenceLane.at(timeStep - 1) != nullptr)
+        referenceLane[timeStep] = referenceLane.at(timeStep - 1);
+    else
+        for (size_t t{timeStep + 1}; t <= getLastTrajectoryTimeStep(); ++t) {
+            referenceLane[timeStep] = getReferenceLane(t);
+        }
+    if (referenceLane.count(timeStep) == 0 or referenceLane.at(timeStep) == nullptr)
+        throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
+                                 std::to_string(getId()) + " at time step " + std::to_string(timeStep));
     return referenceLane.at(timeStep);
 }
 
@@ -540,4 +543,13 @@ void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, std
             for (const auto &time : getHistoryTimeSteps())
                 setOccupiedLanes(roadNetwork, time, idCounter, fovFront);
     }
+}
+
+void Obstacle::setCurvilinearStates() {
+    if (!currentState->getValidStates().lonPosition)
+        convertPointToCurvilinear(currentState->getTimeStep());
+    if (!isStatic)
+        for (const auto &timeStep : getPredictionTimeSteps())
+            if (!getStateByTimeStep(timeStep)->getValidStates().lonPosition)
+                convertPointToCurvilinear(timeStep);
 }

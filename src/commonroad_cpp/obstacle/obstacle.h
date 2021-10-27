@@ -496,6 +496,8 @@ class Obstacle {
     void computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, std::shared_ptr<size_t> idCounter,
                       bool considerHistory = false);
 
+    void setCurvilinearStates();
+
   private:
     size_t id;                                        //**< unique ID of lanelet */
     bool isStatic{false};                             //**< true if Obstacle is static */
