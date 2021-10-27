@@ -295,7 +295,7 @@ double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &re
     } catch (...) {
         std::string refInfo;
         for (const auto &ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
-            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}";
+            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}, ";
         throw std::runtime_error(
             "Obstacle::getLonPosition Custom CCS - Curvilinear Projection Error - Obstacle ID: " + std::to_string(id) +
             " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " + refInfo);
@@ -310,7 +310,7 @@ double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &re
     } catch (...) {
         std::string refInfo;
         for (const auto &ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
-            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}";
+            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}, ";
         throw std::runtime_error(
             "Obstacle::getLatPosition Custom CCS - Curvilinear Projection Error - Obstacle ID: " + std::to_string(id) +
             " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " + refInfo);
@@ -342,10 +342,10 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
 
     std::vector<std::shared_ptr<Lane>> relevantOccupiedLanes;
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
+    // 1. check which currently occupied lanelets match direction
     if (getOccupiedLanelets(timeStep).size() == 1)
         relevantLanelets.push_back(getOccupiedLanelets(timeStep).front());
     else {
-        // 1. check which currently occupied lanelets match direction
         for (const auto &la : getOccupiedLanelets(timeStep)) {
             auto curPointOrientation{la->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
                                                                   getStateByTimeStep(timeStep)->getYPosition())};
@@ -416,13 +416,15 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
                 referenceLane[timeStep] = referenceLaneCandidates.front();
         }
     }
-    // check previous reference lane, if no previous exist try to use future reference lane
-    if (referenceLane.count(timeStep - 1) == 1 and referenceLane.at(timeStep - 1) != nullptr)
-        referenceLane[timeStep] = referenceLane.at(timeStep - 1);
-    else
-        for (size_t t{timeStep + 1}; t <= getLastTrajectoryTimeStep(); ++t) {
-            referenceLane[timeStep] = getReferenceLane(t);
-        }
+    // if no reference lane found: check previous reference lane, if no previous exist try to use future reference lane
+    if (referenceLane.count(timeStep) != 1) {
+        if (referenceLane.count(timeStep - 1) == 1 and referenceLane.at(timeStep - 1) != nullptr)
+            referenceLane[timeStep] = referenceLane.at(timeStep - 1);
+        else
+            for (size_t t{timeStep + 1}; t <= getLastTrajectoryTimeStep(); ++t) {
+                referenceLane[timeStep] = getReferenceLane(t);
+            }
+    }
     if (referenceLane.count(timeStep) == 0 or referenceLane.at(timeStep) == nullptr)
         throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
                                  std::to_string(getId()) + " at time step " + std::to_string(timeStep));
@@ -430,25 +432,27 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
 }
 
 void Obstacle::convertPointToCurvilinear(size_t timeStep) {
+    Eigen::Vector2d convertedPoint;
+    auto curReferenceLane{getReferenceLane(timeStep)};
     try {
-        Eigen::Vector2d convertedPoint =
-            getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
-                getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
-        getStateByTimeStep(timeStep)->setLonPosition(convertedPoint.x());
-        getStateByTimeStep(timeStep)->setLatPosition(convertedPoint.y());
-        double theta = getStateByTimeStep(timeStep)->getGlobalOrientation() -
-                       getReferenceLane(timeStep)->getOrientationAtPosition(
-                           getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
-        getStateByTimeStep(timeStep)->setCurvilinearOrientation(theta);
+        convertedPoint = curReferenceLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+            getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
     } catch (...) {
         std::string refInfo;
         for (const auto &ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
-            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}";
-        throw std::runtime_error("Curvilinear Projection Error - Obstacle ID: " + std::to_string(id) +
-                                 " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " + refInfo +
-                                 " - x-position: " + std::to_string(getStateByTimeStep(timeStep)->getXPosition()) +
-                                 " - y-position: " + std::to_string(getStateByTimeStep(timeStep)->getYPosition()));
+            refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}, ";
+        throw std::runtime_error(
+            "Obstacle::convertPointToCurvilinear: Curvilinear Projection Error - Obstacle ID: " + std::to_string(id) +
+            " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " + refInfo +
+            " - x-position: " + std::to_string(getStateByTimeStep(timeStep)->getXPosition()) +
+            " - y-position: " + std::to_string(getStateByTimeStep(timeStep)->getYPosition()));
     }
+    getStateByTimeStep(timeStep)->setLonPosition(convertedPoint.x());
+    getStateByTimeStep(timeStep)->setLatPosition(convertedPoint.y());
+    double theta = getStateByTimeStep(timeStep)->getGlobalOrientation() -
+                   getReferenceLane(timeStep)->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                                                        getStateByTimeStep(timeStep)->getYPosition());
+    getStateByTimeStep(timeStep)->setCurvilinearOrientation(theta);
 }
 
 void Obstacle::interpolateAcceleration(size_t timeStep, double dt) {

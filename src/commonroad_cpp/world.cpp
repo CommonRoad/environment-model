@@ -27,7 +27,7 @@ World::World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
     for (const auto &obs : obstacles)
         idCounter = std::max(idCounter, obs->getId());
     setInitialLanes();
-    setCurvilinearStates();
+    //    setCurvilinearStates();
 }
 
 size_t World::getTimeStep() const { return timeStep; }
