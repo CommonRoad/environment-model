@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include <pugixml.hpp>
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include <pugixml.hpp>
 #include <stdexcept>
 
 /**
