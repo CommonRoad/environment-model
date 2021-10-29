@@ -19,6 +19,18 @@ install(
   FILES_MATCHING PATTERN "*.hpp"
   )
 
+# pybind11
+
+FetchContent_Declare(
+  external_pybind11
+
+  GIT_REPOSITORY https://github.com/pybind/pybind11.git
+  GIT_TAG        v2.8.1
+  GIT_PROGRESS   true
+)
+
+FetchContent_MakeAvailable(external_pybind11)
+
 # GoogleTest
 
 FetchContent_Declare(
