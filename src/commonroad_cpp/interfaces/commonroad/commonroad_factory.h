@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.hpp"
+#include <pugixml.hpp>
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"

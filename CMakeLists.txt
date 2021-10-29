@@ -32,6 +32,9 @@ if (CODE_COVERAGE)
     option(CodeCoverage "CodeCoverage" ON)
 endif()
 
+
+add_subdirectory(external)
+
 find_package(DrivabilityChecker REQUIRED CONFIG)
 
 # Include Eigen3, Boost filesystem, and OpenMP

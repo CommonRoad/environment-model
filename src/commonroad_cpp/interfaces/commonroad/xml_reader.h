@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include "commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.hpp"
+#include <pugixml.hpp>
 
 class Intersection;
 class Obstacle;
