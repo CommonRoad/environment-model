@@ -51,13 +51,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-
-## Include pybind
-if(BUILD_PYBIND)
-    add_subdirectory(external/pybind11)
-    set(PYBIND11_CPP_STANDARD -std=c++17)
-endif(BUILD_PYBIND)
-
 # Add Environment model node
 add_subdirectory(src)
 

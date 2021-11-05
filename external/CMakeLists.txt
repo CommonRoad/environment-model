@@ -11,13 +11,6 @@ FetchContent_Declare(
   GIT_PROGRESS   true
 )
 
-FetchContent_MakeAvailable(external_pugixml)
-
-install(
-  DIRECTORY ${external_pugixml_SOURCE_DIR}/src/
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  FILES_MATCHING PATTERN "*.hpp"
-  )
 
 # pybind11
 
@@ -27,9 +20,8 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/pybind/pybind11.git
   GIT_TAG        v2.8.1
   GIT_PROGRESS   true
-)
 
-FetchContent_MakeAvailable(external_pybind11)
+)
 
 # GoogleTest
 
@@ -41,6 +33,16 @@ FetchContent_Declare(
   GIT_TAG        e2239ee6043f73722e7aa812a459f54a28552929
   GIT_PROGRESS   true
 )
+
+# Stage 2: Run FetchContent_MakeAvailable
+# CMake recommends running FetchContent_Declare for all third-party projects first
+# and finally running FetchContent_MakeAvailable in the end
+# See https://cmake.org/cmake/help/v3.22/module/FetchContent.html#command:fetchcontent_makeavailable
+
+FetchContent_MakeAvailable(external_pugixml)
+
+set(PYBIND11_CPP_STANDARD -std=c++17)
+FetchContent_MakeAvailable(external_pybind11)
 
 FetchContent_MakeAvailable(external_googletest)
 
@@ -54,3 +56,12 @@ set_target_properties(gtest PROPERTIES FOLDER extern)
 set_target_properties(gtest_main PROPERTIES FOLDER extern)
 set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
+
+
+# Install rule for pugixml headers
+
+install(
+  DIRECTORY ${external_pugixml_SOURCE_DIR}/src/
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  FILES_MATCHING PATTERN "*.hpp"
+  )
