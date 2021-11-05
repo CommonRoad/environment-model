@@ -20,7 +20,7 @@ class TrafficSign;
 class TrafficLight;
 
 namespace pugi {
-    class xml_node;
+class xml_node;
 }
 
 namespace XMLReader {

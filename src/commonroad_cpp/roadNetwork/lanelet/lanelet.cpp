@@ -13,6 +13,9 @@
 #include <boost/geometry/algorithms/intersects.hpp>
 #include <boost/geometry/algorithms/simplify.hpp>
 #include <boost/geometry/algorithms/unique.hpp>
+#include <boost/geometry/algorithms/within.hpp>
+
+#include <boost/geometry/strategies/strategies.hpp>
 
 namespace bg = boost::geometry;
 
