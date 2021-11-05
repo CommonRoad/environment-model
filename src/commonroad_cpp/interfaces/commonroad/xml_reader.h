@@ -10,7 +10,6 @@
 #include <vector>
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include <pugixml.hpp>
 
 class Intersection;
 class Obstacle;
@@ -19,6 +18,10 @@ class World;
 class Lanelet;
 class TrafficSign;
 class TrafficLight;
+
+namespace pugi {
+    class xml_node;
+}
 
 namespace XMLReader {
 /**
