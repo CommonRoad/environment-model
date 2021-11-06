@@ -198,8 +198,8 @@ std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(size_t timeS
     if (occupiedLanelets.count(timeStep) == 1)
         return occupiedLanelets.at(timeStep);
     else
-        throw std::logic_error("Obstacle::getOccupiedLanelets: Occupied lanelets not calculated yet. Obstacle ID: " + std::to_string(this->getId()) +
-                               " - Time step: " + std::to_string(timeStep));
+        throw std::logic_error("Obstacle::getOccupiedLanelets: Occupied lanelets not calculated yet. Obstacle ID: " +
+                               std::to_string(this->getId()) + " - Time step: " + std::to_string(timeStep));
 }
 
 double Obstacle::frontS(size_t timeStep) {
