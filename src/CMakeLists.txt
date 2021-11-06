@@ -18,7 +18,6 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/geometry/circle.cpp
         commonroad_cpp/geometry/geometric_operations.cpp
         commonroad_cpp/geometry/rectangle.cpp
-        commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2018b.cpp
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2020a.cpp
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
@@ -78,6 +77,7 @@ target_link_libraries(env_model
         Boost::program_options
         Boost::filesystem
         OpenMP::OpenMP_CXX
+        pugixml-static
     )
 
 

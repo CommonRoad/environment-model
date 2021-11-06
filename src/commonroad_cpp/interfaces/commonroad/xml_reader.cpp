@@ -9,6 +9,8 @@
 #include <sstream>
 #include <utility>
 
+#include <pugixml.hpp>
+
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
