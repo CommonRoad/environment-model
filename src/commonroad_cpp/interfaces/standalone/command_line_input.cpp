@@ -14,6 +14,8 @@
 
 #include "command_line_input.h"
 
+#include <spdlog/spdlog.h>
+
 namespace po = boost::program_options;
 
 namespace CommandLine {
@@ -48,8 +50,8 @@ int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::st
             return 0;
         }
 
-        std::cout << "[*] Using file " << xmlFilePath << std::endl;
-        std::cout << "[*] Using that many threads: " << num_threads << std::endl;
+        spdlog::info("Using file {}", xmlFilePath);
+        spdlog::info("Thread count: {}", num_threads);
 
         return 0;
     } catch (std::exception &e) {
