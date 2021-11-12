@@ -133,7 +133,7 @@ TEST_F(InterfacesTest, ReadCommandLineValuesValidDefault) {
 
     EXPECT_EQ(error_code, 0);
     EXPECT_EQ(num_threads, 1);
-    EXPECT_EQ(xmlFilePath, "../testScenarios/USA_Lanker-1_1_T-1.xml");
+    EXPECT_EQ(xmlFilePath, "../tests/scenarios/USA_Lanker-1_1_T-1.xml");
 }
 
 TEST_F(InterfacesTest, ReadCommandLineValuesValidParameters) {

@@ -9,7 +9,7 @@ RUN apt-get update && \
         build-essential git pkg-config wget libomp-dev \
         gcovr doxygen graphviz cppcheck \
         libeigen3-dev libboost-all-dev uuid-dev \
-        libcgal-dev && \
+        libcgal-dev libspdlog-dev && \
     rm -rf /var/lib/apt/lists/*
 
 ARG CMAKE_VERSION=3.19.0
@@ -55,11 +55,7 @@ ENV CONDA_DEFAULT_ENV $commonroad
 
 RUN mkdir -p -m 0600 ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan gitlab.lrz.de >> ~/.ssh/known_hosts
 
-RUN --mount=type=ssh \
-    git clone git@gitlab.lrz.de:cps/commonroad-drivability-checker.git && \
-    cd commonroad-drivability-checker && \
-    git checkout feature_cmake_export && \
-    git submodule update --init
+RUN --mount=type=ssh git clone --branch=development --recurse-submodules git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
 
 RUN mkdir dist && \
     cd commonroad-drivability-checker && \

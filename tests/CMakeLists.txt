@@ -38,11 +38,21 @@ set(ENV_MODEL_TEST_SRC_FILES
 
 # Create executable for test
 add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
+
 target_compile_features(env_model_test
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
+
 set_property(TARGET env_model_test PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(env_model_test PRIVATE env_model gtest Boost::filesystem OpenMP::OpenMP_CXX)
+
+target_link_libraries(env_model_test
+    PRIVATE
+        env_model
+        gtest
+        Boost::filesystem
+        OpenMP::OpenMP_CXX
+        spdlog::spdlog
+    )
 
 include(GoogleTest)
 # queries the compiled executable for tests, this requires the executable to be runnable. if you are
@@ -65,7 +75,9 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
                 Boost::filesystem
                 Boost::program_options
                 OpenMP::OpenMP_CXX
-                Eigen3::Eigen)
+                Eigen3::Eigen
+                spdlog::spdlog
+            )
 
         include(CodeCoverage)
         append_coverage_compiler_flags()

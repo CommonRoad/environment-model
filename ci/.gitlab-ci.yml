@@ -6,7 +6,7 @@ stages:
   - static-test
   - docs
 
-image: $CI_REGISTRY/maierhofer/environment-model/ci:0.5.0
+image: $CI_REGISTRY/maierhofer/environment-model/ci:0.6.0
 
 .python-prepare: &python-prepare
   - source activate commonroad

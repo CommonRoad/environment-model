@@ -40,6 +40,7 @@ find_package(DrivabilityChecker REQUIRED CONFIG)
 # Include Eigen3, Boost filesystem, and OpenMP
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)
+find_package(spdlog REQUIRED)
 find_package(OpenMP)
 if(NOT OpenMP_CXX_FOUND)
     message(SEND_ERROR "Can't find the OpenMP package")
