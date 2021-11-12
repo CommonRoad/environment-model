@@ -36,7 +36,7 @@ int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::st
         desc.add_options()("help", "produce help message")(
             "input-file",
             boost::program_options::value<std::string>(&xmlFilePath)
-                ->default_value("../testScenarios/USA_Lanker-1_1_T-1.xml")
+                ->default_value("../tests/scenarios/USA_Lanker-1_1_T-1.xml")
                 ->required(),
             "Input file")("threads,t", po::value<int>(&num_threads)->default_value(1),
                           "set number of threads to run with");
