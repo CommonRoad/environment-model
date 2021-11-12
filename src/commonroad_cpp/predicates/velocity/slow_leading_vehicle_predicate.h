@@ -14,6 +14,11 @@
 class SlowLeadingVehiclePredicate : public CommonRoadPredicate {
   public:
     /**
+     * Constructor for SlowLeadingVehiclePredicate.
+     */
+    SlowLeadingVehiclePredicate();
+
+    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.

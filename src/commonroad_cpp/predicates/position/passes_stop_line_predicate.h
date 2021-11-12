@@ -15,6 +15,11 @@
 class PassesStopLinePredicate : public CommonRoadPredicate {
   public:
     /**
+     * Constructor for PassesStopLinePredicate.
+     */
+    PassesStopLinePredicate();
+
+    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.

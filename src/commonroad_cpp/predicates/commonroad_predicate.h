@@ -12,11 +12,10 @@
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
 #include <commonroad_cpp/auxiliaryDefs/timer.h>
 
-#include "predicate_parameters.h"
+#include "predicate_config.h"
 
 class Obstacle;
 class World;
-// struct Constraint;
 
 /**
  * Interface for a predicate.
@@ -27,15 +26,16 @@ class CommonRoadPredicate {
      * Constructor for predicate class.
      *
      * @param parameters Struct containing parameters of all predicates.
+     * @param vehicleDependent Boolean indicating whether predicate depends only on one vehicle
      */
-    explicit CommonRoadPredicate(const PredicateParameters &parameters);
+    explicit CommonRoadPredicate(const PredicateParameters &parameters, bool vehicleDependent);
 
     /**
      * Default constructor for predicate class without parameter.
      *
-     * @param parameters Struct containing parameters of all predicates.
+     * @param vehicleDependent Boolean indicating whether predicate depends only on one vehicle
      */
-    CommonRoadPredicate();
+    CommonRoadPredicate(bool vehicleDependent);
 
     /**
      * Virtual function for the boolean evaluation of a predicate.
@@ -122,4 +122,7 @@ class CommonRoadPredicate {
     Timer evaluationTimer;          //**< Time measuring object for predicates. */
     PredicateStatistics statistics; //**< Struct storing statistics of a predicate, e.g., average computation
                                     // time,  number of calls, etc. */
+    const bool vehicleDependent; //**< Boolean indicating whether predicate depends on one specific obstacle or two. */
 };
+
+extern std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates; //**< List of all predicates **/

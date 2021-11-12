@@ -44,3 +44,10 @@ struct PredicateStatistics {
 struct Constraint {
     double realValuedConstraint;
 };
+
+struct PredicateSatisfaction {
+    PredicateSatisfaction(double costs, double satisfaction_probability)
+        : costs(costs), satisfactionProbability(satisfaction_probability) {}
+    double costs{100.0};
+    double satisfactionProbability{0.0};
+};
