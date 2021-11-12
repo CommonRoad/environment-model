@@ -78,6 +78,7 @@ target_link_libraries(env_model
         Boost::filesystem
         OpenMP::OpenMP_CXX
         pugixml-static
+        spdlog::spdlog
     )
 
 
@@ -88,6 +89,7 @@ target_link_libraries(env_model_example_node
     PRIVATE
         env_model
         Boost::program_options
+        spdlog::spdlog
     )
 
 

@@ -13,10 +13,33 @@ It contains an interface to Python and predicates for evaluating traffic rules (
 Note that the repository does not contain runtime verification algorithms and code for evaluating traffic rules.
 
 
-## Dependencies:
+## Dependencies
+
+### CommonRoad dependencies
+
 - [commonroad-io](https://gitlab.lrz.de/cps/commonroad-io)
 - [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker) (branch feature_cmake_export; follow C++ installation instructions under doc/installation_cpp.rst)
+
+### Common dependencies
+
+These dependencies should be available as a system package.
+
 - **cmake > 3.16**
+- Boost
+- Eigen3
+- spdlog
+- OpenMP
+- Doxygen (for building the documentation)
+- Graphviz (for building the documentation)
+
+#### Debian/Ubuntu
+
+On Debian/Ubuntu, you'll most likely need to install the following packages:
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libcgal-dev libspdlog-dev`
+
+For building the documentation, you'll need to install `doxygen` and `graphviz`.
+
+For test coverage, you'll need to install `gcovr`.
 
 ## Build and Compile
 
@@ -25,7 +48,7 @@ Tested with
 - GCC 7.5.0
 - Clang 10
 
-For development the IDE [Clion](https://www.jetbrains.com/clion/?gclid=EAIaIQobChMI3-KEq9fk8AIVB853Ch2JdgNFEAAYASAAEgIChfD_BwE&gclsrc=aw.ds) is recommended.  
+For development the IDE [CLion](https://www.jetbrains.com/clion) is recommended.
 You can also take a look at the Docker container, or the .gitlab-ci.yml file to see how the software can be installed. Both are located in the *ci* directory.
   
 ### C++
