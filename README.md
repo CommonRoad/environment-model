@@ -48,7 +48,7 @@ Tested with
 - GCC 7.5.0
 - Clang 10
 
-For development the IDE [Clion](https://www.jetbrains.com/clion/?gclid=EAIaIQobChMI3-KEq9fk8AIVB853Ch2JdgNFEAAYASAAEgIChfD_BwE&gclsrc=aw.ds) is recommended.  
+For development the IDE [CLion](https://www.jetbrains.com/clion) is recommended.
 You can also take a look at the Docker container, or the .gitlab-ci.yml file to see how the software can be installed. Both are located in the *ci* directory.
   
 ### C++
