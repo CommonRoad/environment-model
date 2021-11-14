@@ -8,23 +8,25 @@
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
 
+/* Slow leading vehicle ref */
+//2.78
 void InCongestionPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 2, 0, 0, 0, 10, 0);
     std::shared_ptr<State> stateZeroObstacleFive = std::make_shared<State>(1, 0, 6, 60, 0, 0, 0, 0, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 12, 2, 2, 0, 0, 0, 12, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 22, 2, 50, 0, 0, 0, 22, 0);
-    std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 32, 2, 36, 0, 0, 0, 32, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 12, 2, 2.7, 0, 0, 0, 12, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 22, 2, 1.73, 0, 0, 0, 22, 0);
+    std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 32, 2, 1.5, 0, 0, 0, 32, 0);
     std::shared_ptr<State> stateOneObstacleFive = std::make_shared<State>(1, 60, 9.5, 0, 0, 0, 0, 60, 1.5);
 
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 14, 2, 2, 0, 0, 0, 14, 0);
-    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 72, 2, 12, 0, 0, 0, 72, 0);
-    std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 68, 2, 36, 0, 0, 0, 68, 0);
-    std::shared_ptr<State> stateTwoObstacleFour = std::make_shared<State>(2, 44, 2, 50, 0, 0, 0, 44, 0);
+    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 72, 2, 1.53, 0, 0, 0, 72, 0);
+    std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 68, 2, 1.27, 0, 0, 0, 68, 0);
+    std::shared_ptr<State> stateTwoObstacleFour = std::make_shared<State>(2, 44, 2, 1.5, 0, 0, 0, 44, 0);
 
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 16, 2, 2, 0, 0, 0, 16, 0);
     std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 84, 2, 2, 0, 0, 0, 84, 0);
-    std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 98, 2, 36, 0, 0, 0, 98, 0);
+    std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 98, 2, 1.86, 0, 0, 0, 98, 0);
     std::shared_ptr<State> stateThreeObstacleFour = std::make_shared<State>(3, 94, 2, 0, 0, 0, 0, 94, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
@@ -69,20 +71,20 @@ void InCongestionPredicateTest::SetUp() {
 }
 
 TEST_F(InCongestionPredicateTest, BooleanEvaluationObjects) {
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne)); // no leading vehicle at all
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne)); // two leading vehicles which drive with speed limit
-    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne));  // first leading vehicle is drives to slow
-    EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne));  // third leading vehicle drives to slow
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne));
+    EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne));
 }
 
 TEST_F(InCongestionPredicateTest, StatisticBooleanEvaluation) {
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne)); // no leading vehicle at all
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 1);
     EXPECT_FALSE(
-        pred.statisticBooleanEvaluation(1, world, obstacleOne)); // two leading vehicles which drive with speed limit
+        pred.statisticBooleanEvaluation(1, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 2);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne)); // first leading vehicle is drives to slow
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 3);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne)); // third leading vehicle drives to slow
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 4);
 }

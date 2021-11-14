@@ -11,8 +11,8 @@
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 bool InCongestionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                              const std::shared_ptr<Obstacle> &obstacleP,
-                                              const std::shared_ptr<Obstacle> &obstacleK) {
+                                              const std::shared_ptr<Obstacle> &obstacleK,
+                                              const std::shared_ptr<Obstacle> &obstacleP) {
     InFrontOfPredicate inFrontOfPredicate;
     InSameLanePredicate inSameLanePredicate;
 
@@ -38,7 +38,7 @@ Constraint InCongestionPredicate::constraintEvaluation(size_t timeStep, const st
 
 
 double InCongestionPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                               const std::shared_ptr<Obstacle> &obstacleP,
-                                               const std::shared_ptr<Obstacle> &obstacleK) {
+                                               const std::shared_ptr<Obstacle> &obstacleK,
+                                               const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("In Congestion Predicate does not support robust evaluation!");
 }
