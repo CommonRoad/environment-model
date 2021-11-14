@@ -11,8 +11,8 @@
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 bool InCongestionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                             const std::shared_ptr<Obstacle> &obstacleP,
-                                                             const std::shared_ptr<Obstacle> &obstacleK) {
+                                              const std::shared_ptr<Obstacle> &obstacleP,
+                                              const std::shared_ptr<Obstacle> &obstacleK) {
     InFrontOfPredicate inFrontOfPredicate;
     InSameLanePredicate inSameLanePredicate;
 
@@ -23,7 +23,7 @@ bool InCongestionPredicate::booleanEvaluation(size_t timeStep, const std::shared
         if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.maxCongestionVelocity)
-                num_vehicles += 1;
+            num_vehicles += 1;
     }
     if (num_vehicles >= parameters.numVehCongestion)
         return true;
@@ -31,14 +31,14 @@ bool InCongestionPredicate::booleanEvaluation(size_t timeStep, const std::shared
 }
 
 Constraint InCongestionPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                             const std::shared_ptr<Obstacle> &obstacleK,
-                                                             const std::shared_ptr<Obstacle> &obstacleP) {
+                                                       const std::shared_ptr<Obstacle> &obstacleK,
+                                                       const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("In Congestion Predicate does not support constraint evaluation!");
 }
 
 
 double InCongestionPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                              const std::shared_ptr<Obstacle> &obstacleP,
-                                                              const std::shared_ptr<Obstacle> &obstacleK) {
-   throw std::runtime_error("In Congestion Predicate does not support robust evaluation!");
+                                               const std::shared_ptr<Obstacle> &obstacleP,
+                                               const std::shared_ptr<Obstacle> &obstacleK) {
+    throw std::runtime_error("In Congestion Predicate does not support robust evaluation!");
 }
