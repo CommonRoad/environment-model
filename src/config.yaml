@@ -1,14 +1,20 @@
-# road network and curvilinear coordinate system parameters
+# simulation parameters for predicate evaluation
 ###
 # .. code-block:: yaml
 #
-#    - num_chankins_corner_cutting: number of how often chankins algorithm should be applied
-#    - polyline_resampling_step: step size for polyline resampling
-#    - merging_length: maximum accumulated length of lanelets belonging to a lane
-road_network_param:
-  num_chankins_corner_cutting: 10
-  polyline_resampling_step: 0.5
-  merging_length: 10000
+#    - dt: time step size
+#    - operating_mode: specifies operating mode: either single_scenario, single_vehicle, evaluation, or benchmark
+#    - ego_vehicle_id: ego vehicle ID
+#    - directories: directories in which CommonRoad scenarios are located
+#    - benchmark_id: CommonRoad solution file name
+#    - performance_measurement: activate/deactivate computation time measuring
+simulation_param:
+  evaluation_mode: single_vehicle # single_scenario, single_vehicle, test, directory, directory_single_vehicle
+  ego_vehicle_id: 1010
+  benchmark_id: DEU_test_safe_distance #DEU_LocationFLower-59_1_T-1 # DEU_test_unnecessary_braking  #BEL_Aarschot-1_2_T-1 # DEU_LocationBLower-3_1_T-1 #DEU_LocationBUpper-1_1_T-1
+  directories: [ "./tests/scenarios/test_general_rules" ] # /media/sebastian/TUM/06_code/cps/scenarios/datasets/highD/commonroad   "./tests/scenarios/test_general_rules" "../../cps/scenarios/cr-scenarios/scenarios/scenario-factory"
+  performance_measurement: true
+  operating_mode: monitor # one of monitor, constraint, robustness
 
 # Ego vehicle parameters
 ###
@@ -74,31 +80,3 @@ other_vehicles_param:
   t_react: 0.3 # for safe distance calculation of preceding vehicles
   dynamics_param: None  # TODO replace dynamics parameter with worst case behavior
 
-# Visualization parameters
-###
-#    - Parameters for plotting of profiles
-#    - Parameters for video creation
-visualization:
-  # Parameters for plotting of profiles
-  ###
-  # .. code-block:: yaml
-  #
-  #   - width: width of matplotlib figure
-  #   - line_width: line width of profiles
-  #   - font_size: font size of text within the plot
-  #   - axes_line_width: line width of the axes
-  #   - figure_type: type of figure which should be stored
-  plot:
-    width: 3.75
-    line_width: 0.75
-    font_size: 9
-    axes_line_width: 0.25
-    figure_type: eps
-
-  # Parameters for video creation
-  ###
-  # .. code-block:: yaml
-  #
-  #   - obstacle_label: activate/deactivate visualization of obstacle label (ID) in video
-  video:
-    obstacle_label: True

@@ -7,6 +7,10 @@
 
 #pragma once
 
+enum class EvaluationMode { directory, singleScenario, singleVehicle, directory_single_vehicle };
+
+enum class OperatingMode { boolean, constraint, robustness };
+
 enum class ObstacleType { car, truck, pedestrian, bus, unknown, vehicle };
 
 enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };

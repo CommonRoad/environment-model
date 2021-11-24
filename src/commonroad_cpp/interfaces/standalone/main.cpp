@@ -5,24 +5,25 @@
 // Credits: BMW Car@TUM
 //
 
-#include "command_line_input.h"
-#include "commonroad_cpp/world.h"
-#include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/roadNetwork/road_network.h>
+#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include "commonroad_cpp/predicates/predicate_manager.h"
+#include <boost/stacktrace.hpp>
+#include <iostream>
 
 int main(int argc, char **argv) {
 
     // Read command line parameters; if none are provided, use default values (specified in read_command_line_values)
     int num_threads;
-    std::string xmlFilePath;
-    int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
+    std::string filePath;
+    int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, filePath);
     if (error_code != 0)
         return error_code;
 
-    // Read and parse CommonRoad scenario file
-    const auto &[obstacles, roadNetwork, timeStepSize] = CommandLine::getDataFromCommonRoad(xmlFilePath);
-
-    auto world{World(0, roadNetwork, obstacles, {}, timeStepSize)};
-
+    try {
+        PredicateManager eval{num_threads, filePath};
+        eval.extractPredicateSatisfaction();
+    } catch (...) {
+        std::cout << boost::stacktrace::stacktrace();
+    }
     return 0;
 }
