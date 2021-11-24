@@ -9,10 +9,8 @@
 #include <tuple>
 #include <vector>
 
+#include "../commonroad/xml_reader.h"
 #include <boost/program_options.hpp>
-//#include "commonroad_cpp/roadNetwork/road_network.h"
-
-#include "commonroad_cpp/interfaces/commonroad/xml_reader.h"
 
 class RoadNetwork;
 
@@ -35,5 +33,19 @@ int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::st
  */
 std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
 getDataFromCommonRoad(const std::string &xmlFilePath);
+
+/**
+ * Initializes CommonRoad evaluation.
+ * @param path Path to config file.
+ */
+SimulationParameters initialize(const std::string &path);
+
+/**
+ * Converts given string to evaluation mode enum.
+ *
+ * @param evaluationMode String containing evaluation mode (loaded from config file)
+ * @return EvaluationMode enum.
+ */
+static EvaluationMode stringToEvaluationMode(const std::string &evaluationMode);
 
 } // namespace CommandLine

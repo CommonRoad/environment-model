@@ -117,6 +117,13 @@ class CommonRoadPredicate {
      */
     const Timer &getEvaluationTimer() const;
 
+    /**
+     * Returns whether predicate is vehicle dependent.
+     *
+     * @return Boolean indicating whether predicate is vehicle dependent.
+     */
+    bool isVehicleDependent() const;
+
   protected:
     PredicateParameters parameters; //**< Struct containing parameters of all predicates. */
     Timer evaluationTimer;          //**< Time measuring object for predicates. */

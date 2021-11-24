@@ -55,6 +55,8 @@ const Timer &CommonRoadPredicate::getEvaluationTimer() const { return evaluation
 
 CommonRoadPredicate::CommonRoadPredicate(bool vehicleDependent) : vehicleDependent(vehicleDependent) {}
 
+bool CommonRoadPredicate::isVehicleDependent() const { return vehicleDependent; }
+
 std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"keeps_safe_distance_prec", std::make_shared<SafeDistancePredicate>()},
     {"unnecessary_braking", std::make_shared<UnnecessaryBrakingPredicate>()},

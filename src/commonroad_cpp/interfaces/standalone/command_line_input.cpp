@@ -13,12 +13,10 @@
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
 #include "command_line_input.h"
-
+#include "yaml-cpp/yaml.h"
 #include <spdlog/spdlog.h>
 
 namespace po = boost::program_options;
-
-namespace CommandLine {
 
 /**
  * Reads the arguments provided via command line.
@@ -28,7 +26,7 @@ namespace CommandLine {
  * @param num_threads Reference where number of threads should be stored.
  * @param xmlFilePath Reference where file path to CommonRoad xml should be stored.
  */
-int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath) {
+int CommandLine::readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath) {
     try {
         std::string xmlFileName;
         po::options_description desc;
@@ -69,7 +67,7 @@ int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::st
  * @return Tuple of obstacles and roadNetwork.
  */
 std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
-getDataFromCommonRoad(const std::string &xmlFilePath) {
+CommandLine::getDataFromCommonRoad(const std::string &xmlFilePath) {
     // Read and parse CommonRoad scenario file
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
     std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
@@ -88,4 +86,26 @@ getDataFromCommonRoad(const std::string &xmlFilePath) {
     return std::make_tuple(obstacles, roadNetwork, timeStepSize);
 }
 
-} // namespace CommandLine
+SimulationParameters CommandLine::initialize(const std::string &configPath) {
+    YAML::Node config = YAML::LoadFile(configPath);
+    return {config["simulation_param"]["directories"].as<std::vector<std::string>>(),
+            config["simulation_param"]["ego_vehicle_id"].as<size_t>(),
+            config["simulation_param"]["benchmark_id"].as<std::string>(),
+            stringToEvaluationMode(config["simulation_param"]["evaluation_mode"].as<std::string>()),
+            config["simulation_param"]["performance_measurement"].as<bool>()};
+}
+
+EvaluationMode CommandLine::stringToEvaluationMode(const std::string &evalMode) {
+    if (evalMode == "directory") {
+        return EvaluationMode::directory;
+    } else if (evalMode == "single_scenario") {
+        return EvaluationMode::singleScenario;
+    } else if (evalMode == "single_vehicle") {
+        return EvaluationMode::singleVehicle;
+    } else if (evalMode == "directory_single_vehicle") {
+        return EvaluationMode::directory_single_vehicle;
+    } else {
+        throw std::runtime_error("CommonRoadEvaluation: Unknown evaluation mode.\n Options are: directory, "
+                                 "single_scenario, single_vehicle, directory_single_vehicle");
+    }
+}

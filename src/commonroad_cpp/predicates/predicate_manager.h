@@ -11,10 +11,19 @@
 
 class PredicateManager {
   public:
+    /**
+     * Constructor
+     *
+     * @param threads Number of threads which can be used.
+     * @param configPath Path to configuration file which contains information about operation mode and traffic rules.
+     */
+    PredicateManager(int threads, const std::string &configPath);
+
     void extractPredicateSatisfaction();
 
   private:
     std::map<std::string, PredicateSatisfaction> predicateSatisfaction;
     std::vector<std::string> scenarios;
     int numThreads;
+    SimulationParameters simulationParameters;
 };

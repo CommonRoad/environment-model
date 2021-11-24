@@ -7,10 +7,11 @@
 
 #pragma once
 
+#include "string"
+#include "types_and_definitions.h"
+#include "vector"
 #include <climits>
 #include <cstddef>
-
-#include "types_and_definitions.h"
 
 struct TrafficLightCycleElement {
     TrafficLightState color;
@@ -50,4 +51,16 @@ struct PredicateSatisfaction {
         : costs(costs), satisfactionProbability(satisfaction_probability) {}
     double costs{100.0};
     double satisfactionProbability{0.0};
+};
+
+struct SimulationParameters {
+    SimulationParameters(std::vector<std::string> directoryPaths, size_t egoVehicleId, std::string benchmarkId,
+                         EvaluationMode evaluationMode, bool performanceMeasurement)
+        : directoryPaths(std::move(directoryPaths)), egoVehicleId(egoVehicleId), benchmarkId(std::move(benchmarkId)),
+          evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement){};
+    std::vector<std::string> directoryPaths; //**< List of directories in which all scenarios should be evaluated */
+    size_t egoVehicleId;                     //**< ID of ego vehicle */
+    std::string benchmarkId;                 //**< CommonRoad benchmark ID */
+    EvaluationMode evaluationMode; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
+    bool performanceMeasurement;   //**< Flag indicating whether performance should me measured. */
 };

@@ -5,9 +5,10 @@
 // Credits: BMW Car@TUM
 //
 #include "predicate_manager.h"
+#include "../interfaces/standalone/command_line_input.h"
 #include "../obstacle/obstacle.h"
 #include "../world.h"
-#include <commonroad_cpp/interfaces/standalone/command_line_input.h>
+#include "commonroad_predicate.h"
 
 void PredicateManager::extractPredicateSatisfaction() {
     for (const auto &sc : scenarios) {
@@ -23,6 +24,18 @@ void PredicateManager::extractPredicateSatisfaction() {
             // setObstacleProperties(ego, others);
             auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
             auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
+            for (size_t timeStep{ego->getCurrentState()->getTimeStep()}; timeStep <= ego->getLastTrajectoryTimeStep();
+                 ++timeStep)
+                for (const auto &[predName, pred] : predicates)
+                    if (!pred->isVehicleDependent()) {
+                        pred->booleanEvaluation(timeStep, world, ego, nullptr);
+                    } else
+                        for (const auto &obs : world->getObstacles()) {
+                            pred->booleanEvaluation(timeStep, world, ego, obs);
+                        }
         }
     }
 }
+
+PredicateManager::PredicateManager(int threads, const std::string &configPath)
+    : numThreads(threads), simulationParameters(CommandLine::initialize(configPath)) {}
