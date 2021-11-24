@@ -28,10 +28,10 @@ void PredicateManager::extractPredicateSatisfaction() {
                  ++timeStep)
                 for (const auto &[predName, pred] : predicates)
                     if (!pred->isVehicleDependent()) {
-                        pred->booleanEvaluation(timeStep, world, ego, nullptr);
+                        pred->statisticBooleanEvaluation(timeStep, world, ego, nullptr);
                     } else
                         for (const auto &obs : world->getObstacles()) {
-                            pred->booleanEvaluation(timeStep, world, ego, obs);
+                            pred->statisticBooleanEvaluation(timeStep, world, ego, obs);
                         }
         }
     }
