@@ -111,7 +111,8 @@ build-run-coverage:
 test:
   stage: test
   before_script:
-    - mv ./dist /commonroad/
+    - rsync -av ./dist/ /commonroad/
+    - rm -rf /source/
   script:
     - build/env_model_test --gtest_output="xml:report.xml"
   needs:
