@@ -40,7 +40,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(external_pugixml)
 
-
 set(PYBIND11_CPP_STANDARD -std=c++17)
 FetchContent_MakeAvailable(external_pybind11)
 
@@ -57,7 +56,6 @@ set_target_properties(gtest_main PROPERTIES FOLDER extern)
 set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
-
 # Install rule for pugixml headers
 install(
   DIRECTORY ${external_pugixml_SOURCE_DIR}/src/
@@ -65,41 +63,26 @@ install(
   FILES_MATCHING PATTERN "*.hpp"
   )
 
-# Install rule for pugixml headers
-install(
-        DIRECTORY ${external_yamlcpp_SOURCE_DIR}/src/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        FILES_MATCHING PATTERN "*.hpp"
-)
 
 
-
+# Add yaml-cpp (needs cmake arguments therefore FetchContent_MakeAvailable does not work)
 message(STATUS "yaml-cpp - using bundled version")
-
 include(ExternalProject)
 
 ExternalProject_Add(
         yaml_cpp_bundled
         URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz
-        INSTALL_DIR "${CMAKE_BINARY_DIR}/yamlcppPrefix"
-        BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/yamlcppPrefix/lib/libyaml-cpp.so
+        INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
+        BUILD_BYPRODUCTS ${CMAKE_INSTALL_PREFIX}/lib/libyaml-cpp.so
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DBUILD_SHARED_LIBS=ON -DYAML_CPP_BUILD_TESTS=OFF
 )
-
 add_library(yaml-cpp SHARED IMPORTED GLOBAL)
-
 add_dependencies(yaml-cpp yaml_cpp_bundled)
-
 set_target_properties(
         yaml-cpp
-        PROPERTIES "IMPORTED_LOCATION" "${CMAKE_BINARY_DIR}/yamlcppPrefix/lib/libyaml-cpp.so"
+        PROPERTIES "IMPORTED_LOCATION" "${CMAKE_INSTALL_PREFIX}/lib/libyaml-cpp.so"
 )
-
 # create directory otherwise cmake will complain during generate step since this is only generated during make
-file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/yamlcppPrefix/include")
+file(MAKE_DIRECTORY "${CMAKE_INSTALL_PREFIX}/include")
 
-target_include_directories(yaml-cpp SYSTEM INTERFACE "${PROJECT_BINARY_DIR}/yamlcppPrefix/include")
-
-
-
-
+target_include_directories(yaml-cpp SYSTEM INTERFACE "${CMAKE_INSTALL_PREFIX}/include")
