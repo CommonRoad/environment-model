@@ -105,6 +105,8 @@ build-run-coverage:
 
 build-python:
   stage: compile
+  before_script:
+    - *python-prepare
   script:
     - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py build
   needs: []
@@ -131,9 +133,6 @@ test-python:
     - *python-prepare
   script:
     - python setup.py develop
-    - ls -a
-    - cd build
-    - ls -a
     - python -m pytest tests/python
   needs:
     - job: build-python

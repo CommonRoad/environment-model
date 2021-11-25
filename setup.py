@@ -103,7 +103,7 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     install_requires=[
-        'commonroad-io>=2021.1',
+        'commonroad-io>=2021.3',
     ],
     extras_require={
         'tests': ['numpy>=1.20.0',
