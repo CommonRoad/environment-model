@@ -103,25 +103,11 @@ build-run-coverage:
       - ./build/
     expire_in: 30 minutes
 
-build-python:
-  stage: compile
-  before_script:
-    - *python-prepare
-  script:
-    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py develop
-    - mv /commonroad/dist/ ./
-  needs: []
-  artifacts:
-    paths:
-      - ./build/
-      - ./dist/
-    expire_in: 30 minutes
 
 ### tests ###
 test:
   stage: test
   script:
-    - mv ./dist/ /commonroad/
     - build/env_model_test --gtest_output="xml:report.xml"
   needs:
     - job: build-test
@@ -130,12 +116,12 @@ test:
     reports:
       junit: ./report.xml
 
-test-python:
+build-test-python:
   stage: test
   before_script:
     - *python-prepare
   script:
-    - python setup.py develop
+    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py develop
     - python -m pytest tests/python
   needs:
     - job: build-python
