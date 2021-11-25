@@ -85,20 +85,10 @@ build-test:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
-    - cd ..
-    - cd ..
-    - cd ..
-    - cd ..
-    - cd commonroad
-    - ls -a
-    - cd dist
-    - ls -a
   needs: []
   artifacts:
     paths:
-      - ./../../../../commonroad/dist/
-      - build/env_model_test
-      - build/libenv_model.so
+      - ./build/
     expire_in: 30 minutes
 
 build-run-coverage:
@@ -110,7 +100,6 @@ build-run-coverage:
   needs: []
   artifacts:
     paths:
-      - commonroad/dist
       - ./build/
     expire_in: 30 minutes
 
@@ -122,7 +111,6 @@ build-python:
   artifacts:
     paths:
       - ./build/
-      - ./commonroad/dist/
     expire_in: 30 minutes
 
 ### tests ###
