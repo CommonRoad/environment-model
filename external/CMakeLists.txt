@@ -83,7 +83,7 @@ ExternalProject_Add(
         URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz
         INSTALL_DIR "${CMAKE_BINARY_DIR}/yamlcppPrefix"
         BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/yamlcppPrefix/lib/libyaml-cpp.so
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DBUILD_SHARED_LIBS=ON
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DBUILD_SHARED_LIBS=ON -DYAML_CPP_BUILD_TESTS=OFF
 )
 
 add_library(yaml-cpp SHARED IMPORTED GLOBAL)
