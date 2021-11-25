@@ -111,7 +111,7 @@ build-run-coverage:
 test:
   stage: test
   before_script:
-    - mv -./dist/lib/libyaml-cpp.so /commonroad/lib/
+    - mv ./dist/lib/libyaml-cpp.so /commonroad/lib/
   script:
     - build/env_model_test --gtest_output="xml:report.xml"
   needs:
