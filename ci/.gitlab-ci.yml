@@ -86,11 +86,12 @@ build-test:
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
     - cd ..
+    - cd ..
     - ls -a
   needs: []
   artifacts:
     paths:
-      - ./commonroad/dist/
+      - /commonroad/dist/
       - build/env_model_test
       - build/libenv_model.so
     expire_in: 30 minutes
