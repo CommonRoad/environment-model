@@ -104,7 +104,7 @@ build-run-coverage:
   needs: []
   artifacts:
     paths:
-      - ./commonroad/dist/
+      - commonroad/dist
       - ./build/
     expire_in: 30 minutes
 
