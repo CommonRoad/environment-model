@@ -123,9 +123,7 @@ build-test-python:
   script:
     - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py develop
     - python -m pytest tests/python
-  needs:
-    - job: build-python
-      artifacts: true
+  needs: []
 
 ### coverage ###
 coverage-analyze:
