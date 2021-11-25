@@ -85,10 +85,10 @@ build-test:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
-    - ls -a
-    - ls -a
-    - ls -a
-    - ls -a
+    - cd ..
+    - cd ..
+    - cd ..
+    - cd ..
     - cd commonroad
     - ls -a
     - cd dist
