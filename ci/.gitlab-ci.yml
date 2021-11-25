@@ -93,6 +93,7 @@ build-test:
     - ls -a
     - cd ..
     - ls -a
+    - pwd
   needs: []
   artifacts:
     paths:
