@@ -114,7 +114,7 @@ test:
     - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
     - mv ./dist/lib/libyaml-cpp.so /commonroad/dist/lib/
     - mv ./dist/lib/libyaml-cpp.so.0.7.0 /commonroad/dist/lib/
-    - mv /dist/include/yaml-cpp/ /commonroad/dist/include/
+    - mv ./dist/include/yaml-cpp/ /commonroad/dist/include/
   script:
     - build/env_model_test --gtest_output="xml:report.xml"
   needs:
