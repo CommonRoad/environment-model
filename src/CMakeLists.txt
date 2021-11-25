@@ -105,7 +105,9 @@ if(BUILD_PYBIND)
             commonroad_cpp/interfaces/pybind/translate_python_types.cpp
             commonroad_cpp/interfaces/pybind/translate_python_types.h)
 
-    target_link_libraries(cpp_env_model PRIVATE env_model)
+    target_link_libraries(cpp_env_model PRIVATE env_model
+            yaml-cpp
+            pthread dl)
 
     # $ORIGIN is a special value: It represents the location of the shared object
     # being loaded itself. By setting the RPATH of the installed Python module
