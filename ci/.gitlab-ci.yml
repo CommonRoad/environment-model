@@ -85,6 +85,7 @@ build-test:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
+    - ls -a
   needs: []
   artifacts:
     paths:
