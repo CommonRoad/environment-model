@@ -132,6 +132,8 @@ test-python:
   script:
     - python setup.py develop
     - ls -a
+    - cd build
+    - ls -a
     - python -m pytest tests/python
   needs:
     - job: build-python
