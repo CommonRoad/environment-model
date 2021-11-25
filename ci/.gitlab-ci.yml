@@ -113,6 +113,8 @@ test:
   before_script:
     - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
   script:
+    - cd /../../../../commonroad/dist/lib
+    - ls -a
     - build/env_model_test --gtest_output="xml:report.xml"
   needs:
     - job: build-test
