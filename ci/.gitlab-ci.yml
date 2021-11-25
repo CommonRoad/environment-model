@@ -91,7 +91,7 @@ build-test:
   needs: []
   artifacts:
     paths:
-      - /commonroad/dist/*
+      - ~/commonroad/dist
       - build/env_model_test
       - build/libenv_model.so
     expire_in: 30 minutes
