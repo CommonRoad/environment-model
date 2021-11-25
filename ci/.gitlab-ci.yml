@@ -109,7 +109,7 @@ build-python:
     - *python-prepare
   script:
     - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py develop
-    - mv commonroad/dist ./
+    - mv /commonroad/dist/ ./
   needs: []
   artifacts:
     paths:
@@ -121,7 +121,7 @@ build-python:
 test:
   stage: test
   script:
-    - mv ./dist/ commonroad/
+    - mv ./dist/ /commonroad/
     - build/env_model_test --gtest_output="xml:report.xml"
   needs:
     - job: build-test
