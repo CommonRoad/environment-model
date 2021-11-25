@@ -68,7 +68,7 @@ install(
 # Add yaml-cpp (needs cmake arguments therefore FetchContent_MakeAvailable does not work)
 message(STATUS "yaml-cpp - using bundled version")
 include(ExternalProject)
-message("${CMAKE_PREFIX_PATH}")
+
 ExternalProject_Add(
         yaml_cpp_bundled
         URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz
