@@ -91,6 +91,7 @@ build-test:
   artifacts:
     paths:
       - ./build/
+      - ./dist/
     expire_in: 30 minutes
 
 build-run-coverage:
