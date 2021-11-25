@@ -108,19 +108,20 @@ build-python:
   before_script:
     - *python-prepare
   script:
-    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py build
-    - python setup.py develop
-    - python -m pytest tests/python
+    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py develop
+    - mv commonroad/dist ./
   needs: []
   artifacts:
     paths:
       - ./build/
+      - ./dist/
     expire_in: 30 minutes
 
 ### tests ###
 test:
   stage: test
   script:
+    - mv ./dist/ commonroad/
     - build/env_model_test --gtest_output="xml:report.xml"
   needs:
     - job: build-test
@@ -129,6 +130,17 @@ test:
     reports:
       junit: ./report.xml
 
+test-python:
+  stage: test
+  before_script:
+    - *python-prepare
+  script:
+    - python setup.py develop
+    - python -m pytest tests/python
+  needs:
+    - job: build-python
+      artifacts: true
+
 ### coverage ###
 coverage-analyze:
   stage: coverage
@@ -136,7 +148,6 @@ coverage-analyze:
     - gcovr --version
     - gcovr
       -f src/
-      -e src/commonroad_cpp/interfaces/commonroad/pugi_xml
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
       -e src/commonroad_cpp/interfaces/pybind/
       --print-summary
@@ -157,7 +168,6 @@ coverage-report:
     - gcovr --version
     - gcovr
       -f src/
-      -e src/commonroad_cpp/interfaces/commonroad/pugi_xml
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
       -e src/commonroad_cpp/interfaces/pybind/
       --print-summary
