@@ -82,6 +82,8 @@ set_target_properties(
         yaml-cpp
         PROPERTIES "IMPORTED_LOCATION" "${CMAKE_BINARY_DIR}/yamlcppPrefix/lib/libyaml-cpp.so"
 )
+set_target_properties(yaml-cpp PROPERTIES POSITION_INDEPENDENT_CODE True)
+
 # create directory otherwise cmake will complain during generate step since this is only generated during make
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/yamlcppPrefix/include")
 

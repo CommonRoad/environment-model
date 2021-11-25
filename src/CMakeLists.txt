@@ -70,8 +70,6 @@ target_link_libraries(env_model
     PUBLIC
         Eigen3::Eigen
         DrivabilityChecker::crccosy
-        yaml-cpp
-        pthread dl
     )
 
 target_link_libraries(env_model
@@ -81,6 +79,8 @@ target_link_libraries(env_model
         OpenMP::OpenMP_CXX
         pugixml-static
         spdlog::spdlog
+        yaml-cpp
+        pthread dl
     )
 
 
@@ -92,6 +92,8 @@ target_link_libraries(env_model_example_node
         env_model
         Boost::program_options
         spdlog::spdlog
+        yaml-cpp
+        pthread dl
     )
 
 
