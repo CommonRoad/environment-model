@@ -51,7 +51,7 @@ void PredicateManager::extractPredicateSatisfaction() {
 
 void PredicateManager::writeFile() {
     std::ofstream file;
-    file.open("example.txt");
+    file.open(simulationParameters.outputDirectory + "/" + simulationParameters.outputFileName);
     for (const auto &[predName, pred] : predicates) {
         file << predName << ": " << pred->getStatistics().numSatisfaction << " - "
              << pred->getStatistics().numExecutions << " - "
@@ -59,7 +59,10 @@ void PredicateManager::writeFile() {
                     static_cast<double>(pred->getStatistics().numExecutions)
              << " - " << static_cast<double>(predicates[predName]->getStatistics().maxComputationTime) / 1e6
              << " [ms] - " << static_cast<double>(predicates[predName]->getStatistics().minComputationTime) / 1e6
-             << " [ms]\n";
+             << " [ms] - "
+             << (static_cast<double>(predicates[predName]->getStatistics().totalComputationTime) / 1e6) /
+                    static_cast<double>(pred->getStatistics().numExecutions)
+             << " [ms] \n";
     }
     file.close();
 }

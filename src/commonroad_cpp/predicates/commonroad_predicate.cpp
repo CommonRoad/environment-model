@@ -6,25 +6,25 @@
 //
 
 #include "commonroad_predicate.h"
-#include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
-#include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
-#include "commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h"
-#include "commonroad_cpp/predicates/general/orientation_towards_predicate.h"
-#include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
-#include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
-#include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
-#include "commonroad_cpp/predicates/position/in_single_lane_predicate.h"
-#include "commonroad_cpp/predicates/position/passes_stop_line_predicate.h"
-#include "commonroad_cpp/predicates/position/stop_line_in_front_predicate.h"
-#include "commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.h"
-#include "commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.h"
-#include "commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.h"
-#include "commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.h"
-#include "commonroad_cpp/predicates/velocity/in_standstill_predicate.h"
-#include "commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.h"
-#include "commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h"
-#include "commonroad_cpp/predicates/velocity/required_speed_predicate.h"
-#include "commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.h"
+#include "braking/safe_distance_predicate.h"
+#include "braking/unnecessary_braking_predicate.h"
+#include "general/lane_based_orientation_similar_predicate.h"
+#include "general/orientation_towards_predicate.h"
+#include "position/in_front_of_predicate.h"
+#include "position/in_intersection_main_area_predicate.h"
+#include "position/in_same_lane_predicate.h"
+#include "position/in_single_lane_predicate.h"
+#include "position/passes_stop_line_predicate.h"
+#include "position/stop_line_in_front_predicate.h"
+#include "regulatory/at_red_left_traffic_light_predicate.h"
+#include "regulatory/at_red_right_traffic_light_predicate.h"
+#include "regulatory/at_red_straight_traffic_light_predicate.h"
+#include "regulatory/at_red_traffic_light_predicate.h"
+#include "velocity/in_standstill_predicate.h"
+#include "velocity/keeps_lane_speed_limit_predicate.h"
+#include "velocity/preserves_traffic_flow_predicate.h"
+#include "velocity/required_speed_predicate.h"
+#include "velocity/slow_leading_vehicle_predicate.h"
 
 bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
@@ -33,6 +33,7 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std:
     auto startTime{Timer::start()};
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
     long compTime{evaluationTimer.stop(startTime)};
+    statistics.totalComputationTime += compTime;
     if (compTime > statistics.maxComputationTime)
         statistics.maxComputationTime = compTime;
     if (compTime < statistics.minComputationTime)
