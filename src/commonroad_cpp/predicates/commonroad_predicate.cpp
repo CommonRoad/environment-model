@@ -29,17 +29,20 @@
 bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
-    statistics.numExecutions++;
     auto startTime{Timer::start()};
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
     long compTime{evaluationTimer.stop(startTime)};
-    statistics.totalComputationTime += compTime;
-    if (compTime > statistics.maxComputationTime)
-        statistics.maxComputationTime = compTime;
-    if (compTime < statistics.minComputationTime)
-        statistics.minComputationTime = compTime;
-    if (result)
-        statistics.numSatisfaction++;
+#pragma omp critical
+    {
+        statistics.numExecutions++;
+        statistics.totalComputationTime += compTime;
+        if (compTime > statistics.maxComputationTime)
+            statistics.maxComputationTime = compTime;
+        if (compTime < statistics.minComputationTime)
+            statistics.minComputationTime = compTime;
+        if (result)
+            statistics.numSatisfaction++;
+    }
     return result;
 }
 
