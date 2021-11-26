@@ -5,17 +5,18 @@
 // Credits: BMW Car@TUM
 //
 
-#include <boost/program_options.hpp>
-#include <iostream>
-
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
+#include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
+#include <iostream>
 
 #include "command_line_input.h"
 #include "yaml-cpp/yaml.h"
 #include <spdlog/spdlog.h>
 
+using namespace boost::filesystem;
 namespace po = boost::program_options;
 
 /**
@@ -108,4 +109,12 @@ EvaluationMode CommandLine::stringToEvaluationMode(const std::string &evalMode) 
         throw std::runtime_error("CommonRoadEvaluation: Unknown evaluation mode.\n Options are: directory, "
                                  "single_scenario, single_vehicle, directory_single_vehicle");
     }
+}
+
+std::vector<std::string> CommandLine::findRelevantScenarioFileNames(const std::string &dir) {
+    std::vector<std::string> fileNames;
+    for (directory_iterator itr(dir); itr != directory_iterator(); ++itr)
+        if (boost::algorithm::ends_with(itr->path().string(), ".xml"))
+            fileNames.push_back(itr->path().string());
+    return fileNames;
 }

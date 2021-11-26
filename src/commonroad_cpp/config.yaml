@@ -9,12 +9,12 @@
 #    - benchmark_id: CommonRoad solution file name
 #    - performance_measurement: activate/deactivate computation time measuring
 simulation_param:
-  evaluation_mode: single_vehicle # single_scenario, single_vehicle, test, directory, directory_single_vehicle
-  ego_vehicle_id: 1010
-  benchmark_id: DEU_test_safe_distance #DEU_LocationFLower-59_1_T-1 # DEU_test_unnecessary_braking  #BEL_Aarschot-1_2_T-1 # DEU_LocationBLower-3_1_T-1 #DEU_LocationBUpper-1_1_T-1
-  directories: [ "./tests/scenarios/test_general_rules" ] # /media/sebastian/TUM/06_code/cps/scenarios/datasets/highD/commonroad   "./tests/scenarios/test_general_rules" "../../cps/scenarios/cr-scenarios/scenarios/scenario-factory"
+  evaluation_mode: directory # single_scenario, single_vehicle, test, directory, directory_single_vehicle
+  ego_vehicle_id: 1
+  benchmark_id: DEU_test_safe_distance
+  directories: [ "./tests/scenarios/abc" ]
   performance_measurement: true
-  operating_mode: monitor # one of monitor, constraint, robustness
+  operating_mode: boolean # one of boolean, constraint, robustness
 
 # Ego vehicle parameters
 ###

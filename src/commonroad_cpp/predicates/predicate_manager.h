@@ -20,6 +20,7 @@ class PredicateManager {
     PredicateManager(int threads, const std::string &configPath);
 
     void extractPredicateSatisfaction();
+    void writeFile();
 
   private:
     std::map<std::string, PredicateSatisfaction> predicateSatisfaction;

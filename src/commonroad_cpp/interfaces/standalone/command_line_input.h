@@ -48,4 +48,6 @@ SimulationParameters initialize(const std::string &path);
  */
 static EvaluationMode stringToEvaluationMode(const std::string &evaluationMode);
 
+std::vector<std::string> findRelevantScenarioFileNames(const std::string &dir);
+
 } // namespace CommandLine
