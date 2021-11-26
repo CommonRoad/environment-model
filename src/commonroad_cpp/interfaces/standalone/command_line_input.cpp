@@ -93,7 +93,9 @@ SimulationParameters CommandLine::initialize(const std::string &configPath) {
             config["simulation_param"]["ego_vehicle_id"].as<size_t>(),
             config["simulation_param"]["benchmark_id"].as<std::string>(),
             stringToEvaluationMode(config["simulation_param"]["evaluation_mode"].as<std::string>()),
-            config["simulation_param"]["performance_measurement"].as<bool>()};
+            config["simulation_param"]["performance_measurement"].as<bool>(),
+            config["simulation_param"]["output_directory"].as<std::string>(),
+            config["simulation_param"]["output_file_name"].as<std::string>()};
 }
 
 EvaluationMode CommandLine::stringToEvaluationMode(const std::string &evalMode) {

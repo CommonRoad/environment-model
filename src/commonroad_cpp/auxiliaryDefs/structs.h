@@ -12,6 +12,7 @@
 #include "vector"
 #include <climits>
 #include <cstddef>
+#include <utility>
 
 struct TrafficLightCycleElement {
     TrafficLightState color;
@@ -55,12 +56,16 @@ struct PredicateSatisfaction {
 
 struct SimulationParameters {
     SimulationParameters(std::vector<std::string> directoryPaths, size_t egoVehicleId, std::string benchmarkId,
-                         EvaluationMode evaluationMode, bool performanceMeasurement)
+                         EvaluationMode evaluationMode, bool performanceMeasurement, std::string outputDirectory,
+                         std::string outputFileName)
         : directoryPaths(std::move(directoryPaths)), egoVehicleId(egoVehicleId), benchmarkId(std::move(benchmarkId)),
-          evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement){};
+          evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement),
+          outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)){};
     std::vector<std::string> directoryPaths; //**< List of directories in which all scenarios should be evaluated */
     size_t egoVehicleId{0};                  //**< ID of ego vehicle */
     std::string benchmarkId;                 //**< CommonRoad benchmark ID */
     EvaluationMode evaluationMode; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
     bool performanceMeasurement;   //**< Flag indicating whether performance should me measured. */
+    std::string outputDirectory;   //**< Path to output directory of file to generate. */
+    std::string outputFileName;    //**< name and file type for to generate. */
 };
