@@ -18,7 +18,6 @@ int main(int argc, char **argv) {
     int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, filePath);
     if (error_code != 0)
         return error_code;
-
     try {
         PredicateManager eval{num_threads, filePath};
         eval.extractPredicateSatisfaction();

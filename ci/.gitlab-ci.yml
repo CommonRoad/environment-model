@@ -32,7 +32,6 @@ cppcheck:
     cppcheck
     --project=build/compile_commands.json
     -i"$(pwd)/external"
-    -i"$(pwd)/src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp"
   needs:
     - job: build-compile-commands
       artifacts: true
