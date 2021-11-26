@@ -35,9 +35,9 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std:
     long compTime{evaluationTimer.stop(startTime)};
     if (compTime > statistics.maxComputationTime)
         statistics.maxComputationTime = compTime;
-    else if (compTime < statistics.minComputationTime)
+    if (compTime < statistics.minComputationTime)
         statistics.minComputationTime = compTime;
-    else if (result)
+    if (result)
         statistics.numSatisfaction++;
     return result;
 }
