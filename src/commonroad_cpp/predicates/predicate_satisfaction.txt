@@ -1,24 +1,24 @@
-Predicate Name - Number Satisfactions - Number Executions - Percentage Satisfaction - Max. Comp. Time - Min. Comp. Time - Avg. Comp. Time
-at_red_left_traffic_light: 0 - 1173 - 0 - 0.063569 [ms] - 0.001606 [ms] - 0.00402463 [ms]
-at_red_right_traffic_light: 0 - 1173 - 0 - 0.005435 [ms] - 0.000767 [ms] - 0.00121794 [ms]
-at_red_straight_traffic_light: 0 - 1173 - 0 - 0.007581 [ms] - 0.00073 [ms] - 0.00110435 [ms]
-at_red_traffic_light: 0 - 1173 - 0 - 0.015167 [ms] - 0.00072 [ms] - 0.00109538 [ms]
-in_front_of: 4521 - 9588 - 0.471527 - 55.3768 [ms] - 0.38076 [ms] - 0.699805 [ms]
-in_intersection_main_area: 0 - 1173 - 0 - 0.067544 [ms] - 0.003911 [ms] - 0.00659385 [ms]
-in_same_lane: 3522 - 9588 - 0.367334 - 0.25769 [ms] - 0.00309 [ms] - 0.0154858 [ms]
-in_single_lane: 869 - 1173 - 0.740835 - 0.007692 [ms] - 0.000951 [ms] - 0.00185212 [ms]
-in_standstill: 51 - 1173 - 0.0434783 - 0.005967 [ms] - 0.00067 [ms] - 0.00139926 [ms]
-keeps_lane_speed_limit: 990 - 1173 - 0.84399 - 0.086867 [ms] - 0.00566 [ms] - 0.0107131 [ms]
-keeps_safe_distance_prec: 8736 - 9588 - 0.911139 - 13.1536 [ms] - 0.382543 [ms] - 0.555962 [ms]
-keeps_sign_min_speed_limit: 1173 - 1173 - 1 - 0.12385 [ms] - 0.007048 [ms] - 0.0124561 [ms]
-lane_based_orientation_similar: 9588 - 9588 - 1 - 0.11949 [ms] - 0.012404 [ms] - 0.0198723 [ms]
-orientation_towards: 643 - 9588 - 0.067063 - 3.22464 [ms] - 0.395228 [ms] - 1.04526 [ms]
-passes_stop_line: 0 - 1173 - 0 - 0.065287 [ms] - 0.003294 [ms] - 0.00640818 [ms]
-preserves_traffic_flow: 338 - 1173 - 0.28815 - 0.082406 [ms] - 0.005939 [ms] - 0.0125402 [ms]
-slow_leading_vehicle: 567 - 1173 - 0.483376 - 13.3055 [ms] - 0.40874 [ms] - 3.81245 [ms]
-stop_line_in_front: 0 - 1173 - 0 - 0.042997 [ms] - 0.001102 [ms] - 0.00281978 [ms]
-unnecessary_braking: 49 - 1173 - 0.0417732 - 11.322 [ms] - 0.01315 [ms] - 2.54469 [ms]
-Global Max. Comp. Time: 55.376795
-Global Min. Comp. Time: 0.000670
-Global Max. Avg Comp. Time: 3.812448
-Global Min. Avg Comp. Time: 0.001095
+Predicate Name - Number Satisfactions - Number Executions - Percentage Satisfaction - Max. Comp. Time - Min. Comp. Time - Avg. Comp. Time - Weight Max. Comp. Time - Weight Avg. Comp. Time 
+at_red_left_traffic_light: 0 - 1173 - 0 - 0.030308 [ms] - 0.001561 [ms] - 0.00393791 [ms] - 0.000379752 - 0.00068532
+at_red_right_traffic_light: 0 - 1173 - 0 - 0.006107 [ms] - 0.000739 [ms] - 0.001356 [ms] - 6.94969e-05 - 3.70346e-05
+at_red_straight_traffic_light: 0 - 1173 - 0 - 0.004293 [ms] - 0.000686 [ms] - 0.00123679 [ms] - 4.62415e-05 - 7.10133e-06
+at_red_traffic_light: 0 - 1173 - 0 - 0.004599 [ms] - 0.00071 [ms] - 0.00120851 [ms] - 5.01644e-05 - 0
+in_front_of: 4521 - 9588 - 0.471527 - 78.0041 [ms] - 0.459798 [ms] - 0.767355 [ms] - 1 - 0.19237
+in_intersection_main_area: 0 - 1173 - 0 - 0.039123 [ms] - 0.003932 [ms] - 0.00655082 [ms] - 0.00049276 - 0.00134139
+in_same_lane: 3522 - 9588 - 0.367334 - 0.371205 [ms] - 0.00326 [ms] - 0.0222345 [ms] - 0.00475003 - 0.00527939
+in_single_lane: 869 - 1173 - 0.740835 - 0.027678 [ms] - 0.001035 [ms] - 0.00250423 [ms] - 0.000346036 - 0.00032534
+in_standstill: 51 - 1173 - 0.0434783 - 0.004939 [ms] - 0.000779 [ms] - 0.00169066 [ms] - 5.45232e-05 - 0.000121062
+keeps_lane_speed_limit: 990 - 1173 - 0.84399 - 0.08513 [ms] - 0.00551 [ms] - 0.011044 [ms] - 0.00108257 - 0.00246958
+keeps_safe_distance_prec: 8736 - 9588 - 0.911139 - 17.1539 [ms] - 0.461923 [ms] - 0.594578 [ms] - 0.219903 - 0.148988
+keeps_sign_min_speed_limit: 1173 - 1173 - 1 - 0.061428 [ms] - 0.007169 [ms] - 0.0127273 [ms] - 0.000778709 - 0.00289224
+lane_based_orientation_similar: 9588 - 9588 - 1 - 0.074872 [ms] - 0.014381 [ms] - 0.0225721 [ms] - 0.00095106 - 0.00536414
+orientation_towards: 643 - 9588 - 0.067063 - 3.39872 [ms] - 0.44809 [ms] - 1.11744 [ms] - 0.0435626 - 0.280274
+passes_stop_line: 0 - 1173 - 0 - 0.023716 [ms] - 0.003416 [ms] - 0.0059525 [ms] - 0.000295243 - 0.00119116
+preserves_traffic_flow: 338 - 1173 - 0.28815 - 0.058072 [ms] - 0.006076 [ms] - 0.0125937 [ms] - 0.000735685 - 0.0028587
+slow_leading_vehicle: 567 - 1173 - 0.483376 - 17.4981 [ms] - 0.659016 [ms] - 3.98387 [ms] - 0.224316 - 1
+stop_line_in_front: 0 - 1173 - 0 - 0.020932 [ms] - 0.001073 [ms] - 0.00296055 [ms] - 0.000259553 - 0.000439919
+unnecessary_braking: 49 - 1173 - 0.0417732 - 15.1894 [ms] - 0.021108 [ms] - 2.73034 [ms] - 0.194718 - 0.685254
+Global Max. Comp. Time: 78.004146
+Global Min. Comp. Time: 0.000686
+Global Max. Avg Comp. Time: 3.983871
+Global Min. Avg Comp. Time: 0.001209

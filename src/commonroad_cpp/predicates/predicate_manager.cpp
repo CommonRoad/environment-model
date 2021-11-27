@@ -10,8 +10,8 @@
 #include "../world.h"
 #include "commonroad_predicate.h"
 #include <fstream>
-#include <limits>
 #include <iostream>
+#include <limits>
 
 void PredicateManager::extractPredicateSatisfaction() {
     // evaluate scenarios
@@ -61,28 +61,36 @@ void PredicateManager::writeFile() {
     double globalMaxAvgExecutionTime{std::numeric_limits<double>::lowest()};
     file.open(simulationParameters.outputDirectory + "/" + simulationParameters.outputFileName);
     file << "Predicate Name - Number Satisfactions - Number Executions - Percentage Satisfaction - Max. Comp. Time - "
-            "Min. Comp. Time - Avg. Comp. Time\n";
+            "Min. Comp. Time - Avg. Comp. Time - Weight Max. Comp. Time - Weight Avg. Comp. Time \n";
+    std::map<std::string, std::tuple<size_t, size_t, double, double, double, double>> predicateStatistics;
     for (const auto &[predName, pred] : predicates) {
         auto minExecutionTime{static_cast<double>(predicates[predName]->getStatistics().minComputationTime) / 1e6};
         auto maxExecutionTime{static_cast<double>(predicates[predName]->getStatistics().maxComputationTime) / 1e6};
         auto avgExecutionTime{(static_cast<double>(predicates[predName]->getStatistics().totalComputationTime) / 1e6) /
                               static_cast<double>(pred->getStatistics().numExecutions)};
-        if(minExecutionTime < globalMinExecutionTime)
+        if (minExecutionTime < globalMinExecutionTime)
             globalMinExecutionTime = minExecutionTime;
-        if(maxExecutionTime > globalMaxExecutionTime)
+        if (maxExecutionTime > globalMaxExecutionTime)
             globalMaxExecutionTime = maxExecutionTime;
-        if(avgExecutionTime < globalMinAvgExecutionTime)
+        if (avgExecutionTime < globalMinAvgExecutionTime)
             globalMinAvgExecutionTime = avgExecutionTime;
-        if(avgExecutionTime > globalMaxAvgExecutionTime)
+        if (avgExecutionTime > globalMaxAvgExecutionTime)
             globalMaxAvgExecutionTime = avgExecutionTime;
-        file << predName << ": "
-             << pred->getStatistics().numSatisfaction << " - "
-             << pred->getStatistics().numExecutions << " - "
-             << static_cast<double>(pred->getStatistics().numSatisfaction) /
-                    static_cast<double>(pred->getStatistics().numExecutions) << " - "
-             << maxExecutionTime << " [ms] - "
-             << minExecutionTime << " [ms] - "
-             << avgExecutionTime << " [ms]\n";
+        predicateStatistics.insert({predName,
+                                    {pred->getStatistics().numSatisfaction, pred->getStatistics().numExecutions,
+                                     static_cast<double>(pred->getStatistics().numSatisfaction) /
+                                         static_cast<double>(pred->getStatistics().numExecutions),
+                                     maxExecutionTime, minExecutionTime, avgExecutionTime}});
+    }
+    for (const auto &[predName, pred] : predicateStatistics) {
+        file << predName << ": " << std::get<0>(pred) << " - " << std::get<1>(pred) << " - " << std::get<2>(pred)
+             << " - " << std::get<3>(pred) << " [ms] - " << std::get<4>(pred) << " [ms] - " << std::get<5>(pred)
+             << " [ms] - "
+             << (std::get<3>(pred) - globalMinExecutionTime) / (globalMaxExecutionTime - globalMinExecutionTime)
+             << " - "
+             << (std::get<5>(pred) - globalMinAvgExecutionTime) /
+                    (globalMaxAvgExecutionTime - globalMinAvgExecutionTime)
+             << "\n";
     }
     file << "Global Max. Comp. Time: " << std::to_string(globalMaxExecutionTime) << '\n';
     file << "Global Min. Comp. Time: " << std::to_string(globalMinExecutionTime) << '\n';
