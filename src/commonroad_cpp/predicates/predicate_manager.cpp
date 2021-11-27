@@ -12,11 +12,14 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <random>
+#include "yaml-cpp/yaml.h"
 
 void PredicateManager::extractPredicateSatisfaction() {
+    auto rng = std::default_random_engine {};
     // evaluate scenarios
     omp_set_num_threads(numThreads);
-#pragma omp parallel for schedule(guided) shared(scenarios, predicates) default(none)
+#pragma omp parallel for schedule(guided) shared(scenarios, predicates, rng) default(none)
     for (size_t i = 0; i < scenarios.size(); i++) {
         auto sc{scenarios.at(i)};
         const auto &[obstacles, roadNetwork, timeStepSize] = CommandLine::getDataFromCommonRoad(sc);
@@ -34,10 +37,14 @@ void PredicateManager::extractPredicateSatisfaction() {
             // setObstacleProperties(ego, others);
             auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
             auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
-#pragma omp parallel for schedule(guided) shared(sc, world, predicates) firstprivate(ego) default(none)
+            omp_set_num_threads(numThreads);
+#pragma omp parallel for schedule(guided) shared(predicates, world, sc, rng) firstprivate(ego) default(none)
             for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getLastTrajectoryTimeStep();
-                 ++timeStep)
-                for (const auto &[predName, pred] : predicates)
+                 ++timeStep) {
+
+                std::shuffle(std::begin(relevantPredicates), std::end(relevantPredicates), rng);
+                for (const auto &predName : relevantPredicates) {
+                    auto pred{predicates[predName]};
                     try {
                         if (!pred->isVehicleDependent())
                             pred->statisticBooleanEvaluation(timeStep, world, ego, nullptr);
@@ -49,6 +56,8 @@ void PredicateManager::extractPredicateSatisfaction() {
                                                  " - ego vehicle: " + std::to_string(ego->getId()) +
                                                  " - time step:" + std::to_string(timeStep));
                     }
+                }
+            }
         }
     }
     writeFile();
@@ -61,10 +70,11 @@ void PredicateManager::writeFile() {
     double globalMinAvgExecutionTime{std::numeric_limits<double>::max()};
     double globalMaxAvgExecutionTime{std::numeric_limits<double>::lowest()};
     file.open(simulationParameters.outputDirectory + "/" + simulationParameters.outputFileName);
-    file << "Predicate Name - Number Satisfactions - Number Executions - Percentage Satisfaction - Max. Comp. Time - "
+    file << "Predicate Name - Num. Satisfactions - Num. Executions - Satisfaction in % - Max. Comp. Time - "
             "Min. Comp. Time - Avg. Comp. Time - Weight Max. Comp. Time - Weight Avg. Comp. Time \n";
     std::map<std::string, std::tuple<size_t, size_t, double, double, double, double>> predicateStatistics;
-    for (const auto &[predName, pred] : predicates) {
+    for (const auto &predName : relevantPredicates) {
+        auto pred{predicates[predName]};
         auto minExecutionTime{static_cast<double>(predicates[predName]->getStatistics().minComputationTime) / 1e6};
         auto maxExecutionTime{static_cast<double>(predicates[predName]->getStatistics().maxComputationTime) / 1e6};
         auto avgExecutionTime{(static_cast<double>(predicates[predName]->getStatistics().totalComputationTime) / 1e6) /
@@ -101,7 +111,7 @@ void PredicateManager::writeFile() {
 }
 
 PredicateManager::PredicateManager(int threads, const std::string &configPath)
-    : numThreads(threads), simulationParameters(CommandLine::initialize(configPath)) {
+    : numThreads(threads), simulationParameters(CommandLine::initializeSimulationParameters(configPath)){
     EvaluationMode mode{simulationParameters.evaluationMode};
     std::string singleScenario{simulationParameters.benchmarkId};
     for (auto const &dir : simulationParameters.directoryPaths) {
@@ -112,15 +122,15 @@ PredicateManager::PredicateManager(int threads, const std::string &configPath)
                                                                         name.find(singleScenario) != std::string::npos);
                      });
     }
-    switch (simulationParameters.evaluationMode) {
-    case EvaluationMode::directory:
+    extractRelevantPredicates(configPath);
+}
 
-        break;
-    case EvaluationMode::singleScenario:
-        break;
-    case EvaluationMode::singleVehicle:
-        break;
-    case EvaluationMode::directory_single_vehicle:
-        break;
-    }
+void PredicateManager::extractRelevantPredicates(const std::string &configPath) {
+    YAML::Node config = YAML::LoadFile(configPath);
+    auto relevantPredicateSets{config["predicate_eval"]["relevant_predicate_sets"].as<std::vector<std::string>>()};
+    for(const auto& predicateSet : relevantPredicateSets){
+       auto relevantSetPredicates{config["predicate_eval"]["predicate_category"][predicateSet].as<std::vector<std::string>>()};
+       for(const auto &pred : relevantSetPredicates)
+           relevantPredicates.push_back(pred);
+   }
 }

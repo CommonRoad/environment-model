@@ -87,7 +87,7 @@ CommandLine::getDataFromCommonRoad(const std::string &xmlFilePath) {
     return std::make_tuple(obstacles, roadNetwork, timeStepSize);
 }
 
-SimulationParameters CommandLine::initialize(const std::string &configPath) {
+SimulationParameters CommandLine::initializeSimulationParameters(const std::string &configPath) {
     YAML::Node config = YAML::LoadFile(configPath);
     return {config["simulation_param"]["directories"].as<std::vector<std::string>>(),
             config["simulation_param"]["ego_vehicle_id"].as<size_t>(),

@@ -6,7 +6,9 @@
 //
 #pragma once
 
+#include "commonroad_predicate.h"
 #include "predicate_config.h"
+#include <memory>
 #include <vector>
 
 class PredicateManager {
@@ -20,11 +22,14 @@ class PredicateManager {
     PredicateManager(int threads, const std::string &configPath);
 
     void extractPredicateSatisfaction();
-    void writeFile();
 
   private:
     std::map<std::string, PredicateSatisfaction> predicateSatisfaction;
     std::vector<std::string> scenarios;
     int numThreads;
     SimulationParameters simulationParameters;
+    std::vector<std::string> relevantPredicates;
+
+    void writeFile();
+    void extractRelevantPredicates(const std::string &configPath);
 };
