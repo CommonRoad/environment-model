@@ -38,7 +38,7 @@ getDataFromCommonRoad(const std::string &xmlFilePath);
  * Initializes CommonRoad evaluation.
  * @param path Path to config file.
  */
-SimulationParameters initialize(const std::string &path);
+SimulationParameters initializeSimulationParameters(const std::string &path);
 
 /**
  * Converts given string to evaluation mode enum.
