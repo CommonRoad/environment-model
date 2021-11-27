@@ -34,7 +34,8 @@ void PredicateManager::extractPredicateSatisfaction() {
             // setObstacleProperties(ego, others);
             auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
             auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
-            for (size_t timeStep{ego->getCurrentState()->getTimeStep()}; timeStep <= ego->getLastTrajectoryTimeStep();
+#pragma omp parallel for schedule(guided) shared(sc, world, predicates) firstprivate(ego) default(none)
+            for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getLastTrajectoryTimeStep();
                  ++timeStep)
                 for (const auto &[predName, pred] : predicates)
                     try {
