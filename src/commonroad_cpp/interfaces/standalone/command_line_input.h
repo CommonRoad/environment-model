@@ -14,7 +14,7 @@
 
 class RoadNetwork;
 
-namespace CommandLine {
+namespace InputUtils {
 
 /**
  * Reads the arguments provided via command line.
@@ -46,8 +46,14 @@ SimulationParameters initializeSimulationParameters(const std::string &path);
  * @param evaluationMode String containing evaluation mode (loaded from config file)
  * @return EvaluationMode enum.
  */
-static EvaluationMode stringToEvaluationMode(const std::string &evaluationMode);
+EvaluationMode stringToEvaluationMode(const std::string &evaluationMode);
 
+/**
+ * Extracts all XML-files within directory.
+ *
+ * @param dir Directory to search in.
+ * @return List of paths to XML files within directory.
+ */
 std::vector<std::string> findRelevantScenarioFileNames(const std::string &dir);
 
-} // namespace CommandLine
+} // namespace InputUtils

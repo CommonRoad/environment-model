@@ -61,6 +61,7 @@ struct SimulationParameters {
         : directoryPaths(std::move(directoryPaths)), egoVehicleId(egoVehicleId), benchmarkId(std::move(benchmarkId)),
           evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement),
           outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)){};
+    SimulationParameters() = default;
     std::vector<std::string> directoryPaths; //**< List of directories in which all scenarios should be evaluated */
     size_t egoVehicleId{0};                  //**< ID of ego vehicle */
     std::string benchmarkId;                 //**< CommonRoad benchmark ID */

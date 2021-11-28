@@ -124,6 +124,11 @@ class CommonRoadPredicate {
      */
     bool isVehicleDependent() const;
 
+    /**
+     * Resets predicate statistic.
+     */
+    void resetStatistics();
+
   protected:
     PredicateParameters parameters; //**< Struct containing parameters of all predicates. */
     Timer evaluationTimer;          //**< Time measuring object for predicates. */
