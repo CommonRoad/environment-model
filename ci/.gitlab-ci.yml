@@ -13,6 +13,12 @@ image: $CI_REGISTRY/maierhofer/environment-model/ci:0.6.0
   - pip install -r ./requirements.txt
   - pip install -r ./test_requirements.txt
 
+.copy-cpp-dist: &copy-cpp-dist
+  - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
+  - mv ./dist/lib/libyaml-cpp.so /commonroad/dist/lib/
+  - mv ./dist/lib/libyaml-cpp.so.0.7.0 /commonroad/dist/lib/
+  - mv ./dist/include/yaml-cpp/ /commonroad/dist/include/
+
 ### static test ###
 clang-format:
   stage: static-test
@@ -113,10 +119,7 @@ build-run-coverage:
 test:
   stage: test
   before_script:
-    - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
-    - mv ./dist/lib/libyaml-cpp.so /commonroad/dist/lib/
-    - mv ./dist/lib/libyaml-cpp.so.0.7.0 /commonroad/dist/lib/
-    - mv ./dist/include/yaml-cpp/ /commonroad/dist/include/
+    - *copy-cpp-dist
   script:
     - build/env_model_test --gtest_output="xml:report.xml"
   needs:
@@ -139,10 +142,7 @@ build-test-python:
 coverage-analyze:
   stage: coverage
   before_script:
-    - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
-    - mv ./dist/lib/libyaml-cpp.so /commonroad/dist/lib/
-    - mv ./dist/lib/libyaml-cpp.so.0.7.0 /commonroad/dist/lib/
-    - mv ./dist/include/yaml-cpp/ /commonroad/dist/include/
+    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
@@ -165,10 +165,7 @@ coverage-analyze:
 coverage-report:
   stage: coverage
   before_script:
-    - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
-    - mv ./dist/lib/libyaml-cpp.so /commonroad/dist/lib/
-    - mv ./dist/lib/libyaml-cpp.so.0.7.0 /commonroad/dist/lib/
-    - mv ./dist/include/yaml-cpp/ /commonroad/dist/include/
+    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
