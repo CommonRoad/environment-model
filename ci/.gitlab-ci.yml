@@ -99,10 +99,13 @@ build-run-coverage:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
     - make env_model_coverage -j4
+  after_script:
+    - mv /commonroad/dist/ ./
   needs: []
   artifacts:
     paths:
       - ./build/
+      - ./dist/
     expire_in: 30 minutes
 
 
@@ -135,6 +138,11 @@ build-test-python:
 ### coverage ###
 coverage-analyze:
   stage: coverage
+  before_script:
+    - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
+    - mv ./dist/lib/libyaml-cpp.so /commonroad/dist/lib/
+    - mv ./dist/lib/libyaml-cpp.so.0.7.0 /commonroad/dist/lib/
+    - mv ./dist/include/yaml-cpp/ /commonroad/dist/include/
   script:
     - gcovr --version
     - gcovr
