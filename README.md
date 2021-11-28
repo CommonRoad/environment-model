@@ -18,7 +18,8 @@ Note that the repository does not contain runtime verification algorithms and co
 ### CommonRoad dependencies
 
 - [commonroad-io](https://gitlab.lrz.de/cps/commonroad-io)
-- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker) (branch feature_cmake_export; follow C++ installation instructions under doc/installation_cpp.rst)
+- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker) 
+(instructions under doc/installation_cpp.rst)
 
 ### Common dependencies
 
@@ -35,7 +36,7 @@ These dependencies should be available as a system package.
 #### Debian/Ubuntu
 
 You require at least Ubuntu 20.04.
-On Debian/Ubuntu, you'll most likely need to install the following packages:
+On Debian/Ubuntu, you'll most likely need to install the following packages:  
 `build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libcgal-dev libspdlog-dev`
 
 For building the documentation, you'll need to install `doxygen` and `graphviz`.
