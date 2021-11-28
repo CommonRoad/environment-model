@@ -23,7 +23,7 @@ TEST_F(WorldTest, TestScenariosValid) {
     for (const auto &sc : scenarios) {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + sc};
         const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-            CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+            InputUtils::getDataFromCommonRoad(pathToTestFileOne);
         EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
     }
 }
@@ -33,7 +33,7 @@ TEST_F(WorldTest, TestScenariosValid) {
 //    size_t obstacleId{31};
 //    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
 //    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-//    CommandLine::getDataFromCommonRoad(pathToTestFileOne); auto world =
+//    InputUtils::getDataFromCommonRoad(pathToTestFileOne); auto world =
 //        World(0, roadNetworkScenarioOne, {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)},
 //        {}, timeStepSizeOne);
 //    auto obs{world.findObstacle(obstacleId)};
@@ -46,7 +46,7 @@ TEST_F(WorldTest, TestSingleScenarioObstacle) {
     size_t obstacleId{325};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-        CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     EXPECT_EQ(timeStepSizeOne, 0.1);
     auto world = World(0, roadNetworkScenarioOne,
                        {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, timeStepSizeOne);
@@ -59,7 +59,7 @@ TEST_F(WorldTest, TestSingleScenario) {
     std::string scenario{"USA_Peach-2_1_T-1.xml"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-        CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
     for (const auto &obs : obstaclesScenarioOne)
         for (const auto &t : obs->getTimeSteps())
@@ -84,7 +84,7 @@ TEST_F(WorldTest, TestSingleScenario) {
 //        //#pragma omp parallel for schedule(guided) shared(fileNames) default(none)
 //        for (auto &fileName : fileNames) {
 //            const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-//            CommandLine::getDataFromCommonRoad(fileName); auto world{World(0, roadNetworkScenarioOne,
+//            InputUtils::getDataFromCommonRoad(fileName); auto world{World(0, roadNetworkScenarioOne,
 //            obstaclesScenarioOne, {}, timeStepSizeOne)}; for (const auto &obs : obstaclesScenarioOne)
 //                for (const auto &t : obs->getTimeSteps())
 //                    try {

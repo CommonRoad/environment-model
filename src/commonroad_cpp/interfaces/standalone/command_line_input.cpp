@@ -27,7 +27,7 @@ namespace po = boost::program_options;
  * @param num_threads Reference where number of threads should be stored.
  * @param xmlFilePath Reference where file path to CommonRoad xml should be stored.
  */
-int CommandLine::readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath) {
+int InputUtils::readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath) {
     try {
         std::string xmlFileName;
         po::options_description desc;
@@ -35,7 +35,7 @@ int CommandLine::readCommandLineValues(int argc, char *const *argv, int &num_thr
         desc.add_options()("help", "produce help message")(
             "input-file",
             boost::program_options::value<std::string>(&xmlFilePath)
-                ->default_value("../tests/scenarios/USA_Lanker-1_1_T-1.xml")
+                ->default_value("../src/commonroad_cpp/default_config.xml")
                 ->required(),
             "Input file")("threads,t", po::value<int>(&num_threads)->default_value(1),
                           "set number of threads to run with");
@@ -68,7 +68,7 @@ int CommandLine::readCommandLineValues(int argc, char *const *argv, int &num_thr
  * @return Tuple of obstacles and roadNetwork.
  */
 std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
-CommandLine::getDataFromCommonRoad(const std::string &xmlFilePath) {
+InputUtils::getDataFromCommonRoad(const std::string &xmlFilePath) {
     // Read and parse CommonRoad scenario file
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
     std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
@@ -87,7 +87,7 @@ CommandLine::getDataFromCommonRoad(const std::string &xmlFilePath) {
     return std::make_tuple(obstacles, roadNetwork, timeStepSize);
 }
 
-SimulationParameters CommandLine::initializeSimulationParameters(const std::string &configPath) {
+SimulationParameters InputUtils::initializeSimulationParameters(const std::string &configPath) {
     YAML::Node config = YAML::LoadFile(configPath);
     return {config["simulation_param"]["directories"].as<std::vector<std::string>>(),
             config["simulation_param"]["ego_vehicle_id"].as<size_t>(),
@@ -98,7 +98,7 @@ SimulationParameters CommandLine::initializeSimulationParameters(const std::stri
             config["simulation_param"]["output_file_name"].as<std::string>()};
 }
 
-EvaluationMode CommandLine::stringToEvaluationMode(const std::string &evalMode) {
+EvaluationMode InputUtils::stringToEvaluationMode(const std::string &evalMode) {
     if (evalMode == "directory") {
         return EvaluationMode::directory;
     } else if (evalMode == "single_scenario") {
@@ -113,7 +113,7 @@ EvaluationMode CommandLine::stringToEvaluationMode(const std::string &evalMode) 
     }
 }
 
-std::vector<std::string> CommandLine::findRelevantScenarioFileNames(const std::string &dir) {
+std::vector<std::string> InputUtils::findRelevantScenarioFileNames(const std::string &dir) {
     std::vector<std::string> fileNames;
     for (directory_iterator itr(dir); itr != directory_iterator(); ++itr)
         if (boost::algorithm::ends_with(itr->path().string(), ".xml"))

@@ -32,7 +32,7 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std:
     auto startTime{Timer::start()};
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
     long compTime{evaluationTimer.stop(startTime)};
-#pragma omp critical
+#pragma omp critical(statistics)
     {
         statistics.numExecutions++;
         statistics.totalComputationTime += compTime;
@@ -54,6 +54,14 @@ CommonRoadPredicate::CommonRoadPredicate(const PredicateParameters &parameters, 
     : parameters(parameters), vehicleDependent(vehicleDependent) {}
 
 const PredicateStatistics &CommonRoadPredicate::getStatistics() const { return statistics; }
+
+void CommonRoadPredicate::resetStatistics() {
+    statistics.minComputationTime = LONG_MAX;
+    statistics.maxComputationTime = LONG_MIN;
+    statistics.totalComputationTime = 0;
+    statistics.numSatisfaction = 0;
+    statistics.numExecutions = 0;
+}
 
 const Timer &CommonRoadPredicate::getEvaluationTimer() const { return evaluationTimer; }
 

@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     // Read command line parameters; if none are provided, use default values (specified in read_command_line_values)
     int num_threads;
     std::string filePath;
-    int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, filePath);
+    int error_code = InputUtils::readCommandLineValues(argc, argv, num_threads, filePath);
     if (error_code != 0)
         return error_code;
     try {

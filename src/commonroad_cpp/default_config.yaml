@@ -12,9 +12,9 @@
 #    - output_file_name: name and file type for to generate
 simulation_param:
   evaluation_mode: directory # single_scenario, single_vehicle, test, directory, directory_single_vehicle
-  ego_vehicle_id: 1
+  ego_vehicle_id: 0
   benchmark_id: DEU_test_safe_distance
-  directories: [ "./tests/scenarios/abc" ]
+  directories: [ "./tests/scenarios" ]
   performance_measurement: true
   operating_mode: boolean # one of boolean, constraint, robustness
   output_directory: "src/commonroad_cpp/predicates"

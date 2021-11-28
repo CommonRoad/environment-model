@@ -9,20 +9,21 @@
 #include "../obstacle/obstacle.h"
 #include "../world.h"
 #include "commonroad_predicate.h"
+#include "yaml-cpp/yaml.h"
 #include <fstream>
 #include <iostream>
 #include <limits>
 #include <random>
-#include "yaml-cpp/yaml.h"
+#include <utility>
 
 void PredicateManager::extractPredicateSatisfaction() {
-    auto rng = std::default_random_engine {};
+    auto rng = std::default_random_engine{};
     // evaluate scenarios
     omp_set_num_threads(numThreads);
 #pragma omp parallel for schedule(guided) shared(scenarios, predicates, rng) default(none)
     for (size_t i = 0; i < scenarios.size(); i++) {
         auto sc{scenarios.at(i)};
-        const auto &[obstacles, roadNetwork, timeStepSize] = CommandLine::getDataFromCommonRoad(sc);
+        const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(sc);
         // evaluate all obstacles
         for (const auto &ego : obstacles) {
             if (ego->getIsStatic())
@@ -38,10 +39,10 @@ void PredicateManager::extractPredicateSatisfaction() {
             auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
             auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
             omp_set_num_threads(numThreads);
-#pragma omp parallel for schedule(guided) shared(predicates, world, sc, rng) firstprivate(ego) default(none)
+#pragma omp parallel for schedule(guided) shared(predicates, world)                                                    \
+    firstprivate(ego, relevantPredicates, rng, sc) default(none)
             for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getLastTrajectoryTimeStep();
                  ++timeStep) {
-
                 std::shuffle(std::begin(relevantPredicates), std::end(relevantPredicates), rng);
                 for (const auto &predName : relevantPredicates) {
                     auto pred{predicates[predName]};
@@ -50,7 +51,8 @@ void PredicateManager::extractPredicateSatisfaction() {
                             pred->statisticBooleanEvaluation(timeStep, world, ego, nullptr);
                         else
                             for (const auto &obs : world->getObstacles())
-                                pred->statisticBooleanEvaluation(timeStep, world, ego, obs);
+                                if (obs->timeStepExists(timeStep))
+                                    pred->statisticBooleanEvaluation(timeStep, world, ego, obs);
                     } catch (...) {
                         throw std::runtime_error("PredicateManager::extractPredicateSatisfaction - Scenario: " + sc +
                                                  " - ego vehicle: " + std::to_string(ego->getId()) +
@@ -111,26 +113,41 @@ void PredicateManager::writeFile() {
 }
 
 PredicateManager::PredicateManager(int threads, const std::string &configPath)
-    : numThreads(threads), simulationParameters(CommandLine::initializeSimulationParameters(configPath)){
+    : numThreads(threads), simulationParameters(InputUtils::initializeSimulationParameters(configPath)) {
+    extractScenarios();
+    extractRelevantPredicates(configPath);
+}
+void PredicateManager::extractScenarios() {
     EvaluationMode mode{simulationParameters.evaluationMode};
     std::string singleScenario{simulationParameters.benchmarkId};
     for (auto const &dir : simulationParameters.directoryPaths) {
-        std::vector<std::string> fileNames{CommandLine::findRelevantScenarioFileNames(dir)};
+        std::vector<std::string> fileNames{InputUtils::findRelevantScenarioFileNames(dir)};
         std::copy_if(fileNames.begin(), fileNames.end(), std::back_inserter(scenarios),
                      [mode, singleScenario](const std::string &name) {
                          return (mode == EvaluationMode::directory) or (mode == EvaluationMode::singleScenario and
                                                                         name.find(singleScenario) != std::string::npos);
                      });
     }
-    extractRelevantPredicates(configPath);
+}
+
+PredicateManager::PredicateManager(int threads, SimulationParameters simulationParameters,
+                                   std::vector<std::string> relevantPredicates)
+    : numThreads(threads), simulationParameters(std::move(simulationParameters)),
+      relevantPredicates(std::move(relevantPredicates)) {
+    extractScenarios();
 }
 
 void PredicateManager::extractRelevantPredicates(const std::string &configPath) {
     YAML::Node config = YAML::LoadFile(configPath);
     auto relevantPredicateSets{config["predicate_eval"]["relevant_predicate_sets"].as<std::vector<std::string>>()};
-    for(const auto& predicateSet : relevantPredicateSets){
-       auto relevantSetPredicates{config["predicate_eval"]["predicate_category"][predicateSet].as<std::vector<std::string>>()};
-       for(const auto &pred : relevantSetPredicates)
-           relevantPredicates.push_back(pred);
-   }
+    for (const auto &predicateSet : relevantPredicateSets) {
+        auto relevantSetPredicates{
+            config["predicate_eval"]["predicate_category"][predicateSet].as<std::vector<std::string>>()};
+        for (const auto &pred : relevantSetPredicates)
+            relevantPredicates.push_back(pred);
+    }
+}
+void PredicateManager::reset() {
+    for (const auto &predName : relevantPredicates)
+        predicates[predName]->resetStatistics();
 }

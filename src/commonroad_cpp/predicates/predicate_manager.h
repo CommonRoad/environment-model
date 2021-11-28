@@ -21,7 +21,12 @@ class PredicateManager {
      */
     PredicateManager(int threads, const std::string &configPath);
 
+    PredicateManager(int threads, SimulationParameters simulationParameters,
+                     std::vector<std::string> relevantPredicates);
+
     void extractPredicateSatisfaction();
+
+    void reset();
 
   private:
     std::map<std::string, PredicateSatisfaction> predicateSatisfaction;
@@ -32,4 +37,5 @@ class PredicateManager {
 
     void writeFile();
     void extractRelevantPredicates(const std::string &configPath);
+    void extractScenarios();
 };
