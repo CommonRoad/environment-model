@@ -14,7 +14,7 @@ from commonroad.common.file_reader import CommonRoadFileReader
 class TestAtRedTrafficLightPredicates(unittest.TestCase):
     def setUp(self):
         path = os.path.dirname(os.path.realpath(__file__))
-        filename = path + '/../../../scenarios/DEU_TrafficLightTest-1_1_T-1.xml'
+        filename = path + '/../../../scenarios/predicates/DEU_TrafficLightTest-1_1_T-1.xml'
         scenario, _ = CommonRoadFileReader(filename).open()
         self.lanelet_network = scenario.lanelet_network
         self.dt = scenario.dt
