@@ -193,7 +193,8 @@ TEST_F(InterfacesTest, ReadCommandLineValuesMissingOption) {
 }
 
 TEST_F(InterfacesTest, InitializeSimulationParameters) {
-    auto simulationParameters{InputUtils::initializeSimulationParameters("../src/commonroad_cpp/default_config.yaml")};
+    auto simulationParameters{InputUtils::initializeSimulationParameters(
+        TestUtils::getTestScenarioDirectory() + "/../../src/commonroad_cpp/default_config.yaml")};
     EXPECT_EQ(simulationParameters.performanceMeasurement, true);
     EXPECT_EQ(simulationParameters.outputFileName, "predicate_satisfaction.txt");
     EXPECT_EQ(simulationParameters.outputDirectory, "src/commonroad_cpp/predicates");
