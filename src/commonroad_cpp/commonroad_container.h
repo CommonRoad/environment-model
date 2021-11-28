@@ -61,4 +61,3 @@ class CommonRoadContainer {
     static std::shared_ptr<CommonRoadContainer> instance; //**< self-reference */
     std::map<size_t, std::shared_ptr<World>> worldList;   //**< map containing pairs of id and world objects */
 };
-

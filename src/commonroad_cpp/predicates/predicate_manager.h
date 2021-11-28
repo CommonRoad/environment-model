@@ -45,9 +45,9 @@ class PredicateManager {
     void reset();
 
   private:
-    std::vector<std::string> scenarios; //**< set of scenario which should be evaluated */
-    int numThreads; //**< number of threads which should be used for evaluation */
-    SimulationParameters simulationParameters; //**< struct containing simulation-related parameters */
+    std::vector<std::string> scenarios;          //**< set of scenario which should be evaluated */
+    int numThreads;                              //**< number of threads which should be used for evaluation */
+    SimulationParameters simulationParameters;   //**< struct containing simulation-related parameters */
     std::vector<std::string> relevantPredicates; //**< subset of relevant predicates which need to be evaluated */
 
     /**
