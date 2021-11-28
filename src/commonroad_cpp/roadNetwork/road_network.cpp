@@ -28,7 +28,9 @@ struct RoadNetwork::impl {
 };
 
 RoadNetwork::RoadNetwork(RoadNetwork &&) noexcept = default;
+
 RoadNetwork::~RoadNetwork() = default;
+
 RoadNetwork &RoadNetwork::operator=(RoadNetwork &&) noexcept = default;
 
 RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, SupportedTrafficSignCountry cou,
