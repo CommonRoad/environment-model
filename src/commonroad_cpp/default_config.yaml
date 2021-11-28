@@ -2,16 +2,16 @@
 ###
 # .. code-block:: yaml
 #
-#    - dt: time step size
-#    - operating_mode: specifies operating mode: either single_scenario, single_vehicle, evaluation, or benchmark
+#    - evaluation_mode: directory
 #    - ego_vehicle_id: ego vehicle ID
-#    - directories: directories in which CommonRoad scenarios are located
 #    - benchmark_id: CommonRoad solution file name
+#    - directories: directories in which CommonRoad scenarios are located
 #    - performance_measurement: activate/deactivate computation time measuring
+#    - operating_mode: specifies operating mode: either single_scenario, single_vehicle, directory, directory_single_vehicle
 #    - output_directory: path to output directory of file to generate
 #    - output_file_name: name and file type for to generate
 simulation_param:
-  evaluation_mode: directory # single_scenario, single_vehicle, test, directory, directory_single_vehicle
+  evaluation_mode: directory
   ego_vehicle_id: 0
   benchmark_id: DEU_test_safe_distance
   directories: [ "./tests/scenarios" ]
@@ -19,6 +19,22 @@ simulation_param:
   operating_mode: boolean # one of boolean, constraint, robustness
   output_directory: "src/commonroad_cpp/predicates"
   output_file_name: "predicate_satisfaction.txt"
+
+# parameters for predicate evaluation
+###
+# .. code-block:: yaml
+#
+#    - predicate_category: lists with names of predicates belonging to group
+#    - relevant_predicate_sets: predicate categories which should be evaluated
+predicate_eval:
+  predicate_category:
+    intersection: ["in_intersection_main_area", "at_red_traffic_light", "at_red_straight_traffic_light",
+                   "at_red_left_traffic_light", "at_red_right_traffic_light", "stop_line_in_front"]
+    general: ["keeps_safe_distance_prec", "unnecessary_braking", "in_front_of", "in_same_lane",
+              "keeps_lane_speed_limit", "preserves_traffic_flow", "keeps_sign_min_speed_limit", "slow_leading_vehicle",
+              "orientation_towards", "lane_based_orientation_similar", "in_single_lane", "in_standstill",
+              "passes_stop_line"]
+  relevant_predicate_sets: [general]
 
 # Ego vehicle parameters
 ###
@@ -40,16 +56,6 @@ simulation_param:
 #    - fov_speed_limit: speed limit based on field of view
 #    - braking_speed_limit: speed limit to ensure comfortable braking within field of view
 #    - road_condition_speed_limit: speed limit based on road conditions
-
-predicate_eval:
-  predicate_category:
-    intersection: ["in_intersection_main_area", "at_red_traffic_light", "at_red_straight_traffic_light",
-                   "at_red_left_traffic_light", "at_red_right_traffic_light", "stop_line_in_front"]
-    general: ["keeps_safe_distance_prec", "unnecessary_braking", "in_front_of", "in_same_lane",
-              "keeps_lane_speed_limit", "preserves_traffic_flow", "keeps_sign_min_speed_limit", "slow_leading_vehicle",
-              "orientation_towards", "lane_based_orientation_similar", "in_single_lane", "in_standstill",
-              "passes_stop_line"]
-  relevant_predicate_sets: [general]
 
 ego_vehicle_param:
   vehicle_number: 2

@@ -45,5 +45,3 @@ struct PredicateParameters {
 
     void checkParameterValidity() const;
 };
-
-extern std::map<std::string, PredicateSatisfaction> predicateSatisfaction;
