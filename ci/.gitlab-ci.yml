@@ -141,6 +141,7 @@ coverage-analyze:
       -f src/
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
       -e src/commonroad_cpp/interfaces/pybind/
+      -e /commonroad/dist/include/yaml-cpp/
       --print-summary
       --exclude-unreachable-branches
       --output coverage.xml
