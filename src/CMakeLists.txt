@@ -23,6 +23,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
         commonroad_cpp/interfaces/standalone/command_line_input.cpp
         commonroad_cpp/world.cpp
+        commonroad_cpp/predicates/predicate_manager.cpp
         commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
@@ -42,10 +43,9 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.cpp
         commonroad_cpp/predicates/position/in_intersection_main_area_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
-        commonroad_cpp/predicates/predicate_parameters.cpp
+        commonroad_cpp/predicates/predicate_config.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
         )
 
@@ -70,6 +70,8 @@ target_link_libraries(env_model
     PUBLIC
         Eigen3::Eigen
         DrivabilityChecker::crccosy
+        yaml-cpp
+        pthread dl
     )
 
 target_link_libraries(env_model
@@ -90,6 +92,8 @@ target_link_libraries(env_model_example_node
         env_model
         Boost::program_options
         spdlog::spdlog
+        yaml-cpp
+        pthread dl
     )
 
 

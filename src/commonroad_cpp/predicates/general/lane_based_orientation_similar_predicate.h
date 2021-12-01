@@ -16,6 +16,11 @@
 class LaneBasedOrientationSimilarPredicate : public CommonRoadPredicate {
   public:
     /**
+     * Constructor for LaneBasedOrientationSimilarPredicate.
+     */
+    LaneBasedOrientationSimilarPredicate();
+
+    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.

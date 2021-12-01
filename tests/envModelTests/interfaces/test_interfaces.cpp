@@ -18,7 +18,7 @@ TEST_F(InterfacesTest, Read2018bFileSingleThread) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_Muc-2_1_T-1.xml"};
     const char *array[5]{"myprogram", "--input-file", pathToTestFile.c_str(), "--t", "1"};
     char **argv{const_cast<char **>(array)};
-    int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
+    int error_code = InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);
 
     // Read and parse CommonRoad scenario file
@@ -51,7 +51,7 @@ TEST_F(InterfacesTest, Read2018bFileMultiThread) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_Muc-2_1_T-1.xml"};
     const char *array[5]{"myprogram", "--input-file", pathToTestFile.c_str(), "--t", "4"};
     char **argv{const_cast<char **>(array)};
-    int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
+    int error_code = InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);
 
     // Read and parse CommonRoad scenario file
@@ -78,7 +78,7 @@ TEST_F(InterfacesTest, Read2020aFileSingleThread) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
     const char *array[5]{"myprogram", "--input-file", pathToTestFile.c_str(), "--t", "1"};
     char **argv{const_cast<char **>(array)};
-    int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
+    int error_code = InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);
 
     // Read and parse CommonRoad scenario file
@@ -105,7 +105,7 @@ TEST_F(InterfacesTest, Read2020aFileMultiThread) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
     const char *array[5]{"myprogram", "--input-file", pathToTestFile.c_str(), "--t", "4"};
     char **argv{const_cast<char **>(array)};
-    int error_code = CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
+    int error_code = InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath);
     EXPECT_EQ(error_code, 0);
 
     // Read and parse CommonRoad scenario file
@@ -129,11 +129,11 @@ TEST_F(InterfacesTest, ReadCommandLineValuesValidDefault) {
     std::string xmlFilePath;
     int argc{1};
     char **argv{};
-    int error_code{CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
+    int error_code{InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
 
     EXPECT_EQ(error_code, 0);
     EXPECT_EQ(num_threads, 1);
-    EXPECT_EQ(xmlFilePath, "../tests/scenarios/USA_Lanker-1_1_T-1.xml");
+    EXPECT_EQ(xmlFilePath, "../src/commonroad_cpp/default_config.xml");
 }
 
 TEST_F(InterfacesTest, ReadCommandLineValuesValidParameters) {
@@ -142,7 +142,7 @@ TEST_F(InterfacesTest, ReadCommandLineValuesValidParameters) {
     int argc{5};
     const char *array[5]{"myprogram", "--input-file", "test", "--t", "4"};
     char **argv{const_cast<char **>(array)};
-    int error_code{CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
+    int error_code{InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
 
     EXPECT_EQ(error_code, 0);
     EXPECT_EQ(num_threads, 4);
@@ -155,7 +155,7 @@ TEST_F(InterfacesTest, ReadCommandLineValuesHelp) {
     int argc{2};
     const char *array[5]{"myprogram", "--help"};
     char **argv{const_cast<char **>(array)};
-    int error_code{CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
+    int error_code{InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
 
     EXPECT_EQ(error_code, 0);
 }
@@ -166,7 +166,7 @@ TEST_F(InterfacesTest, ReadCommandLineValuesWrongNumberArguments) {
     int argc{4};
     const char *array[5]{"myprogram", "--help"};
     char **argv{const_cast<char **>(array)};
-    int error_code{CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
+    int error_code{InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
 
     EXPECT_EQ(error_code, 1);
 }
@@ -177,7 +177,7 @@ TEST_F(InterfacesTest, ReadCommandLineValuesUnrecognizedOption) {
     int argc{2};
     const char *array[5]{"myprogram", "--abc"};
     char **argv{const_cast<char **>(array)};
-    int error_code{CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
+    int error_code{InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
 
     EXPECT_EQ(error_code, 1);
 }
@@ -188,6 +188,38 @@ TEST_F(InterfacesTest, ReadCommandLineValuesMissingOption) {
     int argc{2};
     const char *array[5]{"myprogram", "--input-file"};
     char **argv{const_cast<char **>(array)};
-    int error_code{CommandLine::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
+    int error_code{InputUtils::readCommandLineValues(argc, argv, num_threads, xmlFilePath)};
     EXPECT_EQ(error_code, 1);
+}
+
+TEST_F(InterfacesTest, InitializeSimulationParameters) {
+    auto simulationParameters{InputUtils::initializeSimulationParameters(
+        TestUtils::getTestScenarioDirectory() + "/../../src/commonroad_cpp/default_config.yaml")};
+    EXPECT_EQ(simulationParameters.performanceMeasurement, true);
+    EXPECT_EQ(simulationParameters.outputFileName, "predicate_satisfaction.txt");
+    EXPECT_EQ(simulationParameters.outputDirectory, "src/commonroad_cpp/predicates");
+    EXPECT_EQ(simulationParameters.benchmarkId, "DEU_test_safe_distance");
+    EXPECT_EQ(simulationParameters.evaluationMode, EvaluationMode::directory);
+    EXPECT_EQ(simulationParameters.directoryPaths.size(), 1);
+    EXPECT_EQ(simulationParameters.directoryPaths.at(0), "./tests/scenarios");
+    EXPECT_EQ(simulationParameters.egoVehicleId, 0);
+}
+
+TEST_F(InterfacesTest, StringToEvaluationMode) {
+    std::string str{"directory"};
+    EXPECT_EQ(InputUtils::stringToEvaluationMode(str), EvaluationMode::directory);
+    str = "single_scenario";
+    EXPECT_EQ(InputUtils::stringToEvaluationMode(str), EvaluationMode::singleScenario);
+    str = "single_vehicle";
+    EXPECT_EQ(InputUtils::stringToEvaluationMode(str), EvaluationMode::singleVehicle);
+    str = "directory_single_vehicle";
+    EXPECT_EQ(InputUtils::stringToEvaluationMode(str), EvaluationMode::directory_single_vehicle);
+    str = "fail";
+    EXPECT_THROW(InputUtils::stringToEvaluationMode(str), std::runtime_error);
+}
+
+TEST_F(InterfacesTest, FindRelevantScenarioFileNames) {
+    EXPECT_EQ(InputUtils::findRelevantScenarioFileNames(TestUtils::getTestScenarioDirectory() + "/predicates").size(),
+              4);
+    EXPECT_EQ(InputUtils::findRelevantScenarioFileNames(TestUtils::getTestScenarioDirectory()).size(), 12);
 }

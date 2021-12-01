@@ -1,5 +1,11 @@
-#ifndef ENV_MODEL_COMMONROAD_CONTAINER_H
-#define ENV_MODEL_COMMONROAD_CONTAINER_H
+//
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
+//
+
+#pragma once
 
 #include <map>
 #include <memory>
@@ -55,5 +61,3 @@ class CommonRoadContainer {
     static std::shared_ptr<CommonRoadContainer> instance; //**< self-reference */
     std::map<size_t, std::shared_ptr<World>> worldList;   //**< map containing pairs of id and world objects */
 };
-
-#endif // ENV_MODEL_COMMONROAD_CONTAINER_H

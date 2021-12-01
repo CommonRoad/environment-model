@@ -7,10 +7,12 @@
 
 #pragma once
 
+#include "string"
+#include "types_and_definitions.h"
+#include "vector"
 #include <climits>
 #include <cstddef>
-
-#include "types_and_definitions.h"
+#include <utility>
 
 struct TrafficLightCycleElement {
     TrafficLightState color;
@@ -43,4 +45,28 @@ struct PredicateStatistics {
 
 struct Constraint {
     double realValuedConstraint;
+};
+
+struct PredicateSatisfaction {
+    PredicateSatisfaction(double costs, double satisfaction_probability)
+        : costs(costs), satisfactionProbability(satisfaction_probability) {}
+    double costs{100.0};
+    double satisfactionProbability{0.0};
+};
+
+struct SimulationParameters {
+    SimulationParameters(std::vector<std::string> directoryPaths, size_t egoVehicleId, std::string benchmarkId,
+                         EvaluationMode evaluationMode, bool performanceMeasurement, std::string outputDirectory,
+                         std::string outputFileName)
+        : directoryPaths(std::move(directoryPaths)), egoVehicleId(egoVehicleId), benchmarkId(std::move(benchmarkId)),
+          evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement),
+          outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)){};
+    SimulationParameters() = default;
+    std::vector<std::string> directoryPaths; //**< List of directories in which all scenarios should be evaluated */
+    size_t egoVehicleId{0};                  //**< ID of ego vehicle */
+    std::string benchmarkId;                 //**< CommonRoad benchmark ID */
+    EvaluationMode evaluationMode; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
+    bool performanceMeasurement;   //**< Flag indicating whether performance should me measured. */
+    std::string outputDirectory;   //**< Path to output directory of file to generate. */
+    std::string outputFileName;    //**< name and file type for to generate. */
 };
