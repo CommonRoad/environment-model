@@ -8,6 +8,9 @@ stages:
 
 image: $CI_REGISTRY/maierhofer/environment-model/ci:0.6.0
 
+before_script:
+  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
+
 .python-prepare: &python-prepare
   - source activate commonroad
   - pip install -r ./requirements.txt
