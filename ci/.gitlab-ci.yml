@@ -6,7 +6,7 @@ stages:
   - static-test
   - docs
 
-image: $CI_REGISTRY/maierhofer/environment-model/ci:0.6.0
+image: $CI_REGISTRY/maierhofer/environment-model/ci:0.6.1
 
 before_script:
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
