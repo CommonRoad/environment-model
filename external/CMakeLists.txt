@@ -1,8 +1,8 @@
 include(FetchContent)
 include(GNUInstallDirs)
+include(ExternalProject)
 
 # pugixml
-
 FetchContent_Declare(
   external_pugixml
 
@@ -12,7 +12,6 @@ FetchContent_Declare(
 )
 
 # pybind11
-
 FetchContent_Declare(
   external_pybind11
 
@@ -23,7 +22,6 @@ FetchContent_Declare(
 )
 
 # GoogleTest
-
 FetchContent_Declare(
   external_googletest
 
@@ -90,5 +88,26 @@ file(MAKE_DIRECTORY "${CMAKE_PREFIX_PATH}/include")
 target_include_directories(yaml-cpp SYSTEM INTERFACE "${CMAKE_PREFIX_PATH}/include")
 
 
+
+#DrivabilityChecker (includes only curvilinear coordinate system)
+message(STATUS "DrivabilityChecker - using bundled version")
+ExternalProject_Add(
+        DrivabilityChecker_bundled
+        GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
+        GIT_TAG "development"
+        INSTALL_DIR "${CMAKE_PREFIX_PATH}"
+        BUILD_BYPRODUCTS ${CMAKE_PREFIX_PATH}/lib/libcrccosy.a
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DADD_MODULE_COLLISION=OFF -DBUILD_LIBCCD=OFF -DBUILD_FCL=OFF -DBUILD_S11N=OFF -DBUILD_BOX2D=OFF
+)
+
+add_library(DrivabilityChecker::crccosy SHARED IMPORTED GLOBAL)
+add_dependencies(DrivabilityChecker::crccosy DrivabilityChecker_bundled)
+set_target_properties(
+        DrivabilityChecker::crccosy
+        PROPERTIES "IMPORTED_LOCATION" "${CMAKE_PREFIX_PATH}/lib/libcrccosy.a"
+)
+# create directory otherwise cmake will complain during generate step since this is only generated during make
+file(MAKE_DIRECTORY "${CMAKE_PREFIX_PATH}/include")
+target_include_directories(DrivabilityChecker::crccosy SYSTEM INTERFACE "${CMAKE_PREFIX_PATH}/include")
 
 
