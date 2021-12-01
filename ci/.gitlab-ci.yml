@@ -6,14 +6,19 @@ stages:
   - static-test
   - docs
 
-image: $CI_REGISTRY/maierhofer/environment-model/ci:0.6.0
+image: $CI_REGISTRY/maierhofer/environment-model/ci:0.6.2
+
+before_script:
+  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
 
 .python-prepare: &python-prepare
+  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
   - source activate commonroad
   - pip install -r ./requirements.txt
   - pip install -r ./test_requirements.txt
 
 .copy-cpp-dist: &copy-cpp-dist
+  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
   - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
   - mv ./dist/lib/libyaml-cpp.so /commonroad/dist/lib/
   - mv ./dist/lib/libyaml-cpp.so.0.7.0 /commonroad/dist/lib/
@@ -141,8 +146,6 @@ build-test-python:
 ### coverage ###
 coverage-analyze:
   stage: coverage
-  before_script:
-    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
@@ -164,8 +167,6 @@ coverage-analyze:
 
 coverage-report:
   stage: coverage
-  before_script:
-    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
