@@ -35,7 +35,7 @@ endif()
 
 add_subdirectory(external)
 
-find_package(DrivabilityChecker REQUIRED CONFIG)
+#find_package(DrivabilityChecker REQUIRED CONFIG)
 
 # Include Eigen3, Boost filesystem, and OpenMP
 find_package(Eigen3 REQUIRED)
