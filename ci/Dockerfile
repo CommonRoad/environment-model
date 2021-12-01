@@ -40,7 +40,7 @@ ENV PATH="$PATH:/usr/lib/llvm-${CLANG_FORMAT_VERSION}/bin/"
 ENV PATH="$PATH:/usr/lib/llvm-${CLANG_TIDY_VERSION}/bin/"
 
 
-ARG PYTHON_VERSION=3.10
+ARG PYTHON_VERSION=3.9
 RUN wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O /commonroad/anaconda.sh && \
     bash /commonroad/anaconda.sh -b && \
     rm /commonroad/anaconda.sh
