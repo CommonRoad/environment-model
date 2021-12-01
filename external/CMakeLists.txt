@@ -94,8 +94,8 @@ ExternalProject_Add(
         DrivabilityChecker_bundled
         GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
         GIT_TAG "development"
-        INSTALL_DIR "${CMAKE_PREFIX_PATH}"
-        BUILD_BYPRODUCTS ${CMAKE_PREFIX_PATH}/lib/libcrccosy.a
+        INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
+        BUILD_BYPRODUCTS ${CMAKE_INSTALL_PREFIX}/lib/libcrccosy.a
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DADD_MODULE_COLLISION=OFF -DBUILD_LIBCCD=OFF -DBUILD_FCL=OFF -DBUILD_S11N=OFF -DBUILD_BOX2D=OFF
 )
 
@@ -103,10 +103,10 @@ add_library(DrivabilityChecker::crccosy SHARED IMPORTED GLOBAL)
 add_dependencies(DrivabilityChecker::crccosy DrivabilityChecker_bundled)
 set_target_properties(
         DrivabilityChecker::crccosy
-        PROPERTIES "IMPORTED_LOCATION" "${CMAKE_PREFIX_PATH}/lib/libcrccosy.a"
+        PROPERTIES "IMPORTED_LOCATION" "${CMAKE_INSTALL_PREFIX}/lib/libcrccosy.a"
 )
 # create directory otherwise cmake will complain during generate step since this is only generated during make
-file(MAKE_DIRECTORY "${CMAKE_PREFIX_PATH}/include")
-target_include_directories(DrivabilityChecker::crccosy SYSTEM INTERFACE "${CMAKE_PREFIX_PATH}/include")
+file(MAKE_DIRECTORY "${CMAKE_INSTALL_PREFIX}/include")
+target_include_directories(DrivabilityChecker::crccosy SYSTEM INTERFACE "${CMAKE_INSTALL_PREFIX}/include")
 
 
