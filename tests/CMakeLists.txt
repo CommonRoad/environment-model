@@ -27,7 +27,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/regulatory/test_at_red_left_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_straight_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_traffic_light_predicate.cpp
-        envModelTests/predicates/regulatory/test_at_stop_sign_predicate.cpp
         envModelTests/predicates/velocity/test_keeps_lane_speed_limit_predicate.cpp
         envModelTests/predicates/velocity/test_required_speed_predicate.cpp
         envModelTests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
@@ -37,7 +36,7 @@ set(ENV_MODEL_TEST_SRC_FILES
 
 
 # Create executable for test
-add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
+add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES} envModelTests/predicates/predicate_manager_test.cpp envModelTests/predicates/predicate_manager_test.h)
 
 target_compile_features(env_model_test
         PUBLIC cxx_lambdas cxx_auto_type

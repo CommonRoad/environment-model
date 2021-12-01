@@ -11,7 +11,6 @@ FetchContent_Declare(
   GIT_PROGRESS   true
 )
 
-
 # pybind11
 FetchContent_Declare(
   external_pybind11
@@ -55,14 +54,38 @@ set_target_properties(gtest_main PROPERTIES FOLDER extern)
 set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
-
 # Install rule for pugixml headers
-
 install(
   DIRECTORY ${external_pugixml_SOURCE_DIR}/src/
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FILES_MATCHING PATTERN "*.hpp"
   )
+
+
+
+# Add yaml-cpp (needs cmake arguments therefore FetchContent_MakeAvailable does not work)
+message(STATUS "yaml-cpp - using bundled version")
+include(ExternalProject)
+
+ExternalProject_Add(
+        yaml_cpp_bundled
+        URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz
+        INSTALL_DIR "${CMAKE_PREFIX_PATH}"
+        BUILD_BYPRODUCTS ${CMAKE_PREFIX_PATH}/lib/libyaml-cpp.so
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DBUILD_SHARED_LIBS=ON -DYAML_CPP_BUILD_TESTS=OFF
+)
+add_library(yaml-cpp SHARED IMPORTED GLOBAL)
+add_dependencies(yaml-cpp yaml_cpp_bundled)
+set_target_properties(
+        yaml-cpp
+        PROPERTIES "IMPORTED_LOCATION" "${CMAKE_PREFIX_PATH}/lib/libyaml-cpp.so"
+)
+set_target_properties(yaml-cpp PROPERTIES POSITION_INDEPENDENT_CODE True)
+
+# create directory otherwise cmake will complain during generate step since this is only generated during make
+file(MAKE_DIRECTORY "${CMAKE_PREFIX_PATH}/include")
+
+target_include_directories(yaml-cpp SYSTEM INTERFACE "${CMAKE_PREFIX_PATH}/include")
 
 
 
@@ -86,3 +109,5 @@ set_target_properties(
 # create directory otherwise cmake will complain during generate step since this is only generated during make
 file(MAKE_DIRECTORY "${CMAKE_PREFIX_PATH}/include")
 target_include_directories(DrivabilityChecker::crccosy SYSTEM INTERFACE "${CMAKE_PREFIX_PATH}/include")
+
+

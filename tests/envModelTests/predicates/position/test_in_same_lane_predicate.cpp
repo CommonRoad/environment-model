@@ -81,7 +81,7 @@ TEST_F(TestInSameLanePredicate, StatisticBooleanEvaluation) {
 TEST_F(TestInSameLanePredicate, BooleanEvaluationObjectsInIntersection) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-        CommandLine::getDataFromCommonRoad(pathToTestFileOne);
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     std::vector<std::shared_ptr<Obstacle>> egoObstacles{
         obstacle_operations::getObstacleById(obstaclesScenarioOne, 1219)};
     std::vector<std::shared_ptr<Obstacle>> relevantObstacles{

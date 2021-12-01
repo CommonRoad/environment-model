@@ -16,6 +16,12 @@ before_script:
   - pip install -r ./requirements.txt
   - pip install -r ./test_requirements.txt
 
+.copy-cpp-dist: &copy-cpp-dist
+  - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
+  - mv ./dist/lib/libyaml-cpp.so /commonroad/dist/lib/
+  - mv ./dist/lib/libyaml-cpp.so.0.7.0 /commonroad/dist/lib/
+  - mv ./dist/include/yaml-cpp/ /commonroad/dist/include/
+
 ### static test ###
 clang-format:
   stage: static-test
@@ -35,7 +41,6 @@ cppcheck:
     cppcheck
     --project=build/compile_commands.json
     -i"$(pwd)/external"
-    -i"$(pwd)/src/commonroad_cpp/interfaces/commonroad/pugi_xml/pugixml.cpp"
   needs:
     - job: build-compile-commands
       artifacts: true
@@ -88,11 +93,13 @@ build-test:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
+  after_script:
+    - mv /commonroad/dist/ ./
   needs: []
   artifacts:
     paths:
-      - build/env_model_test
-      - build/libenv_model.so
+      - ./build/
+      - ./dist/
     expire_in: 30 minutes
 
 build-run-coverage:
@@ -101,25 +108,21 @@ build-run-coverage:
     - mkdir build && cd build
     - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
     - make env_model_coverage -j4
+  after_script:
+    - mv /commonroad/dist/ ./
   needs: []
   artifacts:
     paths:
       - ./build/
+      - ./dist/
     expire_in: 30 minutes
 
-build-python:
-  stage: compile
-  script:
-    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py build
-  needs: []
-  artifacts:
-    paths:
-      - ./build/
-    expire_in: 30 minutes
 
 ### tests ###
 test:
   stage: test
+  before_script:
+    - *copy-cpp-dist
   script:
     - build/env_model_test --gtest_output="xml:report.xml"
   needs:
@@ -129,27 +132,27 @@ test:
     reports:
       junit: ./report.xml
 
-test-python:
+build-test-python:
   stage: test
   before_script:
     - *python-prepare
   script:
-    - python setup.py develop
+    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py develop
     - python -m pytest tests/python
-  needs:
-    - job: build-python
-      artifacts: true
+  needs: []
 
 ### coverage ###
 coverage-analyze:
   stage: coverage
+  before_script:
+    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
       -f src/
-      -e src/commonroad_cpp/interfaces/commonroad/pugi_xml
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
       -e src/commonroad_cpp/interfaces/pybind/
+      -e /commonroad/dist/include/yaml-cpp/
       --print-summary
       --exclude-unreachable-branches
       --output coverage.xml
@@ -164,13 +167,15 @@ coverage-analyze:
 
 coverage-report:
   stage: coverage
+  before_script:
+    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
       -f src/
-      -e src/commonroad_cpp/interfaces/commonroad/pugi_xml
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
       -e src/commonroad_cpp/interfaces/pybind/
+      -e /commonroad/dist/include/yaml-cpp/
       --print-summary
       --exclude-unreachable-branches
       --output coverage.html
