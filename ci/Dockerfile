@@ -52,3 +52,6 @@ RUN conda update conda && \
     conda update --all && \
     conda create --name commonroad python=${PYTHON_VERSION}
 ENV CONDA_DEFAULT_ENV $commonroad
+
+RUN mkdir dist && cd dist && mkdir lib && mkdir share && mkdir include
+
