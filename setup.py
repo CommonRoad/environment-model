@@ -77,8 +77,7 @@ class CMakeBuild(build_ext):
         for p in [dist_dir, build_dir, install_dir]:
             p.mkdir(parents=True, exist_ok=True)
 
-        cmake_args += [ '-DCMAKE_INSTALL_PREFIX:PATH={}'.format(dist_dir.resolve()) ]
-        cmake_args += [ '-DCMAKE_PREFIX_PATH={}'.format(os.environ["CMAKE_PREFIX_PATH"])]
+        cmake_args += [ '-DCMAKE_INSTALL_PREFIX={}'.format(os.environ["CMAKE_PREFIX_PATH"])]
 
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=build_dir)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=build_dir)
