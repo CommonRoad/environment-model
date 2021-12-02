@@ -35,11 +35,6 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
-        if "CMAKE_PREFIX_PATH" not in os.environ:
-            log.log(log.WARN,
-                'WARNING: The CMAKE_PREFIX_PATH environment variable is not set!'
-                'Consider setting it to the DrivabilityChecker installation prefix.')
-
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
 
         # required for auto-detection of auxiliary "native" libs
@@ -66,6 +61,7 @@ class CMakeBuild(build_ext):
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             build_args += ['--', '-j4']
 
+        print(self.build_temp)
         build_temp_dir = Path(self.build_temp)
         dist_dir = build_temp_dir / 'dist'
         build_dir =  build_temp_dir / 'build'
@@ -77,7 +73,7 @@ class CMakeBuild(build_ext):
         for p in [dist_dir, build_dir, install_dir]:
             p.mkdir(parents=True, exist_ok=True)
 
-        cmake_args += [ '-DCMAKE_INSTALL_PREFIX={}'.format(os.environ["CMAKE_PREFIX_PATH"])]
+        cmake_args += [ '-DCMAKE_INSTALL_PREFIX={}'.format(dist_dir.resolve()) ]
 
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=build_dir)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=build_dir)
