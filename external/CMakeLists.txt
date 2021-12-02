@@ -31,6 +31,7 @@ FetchContent_Declare(
   GIT_PROGRESS   true
 )
 
+# YAML-CPP
 FetchContent_Declare(
         yaml-cpp
         GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
@@ -68,37 +69,8 @@ install(
   )
 
 
-
-# Add yaml-cpp (needs cmake arguments therefore FetchContent_MakeAvailable does not work)
-#message(STATUS "yaml-cpp - using bundled version")
-#get_cmake_property(_variableNames VARIABLES)
-#list (SORT _variableNames)
-#foreach (_variableName ${_variableNames})
-#  message(STATUS "${_variableName}=${${_variableName}}")
-#endforeach()
-#message(STATUS ${CMAKE_INSTALL_PREFIX})
-#ExternalProject_Add(
-#        yaml_cpp_bundled
-#        URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz
-#        INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
-#        BUILD_BYPRODUCTS ${CMAKE_INSTALL_PREFIX}/lib/libyaml-cpp.so
-#        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=ON -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_INSTALL=ON
-#)
-#add_library(yaml-cpp SHARED IMPORTED GLOBAL)
-#add_dependencies(yaml-cpp yaml_cpp_bundled)
-#set_target_properties(
-#        yaml-cpp
-#        PROPERTIES "IMPORTED_LOCATION" "${CMAKE_INSTALL_PREFIX}/lib/libyaml-cpp.so"
-#)
-#set_target_properties(yaml-cpp PROPERTIES POSITION_INDEPENDENT_CODE True)
-#
-## create directory otherwise cmake will complain during generate step since this is only generated during make
-#file(MAKE_DIRECTORY "${CMAKE_INSTALL_PREFIX}/include")
-#target_include_directories(yaml-cpp SYSTEM INTERFACE "${CMAKE_INSTALL_PREFIX}/include")
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-#cmake_policy(SET YAML_CPP_BUILD_TESTS NEW)
 set(YAML_CPP_BUILD_TESTS OFF)
-#cmake_policy(SET YAML_CPP_BUILD_TESTS NEW)
 set(YAML_CPP_BUILD_TOOLS OFF)
 FetchContent_MakeAvailable(yaml-cpp)
 set_property(TARGET yaml-cpp
