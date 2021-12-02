@@ -116,6 +116,7 @@ if(BUILD_PYBIND)
     # during installation.
 
     set_property(TARGET cpp_env_model PROPERTY INSTALL_RPATH "$ORIGIN")
+    set_property(TARGET yaml-cpp PROPERTY INSTALL_RPATH "$ORIGIN")
 
 endif(BUILD_PYBIND)
 
