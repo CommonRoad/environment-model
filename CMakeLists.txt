@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 option(BUILD_DOXYGEN "Build doxygen" OFF)
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_PYBIND "Build python interface" OFF)
+option(ENVMODEL_BUILD_SHARED_LIBS "Build using shared libraries" OFF)
 
 # Appends dictionary where other cmake files are stored which install required Software
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)

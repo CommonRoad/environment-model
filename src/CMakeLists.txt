@@ -50,7 +50,11 @@ set(ENV_MODEL_SRC_FILES
         )
 
 # Create environment model library
+if(ENVMODEL_BUILD_SHARED_LIBS)
 add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
+else()
+    add_library(env_model STATIC ${ENV_MODEL_SRC_FILES})
+endif()
 
 target_compile_features(env_model
         PUBLIC cxx_lambdas cxx_auto_type
