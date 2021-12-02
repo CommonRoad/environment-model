@@ -37,6 +37,13 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
         GIT_TAG yaml-cpp-0.6.3
 )
+#
+## YAML-CPP
+#FetchContent_Declare(
+#        external_crccs
+#        GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
+#        GIT_TAG "development"
+#)
 
 # Stage 2: Run FetchContent_MakeAvailable
 # CMake recommends running FetchContent_Declare for all third-party projects first
@@ -83,6 +90,20 @@ install(
 )
 
 #DrivabilityChecker (includes only curvilinear coordinate system)
+#set(ADD_MODULE_COLLISION OFF)
+#set(BUILD_LIBCCD OFF)
+#set(BUILD_FCL OFF)
+#set(BUILD_S11N OFF)
+#set(BUILD_BOX2D OFF)
+#set(BUILD_BOX2D OFF)
+#set(ADD_PYTHON_BINDINGS OFF)
+#FetchContent_MakeAvailable(external_crccs)
+#message(STATUS ${external_crccs_SOURCE_DIR}/)
+#install(
+#        DIRECTORY ${external_crccs_SOURCE_DIR}/cpp/geometry/
+#        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+#        FILES_MATCHING PATTERN "*.h"
+#)
 message(STATUS "DrivabilityChecker - using bundled version")
 ExternalProject_Add(
         DrivabilityChecker_bundled
