@@ -53,7 +53,7 @@ build-compile-commands:
   script:
     # run CMake in order to get compile_commands.json
     - mkdir build && cd build
-    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
     - cd ..
   needs: []
   artifacts:
@@ -67,7 +67,7 @@ build-clang:
     - export CC=clang
     - export CXX=clang++
     - mkdir build && cd build
-    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
   needs: []
 
@@ -77,7 +77,7 @@ build-gcc:
     - export CC=gcc
     - export CXX=g++
     - mkdir build && cd build
-    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
   needs: []
 
@@ -85,7 +85,7 @@ build-standalone:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model_example_node -j4
   needs: []
 
@@ -93,7 +93,7 @@ build-test:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
   after_script:
     - mv /commonroad/dist/ ./
@@ -108,7 +108,7 @@ build-run-coverage:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCMAKE_PREFIX_PATH=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
     - make env_model_coverage -j4
   after_script:
     - mv /commonroad/dist/ ./
@@ -139,7 +139,7 @@ build-test-python:
   before_script:
     - *python-prepare
   script:
-    - CMAKE_PREFIX_PATH=/commonroad/dist python setup.py develop
+    - python setup.py develop
     - python -m pytest tests/python
   needs: []
 
