@@ -139,7 +139,7 @@ build-test-python:
   before_script:
     - *python-prepare
   script:
-    - python setup.py develop
+    - DCMAKE_INSTALL_PREFIX=/commonroad/dist python setup.py develop
     - python -m pytest tests/python
   needs: []
 

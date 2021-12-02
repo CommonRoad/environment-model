@@ -61,7 +61,6 @@ class CMakeBuild(build_ext):
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             build_args += ['--', '-j4']
 
-        print(self.build_temp)
         build_temp_dir = Path(self.build_temp)
         dist_dir = build_temp_dir / 'dist'
         build_dir =  build_temp_dir / 'build'
@@ -69,11 +68,10 @@ class CMakeBuild(build_ext):
         lib_python_dir = lib_dir / 'python'
         install_path = Path(self.get_ext_fullpath(ext.name))
         install_dir = install_path.parent
-
         for p in [dist_dir, build_dir, install_dir]:
             p.mkdir(parents=True, exist_ok=True)
 
-        cmake_args += [ '-DCMAKE_INSTALL_PREFIX={}'.format(dist_dir.resolve()) ]
+        cmake_args += [ '-DCMAKE_INSTALL_PREFIX:PATH={}'.format(dist_dir.resolve()) ]
 
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=build_dir)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=build_dir)

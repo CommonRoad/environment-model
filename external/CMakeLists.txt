@@ -65,16 +65,20 @@ install(
 
 # Add yaml-cpp (needs cmake arguments therefore FetchContent_MakeAvailable does not work)
 message(STATUS "yaml-cpp - using bundled version")
-include(ExternalProject)
-message(STATUS "install prefix: ${CMAKE_INSTALL_PREFIX}")
+get_cmake_property(_variableNames VARIABLES)
+list (SORT _variableNames)
+foreach (_variableName ${_variableNames})
+  message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+
 ExternalProject_Add(
         yaml_cpp_bundled
         URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz
         INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
-        BUILD_BYPRODUCTS ${CMAKE_INSTALL_PREFIX}/lib/libyaml-cpp.so
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DBUILD_SHARED_LIBS=ON -DYAML_CPP_BUILD_TESTS=OFF
+        BUILD_BYPRODUCTS ${CMAKE_INSTALL_PREFIX}/lib/libyaml-cpp.a
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DBUILD_SHARED_LIBS=OFF -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_INSTALL=ON
 )
-add_library(yaml-cpp SHARED IMPORTED GLOBAL)
+add_library(yaml-cpp STATIC IMPORTED GLOBAL)
 add_dependencies(yaml-cpp yaml_cpp_bundled)
 set_target_properties(
         yaml-cpp

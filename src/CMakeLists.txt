@@ -71,7 +71,6 @@ target_link_libraries(env_model
         Eigen3::Eigen
         DrivabilityChecker::crccosy
         yaml-cpp
-        pthread dl
     )
 
 target_link_libraries(env_model
