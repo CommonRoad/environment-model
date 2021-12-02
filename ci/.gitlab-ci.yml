@@ -62,6 +62,8 @@ build-clang:
     - mkdir build && cd build
     - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DENVMODEL_BUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release ..
+    - make env_model -j4
   needs: []
 
 build-gcc:
@@ -71,6 +73,8 @@ build-gcc:
     - export CXX=g++
     - mkdir build && cd build
     - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
+    - make env_model -j4
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DENVMODEL_BUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
   needs: []
 
