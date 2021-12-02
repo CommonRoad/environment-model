@@ -95,8 +95,10 @@ install(
 ## create directory otherwise cmake will complain during generate step since this is only generated during make
 #file(MAKE_DIRECTORY "${CMAKE_INSTALL_PREFIX}/include")
 #target_include_directories(yaml-cpp SYSTEM INTERFACE "${CMAKE_INSTALL_PREFIX}/include")
-
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+#cmake_policy(SET YAML_CPP_BUILD_TESTS NEW)
 set(YAML_CPP_BUILD_TESTS OFF)
+#cmake_policy(SET YAML_CPP_BUILD_TESTS NEW)
 set(YAML_CPP_BUILD_TOOLS OFF)
 FetchContent_MakeAvailable(yaml-cpp)
 set_property(TARGET yaml-cpp
