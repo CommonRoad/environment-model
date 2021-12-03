@@ -64,7 +64,7 @@ gtest_discover_tests(
 
 # Code coverage
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    if (CodeCoverage MATCHES ON)
+    if (ENV_MODEL_BUILD_CODE_COVERAGE)
         add_executable(env_model_test_coverage ${ENV_MODEL_SRC_FILES} ${ENV_MODEL_TEST_SRC_FILES})
         target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
         target_link_libraries(env_model_test_coverage PUBLIC

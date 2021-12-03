@@ -101,7 +101,7 @@ target_link_libraries(env_model_example_node
 
 
 # add pybind module
-if(BUILD_PYBIND)
+if(ENV_MODEL_BUILD_PYBIND)
     pybind11_add_module(cpp_env_model
             commonroad_cpp/interfaces/pybind/python_interface.cpp
             commonroad_cpp/interfaces/pybind/python_interface.h
@@ -122,7 +122,7 @@ if(BUILD_PYBIND)
     set_property(TARGET cpp_env_model PROPERTY INSTALL_RPATH "$ORIGIN")
     set_property(TARGET yaml-cpp PROPERTY INSTALL_RPATH "$ORIGIN")
 
-endif(BUILD_PYBIND)
+endif(ENV_MODEL_BUILD_PYBIND)
 
 # this adds many warnings to the build. They usually help to find some bugs
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")

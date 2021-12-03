@@ -105,7 +105,7 @@ build-run-coverage:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DENV_MODEL_BUILD_CODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
     - make env_model_coverage -j4
   after_script:
     - mv /commonroad/dist/ ./
@@ -134,7 +134,7 @@ build-test-python:
   before_script:
     - *python-prepare
   script:
-    - DCMAKE_INSTALL_PREFIX=/commonroad/dist python setup.py develop
+    - python setup.py develop
     - python -m pytest tests/python
   needs: []
 
