@@ -43,9 +43,9 @@ class CMakeBuild(build_ext):
 
         cmake_args = ["-DPYTHON_EXECUTABLE={}".format(sys.executable),
                       "-DINSTALL_GTEST=OFF",
-                      "-DBUILD_TESTS=OFF",
-                      "-DBUILD_DOXYGEN=OFF",
-                      "-DBUILD_PYBIND=ON"]
+                      "-DENV_MODEL_BUILD_TESTS=OFF",
+                      "-DENV_MODEL_BUILD_DOXYGEN=OFF",
+                      "-DENV_MODEL_BUILD_PYBIND=ON"]
 
         cfg = 'Debug' if self.debug else 'Release'
         config_arg = ['--config', cfg]
