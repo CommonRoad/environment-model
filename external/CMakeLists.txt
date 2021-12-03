@@ -38,9 +38,9 @@ FetchContent_Declare(
         GIT_TAG yaml-cpp-0.6.3
 )
 #
-## YAML-CPP
+## Curvilinear Coordinate System
 #FetchContent_Declare(
-#        external_crccs
+#        external_crccosy
 #        GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
 #        GIT_TAG "development"
 #)
@@ -95,18 +95,17 @@ install(
 #set(BUILD_FCL OFF)
 #set(BUILD_S11N OFF)
 #set(BUILD_BOX2D OFF)
-#set(BUILD_BOX2D OFF)
 #set(ADD_PYTHON_BINDINGS OFF)
-#FetchContent_MakeAvailable(external_crccs)
-#message(STATUS ${external_crccs_SOURCE_DIR}/)
+#FetchContent_MakeAvailable(external_crccosy)
 #install(
-#        DIRECTORY ${external_crccs_SOURCE_DIR}/cpp/geometry/
+#        DIRECTORY ${external_crccosy_SOURCE_DIR}/cpp/geometry/
 #        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 #        FILES_MATCHING PATTERN "*.h"
 #)
-message(STATUS "DrivabilityChecker - using bundled version")
+#message(STATUS "DrivabilityChecker - using bundled version")
 ExternalProject_Add(
         DrivabilityChecker_bundled
+        CMAKE_GENERATOR drivability
         GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
         GIT_TAG "development"
         INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
@@ -114,7 +113,7 @@ ExternalProject_Add(
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DADD_MODULE_COLLISION=OFF -DBUILD_LIBCCD=OFF -DBUILD_FCL=OFF -DBUILD_S11N=OFF -DBUILD_BOX2D=OFF
 )
 
-add_library(DrivabilityChecker::crccosy SHARED IMPORTED GLOBAL)
+add_library(DrivabilityChecker::crccosy STATIC IMPORTED GLOBAL)
 add_dependencies(DrivabilityChecker::crccosy DrivabilityChecker_bundled)
 set_target_properties(
         DrivabilityChecker::crccosy
