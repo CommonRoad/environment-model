@@ -51,7 +51,7 @@ set(ENV_MODEL_SRC_FILES
 
 # Create environment model library
 if(ENVMODEL_BUILD_SHARED_LIBS)
-    add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
+add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
 else()
     add_library(env_model STATIC ${ENV_MODEL_SRC_FILES})
 endif()
@@ -71,22 +71,20 @@ target_include_directories(env_model
     )
 
 target_link_libraries(env_model
-        PRIVATE
+    PUBLIC
+        Eigen3::Eigen
+        DrivabilityChecker::crccosy
+        yaml-cpp
+    )
+
+target_link_libraries(env_model
+    PRIVATE
         Boost::program_options
         Boost::filesystem
         OpenMP::OpenMP_CXX
         pugixml-static
         spdlog::spdlog
-        crccosy
-        )
-
-target_link_libraries(env_model
-    PUBLIC
-        Eigen3::Eigen
-        yaml-cpp
     )
-
-
 
 
 # Create environment model test node
