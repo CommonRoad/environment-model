@@ -105,7 +105,6 @@ install(
 #message(STATUS "DrivabilityChecker - using bundled version")
 ExternalProject_Add(
         DrivabilityChecker_bundled
-        CMAKE_GENERATOR drivability
         GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
         GIT_TAG "development"
         INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
@@ -113,7 +112,7 @@ ExternalProject_Add(
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DADD_MODULE_COLLISION=OFF -DBUILD_LIBCCD=OFF -DBUILD_FCL=OFF -DBUILD_S11N=OFF -DBUILD_BOX2D=OFF
 )
 
-add_library(DrivabilityChecker::crccosy STATIC IMPORTED GLOBAL)
+add_library(DrivabilityChecker::crccosy SHARED IMPORTED GLOBAL)
 add_dependencies(DrivabilityChecker::crccosy DrivabilityChecker_bundled)
 set_target_properties(
         DrivabilityChecker::crccosy
