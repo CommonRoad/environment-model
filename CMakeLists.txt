@@ -10,6 +10,7 @@ option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
 option(ENV_MODEL_BUILD_PYBIND "Build python interface" OFF)
 option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" OFF)
 option(ENV_MODEL_BUILD_CODE_COVERAGE "Build code coverage" OFF)
+option(ENV_MODEL_BUILD_EXECUTABLE "Build executable" ON)
 
 # Appends dictionary where other cmake files are stored which install required Software
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)

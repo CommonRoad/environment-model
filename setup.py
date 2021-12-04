@@ -8,7 +8,6 @@ from pathlib import Path
 from setuptools import Extension
 from setuptools.command.build_ext import build_ext
 from distutils.core import setup
-from distutils import log
 from distutils.version import LooseVersion
 
 
@@ -45,7 +44,8 @@ class CMakeBuild(build_ext):
                       "-DINSTALL_GTEST=OFF",
                       "-DENV_MODEL_BUILD_TESTS=OFF",
                       "-DENV_MODEL_BUILD_DOXYGEN=OFF",
-                      "-DENV_MODEL_BUILD_PYBIND=ON"]
+                      "-DENV_MODEL_BUILD_PYBIND=ON",
+                      "-DENV_MODEL_BUILD_EXECUTABLE=OFF"]
 
         cfg = 'Debug' if self.debug else 'Release'
         config_arg = ['--config', cfg]

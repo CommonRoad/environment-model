@@ -86,19 +86,19 @@ target_link_libraries(env_model
         spdlog::spdlog
     )
 
+if(ENV_MODEL_BUILD_EXECUTABLE)
+    # Create environment model test node
+    add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
 
-# Create environment model test node
-add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
-
-target_link_libraries(env_model_example_node
-    PRIVATE
-        env_model
-        Boost::program_options
-        spdlog::spdlog
-        yaml-cpp
-        pthread dl
-    )
-
+    target_link_libraries(env_model_example_node
+        PRIVATE
+            env_model
+            Boost::program_options
+            spdlog::spdlog
+            yaml-cpp
+            pthread dl
+        )
+endif(ENV_MODEL_BUILD_EXECUTABLE)
 
 # add pybind module
 if(ENV_MODEL_BUILD_PYBIND)
