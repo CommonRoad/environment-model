@@ -126,14 +126,18 @@ endif(ENV_MODEL_BUILD_PYBIND)
 
 # this adds many warnings to the build. They usually help to find some bugs
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    target_compile_options(env_model_example_node PRIVATE -Wall -Wextra -Wconversion -pedantic
-            -Wfatal-errors)
+    if(ENV_MODEL_BUILD_EXECUTABLE)
+        target_compile_options(env_model_example_node PRIVATE -Wall -Wextra -Wconversion -pedantic
+                -Wfatal-errors)
+    endif(ENV_MODEL_BUILD_EXECUTABLE)
     target_compile_options(env_model PRIVATE -Wall -Wextra -Wconversion
             -pedantic -Wfatal-errors)
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(env_model PRIVATE /W3 /WX)
-    target_compile_options(HW01Main PRIVATE /W3 /WX)
+    if(ENV_MODEL_BUILD_EXECUTABLE)
+        target_compile_options(env_model_example_node PRIVATE /W3 /WX)
+    endif(ENV_MODEL_BUILD_EXECUTABLE)
 endif()
 
 
