@@ -75,21 +75,16 @@ target_link_libraries(env_model
         Eigen3::Eigen
         DrivabilityChecker::crccosy
         yaml-cpp
-        pugixml-static
+    )
+
+target_link_libraries(env_model
+    PRIVATE
         Boost::program_options
         Boost::filesystem
         OpenMP::OpenMP_CXX
+        pugixml-static
         spdlog::spdlog
     )
-
-#target_link_libraries(env_model
-#    PRIVATE
-#        Boost::program_options
-#        Boost::filesystem
-#        OpenMP::OpenMP_CXX
-#
-#        spdlog::spdlog
-#    )
 
 
 # Create environment model test node
