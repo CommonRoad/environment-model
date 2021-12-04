@@ -51,6 +51,12 @@ FetchContent_Declare(
 # See https://cmake.org/cmake/help/v3.22/module/FetchContent.html#command:fetchcontent_makeavailable
 
 FetchContent_MakeAvailable(external_pugixml)
+# Install rule for pugixml headers
+install(
+        DIRECTORY ${external_pugixml_SOURCE_DIR}/src/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILES_MATCHING PATTERN "*.hpp"
+)
 
 set(PYBIND11_CPP_STANDARD -std=c++17)
 FetchContent_MakeAvailable(external_pybind11)
@@ -68,12 +74,7 @@ set_target_properties(gtest_main PROPERTIES FOLDER extern)
 set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
-# Install rule for pugixml headers
-install(
-  DIRECTORY ${external_pugixml_SOURCE_DIR}/src/
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  FILES_MATCHING PATTERN "*.hpp"
-  )
+
 
 
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
