@@ -37,13 +37,7 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
         GIT_TAG yaml-cpp-0.6.3
 )
-#
-## Curvilinear Coordinate System
-#FetchContent_Declare(
-#        external_crccosy
-#        GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
-#        GIT_TAG "development"
-#)
+
 
 # Stage 2: Run FetchContent_MakeAvailable
 # CMake recommends running FetchContent_Declare for all third-party projects first
@@ -90,27 +84,14 @@ install(
         FILES_MATCHING PATTERN "*.hpp"
 )
 
-#DrivabilityChecker (includes only curvilinear coordinate system)
-#set(ADD_MODULE_COLLISION OFF)
-#set(BUILD_LIBCCD OFF)
-#set(BUILD_FCL OFF)
-#set(BUILD_S11N OFF)
-#set(BUILD_BOX2D OFF)
-#set(ADD_PYTHON_BINDINGS OFF)
-#FetchContent_MakeAvailable(external_crccosy)
-#install(
-#        DIRECTORY ${external_crccosy_SOURCE_DIR}/cpp/geometry/
-#        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-#        FILES_MATCHING PATTERN "*.h"
-#)
-#message(STATUS "DrivabilityChecker - using bundled version")
+message(STATUS "DrivabilityChecker - using bundled version")
 ExternalProject_Add(
         DrivabilityChecker_bundled
         GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
         GIT_TAG "development"
         INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
         BUILD_BYPRODUCTS ${CMAKE_INSTALL_PREFIX}/lib/libcrccosy.a
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DADD_MODULE_COLLISION=OFF -DBUILD_LIBCCD=OFF -DBUILD_FCL=OFF -DBUILD_S11N=OFF -DBUILD_BOX2D=OFF
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DADD_MODULE_COLLISION=OFF -DBUILD_LIBCCD=OFF -DBUILD_FCL=OFF -DBUILD_S11N=OFF -DBUILD_BOX2D=OFF -DADD_PYTHON_BINDINGS=OFF
 )
 
 add_library(DrivabilityChecker::crccosy SHARED IMPORTED GLOBAL)
