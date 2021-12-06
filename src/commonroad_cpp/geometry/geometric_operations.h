@@ -65,7 +65,7 @@ std::vector<double> computePathLengthFromPolyline(const std::vector<vertex> &pol
  */
 double euclideanDistance2Dim(const vertex &pointA, const vertex &pointB);
 
-    /**
+/**
  * Computes distance between each vertex of two polylines. The polylines must be of same length.
  *
  * @param polylineA First polyline.

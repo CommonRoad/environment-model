@@ -15,7 +15,8 @@
 using CurvilinearCoordinateSystem = geometry::CurvilinearCoordinateSystem;
 using boost::geometry::get;
 
-std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex> qVertex, double length, double width) {
+std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex> qVertex, double length,
+                                                              double width) {
     std::vector<vertex> pVertex;
 
     // check for special cases
@@ -183,7 +184,8 @@ std::vector<double> geometric_operations::computePathLengthFromPolyline(const st
     return distance;
 }
 
-double geometric_operations::interpolate(double xDistance, const std::vector<double> &polyline1, const std::vector<double> &polyline2) {
+double geometric_operations::interpolate(double xDistance, const std::vector<double> &polyline1,
+                                         const std::vector<double> &polyline2) {
     // taken from https://bulldozer00.blog/2016/05/10/linear-interpolation-in-c/
 
     // Ensure that no 2 adjacent x values are equal,
@@ -242,8 +244,9 @@ double geometric_operations::euclideanDistance2Dim(const vertex &pointA, const v
 std::vector<double> geometric_operations::computeDistanceFromPolylines(const std::vector<vertex> &polylineA,
                                                                        const std::vector<vertex> &polylineB) {
     if (polylineA.size() < 2 or polylineB.size() < 2 or polylineA.size() != polylineB.size())
-        throw std::logic_error("geometric_operations computeOrientationFromPolyline: "
-                               "Cannot create distance from polyline of length < 2 or of polylines with different size");
+        throw std::logic_error(
+            "geometric_operations computeOrientationFromPolyline: "
+            "Cannot create distance from polyline of length < 2 or of polylines with different size");
     std::vector<double> width;
     width.reserve(polylineA.size());
 
