@@ -404,9 +404,9 @@ class Lanelet {
      * @param lonPosition Longitudinal position.
      * @return Width [m].
      */
-    double getWidth(double lonPosition) ;
+    double getWidth(double lonPosition);
 
-        /**
+    /**
      * Finds closest index on center line given 2D vertex.
      *
      * @param positionX X-position of point of interest.
