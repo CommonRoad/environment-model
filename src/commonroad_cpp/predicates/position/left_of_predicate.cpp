@@ -21,7 +21,18 @@ bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<W
                                                 const std::shared_ptr<Obstacle> &obstacleK,
                                                 const std::shared_ptr<Obstacle> &obstacleP) {
 
-    auto obstacleK_left_d
+    if (obstacleK->leftD(timeStep) >= obstacleP->rightD(timeStep))
+        return false;
+    else{
+        if (obstacleK->rearS(timeStep) <= obstacleP->frontS(timeStep) <= obstacleK->frontS(timeStep))
+            return true;
+        if (obstacleK->rearS(timeStep) < obstacleP->rearS(timeStep) < obstacleK->frontS(timeStep))
+            return true;
+        if ((obstacleP->rearS(timeStep) < obstacleK->rearS(timeStep)) and (obstacleK->frontS(timeStep) < obstacleP->frontS(timeStep)))
+            return true;
+        else
+            return false;
+    }
 }
 
 double LeftOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

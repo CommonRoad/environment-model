@@ -12,7 +12,7 @@
 /**
  * Evaluates
  */
-class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
+class OnMainCarriageWayPredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using objects.
@@ -52,10 +52,5 @@ class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
                                     const std::shared_ptr<Obstacle> &obstacleP) override;
-
-
-    std::vector<std::shared_ptr<Lanelet>> laneletsRightOfVehicle(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obs);
-
-    std::vector<std::shared_ptr<Lanelet>> laneletsRightOfLanet(const std::shared_ptr<World> &world, const std::shared_ptr<Lanelet> &lanelet);
 
 };
