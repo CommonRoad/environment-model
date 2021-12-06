@@ -15,76 +15,76 @@
 using CurvilinearCoordinateSystem = geometry::CurvilinearCoordinateSystem;
 using boost::geometry::get;
 
-std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex> q, double length, double width) {
-    std::vector<vertex> p;
+std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex> qVertex, double length, double width) {
+    std::vector<vertex> pVertex;
 
     // check for special cases
-    if (q.size() == 1) // exactly one vertex
+    if (qVertex.size() == 1) // exactly one vertex
     {
-        p.resize(4);
-        // add the dimension around the point q
-        vertex p1{}, p2{}, p3{}, p4{};
-        p1.x = q.front().x + (-0.5 * length);
-        p1.y = q.front().y + (0.5 * width);
-        p2.x = q.front().x + (0.5 * length);
-        p2.y = q.front().y + (0.5 * width);
-        p3.x = q.front().x + (0.5 * length);
-        p3.y = q.front().y + (-0.5 * width);
-        p4.x = q.front().x + (-0.5 * length);
-        p4.y = q.front().y + (-0.5 * width);
-        p[0] = p1;
-        p[1] = p2;
-        p[2] = p3;
-        p[3] = p4;
-    } else if (q.size() == 4) // exactly 4 vertices
+        pVertex.resize(4);
+        // add the dimension around the point qVertex
+        vertex p1Vertex{}, p2Vertex{}, p3Vertex{}, p4Vertex{};
+        p1Vertex.x = qVertex.front().x + (-0.5 * length);
+        p1Vertex.y = qVertex.front().y + (0.5 * width);
+        p2Vertex.x = qVertex.front().x + (0.5 * length);
+        p2Vertex.y = qVertex.front().y + (0.5 * width);
+        p3Vertex.x = qVertex.front().x + (0.5 * length);
+        p3Vertex.y = qVertex.front().y + (-0.5 * width);
+        p4Vertex.x = qVertex.front().x + (-0.5 * length);
+        p4Vertex.y = qVertex.front().y + (-0.5 * width);
+        pVertex[0] = p1Vertex;
+        pVertex[1] = p2Vertex;
+        pVertex[2] = p3Vertex;
+        pVertex[3] = p4Vertex;
+    } else if (qVertex.size() == 4) // exactly 4 vertices
     {
-        p.resize(4);
-        vertex p1{}, p2{}, p3{}, p4{};
-        p1.x = q[0].x + (-0.5 * length);
-        p1.y = q[0].y + (0.5 * width);
-        p2.x = q[1].x + (0.5 * length);
-        p2.y = q[1].y + (0.5 * width);
-        p3.x = q[2].x + (0.5 * length);
-        p3.y = q[2].y + (-0.5 * width);
-        p4.x = q[3].x + (-0.5 * length);
-        p4.y = q[3].y + (-0.5 * width);
-        p[0] = p1;
-        p[1] = p2;
-        p[2] = p3;
-        p[3] = p4;
-    } else if (q.size() == 6) // exactly six vertices
+        pVertex.resize(4);
+        vertex p1Vertex{}, p2Vertex{}, p3Vertex{}, p4Vertex{};
+        p1Vertex.x = qVertex[0].x + (-0.5 * length);
+        p1Vertex.y = qVertex[0].y + (0.5 * width);
+        p2Vertex.x = qVertex[1].x + (0.5 * length);
+        p2Vertex.y = qVertex[1].y + (0.5 * width);
+        p3Vertex.x = qVertex[2].x + (0.5 * length);
+        p3Vertex.y = qVertex[2].y + (-0.5 * width);
+        p4Vertex.x = qVertex[3].x + (-0.5 * length);
+        p4Vertex.y = qVertex[3].y + (-0.5 * width);
+        pVertex[0] = p1Vertex;
+        pVertex[1] = p2Vertex;
+        pVertex[2] = p3Vertex;
+        pVertex[3] = p4Vertex;
+    } else if (qVertex.size() == 6) // exactly six vertices
     {
-        p.resize(6);
-        // add the dimensions to all six vertices q (Theorem 1)
-        vertex p1{}, p2{}, p3{}, p4{}, p5{}, p6{};
-        p1.x = q[0].x + (-0.5 * length);
-        p1.y = q[0].y + (0.5 * width);
-        p2.x = q[1].x + (-0.5 * length);
-        p2.y = q[1].y + (0.5 * width);
-        p3.x = q[2].x + (0.5 * length);
-        p3.y = q[2].y + (0.5 * width);
-        p4.x = q[3].x + (0.5 * length);
-        p4.y = q[3].y + (-0.5 * width);
-        p5.x = q[4].x + (-0.5 * length);
-        p5.y = q[4].y + (-0.5 * width);
-        p6.x = q[5].x + (-0.5 * length);
-        p6.y = q[5].y + (-0.5 * width);
-        p[0] = p1;
-        p[1] = p2;
-        p[2] = p3;
-        p[3] = p4;
-        p[4] = p5;
-        p[5] = p6;
-    } else if (!q.empty()) // arbitrary polygon
+        pVertex.resize(6);
+        // add the dimensions to all six vertices qVertex (Theorem 1)
+        vertex p1Vertex{}, p2Vertex{}, p3Vertex{}, p4Vertex{}, p5Vertex{}, p6Vertex{};
+        p1Vertex.x = qVertex[0].x + (-0.5 * length);
+        p1Vertex.y = qVertex[0].y + (0.5 * width);
+        p2Vertex.x = qVertex[1].x + (-0.5 * length);
+        p2Vertex.y = qVertex[1].y + (0.5 * width);
+        p3Vertex.x = qVertex[2].x + (0.5 * length);
+        p3Vertex.y = qVertex[2].y + (0.5 * width);
+        p4Vertex.x = qVertex[3].x + (0.5 * length);
+        p4Vertex.y = qVertex[3].y + (-0.5 * width);
+        p5Vertex.x = qVertex[4].x + (-0.5 * length);
+        p5Vertex.y = qVertex[4].y + (-0.5 * width);
+        p6Vertex.x = qVertex[5].x + (-0.5 * length);
+        p6Vertex.y = qVertex[5].y + (-0.5 * width);
+        pVertex[0] = p1Vertex;
+        pVertex[1] = p2Vertex;
+        pVertex[2] = p3Vertex;
+        pVertex[3] = p4Vertex;
+        pVertex[4] = p5Vertex;
+        pVertex[5] = p6Vertex;
+    } else if (!qVertex.empty()) // arbitrary polygon
     {
-        // add the dimensions to all vertices q:
+        // add the dimensions to all vertices qVertex:
         // (left up, right up, left down, right down)
-        std::vector<vertex> p_LU = q;
-        std::vector<vertex> p_RU = q;
-        std::vector<vertex> p_LD = q;
-        std::vector<vertex> p_RD = q;
-        std::vector<vertex> p_all(q.size() * 4);
-        for (size_t i = 0; i < q.size(); i++) {
+        std::vector<vertex> p_LU = qVertex;
+        std::vector<vertex> p_RU = qVertex;
+        std::vector<vertex> p_LD = qVertex;
+        std::vector<vertex> p_RD = qVertex;
+        std::vector<vertex> p_all(qVertex.size() * 4);
+        for (size_t i = 0; i < qVertex.size(); i++) {
             p_LU[i].x -= 0.5 * length;
             p_LU[i].y += 0.5 * width;
 
@@ -98,19 +98,19 @@ std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex
             p_RD[i].y -= 0.5 * width;
         }
         size_t idx = 0;
-        for (size_t i = 0; i < q.size(); i++) {
+        for (size_t i = 0; i < qVertex.size(); i++) {
             p_all[idx] = p_LU[i];
             idx++;
         }
-        for (size_t i = 0; i < q.size(); i++) {
+        for (size_t i = 0; i < qVertex.size(); i++) {
             p_all[idx] = p_RU[i];
             idx++;
         }
-        for (size_t i = 0; i < q.size(); i++) {
+        for (size_t i = 0; i < qVertex.size(); i++) {
             p_all[idx] = p_LD[i];
             idx++;
         }
-        for (size_t i = 0; i < q.size(); i++) {
+        for (size_t i = 0; i < qVertex.size(); i++) {
             p_all[idx] = p_RD[i];
             idx++;
         }
@@ -118,23 +118,23 @@ std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex
         // Construct polygon
         polygon_type polygon;
         polygon.outer().resize(p_all.size() + 1);
-        for (size_t m = 0; m < p_all.size(); m++) {
-            polygon.outer()[m] = point_type{p_all[m].x, p_all[m].y};
-        }
+        for (size_t j{0}; j < p_all.size(); j++)
+            polygon.outer()[j] = point_type{p_all[j].x, p_all[j].y};
+
         polygon.outer().back() = point_type{p_all[0].x, p_all[0].y}; // close polygon
 
         polygon_type hull;
         boost::geometry::convex_hull(polygon, hull);
 
         std::vector<point_type> const &points = hull.outer();
-        p.resize(points.size());
-        for (std::vector<point_type>::size_type i = 0; i < points.size(); ++i) {
-            p[i] = vertex{double(get<0>(points[i])), double(get<1>(points[i]))};
-        }
+        pVertex.resize(points.size());
+        for (std::vector<point_type>::size_type i = 0; i < points.size(); ++i)
+            pVertex[i] = vertex{double(get<0>(points[i])), double(get<1>(points[i]))};
+
     } else {
         throw std::runtime_error("Input vector is not a 2D row of vertices.");
     }
-    return p;
+    return pVertex;
 }
 
 std::vector<vertex> geometric_operations::rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
@@ -176,14 +176,14 @@ std::vector<double> geometric_operations::computeOrientationFromPolyline(std::ve
 std::vector<double> geometric_operations::computePathLengthFromPolyline(const std::vector<vertex> &polyline) {
     std::vector<double> distance(polyline.size(), 0.0);
     for (size_t idx{1}; idx < polyline.size(); ++idx) {
-        double x{polyline[idx].x - polyline[idx - 1].x};
-        double y{polyline[idx].y - polyline[idx - 1].y};
-        distance[idx] = distance[idx - 1] + std::sqrt((x * x + y * y));
+        double xDistance{polyline[idx].x - polyline[idx - 1].x};
+        double yDistance{polyline[idx].y - polyline[idx - 1].y};
+        distance[idx] = distance[idx - 1] + std::sqrt((xDistance * xDistance + yDistance * yDistance));
     }
     return distance;
 }
 
-double interpolate(double x, const std::vector<double> &polyline1, const std::vector<double> &polyline2) {
+double geometric_operations::interpolate(double xDistance, const std::vector<double> &polyline1, const std::vector<double> &polyline2) {
     // taken from https://bulldozer00.blog/2016/05/10/linear-interpolation-in-c/
 
     // Ensure that no 2 adjacent x values are equal,
@@ -198,13 +198,13 @@ double interpolate(double x, const std::vector<double> &polyline1, const std::ve
         }
     }
 
-    // Define a lambda that returns true if the x value
-    // of a point pair is < the caller's x value
-    auto lessThan = [](const double value, double x) { return value < x; };
+    // Define a lambda that returns true if the xDistance value
+    // of a point pair is < the caller's xDistance value
+    auto lessThan = [](const double value, double xDistance) { return value < xDistance; };
 
-    // Find the first table entry whose value is >= caller's x value
+    // Find the first table entry whose value is >= caller's xDistance value
     auto index = static_cast<size_t>(
-        std::distance(polyline1.begin(), std::lower_bound(polyline1.begin(), polyline1.end(), x, lessThan)));
+        std::distance(polyline1.begin(), std::lower_bound(polyline1.begin(), polyline1.end(), xDistance, lessThan)));
 
     // If the caller's X value is greater than the largest
     // X value in the table, we can't interpolate.
@@ -213,7 +213,7 @@ double interpolate(double x, const std::vector<double> &polyline1, const std::ve
 
     // If the caller's X value is less than the smallest X value in the table,
     // we can't interpolate.
-    if (index == 0 and x <= polyline1.front()) {
+    if (index == 0 and xDistance <= polyline1.front()) {
         return polyline2.front();
     }
 
@@ -226,9 +226,29 @@ double interpolate(double x, const std::vector<double> &polyline1, const std::ve
     double deltaY{upperY - lowerY};
     double deltaX{upperX - lowerX};
 
-    return lowerY + ((x - lowerX) / deltaX) * deltaY;
+    return lowerY + ((xDistance - lowerX) / deltaX) * deltaY;
 }
 
 double geometric_operations::subtractOrientations(double lhs, double rhs) {
     return std::fmod((lhs - rhs) + M_PI * 3, 2 * M_PI) - M_PI;
+}
+
+double geometric_operations::euclideanDistance2Dim(const vertex &pointA, const vertex &pointB) {
+    double xDifference{pointA.x - pointB.x};
+    double yDifference{pointA.y - pointB.y};
+    return sqrt(pow(xDifference, 2) + pow(yDifference, 2));
+}
+
+std::vector<double> geometric_operations::computeDistanceFromPolylines(const std::vector<vertex> &polylineA,
+                                                                       const std::vector<vertex> &polylineB) {
+    if (polylineA.size() < 2 or polylineB.size() < 2 or polylineA.size() != polylineB.size())
+        throw std::logic_error("geometric_operations computeOrientationFromPolyline: "
+                               "Cannot create distance from polyline of length < 2 or of polylines with different size");
+    std::vector<double> width;
+    width.reserve(polylineA.size());
+
+    for (size_t idx{0}; idx < polylineA.size() - 1; ++idx)
+        width.push_back(euclideanDistance2Dim(polylineA[idx], polylineB[idx]));
+
+    return width;
 }

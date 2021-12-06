@@ -391,6 +391,22 @@ class Lanelet {
     const std::vector<double> &getPathLength();
 
     /**
+     * Computes list of distance/width values along vertices of left and right border
+     * or returns already computed values.
+     *
+     * @return List of width values.
+     */
+    const std::vector<double> &getWidthAlongLanelet();
+
+    /**
+     * Computes width at longitudinal position along centerline.
+     *
+     * @param lonPosition Longitudinal position.
+     * @return Width [m].
+     */
+    double getWidth(double lonPosition) ;
+
+        /**
      * Finds closest index on center line given 2D vertex.
      *
      * @param positionX X-position of point of interest.
@@ -422,4 +438,5 @@ class Lanelet {
     LineMarking lineMarkingRight;              //**< Line marking of right boundary*/
     std::vector<double> orientation;           //**< orientation along center line */
     std::vector<double> pathLength;            //**< path length along center line */
+    std::vector<double> width;                 //**< width along center line */
 };
