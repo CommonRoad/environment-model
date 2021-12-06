@@ -8,8 +8,6 @@
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
 
-/* Slow leading vehicle ref */
-//2.78
 void InCongestionPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 2, 0, 0, 0, 10, 0);
     std::shared_ptr<State> stateZeroObstacleFive = std::make_shared<State>(1, 0, 6, 60, 0, 0, 0, 0, 0);

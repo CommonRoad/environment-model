@@ -11,7 +11,7 @@
 /**
  * Predicate for evaluating congestion
  */
-class InCongestionPredicate : public CommonRoadPredicate {
+class MakesUTurnPredicate : public CommonRoadPredicate {
   public:
     /* TODO boolean Evaluation with python params */
 

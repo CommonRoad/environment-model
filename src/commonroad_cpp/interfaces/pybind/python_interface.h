@@ -60,6 +60,8 @@ bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lo
 
 double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP);
 
+bool py_in_congestion_boolean_single_evaluation();
+
 PYBIND11_MODULE(cpp_env_model, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
     m.def("register_scenario", &py_registerScenario, "Add new scenario to C++ environment model", py::arg("scenarioId"),
@@ -112,7 +114,6 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("in_single_lane_boolean_evaluation", &py_boolean_single_evaluation<InSingleLanePredicate>,
           "Boolean evaluation of in single lane predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
-
     m.def("unnecessary_braking_boolean_evaluation", &py_boolean_single_evaluation<UnnecessaryBrakingPredicate>,
           "Boolean evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
@@ -120,6 +121,11 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("unnecessary_braking_robust_evaluation", &py_robust_single_evaluation<UnnecessaryBrakingPredicate>,
           "Robust evaluation of unnecessary braking predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
+
+    /* In Congestion Pred */
+    m.def("in_congestion_boolean_evaluation", &py_in_congestion_boolean_single_evaluation,
+          "Boolean evaluation of in congestion predicate")
+
     m.def("orientation_towards_boolean_evaluation", &py_boolean_evaluation<OrientationTowardsPredicate>,
           "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));

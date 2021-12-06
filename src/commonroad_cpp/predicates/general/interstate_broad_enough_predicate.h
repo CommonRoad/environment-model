@@ -7,11 +7,12 @@
 #pragma once
 
 #include "../commonroad_predicate.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 
 /**
- * Predicate for evaluating congestion
- */
-class InCongestionPredicate : public CommonRoadPredicate {
+ *  Evaluates if a interstate is broad enough to build a standard emergency lane
+*/
+class InterstateBroadEnoughPredicate : public CommonRoadPredicate {
   public:
     /* TODO boolean Evaluation with python params */
 
@@ -26,7 +27,7 @@ class InCongestionPredicate : public CommonRoadPredicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                           const std::shared_ptr<Obstacle> &obstacleP) override;
 
     /**
      * Robustness evaluation of predicate using objects.
@@ -39,7 +40,7 @@ class InCongestionPredicate : public CommonRoadPredicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                            const std::shared_ptr<Obstacle> &obstacleP) override;
 
     /**
      * Constraint evaluation of predicate using objects.
@@ -52,5 +53,9 @@ class InCongestionPredicate : public CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP={}) override;
-};
+                                    const std::shared_ptr<Obstacle> &obstacleP) override;
+
+    double roadWidth(const std::shared_ptr<Lanelet> &lanelet, double position);
+
+    std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet);
+}

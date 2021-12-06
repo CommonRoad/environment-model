@@ -47,7 +47,7 @@ class RoadNetwork {
         std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{},
         std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{});
 
-    RoadNetwork(RoadNetwork &&) noexcept;
+    std::shared_ptr<RoadNetwork> RoadNetwork(RoadNetwork &&) noexcept;
     ~RoadNetwork();
     RoadNetwork &operator=(RoadNetwork &&) noexcept;
 

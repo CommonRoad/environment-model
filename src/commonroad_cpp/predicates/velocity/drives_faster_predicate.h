@@ -4,17 +4,16 @@
 // Copyright (c) 2021 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
+
 #pragma once
 
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate for evaluating congestion
+ * Description of class
  */
-class InCongestionPredicate : public CommonRoadPredicate {
+class DrivesFasterPredicate : public CommonRoadPredicate {
   public:
-    /* TODO boolean Evaluation with python params */
-
     /**
      * Boolean evaluation of predicate using objects.
      *
@@ -26,7 +25,7 @@ class InCongestionPredicate : public CommonRoadPredicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                           const std::shared_ptr<Obstacle> &obstacleP) override;
 
     /**
      * Robustness evaluation of predicate using objects.
@@ -39,7 +38,7 @@ class InCongestionPredicate : public CommonRoadPredicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                            const std::shared_ptr<Obstacle> &obstacleP) override;
 
     /**
      * Constraint evaluation of predicate using objects.
@@ -52,5 +51,5 @@ class InCongestionPredicate : public CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                                    const std::shared_ptr<Obstacle> &obstacleP) override;
 };
