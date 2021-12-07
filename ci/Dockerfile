@@ -9,7 +9,7 @@ RUN apt-get update && \
         build-essential git pkg-config wget libomp-dev \
         gcovr doxygen graphviz cppcheck \
         libeigen3-dev libboost-all-dev uuid-dev \
-        libcgal-dev && \
+        libcgal-dev libspdlog-dev && \
     rm -rf /var/lib/apt/lists/*
 
 ARG CMAKE_VERSION=3.19.0
@@ -40,7 +40,7 @@ ENV PATH="$PATH:/usr/lib/llvm-${CLANG_FORMAT_VERSION}/bin/"
 ENV PATH="$PATH:/usr/lib/llvm-${CLANG_TIDY_VERSION}/bin/"
 
 
-ARG PYTHON_VERSION=3.8
+ARG PYTHON_VERSION=3.9
 RUN wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O /commonroad/anaconda.sh && \
     bash /commonroad/anaconda.sh -b && \
     rm /commonroad/anaconda.sh
@@ -53,24 +53,5 @@ RUN conda update conda && \
     conda create --name commonroad python=${PYTHON_VERSION}
 ENV CONDA_DEFAULT_ENV $commonroad
 
-RUN mkdir -p -m 0600 ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan gitlab.lrz.de >> ~/.ssh/known_hosts
+RUN mkdir dist && cd dist && mkdir lib && mkdir share && mkdir include
 
-RUN --mount=type=ssh \
-    git clone git@gitlab.lrz.de:cps/commonroad-drivability-checker.git && \
-    cd commonroad-drivability-checker && \
-    git checkout feature_cmake_export && \
-    git submodule update --init
-
-RUN mkdir dist && \
-    cd commonroad-drivability-checker && \
-    mkdir build-cpp && cd build-cpp && \
-    cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=RelWithDebInfo .. && \
-    cmake --build . && \
-    cmake --install . && \
-    cd .. && rm -rf build-cpp
-
-RUN /bin/bash -c "source activate commonroad"
-
-RUN cd commonroad-drivability-checker && \
-    python setup.py bdist_wheel && \
-    python setup.py install

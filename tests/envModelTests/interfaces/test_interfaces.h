@@ -1,13 +1,13 @@
 //
-// Created by sebastian on 26.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TEST_INPUT_H
-#define ENV_MODEL_TEST_INPUT_H
+#pragma once
 
 #include "utility_functions.h"
 #include <gtest/gtest.h>
 
 class InterfacesTest : public testing::Test {};
-
-#endif // ENV_MODEL_TEST_INPUT_H

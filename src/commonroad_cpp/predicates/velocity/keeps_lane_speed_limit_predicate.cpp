@@ -68,3 +68,4 @@ Constraint KeepsLaneSpeedLimitPredicate::constraintEvaluation(size_t timeStep, c
     // TODO add constraint mode
     throw std::runtime_error("KeepsLaneSpeedLimitPredicate does not support constraint evaluation!");
 }
+KeepsLaneSpeedLimitPredicate::KeepsLaneSpeedLimitPredicate() : CommonRoadPredicate(false) {}

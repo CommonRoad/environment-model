@@ -51,3 +51,5 @@ double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_p
 double InFrontOfPredicate::robustEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {
     return (lonPositionK - 0.5 * lengthK) - (lonPositionP + 0.5 * lengthP);
 }
+
+InFrontOfPredicate::InFrontOfPredicate() : CommonRoadPredicate(true) {}

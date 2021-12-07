@@ -8,8 +8,8 @@
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 
 void AtRedLeftTrafficLightPredicateTest::SetUp() {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
-    const auto &[obstacles, roadNetwork, timeStepSize] = CommandLine::getDataFromCommonRoad(pathToTestFile);
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
+    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -15.0, 0, 0, M_PI / 2, 0, 15.0, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 40.0, 2.5, 0, 0, 0, 0, 10, 0);

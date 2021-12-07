@@ -212,3 +212,15 @@ const std::vector<double> &Lanelet::getPathLength() {
         pathLength = geometric_operations::computePathLengthFromPolyline(centerVertices);
     return pathLength;
 }
+
+const std::vector<double> &Lanelet::getWidthAlongLanelet() {
+    if (width.empty())
+        width = geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder);
+    return width;
+}
+
+double Lanelet::getWidth(double lonPosition) {
+    if (width.empty())
+        width = geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder);
+    return geometric_operations::interpolate(lonPosition, pathLength, width);
+}

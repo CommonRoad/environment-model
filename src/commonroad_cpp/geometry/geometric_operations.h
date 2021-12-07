@@ -21,12 +21,12 @@ namespace geometric_operations {
 /**
  * Add the dimensions of the object (length and width) to the polygon vertices q in the object's coordinate frame.
  *
- * @param q Vertices for which the dimension should be adapted.
+ * @param qVertex Vertices for which the dimension should be adapted.
  * @param length Length to add.
  * @param width Width to add.
  * @return Vertices of polygon.
  */
-std::vector<vertex> addObjectDimensions(std::vector<vertex> q, double length, double width);
+std::vector<vertex> addObjectDimensions(std::vector<vertex> qVertex, double length, double width);
 
 /**
  * Rotate and translate the vertices from the special relative coordinates to the reference position and orientation
@@ -57,14 +57,33 @@ std::vector<double> computeOrientationFromPolyline(std::vector<vertex> polyline)
 std::vector<double> computePathLengthFromPolyline(const std::vector<vertex> &polyline);
 
 /**
+ * Computes Euclidean distance in 2D space.
+ *
+ * @param pointA First vertex.
+ * @param pointB Second vertex.
+ * @return Distance.
+ */
+double euclideanDistance2Dim(const vertex &pointA, const vertex &pointB);
+
+/**
+ * Computes distance between each vertex of two polylines. The polylines must be of same length.
+ *
+ * @param polylineA First polyline.
+ * @param polylineB Second polyline.
+ * @return Width along polylines.
+ */
+std::vector<double> computeDistanceFromPolylines(const std::vector<vertex> &polylineA,
+                                                 const std::vector<vertex> &polylineB);
+
+/**
  * Interpolates value based on two polylines.
  * @param value Position where to evaluate value.
- * @param x x-coordinates of data points. Must be in ascending order.
- * @param y y-coordinates of data points.
+ * @param xValues x-coordinates of data points. Must be in ascending order.
+ * @param yValues y-coordinates of data points.
  *
  * @return Interpolated value.
  */
-double interpolate(double value, const std::vector<double> &x, const std::vector<double> &y);
+double interpolate(double value, const std::vector<double> &xValues, const std::vector<double> &yValues);
 
 /**
  * Return the signed difference between angles lhs and rhs

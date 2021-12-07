@@ -8,7 +8,6 @@ from pathlib import Path
 from setuptools import Extension
 from setuptools.command.build_ext import build_ext
 from distutils.core import setup
-from distutils import log
 from distutils.version import LooseVersion
 
 
@@ -35,11 +34,6 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
-        if "CMAKE_PREFIX_PATH" not in os.environ:
-            log.log(log.WARN,
-                'WARNING: The CMAKE_PREFIX_PATH environment variable is not set!'
-                'Consider setting it to the DrivabilityChecker installation prefix.')
-
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
 
         # required for auto-detection of auxiliary "native" libs
@@ -48,9 +42,10 @@ class CMakeBuild(build_ext):
 
         cmake_args = ["-DPYTHON_EXECUTABLE={}".format(sys.executable),
                       "-DINSTALL_GTEST=OFF",
-                      "-DBUILD_TESTS=OFF",
-                      "-DBUILD_DOXYGEN=OFF",
-                      "-DBUILD_PYBIND=ON"]
+                      "-DENV_MODEL_BUILD_TESTS=OFF",
+                      "-DENV_MODEL_BUILD_DOXYGEN=OFF",
+                      "-DENV_MODEL_BUILD_PYBIND=ON",
+                      "-DENV_MODEL_BUILD_EXECUTABLE=OFF"]
 
         cfg = 'Debug' if self.debug else 'Release'
         config_arg = ['--config', cfg]
@@ -73,7 +68,6 @@ class CMakeBuild(build_ext):
         lib_python_dir = lib_dir / 'python'
         install_path = Path(self.get_ext_fullpath(ext.name))
         install_dir = install_path.parent
-
         for p in [dist_dir, build_dir, install_dir]:
             p.mkdir(parents=True, exist_ok=True)
 
@@ -103,7 +97,7 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     install_requires=[
-        'commonroad-io>=2021.1',
+        'commonroad-io>=2021.3',
     ],
     extras_require={
         'tests': ['numpy>=1.20.0',

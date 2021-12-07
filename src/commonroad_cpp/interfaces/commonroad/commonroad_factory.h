@@ -19,6 +19,11 @@
 class CommonRoadFactory {
   public:
     /**
+     * Virtual destructor (required for inheritance).
+     */
+    virtual ~CommonRoadFactory() {}
+
+    /**
      * Constructor for CommonRoadFactory.
      *
      * @param xmlDocument Pointer to loaded XML.
