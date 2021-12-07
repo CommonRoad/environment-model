@@ -7,7 +7,9 @@
 
 #pragma once
 
-#include "utility_functions.h"
 #include <gtest/gtest.h>
 
-class InterfacesTest : public testing::Test {};
+class PredicateManagerTest : public testing::Test {
+  protected:
+    void extractRelevantPredicatesHelper(int num_threads) const;
+};

@@ -1,14 +1,40 @@
-# road network and curvilinear coordinate system parameters
+# simulation parameters for predicate evaluation
 ###
 # .. code-block:: yaml
 #
-#    - num_chankins_corner_cutting: number of how often chankins algorithm should be applied
-#    - polyline_resampling_step: step size for polyline resampling
-#    - merging_length: maximum accumulated length of lanelets belonging to a lane
-road_network_param:
-  num_chankins_corner_cutting: 10
-  polyline_resampling_step: 0.5
-  merging_length: 10000
+#    - evaluation_mode: directory
+#    - ego_vehicle_id: ego vehicle ID
+#    - benchmark_id: CommonRoad solution file name
+#    - directories: directories in which CommonRoad scenarios are located
+#    - performance_measurement: activate/deactivate computation time measuring
+#    - operating_mode: specifies operating mode: either single_scenario, single_vehicle, directory, directory_single_vehicle
+#    - output_directory: path to output directory of file to generate
+#    - output_file_name: name and file type for to generate
+simulation_param:
+  evaluation_mode: directory
+  ego_vehicle_id: 0
+  benchmark_id: DEU_test_safe_distance
+  directories: [ "./tests/scenarios" ]
+  performance_measurement: true
+  operating_mode: boolean # one of boolean, constraint, robustness
+  output_directory: "src/commonroad_cpp/predicates"
+  output_file_name: "predicate_satisfaction.txt"
+
+# parameters for predicate evaluation
+###
+# .. code-block:: yaml
+#
+#    - predicate_category: lists with names of predicates belonging to group
+#    - relevant_predicate_sets: predicate categories which should be evaluated
+predicate_eval:
+  predicate_category:
+    intersection: ["in_intersection_main_area", "at_red_traffic_light", "at_red_straight_traffic_light",
+                   "at_red_left_traffic_light", "at_red_right_traffic_light", "stop_line_in_front"]
+    general: ["keeps_safe_distance_prec", "unnecessary_braking", "in_front_of", "in_same_lane",
+              "keeps_lane_speed_limit", "preserves_traffic_flow", "keeps_sign_min_speed_limit", "slow_leading_vehicle",
+              "orientation_towards", "lane_based_orientation_similar", "in_single_lane", "in_standstill",
+              "passes_stop_line"]
+  relevant_predicate_sets: [general]
 
 # Ego vehicle parameters
 ###
@@ -74,31 +100,3 @@ other_vehicles_param:
   t_react: 0.3 # for safe distance calculation of preceding vehicles
   dynamics_param: None  # TODO replace dynamics parameter with worst case behavior
 
-# Visualization parameters
-###
-#    - Parameters for plotting of profiles
-#    - Parameters for video creation
-visualization:
-  # Parameters for plotting of profiles
-  ###
-  # .. code-block:: yaml
-  #
-  #   - width: width of matplotlib figure
-  #   - line_width: line width of profiles
-  #   - font_size: font size of text within the plot
-  #   - axes_line_width: line width of the axes
-  #   - figure_type: type of figure which should be stored
-  plot:
-    width: 3.75
-    line_width: 0.75
-    font_size: 9
-    axes_line_width: 0.25
-    figure_type: eps
-
-  # Parameters for video creation
-  ###
-  # .. code-block:: yaml
-  #
-  #   - obstacle_label: activate/deactivate visualization of obstacle label (ID) in video
-  video:
-    obstacle_label: True

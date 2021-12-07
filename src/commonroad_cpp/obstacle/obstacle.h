@@ -384,7 +384,7 @@ class Obstacle {
      * @return curvilinear orientation of obstacle state
      */
     [[nodiscard]] double getCurvilinearOrientation(size_t timeStep,
-                                                   const std::shared_ptr<Lane> &refLane); // Todo create test case
+                                                   const std::shared_ptr<Lane> &refLane) const; // Todo create test case
 
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
@@ -401,7 +401,7 @@ class Obstacle {
      * @param timeStep Time step of interest.
      */
     void setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                          std::shared_ptr<size_t> idCounter, double fovFront); // TODO create test case
+                          const std::shared_ptr<size_t> &idCounter, double fovFront); // TODO create test case
 
     /**
      * Extracts first time step of trajectory
@@ -427,9 +427,9 @@ class Obstacle {
      * @param idCounter Starting ID for new lanes.
      * @return List of pointers to occupied lanes.
      */
-    std::vector<std::shared_ptr<Lane>> getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                        size_t timeStep,
-                                                        std::shared_ptr<size_t> idCounter); // TODO create test case
+    std::vector<std::shared_ptr<Lane>>
+    getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                     const std::shared_ptr<size_t> &idCounter); // TODO create test case
 
     /**
      * Getter for occupied lanes at a time step. Computes occupied lanes must be computed already.
@@ -449,9 +449,9 @@ class Obstacle {
      * @param idCounter Starting ID for new lanes.
      * @return List of pointers to lanes which are part of driving path.
      */
-    std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                           size_t timeStep,
-                                                           std::shared_ptr<size_t> idCounter); // TODO create test case
+    std::vector<std::shared_ptr<Lane>>
+    getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                        const std::shared_ptr<size_t> &idCounter); // TODO create test case
 
     /**
      * Getter for route.
@@ -510,9 +510,12 @@ class Obstacle {
      * @param roadNetwork Pointer to road network.
      * @param idCounter Starting ID for new lanes.
      */
-    void computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, std::shared_ptr<size_t> idCounter,
+    void computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<size_t> &idCounter,
                       bool considerHistory = false);
 
+    /**
+     * Converts all states to curvilinear representation.
+     */
     void setCurvilinearStates();
 
   private:
@@ -547,5 +550,5 @@ class Obstacle {
      *
      * @return Approximated field of view.
      */
-    double approximateFieldOfView();
+    double approximateFieldOfView() const;
 };

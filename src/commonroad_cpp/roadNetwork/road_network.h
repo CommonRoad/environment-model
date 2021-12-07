@@ -47,11 +47,33 @@ class RoadNetwork {
         std::vector<std::shared_ptr<TrafficLight>> lights = std::vector<std::shared_ptr<TrafficLight>>{},
         std::vector<std::shared_ptr<Intersection>> inters = std::vector<std::shared_ptr<Intersection>>{});
 
-    std::shared_ptr<RoadNetwork> RoadNetwork(RoadNetwork &&) noexcept;
+    /**
+     * Move assignment of road network.
+     */
+    RoadNetwork(RoadNetwork &&) noexcept;
+
+    /*
+     * Destructor of road network.
+     */
     ~RoadNetwork();
+
+    /**
+     * Move constructor of road network.
+     *
+     * @return Road network.
+     */
     RoadNetwork &operator=(RoadNetwork &&) noexcept;
 
+    /**
+     * Copy constructor of road network.
+     */
     RoadNetwork(const RoadNetwork &) = delete;
+
+    /**
+     * Copy assignment of road network.
+     *
+     * @return Road network.
+     */
     RoadNetwork &operator=(const RoadNetwork &) = delete;
 
     /**

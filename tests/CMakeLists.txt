@@ -28,7 +28,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/regulatory/test_at_red_left_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_straight_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_traffic_light_predicate.cpp
-        envModelTests/predicates/regulatory/test_at_stop_sign_predicate.cpp
         envModelTests/predicates/velocity/test_keeps_lane_speed_limit_predicate.cpp
         envModelTests/predicates/velocity/test_required_speed_predicate.cpp
         envModelTests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
@@ -38,12 +37,22 @@ set(ENV_MODEL_TEST_SRC_FILES
 
 
 # Create executable for test
-add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
+add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES} envModelTests/predicates/predicate_manager_test.cpp envModelTests/predicates/predicate_manager_test.h)
+
 target_compile_features(env_model_test
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
+
 set_property(TARGET env_model_test PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(env_model_test PRIVATE env_model gtest Boost::filesystem OpenMP::OpenMP_CXX)
+
+target_link_libraries(env_model_test
+    PRIVATE
+        env_model
+        gtest
+        Boost::filesystem
+        OpenMP::OpenMP_CXX
+        spdlog::spdlog
+    )
 
 include(GoogleTest)
 # queries the compiled executable for tests, this requires the executable to be runnable. if you are
@@ -56,7 +65,7 @@ gtest_discover_tests(
 
 # Code coverage
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    if (CodeCoverage MATCHES ON)
+    if (ENV_MODEL_BUILD_CODE_COVERAGE)
         add_executable(env_model_test_coverage ${ENV_MODEL_SRC_FILES} ${ENV_MODEL_TEST_SRC_FILES})
         target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
         target_link_libraries(env_model_test_coverage PUBLIC
@@ -66,7 +75,9 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
                 Boost::filesystem
                 Boost::program_options
                 OpenMP::OpenMP_CXX
-                Eigen3::Eigen)
+                Eigen3::Eigen
+                spdlog::spdlog
+            )
 
         include(CodeCoverage)
         append_coverage_compiler_flags()

@@ -47,9 +47,9 @@ TEST_F(RoadNetworkTest, FindLaneletById) {
 }
 
 TEST_F(RoadNetworkTest, AddLanes) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_TrafficLightTest-1_1_T-1.xml"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
-        CommandLine::getDataFromCommonRoad(pathToTestFile);
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     auto lanes{lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, globalIdRef,

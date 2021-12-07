@@ -5,9 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-option(BUILD_DOXYGEN "Build doxygen" OFF)
-option(BUILD_TESTS "Build tests" ON)
-option(BUILD_PYBIND "Build python interface" OFF)
+option(ENV_MODEL_BUILD_DOXYGEN "Build doxygen" OFF)
+option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
+option(ENV_MODEL_BUILD_PYBIND "Build python interface" OFF)
+option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" OFF)
+option(ENV_MODEL_BUILD_CODE_COVERAGE "Build code coverage" OFF)
+option(ENV_MODEL_BUILD_EXECUTABLE "Build executable" ON)
 
 # Appends dictionary where other cmake files are stored which install required Software
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
@@ -27,19 +30,12 @@ if(NOT CMAKE_BUILD_TYPE)
             STRING "Choose the type of build." FORCE)
 endif()
 
-# Activate code coverage
-if (CODE_COVERAGE)
-    option(CodeCoverage "CodeCoverage" ON)
-endif()
-
-
 add_subdirectory(external)
-
-find_package(DrivabilityChecker REQUIRED CONFIG)
 
 # Include Eigen3, Boost filesystem, and OpenMP
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)
+find_package(spdlog REQUIRED)
 find_package(OpenMP)
 if(NOT OpenMP_CXX_FOUND)
     message(SEND_ERROR "Can't find the OpenMP package")
@@ -55,15 +51,15 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_subdirectory(src)
 
 ## Doxygen
-if(BUILD_DOXYGEN)
+if(ENV_MODEL_BUILD_DOXYGEN)
     include(doxygen)
-endif(BUILD_DOXYGEN)
+endif(ENV_MODEL_BUILD_DOXYGEN)
 
 # add unit testing
-if(BUILD_TESTS)
+if(ENV_MODEL_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
-endif(BUILD_TESTS)
+endif(ENV_MODEL_BUILD_TESTS)
 
 # Provides configure_package_config_file
 include(CMakePackageConfigHelpers)
@@ -79,11 +75,11 @@ install(TARGETS env_model
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-if(BUILD_PYBIND)
+if(ENV_MODEL_BUILD_PYBIND)
     install(TARGETS cpp_env_model env_model
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/python
     )
-endif(BUILD_PYBIND)
+endif(ENV_MODEL_BUILD_PYBIND)
 
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"

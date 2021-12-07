@@ -9,14 +9,12 @@
 #include <tuple>
 #include <vector>
 
+#include "../commonroad/xml_reader.h"
 #include <boost/program_options.hpp>
-//#include "commonroad_cpp/roadNetwork/road_network.h"
-
-#include "commonroad_cpp/interfaces/commonroad/xml_reader.h"
 
 class RoadNetwork;
 
-namespace CommandLine {
+namespace InputUtils {
 
 /**
  * Reads the arguments provided via command line.
@@ -36,4 +34,26 @@ int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::st
 std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
 getDataFromCommonRoad(const std::string &xmlFilePath);
 
-} // namespace CommandLine
+/**
+ * Initializes CommonRoad evaluation.
+ * @param path Path to config file.
+ */
+SimulationParameters initializeSimulationParameters(const std::string &path);
+
+/**
+ * Converts given string to evaluation mode enum.
+ *
+ * @param evaluationMode String containing evaluation mode (loaded from config file)
+ * @return EvaluationMode enum.
+ */
+EvaluationMode stringToEvaluationMode(const std::string &evaluationMode);
+
+/**
+ * Extracts all XML-files within directory.
+ *
+ * @param dir Directory to search in.
+ * @return List of paths to XML files within directory.
+ */
+std::vector<std::string> findRelevantScenarioFileNames(const std::string &dir);
+
+} // namespace InputUtils

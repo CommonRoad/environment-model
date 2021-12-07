@@ -1,31 +1,50 @@
 # CommonRoad C++ Environment Model
 
-**Note: Still in development!!!**   
-Not all functionalities are finished and well tested.  
-When you add or change something always check whether a test case already exists. 
-If no test case exists, please create one.   
-Similarly, when you see a missing docstring for a class/function please add it.  
-Please create always merge requests and assign them to Sebastian Maierhofer.  
-For the coding style see [.clang-format](.clang-format). 
-
 The CommonRoad C++ Environment Model provides classes and methods to represent the CommonRoad format in C++17.  
-It contains an interface to Python and predicates for evaluating traffic rules (both not finished yet).  
+It contains an interface to Python and predicates for evaluating traffic rules.  
 Note that the repository does not contain runtime verification algorithms and code for evaluating traffic rules.
 
 
-## Dependencies:
+## Dependencies
+
+### CommonRoad dependencies
+
 - [commonroad-io](https://gitlab.lrz.de/cps/commonroad-io)
-- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker) (branch feature_cmake_export; follow C++ installation instructions under doc/installation_cpp.rst)
-- **cmake > 3.16**
+- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/cps/commonroad-drivability-checker) 
+Note that the drivability-checker is installed automatically. Therefore, you need access to the linked repository. 
+Additionally, an ssh key in your Gitlab account is required. 
+See [here](https://docs.gitlab.com/ee/ssh/) for instructions to add an ssh key.
+
+### Common dependencies
+
+These dependencies should be available as a system package.
+
+- cmake > 3.16
+- Boost
+- Eigen3
+- spdlog
+- OpenMP
+- Doxygen (for building the documentation)
+- Graphviz (for building the documentation)
+
+#### Debian/Ubuntu
+
+You require at least Ubuntu 20.04.
+On Debian/Ubuntu, you'll most likely need to install the following packages:  
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libcgal-dev libspdlog-dev`
+
+For building the documentation, you'll need to install `doxygen` and `graphviz`.
+
+For test coverage, you'll need to install `gcovr`.
 
 ## Build and Compile
 
 Tested with
-- CMake 3.17.5
-- GCC 7.5.0
-- Clang 10
+- CMake 3.19/20
+- GCC 9.3.0
+- Clang 10/12
 
-For development the IDE [Clion](https://www.jetbrains.com/clion/?gclid=EAIaIQobChMI3-KEq9fk8AIVB853Ch2JdgNFEAAYASAAEgIChfD_BwE&gclsrc=aw.ds) is recommended.  
+For development the IDE [CLion](https://www.jetbrains.com/clion) is recommended.
 You can also take a look at the Docker container, or the .gitlab-ci.yml file to see how the software can be installed. Both are located in the *ci* directory.
   
 ### C++
@@ -47,8 +66,7 @@ Consider specifying the following options:
  * Optionally specify an installation prefix where you want to install the Environment Model
    using `-DCMAKE_INSTALL_PREFIX`.
  * The recommended approach is to use a user-writable folder as the installation prefix.
-   It is totally fine to use the same installation prefix for both the Drivability Checker and
-   the Environment Model.
+   It is totally fine to use the same installation prefix for several tools.
  * Replace the build type if necessary
 
 Example invocation:

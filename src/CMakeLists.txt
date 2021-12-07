@@ -23,6 +23,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
         commonroad_cpp/interfaces/standalone/command_line_input.cpp
         commonroad_cpp/world.cpp
+        commonroad_cpp/predicates/predicate_manager.cpp
         commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
@@ -61,15 +62,18 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.cpp
         commonroad_cpp/predicates/position/in_intersection_main_area_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
-        commonroad_cpp/predicates/predicate_parameters.cpp
+        commonroad_cpp/predicates/predicate_config.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
         )
 
 # Create environment model library
+if(ENVMODEL_BUILD_SHARED_LIBS)
 add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
+else()
+    add_library(env_model STATIC ${ENV_MODEL_SRC_FILES})
+endif()
 
 target_compile_features(env_model
         PUBLIC cxx_lambdas cxx_auto_type
@@ -89,6 +93,7 @@ target_link_libraries(env_model
     PUBLIC
         Eigen3::Eigen
         DrivabilityChecker::crccosy
+        yaml-cpp
     )
 
 target_link_libraries(env_model
@@ -97,21 +102,25 @@ target_link_libraries(env_model
         Boost::filesystem
         OpenMP::OpenMP_CXX
         pugixml-static
+        spdlog::spdlog
     )
 
+if(ENV_MODEL_BUILD_EXECUTABLE)
+    # Create environment model test node
+    add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
 
-# Create environment model test node
-add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
-
-target_link_libraries(env_model_example_node
-    PRIVATE
-        env_model
-        Boost::program_options
-    )
-
+    target_link_libraries(env_model_example_node
+        PRIVATE
+            env_model
+            Boost::program_options
+            spdlog::spdlog
+            yaml-cpp
+            pthread dl
+        )
+endif(ENV_MODEL_BUILD_EXECUTABLE)
 
 # add pybind module
-if(BUILD_PYBIND)
+if(ENV_MODEL_BUILD_PYBIND)
     pybind11_add_module(cpp_env_model
             commonroad_cpp/interfaces/pybind/python_interface.cpp
             commonroad_cpp/interfaces/pybind/python_interface.h
@@ -130,19 +139,24 @@ if(BUILD_PYBIND)
     # during installation.
 
     set_property(TARGET cpp_env_model PROPERTY INSTALL_RPATH "$ORIGIN")
+    set_property(TARGET yaml-cpp PROPERTY INSTALL_RPATH "$ORIGIN")
 
-endif(BUILD_PYBIND)
+endif(ENV_MODEL_BUILD_PYBIND)
 
 # this adds many warnings to the build. They usually help to find some bugs
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    target_compile_options(env_model_example_node PRIVATE -Wall -Wextra -Wconversion -pedantic
-            -Wfatal-errors)
+    if(ENV_MODEL_BUILD_EXECUTABLE)
+        target_compile_options(env_model_example_node PRIVATE -Wall -Wextra -Wconversion -pedantic
+                -Wfatal-errors)
+    endif(ENV_MODEL_BUILD_EXECUTABLE)
     target_compile_options(env_model PRIVATE -Wall -Wextra -Wconversion
             -pedantic -Wfatal-errors)
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(env_model PRIVATE /W3 /WX)
-    target_compile_options(HW01Main PRIVATE /W3 /WX)
+    if(ENV_MODEL_BUILD_EXECUTABLE)
+        target_compile_options(env_model_example_node PRIVATE /W3 /WX)
+    endif(ENV_MODEL_BUILD_EXECUTABLE)
 endif()
 
 
