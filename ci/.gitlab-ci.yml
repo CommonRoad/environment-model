@@ -17,6 +17,13 @@ before_script:
   - pip install -r ./requirements.txt
   - pip install -r ./test_requirements.txt
 
+.copy-cpp-dist: &copy-cpp-dist
+  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
+  - mv ./dist/lib/libyaml-cpp.so.0.7 /commonroad/dist/lib/
+  - mv ./dist/lib/libyaml-cpp.so /commonroad/dist/lib/
+  - mv ./dist/lib/libyaml-cpp.so.0.7.0 /commonroad/dist/lib/
+  - mv ./dist/include/yaml-cpp/ /commonroad/dist/include/
+
 ### static test ###
 clang-format:
   stage: static-test
@@ -92,8 +99,6 @@ build-test:
     - mkdir build && cd build
     - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
     - make env_model_test -j4
-  after_script:
-    - mv /commonroad/dist/ ./
   needs: []
   artifacts:
     paths:
@@ -141,6 +146,8 @@ build-test-python:
 ### coverage ###
 coverage-analyze:
   stage: coverage
+  before_script:
+    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
@@ -162,6 +169,8 @@ coverage-analyze:
 
 coverage-report:
   stage: coverage
+  before_script:
+    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
