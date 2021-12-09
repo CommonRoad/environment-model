@@ -41,3 +41,4 @@ double InCongestionPredicate::robustEvaluation(size_t timeStep, const std::share
                                                const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("In Congestion Predicate does not support robust evaluation!");
 }
+InCongestionPredicate::InCongestionPredicate() : CommonRoadPredicate(false) {}
