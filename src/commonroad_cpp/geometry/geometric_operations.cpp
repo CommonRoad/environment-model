@@ -250,7 +250,7 @@ std::vector<double> geometric_operations::computeDistanceFromPolylines(const std
     std::vector<double> width;
     width.reserve(polylineA.size());
 
-    for (size_t idx{0}; idx < polylineA.size() - 1; ++idx)
+    for (size_t idx{0}; idx < polylineA.size(); ++idx)
         width.push_back(euclideanDistance2Dim(polylineA[idx], polylineB[idx]));
 
     return width;
