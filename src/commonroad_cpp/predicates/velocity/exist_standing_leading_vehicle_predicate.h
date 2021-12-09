@@ -14,6 +14,12 @@
  */
 class ExistStandingLeadingVehiclePredicate : public CommonRoadPredicate {
   public:
+
+    /**
+     * Constructor for ExistStandingLeadingVehiclePredicate
+     */
+    ExistStandingLeadingVehiclePredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

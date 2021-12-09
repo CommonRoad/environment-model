@@ -13,6 +13,12 @@
  */
 class LeftOfPredicate : public CommonRoadPredicate {
   public:
+
+    /**
+     * Constructor for LeftOfPredicate
+     */
+    LeftOfPredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

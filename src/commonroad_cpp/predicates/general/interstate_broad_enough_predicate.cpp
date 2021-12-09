@@ -60,3 +60,5 @@ InterstateBroadEnoughPredicate::adjacentLanelets(const std::shared_ptr<Lanelet> 
 
     return adj_lanelets;
 }
+
+InterstateBroadEnoughPredicate::InterstateBroadEnoughPredicate(): CommonRoadPredicate(false) {}

@@ -13,7 +13,6 @@
  */
 class InSlowMovingTrafficPredicate : public CommonRoadPredicate {
   public:
-    /* TODO boolean Evaluation with python params */
     /**
      * Constructor for InSlowMovingTrafficPredicate.
      */

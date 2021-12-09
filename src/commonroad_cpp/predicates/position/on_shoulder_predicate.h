@@ -14,6 +14,12 @@
  */
 class OnShoulderPredicate : public CommonRoadPredicate {
   public:
+
+    /**
+     * Constructor for OnShoulderPredicate
+     */
+    OnShoulderPredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

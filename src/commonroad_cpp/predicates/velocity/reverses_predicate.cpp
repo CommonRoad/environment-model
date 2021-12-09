@@ -28,3 +28,5 @@ double ReversesPredicate::robustEvaluation(size_t timeStep, const std::shared_pt
                                            const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("Reverses Predicate does not support robust evaluation!");
 }
+
+ReversesPredicate::ReversesPredicate(): CommonRoadPredicate(true) {}

@@ -12,6 +12,12 @@
  */
 class ReversesPredicate : public CommonRoadPredicate {
   public:
+
+    /**
+     * Constructor for ReversesPredicate
+     */
+     ReversesPredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

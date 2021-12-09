@@ -41,3 +41,5 @@ Constraint LeftOfPredicate::constraintEvaluation(size_t timeStep, const std::sha
                                                  const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("PassesStopLinePredicate does not support constraint evaluation!");
 }
+
+LeftOfPredicate::LeftOfPredicate():CommonRoadPredicate(false) {}

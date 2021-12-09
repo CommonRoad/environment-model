@@ -15,7 +15,7 @@ class InCongestionPredicate : public CommonRoadPredicate {
   public:
     /* TODO boolean Evaluation with python params */
     /**
-     * Constructor for SafeDistancePredicate.
+     * Constructor for InCongestionPredicate
      */
     InCongestionPredicate();
 

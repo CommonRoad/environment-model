@@ -14,6 +14,12 @@
  */
 class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
   public:
+
+    /**
+     * Constructor for LeftOfBroadLaneMarkingPredicate
+     */
+    LeftOfBroadLaneMarkingPredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

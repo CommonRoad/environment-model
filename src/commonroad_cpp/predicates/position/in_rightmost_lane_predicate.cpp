@@ -40,3 +40,5 @@ Constraint InRightmostLanePredicate::constraintEvaluation(size_t timeStep, const
                                                           const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("InLeftmostLanePredicate does not support constraint evaluation!");
 }
+
+InRightmostLanePredicate::InRightmostLanePredicate():CommonRoadPredicate(false) {}

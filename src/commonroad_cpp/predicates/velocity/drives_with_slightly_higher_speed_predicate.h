@@ -14,6 +14,12 @@
  */
 class DrivesWithSlightlyHigherSpeedPredicate : public CommonRoadPredicate {
   public:
+
+   /**
+    * Constructor for DrivesWithSlightlyHigherSpeedPredicate
+    */
+    DrivesWithSlightlyHigherSpeedPredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

@@ -30,3 +30,4 @@ double DrivesWithSlightlyHigherSpeedPredicate::robustEvaluation(size_t timeStep,
                                                                 const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("Drives With Slightly Higher Speed Predicate does not support robust evaluation!");
 }
+DrivesWithSlightlyHigherSpeedPredicate::DrivesWithSlightlyHigherSpeedPredicate():CommonRoadPredicate(false) {}

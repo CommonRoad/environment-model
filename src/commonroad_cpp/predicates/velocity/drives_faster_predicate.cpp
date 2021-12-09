@@ -30,3 +30,5 @@ double DrivesFasterPredicate::robustEvaluation(size_t timeStep, const std::share
                                                const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("Drives Faster Predicate does not support robust evaluation!");
 }
+
+DrivesFasterPredicate::DrivesFasterPredicate():CommonRoadPredicate(false) {}
