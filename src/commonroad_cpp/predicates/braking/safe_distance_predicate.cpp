@@ -88,5 +88,3 @@ double SafeDistancePredicate::robustEvaluation(double lonPosK, double lonPosP, d
     else
         return (deltaS - dSafe);
 }
-
-SafeDistancePredicate::SafeDistancePredicate() : CommonRoadPredicate(true) {}

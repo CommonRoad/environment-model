@@ -15,11 +15,6 @@
 class InIntersectionMainAreaPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for InIntersectionMainAreaPredicate.
-     */
-    InIntersectionMainAreaPredicate();
-
-    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.

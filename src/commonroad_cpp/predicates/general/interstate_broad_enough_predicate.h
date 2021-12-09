@@ -58,4 +58,4 @@ class InterstateBroadEnoughPredicate : public CommonRoadPredicate {
     double roadWidth(const std::shared_ptr<Lanelet> &lanelet, double position);
 
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet);
-}
+};

@@ -28,4 +28,3 @@ Constraint AtRedRightTrafficLightPredicate::constraintEvaluation(size_t timeStep
                                                                  const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("AtRedRightTrafficLight does not support constraint evaluation!");
 }
-AtRedRightTrafficLightPredicate::AtRedRightTrafficLightPredicate() : CommonRoadPredicate(false) {}

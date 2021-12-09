@@ -36,4 +36,3 @@ Constraint PreservesTrafficFlowPredicate::constraintEvaluation(size_t timeStep, 
     // TODO add constraint mode
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support constraint evaluation!");
 }
-PreservesTrafficFlowPredicate::PreservesTrafficFlowPredicate() : CommonRoadPredicate(false) {}

@@ -1,7 +1,7 @@
 //
-// Created by Evald Nexhipi.
+// Created by Sebastian Maierhofer.
 // Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
 
@@ -10,9 +10,9 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *
+ * Evaluates whether the obstacle occupies a lanelet which references a stop sign.
  */
-class DrivesRightmostPredicate : public CommonRoadPredicate {
+class AtStopSignPredicate : public CommonRoadPredicate {
   public:
     /**
      * Boolean evaluation of predicate using objects.
@@ -25,7 +25,7 @@ class DrivesRightmostPredicate : public CommonRoadPredicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                           const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Constraint evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -38,7 +38,7 @@ class DrivesRightmostPredicate : public CommonRoadPredicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                            const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Robustness evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -51,14 +51,5 @@ class DrivesRightmostPredicate : public CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP={}) override;
-
-    std::shared_ptr<Obstacle> vehicleDirectlyRight(size_t timeStep, const std::shared_ptr<World> &world,
-                                                  const std::shared_ptr<Obstacle> &obstacleK);
-
-    std::vector<std::shared_ptr<Obstacle>> vehiclesRight(size_t timeStep, const std::shared_ptr<World> &world,
-                                                        const std::shared_ptr<Obstacle> &obstacleK);
-
-    std::vector<std::shared_ptr<Obstacle>> vehiclesAdjacent(size_t timeStep, const std::shared_ptr<World> &world,
-                                                            const std::shared_ptr<Obstacle> &obstacleK);
+                                    const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 };

@@ -15,11 +15,6 @@
 class SafeDistancePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for SafeDistancePredicate.
-     */
-    SafeDistancePredicate();
-
-    /**
      * Safe distance between the kth and the pth obstacle using objects.
      *
      * @param velocityK Velocity of the kth obstacle [m/s].

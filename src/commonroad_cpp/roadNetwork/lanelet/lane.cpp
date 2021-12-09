@@ -39,9 +39,10 @@ const CurvilinearCoordinateSystem &Lane::getCurvilinearCoordinateSystem() {
 
 const std::set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
 
-double Lane::getWidth() {
+double Lane::getWidth(double lonPosition) {
     double width = 0.0;
     for (auto &lanelet : containedLanelets){
-       width += lanelet.
+       width += lanelet->getWidth(lonPosition);
     }
+    return width;
 }

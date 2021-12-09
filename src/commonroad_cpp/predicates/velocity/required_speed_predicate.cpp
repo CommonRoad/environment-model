@@ -61,4 +61,3 @@ Constraint RequiredSpeedPredicate::constraintEvaluation(size_t timeStep, const s
     // TODO add constraint mode
     throw std::runtime_error("RequiredSpeedPredicate does not support constraint evaluation!");
 }
-RequiredSpeedPredicate::RequiredSpeedPredicate() : CommonRoadPredicate(false) {}

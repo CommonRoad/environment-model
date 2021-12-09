@@ -15,11 +15,6 @@
 class InFrontOfPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for in front of predicate.
-     */
-    InFrontOfPredicate();
-
-    /**
      * Boolean evaluation of predicate using parameter values.
      *
      * @param lonPositionK Longitudinal position of the kth obstacle [m].

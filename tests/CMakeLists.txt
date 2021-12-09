@@ -21,6 +21,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/general/test_orientation_towards_predicate.cpp
         envModelTests/predicates/general/test_lane_based_orientation_similar_predicate.cpp
         envModelTests/predicates/general/test_in_congestion_predicate.cpp
+        envModelTests/predicates/general/test_in_slow_moving_traffic_predicate.cpp
         envModelTests/predicates/position/test_in_intersection_main_area_predicate.cpp
         envModelTests/predicates/position/test_stop_line_in_front_predicate.cpp
         envModelTests/predicates/position/test_passes_stop_line_predicate.cpp
@@ -28,6 +29,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/regulatory/test_at_red_left_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_straight_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_traffic_light_predicate.cpp
+        envModelTests/predicates/regulatory/test_at_stop_sign_predicate.cpp
         envModelTests/predicates/velocity/test_keeps_lane_speed_limit_predicate.cpp
         envModelTests/predicates/velocity/test_required_speed_predicate.cpp
         envModelTests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
@@ -37,7 +39,7 @@ set(ENV_MODEL_TEST_SRC_FILES
 
 
 # Create executable for test
-add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES} envModelTests/predicates/predicate_manager_test.cpp envModelTests/predicates/predicate_manager_test.h)
+add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
 
 target_compile_features(env_model_test
         PUBLIC cxx_lambdas cxx_auto_type
@@ -46,13 +48,13 @@ target_compile_features(env_model_test
 set_property(TARGET env_model_test PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 target_link_libraries(env_model_test
-    PRIVATE
+        PRIVATE
         env_model
         gtest
         Boost::filesystem
         OpenMP::OpenMP_CXX
         spdlog::spdlog
-    )
+        )
 
 include(GoogleTest)
 # queries the compiled executable for tests, this requires the executable to be runnable. if you are
@@ -65,7 +67,7 @@ gtest_discover_tests(
 
 # Code coverage
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    if (ENV_MODEL_BUILD_CODE_COVERAGE)
+    if (CodeCoverage MATCHES ON)
         add_executable(env_model_test_coverage ${ENV_MODEL_SRC_FILES} ${ENV_MODEL_TEST_SRC_FILES})
         target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
         target_link_libraries(env_model_test_coverage PUBLIC
@@ -77,22 +79,22 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
                 OpenMP::OpenMP_CXX
                 Eigen3::Eigen
                 spdlog::spdlog
-            )
+                )
 
         include(CodeCoverage)
         append_coverage_compiler_flags()
-         setup_target_for_coverage_gcovr_html(
-             NAME env_model_coverage                                          # New target name
-             EXECUTABLE env_model_test_coverage                               # Executable in PROJECT_BINARY_DIR
-             DEPENDENCIES env_model_test_coverage                             # Dependencies to build first
-             BASE_DIRECTORY "../"                                             # Base directory for report
-                                                                              #  (defaults to PROJECT_SOURCE_DIR)
-             EXCLUDE                                                          # Patterns to exclude (can be relative
-                 "src/interfaces/commonroad/pugi_xml/pugixml.hpp"             #  to BASE_DIRECTORY, with CMake 3.4+)
-                 "src/interfaces/commonroad/pugi_xml/pugixml.cpp"
-                 "ci/"
-                 "docs/"
-                 "external/"
-         )
+        setup_target_for_coverage_gcovr_html(
+                NAME env_model_coverage                                          # New target name
+                EXECUTABLE env_model_test_coverage                               # Executable in PROJECT_BINARY_DIR
+                DEPENDENCIES env_model_test_coverage                             # Dependencies to build first
+                BASE_DIRECTORY "../"                                             # Base directory for report
+                #  (defaults to PROJECT_SOURCE_DIR)
+                EXCLUDE                                                          # Patterns to exclude (can be relative
+                "src/interfaces/commonroad/pugi_xml/pugixml.hpp"             #  to BASE_DIRECTORY, with CMake 3.4+)
+                "src/interfaces/commonroad/pugi_xml/pugixml.cpp"
+                "ci/"
+                "docs/"
+                "external/"
+        )
     endif()
 endif()

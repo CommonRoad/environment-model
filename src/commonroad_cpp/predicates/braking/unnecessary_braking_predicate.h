@@ -15,11 +15,6 @@
 class UnnecessaryBrakingPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for UnnecessaryBrakingPredicate.
-     */
-    UnnecessaryBrakingPredicate();
-
-    /**
      * Boolean evaluation of predicate.
      *
      * @param timeStep Time step of interest.

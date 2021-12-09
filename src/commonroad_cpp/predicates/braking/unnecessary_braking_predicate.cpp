@@ -76,4 +76,3 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
     else
         return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt;
 }
-UnnecessaryBrakingPredicate::UnnecessaryBrakingPredicate() : CommonRoadPredicate(false) {}

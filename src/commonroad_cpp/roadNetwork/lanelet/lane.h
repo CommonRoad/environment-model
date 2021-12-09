@@ -69,7 +69,7 @@ class Lane : public Lanelet {
      *
      * @return width of the lane [m]
      */
-    double getWidth();
+    double getWidth(double lonPosition);
 
   private:
     std::vector<std::shared_ptr<Lanelet>> containedLanelets; //**< list of pointers to lanelets constructing lane */
