@@ -14,9 +14,8 @@ bool MakesUTurnPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleP) {
 
     const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
-    //
-    std::vector<std::shared_ptr<Lane>> lanes =
-        roadNetwork->findLanesByContainedLanelet(obstacleK->getOccupiedLanelets(timeStep)[0]->getId());
+
+    std::vector<std::shared_ptr<Lane>> lanes = roadNetwork->findLanesByContainedLanelet(obstacleK->getOccupiedLanelets(timeStep)[0]->getId());
     for (const auto &la : lanes) {
         if (parameters.uTurn <=
             abs(obstacleK->getCurvilinearOrientation(timeStep) -
@@ -38,3 +37,5 @@ double MakesUTurnPredicate::robustEvaluation(size_t timeStep, const std::shared_
                                              const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("Makes U Turn Predicate does not support robust evaluation!");
 }
+
+MakesUTurnPredicate::MakesUTurnPredicate(): CommonRoadPredicate(false) {}

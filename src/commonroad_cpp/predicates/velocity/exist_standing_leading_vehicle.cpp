@@ -42,3 +42,5 @@ double ExistStandingLeadingVehiclePredicate::robustEvaluation(size_t timeStep, c
                                                               const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("Exist Standing Leading Vehicle Predicate does not support robust evaluation!");
 }
+
+ExistStandingLeadingVehiclePredicate::ExistStandingLeadingVehiclePredicate() : CommonRoadPredicate(false) {}

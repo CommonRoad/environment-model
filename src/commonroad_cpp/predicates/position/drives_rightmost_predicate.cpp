@@ -127,3 +127,4 @@ DrivesRightmostPredicate::vehiclesAdjacent(size_t timeStep, const std::shared_pt
 
     return otherVehicles;
 }
+DrivesRightmostPredicate::DrivesRightmostPredicate(): CommonRoadPredicate(false) {}

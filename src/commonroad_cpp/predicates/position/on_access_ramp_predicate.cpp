@@ -42,3 +42,5 @@ Constraint OnAccessRampPredicate::constraintEvaluation(size_t timeStep, const st
                                                        const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("On Access Ramp Predicate does not support constraint evaluation!");
 }
+
+OnAccessRampPredicate::OnAccessRampPredicate():CommonRoadPredicate(true) {}

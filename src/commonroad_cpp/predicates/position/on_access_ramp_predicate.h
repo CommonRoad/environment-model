@@ -14,6 +14,12 @@
  */
 class OnAccessRampPredicate : public CommonRoadPredicate {
   public:
+
+    /**
+     * Constructor for OnAccessRampPredicate
+     */
+    OnAccessRampPredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

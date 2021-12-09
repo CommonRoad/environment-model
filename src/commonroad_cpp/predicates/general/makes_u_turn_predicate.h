@@ -13,7 +13,11 @@
  */
 class MakesUTurnPredicate : public CommonRoadPredicate {
   public:
-    /* TODO boolean Evaluation with python params */
+
+    /**
+     * Constructor for MakesUTurnPredicate
+     */
+    MakesUTurnPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

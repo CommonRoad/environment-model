@@ -14,6 +14,12 @@
  */
 class InRightmostLanePredicate : public CommonRoadPredicate {
   public:
+
+    /**
+     * Constructor for InRightmostLanePredicate
+     */
+    InRightmostLanePredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

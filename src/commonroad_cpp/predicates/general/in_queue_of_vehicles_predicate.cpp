@@ -41,3 +41,5 @@ double InQueueOfVehiclesPredicate::robustEvaluation(size_t timeStep, const std::
                                                     const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("In Slow Moving Traffic Predicate does not support robust evaluation!");
 }
+
+InQueueOfVehiclesPredicate::InQueueOfVehiclesPredicate(): CommonRoadPredicate(false) {}

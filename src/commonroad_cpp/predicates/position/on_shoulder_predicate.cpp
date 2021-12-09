@@ -42,3 +42,4 @@ Constraint OnShoulderPredicate::constraintEvaluation(size_t timeStep, const std:
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("On Shoulder Predicate does not support constraint evaluation!");
 }
+OnShoulderPredicate::OnShoulderPredicate(): CommonRoadPredicate(false) {}

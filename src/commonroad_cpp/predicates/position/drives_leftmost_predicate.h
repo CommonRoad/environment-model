@@ -14,6 +14,12 @@
  */
 class DrivesLeftmostPredicate : public CommonRoadPredicate {
   public:
+
+    /**
+     * Constructor for DrivesLeftmostPredicate
+     */
+    DrivesLeftmostPredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

@@ -40,3 +40,5 @@ Constraint OnMainCarriageWayPredicate::constraintEvaluation(size_t timeStep, con
                                                             const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("On Main Carriage Way Predicate does not support constraint evaluation!");
 }
+
+OnMainCarriageWayPredicate::OnMainCarriageWayPredicate(): CommonRoadPredicate(true) {}

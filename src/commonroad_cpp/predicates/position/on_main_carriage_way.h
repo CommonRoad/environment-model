@@ -14,6 +14,12 @@
  */
 class OnMainCarriageWayPredicate : public CommonRoadPredicate {
   public:
+
+    /**
+     * Constructor for OnMainCarriageWayPredicate
+     */
+    OnMainCarriageWayPredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

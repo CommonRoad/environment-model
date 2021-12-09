@@ -14,7 +14,11 @@
  */
 class InterstateBroadEnoughPredicate : public CommonRoadPredicate {
   public:
-    /* TODO boolean Evaluation with python params */
+
+    /**
+     * Constructor for InterstateBroadEnough
+     */
+    InterstateBroadEnoughPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
