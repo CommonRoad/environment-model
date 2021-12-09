@@ -25,7 +25,6 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/world.cpp
         commonroad_cpp/predicates/predicate_manager.cpp
         commonroad_cpp/predicates/commonroad_predicate.cpp
-        commonroad_cpp/predicates/predicate_config.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
@@ -66,6 +65,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.cpp
         commonroad_cpp/predicates/position/in_intersection_main_area_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
+        commonroad_cpp/predicates/predicate_config.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
         )
 
