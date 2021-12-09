@@ -126,9 +126,9 @@ PYBIND11_MODULE(cpp_env_model, m) {
     m.def("in_congestion_boolean_evaluation", &py_in_congestion_boolean_single_evaluation,
           "Boolean evaluation of in congestion predicate")
 
-    m.def("orientation_towards_boolean_evaluation", &py_boolean_evaluation<OrientationTowardsPredicate>,
-          "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
+        m.def("orientation_towards_boolean_evaluation", &py_boolean_evaluation<OrientationTowardsPredicate>,
+              "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),
+              py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
     m.def("lane_based_orientation_similar_boolean_evaluation",
           &py_boolean_evaluation<LaneBasedOrientationSimilarPredicate>,
           "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),

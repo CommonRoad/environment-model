@@ -41,8 +41,8 @@ const std::set<size_t> &Lane::getContainedLaneletIDs() const { return containedL
 
 double Lane::getWidth(double lonPosition) {
     double width = 0.0;
-    for (auto &lanelet : containedLanelets){
-       width += lanelet->getWidth(lonPosition);
+    for (auto &lanelet : containedLanelets) {
+        width += lanelet->getWidth(lonPosition);
     }
     return width;
 }

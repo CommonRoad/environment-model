@@ -5,7 +5,6 @@
 // Credits: BMW Car@TUM
 //
 
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
@@ -22,25 +21,25 @@ bool DrivesLeftmostPredicate::booleanEvaluation(size_t timeStep, const std::shar
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacleK->getOccupiedLanelets(timeStep);
     std::shared_ptr<Obstacle> vehicle_directly_left = vehicleDirectlyLeft(timeStep, world, obstacleK);
 
-    if (vehicle_directly_left!= nullptr){
-        //right_d left_d
+    if (vehicle_directly_left != nullptr) {
+        // right_d left_d
         if ((vehicle_directly_left->rightD(timeStep) - obstacleK->leftD(timeStep)) < parameters.closeToOtherVehicle)
             return true;
         else
             return false;
-    }
-    else{
+    } else {
         double left_position = obstacleK->leftD(timeStep);
         double s_ego = obstacleK->getLonPosition(timeStep);
         std::vector<std::shared_ptr<Lane>> lanes;
-        for (auto &occLa : occupiedLanelets){
-            std::vector<std::shared_ptr<Lane>> lanesOfLanelet = roadNetwork->findLanesByContainedLanelet(occLa->getId());
-            for (auto &la : lanesOfLanelet){
+        for (auto &occLa : occupiedLanelets) {
+            std::vector<std::shared_ptr<Lane>> lanesOfLanelet =
+                roadNetwork->findLanesByContainedLanelet(occLa->getId());
+            for (auto &la : lanesOfLanelet) {
                 lanes.push_back(la);
             }
         }
 
-        for (auto &lane : lanes){
+        for (auto &lane : lanes) {
             if (0.5 * lane->getWidth(s_ego) - left_position > parameters.closeToLaneBorder)
                 return false;
         }
@@ -68,11 +67,11 @@ std::shared_ptr<Obstacle> DrivesLeftmostPredicate::vehicleDirectlyLeft(size_t ti
         return nullptr;
     else if (vehicles_left.size() == 1)
         return vehicles_left[0];
-    else{
+    else {
         std::shared_ptr<Obstacle> vehicle_directly_left = vehicles_left[0];
-        for (const auto &obs : vehicles_left){
-            //What's lat.d
-            if (obs->getLatPosition(timeStep) < vehicle_directly_left->getLatPosition(timeStep)){
+        for (const auto &obs : vehicles_left) {
+            // What's lat.d
+            if (obs->getLatPosition(timeStep) < vehicle_directly_left->getLatPosition(timeStep)) {
                 vehicle_directly_left = obs;
             }
         }
@@ -80,15 +79,16 @@ std::shared_ptr<Obstacle> DrivesLeftmostPredicate::vehicleDirectlyLeft(size_t ti
     }
 }
 
-std::vector<std::shared_ptr<Obstacle>> DrivesLeftmostPredicate::vehiclesLeft(size_t timeStep, const std::shared_ptr<World> &world,
-                                                                const std::shared_ptr<Obstacle> &obstacleK) {
+std::vector<std::shared_ptr<Obstacle>>
+DrivesLeftmostPredicate::vehiclesLeft(size_t timeStep, const std::shared_ptr<World> &world,
+                                      const std::shared_ptr<Obstacle> &obstacleK) {
 
     std::vector<std::shared_ptr<Obstacle>> vehicles_left;
     std::vector<std::shared_ptr<Obstacle>> vehicles_adj = vehiclesAdjacent(timeStep, world, obstacleK);
 
-    for (const auto &obs : vehicles_adj){
+    for (const auto &obs : vehicles_adj) {
         // right_d , left_d
-        if ( obs->rightD(timeStep) > obstacleK->leftD(timeStep) ){
+        if (obs->rightD(timeStep) > obstacleK->leftD(timeStep)) {
             vehicles_left.push_back(obs);
         }
     }
@@ -96,31 +96,32 @@ std::vector<std::shared_ptr<Obstacle>> DrivesLeftmostPredicate::vehiclesLeft(siz
     return vehicles_left;
 }
 
-std::vector<std::shared_ptr<Obstacle>> DrivesLeftmostPredicate::vehiclesAdjacent(size_t timeStep,
-                                                                    const std::shared_ptr<World> &world,
-                                                                    const std::shared_ptr<Obstacle> &obstacleK) {
+std::vector<std::shared_ptr<Obstacle>>
+DrivesLeftmostPredicate::vehiclesAdjacent(size_t timeStep, const std::shared_ptr<World> &world,
+                                          const std::shared_ptr<Obstacle> &obstacleK) {
     std::vector<std::shared_ptr<Obstacle>> vehiclesAdj;
     std::vector<std::shared_ptr<Obstacle>> otherVehicles;
 
-    for (const auto &obs : world->getObstacles()){
-        if (obs != obstacleK){
+    for (const auto &obs : world->getObstacles()) {
+        if (obs != obstacleK) {
             otherVehicles.push_back(obs);
         }
     }
 
     for (const auto &obs : otherVehicles) {
-        //also check if obs != obstacleK
+        // also check if obs != obstacleK
         if (!obs->getLonPosition(timeStep))
             continue;
-        if (obs->rearS(timeStep) < obstacleK->frontS(timeStep) < obs->frontS(timeStep)){
+        if (obs->rearS(timeStep) < obstacleK->frontS(timeStep) < obs->frontS(timeStep)) {
             vehiclesAdj.push_back(obs);
             continue;
         }
-        if (obs->rearS(timeStep) < obstacleK->rearS(timeStep) < obs->frontS(timeStep)){
+        if (obs->rearS(timeStep) < obstacleK->rearS(timeStep) < obs->frontS(timeStep)) {
             vehiclesAdj.push_back(obs);
             continue;
         }
-        if (obstacleK->rearS(timeStep) <= obs->rearS(timeStep) and obs->frontS(timeStep) <= obstacleK->frontS(timeStep)){
+        if (obstacleK->rearS(timeStep) <= obs->rearS(timeStep) and
+            obs->frontS(timeStep) <= obstacleK->frontS(timeStep)) {
             vehiclesAdj.push_back(obs);
             continue;
         }

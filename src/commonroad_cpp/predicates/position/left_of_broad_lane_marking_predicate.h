@@ -53,9 +53,9 @@ class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
                                     const std::shared_ptr<Obstacle> &obstacleK,
                                     const std::shared_ptr<Obstacle> &obstacleP) override;
 
+    std::vector<std::shared_ptr<Lanelet>> laneletsRightOfVehicle(size_t timeStep, const std::shared_ptr<World> &world,
+                                                                 const std::shared_ptr<Obstacle> &obs);
 
-    std::vector<std::shared_ptr<Lanelet>> laneletsRightOfVehicle(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obs);
-
-    std::vector<std::shared_ptr<Lanelet>> laneletsRightOfLanet(const std::shared_ptr<World> &world, const std::shared_ptr<Lanelet> &lanelet);
-
+    std::vector<std::shared_ptr<Lanelet>> laneletsRightOfLanet(const std::shared_ptr<World> &world,
+                                                               const std::shared_ptr<Lanelet> &lanelet);
 };

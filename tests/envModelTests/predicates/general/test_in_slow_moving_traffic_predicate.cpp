@@ -49,7 +49,6 @@ void InSlowMovingTrafficPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleFour),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleFour)};
 
-
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionEgoVehicle, 5, 2));
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, false, stateOneObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
@@ -61,8 +60,8 @@ void InSlowMovingTrafficPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, {obstacleOne}, {obstacleTwo, obstacleThree, obstacleFour}, 0.1));
+    world =
+        std::make_shared<World>(World(0, roadNetwork, {obstacleOne}, {obstacleTwo, obstacleThree, obstacleFour}, 0.1));
 }
 
 TEST_F(InSlowMovingTrafficPredicateTest, BooleanEvaluationObjects) {

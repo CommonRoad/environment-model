@@ -37,3 +37,4 @@ Constraint InSameLanePredicate::constraintEvaluation(size_t timeStep, const std:
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("InSameLanePredicate does not support constraint evaluation!");
 }
+InSameLanePredicate::InSameLanePredicate() : CommonRoadPredicate(true) {}

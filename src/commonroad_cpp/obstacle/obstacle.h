@@ -316,7 +316,6 @@ class Obstacle {
      */
     double rightD(size_t timeStep);
 
-
     /**
      * Calculates left d-coordinate of vehicle
      *
