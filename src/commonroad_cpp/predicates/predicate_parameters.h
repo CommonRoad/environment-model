@@ -7,12 +7,9 @@
 
 #pragma once
 
-#include "../auxiliaryDefs/structs.h"
-
 #include <cassert>
+#include <cstdint>
 #include <limits>
-#include <map>
-#include <string>
 
 struct PredicateParameters {
     PredicateParameters() { checkParameterValidity(); }
@@ -45,3 +42,4 @@ struct PredicateParameters {
 
     void checkParameterValidity() const;
 };
+

@@ -15,11 +15,6 @@
 class InSingleLanePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for InSingleLanePredicate.
-     */
-    InSingleLanePredicate();
-
-    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.

@@ -13,11 +13,6 @@
  */
 class RequiredSpeedPredicate : public CommonRoadPredicate {
   public:
-    /**
-     * Constructor for RequiredSpeedPredicate.
-     */
-    RequiredSpeedPredicate();
-
     double requiredVelocity(const std::shared_ptr<Lanelet> &lanelet, const std::string &speedLimitId);
 
     double requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const std::string &speedLimitId);

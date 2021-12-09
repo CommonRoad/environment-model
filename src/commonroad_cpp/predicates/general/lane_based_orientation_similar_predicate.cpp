@@ -30,4 +30,3 @@ double LaneBasedOrientationSimilarPredicate::robustEvaluation(size_t timeStep, c
                                                               const std::shared_ptr<Obstacle> &obstacleK) {
     throw std::runtime_error("SucceedsPredicate does not support robust evaluation!");
 }
-LaneBasedOrientationSimilarPredicate::LaneBasedOrientationSimilarPredicate() : CommonRoadPredicate(true) {}

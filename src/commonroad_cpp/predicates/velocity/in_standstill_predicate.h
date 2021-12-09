@@ -14,11 +14,6 @@
 class InStandstillPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for InStandstillPredicate.
-     */
-    InStandstillPredicate();
-
-    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.

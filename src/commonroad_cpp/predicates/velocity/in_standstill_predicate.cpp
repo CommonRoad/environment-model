@@ -30,4 +30,3 @@ Constraint InStandstillPredicate::constraintEvaluation(size_t timeStep, const st
     // TODO add constraint mode
     throw std::runtime_error("InStandstillPredicate does not support constraint evaluation!");
 }
-InStandstillPredicate::InStandstillPredicate() : CommonRoadPredicate(false) {}

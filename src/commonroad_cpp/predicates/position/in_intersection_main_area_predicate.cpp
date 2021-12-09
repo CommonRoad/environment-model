@@ -37,5 +37,3 @@ Constraint InIntersectionMainAreaPredicate::constraintEvaluation(size_t timeStep
                                                                  const std::shared_ptr<Obstacle> &obstacleP = {}) {
     throw std::runtime_error("InIntersectionMainAreaPredicate does not support constraint evaluation!");
 }
-
-InIntersectionMainAreaPredicate::InIntersectionMainAreaPredicate() : CommonRoadPredicate(false) {}

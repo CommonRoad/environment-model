@@ -15,11 +15,6 @@
 class InSameLanePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for InSameLanePredicate.
-     */
-    InSameLanePredicate();
-
-    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.
