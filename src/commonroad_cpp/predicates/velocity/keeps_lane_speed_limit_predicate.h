@@ -18,6 +18,11 @@
  */
 class KeepsLaneSpeedLimitPredicate : public CommonRoadPredicate {
   public:
+    /**
+     * Constructor for KeepsLaneSpeedLimitPredicate.
+     */
+    KeepsLaneSpeedLimitPredicate();
+
     double speedLimit(const std::shared_ptr<Lanelet> &lanelet, const std::string &speedLimitId);
 
     double speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const std::string &speedLimitId);

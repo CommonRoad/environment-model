@@ -14,6 +14,11 @@
 class OrientationTowardsPredicate : public CommonRoadPredicate {
   public:
     /**
+     * Constructor for OrientationTowardsPredicate.
+     */
+    OrientationTowardsPredicate();
+
+    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.

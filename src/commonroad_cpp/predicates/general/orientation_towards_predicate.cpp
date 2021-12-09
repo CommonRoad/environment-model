@@ -33,3 +33,4 @@ Constraint OrientationTowardsPredicate::constraintEvaluation(size_t timeStep, co
                                                              const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("OrientationTowardsPredicate does not support constraint evaluation!");
 }
+OrientationTowardsPredicate::OrientationTowardsPredicate() : CommonRoadPredicate(true) {}

@@ -54,3 +54,4 @@ Constraint StopLineInFrontPredicate::constraintEvaluation(size_t timeStep, const
                                                           const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("StopLineInFrontPredicate does not support constraint evaluation!");
 }
+StopLineInFrontPredicate::StopLineInFrontPredicate() : CommonRoadPredicate(false) {}

@@ -11,7 +11,7 @@
 
 /**
  *  Evaluates if a interstate is broad enough to build a standard emergency lane
-*/
+ */
 class InterstateBroadEnoughPredicate : public CommonRoadPredicate {
   public:
     /* TODO boolean Evaluation with python params */

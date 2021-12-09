@@ -78,8 +78,7 @@ TEST_F(InCongestionPredicateTest, BooleanEvaluationObjects) {
 TEST_F(InCongestionPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 1);
-    EXPECT_FALSE(
-        pred.statisticBooleanEvaluation(1, world, obstacleOne));
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 2);
     EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 3);

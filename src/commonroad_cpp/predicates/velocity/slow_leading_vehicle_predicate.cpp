@@ -49,3 +49,5 @@ Constraint SlowLeadingVehiclePredicate::constraintEvaluation(size_t timeStep, co
     // TODO add constraint mode
     throw std::runtime_error("SlowLeadingVehiclePredicate does not support constraint evaluation!");
 }
+
+SlowLeadingVehiclePredicate::SlowLeadingVehiclePredicate() : CommonRoadPredicate(false) {}
