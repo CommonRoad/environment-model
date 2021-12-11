@@ -8,9 +8,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 option(ENV_MODEL_BUILD_DOXYGEN "Build doxygen" OFF)
 option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
 option(ENV_MODEL_BUILD_PYBIND "Build python interface" OFF)
-option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" OFF)
+option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ON)
 option(ENV_MODEL_BUILD_CODE_COVERAGE "Build code coverage" OFF)
 option(ENV_MODEL_BUILD_EXECUTABLE "Build executable" ON)
+
+# Provides configure_package_config_file
+include(CMakePackageConfigHelpers)
+# Includes sane defaults for installation paths (CMAKE_INSTALL_LIBDIR, CMAKE_INSTALL_BINDIR etc.)
+include(GNUInstallDirs)
 
 # Appends dictionary where other cmake files are stored which install required Software
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
@@ -61,55 +66,44 @@ if(ENV_MODEL_BUILD_TESTS)
     add_subdirectory(tests)
 endif(ENV_MODEL_BUILD_TESTS)
 
-# Provides configure_package_config_file
-include(CMakePackageConfigHelpers)
-
-# Includes sane defaults for installation paths (CMAKE_INSTALL_LIBDIR, CMAKE_INSTALL_BINDIR etc.)
-include(GNUInstallDirs)
-
-install(TARGETS env_model
-    EXPORT ${PROJECT_NAME}_Targets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-if(ENV_MODEL_BUILD_PYBIND)
-    install(TARGETS cpp_env_model env_model
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/python
+#if(NOT ENV_MODEL_BUILD_PYBIND)
+    install(TARGETS env_model
+        EXPORT ${PROJECT_NAME}_Targets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
-endif(ENV_MODEL_BUILD_PYBIND)
-
-configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-  INSTALL_DESTINATION
-  ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-  )
-
-# Export target configuration (for installation)
-install(EXPORT ${PROJECT_NAME}_Targets
-  FILE ${PROJECT_NAME}Targets.cmake
-  NAMESPACE ${PROJECT_NAME}::
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-  )
-
-install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-  )
-
-# Export target configuration (for local building)
-export(EXPORT ${PROJECT_NAME}_Targets
-  FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
-  NAMESPACE ${PROJECT_NAME}::
-  )
-
-install(
-  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.c" PATTERN "*.cpp"
-  )
 
 
+    configure_package_config_file(
+      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+      "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+      INSTALL_DESTINATION
+      ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+      )
+
+    # Export target configuration (for installation)
+    install(EXPORT ${PROJECT_NAME}_Targets
+      FILE ${PROJECT_NAME}Targets.cmake
+      NAMESPACE ${PROJECT_NAME}::
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+      )
+
+    install(FILES
+      "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+      )
+
+    # Export target configuration (for local building)
+    export(EXPORT ${PROJECT_NAME}_Targets
+      FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
+      NAMESPACE ${PROJECT_NAME}::
+      )
+
+    install(
+      DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
+      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+      FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.c" PATTERN "*.cpp"
+      )
+#endif()
