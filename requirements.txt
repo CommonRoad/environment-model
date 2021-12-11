@@ -1,1 +1,2 @@
 commonroad-io>= 2021.1
+skbuild>=0.12
