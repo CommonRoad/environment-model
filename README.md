@@ -109,7 +109,7 @@ The code should not be used as C++-standalone version but instead be included as
 ### Python 
 The subsequent code snippet shows important functions needed for using the predicates within Python:
 ```Python
-import cpp_env_model
+import commonroad_cpp
 ...
 cpp_env_model.register_scenario(123, 0, lanelet_network, [obstacle_2, obstacle_3], [obstacle_1])
 

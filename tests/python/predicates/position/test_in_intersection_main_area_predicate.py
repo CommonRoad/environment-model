@@ -3,7 +3,7 @@ import numpy as np
 import math
 import os
 
-import cpp_env_model
+import crcpp
 
 from commonroad.geometry.shape import Rectangle
 from commonroad.scenario.obstacle import State, ObstacleType, DynamicObstacle
@@ -40,17 +40,17 @@ class TestInIntersectionMainAreaPredicate(unittest.TestCase):
                                          State(time_step=1, position=np.array([7.0, 3.0]), velocity=0, acceleration=0,
                                                orientation=-math.pi)]), Rectangle(5, 2)))
 
-        cpp_env_model.register_scenario(123, 0, self.dt, "DEU", self.lanelet_network, [obstacle_1, obstacle_2], [])
+        crcpp.register_scenario(123, 0, self.dt, "DEU", self.lanelet_network, [obstacle_1, obstacle_2], [])
 
         # Monitor-Mode
-        sol_monitor_mode_1 = cpp_env_model.in_intersection_main_area_boolean_evaluation(123, 0, 1)
-        sol_monitor_mode_2 = cpp_env_model.in_intersection_main_area_boolean_evaluation(123, 1, 1)
-        sol_monitor_mode_3 = cpp_env_model.in_intersection_main_area_boolean_evaluation(123, 0, 2)
-        sol_monitor_mode_4 = cpp_env_model.in_intersection_main_area_boolean_evaluation(123, 1, 2)
+        sol_monitor_mode_1 = crcpp.in_intersection_main_area_boolean_evaluation(123, 0, 1)
+        sol_monitor_mode_2 = crcpp.in_intersection_main_area_boolean_evaluation(123, 1, 1)
+        sol_monitor_mode_3 = crcpp.in_intersection_main_area_boolean_evaluation(123, 0, 2)
+        sol_monitor_mode_4 = crcpp.in_intersection_main_area_boolean_evaluation(123, 1, 2)
 
         self.assertEqual(exp_sol_monitor_mode_1, sol_monitor_mode_1)
         self.assertEqual(exp_sol_monitor_mode_2, sol_monitor_mode_2)
         self.assertEqual(exp_sol_monitor_mode_3, sol_monitor_mode_3)
         self.assertEqual(exp_sol_monitor_mode_4, sol_monitor_mode_4)
 
-        cpp_env_model.remove_scenario(123)
+        crcpp.remove_scenario(123)
