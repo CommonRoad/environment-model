@@ -66,7 +66,7 @@ if(ENV_MODEL_BUILD_TESTS)
     add_subdirectory(tests)
 endif(ENV_MODEL_BUILD_TESTS)
 
-#if(NOT ENV_MODEL_BUILD_PYBIND)
+if(NOT ENV_MODEL_BUILD_PYBIND)
     install(TARGETS env_model
         EXPORT ${PROJECT_NAME}_Targets
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -106,4 +106,4 @@ endif(ENV_MODEL_BUILD_TESTS)
       DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
       FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.c" PATTERN "*.cpp"
       )
-#endif()
+endif()

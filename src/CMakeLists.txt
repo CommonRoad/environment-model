@@ -114,9 +114,9 @@ if(ENV_MODEL_BUILD_PYBIND)
 
     target_link_libraries(${python_module_name} PRIVATE env_model)
 
-#    install(TARGETS ${python_module_name} env_model
-#            LIBRARY DESTINATION .
-#            )
+    install(TARGETS ${python_module_name} env_model
+            LIBRARY DESTINATION .
+            )
 
     set_property(TARGET ${python_module_name} PROPERTY INSTALL_RPATH "$ORIGIN")
 
