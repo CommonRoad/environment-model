@@ -93,7 +93,7 @@ cmake --install .
 
 To use the environment model within Python, run 
 ```bash
-CMAKE_PREFIX_PATH=/path/to/DrivabilityChecker/install/prefix python setup.py develop
+python setup.py install
 ```
 from the root directory, giving the
 path to the Drivability Checker's install prefix
