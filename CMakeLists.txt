@@ -35,8 +35,6 @@ if(NOT CMAKE_BUILD_TYPE)
             STRING "Choose the type of build." FORCE)
 endif()
 
-add_subdirectory(external)
-
 # Include Eigen3, Boost filesystem, and OpenMP
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)
@@ -45,6 +43,8 @@ find_package(OpenMP)
 if(NOT OpenMP_CXX_FOUND)
     message(SEND_ERROR "Can't find the OpenMP package")
 endif()
+
+add_subdirectory(external)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -66,44 +66,43 @@ if(ENV_MODEL_BUILD_TESTS)
     add_subdirectory(tests)
 endif(ENV_MODEL_BUILD_TESTS)
 
-if(NOT ENV_MODEL_BUILD_PYBIND)
-    install(TARGETS env_model
-        EXPORT ${PROJECT_NAME}_Targets
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    )
 
+install(TARGETS env_model
+    EXPORT ${PROJECT_NAME}_Targets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
 
-    configure_package_config_file(
-      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
-      "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-      INSTALL_DESTINATION
-      ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-      )
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  INSTALL_DESTINATION
+  ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  )
 
-    # Export target configuration (for installation)
-    install(EXPORT ${PROJECT_NAME}_Targets
-      FILE ${PROJECT_NAME}Targets.cmake
-      NAMESPACE ${PROJECT_NAME}::
-      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-      )
+# Export target configuration (for installation)
+install(EXPORT ${PROJECT_NAME}_Targets
+  FILE ${PROJECT_NAME}Targets.cmake
+  NAMESPACE ${PROJECT_NAME}::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  )
 
-    install(FILES
-      "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-      )
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  )
 
-    # Export target configuration (for local building)
-    export(EXPORT ${PROJECT_NAME}_Targets
-      FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
-      NAMESPACE ${PROJECT_NAME}::
-      )
+# Export target configuration (for local building)
+export(EXPORT ${PROJECT_NAME}_Targets
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
+  NAMESPACE ${PROJECT_NAME}::
+  )
 
-    install(
-      DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
-      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-      FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.c" PATTERN "*.cpp"
-      )
-endif()
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.c" PATTERN "*.cpp"
+  )
+
