@@ -36,31 +36,34 @@ set(ENV_MODEL_TEST_SRC_FILES
 
 
 # Create executable for test
-add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES} envModelTests/predicates/predicate_manager_test.cpp envModelTests/predicates/predicate_manager_test.h)
+if (ENV_MODEL_BUILD_TESTS)
+    add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES} envModelTests/predicates/predicate_manager_test.cpp envModelTests/predicates/predicate_manager_test.h)
 
-target_compile_features(env_model_test
-        PUBLIC cxx_lambdas cxx_auto_type
-        PRIVATE cxx_lambdas cxx_auto_type)
+    target_compile_features(env_model_test
+            PUBLIC cxx_lambdas cxx_auto_type
+            PRIVATE cxx_lambdas cxx_auto_type)
 
-set_property(TARGET env_model_test PROPERTY POSITION_INDEPENDENT_CODE ON)
+    set_property(TARGET env_model_test PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-target_link_libraries(env_model_test
-    PRIVATE
-        env_model
-        gtest
-        Boost::filesystem
-        OpenMP::OpenMP_CXX
-        spdlog::spdlog
+    target_link_libraries(env_model_test
+            PRIVATE
+            env_model
+            gtest
+            Boost::filesystem
+            OpenMP::OpenMP_CXX
+            spdlog::spdlog
+            )
+
+    include(GoogleTest)
+    # queries the compiled executable for tests, this requires the executable to be runnable. if you are
+    # cross compiling, make sure to properly set CMAKE_CROSSCOMPILING_EMULATOR.
+    gtest_discover_tests(
+            env_model_test TEST_PREFIX "./"
+            # increase the discovery timeout for `env_model_test --gtest_list_tests`
+            DISCOVERY_TIMEOUT 60
     )
+endif ()
 
-include(GoogleTest)
-# queries the compiled executable for tests, this requires the executable to be runnable. if you are
-# cross compiling, make sure to properly set CMAKE_CROSSCOMPILING_EMULATOR.
-gtest_discover_tests(
-        env_model_test TEST_PREFIX "./"
-        # increase the discovery timeout for `env_model_test --gtest_list_tests`
-        DISCOVERY_TIMEOUT 60
-)
 
 # Code coverage
 if (CMAKE_BUILD_TYPE MATCHES Debug)
