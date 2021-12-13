@@ -85,7 +85,6 @@ DrivesRightmostPredicate::vehiclesRight(size_t timeStep, const std::shared_ptr<W
     std::vector<std::shared_ptr<Obstacle>> vehicles_adj = vehiclesAdjacent(timeStep, world, obstacleK);
 
     for (const auto &obs : vehicles_adj) {
-        // right_d , left_d
         if (obs->leftD(timeStep) < obstacleK->rightD(timeStep)) {
             vehicles_right.push_back(obs);
         }
@@ -107,7 +106,6 @@ DrivesRightmostPredicate::vehiclesAdjacent(size_t timeStep, const std::shared_pt
     }
 
     for (const auto &obs : otherVehicles) {
-        // also check if obs != obstacleK
         if (!obs->getLonPosition(timeStep))
             continue;
         if (obs->rearS(timeStep) < obstacleK->frontS(timeStep) < obs->frontS(timeStep)) {

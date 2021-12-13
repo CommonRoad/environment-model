@@ -14,8 +14,8 @@
 bool DrivesWithSlightlyHigherSpeedPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                                const std::shared_ptr<Obstacle> &obstacleK,
                                                                const std::shared_ptr<Obstacle> &obstacleP) {
-    return 0 < (obstacleK->getStateByTimeStep(timeStep)->getVelocity() -
-                obstacleP->getStateByTimeStep(timeStep)->getVelocity()) < parameters.slightlyHigherSpeedDifference;
+    double diff = obstacleK->getStateByTimeStep(timeStep)->getVelocity() - obstacleP->getStateByTimeStep(timeStep)->getVelocity();
+    return 0 < diff and diff < parameters.slightlyHigherSpeedDifference;
 }
 
 Constraint DrivesWithSlightlyHigherSpeedPredicate::constraintEvaluation(size_t timeStep,
@@ -30,4 +30,4 @@ double DrivesWithSlightlyHigherSpeedPredicate::robustEvaluation(size_t timeStep,
                                                                 const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("Drives With Slightly Higher Speed Predicate does not support robust evaluation!");
 }
-DrivesWithSlightlyHigherSpeedPredicate::DrivesWithSlightlyHigherSpeedPredicate():CommonRoadPredicate(false) {}
+DrivesWithSlightlyHigherSpeedPredicate::DrivesWithSlightlyHigherSpeedPredicate():CommonRoadPredicate(true) {}

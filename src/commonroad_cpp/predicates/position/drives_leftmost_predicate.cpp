@@ -22,7 +22,6 @@ bool DrivesLeftmostPredicate::booleanEvaluation(size_t timeStep, const std::shar
     std::shared_ptr<Obstacle> vehicle_directly_left = vehicleDirectlyLeft(timeStep, world, obstacleK);
 
     if (vehicle_directly_left != nullptr) {
-        // right_d left_d
         if ((vehicle_directly_left->rightD(timeStep) - obstacleK->leftD(timeStep)) < parameters.closeToOtherVehicle)
             return true;
         else
@@ -87,7 +86,7 @@ DrivesLeftmostPredicate::vehiclesLeft(size_t timeStep, const std::shared_ptr<Wor
     std::vector<std::shared_ptr<Obstacle>> vehicles_adj = vehiclesAdjacent(timeStep, world, obstacleK);
 
     for (const auto &obs : vehicles_adj) {
-        // right_d , left_d
+
         if (obs->rightD(timeStep) > obstacleK->leftD(timeStep)) {
             vehicles_left.push_back(obs);
         }
@@ -109,7 +108,7 @@ DrivesLeftmostPredicate::vehiclesAdjacent(size_t timeStep, const std::shared_ptr
     }
 
     for (const auto &obs : otherVehicles) {
-        // also check if obs != obstacleK
+
         if (!obs->getLonPosition(timeStep))
             continue;
         if (obs->rearS(timeStep) < obstacleK->frontS(timeStep) < obs->frontS(timeStep)) {

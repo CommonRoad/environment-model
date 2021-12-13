@@ -41,7 +41,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
         commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
-        commonroad_cpp/predicates/position/on_main_carriage_way.cpp
+        commonroad_cpp/predicates/position/on_main_carriage_way_predicate.cpp
         commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
         commonroad_cpp/predicates/general/in_congestion_predicate.cpp

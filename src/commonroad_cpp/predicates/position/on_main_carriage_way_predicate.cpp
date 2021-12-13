@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "on_main_carriage_way.h"
+#include "on_main_carriage_way_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
@@ -41,4 +41,4 @@ Constraint OnMainCarriageWayPredicate::constraintEvaluation(size_t timeStep, con
     throw std::runtime_error("On Main Carriage Way Predicate does not support constraint evaluation!");
 }
 
-OnMainCarriageWayPredicate::OnMainCarriageWayPredicate(): CommonRoadPredicate(true) {}
+OnMainCarriageWayPredicate::OnMainCarriageWayPredicate(): CommonRoadPredicate(false) {}

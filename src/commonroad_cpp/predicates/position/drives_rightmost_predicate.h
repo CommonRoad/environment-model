@@ -10,7 +10,7 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *
+ *  Evaluates if a vehicle drives rightmost within its occupied lanes
  */
 class DrivesRightmostPredicate : public CommonRoadPredicate {
   public:

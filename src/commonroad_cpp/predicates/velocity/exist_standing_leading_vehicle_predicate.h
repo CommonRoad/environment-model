@@ -10,7 +10,7 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Description of class
+ * Predicate which checks if a standing leading vehicle exist in front of a vehicle
  */
 class ExistStandingLeadingVehiclePredicate : public CommonRoadPredicate {
   public:
