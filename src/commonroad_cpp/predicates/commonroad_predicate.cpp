@@ -30,7 +30,7 @@
 #include "position/in_rightmost_lane_predicate.h"
 #include "position/drives_leftmost_predicate.h"
 #include "position/drives_rightmost_predicate.h"
-#include "position/on_main_carriage_way.h"
+#include "position/on_main_carriage_way_predicate.h"
 #include "regulatory/at_red_left_traffic_light_predicate.h"
 #include "regulatory/at_red_right_traffic_light_predicate.h"
 #include "regulatory/at_red_straight_traffic_light_predicate.h"

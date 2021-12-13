@@ -10,7 +10,7 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- * Evaluates whether the kth and pth vehicle occupy the same lane.
+ * Evaluates if a vehicle is completely right of a broad lane marking
  */
 class RightOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
   public:
@@ -31,7 +31,7 @@ class RightOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP) override;
+                           const std::shared_ptr<Obstacle> &obstacleP={}) override;
 
     /**
      * Constraint evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -44,7 +44,7 @@ class RightOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP) override;
+                            const std::shared_ptr<Obstacle> &obstacleP={}) override;
 
     /**
      * Robustness evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -57,11 +57,11 @@ class RightOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP) override;
+                                    const std::shared_ptr<Obstacle> &obstacleP={}) override;
 
     std::vector<std::shared_ptr<Lanelet>> laneletsLeftOfVehicle(size_t timeStep, const std::shared_ptr<World> &world,
                                                                 const std::shared_ptr<Obstacle> &obs);
 
-    std::vector<std::shared_ptr<Lanelet>> laneletsLeftOfLanet(const std::shared_ptr<World> &world,
+    std::set<std::shared_ptr<Lanelet>> laneletsLeftOfLanet(const std::shared_ptr<World> &world,
                                                               const std::shared_ptr<Lanelet> &lanelet);
 };

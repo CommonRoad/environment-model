@@ -10,7 +10,7 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Description of class
+ * Predicate which checks if the kth vehicle drives maximum with slightly higher speed than the pth vehicle
  */
 class DrivesWithSlightlyHigherSpeedPredicate : public CommonRoadPredicate {
   public:

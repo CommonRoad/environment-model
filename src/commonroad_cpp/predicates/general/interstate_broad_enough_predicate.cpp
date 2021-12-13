@@ -10,13 +10,15 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
+#include "commonroad_cpp/roadNetwork/road_network.h"
+
 bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP) {
     auto occupied_lanelets = obstacleK->getOccupiedLanelets(timeStep);
     double obsK_s = obstacleK->getStateByTimeStep(timeStep)->getLonPosition();
-    for (auto lanelet : occupied_lanelets) {
-        if (roadWidth(lanelet, obsK_s) <= parameters.minInterstateWidth)
+    for (const auto &lanelet : occupied_lanelets) {
+        if (roadWidth(world, lanelet, obsK_s) <= parameters.minInterstateWidth)
             return false;
     }
     return true;
@@ -33,11 +35,13 @@ double InterstateBroadEnoughPredicate::robustEvaluation(size_t timeStep, const s
                                                         const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("In Slow Moving Traffic Predicate does not support robust evaluation!");
 }
-double InterstateBroadEnoughPredicate::roadWidth(const std::shared_ptr<Lanelet> &lanelet, double position) {
+
+double InterstateBroadEnoughPredicate::roadWidth(const std::shared_ptr<World> &world, const std::shared_ptr<Lanelet> &lanelet, double position) {
+    const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
     std::vector<std::shared_ptr<Lanelet>> adj_lanelets = adjacentLanelets(lanelet);
-    double road_width = 0.0;
+    double road_width = lanelet->getWidth(position);
     for (auto &l : adj_lanelets) {
-        road_width += roadWidth(l, position);
+        road_width += roadNetwork->findLanesByContainedLanelet(l->getId())[0]->getWidth(position);
     }
     return road_width;
 }
@@ -46,18 +50,18 @@ std::vector<std::shared_ptr<Lanelet>>
 InterstateBroadEnoughPredicate::adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet) {
     std::vector<std::shared_ptr<Lanelet>> adj_lanelets;
     std::shared_ptr<Lanelet> la = lanelet;
-    adj_lanelets.push_back(la);
 
     while (la != nullptr && la->getAdjacentLeft().adj != nullptr) {
         adj_lanelets.push_back(la);
         la = la->getAdjacentLeft().adj;
     }
 
+    la = lanelet;
+
     while (la != nullptr && la->getAdjacentRight().adj != nullptr) {
         adj_lanelets.push_back(la);
         la = la->getAdjacentRight().adj;
     }
-
     return adj_lanelets;
 }
 

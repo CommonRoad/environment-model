@@ -9,7 +9,7 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- * Description of class
+ * Predicate to evaluate if the k-th vehicle is left of the p-th vehicle
  */
 class LeftOfPredicate : public CommonRoadPredicate {
   public:

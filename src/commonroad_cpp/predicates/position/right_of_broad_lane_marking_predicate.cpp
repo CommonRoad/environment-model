@@ -20,15 +20,14 @@ bool RightOfBroadLaneMarkingPredicate::booleanEvaluation(size_t timeStep, const 
     const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
     std::vector<std::shared_ptr<Lanelet>> lanelets_occ = obstacleK->getOccupiedLanelets(timeStep);
 
-    for (auto &l : lanelets_occ) {
-        auto lanelet = roadNetwork->findLaneletById(l->getId());
-        const LineMarking lanelet_right_marking = lanelet->getLineMarkingRight();
+    for (const auto &l : lanelets_occ) {
+        const LineMarking lanelet_right_marking = l->getLineMarkingRight();
         if (lanelet_right_marking == LineMarking::broad_dashed or lanelet_right_marking == LineMarking::solid)
             return false;
     }
 
     std::vector<std::shared_ptr<Lanelet>> lanelets_left_of_veh = laneletsLeftOfVehicle(timeStep, world, obstacleK);
-    for (auto &lanelet : lanelets_left_of_veh) {
+    for (const auto &lanelet : lanelets_left_of_veh) {
         const LineMarking lanelet_right_marking = lanelet->getLineMarkingRight();
         if (lanelet_right_marking == LineMarking::broad_dashed or lanelet_right_marking == LineMarking::broad_solid)
             return true;
@@ -56,24 +55,24 @@ RightOfBroadLaneMarkingPredicate::laneletsLeftOfVehicle(size_t timeStep, const s
     const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
 
     for (auto &occ_l : occupiedLanelets) {
-        std::vector<std::shared_ptr<Lanelet>> newLanelets = laneletsLeftOfLanet(world, occ_l);
-        for (auto &nl : newLanelets) {
+        std::set<std::shared_ptr<Lanelet>> newLanelets = laneletsLeftOfLanet(world, occ_l);
+        for (const auto &nl : newLanelets) {
             leftLanelets.push_back(nl);
         }
     }
     return leftLanelets;
 }
 
-std::vector<std::shared_ptr<Lanelet>>
+std::set<std::shared_ptr<Lanelet>>
 RightOfBroadLaneMarkingPredicate::laneletsLeftOfLanet(const std::shared_ptr<World> &world,
                                                       const std::shared_ptr<Lanelet> &lanelet) {
     const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
-    std::vector<std::shared_ptr<Lanelet>> leftLanelets;
+    std::set<std::shared_ptr<Lanelet>> leftLanelets;
     std::shared_ptr<Lanelet> tmp_lanelet = lanelet;
     while (tmp_lanelet->getAdjacentLeft().adj != nullptr) {
-        tmp_lanelet = roadNetwork->findLaneletById(tmp_lanelet->getId());
-        leftLanelets.push_back(tmp_lanelet);
+        leftLanelets.insert(tmp_lanelet);
+        tmp_lanelet = tmp_lanelet->getAdjacentLeft().adj;
     }
     return leftLanelets;
 }
-RightOfBroadLaneMarkingPredicate::RightOfBroadLaneMarkingPredicate(): CommonRoadPredicate(true) {}
+RightOfBroadLaneMarkingPredicate::RightOfBroadLaneMarkingPredicate(): CommonRoadPredicate(false) {}

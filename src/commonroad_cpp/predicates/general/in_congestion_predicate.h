@@ -9,7 +9,7 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate for evaluating congestion
+ * Predicate for evaluating if a vehicle is in a congestion
  */
 class InCongestionPredicate : public CommonRoadPredicate {
   public:
