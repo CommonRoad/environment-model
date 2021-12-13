@@ -33,13 +33,13 @@ bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<W
 double LeftOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                          const std::shared_ptr<Obstacle> &obstacleK,
                                          const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("PassesStopLinePredicate does not support robust evaluation!");
+    throw std::runtime_error("Left Of does not support robust evaluation!");
 }
 
 Constraint LeftOfPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
                                                  const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("PassesStopLinePredicate does not support constraint evaluation!");
+    throw std::runtime_error("Left Of does not support constraint evaluation!");
 }
 
 LeftOfPredicate::LeftOfPredicate():CommonRoadPredicate(false) {}

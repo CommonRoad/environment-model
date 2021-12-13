@@ -49,13 +49,13 @@ bool DrivesLeftmostPredicate::booleanEvaluation(size_t timeStep, const std::shar
 double DrivesLeftmostPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
                                                  const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("DrivesLeftmostPredicate does not support robust evaluation!");
+    throw std::runtime_error("Drives Leftmost Predicate does not support robust evaluation!");
 }
 
 Constraint DrivesLeftmostPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
                                                          const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("DrivesLeftmostPredicate does not support constraint evaluation!");
+    throw std::runtime_error("Drives Leftmost Predicate does not support constraint evaluation!");
 }
 
 std::shared_ptr<Obstacle> DrivesLeftmostPredicate::vehicleDirectlyLeft(size_t timeStep,
