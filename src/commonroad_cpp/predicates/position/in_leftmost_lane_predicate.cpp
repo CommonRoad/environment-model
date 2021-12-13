@@ -32,13 +32,13 @@ bool InLeftmostLanePredicate::booleanEvaluation(size_t timeStep, const std::shar
 double InLeftmostLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
                                                  const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("InLeftmostLanePredicate does not support robust evaluation!");
+    throw std::runtime_error("In Leftmost Lane Predicate does not support robust evaluation!");
 }
 
 Constraint InLeftmostLanePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
                                                          const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("InLeftmostLanePredicate does not support constraint evaluation!");
+    throw std::runtime_error("In Leftmost Lane Predicate does not support constraint evaluation!");
 }
 
 InLeftmostLanePredicate::InLeftmostLanePredicate(): CommonRoadPredicate(false) {}

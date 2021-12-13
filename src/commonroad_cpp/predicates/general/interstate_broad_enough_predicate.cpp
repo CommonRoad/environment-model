@@ -27,13 +27,13 @@ bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const st
 Constraint InterstateBroadEnoughPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                                 const std::shared_ptr<Obstacle> &obstacleK,
                                                                 const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("In Slow Moving Traffic Predicate does not support constraint evaluation!");
+    throw std::runtime_error("Interstate Broad Enough Predicate does not support constraint evaluation!");
 }
 
 double InterstateBroadEnoughPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("In Slow Moving Traffic Predicate does not support robust evaluation!");
+    throw std::runtime_error("Interstate Broad Enough Traffic Predicate does not support robust evaluation!");
 }
 
 double InterstateBroadEnoughPredicate::roadWidth(const std::shared_ptr<World> &world, const std::shared_ptr<Lanelet> &lanelet, double position) {

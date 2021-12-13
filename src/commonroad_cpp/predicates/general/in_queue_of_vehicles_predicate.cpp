@@ -33,13 +33,13 @@ bool InQueueOfVehiclesPredicate::booleanEvaluation(size_t timeStep, const std::s
 Constraint InQueueOfVehiclesPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                             const std::shared_ptr<Obstacle> &obstacleK,
                                                             const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("In Slow Moving Traffic Predicate does not support constraint evaluation!");
+    throw std::runtime_error("In Queue of Vehicles Predicate does not support constraint evaluation!");
 }
 
 double InQueueOfVehiclesPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("In Slow Moving Traffic Predicate does not support robust evaluation!");
+    throw std::runtime_error("In Queue of Vehicles Predicate does not support robust evaluation!");
 }
 
 InQueueOfVehiclesPredicate::InQueueOfVehiclesPredicate(): CommonRoadPredicate(false) {}
