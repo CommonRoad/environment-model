@@ -233,8 +233,8 @@ class Obstacle {
      * @param timeStep Time step of interest.
      * @return Pointer to lane object.
      */
-    [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                                                         const std::shared_ptr<size_t> &idCounter = 0);
+    [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                         size_t timeStep, const std::shared_ptr<size_t> &idCounter = 0);
 
     /**
      * Getter for trajectory prediction.
