@@ -336,6 +336,15 @@ size_t Obstacle::getLastTrajectoryTimeStep() const {
     return trajectoryPrediction.begin()->second->getTimeStep() + getTrajectoryLength() - 1;
 }
 
+std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                                 const std::shared_ptr<size_t> &idCounter) {
+    if (referenceLane.count(timeStep) == 1 and referenceLane.at(timeStep) != nullptr)
+        return referenceLane.at(timeStep);
+    else if(!existsOccupiedLanes(timeStep))
+        setOccupiedLanes(roadNetwork, timeStep, idCounter);
+    return getReferenceLane(timeStep);
+}
+
 std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
     if (referenceLane.count(timeStep) == 1 and referenceLane.at(timeStep) != nullptr)
         return referenceLane.at(timeStep);
@@ -477,13 +486,12 @@ void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes,
 }
 
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                                const std::shared_ptr<size_t> &idCounter, double fovFront) {
+                                const std::shared_ptr<size_t> &idCounter) {
     auto lanelets{getOccupiedLanelets(roadNetwork, timeStep)};
     std::vector<std::shared_ptr<Lane>> occLanes{
-        lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfViewRear, fovFront)};
+        lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfViewRear, fieldOfViewFront)};
     occupiedLanes[timeStep] = occLanes;
 }
-double Obstacle::approximateFieldOfView() const { return fieldOfViewFront; }
 
 std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                                  size_t timeStep,
@@ -509,10 +517,8 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shar
 std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                               size_t timeStep,
                                                               const std::shared_ptr<size_t> &idCounter) {
-    if (occupiedLanes[timeStep].empty()) {
-        double fovFront = approximateFieldOfView();
-        setOccupiedLanes(roadNetwork, timeStep, idCounter, fovFront);
-    }
+    if (occupiedLanes[timeStep].empty())
+        setOccupiedLanes(roadNetwork, timeStep, idCounter);
     return occupiedLanes[timeStep];
 }
 
@@ -528,16 +534,15 @@ void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, con
                             bool considerHistory) {
     const size_t timeStamp{currentState->getTimeStep()};
     auto lanelets{getOccupiedLanelets(roadNetwork, timeStamp)};
-    double fovFront = approximateFieldOfView();
     auto lanes{
-        lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfViewRear, fovFront)};
+        lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfViewRear, fieldOfViewFront)};
     setOccupiedLanes(lanes, timeStamp);
     if (!isStatic) {
         for (const auto &time : getPredictionTimeSteps())
-            setOccupiedLanes(roadNetwork, time, idCounter, fovFront);
+            setOccupiedLanes(roadNetwork, time, idCounter);
         if (considerHistory)
             for (const auto &time : getHistoryTimeSteps())
-                setOccupiedLanes(roadNetwork, time, idCounter, fovFront);
+                setOccupiedLanes(roadNetwork, time, idCounter);
     }
 }
 
@@ -549,3 +554,4 @@ void Obstacle::setCurvilinearStates() {
             if (!getStateByTimeStep(timeStep)->getValidStates().lonPosition)
                 convertPointToCurvilinear(timeStep);
 }
+bool Obstacle::existsOccupiedLanes(size_t timeStep) { return occupiedLanes.count(timeStep) >= 1; }
