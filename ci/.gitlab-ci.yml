@@ -1,7 +1,6 @@
 stages:
   - compile
   - test
-  #  - sanitizer TODO
   - coverage
   - static-test
   - docs

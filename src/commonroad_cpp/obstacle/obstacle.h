@@ -228,6 +228,15 @@ class Obstacle {
     [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(size_t timeStep);
 
     /**
+     * Getter for reference lane.
+     *
+     * @param timeStep Time step of interest.
+     * @return Pointer to lane object.
+     */
+    [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                                         const std::shared_ptr<size_t> &idCounter = 0);
+
+    /**
      * Getter for trajectory prediction.
      *
      * @return Map matching time step to state.
@@ -384,21 +393,26 @@ class Obstacle {
      * @param timeStep Time step of interest.
      */
     void setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                          const std::shared_ptr<size_t> &idCounter, double fovFront); // TODO create test case
+                          const std::shared_ptr<size_t> &idCounter); // TODO create test case
+
+    /**
+     * Checks whether occupied lanes are already computed for a time step.
+     *
+     * @param timeStep Time step of interest.
+     */
+    bool existsOccupiedLanes(size_t timeStep); // TODO create test case
 
     /**
      * Extracts first time step of trajectory
      *
-     * @param timeStep time step of interest
-     * @return lateral position of obstacle state
+     * @return first time step of trajectory
      */
     [[nodiscard]] size_t getFirstTrajectoryTimeStep(); // TODO create test case
 
     /**
      * Extracts last time step of trajectory
      *
-     * @param timeStep time step of interest
-     * @return lateral position of obstacle state
+     * @return last time step of trajectory
      */
     [[nodiscard]] size_t getLastTrajectoryTimeStep() const; // TODO create test case
 
@@ -527,11 +541,4 @@ class Obstacle {
                // threshold since initial time step has special evaluation */
     const double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
     const double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
-
-    /**
-     *   Approximates field of view for long prediction horizons.
-     *
-     * @return Approximated field of view.
-     */
-    double approximateFieldOfView() const;
 };

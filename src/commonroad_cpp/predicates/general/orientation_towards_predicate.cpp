@@ -15,10 +15,10 @@ bool OrientationTowardsPredicate::booleanEvaluation(size_t timeStep, const std::
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP) {
     return (obstacleK->getLatPosition(timeStep) < // k on right side
-                obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)) and
+                obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep, world->getIdCounterRef())) and
             obstacleK->getCurvilinearOrientation(timeStep) > 0) or
            (obstacleK->getLatPosition(timeStep) > // k on left side
-                obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)) and
+                obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep, world->getIdCounterRef())) and
             obstacleK->getCurvilinearOrientation(timeStep) < 0);
 }
 
