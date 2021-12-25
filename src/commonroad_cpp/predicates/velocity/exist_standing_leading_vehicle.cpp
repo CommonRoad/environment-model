@@ -19,13 +19,13 @@ bool ExistStandingLeadingVehiclePredicate::booleanEvaluation(size_t timeStep, co
     InSameLanePredicate inSameLanePredicate;
     InStandstillPredicate inStandstillPredicate;
 
-    for (const auto &obs : world->getObstacles()){
-        if(!obs->getStateByTimeStep(timeStep)->getLonPosition())
+    for (const auto &obs : world->getObstacles()) {
+        if (!obs->getStateByTimeStep(timeStep)->getLonPosition())
             continue;
         if (!inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) or
             !inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             continue;
-        if(inStandstillPredicate.booleanEvaluation(timeStep, world, obs))
+        if (inStandstillPredicate.booleanEvaluation(timeStep, world, obs))
             return true;
     }
     return false;

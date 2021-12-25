@@ -29,16 +29,13 @@ void DrivesWithSlightlyHigherSpeedPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle)
-    };
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle)};
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)
-    };
-
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
@@ -47,8 +44,7 @@ void DrivesWithSlightlyHigherSpeedPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world =
-        std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {obstacleOne}, 0.1));
+    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {obstacleOne}, 0.1));
 }
 
 TEST_F(DrivesWithSlightlyHigherSpeedPredicateTest, BooleanEvaluationObjects) {

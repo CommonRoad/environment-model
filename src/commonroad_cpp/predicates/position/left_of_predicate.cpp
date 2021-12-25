@@ -42,4 +42,4 @@ Constraint LeftOfPredicate::constraintEvaluation(size_t timeStep, const std::sha
     throw std::runtime_error("Left Of does not support constraint evaluation!");
 }
 
-LeftOfPredicate::LeftOfPredicate():CommonRoadPredicate(false) {}
+LeftOfPredicate::LeftOfPredicate() : CommonRoadPredicate(false) {}

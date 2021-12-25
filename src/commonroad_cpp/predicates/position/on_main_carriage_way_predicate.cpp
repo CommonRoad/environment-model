@@ -41,4 +41,4 @@ Constraint OnMainCarriageWayPredicate::constraintEvaluation(size_t timeStep, con
     throw std::runtime_error("On Main Carriage Way Predicate does not support constraint evaluation!");
 }
 
-OnMainCarriageWayPredicate::OnMainCarriageWayPredicate(): CommonRoadPredicate(false) {}
+OnMainCarriageWayPredicate::OnMainCarriageWayPredicate() : CommonRoadPredicate(false) {}

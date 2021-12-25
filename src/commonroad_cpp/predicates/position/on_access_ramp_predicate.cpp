@@ -43,4 +43,4 @@ Constraint OnAccessRampPredicate::constraintEvaluation(size_t timeStep, const st
     throw std::runtime_error("On Access Ramp Predicate does not support constraint evaluation!");
 }
 
-OnAccessRampPredicate::OnAccessRampPredicate():CommonRoadPredicate(false) {}
+OnAccessRampPredicate::OnAccessRampPredicate() : CommonRoadPredicate(false) {}

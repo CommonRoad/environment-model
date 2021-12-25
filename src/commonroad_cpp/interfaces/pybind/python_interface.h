@@ -12,36 +12,35 @@
 
 #include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
-#include "commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h"
-#include "commonroad_cpp/predicates/general/orientation_towards_predicate.h"
 #include "commonroad_cpp/predicates/general/in_congestion_predicate.h"
-#include "commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.h"
 #include "commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.h"
-#include "commonroad_cpp/predicates/general/makes_u_turn_predicate.h"
+#include "commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.h"
 #include "commonroad_cpp/predicates/general/interstate_broad_enough_predicate.h"
-#include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
-#include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
-#include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
-#include "commonroad_cpp/predicates/position/in_single_lane_predicate.h"
-#include "commonroad_cpp/predicates/position/left_of_predicate.h"
-#include "commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h"
-#include "commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h"
-#include "commonroad_cpp/predicates/position/on_access_ramp_predicate.h"
-#include "commonroad_cpp/predicates/position/on_shoulder_predicate.h"
-#include "commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h"
-#include "commonroad_cpp/predicates/position/in_rightmost_lane_predicate.h"
+#include "commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h"
+#include "commonroad_cpp/predicates/general/makes_u_turn_predicate.h"
+#include "commonroad_cpp/predicates/general/orientation_towards_predicate.h"
 #include "commonroad_cpp/predicates/position/drives_leftmost_predicate.h"
 #include "commonroad_cpp/predicates/position/drives_rightmost_predicate.h"
+#include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
+#include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
+#include "commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h"
+#include "commonroad_cpp/predicates/position/in_rightmost_lane_predicate.h"
+#include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include "commonroad_cpp/predicates/position/in_single_lane_predicate.h"
+#include "commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h"
+#include "commonroad_cpp/predicates/position/left_of_predicate.h"
+#include "commonroad_cpp/predicates/position/on_access_ramp_predicate.h"
 #include "commonroad_cpp/predicates/position/on_main_carriage_way_predicate.h"
+#include "commonroad_cpp/predicates/position/on_shoulder_predicate.h"
+#include "commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h"
 #include "commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.h"
 #include "commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.h"
 #include "commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.h"
 #include "commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.h"
-#include "commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.h"
-#include "commonroad_cpp/predicates/velocity/in_standstill_predicate.h"
 #include "commonroad_cpp/predicates/velocity/drives_faster_predicate.h"
 #include "commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h"
+#include "commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.h"
+#include "commonroad_cpp/predicates/velocity/in_standstill_predicate.h"
 #include "commonroad_cpp/predicates/velocity/reverses_predicate.h"
 
 namespace py = pybind11;
@@ -143,108 +142,86 @@ PYBIND11_MODULE(crcpp, m) {
 
     m.def("in_congestion_boolean_evaluation", &py_boolean_evaluation<InCongestionPredicate>,
           "Boolean evaluation of in congestion predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0
-          );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("exist_standing_leading_vehicle_evaluation", &py_boolean_evaluation<ExistStandingLeadingVehiclePredicate>,
-        "Boolean evaluation of exist standing leading vehicle predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-          );
+          "Boolean evaluation of exist standing leading vehicle predicate", py::arg("scenarioId"), py::arg("time_step"),
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("in_standstill_evaluation", &py_boolean_evaluation<InStandstillPredicate>,
           "Boolean evaluation of in standstill predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
-    m.def("left_of_evaluation", &py_boolean_evaluation<LeftOfPredicate>,
-          "Boolean evaluation of left of predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+    m.def("left_of_evaluation", &py_boolean_evaluation<LeftOfPredicate>, "Boolean evaluation of left of predicate",
+          py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("drives_faster_evaluation", &py_boolean_evaluation<DrivesFasterPredicate>,
           "Boolean evaluation of drives faster predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
     m.def("in_slow_moving_traffic_evaluation", &py_boolean_evaluation<InSlowMovingTrafficPredicate>,
           "Boolean evaluation of in slow moving traffic predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("in_queue_of_vehicles_evaluation", &py_boolean_evaluation<InQueueOfVehiclesPredicate>,
           "Boolean evaluation of in queue of vehicles predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
-    m.def("drives_with_slightly_higher_speed_evaluation", &py_boolean_evaluation<DrivesWithSlightlyHigherSpeedPredicate>,
-          "Boolean evaluation of drives with slightly higher speed predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")
-    );
+    m.def("drives_with_slightly_higher_speed_evaluation",
+          &py_boolean_evaluation<DrivesWithSlightlyHigherSpeedPredicate>,
+          "Boolean evaluation of drives with slightly higher speed predicate", py::arg("scenarioId"),
+          py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
     m.def("right_of_broad_lane_marking_evaluation", &py_boolean_evaluation<RightOfBroadLaneMarkingPredicate>,
           "Boolean evaluation of right of broad lane marking predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("left_of_broad_lane_marking_evaluation", &py_boolean_evaluation<LeftOfBroadLaneMarkingPredicate>,
           "Boolean evaluation of left of broad lane marking predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("on_access_ramp_evaluation", &py_boolean_evaluation<OnAccessRampPredicate>,
           "Boolean evaluation of on access ramp predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("makes_u_turn_evaluation", &py_boolean_evaluation<MakesUTurnPredicate>,
           "Boolean evaluation of makes u turn predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
-    m.def("reverses_evaluation", &py_boolean_evaluation<ReversesPredicate>,
-          "Boolean evaluation of reverses predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+    m.def("reverses_evaluation", &py_boolean_evaluation<ReversesPredicate>, "Boolean evaluation of reverses predicate",
+          py::arg("scenarioId"), py::arg("time_step"), py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("interstate_broad_enough_evaluation", &py_boolean_evaluation<InterstateBroadEnoughPredicate>,
           "Boolean evaluation of interstate broad enough predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("on_shoulder_evaluation", &py_boolean_evaluation<OnShoulderPredicate>,
           "Boolean evaluation of on shoulder predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("in_leftmost_lane_evaluation", &py_boolean_evaluation<InLeftmostLanePredicate>,
           "Boolean evaluation of in leftmost lane predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("in_rightmost_lane_evaluation", &py_boolean_evaluation<InRightmostLanePredicate>,
           "Boolean evaluation of in rightmost lane predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("drives_leftmost_evaluation", &py_boolean_evaluation<DrivesLeftmostPredicate>,
           "Boolean evaluation of drives leftmost predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("drives_rightmost_evaluation", &py_boolean_evaluation<DrivesRightmostPredicate>,
           "Boolean evaluation of drives rightmost predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("in_single_lane_evaluation", &py_boolean_evaluation<InSingleLanePredicate>,
           "Boolean evaluation of in single lane predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("on_main_carriage_way_evaluation", &py_boolean_evaluation<OnMainCarriageWayPredicate>,
           "Boolean evaluation of on main carriage way predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId")=0
-    );
+          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("orientation_towards_boolean_evaluation", &py_boolean_evaluation<OrientationTowardsPredicate>,
           "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),

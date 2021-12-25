@@ -25,19 +25,17 @@ void LeftOfBroadLaneMarkingPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(5, stateFiveEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle)
-    };
+        std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle)};
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network_3()};
 
-    world =
-        std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
-//See adding one more lane to the network
+// See adding one more lane to the network
 
 TEST_F(LeftOfBroadLaneMarkingPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle));

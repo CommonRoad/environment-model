@@ -7,10 +7,10 @@
 #include "interstate_broad_enough_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
-#include "commonroad_cpp/roadNetwork/road_network.h"
 
 bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
@@ -36,7 +36,8 @@ double InterstateBroadEnoughPredicate::robustEvaluation(size_t timeStep, const s
     throw std::runtime_error("Interstate Broad Enough Traffic Predicate does not support robust evaluation!");
 }
 
-double InterstateBroadEnoughPredicate::roadWidth(const std::shared_ptr<World> &world, const std::shared_ptr<Lanelet> &lanelet, double position) {
+double InterstateBroadEnoughPredicate::roadWidth(const std::shared_ptr<World> &world,
+                                                 const std::shared_ptr<Lanelet> &lanelet, double position) {
     const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
     std::vector<std::shared_ptr<Lanelet>> adj_lanelets = adjacentLanelets(lanelet);
     double road_width = lanelet->getWidth(position);
@@ -65,4 +66,4 @@ InterstateBroadEnoughPredicate::adjacentLanelets(const std::shared_ptr<Lanelet> 
     return adj_lanelets;
 }
 
-InterstateBroadEnoughPredicate::InterstateBroadEnoughPredicate(): CommonRoadPredicate(false) {}
+InterstateBroadEnoughPredicate::InterstateBroadEnoughPredicate() : CommonRoadPredicate(false) {}

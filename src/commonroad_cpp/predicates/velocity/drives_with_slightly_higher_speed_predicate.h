@@ -14,10 +14,9 @@
  */
 class DrivesWithSlightlyHigherSpeedPredicate : public CommonRoadPredicate {
   public:
-
-   /**
-    * Constructor for DrivesWithSlightlyHigherSpeedPredicate
-    */
+    /**
+     * Constructor for DrivesWithSlightlyHigherSpeedPredicate
+     */
     DrivesWithSlightlyHigherSpeedPredicate();
 
     /**
