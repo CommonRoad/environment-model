@@ -10,7 +10,6 @@
 #include <utility>
 
 #include <boost/geometry/algorithms/correct.hpp>
-#include <boost/geometry/algorithms/intersects.hpp>
 #include <boost/geometry/algorithms/simplify.hpp>
 #include <boost/geometry/algorithms/unique.hpp>
 #include <boost/geometry/algorithms/within.hpp>
@@ -19,19 +18,21 @@
 
 namespace bg = boost::geometry;
 
-Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::set<LaneletType> type,
-                 std::set<ObstacleType> oneWayUsers, std::set<ObstacleType> bidirectionalUsers)
-    : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)}, laneletTypes{std::move(type)},
-      usersOneWay{std::move(oneWayUsers)}, usersBidirectional{std::move(bidirectionalUsers)} {
+Lanelet::Lanelet(size_t laneletId, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
+                 std::set<LaneletType> type, std::set<ObstacleType> oneWayUsers,
+                 std::set<ObstacleType> bidirectionalUsers)
+    : laneletId{laneletId}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)},
+      laneletTypes{std::move(type)}, usersOneWay{std::move(oneWayUsers)}, usersBidirectional{
+                                                                              std::move(bidirectionalUsers)} {
     createCenterVertices();
     constructOuterPolygon();
 }
 
-Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
+Lanelet::Lanelet(size_t laneletId, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
                  std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
                  std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::set<LaneletType> type,
                  std::set<ObstacleType> oneWayUsers = {}, std::set<ObstacleType> bidirectionalUsers = {})
-    : id{id}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)},
+    : laneletId{laneletId}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)},
       predecessorLanelets{std::move(predecessorLanelets)}, successorLanelets{std::move(successorLanelets)},
       laneletTypes{std::move(type)}, usersOneWay{std::move(oneWayUsers)}, usersBidirectional{
                                                                               std::move(bidirectionalUsers)} {
@@ -39,7 +40,7 @@ Lanelet::Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> 
     constructOuterPolygon();
 }
 
-void Lanelet::setId(const size_t laneletId) { id = laneletId; }
+void Lanelet::setId(const size_t lid) { laneletId = lid; }
 
 void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet> &left, DrivingDirection dir) {
     adjacentLeft.adj = left;
@@ -63,7 +64,7 @@ void Lanelet::setUsersOneWay(const std::set<ObstacleType> &user) { usersOneWay =
 
 void Lanelet::setUsersBidirectional(const std::set<ObstacleType> &user) { usersBidirectional = user; }
 
-void Lanelet::setStopLine(const std::shared_ptr<StopLine> &sl) { stopLine = sl; }
+void Lanelet::setStopLine(const std::shared_ptr<StopLine> &line) { stopLine = line; }
 
 void Lanelet::addLeftVertex(const vertex left) { leftBorder.push_back(left); }
 
@@ -79,7 +80,7 @@ void Lanelet::addTrafficLight(const std::shared_ptr<TrafficLight> &light) { traf
 
 void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign> &sign) { trafficSigns.push_back(sign); }
 
-size_t Lanelet::getId() const { return id; }
+size_t Lanelet::getId() const { return laneletId; }
 
 const std::vector<std::shared_ptr<Lanelet>> &Lanelet::getPredecessors() const { return predecessorLanelets; }
 
@@ -139,12 +140,12 @@ void Lanelet::constructOuterPolygon() {
         polygon_type polygon;
         polygon.outer().resize(leftBorderTemp.size() + rightBorderTemp.size() + 1);
 
-        for (const auto &it : leftBorderTemp) {
-            polygon.outer()[idx] = point_type{it.x, it.y};
+        for (const auto &left : leftBorderTemp) {
+            polygon.outer()[idx] = point_type{left.x, left.y};
             idx++;
         }
-        for (const auto &it : boost::adaptors::reverse(rightBorderTemp)) {
-            polygon.outer()[idx] = point_type{it.x, it.y};
+        for (const auto &right : boost::adaptors::reverse(rightBorderTemp)) {
+            polygon.outer()[idx] = point_type{right.x, right.y};
             idx++;
         }
         polygon.outer().back() = point_type{leftBorderTemp[0].x, leftBorderTemp[0].y};
@@ -179,7 +180,7 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) con
 }
 
 unsigned long Lanelet::findClosestIndex(double positionX,
-                                        double positionY) const { // find closest vertex to the given position
+                                        double positionY) const { // find the closest vertex to the given position
     std::vector<double> dif(centerVertices.size() - 1);
     for (unsigned long i = 0; i < centerVertices.size() - 1; ++i) {
         vertex vert{centerVertices[i]};

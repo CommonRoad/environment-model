@@ -1,7 +1,6 @@
 stages:
   - compile
   - test
-  #  - sanitizer TODO
   - coverage
   - static-test
   - docs
@@ -136,7 +135,7 @@ build-test-python:
   before_script:
     - *python-prepare
   script:
-    - python setup.py develop
+    - python setup.py install
     - python -m pytest tests/python
   needs: []
 
