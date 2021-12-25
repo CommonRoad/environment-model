@@ -18,20 +18,40 @@ set(ENV_MODEL_TEST_SRC_FILES
         envModelTests/predicates/position/test_in_front_of_predicate.cpp
         envModelTests/predicates/position/test_in_same_lane_predicate.cpp
         envModelTests/predicates/position/test_in_single_lane_predicate.cpp
+        envModelTests/predicates/position/test_left_of_predicate.cpp
         envModelTests/predicates/general/test_orientation_towards_predicate.cpp
         envModelTests/predicates/general/test_lane_based_orientation_similar_predicate.cpp
+        envModelTests/predicates/general/test_in_congestion_predicate.cpp
+        envModelTests/predicates/general/test_in_slow_moving_traffic_predicate.cpp
+        envModelTests/predicates/general/test_in_queue_of_vehicles_predicate.cpp
+        envModelTests/predicates/general/test_makes_u_turn_predicate.cpp
+        envModelTests/predicates/general/test_interstate_broad_enough.cpp
         envModelTests/predicates/position/test_in_intersection_main_area_predicate.cpp
         envModelTests/predicates/position/test_stop_line_in_front_predicate.cpp
         envModelTests/predicates/position/test_passes_stop_line_predicate.cpp
+        envModelTests/predicates/position/test_on_access_ramp_predicate.cpp
+        envModelTests/predicates/position/test_on_shoulder_predicate.cpp
+        envModelTests/predicates/position/test_in_leftmost_lane_predicate.cpp
+        envModelTests/predicates/position/test_in_rightmost_lane_predicate.cpp
+        envModelTests/predicates/position/test_drives_leftmost_predicate.cpp
+        envModelTests/predicates/position/test_drives_rightmost_predicate.cpp
+        envModelTests/predicates/position/test_on_main_carriage_way_predicate.cpp
+        envModelTests/predicates/position/test_right_of_broad_lane_marking_predicate.cpp
+        envModelTests/predicates/position/test_left_of_broad_lane_marking_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_right_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_left_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_straight_traffic_light_predicate.cpp
         envModelTests/predicates/regulatory/test_at_red_traffic_light_predicate.cpp
+        envModelTests/predicates/regulatory/test_at_stop_sign_predicate.cpp
         envModelTests/predicates/velocity/test_keeps_lane_speed_limit_predicate.cpp
         envModelTests/predicates/velocity/test_required_speed_predicate.cpp
         envModelTests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
         envModelTests/predicates/velocity/test_slow_leading_vehicle_predicate.cpp
         envModelTests/predicates/velocity/test_in_standstill_predicate.cpp
+        envModelTests/predicates/velocity/test_exist_standing_leading_vehicle_predicate.cpp
+        envModelTests/predicates/velocity/test_drives_faster_predicate.cpp
+        envModelTests/predicates/velocity/test_drives_with_slightly_higher_speed_predicate.cpp
+        envModelTests/predicates/velocity/test_reverses_predicate.cpp
         )
 
 
@@ -79,22 +99,22 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
                 OpenMP::OpenMP_CXX
                 Eigen3::Eigen
                 spdlog::spdlog
-            )
+                )
 
         include(CodeCoverage)
         append_coverage_compiler_flags()
-         setup_target_for_coverage_gcovr_html(
-             NAME env_model_coverage                                          # New target name
-             EXECUTABLE env_model_test_coverage                               # Executable in PROJECT_BINARY_DIR
-             DEPENDENCIES env_model_test_coverage                             # Dependencies to build first
-             BASE_DIRECTORY "../"                                             # Base directory for report
-                                                                              #  (defaults to PROJECT_SOURCE_DIR)
-             EXCLUDE                                                          # Patterns to exclude (can be relative
-                 "src/interfaces/commonroad/pugi_xml/pugixml.hpp"             #  to BASE_DIRECTORY, with CMake 3.4+)
-                 "src/interfaces/commonroad/pugi_xml/pugixml.cpp"
-                 "ci/"
-                 "docs/"
-                 "external/"
-         )
+        setup_target_for_coverage_gcovr_html(
+                NAME env_model_coverage                                          # New target name
+                EXECUTABLE env_model_test_coverage                               # Executable in PROJECT_BINARY_DIR
+                DEPENDENCIES env_model_test_coverage                             # Dependencies to build first
+                BASE_DIRECTORY "../"                                             # Base directory for report
+                #  (defaults to PROJECT_SOURCE_DIR)
+                EXCLUDE                                                          # Patterns to exclude (can be relative
+                "src/interfaces/commonroad/pugi_xml/pugixml.hpp"             #  to BASE_DIRECTORY, with CMake 3.4+)
+                "src/interfaces/commonroad/pugi_xml/pugixml.cpp"
+                "ci/"
+                "docs/"
+                "external/"
+        )
     endif()
 endif()

@@ -319,6 +319,22 @@ class Obstacle {
     double rearS(size_t timeStep);
 
     /**
+     * Calculates right d-coordinate of vehicle
+     *
+     * @param timeStep time step to consider
+     * @return right d-coordinate [m]
+     */
+    double rightD(size_t timeStep);
+
+    /**
+     * Calculates left d-coordinate of vehicle
+     *
+     * @param timeStep time step to consider
+     * @return left d-coordinate [m]
+     */
+    double leftD(size_t timeStep);
+
+    /**
      * Computes the minimum longitudinal rear position of obstacle (for rectangle shapes) based on given reference lane.
      *
      * @param timeStep Time step of interest.

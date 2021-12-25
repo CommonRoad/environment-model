@@ -32,17 +32,37 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/in_single_lane_predicate.cpp
         commonroad_cpp/predicates/position/stop_line_in_front_predicate.cpp
         commonroad_cpp/predicates/position/passes_stop_line_predicate.cpp
+        commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp/predicates/position/left_of_predicate.cpp
+        commonroad_cpp/predicates/position/on_access_ramp_predicate.cpp
+        commonroad_cpp/predicates/position/on_shoulder_predicate.cpp
+        commonroad_cpp/predicates/position/in_leftmost_lane_predicate.cpp
+        commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
+        commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
+        commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
+        commonroad_cpp/predicates/position/on_main_carriage_way_predicate.cpp
         commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
+        commonroad_cpp/predicates/general/in_congestion_predicate.cpp
+        commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.cpp
+        commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.cpp
+        commonroad_cpp/predicates/general/makes_u_turn_predicate.cpp
+        commonroad_cpp/predicates/general/interstate_broad_enough_predicate.cpp
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
         commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/required_speed_predicate.cpp
         commonroad_cpp/predicates/velocity/in_standstill_predicate.cpp
+        commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle.cpp
+        commonroad_cpp/predicates/velocity/drives_faster_predicate.cpp
+        commonroad_cpp/predicates/velocity/reverses_predicate.cpp
+        commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.cpp
         commonroad_cpp/predicates/position/in_intersection_main_area_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/predicates/predicate_config.cpp
