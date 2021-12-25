@@ -14,10 +14,11 @@ namespace obstacle_operations {
 /**
  * Returns the obstacle which corresponds to a given obstacle ID.
  *
- * @param id obstacle ID
+ * @param obstacleId obstacle ID
  * @return pointer to obstacle
  */
-std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t id);
+std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList,
+                                          size_t obstacleId);
 
 /**
  * Matches a string to an obstacle type

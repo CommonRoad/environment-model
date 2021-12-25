@@ -8,10 +8,10 @@
 #include "obstacle_operations.h"
 
 std::shared_ptr<Obstacle>
-obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t id) {
+obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t obstacleId) {
     std::shared_ptr<Obstacle> temp{nullptr};
     for (const auto &obs : obstacleList) {
-        if (obs->getId() == id) {
+        if (obs->getId() == obstacleId) {
             temp = obs;
             break;
         }

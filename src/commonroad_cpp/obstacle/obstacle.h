@@ -38,7 +38,7 @@ class Obstacle {
      * Constructor initializing several obstacle attributes.
      * If the obstacle is static, certain values are overwritten.
      *
-     * @param id ID of obstacle.
+     * @param obstacleId ID of obstacle.
      * @param isStatic Boolean indicating whether the obstacle is static or not.
      * @param currentState Pointer to current state of obstacle.
      * @param obstacleType Type of the obstacle.
@@ -52,8 +52,8 @@ class Obstacle {
      * @param width Width of the obstacle [m].
      * @param route Planned route of obstacle.
      */
-    Obstacle(size_t id, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType, double vMax,
-             double aMax, double aMaxLong, double aMinLong, double reactionTime,
+    Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
+             double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
              std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width,
              std::vector<vertex> route = {});
 
@@ -67,9 +67,9 @@ class Obstacle {
     /**
      * Setter for isStatic.
      *
-     * @param isStatic Boolean indicating whether the obstacle is static or not.
+     * @param staticObstacle Boolean indicating whether the obstacle is static or not.
      */
-    void setIsStatic(bool isStatic);
+    void setIsStatic(bool staticObstacle);
 
     /**
      * Setter for current state.
@@ -234,7 +234,8 @@ class Obstacle {
      * @return Pointer to lane object.
      */
     [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                         size_t timeStep, const std::shared_ptr<size_t> &idCounter = 0);
+                                                         size_t timeStep,
+                                                         const std::shared_ptr<size_t> &idCounter = nullptr);
 
     /**
      * Getter for trajectory prediction.
@@ -476,9 +477,9 @@ class Obstacle {
      * Interpolates acceleration based on velocity.
      *
      * @param timeStep Time step for which acceleration should be interpolated.
-     * @param dt Time step size [s].
+     * @param timeStepSize Time step size [s].
      */
-    void interpolateAcceleration(size_t timeStep, double dt);
+    void interpolateAcceleration(size_t timeStep, double timeStepSize);
 
     /**
      * Getter for all prediction time steps.
@@ -516,7 +517,7 @@ class Obstacle {
     void setCurvilinearStates();
 
   private:
-    size_t id;                                        //**< unique ID of lanelet */
+    size_t obstacleId;                                //**< unique ID of obstacle */
     bool isStatic{false};                             //**< true if Obstacle is static */
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */

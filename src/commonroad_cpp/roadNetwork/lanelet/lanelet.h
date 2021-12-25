@@ -42,8 +42,9 @@ class Lanelet {
      * @param usersOneWay List of road users one way.
      * @param usersBidirectional List of road users bidirectional.
      */
-    Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder, std::set<LaneletType> types,
-            std::set<ObstacleType> usersOneWay = {}, std::set<ObstacleType> usersBidirectional = {});
+    Lanelet(size_t laneletId, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
+            std::set<LaneletType> types, std::set<ObstacleType> usersOneWay = {},
+            std::set<ObstacleType> usersBidirectional = {});
 
     /**
      * Constructor initializing borders, lanelet typ, road users, predecessor lanelets, and successor lanelets.
@@ -57,7 +58,7 @@ class Lanelet {
      * @param usersOneWay List of road users one way.
      * @param usersBidirectional List of road users bidirectional.
      */
-    Lanelet(size_t id, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
+    Lanelet(size_t laneletId, std::vector<vertex> leftBorder, std::vector<vertex> rightBorder,
             std::vector<std::shared_ptr<Lanelet>> predecessorLanelets,
             std::vector<std::shared_ptr<Lanelet>> successorLanelets, std::set<LaneletType> laneletTypes,
             std::set<ObstacleType> usersOneWay, std::set<ObstacleType> usersBidirectional);
@@ -75,7 +76,7 @@ class Lanelet {
      *
      * @param laneletId ID of lanelet.
      */
-    void setId(size_t laneletId);
+    void setId(size_t lid);
 
     /**
      * Setter for adjacent left lanelet.
@@ -133,7 +134,7 @@ class Lanelet {
      *
      * @param sl Stop line belonging to lanelet.
      */
-    void setStopLine(const std::shared_ptr<StopLine> &sl);
+    void setStopLine(const std::shared_ptr<StopLine> &line);
 
     /**
      * Setter for left line marking.
@@ -416,7 +417,7 @@ class Lanelet {
     size_t findClosestIndex(double positionX, double positionY) const;
 
   private:
-    size_t id{};                                               //**< unique ID of lanelet */
+    size_t laneletId{};                                        //**< unique ID of lanelet */
     std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
     std::vector<vertex> leftBorder;                            //**< vertices of left border */
     std::vector<vertex> rightBorder;                           //**< vertices of right border */
