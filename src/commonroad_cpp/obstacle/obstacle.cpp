@@ -273,6 +273,32 @@ double Obstacle::rearS(size_t timeStep) {
                      (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition});
 }
 
+double Obstacle::rightD(size_t timeStep) {
+    double s = getLonPosition(timeStep);
+    double d = getLatPosition(timeStep);
+    double width = geoShape.getWidth();
+    double length = geoShape.getLength();
+    double theta = getStateByTimeStep(timeStep)->getCurvilinearOrientation();
+
+    return std::min({(width / 2) * cos(theta) - (length / 2) * sin(theta) + d,
+                     (width / 2) * cos(theta) - (-length / 2) * sin(theta) + d,
+                     (-width / 2) * cos(theta) - (length / 2) * sin(theta) + d,
+                     (-width / 2) * cos(theta) - (-length / 2) * sin(theta) + d});
+}
+
+double Obstacle::leftD(size_t timeStep) {
+    double s = getLonPosition(timeStep);
+    double d = getLatPosition(timeStep);
+    double width = geoShape.getWidth();
+    double length = geoShape.getLength();
+    double theta = getStateByTimeStep(timeStep)->getCurvilinearOrientation();
+
+    return std::max({(width / 2) * cos(theta) - (length / 2) * sin(theta) + d,
+                     (width / 2) * cos(theta) - (-length / 2) * sin(theta) + d,
+                     (-width / 2) * cos(theta) - (length / 2) * sin(theta) + d,
+                     (-width / 2) * cos(theta) - (-length / 2) * sin(theta) + d});
+}
+
 double Obstacle::getLonPosition(size_t timeStep) {
     if (getStateByTimeStep(timeStep)->getValidStates().lonPosition)
         return getStateByTimeStep(timeStep)->getLonPosition();

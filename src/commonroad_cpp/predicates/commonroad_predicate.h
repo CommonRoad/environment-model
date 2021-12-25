@@ -9,8 +9,8 @@
 
 #include <memory>
 
-#include <commonroad_cpp/auxiliaryDefs/structs.h>
-#include <commonroad_cpp/auxiliaryDefs/timer.h>
+#include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include "commonroad_cpp/auxiliaryDefs/timer.h"
 
 #include "predicate_config.h"
 

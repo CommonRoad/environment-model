@@ -22,12 +22,12 @@ Constraint LaneBasedOrientationSimilarPredicate::constraintEvaluation(size_t tim
                                                                       const std::shared_ptr<World> &world,
                                                                       const std::shared_ptr<Obstacle> &obstacleP,
                                                                       const std::shared_ptr<Obstacle> &obstacleK) {
-    throw std::runtime_error("SucceedsPredicate does not support constraint evaluation!");
+    throw std::runtime_error("Lane Based Orientation Similar does not support constraint evaluation!");
 }
 
 double LaneBasedOrientationSimilarPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                               const std::shared_ptr<Obstacle> &obstacleP,
                                                               const std::shared_ptr<Obstacle> &obstacleK) {
-    throw std::runtime_error("SucceedsPredicate does not support robust evaluation!");
+    throw std::runtime_error("Lane Based Orientation Similar does not support robust evaluation!");
 }
 LaneBasedOrientationSimilarPredicate::LaneBasedOrientationSimilarPredicate() : CommonRoadPredicate(true) {}
