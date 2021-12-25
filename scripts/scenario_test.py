@@ -1,4 +1,4 @@
-import cpp_env_model
+import crcpp
 import os
 from commonroad.common.file_reader import CommonRoadFileReader
 from joblib import Parallel, delayed
@@ -29,8 +29,8 @@ scenario_list = []
 def eval_scenario(scenario_path: str):
     try:
         sc, _ = CommonRoadFileReader(full_path).open()
-        cpp_env_model.register_scenario(scenario_id, 0, "DEU", sc.lanelet_network, sc.obstacles, [])
-        cpp_env_model.remove_scenario(scenario_id)
+        crcpp.register_scenario(scenario_id, 0, "DEU", sc.lanelet_network, sc.obstacles, [])
+        crcpp.remove_scenario(scenario_id)
         print("Successful - " + scenario_path)
     except:
         print("Failed - " + scenario_path)

@@ -8,9 +8,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 option(ENV_MODEL_BUILD_DOXYGEN "Build doxygen" OFF)
 option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
 option(ENV_MODEL_BUILD_PYBIND "Build python interface" OFF)
-option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" OFF)
+option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ON)
 option(ENV_MODEL_BUILD_CODE_COVERAGE "Build code coverage" OFF)
 option(ENV_MODEL_BUILD_EXECUTABLE "Build executable" ON)
+
+# Provides configure_package_config_file
+include(CMakePackageConfigHelpers)
+# Includes sane defaults for installation paths (CMAKE_INSTALL_LIBDIR, CMAKE_INSTALL_BINDIR etc.)
+include(GNUInstallDirs)
 
 # Appends dictionary where other cmake files are stored which install required Software
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
@@ -30,8 +35,6 @@ if(NOT CMAKE_BUILD_TYPE)
             STRING "Choose the type of build." FORCE)
 endif()
 
-add_subdirectory(external)
-
 # Include Eigen3, Boost filesystem, and OpenMP
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)
@@ -40,6 +43,8 @@ find_package(OpenMP)
 if(NOT OpenMP_CXX_FOUND)
     message(SEND_ERROR "Can't find the OpenMP package")
 endif()
+
+add_subdirectory(external)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -61,11 +66,6 @@ if(ENV_MODEL_BUILD_TESTS)
     add_subdirectory(tests)
 endif(ENV_MODEL_BUILD_TESTS)
 
-# Provides configure_package_config_file
-include(CMakePackageConfigHelpers)
-
-# Includes sane defaults for installation paths (CMAKE_INSTALL_LIBDIR, CMAKE_INSTALL_BINDIR etc.)
-include(GNUInstallDirs)
 
 install(TARGETS env_model
     EXPORT ${PROJECT_NAME}_Targets
@@ -74,12 +74,6 @@ install(TARGETS env_model
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-
-if(ENV_MODEL_BUILD_PYBIND)
-    install(TARGETS cpp_env_model env_model
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/python
-    )
-endif(ENV_MODEL_BUILD_PYBIND)
 
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
@@ -111,3 +105,4 @@ install(
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.c" PATTERN "*.cpp"
   )
+

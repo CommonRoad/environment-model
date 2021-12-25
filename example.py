@@ -1,4 +1,4 @@
-import cpp_env_model
+import crcpp
 from commonroad.geometry.shape import Rectangle
 from commonroad.scenario.lanelet import LaneletNetwork, Lanelet, LaneletType, LineMarking
 from commonroad.scenario.obstacle import State, ObstacleType, DynamicObstacle
@@ -103,13 +103,13 @@ obstacle_3 = DynamicObstacle(3, ObstacleType.CAR, Rectangle(5, 2),
                                  State(time_step=1, position=np.array([0, 12]), velocity=10, acceleration=0,
                                        orientation=0)]), Rectangle(5, 2)))
 
-cpp_env_model.register_scenario(123, 0, "DEU", lanelet_network, [obstacle_1], [obstacle_2, obstacle_3])
+crcpp.register_scenario(123, 0, "DEU", lanelet_network, [obstacle_1], [obstacle_2, obstacle_3])
 
 # Monitor-Mode
-sol_monitor_mode_1 = cpp_env_model.safe_distance_boolean_evaluation(123, 0, 1, 2)
-sol_monitor_mode_2 = cpp_env_model.safe_distance_boolean_evaluation(123, 1, 1, 2)
-sol_monitor_mode_3 = cpp_env_model.safe_distance_boolean_evaluation(123, 2, 1, 2)
-sol_monitor_mode_4 = cpp_env_model.safe_distance_boolean_evaluation(123, 3, 1, 2)
-sol_monitor_mode_5 = cpp_env_model.safe_distance_boolean_evaluation(123, 1, 1, 3)
+sol_monitor_mode_1 = crcpp.safe_distance_boolean_evaluation(123, 0, 1, 2)
+sol_monitor_mode_2 = crcpp.safe_distance_boolean_evaluation(123, 1, 1, 2)
+sol_monitor_mode_3 = crcpp.safe_distance_boolean_evaluation(123, 2, 1, 2)
+sol_monitor_mode_4 = crcpp.safe_distance_boolean_evaluation(123, 3, 1, 2)
+sol_monitor_mode_5 = crcpp.safe_distance_boolean_evaluation(123, 1, 1, 3)
 
-cpp_env_model.remove_scenario(123)
+crcpp.remove_scenario(123)

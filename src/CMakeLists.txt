@@ -70,8 +70,8 @@ set(ENV_MODEL_SRC_FILES
         )
 
 # Create environment model library
-if(ENVMODEL_BUILD_SHARED_LIBS)
-add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
+if(ENV_MODEL_BUILD_SHARED_LIBS)
+    add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
 else()
     add_library(env_model STATIC ${ENV_MODEL_SRC_FILES})
 endif()
@@ -121,26 +121,24 @@ if(ENV_MODEL_BUILD_EXECUTABLE)
 endif(ENV_MODEL_BUILD_EXECUTABLE)
 
 # add pybind module
+if(SKBUILD)
+    message(STATUS "The project is built using scikit-build")
+endif()
 if(ENV_MODEL_BUILD_PYBIND)
-    pybind11_add_module(cpp_env_model
+    set(python_module_name crcpp)
+    pybind11_add_module(${python_module_name} MODULE
             commonroad_cpp/interfaces/pybind/python_interface.cpp
             commonroad_cpp/interfaces/pybind/python_interface.h
             commonroad_cpp/interfaces/pybind/translate_python_types.cpp
             commonroad_cpp/interfaces/pybind/translate_python_types.h)
 
-    target_link_libraries(cpp_env_model PRIVATE env_model)
+    target_link_libraries(${python_module_name} PRIVATE env_model)
 
-    # $ORIGIN is a special value: It represents the location of the shared object
-    # being loaded itself. By setting the RPATH of the installed Python module
-    # to $ORIGIN, the loader will automatically look for shared libraries in the
-    # same directory as the module file itself.
-    #
-    # This is required here so that the loader finds e.g. libcrcc.so which is
-    # installed next to the Python module, even if the Python module got moved
-    # during installation.
+    install(TARGETS ${python_module_name} env_model
+            LIBRARY DESTINATION .
+            )
 
-    set_property(TARGET cpp_env_model PROPERTY INSTALL_RPATH "$ORIGIN")
-    set_property(TARGET yaml-cpp PROPERTY INSTALL_RPATH "$ORIGIN")
+    set_property(TARGET ${python_module_name} PROPERTY INSTALL_RPATH "$ORIGIN")
 
 endif(ENV_MODEL_BUILD_PYBIND)
 

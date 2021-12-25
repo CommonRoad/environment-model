@@ -81,8 +81,7 @@ bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lo
 
 double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP);
 
-
-PYBIND11_MODULE(cpp_env_model, m) {
+PYBIND11_MODULE(crcpp, m) {
     m.doc() = "CommonRoad Python/C++ Interface";
     m.def("register_scenario", &py_registerScenario, "Add new scenario to C++ environment model", py::arg("scenarioId"),
           py::arg("timeStep"), py::arg("dt"), py::arg("country"), py::arg("py_lanelets"), py::arg("py_egoVehicles"),
