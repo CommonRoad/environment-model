@@ -75,4 +75,4 @@ RightOfBroadLaneMarkingPredicate::laneletsLeftOfLanet(const std::shared_ptr<Worl
     }
     return leftLanelets;
 }
-RightOfBroadLaneMarkingPredicate::RightOfBroadLaneMarkingPredicate(): CommonRoadPredicate(false) {}
+RightOfBroadLaneMarkingPredicate::RightOfBroadLaneMarkingPredicate() : CommonRoadPredicate(false) {}

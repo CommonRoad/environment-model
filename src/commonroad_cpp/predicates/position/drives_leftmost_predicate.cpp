@@ -128,4 +128,4 @@ DrivesLeftmostPredicate::vehiclesAdjacent(size_t timeStep, const std::shared_ptr
 
     return otherVehicles;
 }
-DrivesLeftmostPredicate::DrivesLeftmostPredicate():CommonRoadPredicate(false) {}
+DrivesLeftmostPredicate::DrivesLeftmostPredicate() : CommonRoadPredicate(false) {}

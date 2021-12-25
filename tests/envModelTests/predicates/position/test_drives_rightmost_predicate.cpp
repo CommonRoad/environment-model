@@ -24,13 +24,11 @@ void DrivesRightmostPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle)
-    };
+        std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle)};
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)
-    };
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
@@ -39,17 +37,15 @@ void DrivesRightmostPredicateTest::SetUp() {
                                                       0.3, trajectoryPredictionObstacleOne, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
-    world =
-        std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
 
-    world2 =
-        std::make_shared<World>(World(2, roadNetwork, {egoVehicle}, {obstacleOne}, 0.1));
+    world2 = std::make_shared<World>(World(2, roadNetwork, {egoVehicle}, {obstacleOne}, 0.1));
 }
 
 TEST_F(DrivesRightmostPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(2, world2, egoVehicle));
-    EXPECT_FALSE(pred.booleanEvaluation(3, world2, egoVehicle)); //true
-    EXPECT_TRUE(pred.booleanEvaluation(4, world, egoVehicle)); //true
+    EXPECT_FALSE(pred.booleanEvaluation(3, world2, egoVehicle)); // true
+    EXPECT_TRUE(pred.booleanEvaluation(4, world, egoVehicle));   // true
 }

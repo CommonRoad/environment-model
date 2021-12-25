@@ -13,7 +13,6 @@
  */
 class MakesUTurnPredicate : public CommonRoadPredicate {
   public:
-
     /**
      * Constructor for MakesUTurnPredicate
      */

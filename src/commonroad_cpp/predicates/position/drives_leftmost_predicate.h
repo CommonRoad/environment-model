@@ -14,7 +14,6 @@
  */
 class DrivesLeftmostPredicate : public CommonRoadPredicate {
   public:
-
     /**
      * Constructor for DrivesLeftmostPredicate
      */

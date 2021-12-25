@@ -41,4 +41,4 @@ Constraint InRightmostLanePredicate::constraintEvaluation(size_t timeStep, const
     throw std::runtime_error("In Rightmost Lane Predicate does not support constraint evaluation!");
 }
 
-InRightmostLanePredicate::InRightmostLanePredicate():CommonRoadPredicate(false) {}
+InRightmostLanePredicate::InRightmostLanePredicate() : CommonRoadPredicate(false) {}

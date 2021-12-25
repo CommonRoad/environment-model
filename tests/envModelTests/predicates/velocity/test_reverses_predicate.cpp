@@ -10,10 +10,12 @@
 
 void ReversesPredicateTest::SetUp() {
 
-    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 0, 0,0, 0, 0, 0);
+    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 0, 0, 0, 0, 0, 0);
     std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 1, 0, 1, 0, 0, 0, 0, 0);
-    std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 1, 0, -parameters.standstillError, 0, 0, 0, 15, 0);
-    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 1-parameters.standstillError, 4, -2, 0,0, 0, 30, 0);
+    std::shared_ptr<State> stateTwoEgoVehicle =
+        std::make_shared<State>(2, 1, 0, -parameters.standstillError, 0, 0, 0, 15, 0);
+    std::shared_ptr<State> stateThreeEgoVehicle =
+        std::make_shared<State>(3, 1 - parameters.standstillError, 4, -2, 0, 0, 0, 30, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
@@ -27,8 +29,7 @@ void ReversesPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world =
-        std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
 TEST_F(ReversesPredicateTest, BooleanEvaluationObjects) {

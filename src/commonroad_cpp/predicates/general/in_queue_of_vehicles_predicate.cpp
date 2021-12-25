@@ -42,4 +42,4 @@ double InQueueOfVehiclesPredicate::robustEvaluation(size_t timeStep, const std::
     throw std::runtime_error("In Queue of Vehicles Predicate does not support robust evaluation!");
 }
 
-InQueueOfVehiclesPredicate::InQueueOfVehiclesPredicate(): CommonRoadPredicate(false) {}
+InQueueOfVehiclesPredicate::InQueueOfVehiclesPredicate() : CommonRoadPredicate(false) {}

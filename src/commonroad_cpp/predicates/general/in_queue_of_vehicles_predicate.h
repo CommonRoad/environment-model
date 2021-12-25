@@ -13,7 +13,6 @@
  */
 class InQueueOfVehiclesPredicate : public CommonRoadPredicate {
   public:
-
     /**
      * Constructor for InQueueOfVehiclesPredicate
      */

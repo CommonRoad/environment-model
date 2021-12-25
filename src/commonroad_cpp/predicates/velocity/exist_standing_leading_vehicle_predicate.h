@@ -14,7 +14,6 @@
  */
 class ExistStandingLeadingVehiclePredicate : public CommonRoadPredicate {
   public:
-
     /**
      * Constructor for ExistStandingLeadingVehiclePredicate
      */

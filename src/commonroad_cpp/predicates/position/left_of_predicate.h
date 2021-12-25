@@ -13,7 +13,6 @@
  */
 class LeftOfPredicate : public CommonRoadPredicate {
   public:
-
     /**
      * Constructor for LeftOfPredicate
      */

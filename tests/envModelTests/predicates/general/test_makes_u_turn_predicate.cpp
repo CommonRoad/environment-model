@@ -12,14 +12,15 @@
 void MakesUTurnPredicateTest::SetUp() {
 
     double curvlinOrientation0 = 0;
-    double curvlinOrientation1 = M_PI/8;
-    double curvlinOrientation2 = M_PI/2;
-    double curvlinOrientation3 = (3 * M_PI)/4;
+    double curvlinOrientation1 = M_PI / 8;
+    double curvlinOrientation2 = M_PI / 2;
+    double curvlinOrientation3 = (3 * M_PI) / 4;
 
-    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0,0, curvlinOrientation0, 0, 0);
+    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0, 0, curvlinOrientation0, 0, 0);
     std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 0, 10, 0, 0, curvlinOrientation1, 10, 0);
     std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 20, 0, 10, 0, 0, curvlinOrientation2, 20, 0);
-    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 0, 10, 0,0, curvlinOrientation3, 30, 0);
+    std::shared_ptr<State> stateThreeEgoVehicle =
+        std::make_shared<State>(3, 30, 0, 10, 0, 0, curvlinOrientation3, 30, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
@@ -33,8 +34,7 @@ void MakesUTurnPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world =
-        std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
 TEST_F(MakesUTurnPredicateTest, BooleanEvaluationObjects) {

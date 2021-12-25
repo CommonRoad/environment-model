@@ -18,7 +18,6 @@ void InLRightmostLanePredicateTest::SetUp() {
     std::shared_ptr<State> stateFiveEgoVehicle = std::make_shared<State>(5, 50, -2, 10, 0, 0, 0, 50, -2);
     std::shared_ptr<State> stateSixEgoVehicle = std::make_shared<State>(6, 60, 2, 10, 0, 0, 0, 60, 2);
 
-
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
@@ -33,8 +32,7 @@ void InLRightmostLanePredicateTest::SetUp() {
                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
-    world =
-        std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
 TEST_F(InLRightmostLanePredicateTest, BooleanEvaluationObjects) {

@@ -39,27 +39,23 @@ void InQueueOfVehiclesPredicateTest::SetUp() {
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)
-    };
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)
-    };
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleThree{
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree)
-    };
-
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree)};
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
     obstacleOne = std::make_shared<Obstacle>(Obstacle(2, false, stateOneObstacleOne, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionObstacleOne, 5, 2));
-    obstacleTwo = std::make_shared<Obstacle>(Obstacle(3, false, stateOneObstacleTwo, ObstacleType::car, 50, 10, 3,
-                                                      -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
+    obstacleTwo = std::make_shared<Obstacle>(Obstacle(3, false, stateOneObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
+                                                      0.3, trajectoryPredictionObstacleTwo, 5, 2));
     obstacleThree = std::make_shared<Obstacle>(Obstacle(4, false, stateTwoObstacleThree, ObstacleType::car, 50, 10, 3,
                                                         -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
 

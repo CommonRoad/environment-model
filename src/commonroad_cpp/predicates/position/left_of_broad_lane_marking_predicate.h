@@ -14,7 +14,6 @@
  */
 class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
   public:
-
     /**
      * Constructor for LeftOfBroadLaneMarkingPredicate
      */
@@ -31,7 +30,7 @@ class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                           const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Constraint evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -44,7 +43,7 @@ class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                            const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     /**
      * Robustness evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -57,11 +56,11 @@ class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP={}) override;
+                                    const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     std::vector<std::shared_ptr<Lanelet>> laneletsRightOfVehicle(size_t timeStep, const std::shared_ptr<World> &world,
                                                                  const std::shared_ptr<Obstacle> &obs);
 
     std::set<std::shared_ptr<Lanelet>> laneletsRightOfLanet(const std::shared_ptr<World> &world,
-                                                               const std::shared_ptr<Lanelet> &lanelet);
+                                                            const std::shared_ptr<Lanelet> &lanelet);
 };

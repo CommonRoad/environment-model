@@ -14,7 +14,6 @@
  */
 class DrivesFasterPredicate : public CommonRoadPredicate {
   public:
-
     /**
      * Constructor for DrivesFasterPredicate
      */
