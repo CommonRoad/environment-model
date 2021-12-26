@@ -70,3 +70,11 @@ TEST_F(LaneBasedOrientationSimilarPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne,
                                                  obstacleThree)); // ego vehicle drives to other from right
 }
+
+TEST_F(LaneBasedOrientationSimilarPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(LaneBasedOrientationSimilarPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

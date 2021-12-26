@@ -49,3 +49,11 @@ TEST_F(DrivesLeftmostPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(3, world2, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(4, world, egoVehicle));
 }
+
+TEST_F(DrivesLeftmostPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle, obstacleOne), std::runtime_error);
+}
+
+TEST_F(DrivesLeftmostPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle, obstacleOne), std::runtime_error);
+}

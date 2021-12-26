@@ -106,3 +106,11 @@ TEST_F(LeftOfPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(9, world, egoVehicle, obstacleOne));
     EXPECT_FALSE(pred.booleanEvaluation(10, world, egoVehicle, obstacleTwo));
 }
+
+TEST_F(LeftOfPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(LeftOfPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

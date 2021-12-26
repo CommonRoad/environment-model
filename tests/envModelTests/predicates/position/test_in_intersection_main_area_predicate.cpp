@@ -49,3 +49,11 @@ TEST_F(InIntersectionMainAreaPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleTwo));  // inside intersection
     EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleTwo)); // left intersection
 }
+
+TEST_F(InIntersectionMainAreaPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(InIntersectionMainAreaPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

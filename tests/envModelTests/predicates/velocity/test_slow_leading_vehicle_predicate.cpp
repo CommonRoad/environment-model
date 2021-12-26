@@ -87,3 +87,11 @@ TEST_F(SlowLeadingVehiclePredicateTest, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne)); // third leading vehicle drives to slow
     EXPECT_EQ(pred.getStatistics().numExecutions, 4);
 }
+
+TEST_F(SlowLeadingVehiclePredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(SlowLeadingVehiclePredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

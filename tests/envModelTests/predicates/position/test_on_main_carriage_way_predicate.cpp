@@ -41,3 +41,11 @@ TEST_F(OnMainCarriageWayPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(4, world, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(5, world, egoVehicle));
 }
+
+TEST_F(OnMainCarriageWayPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle), std::runtime_error);
+}
+
+TEST_F(OnMainCarriageWayPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle), std::runtime_error);
+}

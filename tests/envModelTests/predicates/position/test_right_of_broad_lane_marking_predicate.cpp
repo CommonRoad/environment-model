@@ -44,3 +44,11 @@ TEST_F(RightOfBroadLaneMarkingPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(5, world, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(6, world, egoVehicle));
 }
+
+TEST_F(RightOfBroadLaneMarkingPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle), std::runtime_error);
+}
+
+TEST_F(RightOfBroadLaneMarkingPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle), std::runtime_error);
+}
