@@ -9,7 +9,7 @@
 
 void Circle::setRadius(const double rad) { radius = rad; }
 
-void Circle::setCenter(const double x, const double y) { center = vertex{x, y}; }
+void Circle::setCenter(const double xPos, const double yPos) { center = vertex{xPos, yPos}; }
 
 double Circle::getRadius() const { return radius; }
 

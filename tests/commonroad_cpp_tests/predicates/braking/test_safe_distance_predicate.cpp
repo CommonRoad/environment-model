@@ -85,3 +85,42 @@ TEST_F(SafeDistancePredicateTest, ComputeSafeDistance) {
     // invalid acceleration
     EXPECT_THROW(SafeDistancePredicate::computeSafeDistance(0, 0, 1, 2, 0.0), std::logic_error);
 }
+
+// Tests for CommonRoadPredicate Interface
+TEST_F(SafeDistancePredicateTest, GetParameters) {
+    EXPECT_EQ(pred.getParameters().aAbrupt, -2);
+    EXPECT_EQ(pred.getParameters().minInterstateWidth, 7);
+}
+
+TEST_F(SafeDistancePredicateTest, SetParameters) {
+    PredicateParameters tmpParameters;
+    tmpParameters.minInterstateWidth = 5;
+    EXPECT_EQ(pred.getParameters().minInterstateWidth, 7);
+    pred.setParameters(tmpParameters);
+    EXPECT_EQ(pred.getParameters().minInterstateWidth, 5);
+}
+
+TEST_F(SafeDistancePredicateTest, ResetStatistics) {
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo));
+    EXPECT_EQ(pred.getStatistics().numExecutions, 1);
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo));
+    EXPECT_LT(pred.getStatistics().minComputationTime, LONG_MAX);
+    EXPECT_GT(pred.getStatistics().maxComputationTime, LONG_MIN);
+    EXPECT_GT(pred.getStatistics().totalComputationTime, 0);
+    EXPECT_GE(pred.getStatistics().numSatisfaction, 0);
+    EXPECT_EQ(pred.getStatistics().numExecutions, 2);
+    pred.resetStatistics();
+    EXPECT_EQ(pred.getStatistics().minComputationTime, LONG_MAX);
+    EXPECT_EQ(pred.getStatistics().maxComputationTime, LONG_MIN);
+    EXPECT_EQ(pred.getStatistics().totalComputationTime, 0);
+    EXPECT_EQ(pred.getStatistics().numSatisfaction, 0);
+    EXPECT_EQ(pred.getStatistics().numExecutions, 0);
+}
+
+TEST_F(SafeDistancePredicateTest, GetEvaluationTimer) {
+    EXPECT_EQ(pred.getEvaluationTimer().getTotalTime(), 0);
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo));
+    EXPECT_GT(pred.getEvaluationTimer().getTotalTime(), 0);
+}
+
+TEST_F(SafeDistancePredicateTest, IsVehicleDependent) { EXPECT_TRUE(pred.isVehicleDependent()); }

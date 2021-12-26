@@ -37,10 +37,10 @@ struct ValidStates {
 
 struct PredicateStatistics {
     long maxComputationTime{LONG_MIN};
-    long minComputationTime{LONG_MAX};
-    long totalComputationTime{0};
-    long numExecutions{0};
-    long numSatisfaction{0};
+    size_t minComputationTime{LONG_MAX};
+    size_t totalComputationTime{0};
+    size_t numExecutions{0};
+    size_t numSatisfaction{0};
 };
 
 struct Constraint {
