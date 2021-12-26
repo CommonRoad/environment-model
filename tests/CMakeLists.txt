@@ -14,6 +14,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/geometry/test_circle.cpp
         commonroad_cpp_tests/geometry/test_geometric_operations.cpp
         commonroad_cpp_tests/interfaces/test_interfaces.cpp
+        commonroad_cpp_tests/predicates/predicate_manager_test.cpp
         commonroad_cpp_tests/predicates/utils_predicate_test.cpp
         commonroad_cpp_tests/predicates/braking/test_safe_distance_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_unnecessary_braking_predicate.cpp
