@@ -20,8 +20,8 @@ TEST_F(WorldTest, TestScenariosValid) {
     std::array<std::string, 6> scenarios{"ZAM_Urban-2_1.xml",      "USA_Peach-4_1_T-1.xml",
                                          "USA_Peach-2_1_T-1.xml",  "ESP_Almansa-2_2_T-1.xml",
                                          "ITA_Foggia-7_2_T-1.xml", "ARG_Carcarana-6_5_T-1.xml"};
-    for (const auto &sc : scenarios) {
-        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + sc};
+    for (const auto &scen : scenarios) {
+        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scen};
         const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
             InputUtils::getDataFromCommonRoad(pathToTestFileOne);
         EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
@@ -51,8 +51,8 @@ TEST_F(WorldTest, TestSingleScenarioObstacle) {
     auto world = World(0, roadNetworkScenarioOne,
                        {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, timeStepSizeOne);
     auto obs{world.findObstacle(obstacleId)};
-    for (const auto &t : obs->getTimeSteps())
-        EXPECT_NO_THROW(auto ref{obs->getReferenceLane(t)});
+    for (const auto &time : obs->getTimeSteps())
+        EXPECT_NO_THROW(auto ref{obs->getReferenceLane(time)});
 }
 
 TEST_F(WorldTest, TestSingleScenario) {
@@ -62,8 +62,8 @@ TEST_F(WorldTest, TestSingleScenario) {
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
     for (const auto &obs : obstaclesScenarioOne)
-        for (const auto &t : obs->getTimeSteps())
-            EXPECT_NO_THROW(obs->getReferenceLane(t));
+        for (const auto &time : obs->getTimeSteps())
+            EXPECT_NO_THROW(obs->getReferenceLane(time));
 }
 
 // TEST_F(WorldTest, TestAllScenarios) {

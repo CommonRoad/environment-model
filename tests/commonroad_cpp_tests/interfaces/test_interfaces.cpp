@@ -133,7 +133,7 @@ TEST_F(InterfacesTest, ReadCommandLineValuesValidDefault) {
 
     EXPECT_EQ(error_code, 0);
     EXPECT_EQ(num_threads, 1);
-    EXPECT_EQ(xmlFilePath, "../src/commonroad_cpp/default_config.xml");
+    EXPECT_EQ(xmlFilePath, "../src/commonroad_cpp_tests/default_config.xml");
 }
 
 TEST_F(InterfacesTest, ReadCommandLineValuesValidParameters) {
