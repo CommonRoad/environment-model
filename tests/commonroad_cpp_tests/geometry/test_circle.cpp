@@ -16,18 +16,13 @@ void CircleTest::SetUp() {
 TEST_F(CircleTest, Initialization) {
     EXPECT_EQ(circleOne.getType(), ShapeType::circle);
     EXPECT_EQ(circleOne.getRadius(), circleOneRadius);
-    EXPECT_EQ(circleTwo.getLength(), circleTwoRadius);
-    EXPECT_EQ(circleThree.getLength(), circleThreeRadius);
+    EXPECT_EQ(circleTwo.getRadius(), circleTwoRadius);
+    EXPECT_EQ(circleThree.getRadius(), circleThreeRadius);
 }
 
-TEST_F(CircleTest, SetWidth) {
-    circleOne.setWidth(2.1);
-    EXPECT_EQ(circleOne.getWidth(), 2.1);
-}
-
-TEST_F(CircleTest, SetLength) {
-    circleOne.setLength(2.1);
-    EXPECT_EQ(circleOne.getLength(), 2.1);
+TEST_F(CircleTest, SetRadius) {
+    circleOne.setRadius(2.1);
+    EXPECT_EQ(circleOne.getRadius(), 2.1);
 }
 
 TEST_F(CircleTest, ScaleShape) {
