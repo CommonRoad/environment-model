@@ -23,14 +23,6 @@ class World;
 class CommonRoadPredicate {
   public:
     /**
-     * Constructor for predicate class.
-     *
-     * @param parameters Struct containing parameters of all predicates.
-     * @param vehicleDependent Boolean indicating whether predicate depends only on one vehicle
-     */
-    explicit CommonRoadPredicate(const PredicateParameters &parameters, bool vehicleDependent);
-
-    /**
      * Default constructor for predicate class without parameter.
      *
      * @param vehicleDependent Boolean indicating whether predicate depends only on one vehicle

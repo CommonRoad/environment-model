@@ -38,6 +38,7 @@ TEST_F(CommonRoadContainerTest, RegisterScenario) {
 TEST_F(CommonRoadContainerTest, RemoveScenario) {
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
     EXPECT_THROW(eval->removeScenario(10), std::logic_error);
+    EXPECT_NO_THROW(eval->findWorld(6));
     EXPECT_NO_THROW(eval->removeScenario(1));
     EXPECT_THROW(eval->findWorld(1), std::logic_error);
     EXPECT_NO_THROW(eval->removeScenario(2));

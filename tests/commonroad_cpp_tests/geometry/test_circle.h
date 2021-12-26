@@ -20,7 +20,6 @@ class CircleTest : public testing::Test {
     vertex circleTwoCenter{0.0, 0.0};
     Circle circleThree;
     double circleThreeRadius{1.0};
-    vertex circleThreeCenter{1.0, 1.0};
     Circle circleFour;
     double circleFourRadius{-1.0};
     vertex circleFourCenter{-1.0, -1.0};

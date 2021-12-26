@@ -11,13 +11,21 @@ void CircleTest::SetUp() {
     circleOne = Circle();
     circleTwo = Circle(circleTwoRadius);
     circleThree = Circle(circleThreeRadius);
+    circleFour = Circle(circleFourRadius, circleFourCenter);
 }
 
 TEST_F(CircleTest, Initialization) {
     EXPECT_EQ(circleOne.getType(), ShapeType::circle);
     EXPECT_EQ(circleOne.getRadius(), circleOneRadius);
+    EXPECT_EQ(circleOne.getCenter().x, circleOneCenter.x);
+    EXPECT_EQ(circleOne.getCenter().y, circleOneCenter.y);
     EXPECT_EQ(circleTwo.getRadius(), circleTwoRadius);
+    EXPECT_EQ(circleTwo.getCenter().x, circleTwoCenter.x);
+    EXPECT_EQ(circleTwo.getCenter().y, circleTwoCenter.y);
     EXPECT_EQ(circleThree.getRadius(), circleThreeRadius);
+    EXPECT_EQ(circleFour.getRadius(), circleFourRadius);
+    EXPECT_EQ(circleFour.getCenter().x, circleFourCenter.x);
+    EXPECT_EQ(circleFour.getCenter().y, circleFourCenter.y);
 }
 
 TEST_F(CircleTest, SetRadius) {
@@ -28,6 +36,12 @@ TEST_F(CircleTest, SetRadius) {
 TEST_F(CircleTest, ScaleShape) {
     circleTwo.scaleShape(2.0);
     EXPECT_EQ(circleTwo.getRadius(), 2 * circleTwoRadius);
+}
+
+TEST_F(CircleTest, SetCenter) {
+    circleThree.setCenter(3, 4);
+    EXPECT_EQ(circleThree.getCenter().x, 3);
+    EXPECT_EQ(circleThree.getCenter().y, 4);
 }
 
 TEST_F(CircleTest, PrintParameters) { circleOne.printParameters(); }

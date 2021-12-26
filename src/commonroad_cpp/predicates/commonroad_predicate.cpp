@@ -69,9 +69,6 @@ const PredicateParameters &CommonRoadPredicate::getParameters() const { return p
 
 void CommonRoadPredicate::setParameters(const PredicateParameters &params) { parameters = params; }
 
-CommonRoadPredicate::CommonRoadPredicate(const PredicateParameters &parameters, bool vehicleDependent)
-    : parameters(parameters), vehicleDependent(vehicleDependent) {}
-
 const PredicateStatistics &CommonRoadPredicate::getStatistics() const { return statistics; }
 
 void CommonRoadPredicate::resetStatistics() {
