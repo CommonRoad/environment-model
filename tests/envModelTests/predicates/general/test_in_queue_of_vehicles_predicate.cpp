@@ -71,3 +71,11 @@ TEST_F(InQueueOfVehiclesPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(2, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(3, world, egoVehicle));
 }
+
+TEST_F(InQueueOfVehiclesPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(InQueueOfVehiclesPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

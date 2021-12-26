@@ -7,7 +7,7 @@
 #include "test_interstate_broad_enough.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
-#include <math.h>
+#include <cmath>
 
 void InterstateBroadEnoughPredicateTest::SetUp() {
 
@@ -36,4 +36,12 @@ TEST_F(InterstateBroadEnoughPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
     // EXPECT_FALSE(pred.booleanEvaluation(2, world_2, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle));
+}
+
+TEST_F(InterstateBroadEnoughPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle), std::runtime_error);
+}
+
+TEST_F(InterstateBroadEnoughPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle), std::runtime_error);
 }

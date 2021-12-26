@@ -70,3 +70,11 @@ TEST_F(InSlowMovingTrafficPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne));
     EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne));
 }
+
+TEST_F(InSlowMovingTrafficPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(InSlowMovingTrafficPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

@@ -53,3 +53,11 @@ TEST_F(TestInSingleLanePredicate, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne));
     EXPECT_TRUE(pred.statisticBooleanEvaluation(4, world, obstacleOne));
 }
+
+TEST_F(TestInSingleLanePredicate, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
+}
+
+TEST_F(TestInSingleLanePredicate, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
+}

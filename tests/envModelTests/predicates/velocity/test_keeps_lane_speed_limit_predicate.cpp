@@ -47,3 +47,11 @@ TEST_F(KeepsLaneSpeedLimitPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne)); // there exists no speed limit
     EXPECT_EQ(pred.getStatistics().numExecutions, 4);
 }
+
+TEST_F(KeepsLaneSpeedLimitPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
+}
+
+TEST_F(KeepsLaneSpeedLimitPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
+}

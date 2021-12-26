@@ -85,3 +85,11 @@ TEST_F(InCongestionPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne));
     EXPECT_EQ(pred.getStatistics().numExecutions, 4);
 }
+
+TEST_F(InCongestionPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(InCongestionPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

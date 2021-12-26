@@ -53,3 +53,11 @@ TEST_F(DrivesWithSlightlyHigherSpeedPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, obstacleOne));
     EXPECT_FALSE(pred.booleanEvaluation(3, world, egoVehicle, obstacleOne));
 }
+
+TEST_F(DrivesWithSlightlyHigherSpeedPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle, obstacleOne), std::runtime_error);
+}
+
+TEST_F(DrivesWithSlightlyHigherSpeedPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle, obstacleOne), std::runtime_error);
+}

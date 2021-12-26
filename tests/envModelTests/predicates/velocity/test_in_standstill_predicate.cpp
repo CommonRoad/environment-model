@@ -51,3 +51,11 @@ TEST_F(InStandstillPredicateTest, StatisticBooleanEvaluation) {
         3, world, obstacleOne)); // drives with speed slightly above upper standstill error margin
     EXPECT_EQ(pred.getStatistics().numExecutions, 4);
 }
+
+TEST_F(InStandstillPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
+}
+
+TEST_F(InStandstillPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
+}

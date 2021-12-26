@@ -43,3 +43,11 @@ TEST_F(MakesUTurnPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(3, world, egoVehicle));
 }
+
+TEST_F(MakesUTurnPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle), std::runtime_error);
+}
+
+TEST_F(MakesUTurnPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle), std::runtime_error);
+}

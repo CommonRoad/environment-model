@@ -38,3 +38,11 @@ TEST_F(OnShoulderPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(3, world, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(4, world, egoVehicle));
 }
+
+TEST_F(OnShoulderPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle), std::runtime_error);
+}
+
+TEST_F(OnShoulderPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle), std::runtime_error);
+}

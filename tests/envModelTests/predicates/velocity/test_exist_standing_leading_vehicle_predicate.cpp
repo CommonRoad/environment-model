@@ -88,3 +88,11 @@ TEST_F(ExistStandingLeadingVehiclePredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(2, world2, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(3, world3, egoVehicle));
 }
+
+TEST_F(ExistStandingLeadingVehiclePredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(ExistStandingLeadingVehiclePredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

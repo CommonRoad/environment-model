@@ -57,3 +57,11 @@ TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
         2, world, obstacleTwo)); // stop line with two different lon. positions; obstacle above stop line
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleTwo)); // stop line behind obstacle
 }
+
+TEST_F(StopLineInFrontPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(StopLineInFrontPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

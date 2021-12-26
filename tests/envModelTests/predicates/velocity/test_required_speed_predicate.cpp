@@ -48,3 +48,11 @@ TEST_F(RequiredSpeedPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne)); // there exists not a min. required speed
     EXPECT_EQ(pred.getStatistics().numExecutions, 4);
 }
+
+TEST_F(RequiredSpeedPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
+}
+
+TEST_F(RequiredSpeedPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
+}

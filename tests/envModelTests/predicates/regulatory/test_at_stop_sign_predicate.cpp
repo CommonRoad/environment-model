@@ -35,3 +35,11 @@ TEST_F(AtStopSignPredicateTest, BooleanEvaluation) {
         pred.booleanEvaluation(1, world, obstacleOne)); // one occupied lanelet references stop sign the other not
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne)); // occupied lanelet does not occupy stop sign
 }
+
+TEST_F(AtStopSignPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(AtStopSignPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

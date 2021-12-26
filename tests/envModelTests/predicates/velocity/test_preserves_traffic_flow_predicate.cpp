@@ -42,3 +42,11 @@ TEST_F(PreservesTrafficFlowPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne)); // vehicle drives faster than velocity limit
     EXPECT_EQ(pred.getStatistics().numExecutions, 3);
 }
+
+TEST_F(PreservesTrafficFlowPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
+}
+
+TEST_F(PreservesTrafficFlowPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
+}

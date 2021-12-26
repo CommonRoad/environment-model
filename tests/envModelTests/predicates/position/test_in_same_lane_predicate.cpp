@@ -95,3 +95,11 @@ TEST_F(TestInSameLanePredicate, BooleanEvaluationObjectsInIntersection) {
                                        relevantObstacles.at(1))); // vehicle on straight lane and ego vehicle drives
                                                                   // straight
 }
+
+TEST_F(TestInSameLanePredicate, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(TestInSameLanePredicate, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

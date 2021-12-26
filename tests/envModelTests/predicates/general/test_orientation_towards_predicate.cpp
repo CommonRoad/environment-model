@@ -70,3 +70,11 @@ TEST_F(OrientationTowardsPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne,
                                                 obstacleThree)); // ego vehicle drives to other from right
 }
+
+TEST_F(OrientationTowardsPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(OrientationTowardsPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}

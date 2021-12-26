@@ -68,3 +68,11 @@ TEST_F(AtRedStraightTrafficLightPredicateTest, StatisticBooleanEvaluation) {
         1, world,
         obstacleTwo)); // standing on stop line -> partially in intersection, traffic light has another direction
 }
+
+TEST_F(AtRedStraightTrafficLightPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(AtRedStraightTrafficLightPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
