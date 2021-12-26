@@ -15,13 +15,14 @@
 std::shared_ptr<CommonRoadContainer> CommonRoadContainer::instance =
     nullptr; // with static declaration, this can live outside of class instance
 
-void CommonRoadContainer::registerScenario(const size_t id, size_t timeStep, double dt,
+void CommonRoadContainer::registerScenario(const size_t scenarioId, size_t timeStep, double timeStepSize,
                                            const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                           std::vector<std::shared_ptr<Obstacle>> &egoVehicles,
-                                           std::vector<std::shared_ptr<Obstacle>> &obstacleList) {
-    if (worldList.find(id) != worldList.end())
+                                           const std::vector<std::shared_ptr<Obstacle>> &egoVehicles,
+                                           const std::vector<std::shared_ptr<Obstacle>> &obstacleList) {
+    if (worldList.find(scenarioId) != worldList.end())
         return; // ID does already exist
-    worldList.insert({id, std::make_shared<World>(timeStep, roadNetwork, egoVehicles, obstacleList, dt)});
+    worldList.insert(
+        {scenarioId, std::make_shared<World>(timeStep, roadNetwork, egoVehicles, obstacleList, timeStepSize)});
 }
 
 std::shared_ptr<CommonRoadContainer> CommonRoadContainer::getInstance() {
@@ -30,16 +31,16 @@ std::shared_ptr<CommonRoadContainer> CommonRoadContainer::getInstance() {
     return instance;
 }
 
-std::shared_ptr<World> CommonRoadContainer::findWorld(size_t id) {
-    auto world{worldList.find(id)};
+std::shared_ptr<World> CommonRoadContainer::findWorld(size_t scenarioId) {
+    auto world{worldList.find(scenarioId)};
     if (world == worldList.end())
         throw std::logic_error("ID does not exist in container!");
     else
         return world->second;
 }
 
-void CommonRoadContainer::removeScenario(const size_t id) {
-    if (worldList.find(id) == worldList.end())
+void CommonRoadContainer::removeScenario(const size_t scenarioId) {
+    if (worldList.find(scenarioId) == worldList.end())
         throw std::logic_error("ID does not exist in container!");
-    worldList.erase(id);
+    worldList.erase(scenarioId);
 }

@@ -10,7 +10,7 @@
 
 #include "commonroad_cpp/geometry/circle.h"
 
-class CircleTestInitialization {
+class CircleTest : public testing::Test {
   protected:
     Circle circleOne;
     double circleOneRadius{0.0};
@@ -25,10 +25,6 @@ class CircleTestInitialization {
     double circleFourRadius{-1.0};
     vertex circleFourCenter{-1.0, -1.0};
 
-    void setUpCircle();
-};
-
-class CircleTest : public testing::Test, public CircleTestInitialization {
   private:
     void SetUp() override;
 };

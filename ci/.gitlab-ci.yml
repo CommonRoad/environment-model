@@ -149,6 +149,7 @@ coverage-analyze:
     - gcovr
       -f src/
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
+      -e src/commonroad_cpp/geometry/shape.h
       -e src/commonroad_cpp/interfaces/pybind/
       -e /commonroad/dist/include/yaml-cpp/
       --print-summary
@@ -172,6 +173,7 @@ coverage-report:
     - gcovr
       -f src/
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
+      -e src/commonroad_cpp/geometry/shape.h
       -e src/commonroad_cpp/interfaces/pybind/
       -e /commonroad/dist/include/yaml-cpp/
       --print-summary
