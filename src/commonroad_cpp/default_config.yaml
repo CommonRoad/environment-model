@@ -34,6 +34,7 @@ predicate_eval:
               "keeps_lane_speed_limit", "preserves_traffic_flow", "keeps_sign_min_speed_limit", "slow_leading_vehicle",
               "orientation_towards", "lane_based_orientation_similar", "in_single_lane", "in_standstill",
               "passes_stop_line"]
+    test: ["keeps_safe_distance_prec"]
   relevant_predicate_sets: [general]
 
 # Ego vehicle parameters

@@ -1,10 +1,13 @@
 //
-// Created by Sebastian Maierhofer on 21.02.21.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_UTILITY_FUNCTIONS_H
-#define ENV_MODEL_UTILITY_FUNCTIONS_H
+#pragma once
 
+#include "vector"
 #include <string>
 
 namespace TestUtils {
@@ -12,6 +15,8 @@ namespace TestUtils {
 bool existsDirectory(const std::string &path);
 
 std::string getTestScenarioDirectory();
-} // namespace TestUtils
 
-#endif // ENV_MODEL_UTILITY_FUNCTIONS_H
+void copyAndReplaceContentInFile(const std::string &orgFileName, const std::string &newFileName,
+                                 const std::vector<std::tuple<std::string, std::string>> &stringList);
+
+} // namespace TestUtils

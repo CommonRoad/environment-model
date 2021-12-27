@@ -96,6 +96,17 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
     std::string filePath;
     int argc{5};
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/test_config.yaml"};
+    std::vector<std::tuple<std::string, std::string>> replace{
+        {"evaluation_mode: directory", "evaluation_mode: single_scenario"},
+        {"directories: [ \"./tests/scenarios\" ]",
+         "directories: [ " + TestUtils::getTestScenarioDirectory() + "/predicates/ ]"},
+        {"output_directory: \"src/commonroad_cpp/predicates\"",
+         "output_directory: " + TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/ "},
+        {"relevant_predicate_sets: [general]", "relevant_predicate_sets: [test]"},
+    };
+    TestUtils::copyAndReplaceContentInFile(TestUtils::getTestScenarioDirectory() +
+                                               "/../../src/commonroad_cpp/default_config.yaml",
+                                           pathToTestFile, replace);
     const char *array[5]{"myprogram", "--input-file", pathToTestFile.c_str(), "--t", "4"};
     char **argv{const_cast<char **>(array)};
     int error_code = InputUtils::readCommandLineValues(argc, argv, num_threads, filePath);
@@ -120,4 +131,6 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
     EXPECT_EQ(predicates["in_standstill"]->getStatistics().maxComputationTime, LONG_MIN);
     EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() +
                                         "/../commonroad_cpp_tests/predicate_satisfaction.txt"));
+    EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() +
+                                        "/../commonroad_cpp_tests/test_config.yaml"));
 }
