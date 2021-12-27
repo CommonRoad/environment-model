@@ -17,11 +17,10 @@ bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const st
                                                        const std::shared_ptr<Obstacle> &obstacleP) {
     auto occupied_lanelets = obstacleK->getOccupiedLanelets(timeStep);
     double obsK_s = obstacleK->getStateByTimeStep(timeStep)->getLonPosition();
-    for (const auto &lanelet : occupied_lanelets) {
-        if (roadWidth(world, lanelet, obsK_s) <= parameters.minInterstateWidth)
-            return false;
-    }
-    return true;
+    return std::all_of(occupied_lanelets.begin(), occupied_lanelets.end(),
+                       [obsK_s, world, this](const std::shared_ptr<Lanelet> &lanelet) {
+                           return roadWidth(world, lanelet, obsK_s) > parameters.minInterstateWidth;
+                       });
 }
 
 Constraint InterstateBroadEnoughPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -41,27 +40,27 @@ double InterstateBroadEnoughPredicate::roadWidth(const std::shared_ptr<World> &w
     const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
     std::vector<std::shared_ptr<Lanelet>> adj_lanelets = adjacentLanelets(lanelet);
     double road_width = lanelet->getWidth(position);
-    for (auto &l : adj_lanelets) {
-        road_width += roadNetwork->findLanesByContainedLanelet(l->getId())[0]->getWidth(position);
-    }
+    for (auto &adjLanelet : adj_lanelets)
+        road_width += roadNetwork->findLanesByContainedLanelet(adjLanelet->getId())[0]->getWidth(position);
+
     return road_width;
 }
 
 std::vector<std::shared_ptr<Lanelet>>
 InterstateBroadEnoughPredicate::adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet) {
     std::vector<std::shared_ptr<Lanelet>> adj_lanelets;
-    std::shared_ptr<Lanelet> la = lanelet;
+    std::shared_ptr<Lanelet> laneletTmp = lanelet;
 
-    while (la != nullptr && la->getAdjacentLeft().adj != nullptr) {
-        adj_lanelets.push_back(la);
-        la = la->getAdjacentLeft().adj;
+    while (laneletTmp != nullptr && laneletTmp->getAdjacentLeft().adj != nullptr) {
+        adj_lanelets.push_back(laneletTmp);
+        laneletTmp = laneletTmp->getAdjacentLeft().adj;
     }
 
-    la = lanelet;
+    laneletTmp = lanelet;
 
-    while (la != nullptr && la->getAdjacentRight().adj != nullptr) {
-        adj_lanelets.push_back(la);
-        la = la->getAdjacentRight().adj;
+    while (laneletTmp != nullptr && laneletTmp->getAdjacentRight().adj != nullptr) {
+        adj_lanelets.push_back(laneletTmp);
+        laneletTmp = laneletTmp->getAdjacentRight().adj;
     }
     return adj_lanelets;
 }
