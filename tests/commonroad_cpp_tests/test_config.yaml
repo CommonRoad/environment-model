@@ -17,7 +17,7 @@ simulation_param:
   directories: [ "../tests/scenarios/predicates/" ]
   performance_measurement: true
   operating_mode: boolean # one of boolean, constraint, robustness
-  output_directory: "./"
+  output_directory: "../tests/commonroad_cpp_tests/"
   output_file_name: "predicate_satisfaction.txt"
 
 # parameters for predicate evaluation

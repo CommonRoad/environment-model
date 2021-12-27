@@ -44,6 +44,7 @@ void PredicateManagerTest::extractRelevantPredicatesHelper(int num_threads) cons
     EXPECT_GE(predicates["in_standstill"]->getStatistics().totalComputationTime,
               predicates["in_standstill"]->getStatistics().maxComputationTime);
     EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() + "/test.txt"));
+    predicateManager.reset();
 }
 
 TEST_F(PredicateManagerTest, ExtractPredicateSatisfactionMultiThread) {
@@ -71,8 +72,8 @@ TEST_F(PredicateManagerTest, Reset) {
                                               outputDirectory, outputFileName),
                          {"keeps_safe_distance_prec"})};
     predicateManager.extractPredicateSatisfaction();
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 5610);
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 4869);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 9588);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 8736);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime, 0);
@@ -86,6 +87,7 @@ TEST_F(PredicateManagerTest, Reset) {
     EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime, 0);
     EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime, LONG_MAX);
     EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime, LONG_MIN);
+    EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() + "/test.txt"));
 }
 
 TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
@@ -116,4 +118,6 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
     EXPECT_EQ(predicates["in_standstill"]->getStatistics().totalComputationTime, 0);
     EXPECT_EQ(predicates["in_standstill"]->getStatistics().minComputationTime, LONG_MAX);
     EXPECT_EQ(predicates["in_standstill"]->getStatistics().maxComputationTime, LONG_MIN);
+    EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() +
+                                        "/../commonroad_cpp_tests/predicate_satisfaction.txt"));
 }
