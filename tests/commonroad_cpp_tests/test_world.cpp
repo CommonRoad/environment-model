@@ -106,6 +106,10 @@ TEST_F(WorldTest, FindObstacle) {
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
     EXPECT_EQ(world1.findObstacle(334)->getId(), 334);
     EXPECT_THROW(world1.findObstacle(1), std::logic_error);
+
+    auto world2{World(0, roadNetworkScenarioOne, {}, obstaclesScenarioOne, timeStepSizeOne)};
+    EXPECT_EQ(world2.findObstacle(334)->getId(), 334);
+    EXPECT_THROW(world2.findObstacle(1), std::logic_error);
 }
 
 TEST_F(WorldTest, GetTimeStep) {
