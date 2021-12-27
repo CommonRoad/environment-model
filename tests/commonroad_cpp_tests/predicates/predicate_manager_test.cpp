@@ -131,6 +131,6 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
     EXPECT_EQ(predicates["in_standstill"]->getStatistics().maxComputationTime, LONG_MIN);
     EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() +
                                         "/../commonroad_cpp_tests/predicate_satisfaction.txt"));
-    EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() +
-                                        "/../commonroad_cpp_tests/test_config.yaml"));
+    EXPECT_TRUE(
+        std::filesystem::remove(TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/test_config.yaml"));
 }
