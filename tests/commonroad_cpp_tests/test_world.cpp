@@ -167,3 +167,15 @@ TEST_F(WorldTest, SetCurvilinearStates) {
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1)};
     EXPECT_NO_THROW(world1.setCurvilinearStates());
 }
+
+TEST_F(WorldTest, GetEgoVehicles) {
+    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
+    EXPECT_EQ(world1.getEgoVehicles().size(), 16);
+
+    auto world2{World(0, roadNetworkScenarioOne, {}, obstaclesScenarioOne, timeStepSizeOne)};
+    EXPECT_EQ(world2.getEgoVehicles().size(), 0);
+}
