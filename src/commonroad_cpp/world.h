@@ -20,13 +20,12 @@ class World {
      *
      * @param timeStep Current time step of world object.
      * @param roadNetwork Currently relevant road network.
-     * @param egoVehicles List of ego vehicles.
-     * @param obstacles List of obstacles.
-     * @param dt Time step size [s].
+     * @param egos List of ego vehicles.
+     * @param otherObstacles List of obstacles.
+     * @param timeStepSize Time step size [s].
      */
-    World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
-          std::vector<std::shared_ptr<Obstacle>> egoVehicles, std::vector<std::shared_ptr<Obstacle>> obstacles,
-          double dt);
+    World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, std::vector<std::shared_ptr<Obstacle>> egos,
+          std::vector<std::shared_ptr<Obstacle>> otherObstacles, double timeStepSize);
 
     /**
      * Getter for world time step.
