@@ -115,7 +115,7 @@ TEST_F(WorldTest, GetTimeStep) {
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
     EXPECT_EQ(world1.getTimeStep(), 0);
-    auto world2{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
+    auto world2{World(1, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
     EXPECT_EQ(world2.getTimeStep(), 1);
 }
 
