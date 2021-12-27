@@ -7,6 +7,7 @@
 #include "test_world.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp"
 #include "commonroad_cpp/world.h"
 #include "interfaces/utility_functions.h"
 #include <array>
@@ -96,3 +97,69 @@ TEST_F(WorldTest, TestSingleScenario) {
 //        }
 //    }
 //}
+
+TEST_F(WorldTest, FindObstacle) {
+    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
+    EXPECT_EQ(world1.findObstacle(334)->getId(), 334);
+    EXPECT_THROW(world1.findObstacle(1), std::logic_error);
+}
+
+TEST_F(WorldTest, GetTimeStep) {
+    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
+    EXPECT_EQ(world1.getTimeStep(), 0);
+    auto world2{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
+    EXPECT_EQ(world2.getTimeStep(), 1);
+}
+
+TEST_F(WorldTest, GetTimeStepSize) {
+    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1)};
+    EXPECT_EQ(world1.getDt(), 0.1);
+    auto world2{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.02)};
+    EXPECT_EQ(world2.getDt(), 0.02);
+}
+
+TEST_F(WorldTest, FindObstacles) {
+    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
+    auto obs{world1.findObstacles({334, 363})};
+    EXPECT_EQ(obs.size(), 2);
+    EXPECT_EQ(obs[0]->getId(), 334);
+    EXPECT_EQ(obs[1]->getId(), 363);
+    obs = world1.findObstacles({1, 334});
+    EXPECT_EQ(obs.size(), 1);
+    EXPECT_EQ(obs[0]->getId(), 334);
+
+    auto world2{World(0, roadNetworkScenarioOne, {}, obstaclesScenarioOne, timeStepSizeOne)};
+    obs = world2.findObstacles({334, 363});
+    EXPECT_EQ(obs.size(), 2);
+    EXPECT_EQ(obs[0]->getId(), 334);
+    EXPECT_EQ(obs[1]->getId(), 363);
+    obs = world2.findObstacles({1, 334});
+    EXPECT_EQ(obs.size(), 1);
+    EXPECT_EQ(obs[0]->getId(), 334);
+}
+
+TEST_F(WorldTest, SetCurvilinearStates) {
+    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    UnnecessaryBrakingPredicate pred;
+    auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1)};
+    EXPECT_NO_THROW(world1.setCurvilinearStates());
+}
