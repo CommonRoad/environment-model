@@ -1,5 +1,5 @@
 //
-// Created by Evald Nexhipi.
+// Created by Sebastian Maierhofer and Evald Nexhipi.
 // Technical University of Munich - Cyber-Physical Systems Group
 // Copyright (c) 2021 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
@@ -25,9 +25,7 @@ bool InCongestionPredicate::booleanEvaluation(size_t timeStep, const std::shared
             obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.maxCongestionVelocity)
             num_vehicles += 1;
     }
-    if (num_vehicles >= parameters.numVehCongestion)
-        return true;
-    return false;
+    return num_vehicles >= parameters.numVehCongestion;
 }
 
 Constraint InCongestionPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
