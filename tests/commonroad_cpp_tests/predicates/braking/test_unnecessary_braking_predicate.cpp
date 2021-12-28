@@ -14,8 +14,25 @@ void UnnecessaryBrakingPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 10, 2, 10, 1, 0);
     std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(0, 20, 2, 10, 1, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 10, 2, 10, -5, 0, 0, 10, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 20, 2, 10, -4, 0, 0, 20, 0);
+    std::shared_ptr<State> stateOneObstacleOne{std::make_shared<State>()};
+    stateOneObstacleOne->setTimeStep(1);
+    stateOneObstacleOne->setXPosition(10);
+    stateOneObstacleOne->setYPosition(2);
+    stateOneObstacleOne->setVelocity(9.5);
+    stateOneObstacleOne->setGlobalOrientation(0);
+    stateOneObstacleOne->setLonPosition(10);
+    stateOneObstacleOne->setLatPosition(0);
+    stateOneObstacleOne->setCurvilinearOrientation(0);
+
+    std::shared_ptr<State> stateOneObstacleTwo{std::make_shared<State>()};
+    stateOneObstacleTwo->setTimeStep(1);
+    stateOneObstacleTwo->setXPosition(20);
+    stateOneObstacleTwo->setYPosition(2);
+    stateOneObstacleTwo->setVelocity(9.6);
+    stateOneObstacleTwo->setGlobalOrientation(0);
+    stateOneObstacleTwo->setLonPosition(20);
+    stateOneObstacleTwo->setLatPosition(0);
+    stateOneObstacleTwo->setCurvilinearOrientation(0);
     std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 30, 2, 10, -1, 0, 0, 30, 0);
 
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 2, 10, -7, 0, 0, 20, 0);
@@ -31,7 +48,6 @@ void UnnecessaryBrakingPredicateTest::SetUp() {
     std::shared_ptr<State> stateFiveObstacleOne = std::make_shared<State>(5, 50, 2, 10, 2, 0, 0, 50, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
-        //  std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
@@ -39,13 +55,11 @@ void UnnecessaryBrakingPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne)};
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
-        //  std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleThree{
-        //  std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleThree),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleThree),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleThree),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree)};
@@ -83,11 +97,11 @@ TEST_F(UnnecessaryBrakingPredicateTest, ConstraintEvaluation) {
 
 TEST_F(UnnecessaryBrakingPredicateTest, RobustEvaluation) {
     EXPECT_NEAR(pred.robustEvaluation(0, world, obstacleOne), -2, 0.001);
-    //    EXPECT_NEAR(pred.robustEvaluation(1, world, obstacleOne), 2, 0.001);
-    //    EXPECT_NEAR(pred.robustEvaluation(2, world, obstacleOne), 3, 0.001);
-    //    EXPECT_NEAR(pred.robustEvaluation(3, world, obstacleOne), -0.5, 0.001);
-    //    EXPECT_NEAR(pred.robustEvaluation(4, world, obstacleOne), 6, 0.001);
-    //    EXPECT_NEAR(pred.robustEvaluation(5, world, obstacleOne), -4, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(1, world, obstacleOne), 2, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(2, world, obstacleOne), 3, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(3, world, obstacleOne), -0.5, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(4, world, obstacleOne), 6, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(5, world, obstacleOne), -4, 0.001);
 }
 
 TEST_F(UnnecessaryBrakingPredicateTest, StatisticBooleanEvaluation) {
