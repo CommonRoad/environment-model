@@ -19,7 +19,7 @@ bool MakesUTurnPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                abs(obstacleK->getCurvilinearOrientation(timeStep) -
                    lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                                   obstacleK->getStateByTimeStep(timeStep)->getYPosition()));
-    })
+    });
 }
 
 Constraint MakesUTurnPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
