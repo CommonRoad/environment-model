@@ -111,6 +111,7 @@ std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(const std::shared_ptr<Lan
 
 /**
  * Evaluates whether occupied lanelets are part of two adjacent lanes.
+ *
  * @param laneOne Pointer to first lane.
  * @param laneTwo Pointer to second lane.
  * @param relevantLanelets Lanelets which should be evaluated, e.g., occupied lanelets.
@@ -118,5 +119,15 @@ std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(const std::shared_ptr<Lan
  */
 bool adjacentLanes(const std::shared_ptr<Lane> &laneOne, const std::shared_ptr<Lane> &laneTwo,
                    const std::vector<std::shared_ptr<Lanelet>> &relevantLanelets);
+
+/**
+ * Computes the width of a road considering all adjacent lanelets of a given lanelet.
+ *
+ * @param lanelet Lanelet based on which width of road should be calculated.
+ * @param xPosition x-position for which width should be computed (must be valid position for provided lanelet)
+ * @param yPosition y-position for which width should be computed (must be valid position for provided lanelet)
+ * @return Width of lanelet at given position [m]
+ */
+double roadWidth(const std::shared_ptr<Lanelet> &lanelet, double xPosition, double yPosition);
 
 } // namespace lanelet_operations
