@@ -34,8 +34,9 @@ ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &t
         return ObstacleType::unknown;
 }
 
-std::shared_ptr<Obstacle> obstacle_operations::vehicleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                                                   const std::shared_ptr<Obstacle> &obstacleK) {
+std::shared_ptr<Obstacle>
+obstacle_operations::vehicleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                         const std::shared_ptr<Obstacle> &obstacleK) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_left = vehiclesLeft(timeStep, obstacles, obstacleK);
     if (vehicles_left.empty())
         return nullptr;
