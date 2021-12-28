@@ -6,6 +6,7 @@
 //
 
 #include "obstacle_operations.h"
+#include "../roadNetwork/lanelet//lanelet_operations.h"
 
 std::shared_ptr<Obstacle>
 obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t obstacleId) {
@@ -35,9 +36,9 @@ ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &t
 }
 
 std::shared_ptr<Obstacle>
-obstacle_operations::vehicleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                         const std::shared_ptr<Obstacle> &obstacleK) {
-    std::vector<std::shared_ptr<Obstacle>> vehicles_left = vehiclesLeft(timeStep, obstacles, obstacleK);
+obstacle_operations::obstacleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                          const std::shared_ptr<Obstacle> &obstacleK) {
+    std::vector<std::shared_ptr<Obstacle>> vehicles_left = obstaclesLeft(timeStep, obstacles, obstacleK);
     if (vehicles_left.empty())
         return nullptr;
     else if (vehicles_left.size() == 1)
@@ -45,7 +46,6 @@ obstacle_operations::vehicleDirectlyLeft(size_t timeStep, const std::vector<std:
     else {
         std::shared_ptr<Obstacle> vehicle_directly_left = vehicles_left[0];
         for (const auto &obs : vehicles_left) {
-            // What's lat.d
             if (obs->getLatPosition(timeStep) < vehicle_directly_left->getLatPosition(timeStep)) {
                 vehicle_directly_left = obs;
             }
@@ -55,11 +55,11 @@ obstacle_operations::vehicleDirectlyLeft(size_t timeStep, const std::vector<std:
 }
 
 std::vector<std::shared_ptr<Obstacle>>
-obstacle_operations::vehiclesLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                  const std::shared_ptr<Obstacle> &obstacleK) {
+obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                   const std::shared_ptr<Obstacle> &obstacleK) {
 
     std::vector<std::shared_ptr<Obstacle>> vehicles_left;
-    std::vector<std::shared_ptr<Obstacle>> vehicles_adj = vehiclesAdjacent(timeStep, obstacles, obstacleK);
+    std::vector<std::shared_ptr<Obstacle>> vehicles_adj = obstaclesAdjacent(timeStep, obstacles, obstacleK);
 
     for (const auto &obs : vehicles_adj) {
 
@@ -72,8 +72,8 @@ obstacle_operations::vehiclesLeft(size_t timeStep, const std::vector<std::shared
 }
 
 std::vector<std::shared_ptr<Obstacle>>
-obstacle_operations::vehiclesAdjacent(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                      const std::shared_ptr<Obstacle> &obstacleK) {
+obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                       const std::shared_ptr<Obstacle> &obstacleK) {
     std::vector<std::shared_ptr<Obstacle>> vehiclesAdj;
     std::vector<std::shared_ptr<Obstacle>> otherVehicles;
 
@@ -106,9 +106,9 @@ obstacle_operations::vehiclesAdjacent(size_t timeStep, const std::vector<std::sh
 }
 
 std::shared_ptr<Obstacle>
-obstacle_operations::vehicleDirectlyRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                          const std::shared_ptr<Obstacle> &obstacleK) {
-    std::vector<std::shared_ptr<Obstacle>> vehicles_right = vehiclesRight(timeStep, obstacles, obstacleK);
+obstacle_operations::obstacleDirectlyRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                           const std::shared_ptr<Obstacle> &obstacleK) {
+    std::vector<std::shared_ptr<Obstacle>> vehicles_right = obstaclesRight(timeStep, obstacles, obstacleK);
     if (vehicles_right.empty())
         return nullptr;
     else if (vehicles_right.size() == 1)
@@ -125,11 +125,11 @@ obstacle_operations::vehicleDirectlyRight(size_t timeStep, const std::vector<std
 }
 
 std::vector<std::shared_ptr<Obstacle>>
-obstacle_operations::vehiclesRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                   const std::shared_ptr<Obstacle> &obstacleK) {
+obstacle_operations::obstaclesRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                    const std::shared_ptr<Obstacle> &obstacleK) {
 
     std::vector<std::shared_ptr<Obstacle>> vehicles_right;
-    std::vector<std::shared_ptr<Obstacle>> vehicles_adj = vehiclesAdjacent(timeStep, obstacles, obstacleK);
+    std::vector<std::shared_ptr<Obstacle>> vehicles_adj = obstaclesAdjacent(timeStep, obstacles, obstacleK);
 
     for (const auto &obs : vehicles_adj) {
         if (obs->leftD(timeStep) < obstacleK->rightD(timeStep)) {
@@ -138,4 +138,32 @@ obstacle_operations::vehiclesRight(size_t timeStep, const std::vector<std::share
     }
 
     return vehicles_right;
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+obstacle_operations::laneletsRightOfObstacle(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                             const std::shared_ptr<Obstacle> &obs) {
+    std::vector<std::shared_ptr<Lanelet>> rightLanelets;
+    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obs->getOccupiedLanelets(timeStep);
+
+    for (auto &occ_l : occupiedLanelets) {
+        std::vector<std::shared_ptr<Lanelet>> newLanelets = lanelet_operations::laneletsRightOfLanelet(occ_l);
+        for (const auto &lanelet : newLanelets)
+            rightLanelets.push_back(lanelet);
+    }
+    return rightLanelets;
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+obstacle_operations::laneletsLeftOfObstacle(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                            const std::shared_ptr<Obstacle> &obs) {
+    std::vector<std::shared_ptr<Lanelet>> leftLanelets;
+    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obs->getOccupiedLanelets(timeStep);
+
+    for (auto &occ_l : occupiedLanelets) {
+        std::vector<std::shared_ptr<Lanelet>> newLanelets = lanelet_operations::laneletsLeftOfLanelet(occ_l);
+        for (const auto &lanelet : newLanelets)
+            leftLanelets.push_back(lanelet);
+    }
+    return leftLanelets;
 }

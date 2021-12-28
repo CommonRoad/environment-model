@@ -28,22 +28,71 @@ std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obst
  */
 ObstacleType matchStringToObstacleType(const std::string &type);
 
-std::shared_ptr<Obstacle> vehicleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                              const std::shared_ptr<Obstacle> &obstacleK);
-
-std::vector<std::shared_ptr<Obstacle>> vehiclesLeft(size_t timeStep,
-                                                    const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                                    const std::shared_ptr<Obstacle> &obstacleK);
-
-std::vector<std::shared_ptr<Obstacle>> vehiclesAdjacent(size_t timeStep,
-                                                        const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                                        const std::shared_ptr<Obstacle> &obstacleK);
-
-std::shared_ptr<Obstacle> vehicleDirectlyRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+/**
+ * Computes obstacle which is directly left of a given obstacle.
+ *
+ * @param timeStep Time step of interest.
+ * @param obstacles List of relevant obstacles.
+ * @param obstacleK Obstacle based on which directly left obstacle is computed.
+ * @return Obstacle directly left.
+ */
+std::shared_ptr<Obstacle> obstacleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                                const std::shared_ptr<Obstacle> &obstacleK);
 
-std::vector<std::shared_ptr<Obstacle>> vehiclesRight(size_t timeStep,
+/**
+ * Computes all obstacles which are left of a given obstacle.
+ *
+ * @param timeStep Time step of interest.
+ * @param obstacles List of relevant obstacles.
+ * @param obstacleK Obstacle based on which left obstacles are computed.
+ * @return List of obstacles located left of given obstacle.
+ */
+std::vector<std::shared_ptr<Obstacle>> obstaclesLeft(size_t timeStep,
                                                      const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                                      const std::shared_ptr<Obstacle> &obstacleK);
+
+/**
+ * Computes all adjacent obstacle which are directly left of a given obstacle.
+ *
+ * @param timeStep Time step of interest.
+ * @param obstacles List of relevant obstacles.
+ * @param obstacleK Obstacle based on which adjacent obstacles are computed.
+ * @return List of adjacent obstacles.
+ */
+std::vector<std::shared_ptr<Obstacle>> obstaclesAdjacent(size_t timeStep,
+                                                         const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                                         const std::shared_ptr<Obstacle> &obstacleK);
+
+/**
+ * Computes obstacle which is directly right of a given obstacle.
+ *
+ * @param timeStep Time step of interest.
+ * @param obstacles List of relevant obstacles.
+ * @param obstacleK Obstacle based on which directly right obstacle is computed.
+ * @return Obstacle directly right.
+ */
+std::shared_ptr<Obstacle> obstacleDirectlyRight(size_t timeStep,
+                                                const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                                const std::shared_ptr<Obstacle> &obstacleK);
+
+/**
+ * Computes all obstacles which are right of a given obstacle.
+ *
+ * @param timeStep Time step of interest.
+ * @param obstacles List of relevant obstacles.
+ * @param obstacleK Obstacle based on which right obstacles are computed.
+ * @return List of obstacles located right of given obstacle.
+ */
+std::vector<std::shared_ptr<Obstacle>> obstaclesRight(size_t timeStep,
+                                                      const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                                      const std::shared_ptr<Obstacle> &obstacleK);
+
+std::vector<std::shared_ptr<Lanelet>> laneletsRightOfObstacle(size_t timeStep,
+                                                              const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                              const std::shared_ptr<Obstacle> &obs);
+
+std::vector<std::shared_ptr<Lanelet>> laneletsLeftOfObstacle(size_t timeStep,
+                                                             const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                             const std::shared_ptr<Obstacle> &obs);
 
 } // namespace obstacle_operations

@@ -15,18 +15,10 @@
 bool OnMainCarriageWayPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                    const std::shared_ptr<Obstacle> &obstacleK,
                                                    const std::shared_ptr<Obstacle> &obstacleP) {
-
     std::vector<std::shared_ptr<Lanelet>> lanelets = obstacleK->getOccupiedLanelets(timeStep);
-    const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
-    for (const auto &l : lanelets) {
-        std::shared_ptr<Lanelet> lanelet = roadNetwork->findLaneletById(l->getId());
-        std::set<LaneletType> laneletTypes = lanelet->getLaneletTypes();
-        for (LaneletType lt : laneletTypes) {
-            if (lt == LaneletType::mainCarriageWay)
-                return true;
-        }
-    }
-    return false;
+    return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
+        return lanelet->hasLaneletType(LaneletType::mainCarriageWay);
+    });
 }
 
 double OnMainCarriageWayPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

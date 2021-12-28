@@ -16,17 +16,11 @@
 bool InLeftmostLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                 const std::shared_ptr<Obstacle> &obstacleK,
                                                 const std::shared_ptr<Obstacle> &obstacleP) {
-
-    const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
     std::vector<std::shared_ptr<Lanelet>> lanelets = obstacleK->getOccupiedLanelets(timeStep);
-
-    for (auto &l : lanelets) {
-        std::shared_ptr<Lanelet> lanelet = roadNetwork->findLaneletById((l->getId()));
-        if (lanelet->getAdjacentLeft().adj == nullptr ||
-            lanelet->getAdjacentLeft().dir != lanelet->getAdjacentLeft().adj->getAdjacentRight().dir)
-            return true;
-    }
-    return false;
+    return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
+        return lanelet->getAdjacentLeft().adj == nullptr ||
+               lanelet->getAdjacentLeft().dir != lanelet->getAdjacentLeft().adj->getAdjacentRight().dir;
+    });
 }
 
 double InLeftmostLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

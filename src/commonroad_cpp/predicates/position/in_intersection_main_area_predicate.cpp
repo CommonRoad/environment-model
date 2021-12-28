@@ -18,9 +18,9 @@ bool InIntersectionMainAreaPredicate::booleanEvaluation(size_t timeStep, const s
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP) {
     auto lanelets{obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep)};
-    for (const auto &la : lanelets) {
-        if (std::any_of(la->getLaneletTypes().begin(), la->getLaneletTypes().end(),
-                        [](LaneletType t) { return t == LaneletType::intersection; }))
+    for (const auto &lanelet : lanelets) {
+        if (std::any_of(lanelet->getLaneletTypes().begin(), lanelet->getLaneletTypes().end(),
+                        [](LaneletType laType) { return laType == LaneletType::intersection; }))
             return true;
     }
     return false;
