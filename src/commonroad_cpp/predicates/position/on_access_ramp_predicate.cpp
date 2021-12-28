@@ -16,19 +16,10 @@
 bool OnAccessRampPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                               const std::shared_ptr<Obstacle> &obstacleK,
                                               const std::shared_ptr<Obstacle> &obstacleP) {
-
-    const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
     std::vector<std::shared_ptr<Lanelet>> lanelets = obstacleK->getOccupiedLanelets(timeStep);
-
-    for (auto &l : lanelets) {
-        std::shared_ptr<Lanelet> lanelet = roadNetwork->findLaneletById(l->getId());
-        const std::set<LaneletType> laneletTypes = lanelet->getLaneletTypes();
-        for (auto &type : laneletTypes) {
-            if (type == LaneletType::accessRamp)
-                return true;
-        }
-    }
-    return false;
+    return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
+        return lanelet->hasLaneletType(LaneletType::accessRamp);
+    });
 }
 
 double OnAccessRampPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

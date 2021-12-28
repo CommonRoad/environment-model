@@ -21,7 +21,7 @@ bool DrivesLeftmostPredicate::booleanEvaluation(size_t timeStep, const std::shar
     const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacleK->getOccupiedLanelets(timeStep);
     std::shared_ptr<Obstacle> vehicle_directly_left =
-        obstacle_operations::vehicleDirectlyLeft(timeStep, world->getObstacles(), obstacleK);
+        obstacle_operations::obstacleDirectlyLeft(timeStep, world->getObstacles(), obstacleK);
 
     if (vehicle_directly_left != nullptr) {
         return (vehicle_directly_left->rightD(timeStep) - obstacleK->leftD(timeStep)) < parameters.closeToOtherVehicle;

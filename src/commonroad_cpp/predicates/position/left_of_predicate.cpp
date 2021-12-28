@@ -18,15 +18,14 @@ bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<W
     if (obstacleK->leftD(timeStep) >= obstacleP->rightD(timeStep))
         return false;
     else {
-        if (obstacleK->rearS(timeStep) <= obstacleP->frontS(timeStep) <= obstacleK->frontS(timeStep))
+        if (obstacleK->rearS(timeStep) <= obstacleP->frontS(timeStep) and
+            obstacleP->frontS(timeStep) <= obstacleK->frontS(timeStep))
             return true;
-        if (obstacleK->rearS(timeStep) < obstacleP->rearS(timeStep) < obstacleK->frontS(timeStep))
+        if (obstacleK->rearS(timeStep) < obstacleP->rearS(timeStep) and
+            obstacleP->rearS(timeStep) < obstacleK->frontS(timeStep))
             return true;
-        if ((obstacleP->rearS(timeStep) < obstacleK->rearS(timeStep)) and
-            (obstacleK->frontS(timeStep) < obstacleP->frontS(timeStep)))
-            return true;
-        else
-            return false;
+        return (obstacleP->rearS(timeStep) < obstacleK->rearS(timeStep)) and
+               (obstacleK->frontS(timeStep) < obstacleP->frontS(timeStep));
     }
 }
 
