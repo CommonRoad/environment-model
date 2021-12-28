@@ -12,6 +12,7 @@
 void SafeDistancePredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 20, 0, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 20, 0, 20, -1, 0);
+    std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(0, 10, 0, 20, -5, 0);
 
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 20, 0, 20, 0, 0);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 30, 0, 0, 0, 0);
@@ -27,21 +28,25 @@ void SafeDistancePredicateTest::SetUp() {
                                                       0.3, trajectoryPredictionEgoVehicle, 5, 2));
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionOtherVehicle, 5, 2));
+    obstacleThree = std::make_shared<Obstacle>(
+        Obstacle(3, false, stateZeroObstacleThree, ObstacleType::car, 50, 10, 3, -10, 0.3, {}, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
-                                          std::vector<std::shared_ptr<Obstacle>>{obstacleTwo}, 0.1));
+    world = std::make_shared<World>(World(
+        0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo, obstacleThree}, {}, 0.1));
 }
 
 TEST_F(SafeDistancePredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, obstacleTwo));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleTwo, obstacleThree));
 }
 
 TEST_F(SafeDistancePredicateTest, BooleanEvaluationValues) {
     EXPECT_TRUE(pred.booleanEvaluation(0, 20, 20, 20, -10, -10, 0.3, 5, 5));
     EXPECT_FALSE(pred.booleanEvaluation(20, 30, 20, 0, -10, -10, 0.3, 5, 5));
+    EXPECT_TRUE(pred.booleanEvaluation(20, 10, 20, 10, -10, -10, 0.3, 5, 5));
 }
 
 TEST_F(SafeDistancePredicateTest, ConstraintEvaluationObjects) {
@@ -57,11 +62,13 @@ TEST_F(SafeDistancePredicateTest, ConstraintEvaluationValues) {
 TEST_F(SafeDistancePredicateTest, RobustEvaluationObjects) {
     EXPECT_NEAR(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), 9, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(1, world, obstacleOne, obstacleTwo), -21, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(0, world, obstacleTwo, obstacleThree), 15, 0.001);
 }
 
 TEST_F(SafeDistancePredicateTest, RobustEvaluationValues) {
     EXPECT_NEAR(pred.robustEvaluation(0, 20, 20, 20, -10, -10, 0.3, 5, 5), 9, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(20, 30, 20, 0, -10, -10, 0.3, 5, 5), -21, 0.001);
+    EXPECT_NEAR(pred.robustEvaluation(20, 10, 20, 20, -10, -10, 0.3, 5, 5), 15, 0.001);
 }
 
 TEST_F(SafeDistancePredicateTest, StatisticBooleanEvaluation) {
@@ -69,6 +76,8 @@ TEST_F(SafeDistancePredicateTest, StatisticBooleanEvaluation) {
     EXPECT_EQ(pred.getStatistics().numExecutions, 1);
     EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo));
     EXPECT_EQ(pred.getStatistics().numExecutions, 2);
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleTwo, obstacleThree));
+    EXPECT_EQ(pred.getStatistics().numExecutions, 3);
 }
 
 TEST_F(SafeDistancePredicateTest, ComputeSafeDistance) {

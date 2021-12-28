@@ -17,6 +17,7 @@ class SafeDistancePredicateTest : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> obstacleOne;
     std::shared_ptr<Obstacle> obstacleTwo;
+    std::shared_ptr<Obstacle> obstacleThree;
     SafeDistancePredicate pred;
     std::shared_ptr<World> world;
 
