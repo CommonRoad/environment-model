@@ -39,7 +39,7 @@ void PassesStopLinePredicateTest::SetUp() {
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
-    auto roadNetwork{utils_predicate_test::create_road_network()};
+    auto roadNetwork{utils_predicate_test::create_road_network_2()};
     obstacleOne->setOccupiedLanes(roadNetwork->getLanes(), 0);
     obstacleTwo->setOccupiedLanes(roadNetwork->getLanes(), 0);
 

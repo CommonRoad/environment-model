@@ -45,4 +45,10 @@ bool atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
  */
 bool trafficSignReferencesStopSign(const std::shared_ptr<TrafficSign> &sign, SupportedTrafficSignCountry country);
 
+double speedLimit(const std::shared_ptr<Lanelet> &lanelet, const std::string &speedLimitId);
+
+double speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const std::string &speedLimitId);
+
+double speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const std::string &speedLimitId);
+
 } // namespace regulatory_elements_utils

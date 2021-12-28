@@ -24,7 +24,7 @@ void KeepsLaneSpeedLimitPredicateTest::SetUp() {
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
                                                       0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
-    auto roadNetwork{utils_predicate_test::create_road_network()};
+    auto roadNetwork{utils_predicate_test::create_road_network_2()};
 
     world =
         std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));

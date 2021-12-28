@@ -316,7 +316,7 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
     laneletFour->setLeftAdjacent(laneletFive, DrivingDirection::same);
     laneletFive->setLineMarkingRight(LineMarking::broad_dashed);
 
-    // sixh lanelet
+    // sixth lanelet
     size_t idLaneletSix = 600;
     auto laneletTypeLaneletSix = std::set<LaneletType>{LaneletType::shoulder, LaneletType::interstate};
     auto userOneWayLaneletSix = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
