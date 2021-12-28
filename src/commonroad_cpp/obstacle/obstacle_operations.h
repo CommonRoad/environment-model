@@ -28,4 +28,22 @@ std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obst
  */
 ObstacleType matchStringToObstacleType(const std::string &type);
 
+std::shared_ptr<Obstacle> vehicleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                              const std::shared_ptr<Obstacle> &obstacleK);
+
+std::vector<std::shared_ptr<Obstacle>> vehiclesLeft(size_t timeStep,
+                                                    const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                                    const std::shared_ptr<Obstacle> &obstacleK);
+
+std::vector<std::shared_ptr<Obstacle>> vehiclesAdjacent(size_t timeStep,
+                                                        const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                                        const std::shared_ptr<Obstacle> &obstacleK);
+
+std::shared_ptr<Obstacle> vehicleDirectlyRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                               const std::shared_ptr<Obstacle> &obstacleK);
+
+std::vector<std::shared_ptr<Obstacle>> vehiclesRight(size_t timeStep,
+                                                     const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                                     const std::shared_ptr<Obstacle> &obstacleK);
+
 } // namespace obstacle_operations
