@@ -10,6 +10,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 
+#include "../../predicates/predicate_config.h"
 #include "../intersection/intersection_operations.h"
 #include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
 #include "regulatory_elements_utils.h"
@@ -19,10 +20,10 @@ regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::share
                                                const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::set<std::shared_ptr<TrafficLight>> trafficLights;
     auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
-    for (const auto &la : lanelets) {
-        for (const auto &tl : la->getTrafficLights()) {
-            if (tl->isActive() and tl->getElementAtTime(timeStep).color != TrafficLightState::inactive)
-                trafficLights.insert(tl);
+    for (const auto &lanelet : lanelets) {
+        for (const auto &light : lanelet->getTrafficLights()) {
+            if (light->isActive() and light->getElementAtTime(timeStep).color != TrafficLightState::inactive)
+                trafficLights.insert(light);
         }
     }
     return trafficLights;
@@ -54,12 +55,12 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
         relevantTrafficLightDirections = {TurningDirections::all};
     }
     auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
-    for (const auto &tl : activeTl) {
+    for (const auto &light : activeTl) {
         if (std::any_of(relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
-                        [tl](const TurningDirections &relevantDirection) {
-                            return relevantDirection == tl->getDirection();
+                        [light](const TurningDirections &relevantDirection) {
+                            return relevantDirection == light->getDirection();
                         }) and
-            tl->getElementAtTime(timeStep).color == TrafficLightState::red)
+            light->getElementAtTime(timeStep).color == TrafficLightState::red)
             return true;
     }
     return false;
@@ -71,4 +72,37 @@ bool regulatory_elements_utils::trafficSignReferencesStopSign(const std::shared_
     auto elements{sign->getTrafficSignElements()};
     return std::any_of(elements.begin(), elements.end(),
                        [signId](const std::shared_ptr<TrafficSignElement> &elem) { return elem->getId() == signId; });
+}
+
+double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lanelet, const std::string &speedLimitId) {
+    double limit = PredicateParameters().maxPositiveDouble;
+    std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
+    for (const std::shared_ptr<TrafficSign> &signPtr : trafficSigns) {
+        for (const std::shared_ptr<TrafficSignElement> &elemPtr : signPtr->getTrafficSignElements()) {
+            if (elemPtr->getId() == speedLimitId) {
+                double signLimit = std::stod(elemPtr->getAdditionalValues()[0]);
+                if (limit > signLimit)
+                    limit = signLimit;
+            }
+        }
+    }
+    return limit;
+}
+
+double regulatory_elements_utils::speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
+                                             const std::string &speedLimitId) {
+    std::vector<double> speedLimits;
+    for (const auto &lanelet : lanelets) {
+        speedLimits.push_back(speedLimit(lanelet, speedLimitId));
+    }
+    return *std::min_element(speedLimits.begin(), speedLimits.end());
+}
+
+double regulatory_elements_utils::speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
+                                                      const std::string &speedLimitId) {
+    double vMaxLane{speedLimit(lanelets, speedLimitId)};
+    if (vMaxLane == PredicateParameters().maxPositiveDouble)
+        return PredicateParameters().desiredInterstateVelocity;
+    else
+        return std::min(PredicateParameters().desiredInterstateVelocity, vMaxLane);
 }

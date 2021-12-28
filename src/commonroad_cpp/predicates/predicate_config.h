@@ -30,7 +30,6 @@ struct PredicateParameters {
         3}; // minimum number of leading vehicles so that a vehicle can be assumed to be part of a queue of vehicles
     double maxQueueOfVehiclesVelocity{3};       // maximum velocity of a vehicle withing a queue of vehicles
     double maxVelocityLimitFreeDriving{16.67};  // maximum velocity of a free-driving vehicle
-    double desiredInterstateVelocity{36.11};    // desired velocity on interstates
     double minInterstateWidth{7.0};             // minimum interstate width so that emergency lane can be created
     double closeToLaneBorder{7.0};              // indicator if vehicle is close to lane border
     double closeToOtherVehicle{0.5};            // indicator if vehicle is close to another vehicle
@@ -38,10 +37,13 @@ struct PredicateParameters {
     double uTurn{1.57};                         // angle [rad] indicating u-turn
     double aboveCenterlineTh{0.1};              // indicator for necessary distance to be classified above centerline
     double epsilon{1e-6};                       // small value close to zero for different purposes
-    double maxPositiveDouble{
-        std::numeric_limits<double>::max()}; // max double value close to zero for different purposes
-    double stopLineDistance{1.0};            // maximum distance vehicle waiting in front of stop line has to wait
-    double laneMatchingOrientation{0.35};    // orientation threshold for following a lane
+
+    double stopLineDistance{1.0};         // maximum distance vehicle waiting in front of stop line has to wait
+    double laneMatchingOrientation{0.35}; // orientation threshold for following a lane
 
     void checkParameterValidity() const;
+
+    double maxPositiveDouble{
+        std::numeric_limits<double>::max()}; // max double value close to zero for different purposes
+    double desiredInterstateVelocity{36.11}; // desired velocity on interstates
 };
