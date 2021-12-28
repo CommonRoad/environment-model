@@ -205,8 +205,8 @@ double geometric_operations::interpolate(double xDistance, const std::vector<dou
     auto lessThan = [](const double value, double xDistance) { return value < xDistance; };
 
     // Find the first table entry whose value is >= caller's xDistance value
-    auto index = static_cast<size_t>(
-        std::distance(polyline1.begin(), std::lower_bound(polyline1.begin(), polyline1.end(), xDistance, lessThan)));
+    auto index{static_cast<size_t>(
+        std::distance(polyline1.begin(), std::lower_bound(polyline1.begin(), polyline1.end(), xDistance, lessThan)))};
 
     // If the caller's X value is greater than the largest
     // X value in the table, we can't interpolate.

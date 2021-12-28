@@ -274,7 +274,6 @@ double Obstacle::rearS(size_t timeStep) {
 }
 
 double Obstacle::rightD(size_t timeStep) {
-    double s = getLonPosition(timeStep);
     double d = getLatPosition(timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
@@ -287,7 +286,6 @@ double Obstacle::rightD(size_t timeStep) {
 }
 
 double Obstacle::leftD(size_t timeStep) {
-    double s = getLonPosition(timeStep);
     double d = getLatPosition(timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
