@@ -24,11 +24,8 @@ void InterstateBroadEnoughPredicateTest::SetUp() {
                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
-    // auto roadNetwork2{utils_predicate_test::create_road_network_2()};
 
     world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
-
-    // world_2 = std::make_shared<World>(World(2, roadNetwork2, {egoVehicle}, {}, 0.1));
 }
 
 TEST_F(InterstateBroadEnoughPredicateTest, BooleanEvaluationObjects) {
