@@ -531,7 +531,8 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shar
                 relevantLanes.push_back(lanelet);
                 continue;
             }
-            if (lanelet_operations::adjacentLanes(getReferenceLane(timeStep), lanelet, occLanelets))
+            if (lanelet_operations::areLaneletsInDirectlyAdjacentLanes(getReferenceLane(timeStep), lanelet,
+                                                                       occLanelets))
                 relevantLanes.push_back(lanelet);
         }
         return {relevantLanes};

@@ -234,8 +234,9 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const
     return relevantLanelets;
 }
 
-bool lanelet_operations::adjacentLanes(const std::shared_ptr<Lane> &laneOne, const std::shared_ptr<Lane> &laneTwo,
-                                       const std::vector<std::shared_ptr<Lanelet>> &relevantLanelets) {
+bool lanelet_operations::areLaneletsInDirectlyAdjacentLanes(
+    const std::shared_ptr<Lane> &laneOne, const std::shared_ptr<Lane> &laneTwo,
+    const std::vector<std::shared_ptr<Lanelet>> &relevantLanelets) {
     for (const auto &la1 : relevantLanelets) {
         for (const auto &la2 : relevantLanelets) {
             if (la1->getId() == la2->getId())
