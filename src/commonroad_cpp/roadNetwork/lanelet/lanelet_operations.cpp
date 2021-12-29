@@ -198,34 +198,37 @@ lanelet_operations::createLaneByContainedLanelets(const std::vector<std::shared_
     return lane;
 }
 
-std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet) {
+std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet,
+                                                                                 bool sameDirection) {
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
     auto curLanelet{std::move(lanelet)};
 
     while (curLanelet->getAdjacentRight().adj != nullptr and
-           curLanelet->getAdjacentLeft().dir != DrivingDirection::opposite) {
+           (!sameDirection or curLanelet->getAdjacentRight().dir == DrivingDirection::same)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentRight().adj);
         curLanelet = curLanelet->getAdjacentRight().adj;
     }
     return adjacentLanelets;
 }
 
-std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet) {
+std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet,
+                                                                                bool sameDirection) {
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
     auto curLanelet{std::move(lanelet)};
 
     while (curLanelet->getAdjacentLeft().adj != nullptr and
-           curLanelet->getAdjacentLeft().dir != DrivingDirection::opposite) {
+           (!sameDirection or curLanelet->getAdjacentLeft().dir == DrivingDirection::same)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentLeft().adj);
         curLanelet = curLanelet->getAdjacentLeft().adj;
     }
     return adjacentLanelets;
 }
 
-std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet) {
+std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet,
+                                                                           bool sameDirection) {
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets{lanelet};
-    auto leftLanelets{laneletsLeftOfLanelet(lanelet)};
-    auto rightLanelets{laneletsRightOfLanelet(lanelet)};
+    auto leftLanelets{laneletsLeftOfLanelet(lanelet, sameDirection)};
+    auto rightLanelets{laneletsRightOfLanelet(lanelet, sameDirection)};
     relevantLanelets.insert(relevantLanelets.end(), leftLanelets.begin(), leftLanelets.end());
     relevantLanelets.insert(relevantLanelets.end(), rightLanelets.begin(), rightLanelets.end());
     return relevantLanelets;
@@ -250,16 +253,23 @@ bool lanelet_operations::adjacentLanes(const std::shared_ptr<Lane> &laneOne, con
 }
 
 double lanelet_operations::roadWidth(const std::shared_ptr<Lanelet> &lanelet, double xPosition, double yPosition) {
-    std::vector<std::shared_ptr<Lanelet>> adj_lanelets = adjacentLanelets(lanelet);
+    std::vector<std::shared_ptr<Lanelet>> adj_lanelets = adjacentLanelets(lanelet, false);
     geometry::EigenPolyline reference_path;
     for (auto vert : lanelet->getCenterVertices())
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     geometry::util::resample_polyline(reference_path, 2, reference_path);
     auto curvilinearCoordinateSystem = CurvilinearCoordinateSystem(reference_path);
-    auto curvilinearPos{curvilinearCoordinateSystem.convertToCurvilinearCoords(xPosition, yPosition)};
-    double road_width{0};
-    for (auto &adjLanelet : adj_lanelets)
-        road_width += adjLanelet->getWidth(curvilinearPos.x());
+    try {
+        auto curvilinearPos{curvilinearCoordinateSystem.convertToCurvilinearCoords(xPosition, yPosition)};
+        double road_width{0};
+        for (auto &adjLanelet : adj_lanelets)
+            road_width += adjLanelet->getWidth(curvilinearPos.x());
 
-    return road_width;
+        return road_width;
+    } catch (...) {
+        throw std::runtime_error(
+            "lanelet_operations::roadWidth: Custom CCS - Curvilinear Projection Error - x-position: " +
+            std::to_string(xPosition) + " - y-position: " + std::to_string(yPosition) +
+            " - Lanelet ID: " + std::to_string(lanelet->getId()));
+    }
 }

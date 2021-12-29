@@ -19,6 +19,7 @@ class LaneletTestInitialization {
     std::vector<vertex> centerVerticesLaneletOne;
     std::vector<vertex> leftBorderLaneletOne;
     std::vector<vertex> rightBorderLaneletOne;
+    std::shared_ptr<Lanelet> adjacentRight;
     std::shared_ptr<Lanelet> laneletOne;
 
     size_t idLaneletTwo;
