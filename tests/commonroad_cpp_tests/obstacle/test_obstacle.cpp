@@ -131,7 +131,6 @@ TEST_F(ObstacleTest, InitializationComplete) {
     EXPECT_EQ(obstacleTwo->getAminLong(), 0.0);
     EXPECT_EQ(obstacleOne->getReactionTime(), reactionTimeObstacleOne);
     EXPECT_EQ(obstacleTwo->getReactionTime(), reactionTimeObstacleTwo);
-    EXPECT_EQ(obstacleOne->getId(), laneOne->getId());
     compareVerticesVector(
         {obstacleOne->getReferenceLane(obstacleOne->getCurrentState()->getTimeStep())->getCenterVertices().front(),
          obstacleOne->getReferenceLane(obstacleOne->getCurrentState()->getTimeStep())->getCenterVertices().back()},

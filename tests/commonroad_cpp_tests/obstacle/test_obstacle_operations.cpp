@@ -30,7 +30,10 @@ TEST_F(ObstacleOperationsTest, MatchObstacleTypeToString) {
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("vehicle"), ObstacleType::vehicle);
 }
 
-TEST_F(ObstacleOperationsTest, ObstacleDirectlyLeft) {}
+TEST_F(ObstacleOperationsTest, ObstacleDirectlyLeft) {
+    //    EXPECT_EQ(obstacle_operations::obstacleDirectlyLeft(0, obstacleList, obstacleOne)->getId(), 2);
+    //    EXPECT_THROW(obstacle_operations::obstacleDirectlyLeft(0, obstacleList, obstacleTwo), std::runtime_error);
+}
 
 TEST_F(ObstacleOperationsTest, ObstaclesLeft) {}
 
