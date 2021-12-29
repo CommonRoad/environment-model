@@ -328,7 +328,14 @@ TEST_F(LaneletOperationsTest, AdjacentLanelets) {
 }
 
 TEST_F(LaneletOperationsTest, AdjacentLanes) {
-    // EXPECT_TRUE(lanelet_operations::adjacentLanes(laneletOne, true).size(), 2);
+    EXPECT_TRUE(lanelet_operations::areLaneletsInDirectlyAdjacentLanes(laneOne, laneTwo, {laneletOne, laneletFour}));
+    EXPECT_FALSE(lanelet_operations::areLaneletsInDirectlyAdjacentLanes(laneOne, laneTwo, {laneletOne}));
+    EXPECT_FALSE(lanelet_operations::areLaneletsInDirectlyAdjacentLanes(laneOne, laneTwo, {laneletOne, laneletSix}));
+    EXPECT_FALSE(
+        lanelet_operations::areLaneletsInDirectlyAdjacentLanes(laneTwo, laneThree, {laneletFive, laneletFour}));
+    EXPECT_TRUE(lanelet_operations::areLaneletsInDirectlyAdjacentLanes(laneThree, laneOne, {laneletFive, laneletOne}));
+    EXPECT_FALSE(
+        lanelet_operations::areLaneletsInDirectlyAdjacentLanes(laneThree, laneOne, {laneletFive, laneletSeven}));
 }
 
 TEST_F(LaneletOperationsTest, RoadWidth) {

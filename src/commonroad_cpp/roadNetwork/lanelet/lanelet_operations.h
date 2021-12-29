@@ -35,8 +35,8 @@ LineMarking matchStringToLineMarking(const std::string &type);
  *
  * @param curLanelet Lanelet which is currently at the end of list and for which successors should be added.
  * @param fov Field of view defining length of lane.
- * @param containedLanelets List of contained lanelets in lane. Required for recursive call.
  * @param numIntersections Number of intersection which still can be considered for lane creation.
+ * @param containedLanelets List of contained lanelets in lane. Required for recursive call.
  * @return List containing a list of lanelets contained in lane.
  */
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
@@ -62,7 +62,7 @@ combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, 
 /**
  * Creates lanes which are originating from given set of lanelets.
  *
- * @param initialLanelets Initial lanelets based on which lanelets should be created.
+ * @param initialLanelets Initial lanelets based on which lanes should be created.
  * @param idCounter Starting ID of new lanes.
  * @param roadNetwork Pointer to road network.
  * @param fovRear Field of view behind obstacle which defines length of lanes.
@@ -116,15 +116,16 @@ std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(const std::shared_ptr<Lan
                                                        bool sameDirection = true);
 
 /**
- * Evaluates whether occupied lanelets are part of two adjacent lanes.
+ * Evaluates whether occupied lanelets are part of two directly adjacent lanes.
  *
  * @param laneOne Pointer to first lane.
  * @param laneTwo Pointer to second lane.
- * @param relevantLanelets Lanelets which should be evaluated, e.g., occupied lanelets.
+ * @param relevantLanelets Lanelets which should be evaluated, e.g., occupied lanelets. If only a single lane is
+ * provided the algorithm returns false.
  * @return Boolean indicating whether lanelets part of two adjacent lanes.
  */
-bool adjacentLanes(const std::shared_ptr<Lane> &laneOne, const std::shared_ptr<Lane> &laneTwo,
-                   const std::vector<std::shared_ptr<Lanelet>> &relevantLanelets);
+bool areLaneletsInDirectlyAdjacentLanes(const std::shared_ptr<Lane> &laneOne, const std::shared_ptr<Lane> &laneTwo,
+                                        const std::vector<std::shared_ptr<Lanelet>> &relevantLanelets);
 
 /**
  * Computes the width of a road considering all adjacent lanelets of a given lanelet.

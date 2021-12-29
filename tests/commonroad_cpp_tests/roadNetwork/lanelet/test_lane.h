@@ -15,6 +15,8 @@ class Lane;
 class LaneTestInitialization : public LaneletTestInitialization {
   protected:
     std::shared_ptr<Lane> laneOne;
+    std::shared_ptr<Lane> laneTwo;
+    std::shared_ptr<Lane> laneThree;
     void setUpLane();
 };
 
