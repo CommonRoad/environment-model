@@ -42,6 +42,9 @@ class ObstacleTestInitialization : public StateTestInitialization {
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{};
     std::shared_ptr<Obstacle> obstacleTwo;
 
+    std::shared_ptr<Obstacle> obstacleThree;
+    std::shared_ptr<Obstacle> obstacleFour;
+
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
 
     void setUpObstacles();

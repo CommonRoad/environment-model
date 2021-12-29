@@ -13,7 +13,7 @@
 
 void LaneTestInitialization::setUpLane() {
     setUpLanelets();
-    laneOne = lanelet_operations::createLaneByContainedLanelets({laneletOne, laneletTwo, laneletThree}, 1000);
+    laneOne = lanelet_operations::createLaneByContainedLanelets({laneletThree, laneletOne, laneletTwo}, 1000);
     laneTwo = lanelet_operations::createLaneByContainedLanelets({laneletFour}, 1001);
     laneThree = lanelet_operations::createLaneByContainedLanelets({laneletFive}, 1002);
 }
@@ -21,9 +21,14 @@ void LaneTestInitialization::setUpLane() {
 void LaneTest::SetUp() { setUpLane(); }
 
 TEST_F(LaneTest, Initialization) {
-    EXPECT_EQ(laneOne->getContainedLanelets().at(0)->getId(), laneletOne->getId());
-    EXPECT_EQ(laneOne->getId(), laneletOne->getId());
-    compareVerticesVector(laneOne->getCenterVertices(), laneletOne->getCenterVertices());
+    EXPECT_EQ(laneOne->getContainedLanelets().at(0)->getId(), laneletThree->getId());
+    EXPECT_EQ(laneOne->getContainedLanelets().at(1)->getId(), laneletOne->getId());
+    EXPECT_EQ(laneOne->getContainedLanelets().at(2)->getId(), laneletTwo->getId());
+    EXPECT_EQ(laneOne->getId(), 1000);
+    EXPECT_EQ(laneOne->getCenterVertices().begin()->x, laneletThree->getCenterVertices().begin()->x);
+    EXPECT_EQ(laneOne->getCenterVertices().begin()->y, laneletThree->getCenterVertices().begin()->y);
+    EXPECT_EQ(laneOne->getCenterVertices().at(16).x, laneletTwo->getCenterVertices().at(6).x);
+    EXPECT_EQ(laneOne->getCenterVertices().at(16).y, laneletTwo->getCenterVertices().at(6).y);
 }
 
 TEST_F(LaneTest, ConvertPoint) {
@@ -90,22 +95,22 @@ TEST_F(LaneTest, CurvilinearCoordinateSystem2) {
 
 TEST_F(LaneTest, CheckIntersection) {
     EXPECT_EQ(
-        laneOne->getContainedLanelets().at(0)->checkIntersection(polygonOne, ContainmentType::PARTIALLY_CONTAINED),
+        laneOne->getContainedLanelets().at(1)->checkIntersection(polygonOne, ContainmentType::PARTIALLY_CONTAINED),
         true);
     EXPECT_EQ(
-        laneOne->getContainedLanelets().at(0)->checkIntersection(polygonTwo, ContainmentType::PARTIALLY_CONTAINED),
+        laneOne->getContainedLanelets().at(1)->checkIntersection(polygonTwo, ContainmentType::PARTIALLY_CONTAINED),
         true);
     EXPECT_EQ(
-        laneOne->getContainedLanelets().at(0)->checkIntersection(polygonThree, ContainmentType::PARTIALLY_CONTAINED),
+        laneOne->getContainedLanelets().at(1)->checkIntersection(polygonThree, ContainmentType::PARTIALLY_CONTAINED),
         false);
     EXPECT_EQ(
-        laneOne->getContainedLanelets().at(0)->checkIntersection(polygonOne, ContainmentType::COMPLETELY_CONTAINED),
+        laneOne->getContainedLanelets().at(1)->checkIntersection(polygonOne, ContainmentType::COMPLETELY_CONTAINED),
         true);
     EXPECT_EQ(
-        laneOne->getContainedLanelets().at(0)->checkIntersection(polygonTwo, ContainmentType::COMPLETELY_CONTAINED),
+        laneOne->getContainedLanelets().at(1)->checkIntersection(polygonTwo, ContainmentType::COMPLETELY_CONTAINED),
         false);
     EXPECT_EQ(
-        laneOne->getContainedLanelets().at(0)->checkIntersection(polygonThree, ContainmentType::COMPLETELY_CONTAINED),
+        laneOne->getContainedLanelets().at(1)->checkIntersection(polygonThree, ContainmentType::COMPLETELY_CONTAINED),
         false);
 
     EXPECT_EQ(laneOne->checkIntersection(polygonOne, ContainmentType::PARTIALLY_CONTAINED), true);
