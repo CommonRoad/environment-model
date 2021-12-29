@@ -40,6 +40,16 @@ TEST_F(ObstacleOperationsTest, ObstacleDirectlyRight) {}
 
 TEST_F(ObstacleOperationsTest, ObstaclesRight) {}
 
-TEST_F(ObstacleOperationsTest, LaneletsRightOfObstacle) {}
+TEST_F(ObstacleOperationsTest, LaneletsRightOfObstacle) {
+    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(0, obstacleOne).size(), 1);
+    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(1, obstacleOne).size(), 1);
+    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(2, obstacleOne).size(), 1);
+    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(3, obstacleOne).size(), 1);
+}
 
-TEST_F(ObstacleOperationsTest, LaneletsLeftOfObstacle) {}
+TEST_F(ObstacleOperationsTest, LaneletsLeftOfObstacle) {
+    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(0, obstacleOne).size(), 0);
+    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(1, obstacleOne).size(), 0);
+    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(2, obstacleOne).size(), 1);
+    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(3, obstacleOne).size(), 1);
+}

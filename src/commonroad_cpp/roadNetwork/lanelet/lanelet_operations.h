@@ -106,7 +106,7 @@ std::vector<std::shared_ptr<Lanelet>> laneletsLeftOfLanelet(std::shared_ptr<Lane
                                                             bool sameDirection = true);
 
 /**
- * Extracts all adjacent lanelets in the same direction to given lanelet.
+ * Extracts all adjacent lanelets in the same direction to given lanelet including given lanelet.
  *
  * @param lanelet Pointer to reference lanelet.
  * @param sameDirection Boolean indicating whether only lanelets in the same direction should be considered.

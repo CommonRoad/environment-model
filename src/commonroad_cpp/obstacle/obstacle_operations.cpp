@@ -140,30 +140,28 @@ obstacle_operations::obstaclesRight(size_t timeStep, const std::vector<std::shar
     return vehicles_right;
 }
 
-std::vector<std::shared_ptr<Lanelet>>
-obstacle_operations::laneletsRightOfObstacle(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                             const std::shared_ptr<Obstacle> &obs) {
-    std::vector<std::shared_ptr<Lanelet>> rightLanelets;
+std::set<std::shared_ptr<Lanelet>> obstacle_operations::laneletsRightOfObstacle(size_t timeStep,
+                                                                                const std::shared_ptr<Obstacle> &obs) {
+    std::set<std::shared_ptr<Lanelet>> rightLanelets;
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obs->getOccupiedLanelets(timeStep);
 
     for (auto &occ_l : occupiedLanelets) {
         std::vector<std::shared_ptr<Lanelet>> newLanelets = lanelet_operations::laneletsRightOfLanelet(occ_l);
         for (const auto &lanelet : newLanelets)
-            rightLanelets.push_back(lanelet);
+            rightLanelets.emplace(lanelet);
     }
     return rightLanelets;
 }
 
-std::vector<std::shared_ptr<Lanelet>>
-obstacle_operations::laneletsLeftOfObstacle(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                            const std::shared_ptr<Obstacle> &obs) {
-    std::vector<std::shared_ptr<Lanelet>> leftLanelets;
+std::set<std::shared_ptr<Lanelet>> obstacle_operations::laneletsLeftOfObstacle(size_t timeStep,
+                                                                               const std::shared_ptr<Obstacle> &obs) {
+    std::set<std::shared_ptr<Lanelet>> leftLanelets;
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obs->getOccupiedLanelets(timeStep);
 
     for (auto &occ_l : occupiedLanelets) {
         std::vector<std::shared_ptr<Lanelet>> newLanelets = lanelet_operations::laneletsLeftOfLanelet(occ_l);
         for (const auto &lanelet : newLanelets)
-            leftLanelets.push_back(lanelet);
+            leftLanelets.emplace(lanelet);
     }
     return leftLanelets;
 }
