@@ -89,25 +89,31 @@ std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::share
  * Extracts all lanelets right of a given lanelet in the same direction.
  *
  * @param lanelet Pointer to reference lanelet.
+ * @param sameDirection Boolean indicating whether only lanelets in the same direction should be considered.
  * @return List of pointers to lanelets.
  */
-std::vector<std::shared_ptr<Lanelet>> laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet);
+std::vector<std::shared_ptr<Lanelet>> laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet,
+                                                             bool sameDirection = true);
 
 /**
  * Extracts all lanelets left of a given lanelet in the same direction.
  *
  * @param lanelet Pointer to reference lanelet.
+ * @param sameDirection Boolean indicating whether only lanelets in the same direction should be considered.
  * @return List of pointers to lanelets.
  */
-std::vector<std::shared_ptr<Lanelet>> laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet);
+std::vector<std::shared_ptr<Lanelet>> laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet,
+                                                            bool sameDirection = true);
 
 /**
  * Extracts all adjacent lanelets in the same direction to given lanelet.
  *
  * @param lanelet Pointer to reference lanelet.
+ * @param sameDirection Boolean indicating whether only lanelets in the same direction should be considered.
  * @return List of pointers to lanelets.
  */
-std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet);
+std::vector<std::shared_ptr<Lanelet>> adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet,
+                                                       bool sameDirection = true);
 
 /**
  * Evaluates whether occupied lanelets are part of two adjacent lanes.

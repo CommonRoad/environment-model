@@ -102,37 +102,37 @@ void LaneletTestInitialization::setUpLanelets() {
     // second front lanelet
     size_t idSix{6};
     std::set<LaneletType> laneletTypeSix{LaneletType::busLane, LaneletType::urban};
-    std::vector<vertex> leftBorderSix = std::vector<vertex>{vertex{6, 1.0}, vertex{7, 1.0}, vertex{8, 1.0}};
-    std::vector<vertex> rightBorderSix = std::vector<vertex>{vertex{6, 0}, vertex{7, 0}, vertex{8, 0}};
+    std::vector<vertex> leftBorderSix = std::vector<vertex>{vertex{6, 1.0}, vertex{7, 1.0}, vertex{10, 1.0}};
+    std::vector<vertex> rightBorderSix = std::vector<vertex>{vertex{6, 0}, vertex{7, 0}, vertex{10, 0}};
     laneletSix = std::make_shared<Lanelet>(Lanelet(idSix, leftBorderSix, rightBorderSix, laneletTypeSix));
 
     // second rear lanelet
     size_t idSeven{7};
     std::set<LaneletType> laneletTypeSeven{LaneletType::urban, LaneletType::country};
-    std::vector<vertex> leftBorderSeven{vertex{-2, 1.5}, vertex{-1, 2}, vertex{0, 2}};
-    std::vector<vertex> rightBorderSeven{vertex{-2, 0.0}, vertex{-1, 0.0}, vertex{0, 0.0}};
+    std::vector<vertex> leftBorderSeven{vertex{-4, 1.5}, vertex{-1, 2}, vertex{0, 2}};
+    std::vector<vertex> rightBorderSeven{vertex{-4, 0.0}, vertex{-1, 0.0}, vertex{0, 0.0}};
     laneletSeven = std::make_shared<Lanelet>(Lanelet(idSeven, leftBorderSeven, rightBorderSeven, laneletTypeSeven));
 
     // traffic sign, traffic light, and stop line for middle lanelet
     std::shared_ptr<TrafficSignElement> tsElem = std::make_shared<TrafficSignElement>("123");
-    std::shared_ptr<TrafficSign> ts = std::make_shared<TrafficSign>(TrafficSign());
-    ts->addTrafficSignElement(tsElem);
-    ts->setId(123);
-    std::shared_ptr<TrafficLight> tl = std::make_shared<TrafficLight>(TrafficLight());
-    tl->setId(456);
-    tl->setActive(true);
-    tl->setOffset(0.0);
-    tl->setDirection(TurningDirections::straight);
-    tl->setCycle(std::vector<TrafficLightCycleElement>{TrafficLightCycleElement{TrafficLightState::green, 1},
-                                                       TrafficLightCycleElement{TrafficLightState::yellow, 1},
-                                                       TrafficLightCycleElement{TrafficLightState::red, 1},
-                                                       TrafficLightCycleElement{TrafficLightState::red_yellow, 1}});
+    std::shared_ptr<TrafficSign> sign = std::make_shared<TrafficSign>(TrafficSign());
+    sign->addTrafficSignElement(tsElem);
+    sign->setId(123);
+    std::shared_ptr<TrafficLight> light = std::make_shared<TrafficLight>(TrafficLight());
+    light->setId(456);
+    light->setActive(true);
+    light->setOffset(0.0);
+    light->setDirection(TurningDirections::straight);
+    light->setCycle(std::vector<TrafficLightCycleElement>{TrafficLightCycleElement{TrafficLightState::green, 1},
+                                                          TrafficLightCycleElement{TrafficLightState::yellow, 1},
+                                                          TrafficLightCycleElement{TrafficLightState::red, 1},
+                                                          TrafficLightCycleElement{TrafficLightState::red_yellow, 1}});
 
-    StopLine sl = StopLine();
-    sl.setLineMarking(LineMarking::broad_solid);
-    sl.setPoints(std::vector<vertex>{vertex{1, 2}, vertex{3, 4}});
-    sl.addTrafficSign(ts);
-    sl.addTrafficLight(tl);
+    StopLine sline = StopLine();
+    sline.setLineMarking(LineMarking::broad_solid);
+    sline.setPoints(std::vector<vertex>{vertex{1, 2}, vertex{3, 4}});
+    sline.addTrafficSign(sign);
+    sline.addTrafficLight(light);
 
     // add successors, predecessors, adjacent, traffic sign, traffic light, and stop line to lanelet one
     laneletOne->addSuccessor(laneletTwo);
@@ -147,9 +147,9 @@ void LaneletTestInitialization::setUpLanelets() {
     laneletFive->setRightAdjacent(laneletOne, DrivingDirection::opposite);
     laneletOne->setRightAdjacent(laneletFour, DrivingDirection::same);
     laneletFour->setLeftAdjacent(laneletOne, DrivingDirection::same);
-    laneletOne->addTrafficLight(tl);
-    laneletOne->addTrafficSign(ts);
-    laneletOne->setStopLine(std::make_shared<StopLine>(sl));
+    laneletOne->addTrafficLight(light);
+    laneletOne->addTrafficSign(sign);
+    laneletOne->setStopLine(std::make_shared<StopLine>(sline));
 
     polygonOne = polygon_type{{{0.0, 0.0}, {0.0, 0.5}, {0.5, 0.5}, {0.5, 0.0}, {0.0, 0.0}}};
     polygonTwo = polygon_type{{{0.5, 0.5}, {0.5, 2.0}, {1.0, 2.0}, {1.0, 0.5}, {0.5, 0.5}}};

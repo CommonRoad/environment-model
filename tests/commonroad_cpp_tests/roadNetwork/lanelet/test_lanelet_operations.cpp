@@ -272,3 +272,55 @@ TEST_F(LaneletOperationsTest, CreateLanesByLaneletsSeveralComplexIntersections) 
     expEndIds = {77071, 77236, 77301};
     EXPECT_EQ(endIds, expEndIds);
 }
+
+TEST_F(LaneletOperationsTest, LaneletsRightOfLanelet) {
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletOne, true).size(), 1);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletTwo, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletThree, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletFour, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletFive, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletSix, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletSeven, true).size(), 0);
+
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletOne, false).size(), 1);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletTwo, false).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletThree, false).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletFour, false).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletFive, false).size(), 2);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletSix, false).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsRightOfLanelet(laneletSeven, false).size(), 0);
+}
+
+TEST_F(LaneletOperationsTest, LaneletsLeftOfLanelet) {
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletOne, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletTwo, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletThree, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletFour, true).size(), 1);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletFive, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletSix, true).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletSeven, true).size(), 0);
+
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletOne, false).size(), 1);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletTwo, false).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletThree, false).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletFour, false).size(), 2);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletFive, false).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletSix, false).size(), 0);
+    EXPECT_EQ(lanelet_operations::laneletsLeftOfLanelet(laneletSeven, false).size(), 0);
+}
+
+TEST_F(LaneletOperationsTest, AdjacentLanelets) {}
+
+TEST_F(LaneletOperationsTest, AdjacentLanes) {}
+
+TEST_F(LaneletOperationsTest, RoadWidth) {
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletOne, 1, 0.5), 3);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletTwo, 7, 0.5), 1);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletThree, -4, 0.5), 1);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletFour, 7, -0.5), 3);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletFive, 7, 1.5), 3);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletSix, 7, 0.5), 1);
+    EXPECT_NEAR(lanelet_operations::roadWidth(laneletSeven, -1, 1), 1.99998, 0.0005);
+
+    EXPECT_THROW(lanelet_operations::roadWidth(laneletOne, 100, 100), std::runtime_error);
+}
