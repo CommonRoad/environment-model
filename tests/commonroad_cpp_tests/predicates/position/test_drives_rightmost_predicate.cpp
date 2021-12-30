@@ -43,11 +43,11 @@ void DrivesRightmostPredicateTest::SetUp() {
 }
 
 TEST_F(DrivesRightmostPredicateTest, BooleanEvaluationObjects) {
-    //    EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle));
-    //    EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
-    //    EXPECT_TRUE(pred.booleanEvaluation(2, world2, egoVehicle));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world2, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(3, world2, egoVehicle));
-    //   EXPECT_TRUE(pred.booleanEvaluation(4, world, egoVehicle));
+    EXPECT_TRUE(pred.booleanEvaluation(4, world, egoVehicle));
 }
 
 TEST_F(DrivesRightmostPredicateTest, RobustEvaluation) {
