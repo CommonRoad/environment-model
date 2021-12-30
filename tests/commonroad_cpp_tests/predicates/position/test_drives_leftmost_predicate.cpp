@@ -1,5 +1,5 @@
 //
-// Created by Evald Nexhipi.
+// Created by Sebastian Maierhofer and Evald Nexhipi.
 // Technical University of Munich - Cyber-Physical Systems Group
 // Copyright (c) 2021 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
@@ -10,14 +10,14 @@
 
 void DrivesLeftmostPredicateTest::SetUp() {
 
-    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0.9, 10, 0, 0, 0, 0, 0.9);
-    std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 0.5, 10, 0, 0, 0, 10, 0.5);
-    std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 20, 5, 10, 0, 0, 0, 20, 5);
-    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 0, 10, 0, 0, 0, 30, 0);
-    std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 0, 10, 0, 0, 0, 40, 0);
+    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0.9, 10, 0, 0);
+    std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 0.5, 10, 0, 0);
+    std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 20, 5, 10, 0, 0);
+    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 0, 10, 0, 0);
+    std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 0, 10, 0, 0);
 
-    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 1, 10, 0, 0, 0, 20, 1);
-    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 4, 10, 0, 0, 0, 30, 4);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 1, 10, 0, 0);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 4, 10, 0, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
@@ -51,9 +51,9 @@ TEST_F(DrivesLeftmostPredicateTest, BooleanEvaluationObjects) {
 }
 
 TEST_F(DrivesLeftmostPredicateTest, RobustEvaluation) {
-    EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle, obstacleOne), std::runtime_error);
+    EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle), std::runtime_error);
 }
 
 TEST_F(DrivesLeftmostPredicateTest, ConstraintEvaluation) {
-    EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle, obstacleOne), std::runtime_error);
+    EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle), std::runtime_error);
 }

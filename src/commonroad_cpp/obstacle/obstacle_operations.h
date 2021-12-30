@@ -52,7 +52,7 @@ std::vector<std::shared_ptr<Obstacle>> obstaclesLeft(size_t timeStep,
                                                      const std::shared_ptr<Obstacle> &obstacleK);
 
 /**
- * Computes all adjacent obstacle which are directly left of a given obstacle.
+ * Computes all obstacle which are left or right adjacent to a given obstacle k based on kth reference path.
  *
  * @param timeStep Time step of interest.
  * @param obstacles List of relevant obstacles.

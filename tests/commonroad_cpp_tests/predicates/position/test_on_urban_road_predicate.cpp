@@ -4,11 +4,11 @@
 // Copyright (c) 2021 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "test_on_access_ramp_predicate.h"
+#include "test_on_urban_road_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
 
-void OnAccessRampPredicateTest::SetUp() {
+void OnUrbanRoadPredicateTest::SetUp() {
 
     std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0, 0, 0, 0, 0);
     std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 2, 10, 0, 0, 0, 10, 0);
@@ -27,11 +27,11 @@ void OnAccessRampPredicateTest::SetUp() {
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
-    auto roadNetwork{utils_predicate_test::create_road_network({LaneletType::accessRamp, LaneletType::interstate})};
+    auto roadNetwork{utils_predicate_test::create_road_network({LaneletType::urban})};
     world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
-TEST_F(OnAccessRampPredicateTest, BooleanEvaluationObjects) {
+TEST_F(OnUrbanRoadPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle));
@@ -39,10 +39,10 @@ TEST_F(OnAccessRampPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(4, world, egoVehicle));
 }
 
-TEST_F(OnAccessRampPredicateTest, RobustEvaluation) {
+TEST_F(OnUrbanRoadPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, egoVehicle), std::runtime_error);
 }
 
-TEST_F(OnAccessRampPredicateTest, ConstraintEvaluation) {
+TEST_F(OnUrbanRoadPredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle), std::runtime_error);
 }

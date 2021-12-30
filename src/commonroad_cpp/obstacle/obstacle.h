@@ -335,6 +335,24 @@ class Obstacle {
     double leftD(size_t timeStep);
 
     /**
+     * Calculates left lateral position of obstacle based on given reference lane
+     *
+     * @param timeStep time step to consider
+     * @param refLane Pointer to reference lane which should be used.
+     * @return lateral position [m]
+     */
+    double leftD(size_t timeStep, const std::shared_ptr<Lane> &refLane);
+
+    /**
+     * Calculates right lateral position of obstacle based on given reference lane
+     *
+     * @param timeStep time step to consider
+     * @param refLane Pointer to reference lane which should be used.
+     * @return lateral position [m]
+     */
+    double rightD(size_t timeStep, const std::shared_ptr<Lane> &refLane);
+
+    /**
      * Computes the minimum longitudinal rear position of obstacle (for rectangle shapes) based on given reference lane.
      *
      * @param timeStep Time step of interest.

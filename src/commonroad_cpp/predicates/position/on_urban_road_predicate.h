@@ -1,5 +1,5 @@
 //
-// Created by Sebastian Maierhofer and Evald Nexhipi.
+// Created by Sebastian Maierhofer.
 // Technical University of Munich - Cyber-Physical Systems Group
 // Copyright (c) 2021 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
@@ -10,14 +10,14 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *  Evaluates if a vehicle drives rightmost within its occupied lanes
+ * Evaluates if a vehicle is on an urban road
  */
-class DrivesRightmostPredicate : public CommonRoadPredicate {
+class OnUrbanRoadPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for DrivesRightmostPredicate
+     * Constructor for OnUrbanRoadPredicate
      */
-    DrivesRightmostPredicate();
+    OnUrbanRoadPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

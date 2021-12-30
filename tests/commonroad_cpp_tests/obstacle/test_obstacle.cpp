@@ -22,10 +22,10 @@
 void ObstacleTestInitialization::setUpObstacles() {
     size_t globalID{1234};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
+
     obstacleOne = std::make_shared<Obstacle>(Obstacle());
     idObstacleOne = 1;
     isStaticObstacleOne = false;
-
     obstacleTypeObstacleOne = ObstacleType::car;
     vMaxObstacleOne = 50.0;
     aMaxObstacleOne = 5.0;
@@ -58,7 +58,6 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->setReactionTime(reactionTimeObstacleOne);
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
-    // obstacleOne->setOccupiedLanes({laneOne}, obstacleOne->getFirstTrajectoryTimeStep());
     obstacleOne->computeLanes(roadNetwork, globalIdRef, true);
     obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);
 
@@ -72,15 +71,90 @@ void ObstacleTestInitialization::setUpObstacles() {
     reactionTimeObstacleTwo = 1.5;
     widthObstacleTwo = 2.5;
     lengthObstacleTwo = 10.0;
-
     obstacleTwo = std::make_shared<Obstacle>(
         Obstacle(idObstacleTwo, isStaticObstacleTwo, stateFive, obstacleTypeObstacleTwo, vMaxObstacleTwo,
                  aMaxObstacleTwo, aMaxLongObstacleTwo, aMinLongObstacleTwo, reactionTimeObstacleTwo,
                  trajectoryPredictionObstacleTwo, lengthObstacleTwo, widthObstacleTwo));
     obstacleTwo->computeLanes(roadNetwork, globalIdRef);
 
+    // Obstacle three, four, and five
+    /* State 0 */
+    std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(0, 0, 2, 10, 0, 0);
+    std::shared_ptr<State> stateZeroObstacleFour = std::make_shared<State>(0, 5, 6, 5, 0, 0);
+    /* State 1 */
+    std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 10, 2, 10, 0, 0);
+    std::shared_ptr<State> stateOneObstacleFour = std::make_shared<State>(1, 10, 6, 11, 0, 0);
+    /* State 2 */
+    std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 20, 2, 10, 0, 0);
+    std::shared_ptr<State> stateTwoObstacleFour = std::make_shared<State>(2, 21, 6, 8, 0, 0);
+    /* State 3 */
+    std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 30, 2, 10, 0, 0);
+    std::shared_ptr<State> stateThreeObstacleFour = std::make_shared<State>(3, 29, 6, 8, 0, 0);
+    /* State 4 */
+    std::shared_ptr<State> stateFourObstacleThree = std::make_shared<State>(4, 40, 2, 10, 0, 0);
+    std::shared_ptr<State> stateFourObstacleFive = std::make_shared<State>(4, 40, 6, 10, 0, 0);
+    /* State 5 */
+    std::shared_ptr<State> stateFiveObstacleThree = std::make_shared<State>(5, 50, 2, 10, 0, 0);
+    std::shared_ptr<State> stateFiveObstacleFour = std::make_shared<State>(5, 55, 6, 10, 0, 0);
+    /* State 6 */
+    std::shared_ptr<State> stateSixObstacleThree = std::make_shared<State>(6, 60, 2, 10, 0, 0);
+    std::shared_ptr<State> stateSixObstacleFour = std::make_shared<State>(6, 65, -2, 5, 0, 0);
+    /* State 7 */
+    std::shared_ptr<State> stateSevenObstacleThree = std::make_shared<State>(7, 70, 2, 10, 0, 0);
+    std::shared_ptr<State> stateSevenObstacleFour = std::make_shared<State>(7, 70, -2, 11, 0, 0);
+    std::shared_ptr<State> stateSevenObstacleFive = std::make_shared<State>(7, 70, 6, 11, 0, 0);
+    std::shared_ptr<State> stateSevenObstacleSix = std::make_shared<State>(7, 70, -5, 11, 0, 0);
+    /* State 8 */
+    std::shared_ptr<State> stateEightObstacleThree = std::make_shared<State>(8, 80, 2, 10, 0, 0);
+    std::shared_ptr<State> stateEightObstacleFour = std::make_shared<State>(8, 81, -2, 8, 0, 0);
+    /* State 9 */
+    std::shared_ptr<State> stateNineObstacleThree = std::make_shared<State>(9, 90, 2, 10, 0, 0);
+    std::shared_ptr<State> stateNineObstacleFour = std::make_shared<State>(9, 89, -2, 10, 0, 0);
+    /* State 10 */
+    std::shared_ptr<State> stateTenObstacleThree = std::make_shared<State>(10, 100, 2, 10, 0, 0);
+    std::shared_ptr<State> stateTenObstacleFive = std::make_shared<State>(10, 100, -2, 10, 0, 0);
+
+    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleThree{
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleThree),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleThree),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree),
+        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleThree),
+        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleThree),
+        std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleThree),
+        std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleThree),
+        std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleThree),
+        std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleThree),
+        std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleThree)};
+
+    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleFour{
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleFour),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleFour),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleFour),
+        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFour),
+        std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleFour),
+        std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFour),
+        std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleFour),
+        std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleFour)};
+
+    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleFive{
+        std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFive),
+        std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleFive)};
+
+    obstacleThree = std::make_shared<Obstacle>(Obstacle(3, false, stateZeroObstacleThree, ObstacleType::car, 50, 10, 3,
+                                                        -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
+    obstacleFour = std::make_shared<Obstacle>(Obstacle(4, false, stateZeroObstacleFour, ObstacleType::car, 50, 10, 3,
+                                                       -10, 0.3, trajectoryPredictionObstacleFour, 5, 2));
+    obstacleFive = std::make_shared<Obstacle>(Obstacle(5, false, stateFourObstacleFive, ObstacleType::truck, 50, 10, 3,
+                                                       -10, 0.3, trajectoryPredictionObstacleFive, 8, 2));
+    obstacleSix = std::make_shared<Obstacle>(
+        Obstacle(6, false, stateSevenObstacleSix, ObstacleType::car, 50, 10, 3, -10, 0.3, {}, 5, 2));
+
     obstacleList.push_back(obstacleOne);
     obstacleList.push_back(obstacleTwo);
+    obstacleList.push_back(obstacleThree);
+    obstacleList.push_back(obstacleFour);
+    obstacleList.push_back(obstacleFive);
+    obstacleList.push_back(obstacleSix);
 }
 
 void ObstacleTest::SetUp() {
@@ -196,16 +270,16 @@ TEST_F(ObstacleTest, GetStateByTimeStep) {
 }
 
 TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
-    stateOne->setXPosition(2.5);
-    stateOne->setYPosition(0.5);
+    stateOne->setXPosition(25.0);
+    stateOne->setYPosition(1.5);
     obstacleOne->convertPointToCurvilinear(0);
-    EXPECT_NEAR(stateOne->getLonPosition(), 7.5, 0.0005);
+    EXPECT_NEAR(stateOne->getLonPosition(), 75.0, 0.0005);
     EXPECT_EQ(stateOne->getLatPosition(), 0.0);
-    stateOne->setXPosition(2.5);
-    stateOne->setYPosition(-0.75);
+    stateOne->setXPosition(25.0);
+    stateOne->setYPosition(-2.75);
     obstacleOne->convertPointToCurvilinear(0);
-    EXPECT_NEAR(stateOne->getLonPosition(), 7.5, 0.0005);
-    EXPECT_EQ(stateOne->getLatPosition(), -1.25);
+    EXPECT_NEAR(stateOne->getLonPosition(), 75.0, 0.0005);
+    EXPECT_EQ(stateOne->getLatPosition(), -4.25);
 }
 
 TEST_F(ObstacleTest, SetReferenceGeneral) {

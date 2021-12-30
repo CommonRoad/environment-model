@@ -10,11 +10,11 @@
 
 void OnShoulderPredicateTest::SetUp() {
 
-    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 6, 10, 0, 0, 0, 0, 0);
-    std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 5, 10, 0, 0, 0, 10, 0);
+    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0, 0, 0, 0, 0);
+    std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 2, 10, 0, 0, 0, 10, 0);
     std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 20, 4, 10, 0, 0, 0, 20, 0);
-    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 2, 10, 0, 0, 0, 30, 0);
-    std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 0, 10, 0, 0, 0, 40, 0);
+    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 6, 10, 0, 0, 0, 30, 0);
+    std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 8, 10, 0, 0, 0, 40, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
@@ -27,14 +27,14 @@ void OnShoulderPredicateTest::SetUp() {
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
-    auto roadNetwork{utils_predicate_test::create_road_network_2()};
+    auto roadNetwork{utils_predicate_test::create_road_network({LaneletType::shoulder, LaneletType::interstate})};
     world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
 TEST_F(OnShoulderPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
-    EXPECT_FALSE(pred.booleanEvaluation(2, world, egoVehicle));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(3, world, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(4, world, egoVehicle));
 }

@@ -66,25 +66,12 @@ class StateTestInitialization : public RoadNetworkTestInitialization {
     double latPositionStateFive;
     double globalOrientationStateFive;
     double curvilinearOrientationStateFive;
-    ValidStates validityStateFive;
-
-    int timeStepStateSix;
-    double xPositionStateSix;
-    double yPositionStateSix;
-    double velocityStateSix;
-    double accelerationStateSix;
-    double lonPositionStateSix;
-    double latPositionStateSix;
-    double globalOrientationStateSix;
-    double curvilinearOrientationStateSix;
-    ValidStates validityStateSix;
 
     std::shared_ptr<State> stateOne;
     std::shared_ptr<State> stateTwo;
     std::shared_ptr<State> stateThree;
     std::shared_ptr<State> stateFour;
     std::shared_ptr<State> stateFive;
-    std::shared_ptr<State> stateSix;
 
     void setUpStates();
 };

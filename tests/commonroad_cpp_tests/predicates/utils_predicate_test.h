@@ -10,7 +10,9 @@
 class RoadNetwork;
 
 namespace utils_predicate_test {
-std::shared_ptr<RoadNetwork> create_road_network();
+std::shared_ptr<RoadNetwork>
+create_road_network(const std::set<LaneletType> &laneletTypeLaneletOne = {LaneletType::interstate},
+                    const std::set<LaneletType> &laneletTypeLaneletTwo = {LaneletType::interstate});
 std::shared_ptr<RoadNetwork> create_road_network_2();
 std::shared_ptr<RoadNetwork> create_road_network_3();
 } // namespace utils_predicate_test
