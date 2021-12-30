@@ -52,9 +52,8 @@ void StateTestInitialization::setUpStates() {
     globalOrientationStateFour = -0.01;
     curvilinearOrientationStateFour = -0.01;
     timeStepStateFour = 3;
-    validityStateFour = ValidStates{true, true, true, true, true, true, true};
 
-    xPositionStateFive = 4.0;
+    xPositionStateFive = 70.0;
     yPositionStateFive = 9.0;
     velocityStateFive = 20.0;
     accelerationStateFive = 1.0;
@@ -63,18 +62,6 @@ void StateTestInitialization::setUpStates() {
     globalOrientationStateFive = 0.00;
     curvilinearOrientationStateFive = 0.0;
     timeStepStateFive = 4;
-    validityStateFour = ValidStates{true, true, true, true, true, true, true};
-
-    xPositionStateSix = 11.0;
-    yPositionStateSix = 1.0;
-    velocityStateSix = 40.0;
-    accelerationStateSix = -1.0;
-    lonPositionStateSix = 16.0;
-    latPositionStateSix = 1.0;
-    globalOrientationStateSix = 0.0;
-    curvilinearOrientationStateSix = 0.0;
-    timeStepStateSix = 5;
-    validityStateFour = ValidStates{true, true, true, true, true, true, true};
 
     stateOne = std::make_shared<State>();
     stateOne->setAcceleration(accelerationStateOne);
@@ -105,10 +92,6 @@ void StateTestInitialization::setUpStates() {
     stateFive = std::make_shared<State>(timeStepStateFive, xPositionStateFive, yPositionStateFive, velocityStateFive,
                                         accelerationStateFive, globalOrientationStateFive,
                                         curvilinearOrientationStateFive, lonPositionStateFive, latPositionStateFive);
-
-    stateSix = std::make_shared<State>(timeStepStateSix, xPositionStateSix, yPositionStateSix, velocityStateSix,
-                                       accelerationStateSix, globalOrientationStateSix, curvilinearOrientationStateSix,
-                                       lonPositionStateSix, latPositionStateSix);
 }
 
 void StateTest::SetUp() {

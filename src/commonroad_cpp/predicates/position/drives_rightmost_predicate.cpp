@@ -17,21 +17,21 @@
 bool DrivesRightmostPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
                                                  const std::shared_ptr<Obstacle> &obstacleP) {
-
-    const std::shared_ptr<RoadNetwork> roadNetwork = world->getRoadNetwork();
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obstacleK->getOccupiedLanelets(timeStep);
     std::shared_ptr<Obstacle> vehicle_directly_right =
         obstacle_operations::obstacleDirectlyRight(timeStep, world->getObstacles(), obstacleK);
 
     if (vehicle_directly_right != nullptr) {
-        return (obstacleK->rightD(timeStep) - vehicle_directly_right->leftD(timeStep)) < parameters.closeToOtherVehicle;
+        return (obstacleK->rightD(timeStep) -
+                vehicle_directly_right->leftD(timeStep, obstacleK->getReferenceLane(timeStep))) <
+               parameters.closeToOtherVehicle;
     } else {
         double right_position = obstacleK->rightD(timeStep);
         double s_ego = obstacleK->getLonPosition(timeStep);
         std::vector<std::shared_ptr<Lane>> lanes;
         for (auto &occLa : occupiedLanelets) {
             std::vector<std::shared_ptr<Lane>> lanesOfLanelet =
-                roadNetwork->findLanesByContainedLanelet(occLa->getId());
+                world->getRoadNetwork()->findLanesByContainedLanelet(occLa->getId());
             for (auto &lane : lanesOfLanelet) {
                 lanes.push_back(lane);
             }

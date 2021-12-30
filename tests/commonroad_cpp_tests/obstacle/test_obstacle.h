@@ -44,6 +44,8 @@ class ObstacleTestInitialization : public StateTestInitialization {
 
     std::shared_ptr<Obstacle> obstacleThree;
     std::shared_ptr<Obstacle> obstacleFour;
+    std::shared_ptr<Obstacle> obstacleFive;
+    std::shared_ptr<Obstacle> obstacleSix;
 
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
 

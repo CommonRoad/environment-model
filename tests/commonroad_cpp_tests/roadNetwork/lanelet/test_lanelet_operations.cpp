@@ -339,13 +339,13 @@ TEST_F(LaneletOperationsTest, AdjacentLanes) {
 }
 
 TEST_F(LaneletOperationsTest, RoadWidth) {
-    EXPECT_EQ(lanelet_operations::roadWidth(laneletOne, 1, 0.5), 3);
-    EXPECT_EQ(lanelet_operations::roadWidth(laneletTwo, 7, 0.5), 1);
-    EXPECT_EQ(lanelet_operations::roadWidth(laneletThree, -4, 0.5), 1);
-    EXPECT_EQ(lanelet_operations::roadWidth(laneletFour, 7, -0.5), 3);
-    EXPECT_EQ(lanelet_operations::roadWidth(laneletFive, 7, 1.5), 3);
-    EXPECT_EQ(lanelet_operations::roadWidth(laneletSix, 7, 0.5), 1);
-    EXPECT_NEAR(lanelet_operations::roadWidth(laneletSeven, -1, 1), 1.99998, 0.0005);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletOne, 10, 1.5), 9);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletTwo, 70, 1.5), 3);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletThree, -40, 1.5), 3);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletFour, 70, -1.5), 9);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletFive, 70, 4.5), 9);
+    EXPECT_EQ(lanelet_operations::roadWidth(laneletSix, 70, 1.5), 3);
+    EXPECT_NEAR(lanelet_operations::roadWidth(laneletSeven, -10, 4), 4.99998, 0.0005);
 
-    EXPECT_THROW(lanelet_operations::roadWidth(laneletOne, 100, 100), std::runtime_error);
+    EXPECT_THROW(lanelet_operations::roadWidth(laneletOne, 1000, 0100), std::runtime_error);
 }
