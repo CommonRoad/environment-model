@@ -36,6 +36,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_predicate.cpp
+        commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.cpp
         commonroad_cpp/predicates/position/on_access_ramp_predicate.cpp
         commonroad_cpp/predicates/position/on_exit_ramp_predicate.cpp
         commonroad_cpp/predicates/position/on_urban_road_predicate.cpp
