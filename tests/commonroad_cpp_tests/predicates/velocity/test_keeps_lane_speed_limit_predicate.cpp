@@ -10,10 +10,10 @@
 #include "commonroad_cpp/obstacle/state.h"
 
 void KeepsLaneSpeedLimitPredicateTest::SetUp() {
-    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 45, 0, 0, 0, 0, 0);
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 45, 2, 50, 0, 0, 0, 45, 0);
-    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 95, 2, 55, 0, 0, 0, 95, 0);
-    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 150, 2, 45, 0, 0, 0, 150, 0);
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 30, 0, 0, 0, 0, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 45, 2, 35, 0, 0, 0, 45, 0);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 95, 2, 45, 0, 0, 0, 95, 0);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 150, 2, 30, 0, 0, 0, 150, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),

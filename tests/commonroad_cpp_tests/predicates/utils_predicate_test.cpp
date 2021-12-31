@@ -91,7 +91,7 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
     const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);
     // max speed traffic sign
     size_t trafficSignIdOne = 200;
-    std::vector<std::string> trafficSignElementOneValues{"50"};
+    std::vector<std::string> trafficSignElementOneValues{"35"};
     auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
         trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)}};
     auto vertexOne{vertex{0, 0}};

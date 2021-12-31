@@ -74,12 +74,12 @@ bool regulatory_elements_utils::trafficSignReferencesStopSign(const std::shared_
                        [signId](const std::shared_ptr<TrafficSignElement> &elem) { return elem->getId() == signId; });
 }
 
-double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lanelet, const std::string &speedLimitId) {
+double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lanelet, const std::string &signId) {
     double limit = PredicateParameters().maxPositiveDouble;
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
     for (const std::shared_ptr<TrafficSign> &signPtr : trafficSigns) {
         for (const std::shared_ptr<TrafficSignElement> &elemPtr : signPtr->getTrafficSignElements()) {
-            if (elemPtr->getId() == speedLimitId) {
+            if (elemPtr->getId() == signId) {
                 double signLimit = std::stod(elemPtr->getAdditionalValues()[0]);
                 if (limit > signLimit)
                     limit = signLimit;
@@ -90,30 +90,29 @@ double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lan
 }
 
 double regulatory_elements_utils::speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
-                                             const std::string &speedLimitId) {
+                                             const std::string &signId) {
     std::vector<double> speedLimits;
     for (const auto &lanelet : lanelets) {
-        speedLimits.push_back(speedLimit(lanelet, speedLimitId));
+        speedLimits.push_back(speedLimit(lanelet, signId));
     }
     return *std::min_element(speedLimits.begin(), speedLimits.end());
 }
 
 double regulatory_elements_utils::speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
-                                                      const std::string &speedLimitId) {
-    double vMaxLane{speedLimit(lanelets, speedLimitId)};
+                                                      const std::string &signId) {
+    double vMaxLane{speedLimit(lanelets, signId)};
     if (vMaxLane == PredicateParameters().maxPositiveDouble)
         return PredicateParameters().desiredInterstateVelocity;
     else
         return std::min(PredicateParameters().desiredInterstateVelocity, vMaxLane);
 }
 
-double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet> &lanelet,
-                                                   const std::string &speedLimitId) {
+double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet> &lanelet, const std::string &signId) {
     double limit = 0;
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
     for (const std::shared_ptr<TrafficSign> &signPtr : trafficSigns) {
         for (const std::shared_ptr<TrafficSignElement> &elemPtr : signPtr->getTrafficSignElements()) {
-            if (elemPtr->getId() == speedLimitId) {
+            if (elemPtr->getId() == signId) {
                 double signLimit = std::stod(elemPtr->getAdditionalValues()[0]);
                 if (limit < signLimit)
                     limit = signLimit;
@@ -124,12 +123,12 @@ double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet
 }
 
 double regulatory_elements_utils::requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
-                                                   const std::string &speedLimitId) {
+                                                   const std::string &signId) {
     std::vector<double> speedLimits;
     for (const auto &lanelet : lanelets) {
-        speedLimits.push_back(requiredVelocity(lanelet, speedLimitId));
+        speedLimits.push_back(requiredVelocity(lanelet, signId));
     }
-    return *std::min_element(speedLimits.begin(), speedLimits.end());
+    return *std::max_element(speedLimits.begin(), speedLimits.end());
 }
 
 double regulatory_elements_utils::typeSpeedLimit(ObstacleType obstacleType) {
