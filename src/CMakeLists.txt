@@ -61,6 +61,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle.cpp
         commonroad_cpp/predicates/velocity/drives_faster_predicate.cpp
         commonroad_cpp/predicates/velocity/reverses_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp

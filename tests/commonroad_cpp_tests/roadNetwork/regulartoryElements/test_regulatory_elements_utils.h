@@ -6,6 +6,12 @@
 //
 #pragma once
 
+#include "commonroad_cpp/obstacle/obstacle.h"
 #include <gtest/gtest.h>
 
-class RegulatoryElementsUtilsTest : public testing::Test {};
+class RegulatoryElementsUtilsTest : public testing::Test {
+    std::shared_ptr<Obstacle> obstacleOne;
+
+  private:
+    void SetUp() override;
+};

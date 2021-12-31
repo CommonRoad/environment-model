@@ -18,10 +18,6 @@ class RequiredSpeedPredicate : public CommonRoadPredicate {
      */
     RequiredSpeedPredicate();
 
-    double requiredVelocity(const std::shared_ptr<Lanelet> &lanelet, const std::string &speedLimitId);
-
-    double requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const std::string &speedLimitId);
-
     /**
      * Boolean evaluation of predicate using objects.
      *

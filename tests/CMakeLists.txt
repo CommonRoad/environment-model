@@ -60,6 +60,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/velocity/test_drives_faster_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_drives_with_slightly_higher_speed_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_reverses_predicate.cpp
+        commonroad_cpp_tests/predicates/velocity/test_keeps_type_speed_limit_predicate.cpp
         )
 
 

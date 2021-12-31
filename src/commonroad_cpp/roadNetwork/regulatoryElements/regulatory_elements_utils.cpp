@@ -106,3 +106,37 @@ double regulatory_elements_utils::speedLimitSuggested(const std::vector<std::sha
     else
         return std::min(PredicateParameters().desiredInterstateVelocity, vMaxLane);
 }
+
+double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet> &lanelet,
+                                                   const std::string &speedLimitId) {
+    double limit = 0;
+    std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
+    for (const std::shared_ptr<TrafficSign> &signPtr : trafficSigns) {
+        for (const std::shared_ptr<TrafficSignElement> &elemPtr : signPtr->getTrafficSignElements()) {
+            if (elemPtr->getId() == speedLimitId) {
+                double signLimit = std::stod(elemPtr->getAdditionalValues()[0]);
+                if (limit < signLimit)
+                    limit = signLimit;
+            }
+        }
+    }
+    return limit;
+}
+
+double regulatory_elements_utils::requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
+                                                   const std::string &speedLimitId) {
+    std::vector<double> speedLimits;
+    for (const auto &lanelet : lanelets) {
+        speedLimits.push_back(requiredVelocity(lanelet, speedLimitId));
+    }
+    return *std::min_element(speedLimits.begin(), speedLimits.end());
+}
+
+double regulatory_elements_utils::typeSpeedLimit(ObstacleType obstacleType) {
+    switch (obstacleType) {
+    case ObstacleType::truck:
+        return 22.22;
+    default:
+        return std::numeric_limits<double>::max();
+    }
+}

@@ -5,8 +5,6 @@
 // Credits: BMW Car@TUM
 //
 
-#include <algorithm>
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
