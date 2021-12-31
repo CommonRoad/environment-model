@@ -43,6 +43,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/position/test_drives_leftmost_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_drives_rightmost_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_on_main_carriage_way_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_main_carriageway_right_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_right_of_broad_lane_marking_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_left_of_broad_lane_marking_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_at_red_right_traffic_light_predicate.cpp
