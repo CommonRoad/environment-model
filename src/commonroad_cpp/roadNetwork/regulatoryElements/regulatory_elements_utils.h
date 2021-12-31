@@ -51,4 +51,16 @@ double speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const s
 
 double speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const std::string &speedLimitId);
 
+double requiredVelocity(const std::shared_ptr<Lanelet> &lanelet, const std::string &speedLimitId);
+
+double requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const std::string &speedLimitId);
+
+/**
+ * Evaluates speed limit for a obstacle type. Currently, only the type speed limit for trucks is added.
+ *
+ * @param obstacleType Tye of relevant obstacle.
+ * @return Speed limit [m/s]
+ */
+double typeSpeedLimit(ObstacleType obstacleType);
+
 } // namespace regulatory_elements_utils

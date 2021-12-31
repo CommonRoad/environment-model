@@ -9,14 +9,14 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate for evaluating traffic flow
+ * Evaluates whether a vehicle keeps its type speed limit
  */
-class RequiredSpeedPredicate : public CommonRoadPredicate {
+class KeepsTypeSpeedLimitPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for RequiredSpeedPredicate.
+     * Constructor for KeepsTypeSpeedLimitPredicate.
      */
-    RequiredSpeedPredicate();
+    KeepsTypeSpeedLimitPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
