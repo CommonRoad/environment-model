@@ -27,6 +27,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
+        commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_single_lane_predicate.cpp

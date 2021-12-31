@@ -5,10 +5,6 @@
 // Credits: BMW Car@TUM
 //
 
-#include <algorithm>
-#include <memory>
-#include <vector>
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
