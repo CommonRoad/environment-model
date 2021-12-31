@@ -37,9 +37,8 @@ struct PredicateParameters {
     double uTurn{1.57};                         // angle [rad] indicating u-turn
     double aboveCenterlineTh{0.1};              // indicator for necessary distance to be classified above centerline
     double epsilon{1e-6};                       // small value close to zero for different purposes
-
-    double stopLineDistance{1.0};         // maximum distance vehicle waiting in front of stop line has to wait
-    double laneMatchingOrientation{0.35}; // orientation threshold for following a lane
+    double stopLineDistance{1.0};               // maximum distance vehicle waiting in front of stop line has to wait
+    double laneMatchingOrientation{0.35};       // orientation threshold for following a lane
 
     void checkParameterValidity() const;
 

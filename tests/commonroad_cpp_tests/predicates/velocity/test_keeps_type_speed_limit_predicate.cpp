@@ -48,3 +48,11 @@ TEST_F(KeepsTypeSpeedLimitPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(2, world,
                                        obstacleTwo)); // car drives slower than truck type speed limit
 }
+
+TEST_F(KeepsTypeSpeedLimitPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
+}
+
+TEST_F(KeepsTypeSpeedLimitPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
+}
