@@ -17,7 +17,6 @@
 bool SlowLeadingVehiclePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP) {
-    // TODO consider other speed limit types -> see Python predicate
     InFrontOfPredicate inFrontOfPredicate;
     InSameLanePredicate inSameLanePredicate;
     for (const auto &obs : world->getObstacles()) {
@@ -26,10 +25,12 @@ bool SlowLeadingVehiclePredicate::booleanEvaluation(size_t timeStep, const std::
         if (!inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) or
             !inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             continue;
-        double vMaxLane{regulatory_elements_utils::speedLimitSuggested(
-            obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep),
-            world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED))};
-        if (vMaxLane - obs->getStateByTimeStep(timeStep)->getVelocity() >= parameters.minVelocityDif)
+        double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
+                                  obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep),
+                                  world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED)),
+                              regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
+                              EgoVehicleParameters().roadConditionSpeedLimit})};
+        if (vMax - obs->getStateByTimeStep(timeStep)->getVelocity() >= parameters.minVelocityDif)
             return true;
     }
     return false;
