@@ -13,11 +13,21 @@ void BrakesStrongerPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 10, -2, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 10, 2, 10, -1, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(0, 0, 2, 10, -1, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(0, 10, 2, 10, -2, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 0, 2, 10, -1, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 10, 2, 10, -2, 0);
 
-    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 2, 10, 1, 0);
-    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 30, 2, 10, 1, 0);
+    std::shared_ptr<State> stateTwoObstacleOne{std::make_shared<State>()};
+    stateTwoObstacleOne->setTimeStep(2);
+    stateTwoObstacleOne->setXPosition(20);
+    stateTwoObstacleOne->setYPosition(2);
+    stateTwoObstacleOne->setVelocity(10.1);
+    stateTwoObstacleOne->setGlobalOrientation(0);
+    std::shared_ptr<State> stateTwoObstacleTwo{std::make_shared<State>()};
+    stateTwoObstacleTwo->setTimeStep(2);
+    stateTwoObstacleTwo->setXPosition(20);
+    stateTwoObstacleTwo->setYPosition(2);
+    stateTwoObstacleTwo->setVelocity(10.1);
+    stateTwoObstacleTwo->setGlobalOrientation(0);
 
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 2, 10, 2, 0);
     std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 40, 2, 10, 1, 0);
@@ -59,6 +69,6 @@ TEST_F(BrakesStrongerPredicateTest, ConstraintEvaluation) {
 TEST_F(BrakesStrongerPredicateTest, RobustEvaluation) {
     EXPECT_EQ(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), 1);
     EXPECT_EQ(pred.robustEvaluation(1, world, obstacleOne, obstacleTwo), -1);
-    EXPECT_EQ(pred.robustEvaluation(2, world, obstacleOne, obstacleTwo), -1);
+    EXPECT_NEAR(pred.robustEvaluation(2, world, obstacleOne, obstacleTwo), -1, 0.0001);
     EXPECT_EQ(pred.robustEvaluation(3, world, obstacleOne, obstacleTwo), -2);
 }

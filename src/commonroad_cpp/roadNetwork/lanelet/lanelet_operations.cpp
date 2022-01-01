@@ -259,18 +259,19 @@ double lanelet_operations::roadWidth(const std::shared_ptr<Lanelet> &lanelet, do
     for (auto vert : lanelet->getCenterVertices())
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     geometry::util::resample_polyline(reference_path, 2, reference_path);
-    auto curvilinearCoordinateSystem = CurvilinearCoordinateSystem(reference_path);
+    auto curvilinearCoordinateSystem = CurvilinearCoordinateSystem(reference_path, 20.0, 0.1, 1);
+    Eigen::Vector2d curvilinearPos;
     try {
-        auto curvilinearPos{curvilinearCoordinateSystem.convertToCurvilinearCoords(xPosition, yPosition)};
-        double road_width{0};
-        for (auto &adjLanelet : adj_lanelets)
-            road_width += adjLanelet->getWidth(curvilinearPos.x());
-
-        return road_width;
+        curvilinearPos = curvilinearCoordinateSystem.convertToCurvilinearCoords(xPosition, yPosition);
     } catch (...) {
         throw std::runtime_error(
             "lanelet_operations::roadWidth: Custom CCS - Curvilinear Projection Error - x-position: " +
             std::to_string(xPosition) + " - y-position: " + std::to_string(yPosition) +
             " - Lanelet ID: " + std::to_string(lanelet->getId()));
     }
+    double road_width{0};
+    for (auto &adjLanelet : adj_lanelets)
+        road_width += adjLanelet->getWidth(curvilinearPos.x());
+
+    return road_width;
 }

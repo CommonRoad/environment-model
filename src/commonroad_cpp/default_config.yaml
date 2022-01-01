@@ -14,7 +14,7 @@ simulation_param:
   evaluation_mode: directory
   ego_vehicle_id: 0
   benchmark_id: DEU_test_safe_distance
-  directories: [ "./tests/scenarios" ]
+  directories: [ "./tests/scenarios/predicates" ]
   performance_measurement: true
   operating_mode: boolean # one of boolean, constraint, robustness
   output_directory: "src/commonroad_cpp/predicates"
@@ -29,13 +29,18 @@ simulation_param:
 predicate_eval:
   predicate_category:
     intersection: ["in_intersection_main_area", "at_red_traffic_light", "at_red_straight_traffic_light",
-                   "at_red_left_traffic_light", "at_red_right_traffic_light", "stop_line_in_front"]
+                   "at_red_left_traffic_light", "at_red_right_traffic_light", "stop_line_in_front", "passes_stop_line"]
     general: ["keeps_safe_distance_prec", "unnecessary_braking", "in_front_of", "in_same_lane",
               "keeps_lane_speed_limit", "preserves_traffic_flow", "keeps_sign_min_speed_limit", "slow_leading_vehicle",
               "orientation_towards", "lane_based_orientation_similar", "in_single_lane", "in_standstill",
-              "passes_stop_line"]
-    test: ["keeps_safe_distance_prec"]
-  relevant_predicate_sets: [general]
+              "brakes_stronger", "in_congestion", "in_queue_of_vehicles", "in_slow_moving_traffic", "makes_u_turn",
+              "drives_leftmost", "drives_rightmost", "in_leftmost_lane", "in_rightmost_lane",
+              "left_of_broad_lane_marking", "left_of", "on_urban_road", "right_of_broad_lane_marking", "drives_faster",
+              "drives_with_slightly_higher_speed", "exist_standing_leading_vehicle", "keeps_braking_speed_limit",
+              "keeps_fov_speed_limit", "keeps_type_speed_limit", "reverses"]
+    interstate: [ "interstate_broad_enough", "main_carriageway_right_lane", "on_access_ramp", "on_exit_ramp",
+                  "on_main_carriage_way", "on_shoulder" ]
+  relevant_predicate_sets: [general, interstate]
 
 # Ego vehicle parameters
 ###
