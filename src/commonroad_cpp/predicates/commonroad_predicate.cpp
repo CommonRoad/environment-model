@@ -26,15 +26,15 @@
 #include "position/in_single_lane_predicate.h"
 #include "position/left_of_broad_lane_marking_predicate.h"
 #include "position/left_of_predicate.h"
+#include "position/main_carriageway_right_lane_predicate.h"
 #include "position/on_access_ramp_predicate.h"
+#include "position/on_exit_ramp_predicate.h"
 #include "position/on_main_carriage_way_predicate.h"
 #include "position/on_shoulder_predicate.h"
-#include "position/passes_stop_line_predicate.h"
 #include "position/on_urban_road_predicate.h"
-#include "position/on_exit_ramp_predicate.h"
+#include "position/passes_stop_line_predicate.h"
 #include "position/right_of_broad_lane_marking_predicate.h"
 #include "position/stop_line_in_front_predicate.h"
-#include "position/main_carriageway_right_lane_predicate.h"
 #include "regulatory/at_red_left_traffic_light_predicate.h"
 #include "regulatory/at_red_right_traffic_light_predicate.h"
 #include "regulatory/at_red_straight_traffic_light_predicate.h"
@@ -44,10 +44,10 @@
 #include "velocity/drives_with_slightly_higher_speed_predicate.h"
 #include "velocity/exist_standing_leading_vehicle_predicate.h"
 #include "velocity/in_standstill_predicate.h"
+#include "velocity/keeps_braking_speed_limit_predicate.h"
+#include "velocity/keeps_fov_speed_limit_predicate.h"
 #include "velocity/keeps_lane_speed_limit_predicate.h"
 #include "velocity/keeps_type_speed_limit_predicate.h"
-#include "velocity/keeps_fov_speed_limit_predicate.h"
-#include "velocity/keeps_braking_speed_limit_predicate.h"
 #include "velocity/preserves_traffic_flow_predicate.h"
 #include "velocity/required_speed_predicate.h"
 #include "velocity/reverses_predicate.h"
@@ -141,10 +141,3 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"reverses", std::make_shared<ReversesPredicate>()},
     {"slow_leading_vehicle", std::make_shared<SlowLeadingVehiclePredicate>()},
 };
-
-
-
-
-
-
-
