@@ -14,18 +14,18 @@
 bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                         const std::shared_ptr<Obstacle> &obstacleK,
                                         const std::shared_ptr<Obstacle> &obstacleP) {
-
-    if (obstacleK->leftD(timeStep) >= obstacleP->rightD(timeStep))
+    auto referenceK{obstacleK->getReferenceLane(timeStep)};
+    if (obstacleK->leftD(timeStep) >= obstacleP->rightD(timeStep, referenceK))
         return false;
     else {
-        if (obstacleK->rearS(timeStep) <= obstacleP->frontS(timeStep) and
-            obstacleP->frontS(timeStep) <= obstacleK->frontS(timeStep))
+        if (obstacleK->rearS(timeStep) <= obstacleP->frontS(timeStep, referenceK) and
+            obstacleP->frontS(timeStep, referenceK) <= obstacleK->frontS(timeStep))
             return true;
-        if (obstacleK->rearS(timeStep) < obstacleP->rearS(timeStep) and
-            obstacleP->rearS(timeStep) < obstacleK->frontS(timeStep))
+        if (obstacleK->rearS(timeStep) < obstacleP->rearS(timeStep, referenceK) and
+            obstacleP->rearS(timeStep, referenceK) < obstacleK->frontS(timeStep))
             return true;
-        return (obstacleP->rearS(timeStep) < obstacleK->rearS(timeStep)) and
-               (obstacleK->frontS(timeStep) < obstacleP->frontS(timeStep));
+        return (obstacleP->rearS(timeStep, referenceK) < obstacleK->rearS(timeStep)) and
+               (obstacleK->frontS(timeStep) < obstacleP->frontS(timeStep, referenceK));
     }
 }
 
@@ -41,4 +41,4 @@ Constraint LeftOfPredicate::constraintEvaluation(size_t timeStep, const std::sha
     throw std::runtime_error("Left Of does not support constraint evaluation!");
 }
 
-LeftOfPredicate::LeftOfPredicate() : CommonRoadPredicate(false) {}
+LeftOfPredicate::LeftOfPredicate() : CommonRoadPredicate(true) {}

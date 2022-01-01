@@ -6,7 +6,7 @@
 //
 
 #include "brakes_stronger_predicate.h"
-#include <algorithm>
+#include "../../world.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 
 bool BrakesStrongerPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -18,14 +18,20 @@ bool BrakesStrongerPredicate::booleanEvaluation(size_t timeStep, const std::shar
 Constraint BrakesStrongerPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
                                                          const std::shared_ptr<Obstacle> &obstacleP) {
+    if (!obstacleP->getStateByTimeStep(timeStep)->getValidStates().acceleration)
+        obstacleP->interpolateAcceleration(timeStep, world->getDt());
     return {std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(), 0.0)};
 }
 
 double BrakesStrongerPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
                                                  const std::shared_ptr<Obstacle> &obstacleP) {
+    if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
+        obstacleK->interpolateAcceleration(timeStep, world->getDt());
+    if (!obstacleP->getStateByTimeStep(timeStep)->getValidStates().acceleration)
+        obstacleP->interpolateAcceleration(timeStep, world->getDt());
     return std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(), 0.0) -
            obstacleK->getStateByTimeStep(timeStep)->getAcceleration();
 }
 
-BrakesStrongerPredicate::BrakesStrongerPredicate() : CommonRoadPredicate(false) {}
+BrakesStrongerPredicate::BrakesStrongerPredicate() : CommonRoadPredicate(true) {}

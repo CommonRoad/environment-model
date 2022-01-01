@@ -55,8 +55,8 @@ void PredicateManager::extractPredicateSatisfaction() {
                                     pred->statisticBooleanEvaluation(timeStep, world, ego, obs);
                     } catch (...) {
                         throw std::runtime_error("PredicateManager::extractPredicateSatisfaction - Scenario: " + sc +
-                                                 " - ego vehicle: " + std::to_string(ego->getId()) +
-                                                 " - time step:" + std::to_string(timeStep));
+                                                 " - ego vehicle: " + std::to_string(ego->getId()) + " - predicate: " +
+                                                 predName + " - time step:" + std::to_string(timeStep));
                     }
                 }
             }
