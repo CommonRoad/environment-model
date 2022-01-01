@@ -17,11 +17,11 @@ bool PreservesTrafficFlowPredicate::booleanEvaluation(size_t timeStep, const std
                                                       const std::shared_ptr<Obstacle> &obstacleK,
                                                       const std::shared_ptr<Obstacle> &obstacleP) {
     double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
-        obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep),
-        world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED)),
-                             regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
-                             EgoVehicleParameters().brakingSpeedLimit, EgoVehicleParameters().fovSpeedLimit,
-                             EgoVehicleParameters().roadConditionSpeedLimit})};
+                              obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep),
+                              world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED)),
+                          regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
+                          EgoVehicleParameters().brakingSpeedLimit, EgoVehicleParameters().fovSpeedLimit,
+                          EgoVehicleParameters().roadConditionSpeedLimit})};
     return (vMax - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.minVelocityDif;
 }
 
