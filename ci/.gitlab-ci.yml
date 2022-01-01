@@ -5,6 +5,7 @@ stages:
   - coverage
   - static-test
   - docs
+  - publish
 
 image: $CI_REGISTRY/maierhofer/environment-model/ci:0.6.0
 
@@ -197,3 +198,17 @@ docs:
       - build/doc_doxygen/html/
     expose_as: 'Doxygen Documentation'
     expire_in: 30 minutes
+
+pages:
+  stage: publish
+  script:
+    - mv build/doc_doxygen/html public
+  needs:
+    - job: docs
+      artifacts: true
+  artifacts:
+    paths:
+      - public
+    expire_in: 20 minutes
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
