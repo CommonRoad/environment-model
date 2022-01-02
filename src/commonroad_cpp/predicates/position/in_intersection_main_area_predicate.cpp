@@ -17,10 +17,10 @@
 bool InIntersectionMainAreaPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP) {
-    auto lanelets{obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep)};
-    for (const auto &la : lanelets) {
-        if (std::any_of(la->getLaneletTypes().begin(), la->getLaneletTypes().end(),
-                        [](LaneletType t) { return t == LaneletType::intersection; }))
+    auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
+    for (const auto &lanelet : lanelets) {
+        if (std::any_of(lanelet->getLaneletTypes().begin(), lanelet->getLaneletTypes().end(),
+                        [](LaneletType laType) { return laType == LaneletType::intersection; }))
             return true;
     }
     return false;
@@ -37,3 +37,5 @@ Constraint InIntersectionMainAreaPredicate::constraintEvaluation(size_t timeStep
                                                                  const std::shared_ptr<Obstacle> &obstacleP = {}) {
     throw std::runtime_error("InIntersectionMainAreaPredicate does not support constraint evaluation!");
 }
+
+InIntersectionMainAreaPredicate::InIntersectionMainAreaPredicate() : CommonRoadPredicate(false) {}

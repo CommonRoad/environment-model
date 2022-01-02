@@ -19,7 +19,7 @@ bool InSameLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_p
     for (const auto &laneK :
          obstacleK->getDrivingPathLanes(world->getRoadNetwork(), timeStep, world->getIdCounterRef())) {
         auto relevantIDs{laneK->getContainedLaneletIDs()};
-        for (const auto &laneletP : obstacleP->getOccupiedLanelets(world->getRoadNetwork(), timeStep))
+        for (const auto &laneletP : obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep))
             if (relevantIDs.find(laneletP->getId()) != relevantIDs.end())
                 return true;
     }
@@ -29,11 +29,12 @@ bool InSameLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_p
 double InSameLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                              const std::shared_ptr<Obstacle> &obstacleK,
                                              const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("InSameLanePredicate does not support robust evaluation!");
+    throw std::runtime_error("In Same Lane Predicate does not support robust evaluation!");
 }
 
 Constraint InSameLanePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
-    throw std::runtime_error("InSameLanePredicate does not support constraint evaluation!");
+    throw std::runtime_error("In Same Lane Predicate does not support constraint evaluation!");
 }
+InSameLanePredicate::InSameLanePredicate() : CommonRoadPredicate(true) {}

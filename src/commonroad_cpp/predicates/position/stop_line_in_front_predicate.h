@@ -15,6 +15,11 @@
 class StopLineInFrontPredicate : public CommonRoadPredicate {
   public:
     /**
+     * Constructor for StopLineInFrontPredicate.
+     */
+    StopLineInFrontPredicate();
+
+    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.

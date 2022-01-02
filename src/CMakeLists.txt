@@ -23,21 +23,48 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
         commonroad_cpp/interfaces/standalone/command_line_input.cpp
         commonroad_cpp/world.cpp
+        commonroad_cpp/predicates/predicate_manager.cpp
         commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
+        commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_single_lane_predicate.cpp
         commonroad_cpp/predicates/position/stop_line_in_front_predicate.cpp
         commonroad_cpp/predicates/position/passes_stop_line_predicate.cpp
+        commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp/predicates/position/left_of_predicate.cpp
+        commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.cpp
+        commonroad_cpp/predicates/position/on_access_ramp_predicate.cpp
+        commonroad_cpp/predicates/position/on_exit_ramp_predicate.cpp
+        commonroad_cpp/predicates/position/on_urban_road_predicate.cpp
+        commonroad_cpp/predicates/position/on_shoulder_predicate.cpp
+        commonroad_cpp/predicates/position/in_leftmost_lane_predicate.cpp
+        commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
+        commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
+        commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
+        commonroad_cpp/predicates/position/on_main_carriage_way_predicate.cpp
         commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
+        commonroad_cpp/predicates/general/in_congestion_predicate.cpp
+        commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.cpp
+        commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.cpp
+        commonroad_cpp/predicates/general/makes_u_turn_predicate.cpp
+        commonroad_cpp/predicates/general/interstate_broad_enough_predicate.cpp
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
         commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/required_speed_predicate.cpp
         commonroad_cpp/predicates/velocity/in_standstill_predicate.cpp
+        commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle.cpp
+        commonroad_cpp/predicates/velocity/drives_faster_predicate.cpp
+        commonroad_cpp/predicates/velocity/reverses_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.cpp
+        commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp
@@ -45,12 +72,16 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.cpp
         commonroad_cpp/predicates/position/in_intersection_main_area_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
-        commonroad_cpp/predicates/predicate_parameters.cpp
+        commonroad_cpp/predicates/predicate_config.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
         )
 
 # Create environment model library
-add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
+if(ENV_MODEL_BUILD_SHARED_LIBS)
+    add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
+else()
+    add_library(env_model STATIC ${ENV_MODEL_SRC_FILES})
+endif()
 
 target_compile_features(env_model
         PUBLIC cxx_lambdas cxx_auto_type
@@ -70,6 +101,7 @@ target_link_libraries(env_model
     PUBLIC
         Eigen3::Eigen
         DrivabilityChecker::crccosy
+        yaml-cpp
     )
 
 target_link_libraries(env_model
@@ -81,51 +113,56 @@ target_link_libraries(env_model
         spdlog::spdlog
     )
 
+if(ENV_MODEL_BUILD_EXECUTABLE)
+    # Create environment model test node
+    add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
 
-# Create environment model test node
-add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
-
-target_link_libraries(env_model_example_node
-    PRIVATE
-        env_model
-        Boost::program_options
-        spdlog::spdlog
-    )
-
+    target_link_libraries(env_model_example_node
+        PRIVATE
+            env_model
+            Boost::program_options
+            spdlog::spdlog
+            yaml-cpp
+            pthread dl
+        )
+endif(ENV_MODEL_BUILD_EXECUTABLE)
 
 # add pybind module
-if(BUILD_PYBIND)
-    pybind11_add_module(cpp_env_model
+if(SKBUILD)
+    message(STATUS "The project is built using scikit-build")
+endif()
+if(ENV_MODEL_BUILD_PYBIND)
+    set(python_module_name crcpp)
+    pybind11_add_module(${python_module_name} MODULE
             commonroad_cpp/interfaces/pybind/python_interface.cpp
             commonroad_cpp/interfaces/pybind/python_interface.h
             commonroad_cpp/interfaces/pybind/translate_python_types.cpp
             commonroad_cpp/interfaces/pybind/translate_python_types.h)
 
-    target_link_libraries(cpp_env_model PRIVATE env_model)
+    target_link_libraries(${python_module_name} PRIVATE env_model)
 
-    # $ORIGIN is a special value: It represents the location of the shared object
-    # being loaded itself. By setting the RPATH of the installed Python module
-    # to $ORIGIN, the loader will automatically look for shared libraries in the
-    # same directory as the module file itself.
-    #
-    # This is required here so that the loader finds e.g. libcrcc.so which is
-    # installed next to the Python module, even if the Python module got moved
-    # during installation.
+    install(TARGETS ${python_module_name} env_model
+            LIBRARY DESTINATION .
+            )
 
-    set_property(TARGET cpp_env_model PROPERTY INSTALL_RPATH "$ORIGIN")
+    set_property(TARGET ${python_module_name} PROPERTY INSTALL_RPATH "$ORIGIN")
 
-endif(BUILD_PYBIND)
+endif(ENV_MODEL_BUILD_PYBIND)
 
 # this adds many warnings to the build. They usually help to find some bugs
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    target_compile_options(env_model_example_node PRIVATE -Wall -Wextra -Wconversion -pedantic
-            -Wfatal-errors)
+    if(ENV_MODEL_BUILD_EXECUTABLE)
+        target_compile_options(env_model_example_node PRIVATE -Wall -Wextra -Wconversion -pedantic
+                -Wfatal-errors)
+    endif(ENV_MODEL_BUILD_EXECUTABLE)
     target_compile_options(env_model PRIVATE -Wall -Wextra -Wconversion
             -pedantic -Wfatal-errors)
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(env_model PRIVATE /W3 /WX)
-    target_compile_options(HW01Main PRIVATE /W3 /WX)
+    if(ENV_MODEL_BUILD_EXECUTABLE)
+        target_compile_options(env_model_example_node PRIVATE /W3 /WX)
+    endif(ENV_MODEL_BUILD_EXECUTABLE)
 endif()
 
 

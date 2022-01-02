@@ -14,20 +14,19 @@
 #include "world.h"
 
 World::World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
-             std::vector<std::shared_ptr<Obstacle>> egoVehicles, std::vector<std::shared_ptr<Obstacle>> obstacles,
-             double dt)
-    : timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egoVehicles)),
-      obstacles(std::move(obstacles)), dt(dt) {
-    for (const auto &la : roadNetwork->getLanes())
-        idCounter = std::max(idCounter, la->getId());
-    for (const auto &la : roadNetwork->getLaneletNetwork())
-        idCounter = std::max(idCounter, la->getId());
+             std::vector<std::shared_ptr<Obstacle>> egos, std::vector<std::shared_ptr<Obstacle>> otherObstacles,
+             double timeStepSize)
+    : timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egos)), obstacles(std::move(otherObstacles)),
+      dt(timeStepSize) {
+    for (const auto &lane : roadNetwork->getLanes())
+        idCounter = std::max(idCounter, lane->getId());
+    for (const auto &lanelet : roadNetwork->getLaneletNetwork())
+        idCounter = std::max(idCounter, lanelet->getId());
     for (const auto &obs : egoVehicles)
         idCounter = std::max(idCounter, obs->getId());
     for (const auto &obs : obstacles)
         idCounter = std::max(idCounter, obs->getId());
     setInitialLanes();
-    //    setCurvilinearStates();
 }
 
 size_t World::getTimeStep() const { return timeStep; }
@@ -41,14 +40,14 @@ const std::vector<std::shared_ptr<Obstacle>> &World::getObstacles() const { retu
 std::vector<std::shared_ptr<Obstacle>> World::findObstacles(const std::vector<size_t> &obstacleIdList) const {
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
     obstacleList.reserve(obstacleIdList.size());
-    for (const auto &id : obstacleIdList) {
+    for (const auto &obstacleID : obstacleIdList) {
         for (const auto &obs : obstacles)
-            if (id == obs->getId())
+            if (obstacleID == obs->getId())
                 obstacleList.emplace_back(obs);
     }
-    for (const auto &id : obstacleIdList) {
+    for (const auto &obstacleID : obstacleIdList) {
         for (const auto &obs : egoVehicles)
-            if (id == obs->getId())
+            if (obstacleID == obs->getId())
                 obstacleList.emplace_back(obs);
     }
 

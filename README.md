@@ -1,15 +1,7 @@
 # CommonRoad C++ Environment Model
 
-**Note: Still in development!!!**   
-Not all functionalities are finished and well tested.  
-When you add or change something always check whether a test case already exists. 
-If no test case exists, please create one.   
-Similarly, when you see a missing docstring for a class/function please add it.  
-Please create always merge requests and assign them to Sebastian Maierhofer.  
-For the coding style see [.clang-format](.clang-format). 
-
 The CommonRoad C++ Environment Model provides classes and methods to represent the CommonRoad format in C++17.  
-It contains an interface to Python and predicates for evaluating traffic rules (both not finished yet).  
+It contains an interface to Python and predicates for evaluating traffic rules.  
 Note that the repository does not contain runtime verification algorithms and code for evaluating traffic rules.
 
 
@@ -18,13 +10,16 @@ Note that the repository does not contain runtime verification algorithms and co
 ### CommonRoad dependencies
 
 - [commonroad-io](https://gitlab.lrz.de/cps/commonroad-io)
-- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/tum-cps/commonroad-drivability-checker) (branch feature_cmake_export; follow C++ installation instructions under doc/installation_cpp.rst)
+- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/cps/commonroad-drivability-checker) 
+Note that the drivability-checker is installed automatically. Therefore, you need access to the linked repository. 
+Additionally, an ssh key in your Gitlab account is required. 
+See [here](https://docs.gitlab.com/ee/ssh/) for instructions to add an ssh key.
 
 ### Common dependencies
 
 These dependencies should be available as a system package.
 
-- **cmake > 3.16**
+- cmake > 3.16
 - Boost
 - Eigen3
 - spdlog
@@ -34,7 +29,8 @@ These dependencies should be available as a system package.
 
 #### Debian/Ubuntu
 
-On Debian/Ubuntu, you'll most likely need to install the following packages:
+You require at least Ubuntu 20.04.
+On Debian/Ubuntu, you'll most likely need to install the following packages:  
 `build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libcgal-dev libspdlog-dev`
 
 For building the documentation, you'll need to install `doxygen` and `graphviz`.
@@ -44,9 +40,9 @@ For test coverage, you'll need to install `gcovr`.
 ## Build and Compile
 
 Tested with
-- CMake 3.17.5
-- GCC 7.5.0
-- Clang 10
+- CMake 3.19/20
+- GCC 9.3.0
+- Clang 10/12
 
 For development the IDE [CLion](https://www.jetbrains.com/clion) is recommended.
 You can also take a look at the Docker container, or the .gitlab-ci.yml file to see how the software can be installed. Both are located in the *ci* directory.
@@ -70,8 +66,7 @@ Consider specifying the following options:
  * Optionally specify an installation prefix where you want to install the Environment Model
    using `-DCMAKE_INSTALL_PREFIX`.
  * The recommended approach is to use a user-writable folder as the installation prefix.
-   It is totally fine to use the same installation prefix for both the Drivability Checker and
-   the Environment Model.
+   It is totally fine to use the same installation prefix for several tools.
  * Replace the build type if necessary
 
 Example invocation:
@@ -98,7 +93,7 @@ cmake --install .
 
 To use the environment model within Python, run 
 ```bash
-CMAKE_PREFIX_PATH=/path/to/DrivabilityChecker/install/prefix python setup.py develop
+python setup.py install
 ```
 from the root directory, giving the
 path to the Drivability Checker's install prefix
@@ -109,12 +104,18 @@ It is not necessary to build the C++ standalone version first.
 ## Usage:
 
 ### C++
-The code should not be used as C++-standalone version but instead be included as library in other C++ or Python tools which require are CommonRoad representation in C++ or the CommonRoad predicates.
+The main purpose of this code is to serve as library containing the main CommonRoad elements and predicates, e.g., for traffic rules.
+The code can be used as C++-standalone version for extracting the predicate cost and satisfaction probability of predicates.
+The standalone execution can be configured via the config file and be executed via the **env_model_example_node** which can be executed via
+```bash
+pathToExecutable/env_model_example_node --input-file pathToRepository/src/commonroad_cpp/default_config.yaml --t 6
+```
+where *--input-file* specifies the path to a configuration file based on the default configuration file and *--t* specifies the number of threads which should be used.
 
 ### Python 
 The subsequent code snippet shows important functions needed for using the predicates within Python:
 ```Python
-import cpp_env_model
+import commonroad_cpp
 ...
 cpp_env_model.register_scenario(123, 0, lanelet_network, [obstacle_2, obstacle_3], [obstacle_1])
 

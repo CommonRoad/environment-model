@@ -18,11 +18,10 @@
  */
 class KeepsLaneSpeedLimitPredicate : public CommonRoadPredicate {
   public:
-    double speedLimit(const std::shared_ptr<Lanelet> &lanelet, const std::string &speedLimitId);
-
-    double speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const std::string &speedLimitId);
-
-    double speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const std::string &speedLimitId);
+    /**
+     * Constructor for KeepsLaneSpeedLimitPredicate.
+     */
+    KeepsLaneSpeedLimitPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

@@ -15,6 +15,11 @@
 class AtStopSignPredicate : public CommonRoadPredicate {
   public:
     /**
+     * Constructor for AtStopSignPredicate.
+     */
+    AtStopSignPredicate();
+
+    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.
