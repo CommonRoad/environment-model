@@ -18,7 +18,7 @@ include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
 # Appends dictionary where other cmake files are stored which install required Software
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/)
 
 # Set compiler optimizations for build types
 set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
@@ -76,7 +76,7 @@ install(TARGETS env_model
 )
 
 configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+  "${CMAKE_CURRENT_SOURCE_DIR}/external/${PROJECT_NAME}Config.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
   INSTALL_DESTINATION
   ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
