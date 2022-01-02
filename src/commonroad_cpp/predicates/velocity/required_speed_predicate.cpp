@@ -14,7 +14,7 @@ bool RequiredSpeedPredicate::booleanEvaluation(size_t timeStep, const std::share
                                                const std::shared_ptr<Obstacle> &obstacleK,
                                                const std::shared_ptr<Obstacle> &obstacleP) {
     double vReqLane{regulatory_elements_utils::requiredVelocity(
-        obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep),
+        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
         world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MIN_SPEED))};
     return vReqLane <= obstacleK->getStateByTimeStep(timeStep)->getVelocity();
 }

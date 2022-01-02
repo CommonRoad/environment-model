@@ -17,7 +17,7 @@
 bool PassesStopLinePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                 const std::shared_ptr<Obstacle> &obstacleK,
                                                 const std::shared_ptr<Obstacle> &obstacleP) {
-    auto lanelets{obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep)};
+    auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
     for (const auto &lanelet : lanelets) {
         std::shared_ptr<StopLine> stopLine{lanelet->getStopLine()};
         if (stopLine == nullptr)

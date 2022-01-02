@@ -201,7 +201,7 @@ TEST_F(InterfacesTest, InitializeSimulationParameters) {
     EXPECT_EQ(simulationParameters.benchmarkId, "DEU_test_safe_distance");
     EXPECT_EQ(simulationParameters.evaluationMode, EvaluationMode::directory);
     EXPECT_EQ(simulationParameters.directoryPaths.size(), 1);
-    EXPECT_EQ(simulationParameters.directoryPaths.at(0), "./tests/scenarios");
+    EXPECT_EQ(simulationParameters.directoryPaths.at(0), "./tests/scenarios/predicates");
     EXPECT_EQ(simulationParameters.egoVehicleId, 0);
 }
 
