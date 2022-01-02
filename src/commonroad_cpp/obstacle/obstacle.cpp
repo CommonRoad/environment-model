@@ -185,8 +185,8 @@ polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
 
 Shape &Obstacle::getGeoShape() { return geoShape; }
 
-std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                                    size_t timeStep) {
+std::vector<std::shared_ptr<Lanelet>>
+Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     if (occupiedLanelets.find(timeStep) != occupiedLanelets.end())
         return occupiedLanelets.at(timeStep);
     polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
@@ -200,8 +200,9 @@ std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLaneletsByShape(size_
     if (occupiedLanelets.count(timeStep) == 1)
         return occupiedLanelets.at(timeStep);
     else
-        throw std::logic_error("Obstacle::getOccupiedLaneletsByShape: Occupied lanelets not calculated yet. Obstacle ID: " +
-                               std::to_string(this->getId()) + " - Time step: " + std::to_string(timeStep));
+        throw std::logic_error(
+            "Obstacle::getOccupiedLaneletsByShape: Occupied lanelets not calculated yet. Obstacle ID: " +
+            std::to_string(this->getId()) + " - Time step: " + std::to_string(timeStep));
 }
 
 double Obstacle::frontS(size_t timeStep) {

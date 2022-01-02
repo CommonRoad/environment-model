@@ -14,6 +14,7 @@
 #include <iostream>
 #include <limits>
 #include <random>
+#include <spdlog/spdlog.h>
 #include <utility>
 
 void PredicateManager::extractPredicateSatisfaction() {
@@ -22,8 +23,8 @@ void PredicateManager::extractPredicateSatisfaction() {
     omp_set_num_threads(numThreads);
 #pragma omp parallel for schedule(guided) shared(scenarios, predicates, rng) default(none)
     for (size_t i = 0; i < scenarios.size(); i++) {
-        auto sc{scenarios.at(i)};
-        const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(sc);
+        auto scen{scenarios.at(i)};
+        const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(scen);
         // evaluate all obstacles
         for (const auto &ego : obstacles) {
             if (ego->getIsStatic())
@@ -40,7 +41,7 @@ void PredicateManager::extractPredicateSatisfaction() {
             auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
             omp_set_num_threads(numThreads);
 #pragma omp parallel for schedule(guided) shared(predicates, world)                                                    \
-    firstprivate(ego, relevantPredicates, rng, sc) default(none)
+    firstprivate(ego, relevantPredicates, rng, scen) default(none)
             for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getLastTrajectoryTimeStep();
                  ++timeStep) {
                 std::shuffle(std::begin(relevantPredicates), std::end(relevantPredicates), rng);
@@ -54,9 +55,15 @@ void PredicateManager::extractPredicateSatisfaction() {
                                 if (obs->timeStepExists(timeStep))
                                     pred->statisticBooleanEvaluation(timeStep, world, ego, obs);
                     } catch (...) {
-                        throw std::runtime_error("PredicateManager::extractPredicateSatisfaction - Scenario: " + sc +
-                                                 " - ego vehicle: " + std::to_string(ego->getId()) + " - predicate: " +
-                                                 predName + " - time step:" + std::to_string(timeStep));
+                        spdlog::error(std::string("PredicateManager::extractPredicateSatisfaction - Scenario: ")
+                                          .append(scen)
+                                          .append(" - ego vehicle: ")
+                                          .append(std::to_string(ego->getId()))
+                                          .append(" - predicate: ")
+                                          .append(predName)
+                                          .append(" - time step:")
+                                          .append(std::to_string(timeStep)));
+                        continue;
                     }
                 }
             }

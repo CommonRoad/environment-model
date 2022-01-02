@@ -12,8 +12,7 @@
 bool MakesUTurnPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP) {
-    std::vector<std::shared_ptr<Lane>> lanes =
-        world->getRoadNetwork()->findLanesByContainedLanelet(
+    std::vector<std::shared_ptr<Lane>> lanes = world->getRoadNetwork()->findLanesByContainedLanelet(
         obstacleK->getOccupiedLaneletsByShape(timeStep)[0]->getId());
     return std::any_of(lanes.begin(), lanes.end(), [this, timeStep, obstacleK](const std::shared_ptr<Lane> &lane) {
         return parameters.uTurn <=
