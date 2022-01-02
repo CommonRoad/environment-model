@@ -212,7 +212,7 @@ function(setup_target_for_coverage_lcov)
     if(${Coverage_BASE_DIRECTORY})
         get_filename_component(BASEDIR ${Coverage_BASE_DIRECTORY} ABSOLUTE)
     else()
-        set(BASEDIR ${PROJECT_SOURCE_DIR})
+        set(BASEDIR ..)
     endif()
 
     # Collect excludes (CMake 3.4+: Also compute absolute paths)
@@ -234,15 +234,15 @@ function(setup_target_for_coverage_lcov)
     add_custom_target(${Coverage_NAME}
 
             # Cleanup lcov
-            COMMAND ${LCOV_PATH} ${Coverage_LCOV_ARGS} --gcov-tool ${GCOV_PATH} -directory . -b ${BASEDIR} --zerocounters
+            COMMAND ${LCOV_PATH} ${Coverage_LCOV_ARGS} --gcov-tool ${GCOV_PATH} -directory ../cmake -b ${BASEDIR} --zerocounters
             # Create baseline to make sure untouched files show up in the report
-            COMMAND ${LCOV_PATH} ${Coverage_LCOV_ARGS} --gcov-tool ${GCOV_PATH} -c -i -d . -b ${BASEDIR} -o ${Coverage_NAME}.base
+            COMMAND ${LCOV_PATH} ${Coverage_LCOV_ARGS} --gcov-tool ${GCOV_PATH} -c -i -d ../cmake -b ${BASEDIR} -o ${Coverage_NAME}.base
 
             # Run tests
             COMMAND ${Coverage_EXECUTABLE} ${Coverage_EXECUTABLE_ARGS}
 
             # Capturing lcov counters and generating report
-            COMMAND ${LCOV_PATH} ${Coverage_LCOV_ARGS} --gcov-tool ${GCOV_PATH} --directory . -b ${BASEDIR} --capture --output-file ${Coverage_NAME}.capture
+            COMMAND ${LCOV_PATH} ${Coverage_LCOV_ARGS} --gcov-tool ${GCOV_PATH} --directory ../cmake -b ${BASEDIR} --capture --output-file ${Coverage_NAME}.capture
             # add baseline counters
             COMMAND ${LCOV_PATH} ${Coverage_LCOV_ARGS} --gcov-tool ${GCOV_PATH} -a ${Coverage_NAME}.base -a ${Coverage_NAME}.capture --output-file ${Coverage_NAME}.total
             # filter collected data to final coverage report
@@ -308,7 +308,7 @@ function(setup_target_for_coverage_gcovr_xml)
     if(${Coverage_BASE_DIRECTORY})
         get_filename_component(BASEDIR ${Coverage_BASE_DIRECTORY} ABSOLUTE)
     else()
-        set(BASEDIR ${PROJECT_SOURCE_DIR})
+        set(BASEDIR ..)
     endif()
 
     # Collect excludes (CMake 3.4+: Also compute absolute paths)
@@ -380,7 +380,7 @@ function(setup_target_for_coverage_gcovr_html)
     if(${Coverage_BASE_DIRECTORY})
         get_filename_component(BASEDIR ${Coverage_BASE_DIRECTORY} ABSOLUTE)
     else()
-        set(BASEDIR ${PROJECT_SOURCE_DIR})
+        set(BASEDIR ..)
     endif()
 
     # Collect excludes (CMake 3.4+: Also compute absolute paths)
