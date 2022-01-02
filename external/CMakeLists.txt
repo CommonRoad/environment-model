@@ -1,8 +1,8 @@
 include(FetchContent)
 include(GNUInstallDirs)
+include(ExternalProject)
 
 # pugixml
-
 FetchContent_Declare(
   external_pugixml
 
@@ -11,9 +11,7 @@ FetchContent_Declare(
   GIT_PROGRESS   true
 )
 
-
 # pybind11
-
 FetchContent_Declare(
   external_pybind11
 
@@ -24,7 +22,6 @@ FetchContent_Declare(
 )
 
 # GoogleTest
-
 FetchContent_Declare(
   external_googletest
 
@@ -34,12 +31,26 @@ FetchContent_Declare(
   GIT_PROGRESS   true
 )
 
+# YAML-CPP
+FetchContent_Declare(
+        external_yaml_cpp
+        GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+        GIT_TAG yaml-cpp-0.6.3
+)
+
+
 # Stage 2: Run FetchContent_MakeAvailable
 # CMake recommends running FetchContent_Declare for all third-party projects first
 # and finally running FetchContent_MakeAvailable in the end
 # See https://cmake.org/cmake/help/v3.22/module/FetchContent.html#command:fetchcontent_makeavailable
 
 FetchContent_MakeAvailable(external_pugixml)
+# Install rule for pugixml headers
+install(
+        DIRECTORY ${external_pugixml_SOURCE_DIR}/src/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILES_MATCHING PATTERN "*.hpp"
+)
 
 set(PYBIND11_CPP_STANDARD -std=c++17)
 FetchContent_MakeAvailable(external_pybind11)
@@ -58,10 +69,39 @@ set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
 
-# Install rule for pugixml headers
 
+
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+set(YAML_CPP_BUILD_TESTS OFF)
+set(YAML_CPP_BUILD_TOOLS OFF)
+FetchContent_MakeAvailable(external_yaml_cpp)
+set_property(TARGET yaml-cpp
+        PROPERTY POSITION_INDEPENDENT_CODE ON)
+# Install rule for yaml-cpp headers
 install(
-  DIRECTORY ${external_pugixml_SOURCE_DIR}/src/
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  FILES_MATCHING PATTERN "*.hpp"
-  )
+        DIRECTORY ${external_yaml_cpp_SOURCE_DIR}/src/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILES_MATCHING PATTERN "*.hpp"
+)
+
+message(STATUS "DrivabilityChecker - using bundled version")
+ExternalProject_Add(
+        DrivabilityChecker_bundled
+        GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
+        GIT_TAG "development"
+        INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
+        BUILD_BYPRODUCTS ${CMAKE_INSTALL_PREFIX}/lib/libcrccosy.a
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DADD_MODULE_COLLISION=OFF -DBUILD_LIBCCD=OFF -DBUILD_FCL=OFF -DBUILD_S11N=OFF -DBUILD_BOX2D=OFF -DADD_PYTHON_BINDINGS=OFF
+)
+
+add_library(DrivabilityChecker::crccosy SHARED IMPORTED GLOBAL)
+add_dependencies(DrivabilityChecker::crccosy DrivabilityChecker_bundled)
+set_target_properties(
+        DrivabilityChecker::crccosy
+        PROPERTIES "IMPORTED_LOCATION" "${CMAKE_INSTALL_PREFIX}/lib/libcrccosy.a"
+)
+# create directory otherwise cmake will complain during generate step since this is only generated during make
+file(MAKE_DIRECTORY "${CMAKE_INSTALL_PREFIX}/include")
+target_include_directories(DrivabilityChecker::crccosy SYSTEM INTERFACE "${CMAKE_INSTALL_PREFIX}/include")
+
+

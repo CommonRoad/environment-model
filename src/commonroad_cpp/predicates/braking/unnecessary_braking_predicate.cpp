@@ -5,10 +5,6 @@
 // Credits: BMW Car@TUM
 //
 
-#include <algorithm>
-#include <memory>
-#include <vector>
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
@@ -33,14 +29,19 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, co
     InFrontOfPredicate inFrontOfPredicate;
     LaneBasedOrientationSimilarPredicate orientationPredicate;
     SafeDistancePredicate safeDistancePredicate;
+    if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
+        obstacleK->interpolateAcceleration(timeStep, world->getDt());
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
         if (sameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             orientationPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
-            safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
+            safeDistancePredicate.booleanEvaluation(timeStep, world, obstacleK, obs)) {
+            if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)
+                obs->interpolateAcceleration(timeStep, world->getDt());
             constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt);
+        }
     }
     if (!constraintValues.empty())
         return {*max_element(constraintValues.begin(), constraintValues.end())};
@@ -76,3 +77,5 @@ double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std:
     else
         return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt;
 }
+
+UnnecessaryBrakingPredicate::UnnecessaryBrakingPredicate() : CommonRoadPredicate(false) {}

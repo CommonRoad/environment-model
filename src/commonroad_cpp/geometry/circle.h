@@ -54,10 +54,10 @@ class Circle : public Shape {
     /**
      * Setter for circle center.
      *
-     * @param x x-coordinate of center [m].
-     * @param y y-coordinate of center [m].
+     * @param xPos x-coordinate of center [m].
+     * @param yPos y-coordinate of center [m].
      */
-    void setCenter(double x, double y) override;
+    void setCenter(double xPos, double yPos) override;
 
     /**
      * Getter for radius of circle.

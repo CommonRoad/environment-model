@@ -1,5 +1,11 @@
-#ifndef ENV_MODEL_COMMONROAD_CONTAINER_H
-#define ENV_MODEL_COMMONROAD_CONTAINER_H
+//
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
+//
+
+#pragma once
 
 #include <map>
 #include <memory>
@@ -18,23 +24,24 @@ class CommonRoadContainer {
     /**
      * Registers scenario in container.
      *
-     * @param id ID under which CommonRoad scenario should be stored (not CommonRoad benchmark ID).
+     * @param scenarioId ID under which CommonRoad scenario should be stored (not CommonRoad benchmark ID).
      * @param timeStep Time step the scenario (world representation) corresponds to.
-     * @param dt Time step size[s].
+     * @param timeStepSize Time step size[s].
      * @param roadNetwork CommonRoad road network representation.
      * @param obstacleList List of obstacles.
      * @param egoVehicles List of ego vehicles.
      */
-    void registerScenario(size_t id, size_t timeStep, double dt, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                          std::vector<std::shared_ptr<Obstacle>> &obstacleList,
-                          std::vector<std::shared_ptr<Obstacle>> &egoVehicles);
+    void registerScenario(size_t scenarioId, size_t timeStep, double timeStepSize,
+                          const std::shared_ptr<RoadNetwork> &roadNetwork,
+                          const std::vector<std::shared_ptr<Obstacle>> &obstacleList,
+                          const std::vector<std::shared_ptr<Obstacle>> &egoVehicles);
 
     /**
      * Removes scenario from container.
      *
-     * @param id ID of world object which should be removed from container.
+     * @param scenarioId ID of world object which should be removed from container.
      */
-    void removeScenario(size_t id);
+    void removeScenario(size_t scenarioId);
 
     /**
      * Instantiates singleton/gives back self-reference.
@@ -46,14 +53,12 @@ class CommonRoadContainer {
     /**
      * Returns world object with given ID.
      *
-     * @param id ID of required world object.
+     * @param scenarioId ID of required world object.
      * @return World object.
      */
-    std::shared_ptr<World> findWorld(size_t id);
+    std::shared_ptr<World> findWorld(size_t scenarioId);
 
   private:
     static std::shared_ptr<CommonRoadContainer> instance; //**< self-reference */
     std::map<size_t, std::shared_ptr<World>> worldList;   //**< map containing pairs of id and world objects */
 };
-
-#endif // ENV_MODEL_COMMONROAD_CONTAINER_H

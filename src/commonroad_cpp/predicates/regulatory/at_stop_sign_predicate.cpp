@@ -19,10 +19,10 @@
 bool AtStopSignPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP) {
-    auto lanelets{obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep)};
+    auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
     for (const auto &la : lanelets) {
         auto signs{la->getTrafficSigns()};
-        if (std::any_of(signs.begin(), signs.end(), [world](std::shared_ptr<TrafficSign> sign) {
+        if (std::any_of(signs.begin(), signs.end(), [world](const std::shared_ptr<TrafficSign> &sign) {
                 return regulatory_elements_utils::trafficSignReferencesStopSign(sign,
                                                                                 world->getRoadNetwork()->getCountry());
             }))
@@ -42,3 +42,4 @@ Constraint AtStopSignPredicate::constraintEvaluation(size_t timeStep, const std:
                                                      const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("AtStopSignPredicate does not support constraint evaluation!");
 }
+AtStopSignPredicate::AtStopSignPredicate() : CommonRoadPredicate(false) {}

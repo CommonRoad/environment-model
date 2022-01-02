@@ -14,11 +14,12 @@
 bool OrientationTowardsPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP) {
-    return (obstacleK->getLatPosition(timeStep) < // right side
-                obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)) and
+    auto referenceLaneK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep, world->getIdCounterRef())};
+    return (obstacleK->getLatPosition(timeStep) < // k on right side
+                obstacleP->getLatPosition(timeStep, referenceLaneK) and
             obstacleK->getCurvilinearOrientation(timeStep) > 0) or
-           (obstacleK->getLatPosition(timeStep) > // left side
-                obstacleP->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)) and
+           (obstacleK->getLatPosition(timeStep) > // k on left side
+                obstacleP->getLatPosition(timeStep, referenceLaneK) and
             obstacleK->getCurvilinearOrientation(timeStep) < 0);
 }
 
@@ -33,3 +34,4 @@ Constraint OrientationTowardsPredicate::constraintEvaluation(size_t timeStep, co
                                                              const std::shared_ptr<Obstacle> &obstacleP) {
     throw std::runtime_error("OrientationTowardsPredicate does not support constraint evaluation!");
 }
+OrientationTowardsPredicate::OrientationTowardsPredicate() : CommonRoadPredicate(true) {}

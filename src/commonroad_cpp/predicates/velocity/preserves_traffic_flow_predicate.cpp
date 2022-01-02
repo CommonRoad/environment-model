@@ -9,30 +9,31 @@
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
+#include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include "keeps_lane_speed_limit_predicate.h"
 #include "preserves_traffic_flow_predicate.h"
 
 bool PreservesTrafficFlowPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                       const std::shared_ptr<Obstacle> &obstacleK,
                                                       const std::shared_ptr<Obstacle> &obstacleP) {
-    // TODO consider other speed limit types -> see Python predicate
-    KeepsLaneSpeedLimitPredicate pred;
-    double vMaxLane{
-        pred.speedLimitSuggested(obstacleK->getOccupiedLanelets(world->getRoadNetwork(), timeStep),
-                                 world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED))};
-    return (vMaxLane - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.minVelocityDif;
+    double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
+                              obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
+                              world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED)),
+                          regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
+                          EgoVehicleParameters().brakingSpeedLimit, EgoVehicleParameters().fovSpeedLimit,
+                          EgoVehicleParameters().roadConditionSpeedLimit})};
+    return (vMax - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.minVelocityDif;
 }
 
 double PreservesTrafficFlowPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP) {
-    // TODO add robust mode
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support robust evaluation!");
 }
 
 Constraint PreservesTrafficFlowPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                                const std::shared_ptr<Obstacle> &obstacleK,
                                                                const std::shared_ptr<Obstacle> &obstacleP) {
-    // TODO add constraint mode
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support constraint evaluation!");
 }
+PreservesTrafficFlowPredicate::PreservesTrafficFlowPredicate() : CommonRoadPredicate(false) {}

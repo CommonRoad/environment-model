@@ -1,5 +1,5 @@
 //
-// Created by Sebastian Maierhofer.
+// Created by Sebastian Maierhofer and Sebastian Maierhofer.
 // Technical University of Munich - Cyber-Physical Systems Group
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
@@ -15,6 +15,11 @@
  */
 class LaneBasedOrientationSimilarPredicate : public CommonRoadPredicate {
   public:
+    /**
+     * Constructor for LaneBasedOrientationSimilarPredicate.
+     */
+    LaneBasedOrientationSimilarPredicate();
+
     /**
      * Boolean evaluation of predicate using objects.
      *

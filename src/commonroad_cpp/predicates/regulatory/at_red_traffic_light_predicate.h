@@ -14,6 +14,11 @@
 class AtRedTrafficLightPredicate : public CommonRoadPredicate {
   public:
     /**
+     * Constructor for AtRedTrafficLightPredicate.
+     */
+    AtRedTrafficLightPredicate();
+
+    /**
      * Boolean evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.
