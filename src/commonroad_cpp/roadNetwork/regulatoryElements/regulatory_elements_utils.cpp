@@ -19,7 +19,7 @@ std::set<std::shared_ptr<TrafficLight>>
 regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
                                                const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::set<std::shared_ptr<TrafficLight>> trafficLights;
-    auto lanelets{obs->getOccupiedLanelets(roadNetwork, timeStep)};
+    auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
     for (const auto &lanelet : lanelets) {
         for (const auto &light : lanelet->getTrafficLights()) {
             if (light->isActive() and light->getElementAtTime(timeStep).color != TrafficLightState::inactive)

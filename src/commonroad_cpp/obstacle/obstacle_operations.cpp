@@ -130,7 +130,7 @@ obstacle_operations::obstaclesRight(size_t timeStep, const std::vector<std::shar
 std::set<std::shared_ptr<Lanelet>> obstacle_operations::laneletsRightOfObstacle(size_t timeStep,
                                                                                 const std::shared_ptr<Obstacle> &obs) {
     std::set<std::shared_ptr<Lanelet>> rightLanelets;
-    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obs->getOccupiedLanelets(timeStep);
+    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obs->getOccupiedLaneletsByShape(timeStep);
 
     for (auto &occ_l : occupiedLanelets) {
         std::vector<std::shared_ptr<Lanelet>> newLanelets = lanelet_operations::laneletsRightOfLanelet(occ_l);
@@ -143,7 +143,7 @@ std::set<std::shared_ptr<Lanelet>> obstacle_operations::laneletsRightOfObstacle(
 std::set<std::shared_ptr<Lanelet>> obstacle_operations::laneletsLeftOfObstacle(size_t timeStep,
                                                                                const std::shared_ptr<Obstacle> &obs) {
     std::set<std::shared_ptr<Lanelet>> leftLanelets;
-    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obs->getOccupiedLanelets(timeStep);
+    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets = obs->getOccupiedLaneletsByShape(timeStep);
 
     for (auto &occ_l : occupiedLanelets) {
         std::vector<std::shared_ptr<Lanelet>> newLanelets = lanelet_operations::laneletsLeftOfLanelet(occ_l);

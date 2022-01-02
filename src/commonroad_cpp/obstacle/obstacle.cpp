@@ -185,7 +185,7 @@ polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
 
 Shape &Obstacle::getGeoShape() { return geoShape; }
 
-std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork,
+std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                                     size_t timeStep) {
     if (occupiedLanelets.find(timeStep) != occupiedLanelets.end())
         return occupiedLanelets.at(timeStep);
@@ -196,11 +196,11 @@ std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(const std::s
     return occupied;
 }
 
-std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLanelets(size_t timeStep) {
+std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLaneletsByShape(size_t timeStep) {
     if (occupiedLanelets.count(timeStep) == 1)
         return occupiedLanelets.at(timeStep);
     else
-        throw std::logic_error("Obstacle::getOccupiedLanelets: Occupied lanelets not calculated yet. Obstacle ID: " +
+        throw std::logic_error("Obstacle::getOccupiedLaneletsByShape: Occupied lanelets not calculated yet. Obstacle ID: " +
                                std::to_string(this->getId()) + " - Time step: " + std::to_string(timeStep));
 }
 
@@ -424,10 +424,10 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
     std::vector<std::shared_ptr<Lane>> relevantOccupiedLanes;
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
     // 1. check which currently occupied lanelets match direction
-    if (getOccupiedLanelets(timeStep).size() == 1)
-        relevantLanelets.push_back(getOccupiedLanelets(timeStep).front());
+    if (getOccupiedLaneletsByShape(timeStep).size() == 1)
+        relevantLanelets.push_back(getOccupiedLaneletsByShape(timeStep).front());
     else {
-        for (const auto &lanelet : getOccupiedLanelets(timeStep)) {
+        for (const auto &lanelet : getOccupiedLaneletsByShape(timeStep)) {
             auto curPointOrientation{lanelet->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
                                                                        getStateByTimeStep(timeStep)->getYPosition())};
             if (abs(geometric_operations::subtractOrientations(curPointOrientation,
@@ -559,7 +559,7 @@ void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes,
 
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
                                 const std::shared_ptr<size_t> &idCounter) {
-    auto lanelets{getOccupiedLanelets(roadNetwork, timeStep)};
+    auto lanelets{getOccupiedLaneletsByShape(roadNetwork, timeStep)};
     std::vector<std::shared_ptr<Lane>> occLanes{lanelet_operations::createLanesBySingleLanelets(
         lanelets, idCounter, roadNetwork, fieldOfViewRear, fieldOfViewFront)};
     occupiedLanes[timeStep] = occLanes;
@@ -573,7 +573,7 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shar
         return occLanes;
     else {
         std::vector<std::shared_ptr<Lane>> relevantLanes;
-        auto occLanelets{getOccupiedLanelets(roadNetwork, timeStep)};
+        auto occLanelets{getOccupiedLaneletsByShape(roadNetwork, timeStep)};
         for (const auto &lanelet : occLanes) {
             if (lanelet->getId() == getReferenceLane(timeStep)->getId()) {
                 relevantLanes.push_back(lanelet);
@@ -606,7 +606,7 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(size_t timeStep) {
 void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<size_t> &idCounter,
                             bool considerHistory) {
     const size_t timeStamp{currentState->getTimeStep()};
-    auto lanelets{getOccupiedLanelets(roadNetwork, timeStamp)};
+    auto lanelets{getOccupiedLaneletsByShape(roadNetwork, timeStamp)};
     auto lanes{lanelet_operations::createLanesBySingleLanelets(lanelets, idCounter, roadNetwork, fieldOfViewRear,
                                                                fieldOfViewFront)};
     setOccupiedLanes(lanes, timeStamp);

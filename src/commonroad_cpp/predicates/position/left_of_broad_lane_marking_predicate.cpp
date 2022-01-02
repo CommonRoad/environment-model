@@ -17,7 +17,7 @@
 bool LeftOfBroadLaneMarkingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP) {
-    std::vector<std::shared_ptr<Lanelet>> lanelets_occ = obstacleK->getOccupiedLanelets(timeStep);
+    std::vector<std::shared_ptr<Lanelet>> lanelets_occ = obstacleK->getOccupiedLaneletsByShape(timeStep);
 
     for (auto &lanelet : lanelets_occ) {
         const LineMarking lanelet_left_marking = lanelet->getLineMarkingLeft();

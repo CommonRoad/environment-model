@@ -98,11 +98,10 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/test_config.yaml"};
     std::vector<std::tuple<std::string, std::string>> replace{
         {"evaluation_mode: directory", "evaluation_mode: single_scenario"},
-        {"directories: [ \"./tests/scenarios\" ]",
+        {"directories: [ \"./tests/scenarios/predicates\" ]",
          "directories: [ " + TestUtils::getTestScenarioDirectory() + "/predicates/ ]"},
         {"output_directory: \"src/commonroad_cpp/predicates\"",
-         "output_directory: " + TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/ "},
-        {"relevant_predicate_sets: [general]", "relevant_predicate_sets: [test]"},
+         "output_directory: " + TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/ "}
     };
     TestUtils::copyAndReplaceContentInFile(TestUtils::getTestScenarioDirectory() +
                                                "/../../src/commonroad_cpp/default_config.yaml",
@@ -124,11 +123,11 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
               predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime);
     EXPECT_GE(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime,
               predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime);
-    EXPECT_EQ(predicates["in_standstill"]->getStatistics().numExecutions, 0);
-    EXPECT_EQ(predicates["in_standstill"]->getStatistics().numSatisfaction, 0);
-    EXPECT_EQ(predicates["in_standstill"]->getStatistics().totalComputationTime, 0);
-    EXPECT_EQ(predicates["in_standstill"]->getStatistics().minComputationTime, LONG_MAX);
-    EXPECT_EQ(predicates["in_standstill"]->getStatistics().maxComputationTime, LONG_MIN);
+    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().numExecutions, 0);
+    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().numSatisfaction, 0);
+    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().totalComputationTime, 0);
+    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().minComputationTime, LONG_MAX);
+    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().maxComputationTime, LONG_MIN);
     EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() +
                                         "/../commonroad_cpp_tests/predicate_satisfaction.txt"));
     EXPECT_TRUE(

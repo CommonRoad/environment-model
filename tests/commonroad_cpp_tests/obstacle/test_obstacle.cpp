@@ -236,9 +236,9 @@ TEST_F(ObstacleTest, GetOccupancyPolygonShape) {
 }
 
 TEST_F(ObstacleTest, GetOccupiedLanelets) {
-    EXPECT_EQ(obstacleOne->getOccupiedLanelets(roadNetwork, 0).size(), 1);
-    EXPECT_EQ(obstacleOne->getOccupiedLanelets(roadNetwork, 1).size(), 1);
-    EXPECT_EQ(obstacleTwo->getOccupiedLanelets(roadNetwork, 4).size(), 0);
+    EXPECT_EQ(obstacleOne->getOccupiedLaneletsByShape(roadNetwork, 0).size(), 1);
+    EXPECT_EQ(obstacleOne->getOccupiedLaneletsByShape(roadNetwork, 1).size(), 1);
+    EXPECT_EQ(obstacleTwo->getOccupiedLaneletsByShape(roadNetwork, 4).size(), 0);
 }
 
 TEST_F(ObstacleTest, FrontS) {
