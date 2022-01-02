@@ -101,8 +101,7 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
         {"directories: [ \"./tests/scenarios/predicates\" ]",
          "directories: [ " + TestUtils::getTestScenarioDirectory() + "/predicates/ ]"},
         {"output_directory: \"src/commonroad_cpp/predicates\"",
-         "output_directory: " + TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/ "}
-    };
+         "output_directory: " + TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/ "}};
     TestUtils::copyAndReplaceContentInFile(TestUtils::getTestScenarioDirectory() +
                                                "/../../src/commonroad_cpp/default_config.yaml",
                                            pathToTestFile, replace);

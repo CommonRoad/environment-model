@@ -104,7 +104,13 @@ It is not necessary to build the C++ standalone version first.
 ## Usage:
 
 ### C++
-The code should not be used as C++-standalone version but instead be included as library in other C++ or Python tools which require are CommonRoad representation in C++ or the CommonRoad predicates.
+The main purpose of this code is to serve as library containing the main CommonRoad elements and predicates, e.g., for traffic rules.
+The code can be used as C++-standalone version for extracting the predicate cost and satisfaction probability of predicates.
+The standalone execution can be configured via the config file and be executed via the **env_model_example_node** which can be executed via
+```bash
+pathToExecutable/env_model_example_node --input-file pathToRepository/src/commonroad_cpp/default_config.yaml --t 6
+```
+where *--input-file* specifies the path to a configuration file based on the default configuration file and *--t* specifies the number of threads which should be used.
 
 ### Python 
 The subsequent code snippet shows important functions needed for using the predicates within Python:
