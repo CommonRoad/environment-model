@@ -72,7 +72,6 @@ Consider specifying the following options:
 Example invocation:
 ```bash
 cmake \
-  -DCMAKE_PREFIX_PATH=/path/to/DrivabilityChecker/install/prefix \
   -DCMAKE_INSTALL_PREFIX=/path/to/install/prefix \
   -DCMAKE_BUILD_TYPE=Debug \
   ..
