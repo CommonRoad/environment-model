@@ -6,14 +6,13 @@ stages:
   - docs
   - publish
 
-image: $CI_REGISTRY/maierhofer/environment-model/ci:0.6.2
+image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci:1.0
 
 before_script:
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
 
 .python-prepare: &python-prepare
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
-  - source activate commonroad
   - pip install -r ./requirements.txt
   - pip install -r ./test_requirements.txt
 
@@ -131,9 +130,30 @@ test:
     reports:
       junit: ./report.xml
 
-build-test-python:
+build-test-python-37:
   stage: test
   before_script:
+    - source activate cr37
+    - *python-prepare
+  script:
+    - python setup.py install
+    - python -m pytest tests/python
+  needs: []
+
+build-test-python-38:
+  stage: test
+  before_script:
+    - source activate cr38
+    - *python-prepare
+  script:
+    - python setup.py install
+    - python -m pytest tests/python
+  needs: []
+
+build-test-python-39:
+  stage: test
+  before_script:
+    - source activate cr39
     - *python-prepare
   script:
     - python setup.py install
