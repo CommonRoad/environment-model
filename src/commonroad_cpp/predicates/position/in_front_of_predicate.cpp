@@ -5,9 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
-#include <commonroad_cpp/obstacle/obstacle.h>
-
 #include "in_front_of_predicate.h"
+#include "../../world.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
 
 bool InFrontOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                            const std::shared_ptr<Obstacle> &obstacleP,
@@ -32,7 +32,9 @@ Constraint InFrontOfPredicate::constraintEvaluation(double lonPositionP, double 
 double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::shared_ptr<Obstacle> &obstacleK) {
-    return obstacleK->rearS(timeStep, obstacleP->getReferenceLane(timeStep)) - obstacleP->frontS(timeStep);
+    return obstacleK->rearS(timeStep,
+                            obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep, world->getIdCounterRef())) -
+           obstacleP->frontS(timeStep);
 }
 
 double InFrontOfPredicate::robustEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {
