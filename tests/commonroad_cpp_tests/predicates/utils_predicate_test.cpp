@@ -69,12 +69,12 @@ std::shared_ptr<RoadNetwork> create_road_network(const std::set<LaneletType> &la
     size_t idLaneletTwo = 101;
     auto userOneWayLaneletTwo = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     auto userBidirectionalLaneletTwo = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
-    auto leftBorderLaneletTwo =
-        std::vector<vertex>{vertex{0, 8},  vertex{10, 8}, vertex{20, 8}, vertex{30, 8}, vertex{40, 8},
-                            vertex{50, 8}, vertex{60, 8}, vertex{70, 8}, vertex{80, 8}};
-    auto rightBorderLaneletTwo =
-        std::vector<vertex>{vertex{0, 4},  vertex{10, 4}, vertex{20, 4}, vertex{30, 4}, vertex{40, 4},
-                            vertex{50, 4}, vertex{60, 4}, vertex{70, 4}, vertex{80, 4}};
+    auto leftBorderLaneletTwo = std::vector<vertex>{
+        vertex{0, 8},  vertex{10, 8}, vertex{20, 8}, vertex{30, 8},  vertex{40, 8},  vertex{50, 8}, vertex{60, 8},
+        vertex{70, 8}, vertex{80, 8}, vertex{90, 8}, vertex{100, 8}, vertex{110, 8}, vertex{120, 8}};
+    auto rightBorderLaneletTwo = std::vector<vertex>{
+        vertex{0, 4},  vertex{10, 4}, vertex{20, 4}, vertex{30, 4},  vertex{40, 4},  vertex{50, 4}, vertex{60, 4},
+        vertex{70, 4}, vertex{80, 4}, vertex{90, 4}, vertex{100, 4}, vertex{110, 4}, vertex{120, 4}};
     auto laneletTwo =
         std::make_shared<Lanelet>(Lanelet(idLaneletTwo, leftBorderLaneletTwo, rightBorderLaneletTwo,
                                           laneletTypeLaneletTwo, userOneWayLaneletTwo, userBidirectionalLaneletTwo));
