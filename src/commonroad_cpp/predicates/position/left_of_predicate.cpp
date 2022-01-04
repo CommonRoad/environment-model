@@ -14,8 +14,8 @@
 bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                         const std::shared_ptr<Obstacle> &obstacleK,
                                         const std::shared_ptr<Obstacle> &obstacleP) {
-    auto referenceK{obstacleK->getReferenceLane(timeStep)};
-    if (obstacleK->leftD(timeStep) >= obstacleP->rightD(timeStep, referenceK))
+    auto referenceK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep, world->getIdCounterRef())};
+    if (obstacleK->rightD(timeStep) >= obstacleP->leftD(timeStep, referenceK))
         return false;
     else {
         if (obstacleK->rearS(timeStep) <= obstacleP->frontS(timeStep, referenceK) and
