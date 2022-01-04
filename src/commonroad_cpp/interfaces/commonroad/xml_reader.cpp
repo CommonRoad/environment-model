@@ -213,7 +213,6 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
                                        size_t arrayIndex, const pugi::xml_node &child, const char *side) {
     for (pugi::xml_node points = child.first_child(); points != nullptr; points = points.next_sibling()) {
         vertex newVertex;
-        LineMarking lineMarking;
         if ((strcmp(points.name(), "point")) == 0) {
             newVertex = {points.child("x").text().as_double(), points.child("y").text().as_double()};
             if ((strcmp(side, "rightBound")) == 0)
@@ -222,7 +221,7 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
                 tempLaneletContainer[arrayIndex]->addLeftVertex(newVertex);
         }
         if ((strcmp(points.name(), "lineMarking")) == 0) {
-            lineMarking = lanelet_operations::matchStringToLineMarking(points.value());
+            auto lineMarking = lanelet_operations::matchStringToLineMarking(points.first_child().value());
             if ((strcmp(side, "rightBound")) == 0)
                 tempLaneletContainer[arrayIndex]->setLineMarkingRight(lineMarking);
             else if ((strcmp(side, "leftBound")) == 0)

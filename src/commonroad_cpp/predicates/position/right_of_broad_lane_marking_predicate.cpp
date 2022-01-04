@@ -21,7 +21,7 @@ bool RightOfBroadLaneMarkingPredicate::booleanEvaluation(size_t timeStep, const 
 
     for (const auto &lanelet : lanelets_occ) {
         const LineMarking lanelet_right_marking = lanelet->getLineMarkingRight();
-        if (lanelet_right_marking == LineMarking::broad_dashed or lanelet_right_marking == LineMarking::solid)
+        if (lanelet_right_marking == LineMarking::broad_dashed or lanelet_right_marking == LineMarking::broad_solid)
             return false;
     }
 
