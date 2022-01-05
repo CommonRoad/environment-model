@@ -76,18 +76,17 @@ obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::s
     for (const auto &obs : obstacles) {
         if (!obs->timeStepExists(timeStep) or obs->getId() == obstacleK->getId())
             continue;
-        if (obs->rearS(timeStep, refLaneObstacleK) < obstacleK->frontS(timeStep) and
-            obstacleK->frontS(timeStep) < obs->frontS(timeStep, refLaneObstacleK)) {
+        auto obsRearS{obs->rearS(timeStep, refLaneObstacleK)};
+        auto obsFrontS{obs->frontS(timeStep, refLaneObstacleK)};
+        if (obsRearS < obstacleK->frontS(timeStep) and obstacleK->frontS(timeStep) < obsFrontS) {
             vehiclesAdj.push_back(obs);
             continue;
         }
-        if (obs->rearS(timeStep, refLaneObstacleK) < obstacleK->rearS(timeStep) and
-            obstacleK->rearS(timeStep) < obs->frontS(timeStep, refLaneObstacleK)) {
+        if (obsRearS < obstacleK->rearS(timeStep) and obstacleK->rearS(timeStep) < obsFrontS) {
             vehiclesAdj.push_back(obs);
             continue;
         }
-        if (obstacleK->rearS(timeStep) <= obs->rearS(timeStep, refLaneObstacleK) and
-            obs->frontS(timeStep, refLaneObstacleK) <= obstacleK->frontS(timeStep)) {
+        if (obstacleK->rearS(timeStep) <= obsRearS and obsFrontS <= obstacleK->frontS(timeStep)) {
             vehiclesAdj.push_back(obs);
             continue;
         }
