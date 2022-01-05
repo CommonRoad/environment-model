@@ -127,7 +127,11 @@ std::vector<std::shared_ptr<Lane>> lanelet_operations::createLanesBySingleLanele
         // lane was already created based on this initial lanelet -> continue with next lanelet
         auto newLanes{roadNetwork->findLanesByBaseLanelet(lanelet->getId())};
         if (!newLanes.empty()) {
-            lanes.insert(lanes.end(), newLanes.begin(), newLanes.end());
+            for (const auto &newLane : newLanes)
+                if (!std::any_of(lanes.begin(), lanes.end(), [newLane](const std::shared_ptr<Lane> &lane) {
+                        return newLane->getContainedLaneletIDs() == lane->getContainedLaneletIDs();
+                    }))
+                    lanes.push_back(newLane);
             continue;
         }
 
