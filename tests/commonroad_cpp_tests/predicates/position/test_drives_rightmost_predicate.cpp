@@ -10,13 +10,13 @@
 
 void DrivesRightmostPredicateTest::SetUp() {
 
-    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0, 0);
-    std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 5, 10, 0, 0);
-    std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 20, 1, 10, 0, 0);
-    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 5, 10, 0, 0);
-    std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 4, 10, 0, 0);
+    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 1.1, 10, 0, 0);
+    std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 1.5, 10, 0, 0);
+    std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 20, 3.25, 10, 0, 0);
+    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 4, 10, 0, 0);
+    std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 2, 10, 0, 0);
 
-    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 3, 10, 0, 0);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 1, 10, 0, 0);
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 1, 10, 0, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
@@ -44,10 +44,10 @@ void DrivesRightmostPredicateTest::SetUp() {
 
 TEST_F(DrivesRightmostPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(2, world2, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(3, world2, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(4, world, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(4, world, egoVehicle));
 }
 
 TEST_F(DrivesRightmostPredicateTest, RobustEvaluation) {

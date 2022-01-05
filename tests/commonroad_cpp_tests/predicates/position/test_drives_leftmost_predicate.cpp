@@ -10,14 +10,14 @@
 
 void DrivesLeftmostPredicateTest::SetUp() {
 
-    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0.9, 10, 0, 0);
-    std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 0.5, 10, 0, 0);
-    std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 20, 5, 10, 0, 0);
-    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 0, 10, 0, 0);
-    std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 0, 10, 0, 0);
+    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 6.9, 10, 0, 0);
+    std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 10, 6.5, 10, 0, 0);
+    std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 20, 4.75, 10, 0, 0);
+    std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 4, 10, 0, 0);
+    std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 6, 10, 0, 0);
 
-    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 1, 10, 0, 0);
-    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 4, 10, 0, 0);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 7, 10, 0, 0);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 7, 10, 0, 0);
 
     std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
@@ -44,10 +44,10 @@ void DrivesLeftmostPredicateTest::SetUp() {
 
 TEST_F(DrivesLeftmostPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(2, world2, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(3, world2, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(4, world, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(4, world, egoVehicle));
 }
 
 TEST_F(DrivesLeftmostPredicateTest, RobustEvaluation) {
