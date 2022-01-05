@@ -263,7 +263,7 @@ double lanelet_operations::roadWidth(const std::shared_ptr<Lanelet> &lanelet, do
     for (auto vert : lanelet->getCenterVertices())
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     geometry::util::resample_polyline(reference_path, 2, reference_path);
-    auto curvilinearCoordinateSystem = CurvilinearCoordinateSystem(reference_path, 20.0, 0.1, 1);
+    auto curvilinearCoordinateSystem = CurvilinearCoordinateSystem(reference_path);
     Eigen::Vector2d curvilinearPos;
     try {
         curvilinearPos = curvilinearCoordinateSystem.convertToCurvilinearCoords(xPosition, yPosition);
