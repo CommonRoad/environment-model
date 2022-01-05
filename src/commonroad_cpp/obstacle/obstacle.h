@@ -411,7 +411,7 @@ class Obstacle {
      * @return curvilinear orientation of obstacle state
      */
     [[nodiscard]] double getCurvilinearOrientation(size_t timeStep,
-                                                   const std::shared_ptr<Lane> &refLane) const; // Todo create test case
+                                                   const std::shared_ptr<Lane> &refLane); // Todo create test case
 
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
@@ -550,6 +550,8 @@ class Obstacle {
      */
     void setCurvilinearStates();
 
+    void convertPoint(size_t timeStep, const std::shared_ptr<Lane> &refLane);
+
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     bool isStatic{false};                             //**< true if Obstacle is static */
@@ -568,7 +570,9 @@ class Obstacle {
     std::map<size_t, std::shared_ptr<Lane>>
         referenceLane; //**< lane which is used as reference for curvilinear projection */
     std::map<size_t, std::vector<std::shared_ptr<Lane>>>
-        occupiedLanes;                          //**< map of time steps to lanes occupied by the obstacle */
+        occupiedLanes; //**< map of time steps to lanes occupied by the obstacle */
+    std::map<size_t, std::map<std::set<size_t>, std::array<double, 3>>>
+        convertedPositions;                     //**< map of time steps to lanelet ID set to curvilinear positions */
     std::vector<vertex> route;                  //**< planned route of the obstacle */
     const double laneOrientationThreshold{0.7}; //**< orientation threshold for assigning lanes */
     const double laneOrientationThresholdInitial{
