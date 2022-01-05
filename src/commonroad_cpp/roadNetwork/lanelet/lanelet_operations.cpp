@@ -152,7 +152,7 @@ std::vector<std::shared_ptr<Lane>> lanelet_operations::createLanesBySingleLanele
         newLanes = roadNetwork->addLanes(newLanes, lanelet->getId());
         for (const auto &newLane : newLanes)
             if (!std::any_of(lanes.begin(), lanes.end(), [newLane](const std::shared_ptr<Lane> &lane) {
-                    return newLane->getId() == lane->getId();
+                    return newLane->getContainedLaneletIDs() == lane->getContainedLaneletIDs();
                 }))
                 lanes.push_back(newLane);
     }
