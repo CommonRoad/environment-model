@@ -30,7 +30,7 @@ struct PredicateParameters {
         3}; // minimum number of leading vehicles so that a vehicle can be assumed to be part of a queue of vehicles
     double maxQueueOfVehiclesVelocity{3};       // maximum velocity of a vehicle withing a queue of vehicles
     double maxVelocityLimitFreeDriving{16.67};  // maximum velocity of a free-driving vehicle
-    double minInterstateWidth{7.25};             // minimum interstate width so that emergency lane can be created
+    double minInterstateWidth{7.0};             // minimum interstate width so that emergency lane can be created
     double closeToLaneBorder{0.2};              // indicator if vehicle is close to lane border
     double closeToOtherVehicle{0.5};            // indicator if vehicle is close to another vehicle
     double slightlyHigherSpeedDifference{5.55}; // indicator for slightly higher speed
