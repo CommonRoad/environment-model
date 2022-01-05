@@ -64,13 +64,6 @@ class Lane : public Lanelet {
      */
     [[nodiscard]] const std::set<size_t> &getContainedLaneletIDs() const;
 
-    /**
-     * Getter for Lane's width
-     *
-     * @return width of the lane [m]
-     */
-    double getWidth(double lonPosition);
-
   private:
     std::vector<std::shared_ptr<Lanelet>> containedLanelets; //**< list of pointers to lanelets constructing lane */
     std::optional<CurvilinearCoordinateSystem>
