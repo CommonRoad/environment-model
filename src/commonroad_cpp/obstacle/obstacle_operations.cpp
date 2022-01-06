@@ -6,8 +6,8 @@
 //
 
 #include "obstacle_operations.h"
+#include "../geometry/geometric_operations.h"
 #include "../roadNetwork/lanelet//lanelet_operations.h"
-
 std::shared_ptr<Obstacle>
 obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t obstacleId) {
     std::shared_ptr<Obstacle> temp{nullptr};
@@ -59,10 +59,30 @@ obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::share
                                    const std::shared_ptr<Obstacle> &obstacleK) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_left;
     std::vector<std::shared_ptr<Obstacle>> vehicles_adj = obstaclesAdjacent(timeStep, obstacles, obstacleK);
+    // use cross product between a line and a point to evaluate whether obstacle is left
+    vertex vertA{obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].x(),
+                 obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].y()};
+    vertex vertC{obstacleK->getOccupancyPolygonShape(timeStep).outer()[0].x(),
+                 obstacleK->getOccupancyPolygonShape(timeStep).outer()[0].y()};
+    vertC.x -= vertA.x;
+    vertC.y -= vertA.y;
 
-    for (const auto &obs : vehicles_adj)
-        if (obs->rightD(timeStep, obstacleK->getReferenceLane(timeStep)) > obstacleK->leftD(timeStep))
+    for (const auto &obs : vehicles_adj) {
+        vertex vertP0{obs->getOccupancyPolygonShape(timeStep).outer()[0].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[0].y()};
+        vertex vertP1{obs->getOccupancyPolygonShape(timeStep).outer()[1].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[1].y()};
+        vertex vertP2{obs->getOccupancyPolygonShape(timeStep).outer()[2].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[2].y()};
+        vertex vertP3{obs->getOccupancyPolygonShape(timeStep).outer()[3].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[3].y()};
+        auto crossProductF0{vertC.x * (vertP0.y - vertA.y) - vertC.y * (vertP0.x - vertA.x)};
+        auto crossProductF1{vertC.x * (vertP1.y - vertA.y) - vertC.y * (vertP1.x - vertA.x)};
+        auto crossProductF2{vertC.x * (vertP2.y - vertA.y) - vertC.y * (vertP2.x - vertA.x)};
+        auto crossProductF3{vertC.x * (vertP3.y - vertA.y) - vertC.y * (vertP3.x - vertA.x)};
+        if (crossProductF0 < 0 and crossProductF1 < 0 and crossProductF2 < 0 and crossProductF3 < 0)
             vehicles_left.push_back(obs);
+    }
 
     return vehicles_left;
 }
@@ -72,24 +92,46 @@ obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::s
                                        const std::shared_ptr<Obstacle> &obstacleK) {
     std::vector<std::shared_ptr<Obstacle>> vehiclesAdj;
     auto refLaneObstacleK{obstacleK->getReferenceLane(timeStep)};
-
+    // use cross product between a line and a point to evaluate whether obstacle is adjacent
+    vertex vertA{obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].x(),
+                 obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].y()};
+    vertex vertB{obstacleK->getOccupancyPolygonShape(timeStep).outer()[2].x(),
+                 obstacleK->getOccupancyPolygonShape(timeStep).outer()[2].y()};
+    vertex vertC{obstacleK->getOccupancyPolygonShape(timeStep).outer()[0].x(),
+                 obstacleK->getOccupancyPolygonShape(timeStep).outer()[0].y()};
+    vertex vertD{obstacleK->getOccupancyPolygonShape(timeStep).outer()[3].x(),
+                 obstacleK->getOccupancyPolygonShape(timeStep).outer()[3].y()};
+    vertB.x -= vertA.x;
+    vertB.y -= vertA.y;
+    vertD.x -= vertC.x;
+    vertD.y -= vertC.y;
     for (const auto &obs : obstacles) {
         if (!obs->timeStepExists(timeStep) or obs->getId() == obstacleK->getId())
             continue;
-        auto obsRearS{obs->rearS(timeStep, refLaneObstacleK)};
-        auto obsFrontS{obs->frontS(timeStep, refLaneObstacleK)};
-        if (obsRearS < obstacleK->frontS(timeStep) and obstacleK->frontS(timeStep) < obsFrontS) {
-            vehiclesAdj.push_back(obs);
+        vertex vertP0{obs->getOccupancyPolygonShape(timeStep).outer()[0].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[0].y()};
+        vertex vertP1{obs->getOccupancyPolygonShape(timeStep).outer()[1].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[1].y()};
+        vertex vertP2{obs->getOccupancyPolygonShape(timeStep).outer()[2].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[2].y()};
+        vertex vertP3{obs->getOccupancyPolygonShape(timeStep).outer()[3].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[3].y()};
+
+        auto crossProductF0{vertB.x * (vertP0.y - vertA.y) - vertB.y * (vertP0.x - vertA.x)};
+        auto crossProductF1{vertB.x * (vertP1.y - vertA.y) - vertB.y * (vertP1.x - vertA.x)};
+        auto crossProductF2{vertB.x * (vertP2.y - vertA.y) - vertB.y * (vertP2.x - vertA.x)};
+        auto crossProductF3{vertB.x * (vertP3.y - vertA.y) - vertB.y * (vertP3.x - vertA.x)};
+        auto crossProductH0{vertD.x * (vertP0.y - vertC.y) - vertD.y * (vertP0.x - vertC.x)};
+        auto crossProductH1{vertD.x * (vertP1.y - vertC.y) - vertD.y * (vertP1.x - vertC.x)};
+        auto crossProductH2{vertD.x * (vertP2.y - vertC.y) - vertD.y * (vertP2.x - vertC.x)};
+        auto crossProductH3{vertD.x * (vertP3.y - vertC.y) - vertD.y * (vertP3.x - vertC.x)};
+
+        if (crossProductF0 >= 0 and crossProductF1 >= 0 and crossProductF2 >= 0 and crossProductF3 >= 0)
             continue;
-        }
-        if (obsRearS < obstacleK->rearS(timeStep) and obstacleK->rearS(timeStep) < obsFrontS) {
-            vehiclesAdj.push_back(obs);
+        else if (crossProductH0 <= 0 and crossProductH1 <= 0 and crossProductH2 <= 0 and crossProductH3 <= 0)
             continue;
-        }
-        if (obstacleK->rearS(timeStep) <= obsRearS and obsFrontS <= obstacleK->frontS(timeStep)) {
+        else
             vehiclesAdj.push_back(obs);
-            continue;
-        }
     }
 
     return vehiclesAdj;
@@ -118,11 +160,30 @@ obstacle_operations::obstaclesRight(size_t timeStep, const std::vector<std::shar
                                     const std::shared_ptr<Obstacle> &obstacleK) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_right;
     std::vector<std::shared_ptr<Obstacle>> vehicles_adj = obstaclesAdjacent(timeStep, obstacles, obstacleK);
+    // use cross product between a line and a point to evaluate whether obstacle is right
+    vertex vertA{obstacleK->getOccupancyPolygonShape(timeStep).outer()[2].x(),
+                 obstacleK->getOccupancyPolygonShape(timeStep).outer()[2].y()};
+    vertex vertC{obstacleK->getOccupancyPolygonShape(timeStep).outer()[3].x(),
+                 obstacleK->getOccupancyPolygonShape(timeStep).outer()[3].y()};
+    vertC.x -= vertA.x;
+    vertC.y -= vertA.y;
 
-    for (const auto &obs : vehicles_adj)
-        if (obs->leftD(timeStep, obstacleK->getReferenceLane(timeStep)) < obstacleK->rightD(timeStep))
+    for (const auto &obs : vehicles_adj) {
+        vertex vertP0{obs->getOccupancyPolygonShape(timeStep).outer()[0].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[0].y()};
+        vertex vertP1{obs->getOccupancyPolygonShape(timeStep).outer()[1].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[1].y()};
+        vertex vertP2{obs->getOccupancyPolygonShape(timeStep).outer()[2].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[2].y()};
+        vertex vertP3{obs->getOccupancyPolygonShape(timeStep).outer()[3].x(),
+                      obs->getOccupancyPolygonShape(timeStep).outer()[3].y()};
+        auto crossProductF0{vertC.x * (vertP0.y - vertA.y) - vertC.y * (vertP0.x - vertA.x)};
+        auto crossProductF1{vertC.x * (vertP1.y - vertA.y) - vertC.y * (vertP1.x - vertA.x)};
+        auto crossProductF2{vertC.x * (vertP2.y - vertA.y) - vertC.y * (vertP2.x - vertA.x)};
+        auto crossProductF3{vertC.x * (vertP3.y - vertA.y) - vertC.y * (vertP3.x - vertA.x)};
+        if (crossProductF0 > 0 and crossProductF1 > 0 and crossProductF2 > 0 and crossProductF3 > 0)
             vehicles_right.push_back(obs);
-
+    }
     return vehicles_right;
 }
 

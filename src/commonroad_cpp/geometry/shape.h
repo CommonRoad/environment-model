@@ -70,10 +70,7 @@ class Shape {
      *
      * @return Shape center.
      */
-    [[nodiscard]] virtual vertex getCenter() const {
-        struct vertex v = {0, 0};
-        return v;
-    };
+    [[nodiscard]] virtual vertex getCenter() const { return {0, 0}; };
 
     /**
      * Virtual getter for shape type.

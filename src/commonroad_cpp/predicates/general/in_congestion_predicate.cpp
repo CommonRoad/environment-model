@@ -20,9 +20,9 @@ bool InCongestionPredicate::booleanEvaluation(size_t timeStep, const std::shared
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+        if (obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.maxCongestionVelocity and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
-            obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.maxCongestionVelocity)
+            inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             num_vehicles += 1;
     }
     return num_vehicles >= parameters.numVehCongestion;

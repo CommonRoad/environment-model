@@ -20,9 +20,9 @@ bool InSlowMovingTrafficPredicate::booleanEvaluation(size_t timeStep, const std:
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
+        if (obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.maxSlowMovingTrafficVelocity and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
-            obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.maxSlowMovingTrafficVelocity)
+            inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             num_vehicles += 1;
     }
     return num_vehicles >= parameters.numVehSlowMovingTraffic;
