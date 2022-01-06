@@ -21,12 +21,11 @@ bool DrivesLeftmostPredicate::booleanEvaluation(size_t timeStep, const std::shar
     std::shared_ptr<Obstacle> vehicle_directly_left =
         obstacle_operations::obstacleDirectlyLeft(timeStep, world->getObstacles(), obstacleK);
 
-    if (vehicle_directly_left != nullptr) {
-        return (vehicle_directly_left->rightD(timeStep, obstacleK->getReferenceLane(timeStep)) -
-                obstacleK->leftD(timeStep)) < parameters.closeToOtherVehicle;
+    if (vehicle_directly_left != nullptr and
+        (vehicle_directly_left->rightD(timeStep, obstacleK->getReferenceLane(timeStep)) - obstacleK->leftD(timeStep)) <
+            parameters.closeToOtherVehicle) {
+        return true;
     } else {
-        double left_position = obstacleK->leftD(timeStep);
-        double s_ego = obstacleK->getLonPosition(timeStep);
         std::vector<std::shared_ptr<Lane>> lanes;
         for (auto &occLa : occupiedLanelets) {
             std::vector<std::shared_ptr<Lane>> lanesOfLanelet =
@@ -35,8 +34,9 @@ bool DrivesLeftmostPredicate::booleanEvaluation(size_t timeStep, const std::shar
                 lanes.push_back(lane);
             }
         }
-        return std::all_of(lanes.begin(), lanes.end(), [s_ego, left_position, this](const std::shared_ptr<Lane> &lane) {
-            return 0.5 * lane->getWidth(s_ego) - left_position <= parameters.closeToLaneBorder;
+        return std::all_of(lanes.begin(), lanes.end(), [obstacleK, this, timeStep](const std::shared_ptr<Lane> &lane) {
+            return 0.5 * lane->getWidth(obstacleK->getLonPosition(timeStep, lane)) - obstacleK->leftD(timeStep, lane) <=
+                   parameters.closeToLaneBorder;
         });
     }
 }
