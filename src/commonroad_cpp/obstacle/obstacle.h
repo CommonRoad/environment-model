@@ -493,7 +493,7 @@ class Obstacle {
     const std::vector<vertex> &getRoute() const;
 
     /**
-     * Converts the x- and y-coordinate into the Curvilinear domain.
+     * Converts the x- and y-coordinate into the Curvilinear domain given own reference lane.
      *
      * @param timeStep Time step for which the coordinates should me transformed.
      */
@@ -550,7 +550,13 @@ class Obstacle {
      */
     void setCurvilinearStates();
 
-    void convertPoint(size_t timeStep, const std::shared_ptr<Lane> &refLane);
+    /**
+     * Converts position at a given time step to curvilinear coordinate system given a reference lane.
+     * Point is stored locally in variable convertedPositions.
+     * @param timeStep time step of interest
+     * @param refLane Reference lane which should be used.
+     */
+    void convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<Lane> &refLane);
 
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
@@ -572,9 +578,10 @@ class Obstacle {
     std::map<size_t, std::vector<std::shared_ptr<Lane>>>
         occupiedLanes; //**< map of time steps to lanes occupied by the obstacle */
     std::map<size_t, std::map<std::set<size_t>, std::array<double, 3>>>
-        convertedPositions;                     //**< map of time steps to lanelet ID set to curvilinear positions */
-    std::vector<vertex> route;                  //**< planned route of the obstacle */
-    const double laneOrientationThreshold{0.7}; //**< orientation threshold for assigning lanes */
+        convertedPositions; //**< map of time steps to lanelet ID set to curvilinear positions */
+    std::map<size_t, polygon_type> shapeAtTimeStep; //**< occupied polygon shape at time steps */
+    std::vector<vertex> route;                      //**< planned route of the obstacle */
+    const double laneOrientationThreshold{0.7};     //**< orientation threshold for assigning lanes */
     const double laneOrientationThresholdInitial{
         1.58}; //**< orientation threshold for assigning lanes at initial time step, should be larger than other
                // threshold since initial time step has special evaluation */

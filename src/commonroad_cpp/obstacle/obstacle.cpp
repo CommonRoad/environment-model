@@ -148,6 +148,8 @@ std::map<size_t, std::shared_ptr<State>> Obstacle::getTrajectoryPrediction() con
 size_t Obstacle::getTrajectoryLength() const { return trajectoryPrediction.size(); }
 
 polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
+    if (shapeAtTimeStep.count(timeStep) == 1)
+        return shapeAtTimeStep[timeStep];
     std::vector<vertex> boundingRectangleVertices;
     polygon_type polygonShape;
     std::shared_ptr<State> state{this->getStateByTimeStep(timeStep)};
@@ -180,6 +182,7 @@ polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
                 point_type{adjustedBoundingRectangleVertices[0].x, adjustedBoundingRectangleVertices[0].y};
         }
     }
+    shapeAtTimeStep[timeStep] = polygonShape;
     return polygonShape;
 }
 
@@ -218,7 +221,7 @@ double Obstacle::frontS(size_t timeStep) {
                      (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition});
 }
 
-void Obstacle::convertPoint(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
+void Obstacle::convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     Eigen::Vector2d convertedPoint = refLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
         getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
     double theta = getStateByTimeStep(timeStep)->getGlobalOrientation() -
@@ -231,7 +234,7 @@ double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPoint(timeStep, refLane);
+            convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -257,7 +260,7 @@ double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPoint(timeStep, refLane);
+            convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -283,7 +286,7 @@ double Obstacle::rightD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPoint(timeStep, refLane);
+            convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -308,7 +311,7 @@ double Obstacle::leftD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPoint(timeStep, refLane);
+            convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -384,7 +387,7 @@ double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &re
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPoint(timeStep, refLane);
+            convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -402,7 +405,7 @@ double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &re
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPoint(timeStep, refLane);
+            convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -427,7 +430,7 @@ double Obstacle::getCurvilinearOrientation(size_t timeStep, const std::shared_pt
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPoint(timeStep, refLane);
+            convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -554,7 +557,7 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(size_t timeStep) {
 void Obstacle::convertPointToCurvilinear(size_t timeStep) {
     auto curReferenceLane{getReferenceLane(timeStep)};
     try {
-        convertPoint(timeStep, curReferenceLane);
+        convertPointToCurvilinear(timeStep, curReferenceLane);
     } catch (...) {
         std::string refInfo;
         for (const auto &ref : getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().referencePath())
