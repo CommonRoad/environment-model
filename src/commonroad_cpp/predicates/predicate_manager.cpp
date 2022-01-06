@@ -79,8 +79,8 @@ void PredicateManager::writeFile() {
     double globalMinAvgExecutionTime{std::numeric_limits<double>::max()};
     double globalMaxAvgExecutionTime{std::numeric_limits<double>::lowest()};
     file.open(simulationParameters.outputDirectory + "/" + simulationParameters.outputFileName);
-    file << "Predicate Name - Num. Satisfactions - Num. Executions - Satisfaction in % - Max. Comp. Time - "
-            "Min. Comp. Time - Avg. Comp. Time - Weight Max. Comp. Time - Weight Avg. Comp. Time \n";
+    file << "Predicate Name,Num. Satisfactions,Num. Executions,Satisfaction in %,Max. Comp. Time,"
+            "Min. Comp. Time,Avg. Comp. Time,Weight Max. Comp. Time,Weight Avg. Comp. Time \n";
     std::map<std::string, std::tuple<size_t, size_t, double, double, double, double>> predicateStatistics;
     for (const auto &predName : relevantPredicates) {
         auto pred{predicates[predName]};
@@ -103,19 +103,17 @@ void PredicateManager::writeFile() {
                                      maxExecutionTime, minExecutionTime, avgExecutionTime}});
     }
     for (const auto &[predName, pred] : predicateStatistics) {
-        file << predName << ": " << std::get<0>(pred) << " - " << std::get<1>(pred) << " - " << std::get<2>(pred)
-             << " - " << std::get<3>(pred) << " [ms] - " << std::get<4>(pred) << " [ms] - " << std::get<5>(pred)
-             << " [ms] - "
-             << (std::get<3>(pred) - globalMinExecutionTime) / (globalMaxExecutionTime - globalMinExecutionTime)
-             << " - "
+        file << predName << "," << std::get<0>(pred) << "," << std::get<1>(pred) << "," << std::get<2>(pred) << ","
+             << std::get<3>(pred) << " [ms]," << std::get<4>(pred) << " [ms]," << std::get<5>(pred) << " [ms],"
+             << (std::get<3>(pred) - globalMinExecutionTime) / (globalMaxExecutionTime - globalMinExecutionTime) << ","
              << (std::get<5>(pred) - globalMinAvgExecutionTime) /
                     (globalMaxAvgExecutionTime - globalMinAvgExecutionTime)
              << "\n";
     }
-    file << "Global Max. Comp. Time: " << std::to_string(globalMaxExecutionTime) << '\n';
-    file << "Global Min. Comp. Time: " << std::to_string(globalMinExecutionTime) << '\n';
-    file << "Global Max. Avg Comp. Time: " << std::to_string(globalMaxAvgExecutionTime) << '\n';
-    file << "Global Min. Avg Comp. Time: " << std::to_string(globalMinAvgExecutionTime) << '\n';
+    file << "Global Max. Comp. Time:," << std::to_string(globalMaxExecutionTime) << '\n';
+    file << "Global Min. Comp. Time:," << std::to_string(globalMinExecutionTime) << '\n';
+    file << "Global Max. Avg Comp. Time:," << std::to_string(globalMaxAvgExecutionTime) << '\n';
+    file << "Global Min. Avg Comp. Time:," << std::to_string(globalMinAvgExecutionTime) << '\n';
     file.close();
 }
 
