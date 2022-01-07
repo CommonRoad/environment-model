@@ -20,7 +20,7 @@ bool ExistStandingLeadingVehiclePredicate::booleanEvaluation(size_t timeStep, co
     InStandstillPredicate inStandstillPredicate;
 
     for (const auto &obs : world->getObstacles()) {
-        if (!inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) or
+        if (!obs->timeStepExists(timeStep) or !inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) or
             !inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             continue;
         if (inStandstillPredicate.booleanEvaluation(timeStep, world, obs))
