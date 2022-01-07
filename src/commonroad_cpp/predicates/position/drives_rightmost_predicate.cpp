@@ -35,7 +35,8 @@ bool DrivesRightmostPredicate::booleanEvaluation(size_t timeStep, const std::sha
             }
         }
         return std::all_of(lanes.begin(), lanes.end(), [obstacleK, this, timeStep](const std::shared_ptr<Lane> &lane) {
-            return 0.5 * lane->getWidth(obstacleK->getLonPosition(timeStep, lane)) +
+            return 0.5 * lane->getWidth(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                                        obstacleK->getStateByTimeStep(timeStep)->getYPosition()) +
                        obstacleK->rightD(timeStep, lane) <=
                    parameters.closeToLaneBorder;
         });

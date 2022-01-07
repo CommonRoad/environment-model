@@ -96,4 +96,12 @@ double interpolate(double value, const std::vector<double> &xValues, const std::
  */
 double subtractOrientations(double lhs, double rhs);
 
+/**
+ * Computes scalar product between two vertices.
+ * @param vertA First vertex.
+ * @param vertB Second vertex.
+ * @return Scalar product.
+ */
+double scalarProduct(const vertex &vertA, const vertex &vertB);
+
 } // namespace geometric_operations

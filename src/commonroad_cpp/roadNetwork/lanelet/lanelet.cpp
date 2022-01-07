@@ -220,10 +220,17 @@ const std::vector<double> &Lanelet::getWidthAlongLanelet() {
     return width;
 }
 
-double Lanelet::getWidth(double lonPosition) {
+double Lanelet::getWidth(double positionX, double positionY) {
     if (width.empty())
         width = geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder);
-    if (pathLength.empty())
-        pathLength = geometric_operations::computePathLengthFromPolyline(centerVertices);
-    return geometric_operations::interpolate(lonPosition, pathLength, width);
+    unsigned long closestIndex = findClosestIndex(positionX, positionY);
+    vertex vertS{centerVertices[closestIndex + 1] - centerVertices[closestIndex]};
+    vertex vertV{vertex{positionX, positionY} - centerVertices[closestIndex]};
+    vertex vertP{vertS * (geometric_operations::scalarProduct(vertS, vertV) /
+                          geometric_operations::scalarProduct(vertS, vertS))};
+    double scalar{
+        geometric_operations::euclideanDistance2Dim(centerVertices[closestIndex],
+                                                    vertP + centerVertices[closestIndex]) /
+        geometric_operations::euclideanDistance2Dim(centerVertices[closestIndex], centerVertices[closestIndex + 1])};
+    return width[closestIndex] + (width[closestIndex + 1] - width[closestIndex]) * scalar;
 }

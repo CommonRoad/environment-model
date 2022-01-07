@@ -20,8 +20,21 @@ struct TrafficLightCycleElement {
 };
 
 struct vertex {
-    double x;
-    double y;
+    double x{0};
+    double y{0};
+    vertex() = default;
+    vertex operator+(const vertex &vert) const { return {this->x + vert.x, this->y + vert.y}; }
+    vertex operator-(const vertex &vert) const { return {this->x - vert.x, this->y - vert.y}; }
+    vertex operator*(const vertex &vert) const { return {this->x * vert.x, this->y * vert.y}; }
+    vertex operator*(const double &scalar) const { return {this->x * scalar, this->y * scalar}; }
+    void operator+=(const vertex &vert) {
+        this->x += vert.x;
+        this->y += vert.y;
+    }
+    void operator-=(const vertex &vert) {
+        this->x -= vert.x;
+        this->y -= vert.y;
+    }
 };
 
 struct ValidStates {

@@ -10,7 +10,6 @@
 
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "test_lanelet_operations.h"
 
 void LaneletOperationsTest::SetUp() {
@@ -346,6 +345,4 @@ TEST_F(LaneletOperationsTest, RoadWidth) {
     EXPECT_EQ(lanelet_operations::roadWidth(laneletFive, 70, 4.5), 9);
     EXPECT_EQ(lanelet_operations::roadWidth(laneletSix, 70, 1.5), 3);
     EXPECT_NEAR(lanelet_operations::roadWidth(laneletSeven, -10, 4), 4.99998, 0.0005);
-
-    EXPECT_THROW(lanelet_operations::roadWidth(laneletOne, 1000, 0100), std::runtime_error);
 }

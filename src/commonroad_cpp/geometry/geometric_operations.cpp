@@ -255,3 +255,7 @@ std::vector<double> geometric_operations::computeDistanceFromPolylines(const std
 
     return width;
 }
+
+double geometric_operations::scalarProduct(const vertex &vertA, const vertex &vertB) {
+    return vertA.x * vertB.x + vertA.y * vertB.y;
+}
