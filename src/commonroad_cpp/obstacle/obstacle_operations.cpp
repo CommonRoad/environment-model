@@ -64,8 +64,7 @@ obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::share
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].y()};
     vertex vertC{obstacleK->getOccupancyPolygonShape(timeStep).outer()[0].x(),
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[0].y()};
-    vertC.x -= vertA.x;
-    vertC.y -= vertA.y;
+    vertC -= vertA;
 
     for (const auto &obs : vehicles_adj) {
         vertex vertP0{obs->getOccupancyPolygonShape(timeStep).outer()[0].x(),
@@ -101,10 +100,8 @@ obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::s
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[0].y()};
     vertex vertD{obstacleK->getOccupancyPolygonShape(timeStep).outer()[3].x(),
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[3].y()};
-    vertB.x -= vertA.x;
-    vertB.y -= vertA.y;
-    vertD.x -= vertC.x;
-    vertD.y -= vertC.y;
+    vertB -= vertA;
+    vertD -= vertC;
     for (const auto &obs : obstacles) {
         if (!obs->timeStepExists(timeStep) or obs->getId() == obstacleK->getId())
             continue;
@@ -165,8 +162,7 @@ obstacle_operations::obstaclesRight(size_t timeStep, const std::vector<std::shar
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[2].y()};
     vertex vertC{obstacleK->getOccupancyPolygonShape(timeStep).outer()[3].x(),
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[3].y()};
-    vertC.x -= vertA.x;
-    vertC.y -= vertA.y;
+    vertC -= vertA;
 
     for (const auto &obs : vehicles_adj) {
         vertex vertP0{obs->getOccupancyPolygonShape(timeStep).outer()[0].x(),

@@ -142,6 +142,6 @@ class TrafficLight {
     std::vector<TrafficLightCycleElement> cycle; //**< cycle of traffic light */
     size_t offset;                               //**< time offset of traffic light */
     TurningDirections direction;                 //**< direction for which traffic light is valid */
-    bool active{};                               //**< boolean indicating whether traffic light is valid */
-    vertex position{};                           //**< position of traffic light */
+    bool active;                                 //**< boolean indicating whether traffic light is valid */
+    vertex position;                             //**< position of traffic light */
 };
