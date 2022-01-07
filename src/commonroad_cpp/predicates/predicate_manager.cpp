@@ -29,10 +29,13 @@ void PredicateManager::extractPredicateSatisfaction() {
         for (const auto &ego : obstacles) {
             if (ego->getIsStatic())
                 continue;
+            size_t minTimeStep{ego->getCurrentState()->getTimeStep()};
+            size_t maxTimeStep{ego->getLastTrajectoryTimeStep()};
             std::vector<std::shared_ptr<Obstacle>> others;
             others.reserve(obstacles.size() - 1);
             for (const auto &obs : obstacles) {
-                if (obs->getId() == ego->getId())
+                if (obs->getId() == ego->getId() or (obs->getLastTrajectoryTimeStep() < minTimeStep and
+                                                     maxTimeStep < obs->getCurrentState()->getTimeStep()))
                     continue;
                 others.push_back(obs);
             }
@@ -129,8 +132,9 @@ void PredicateManager::extractScenarios() {
         std::vector<std::string> fileNames{InputUtils::findRelevantScenarioFileNames(dir)};
         std::copy_if(fileNames.begin(), fileNames.end(), std::back_inserter(scenarios),
                      [mode, singleScenario](const std::string &name) {
-                         return (mode == EvaluationMode::directory) or (mode == EvaluationMode::singleScenario and
-                                                                        name.find(singleScenario) != std::string::npos);
+                         return (mode == EvaluationMode::directory) or
+                                ((mode == EvaluationMode::singleScenario or mode == EvaluationMode::singleVehicle) and
+                                 name.find(singleScenario) != std::string::npos);
                      });
     }
 }
