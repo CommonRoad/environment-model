@@ -37,8 +37,11 @@ ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &t
 
 std::shared_ptr<Obstacle>
 obstacle_operations::obstacleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                          const std::shared_ptr<Obstacle> &obstacleK) {
-    std::vector<std::shared_ptr<Obstacle>> vehicles_left = obstaclesLeft(timeStep, obstacles, obstacleK);
+                                          const std::shared_ptr<Obstacle> &obstacleK,
+                                          const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                          const std::shared_ptr<size_t> &idCounter) {
+    std::vector<std::shared_ptr<Obstacle>> vehicles_left =
+        obstaclesLeft(timeStep, obstacles, obstacleK, roadNetwork, idCounter);
     if (vehicles_left.empty())
         return nullptr;
     else if (vehicles_left.size() == 1)
@@ -56,9 +59,12 @@ obstacle_operations::obstacleDirectlyLeft(size_t timeStep, const std::vector<std
 
 std::vector<std::shared_ptr<Obstacle>>
 obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                   const std::shared_ptr<Obstacle> &obstacleK) {
+                                   const std::shared_ptr<Obstacle> &obstacleK,
+                                   const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                   const std::shared_ptr<size_t> &idCounter) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_left;
-    std::vector<std::shared_ptr<Obstacle>> vehicles_adj = obstaclesAdjacent(timeStep, obstacles, obstacleK);
+    std::vector<std::shared_ptr<Obstacle>> vehicles_adj =
+        obstaclesAdjacent(timeStep, obstacles, obstacleK, roadNetwork, idCounter);
     // use cross product between a line and a point to evaluate whether obstacle is left
     vertex vertA{obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].x(),
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].y()};
@@ -88,9 +94,11 @@ obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::share
 
 std::vector<std::shared_ptr<Obstacle>>
 obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                       const std::shared_ptr<Obstacle> &obstacleK) {
+                                       const std::shared_ptr<Obstacle> &obstacleK,
+                                       const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                       const std::shared_ptr<size_t> &idCounter) {
     std::vector<std::shared_ptr<Obstacle>> vehiclesAdj;
-    auto refLaneObstacleK{obstacleK->getReferenceLane(timeStep)};
+    auto refLaneObstacleK{obstacleK->getReferenceLane(roadNetwork, timeStep, idCounter)};
     // use cross product between a line and a point to evaluate whether obstacle is adjacent
     vertex vertA{obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].x(),
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].y()};
@@ -136,8 +144,11 @@ obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::s
 
 std::shared_ptr<Obstacle>
 obstacle_operations::obstacleDirectlyRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                           const std::shared_ptr<Obstacle> &obstacleK) {
-    std::vector<std::shared_ptr<Obstacle>> vehicles_right = obstaclesRight(timeStep, obstacles, obstacleK);
+                                           const std::shared_ptr<Obstacle> &obstacleK,
+                                           const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                           const std::shared_ptr<size_t> &idCounter) {
+    std::vector<std::shared_ptr<Obstacle>> vehicles_right =
+        obstaclesRight(timeStep, obstacles, obstacleK, roadNetwork, idCounter);
     if (vehicles_right.empty())
         return nullptr;
     else if (vehicles_right.size() == 1)
@@ -154,9 +165,12 @@ obstacle_operations::obstacleDirectlyRight(size_t timeStep, const std::vector<st
 
 std::vector<std::shared_ptr<Obstacle>>
 obstacle_operations::obstaclesRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                    const std::shared_ptr<Obstacle> &obstacleK) {
+                                    const std::shared_ptr<Obstacle> &obstacleK,
+                                    const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                    const std::shared_ptr<size_t> &idCounter) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_right;
-    std::vector<std::shared_ptr<Obstacle>> vehicles_adj = obstaclesAdjacent(timeStep, obstacles, obstacleK);
+    std::vector<std::shared_ptr<Obstacle>> vehicles_adj =
+        obstaclesAdjacent(timeStep, obstacles, obstacleK, roadNetwork, idCounter);
     // use cross product between a line and a point to evaluate whether obstacle is right
     vertex vertA{obstacleK->getOccupancyPolygonShape(timeStep).outer()[2].x(),
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[2].y()};
