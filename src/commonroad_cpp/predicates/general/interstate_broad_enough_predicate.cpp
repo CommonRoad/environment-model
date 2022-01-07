@@ -13,12 +13,12 @@
 bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP) {
-    double obsK_x = obstacleK->getStateByTimeStep(timeStep)->getXPosition();
-    double obsK_y = obstacleK->getStateByTimeStep(timeStep)->getYPosition();
-    auto occupied_lanelets = world->getRoadNetwork()->findLaneletsByPosition(obsK_x, obsK_y);
+    auto occupied_lanelets = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::all_of(occupied_lanelets.begin(), occupied_lanelets.end(),
-                       [obsK_x, obsK_y, world, this](const std::shared_ptr<Lanelet> &lanelet) {
-                           return lanelet_operations::roadWidth(lanelet, obsK_x, obsK_y) >
+                       [obstacleK, timeStep, world, this](const std::shared_ptr<Lanelet> &lanelet) {
+                           return lanelet_operations::roadWidth(
+                                      lanelet, obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                                      obstacleK->getStateByTimeStep(timeStep)->getYPosition()) >
                                   parameters.minInterstateWidth;
                        });
 }

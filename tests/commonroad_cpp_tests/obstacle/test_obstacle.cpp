@@ -58,8 +58,8 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->setReactionTime(reactionTimeObstacleOne);
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
-    obstacleOne->computeLanes(roadNetwork, globalIdRef, true);
     obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);
+    obstacleOne->computeLanes(roadNetwork, globalIdRef, true);
 
     idObstacleTwo = 2;
     isStaticObstacleTwo = true;
