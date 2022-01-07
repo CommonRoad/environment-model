@@ -4,6 +4,7 @@
 // Copyright (c) 2021 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
+#include "../../obstacle/obstacle_operations.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
@@ -14,19 +15,11 @@
 bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                         const std::shared_ptr<Obstacle> &obstacleK,
                                         const std::shared_ptr<Obstacle> &obstacleP) {
-    auto referenceK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep, world->getIdCounterRef())};
-    if (obstacleK->rightD(timeStep) < obstacleP->leftD(timeStep, referenceK))
-        return false;
-    else {
-        if (obstacleK->rearS(timeStep) <= obstacleP->frontS(timeStep, referenceK) and
-            obstacleP->frontS(timeStep, referenceK) <= obstacleK->frontS(timeStep))
-            return true;
-        if (obstacleK->rearS(timeStep) < obstacleP->rearS(timeStep, referenceK) and
-            obstacleP->rearS(timeStep, referenceK) < obstacleK->frontS(timeStep))
-            return true;
-        return (obstacleP->rearS(timeStep, referenceK) < obstacleK->rearS(timeStep)) and
-               (obstacleK->frontS(timeStep) < obstacleP->frontS(timeStep, referenceK));
-    }
+    auto leftObstacles{obstacle_operations::obstaclesLeft(timeStep, world->getObstacles(), obstacleP,
+                                                          world->getRoadNetwork(), world->getIdCounterRef())};
+    return std::any_of(leftObstacles.begin(), leftObstacles.end(), [obstacleK](const std::shared_ptr<Obstacle> &obs) {
+        return obstacleK->getId() == obs->getId();
+    });
 }
 
 double LeftOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
