@@ -53,7 +53,7 @@ TEST_F(WorldTest, TestSingleScenarioObstacle) {
                        {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, timeStepSizeOne);
     auto obs{world.findObstacle(obstacleId)};
     for (const auto &time : obs->getTimeSteps())
-        EXPECT_NO_THROW(auto ref{obs->getReferenceLane(time)});
+        EXPECT_NO_THROW(auto ref{obs->getReferenceLane(world.getRoadNetwork(), time)});
 }
 
 TEST_F(WorldTest, TestSingleScenario) {
@@ -64,7 +64,7 @@ TEST_F(WorldTest, TestSingleScenario) {
     EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
     for (const auto &obs : obstaclesScenarioOne)
         for (const auto &time : obs->getTimeSteps())
-            EXPECT_NO_THROW(obs->getReferenceLane(time));
+            EXPECT_NO_THROW(obs->getReferenceLane(roadNetworkScenarioOne, time));
 }
 
 // TEST_F(WorldTest, TestAllScenarios) {

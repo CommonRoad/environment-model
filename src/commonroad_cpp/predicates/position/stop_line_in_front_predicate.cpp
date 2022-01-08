@@ -23,16 +23,18 @@ bool StopLineInFrontPredicate::booleanEvaluation(size_t timeStep, const std::sha
         if (stopLine == nullptr)
             continue;
         Eigen::Vector2d stopLineLonPosOne =
-            obstacleK->getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
-                stopLine->getPoints().at(0).x, stopLine->getPoints().at(0).y);
+            obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+                ->getCurvilinearCoordinateSystem()
+                .convertToCurvilinearCoords(stopLine->getPoints().at(0).x, stopLine->getPoints().at(0).y);
         Eigen::Vector2d stopLineLonPosTwo =
-            obstacleK->getReferenceLane(timeStep)->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
-                stopLine->getPoints().at(1).x, stopLine->getPoints().at(1).y);
+            obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+                ->getCurvilinearCoordinateSystem()
+                .convertToCurvilinearCoords(stopLine->getPoints().at(1).x, stopLine->getPoints().at(1).y);
         auto stopLineMinPos{std::min(stopLineLonPosOne.x(), stopLineLonPosTwo.x())};
 
         // maybe check orientation as in BA
-        if (stopLineMinPos - parameters.stopLineDistance < obstacleK->frontS(timeStep) and
-            obstacleK->frontS(timeStep) < stopLineMinPos) {
+        if (stopLineMinPos - parameters.stopLineDistance < obstacleK->frontS(world->getRoadNetwork(), timeStep) and
+            obstacleK->frontS(world->getRoadNetwork(), timeStep) < stopLineMinPos) {
             return true;
         }
     }

@@ -7,6 +7,7 @@
 
 #include "lane_based_orientation_similar_predicate.h"
 #include "../../geometry/geometric_operations.h"
+#include "../../world.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include <stdexcept>
 
@@ -14,8 +15,10 @@ bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(size_t timeStep, co
                                                              const std::shared_ptr<Obstacle> &obstacleP,
                                                              const std::shared_ptr<Obstacle> &obstacleK) {
     return std::abs(geometric_operations::subtractOrientations(
-               obstacleK->getCurvilinearOrientation(timeStep, obstacleP->getReferenceLane(timeStep)),
-               obstacleP->getCurvilinearOrientation(timeStep))) < parameters.laneMatchingOrientation;
+               obstacleK->getCurvilinearOrientation(timeStep,
+                                                    obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)),
+               obstacleP->getCurvilinearOrientation(world->getRoadNetwork(), timeStep))) <
+           parameters.laneMatchingOrientation;
 }
 
 Constraint LaneBasedOrientationSimilarPredicate::constraintEvaluation(size_t timeStep,

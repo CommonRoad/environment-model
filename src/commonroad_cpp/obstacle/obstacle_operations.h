@@ -35,13 +35,11 @@ ObstacleType matchStringToObstacleType(const std::string &type);
  * @param obstacles List of relevant obstacles.
  * @param obstacleK Obstacle based on which directly left obstacle is computed.
  * @param roadNetwork Relevant road network
- * @param idCounter ID counter reference of corresponding world object
  * @return Obstacle directly left.
  */
 std::shared_ptr<Obstacle> obstacleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                                const std::shared_ptr<Obstacle> &obstacleK,
-                                               const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                               const std::shared_ptr<size_t> &idCounter);
+                                               const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 /**
  * Computes all obstacles which are left of a given obstacle.
@@ -50,14 +48,12 @@ std::shared_ptr<Obstacle> obstacleDirectlyLeft(size_t timeStep, const std::vecto
  * @param obstacles List of relevant obstacles.
  * @param obstacleK Obstacle based on which left obstacles are computed.
  * @param roadNetwork Relevant road network
- *  @param idCounter ID counter reference of corresponding world object
  * @return List of obstacles located left of given obstacle.
  */
 std::vector<std::shared_ptr<Obstacle>> obstaclesLeft(size_t timeStep,
                                                      const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
-                                                     const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                     const std::shared_ptr<size_t> &idCounter);
+                                                     const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 /**
  * Computes all obstacle which are left or right adjacent to a given obstacle k based on kth reference path.
@@ -66,14 +62,12 @@ std::vector<std::shared_ptr<Obstacle>> obstaclesLeft(size_t timeStep,
  * @param obstacles List of relevant obstacles.
  * @param obstacleK Obstacle based on which adjacent obstacles are computed.
  * @param roadNetwork Relevant road network
- * @param idCounter ID counter reference of corresponding world object
  * @return List of adjacent obstacles.
  */
 std::vector<std::shared_ptr<Obstacle>> obstaclesAdjacent(size_t timeStep,
                                                          const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
-                                                         const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                         const std::shared_ptr<size_t> &idCounter);
+                                                         const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 /**
  * Computes obstacle which is directly right of a given obstacle.
@@ -82,14 +76,12 @@ std::vector<std::shared_ptr<Obstacle>> obstaclesAdjacent(size_t timeStep,
  * @param obstacles List of relevant obstacles.
  * @param obstacleK Obstacle based on which directly right obstacle is computed.
  * @param roadNetwork Relevant road network
- * @param idCounter ID counter reference of corresponding world object
  * @return Obstacle directly right.
  */
 std::shared_ptr<Obstacle> obstacleDirectlyRight(size_t timeStep,
                                                 const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                                 const std::shared_ptr<Obstacle> &obstacleK,
-                                                const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                const std::shared_ptr<size_t> &idCounter);
+                                                const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 /**
  * Computes all obstacles which are right of a given obstacle.
@@ -98,14 +90,12 @@ std::shared_ptr<Obstacle> obstacleDirectlyRight(size_t timeStep,
  * @param obstacles List of relevant obstacles.
  * @param obstacleK Obstacle based on which right obstacles are computed.
  * @param roadNetwork Relevant road network
- * @param idCounter ID counter reference of corresponding world object
  * @return List of obstacles located right of given obstacle.
  */
 std::vector<std::shared_ptr<Obstacle>> obstaclesRight(size_t timeStep,
                                                       const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                                       const std::shared_ptr<Obstacle> &obstacleK,
-                                                      const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                      const std::shared_ptr<size_t> &idCounter);
+                                                      const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 /**
  * Computes the set of lanelets on the right side of the obstacle not including occupied lanelets.

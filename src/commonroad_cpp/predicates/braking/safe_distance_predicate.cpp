@@ -8,9 +8,9 @@
 #include <cmath>
 #include <stdexcept>
 
-#include <commonroad_cpp/obstacle/obstacle.h>
-
+#include "../../world.h"
 #include "safe_distance_predicate.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
 
 double SafeDistancePredicate::computeSafeDistance(double velocityK, double velocityP, double minAccelerationK,
                                                   double minAccelerationP, double tReact) {
@@ -40,7 +40,7 @@ Constraint SafeDistancePredicate::constraintEvaluation(size_t timeStep, const st
     double aMinP{obstacleP->getAminLong()};
     double tReact{obstacleK->getReactionTime()};
 
-    return {obstacleP->rearS(timeStep, obstacleK->getReferenceLane(timeStep)) -
+    return {obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
             0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength() -
             computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                 obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
@@ -61,7 +61,8 @@ double SafeDistancePredicate::robustEvaluation(size_t timeStep, const std::share
     double tReact{obstacleK->getReactionTime()};
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
-    double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(timeStep)) - obstacleK->frontS(timeStep)};
+    double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
+                  obstacleK->frontS(world->getRoadNetwork(), timeStep)};
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
     // robustness
     if (deltaS < 0)

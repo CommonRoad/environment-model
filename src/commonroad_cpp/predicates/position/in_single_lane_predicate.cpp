@@ -14,7 +14,7 @@
 bool InSingleLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                               const std::shared_ptr<Obstacle> &obstacleK,
                                               const std::shared_ptr<Obstacle> &obstacleP) {
-    return obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep, world->getIdCounterRef()).size() == 1;
+    return obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep).size() == 1;
 }
 
 double InSingleLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

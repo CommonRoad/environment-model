@@ -57,14 +57,47 @@ void PredicateManager::extractPredicateSatisfaction() {
                             for (const auto &obs : world->getObstacles())
                                 if (obs->timeStepExists(timeStep))
                                     pred->statisticBooleanEvaluation(timeStep, world, ego, obs);
-                    } catch (...) {
-                        spdlog::error(std::string("PredicateManager::extractPredicateSatisfaction - Scenario: ")
+                    } catch (const std::runtime_error &re) {
+                        spdlog::error(std::string("PredicateManager::extractPredicateSatisfaction | Scenario: ")
                                           .append(scen)
-                                          .append(" - ego vehicle: ")
+                                          .append(" | ego vehicle: ")
                                           .append(std::to_string(ego->getId()))
-                                          .append(" - predicate: ")
+                                          .append(" | predicate: ")
                                           .append(predName)
-                                          .append(" - time step:")
+                                          .append(" | time step:")
+                                          .append(std::to_string(timeStep))
+                                          .append(" | Runtime Error: ")
+                                          .append(re.what()));
+                    } catch (const std::logic_error &le) {
+                        spdlog::error(std::string("PredicateManager::extractPredicateSatisfaction | Scenario: ")
+                                          .append(scen)
+                                          .append(" | ego vehicle: ")
+                                          .append(std::to_string(ego->getId()))
+                                          .append(" | predicate: ")
+                                          .append(predName)
+                                          .append(" | time step:")
+                                          .append(std::to_string(timeStep))
+                                          .append(" | Logic Error: ")
+                                          .append(le.what()));
+                    } catch (const std::exception &ex) {
+                        spdlog::error(std::string("PredicateManager::extractPredicateSatisfaction | Scenario: ")
+                                          .append(scen)
+                                          .append(" | ego vehicle: ")
+                                          .append(std::to_string(ego->getId()))
+                                          .append(" | predicate: ")
+                                          .append(predName)
+                                          .append(" | time step:")
+                                          .append(std::to_string(timeStep))
+                                          .append(" | General Error: ")
+                                          .append(ex.what()));
+                    } catch (...) {
+                        spdlog::error(std::string("PredicateManager::extractPredicateSatisfaction | Scenario: ")
+                                          .append(scen)
+                                          .append(" | ego vehicle: ")
+                                          .append(std::to_string(ego->getId()))
+                                          .append(" | predicate: ")
+                                          .append(predName)
+                                          .append(" | time step:")
                                           .append(std::to_string(timeStep)));
                         continue;
                     }

@@ -149,3 +149,9 @@ std::vector<std::shared_ptr<Lane>> RoadNetwork::findLanesByContainedLanelet(size
             relevantLanes.push_back(laneMap.second);
     return relevantLanes;
 }
+void RoadNetwork::setIdCounterRef(const std::shared_ptr<size_t> &idCounter) {
+    if (idCounterRef == nullptr)
+        idCounterRef = idCounter;
+}
+
+std::shared_ptr<size_t> RoadNetwork::getIdCounterRef() const { return idCounterRef; }

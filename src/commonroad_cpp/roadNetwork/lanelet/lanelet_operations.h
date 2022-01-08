@@ -63,7 +63,6 @@ combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, 
  * Creates lanes which are originating from given set of lanelets.
  *
  * @param initialLanelets Initial lanelets based on which lanes should be created.
- * @param idCounter Starting ID of new lanes.
  * @param roadNetwork Pointer to road network.
  * @param fovRear Field of view behind obstacle which defines length of lanes.
  * @param fovFront Field of view in front of obstacle which defines length of lanes.
@@ -72,8 +71,8 @@ combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, 
  */
 std::vector<std::shared_ptr<Lane>>
 createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets,
-                            const std::shared_ptr<size_t> &idCounter, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                            double fovRear = 250, double fovFront = 250, int numIntersections = 2);
+                            const std::shared_ptr<RoadNetwork> &roadNetwork, double fovRear = 250,
+                            double fovFront = 250, int numIntersections = 2);
 
 /**
  * Creates lane objects given set of lanelets which form lane.
