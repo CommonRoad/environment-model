@@ -199,15 +199,6 @@ Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNet
     return occupied;
 }
 
-std::vector<std::shared_ptr<Lanelet>> Obstacle::getOccupiedLaneletsByShape(size_t timeStep) {
-    if (occupiedLanelets.count(timeStep) == 1)
-        return occupiedLanelets.at(timeStep);
-    else
-        throw std::logic_error(
-            "Obstacle::getOccupiedLaneletsByShape: Occupied lanelets not calculated yet. Obstacle ID: " +
-            std::to_string(this->getId()) + " - Time step: " + std::to_string(timeStep));
-}
-
 double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     double lonPosition = getLonPosition(roadNetwork, timeStep);
     double theta = getStateByTimeStep(timeStep)->getCurvilinearOrientation();
@@ -459,10 +450,10 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwo
     std::vector<std::shared_ptr<Lane>> relevantOccupiedLanes;
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
     // 1. check which currently occupied lanelets match direction
-    if (getOccupiedLaneletsByShape(timeStep).size() == 1)
-        relevantLanelets.push_back(getOccupiedLaneletsByShape(timeStep).front());
+    if (getOccupiedLaneletsByShape(roadNetwork, timeStep).size() == 1)
+        relevantLanelets.push_back(getOccupiedLaneletsByShape(roadNetwork, timeStep).front());
     else {
-        for (const auto &lanelet : getOccupiedLaneletsByShape(timeStep)) {
+        for (const auto &lanelet : getOccupiedLaneletsByShape(roadNetwork, timeStep)) {
             auto curPointOrientation{lanelet->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
                                                                        getStateByTimeStep(timeStep)->getYPosition())};
             if (abs(geometric_operations::subtractOrientations(curPointOrientation,
@@ -472,7 +463,7 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwo
         }
     }
     // 2. neglect lanes containing lanelets which do not match
-    for (const auto &lane : getOccupiedLanes(timeStep))
+    for (const auto &lane : getOccupiedLanes(roadNetwork, timeStep))
         for (const auto &lanelet : relevantLanelets)
             if (lane->getContainedLaneletIDs().count(lanelet->getId()) == 1)
                 relevantOccupiedLanes.push_back(lane);
@@ -623,14 +614,6 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
     if (occupiedLanes[timeStep].empty())
         setOccupiedLanes(roadNetwork, timeStep);
     return occupiedLanes[timeStep];
-}
-
-std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(size_t timeStep) {
-    if (occupiedLanes.count(timeStep) == 1)
-        return occupiedLanes.at(timeStep);
-    else
-        throw std::logic_error("Occupied lanes not calculated yet. Obstacle ID: " + std::to_string(this->getId()) +
-                               " - Time step: " + std::to_string(timeStep));
 }
 
 void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, bool considerHistory) {

@@ -102,17 +102,23 @@ std::vector<std::shared_ptr<Obstacle>> obstaclesRight(size_t timeStep,
  *
  * @param timeStep Time step of interest.
  * @param obs Obstacle based on which right lanelets are computed.
+ * @param roadNetwork Relevant road network
  * @return Set of lanelets on the right side of the obstacle.
  */
-std::set<std::shared_ptr<Lanelet>> laneletsRightOfObstacle(size_t timeStep, const std::shared_ptr<Obstacle> &obs);
+std::set<std::shared_ptr<Lanelet>> laneletsRightOfObstacle(size_t timeStep,
+                                                           const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                           const std::shared_ptr<Obstacle> &obs);
 
 /**
  * Computes the set of lanelets on the left side of the obstacle not including occupied lanelets.
  *
  * @param timeStep Time step of interest.
  * @param obs Obstacle based on which left lanelets are computed.
+ * @param roadNetwork Relevant road network
  * @return Set of lanelets on the left side of the obstacle.
  */
-std::set<std::shared_ptr<Lanelet>> laneletsLeftOfObstacle(size_t timeStep, const std::shared_ptr<Obstacle> &obs);
+std::set<std::shared_ptr<Lanelet>> laneletsLeftOfObstacle(size_t timeStep,
+                                                          const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                          const std::shared_ptr<Obstacle> &obs);
 
 } // namespace obstacle_operations

@@ -262,14 +262,6 @@ class Obstacle {
     getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
-     * Getter for occupied lanelets at a time steps. Occupied lanelets must be computed before calling this function.
-     *
-     * @param timeStep Time step of interest
-     * @return List of pointers to occupied lanelets.
-     */
-    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getOccupiedLaneletsByShape(size_t timeStep);
-
-    /**
      * Provides state given a time step. The time step can belong to the current state, history, or prediction.
      *
      * @param timeStep Time step of interest.
@@ -459,15 +451,6 @@ class Obstacle {
      */
     std::vector<std::shared_ptr<Lane>> getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                         size_t timeStep); // TODO create test case
-
-    /**
-     * Getter for occupied lanes at a time step. Computes occupied lanes must be computed already.
-     *
-     * @param roadNetwork Pointer to road network.
-     * @param timeStep Time step of interest.
-     * @return List of pointers to occupied lanes.
-     */
-    std::vector<std::shared_ptr<Lane>> getOccupiedLanes(size_t timeStep); // TODO create test case
 
     /**
      * Computes driving paths at time step. Driving path is defined by all lanes completely adjacent to reference lane.

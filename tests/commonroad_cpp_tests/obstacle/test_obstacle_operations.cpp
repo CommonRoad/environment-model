@@ -181,15 +181,15 @@ TEST_F(ObstacleOperationsTest, ObstaclesRight) {
 }
 
 TEST_F(ObstacleOperationsTest, LaneletsRightOfObstacle) {
-    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(0, obstacleThree).size(), 1);
-    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(1, obstacleThree).size(), 1);
-    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(7, obstacleThree).size(), 0);
-    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(7, obstacleThree).size(), 0);
+    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(0, roadNetwork, obstacleThree).size(), 1);
+    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(1, roadNetwork, obstacleThree).size(), 1);
+    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(7, roadNetwork, obstacleThree).size(), 0);
+    EXPECT_EQ(obstacle_operations::laneletsRightOfObstacle(7, roadNetwork, obstacleThree).size(), 0);
 }
 
 TEST_F(ObstacleOperationsTest, LaneletsLeftOfObstacle) {
-    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(0, obstacleThree).size(), 0);
-    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(1, obstacleThree).size(), 0);
-    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(7, obstacleThree).size(), 0);
-    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(7, obstacleFour).size(), 1);
+    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(0, roadNetwork, obstacleThree).size(), 0);
+    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(1, roadNetwork, obstacleThree).size(), 0);
+    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(7, roadNetwork, obstacleThree).size(), 0);
+    EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(7, roadNetwork, obstacleFour).size(), 1);
 }

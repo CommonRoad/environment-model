@@ -6,13 +6,15 @@
 //
 
 #include "main_carriageway_right_lane_predicate.h"
+#include "../../world.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 
 bool MainCarriagewayRightLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                           const std::shared_ptr<Obstacle> &obstacleK,
                                                           const std::shared_ptr<Obstacle> &obstacleP) {
-    std::vector<std::shared_ptr<Lanelet>> lanelets = obstacleK->getOccupiedLaneletsByShape(timeStep);
+    std::vector<std::shared_ptr<Lanelet>> lanelets =
+        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
         return (lanelet->getAdjacentRight().adj == nullptr or
                 ((lanelet->getAdjacentRight().adj != nullptr) and

@@ -17,7 +17,8 @@
 bool LeftOfBroadLaneMarkingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP) {
-    std::vector<std::shared_ptr<Lanelet>> lanelets_occ = obstacleK->getOccupiedLaneletsByShape(timeStep);
+    std::vector<std::shared_ptr<Lanelet>> lanelets_occ =
+        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
 
     for (auto &lanelet : lanelets_occ) {
         const LineMarking lanelet_left_marking = lanelet->getLineMarkingLeft();
@@ -26,7 +27,7 @@ bool LeftOfBroadLaneMarkingPredicate::booleanEvaluation(size_t timeStep, const s
     }
 
     std::set<std::shared_ptr<Lanelet>> lanelets_right_of_veh =
-        obstacle_operations::laneletsRightOfObstacle(timeStep, obstacleK);
+        obstacle_operations::laneletsRightOfObstacle(timeStep, world->getRoadNetwork(), obstacleK);
     return std::any_of(lanelets_right_of_veh.begin(), lanelets_right_of_veh.end(),
                        [](const std::shared_ptr<Lanelet> &lanelet) {
                            return lanelet->getLineMarkingLeft() == LineMarking::broad_dashed or
