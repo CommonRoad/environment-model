@@ -223,19 +223,11 @@ class Obstacle {
      * Getter for reference lane.
      *
      * @param timeStep Time step of interest.
-     * @return Pointer to lane object.
-     */
-    [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(size_t timeStep);
-
-    /**
-     * Getter for reference lane.
-     *
-     * @param timeStep Time step of interest.
+     * @param roadNetwork Pointer to road network
      * @return Pointer to lane object.
      */
     [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                         size_t timeStep,
-                                                         const std::shared_ptr<size_t> &idCounter = nullptr);
+                                                         size_t timeStep);
 
     /**
      * Getter for trajectory prediction.
@@ -296,9 +288,10 @@ class Obstacle {
      * Computes the maximum longitudinal front position of obstacle (for rectangle shapes)
      *
      * @param timeStep time step of interest
+     * @param roadNetwork Pointer to road network
      * @return longitudinal position of obstacle front
      */
-    double frontS(size_t timeStep);
+    double frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
      * Computes the maximum longitudinal front position of obstacle (for rectangle shapes) based on a given reference
@@ -313,26 +306,29 @@ class Obstacle {
     /**
      * Computes the minimum longitudinal rear position of obstacle (for rectangle shapes)
      *
+     * @param roadNetwork Pointer to road network
      * @param timeStep time step of interest
      * @return longitudinal position of obstacle front
      */
-    double rearS(size_t timeStep);
+    double rearS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
      * Calculates right d-coordinate of vehicle
      *
+     * @param roadNetwork Pointer to road network
      * @param timeStep time step to consider
      * @return right d-coordinate [m]
      */
-    double rightD(size_t timeStep);
+    double rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
      * Calculates left d-coordinate of vehicle
      *
+     * @param roadNetwork Pointer to road network
      * @param timeStep time step to consider
      * @return left d-coordinate [m]
      */
-    double leftD(size_t timeStep);
+    double leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
      * Calculates left lateral position of obstacle based on given reference lane
@@ -364,10 +360,11 @@ class Obstacle {
     /**
      * Computes the longitudinal position of obstacle based on Cartesian state and assigned reference lane
      *
+     * @param roadNetwork Pointer to road network
      * @param timeStep time step of interest
      * @return longitudinal position of obstacle state
      */
-    [[nodiscard]] double getLonPosition(size_t timeStep);
+    [[nodiscard]] double getLonPosition(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
      * Computes the longitudinal position of obstacle based on Cartesian state and provided reference lane.
@@ -381,10 +378,11 @@ class Obstacle {
     /**
      * Computes the lateral position of obstacle based on Cartesian state and assigned reference lane
      *
+     * @param roadNetwork Pointer to road network
      * @param timeStep time step of interest
      * @return lateral position of obstacle state
      */
-    [[nodiscard]] double getLatPosition(size_t timeStep);
+    [[nodiscard]] double getLatPosition(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
      * Computes the lateral position of obstacle based on Cartesian state and assigned reference lane
@@ -398,10 +396,12 @@ class Obstacle {
     /**
      * Computes the curvilinear orientation of obstacle based on Cartesian state and assigned lane
      *
+     * @param roadNetwork Pointer to road network
      * @param timeStep time step of interest
      * @return curvilinear orientation of obstacle state
      */
-    [[nodiscard]] double getCurvilinearOrientation(size_t timeStep); // Todo create test case
+    [[nodiscard]] double getCurvilinearOrientation(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                   size_t timeStep); // Todo create test case
 
     /**
      * Computes the curvilinear orientation of obstacle based on Cartesian state and provided reference lane
@@ -427,8 +427,7 @@ class Obstacle {
      * @param roadNetwork Pointer to road network.
      * @param timeStep Time step of interest.
      */
-    void setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                          const std::shared_ptr<size_t> &idCounter); // TODO create test case
+    void setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep); // TODO create test case
 
     /**
      * Checks whether occupied lanes are already computed for a time step.
@@ -456,19 +455,16 @@ class Obstacle {
      *
      * @param roadNetwork Pointer to road network.
      * @param timeStep Time step of interest.
-     * @param idCounter Starting ID for new lanes.
      * @return List of pointers to occupied lanes.
      */
-    std::vector<std::shared_ptr<Lane>>
-    getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                     const std::shared_ptr<size_t> &idCounter); // TODO create test case
+    std::vector<std::shared_ptr<Lane>> getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                        size_t timeStep); // TODO create test case
 
     /**
      * Getter for occupied lanes at a time step. Computes occupied lanes must be computed already.
      *
      * @param roadNetwork Pointer to road network.
      * @param timeStep Time step of interest.
-     * @param idCounter Starting ID for new lanes.
      * @return List of pointers to occupied lanes.
      */
     std::vector<std::shared_ptr<Lane>> getOccupiedLanes(size_t timeStep); // TODO create test case
@@ -478,12 +474,10 @@ class Obstacle {
      *
      * @param roadNetwork Pointer to road network.
      * @param timeStep Time step of interest.
-     * @param idCounter Starting ID for new lanes.
      * @return List of pointers to lanes which are part of driving path.
      */
-    std::vector<std::shared_ptr<Lane>>
-    getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                        const std::shared_ptr<size_t> &idCounter); // TODO create test case
+    std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                           size_t timeStep); // TODO create test case
 
     /**
      * Getter for route.
@@ -495,9 +489,10 @@ class Obstacle {
     /**
      * Converts the x- and y-coordinate into the Curvilinear domain given own reference lane.
      *
+     * @param roadNetwork Pointer to road network
      * @param timeStep Time step for which the coordinates should me transformed.
      */
-    void convertPointToCurvilinear(size_t timeStep);
+    void convertPointToCurvilinear(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
     /**
      * Checks whether time steps exists in trajectory prediction or current state.
@@ -540,15 +535,16 @@ class Obstacle {
      * Computes occupied lanes for each time step of obstacle and sets reference lane.
      *
      * @param roadNetwork Pointer to road network.
-     * @param idCounter Starting ID for new lanes.
+     * @param considerHistory Boolean indicating whether history should be considered for computation
      */
-    void computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<size_t> &idCounter,
-                      bool considerHistory = false);
+    void computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, bool considerHistory = false);
 
     /**
      * Converts all states to curvilinear representation.
+     *
+     * @param roadNetwork Pointer to road network
      */
-    void setCurvilinearStates();
+    void setCurvilinearStates(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
     /**
      * Converts position at a given time step to curvilinear coordinate system given a reference lane.

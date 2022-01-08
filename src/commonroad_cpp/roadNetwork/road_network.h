@@ -127,7 +127,7 @@ class RoadNetwork {
      * @param id lanelet ID
      * @return pointer to lanelet
      */
-    std::shared_ptr<Lanelet> findLaneletById(size_t id);
+    std::shared_ptr<Lanelet> findLaneletById(size_t laneletID);
 
     /**
      * Matches a string to country enum.
@@ -171,6 +171,20 @@ class RoadNetwork {
      */
     std::vector<std::shared_ptr<Lane>> findLanesByContainedLanelet(size_t laneletID);
 
+    /**
+     * Setter for idCounterRef.
+     *
+     * @param idCounterRef Pointer to ID counter of world object
+     */
+    void setIdCounterRef(const std::shared_ptr<size_t> &idCounterRef);
+
+    /**
+     * Getter for idCounterRef.
+     *
+     * @return Pointer to ID counter of world object
+     */
+    std::shared_ptr<size_t> getIdCounterRef() const;
+
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
     SupportedTrafficSignCountry country;                      //**< country where road network is located */
@@ -181,6 +195,7 @@ class RoadNetwork {
     //**< map of lanes contained in road network with the following structure: contained lanelet IDs, <base lanelets
     // used for creation of lane, lane object> */
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
+    std::shared_ptr<size_t> idCounterRef; //**< Pointer to ID counter of world object */
 
     //**< Struct for private fields including R-Tree */
     struct impl;

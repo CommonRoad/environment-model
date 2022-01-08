@@ -118,9 +118,10 @@ lanelet_operations::combineLaneletAndPredecessorsToLane(const std::shared_ptr<La
     return lanes;
 }
 
-std::vector<std::shared_ptr<Lane>> lanelet_operations::createLanesBySingleLanelets(
-    const std::vector<std::shared_ptr<Lanelet>> &initialLanelets, const std::shared_ptr<size_t> &idCounter,
-    const std::shared_ptr<RoadNetwork> &roadNetwork, double fovRear, double fovFront, int numIntersections) {
+std::vector<std::shared_ptr<Lane>>
+lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets,
+                                                const std::shared_ptr<RoadNetwork> &roadNetwork, double fovRear,
+                                                double fovFront, int numIntersections) {
     std::vector<std::shared_ptr<Lane>> lanes;
 
     // create lanes
@@ -144,15 +145,16 @@ std::vector<std::shared_ptr<Lane>> lanelet_operations::createLanesBySingleLanele
                     std::vector<std::shared_ptr<Lanelet>> containedLanelets{lanePre};
                     std::reverse(containedLanelets.begin(), containedLanelets.end());
                     containedLanelets.insert(containedLanelets.end(), laneSuc.begin() + 1, laneSuc.end());
-                    newLanes.push_back(createLaneByContainedLanelets(containedLanelets, ++*idCounter));
+                    newLanes.push_back(
+                        createLaneByContainedLanelets(containedLanelets, ++*roadNetwork->getIdCounterRef()));
                 }
         else if (!newLaneSuccessorParts.empty())
             for (const auto &laneSuc : newLaneSuccessorParts) {
-                newLanes.push_back(createLaneByContainedLanelets(laneSuc, ++*idCounter));
+                newLanes.push_back(createLaneByContainedLanelets(laneSuc, ++*roadNetwork->getIdCounterRef()));
             }
         else
             for (const auto &lanePre : newLanePredecessorParts) {
-                newLanes.push_back(createLaneByContainedLanelets(lanePre, ++*idCounter));
+                newLanes.push_back(createLaneByContainedLanelets(lanePre, ++*roadNetwork->getIdCounterRef()));
             }
         newLanes = roadNetwork->addLanes(newLanes, lanelet->getId());
         for (const auto &newLane : newLanes)

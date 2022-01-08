@@ -26,6 +26,7 @@ World::World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
         idCounter = std::max(idCounter, obs->getId());
     for (const auto &obs : obstacles)
         idCounter = std::max(idCounter, obs->getId());
+    roadNetwork->setIdCounterRef(std::make_shared<size_t>(idCounter));
     setInitialLanes();
 }
 
@@ -66,7 +67,7 @@ std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
 
 void World::setInitialLanes() {
     for (auto &obs : egoVehicles)
-        obs->computeLanes(roadNetwork, std::make_shared<size_t>(idCounter));
+        obs->computeLanes(roadNetwork);
 }
 
 std::shared_ptr<size_t> World::getIdCounterRef() const { return std::make_shared<size_t>(idCounter); }
@@ -76,5 +77,5 @@ double World::getDt() const { return dt; }
 void World::setCurvilinearStates() {
     for (auto &obs : egoVehicles)
         if (!obs->getIsStatic())
-            obs->setCurvilinearStates();
+            obs->setCurvilinearStates(roadNetwork);
 }

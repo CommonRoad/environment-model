@@ -14,12 +14,13 @@ bool MakesUTurnPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleP) {
     std::vector<std::shared_ptr<Lane>> lanes = world->getRoadNetwork()->findLanesByContainedLanelet(
         obstacleK->getOccupiedLaneletsByShape(timeStep)[0]->getId());
-    return std::any_of(lanes.begin(), lanes.end(), [this, timeStep, obstacleK](const std::shared_ptr<Lane> &lane) {
-        return parameters.uTurn <=
-               abs(obstacleK->getCurvilinearOrientation(timeStep) -
-                   lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                                  obstacleK->getStateByTimeStep(timeStep)->getYPosition()));
-    });
+    return std::any_of(
+        lanes.begin(), lanes.end(), [this, timeStep, obstacleK, world](const std::shared_ptr<Lane> &lane) {
+            return parameters.uTurn <=
+                   abs(obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep) -
+                       lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                                                      obstacleK->getStateByTimeStep(timeStep)->getYPosition()));
+        });
 }
 
 Constraint MakesUTurnPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

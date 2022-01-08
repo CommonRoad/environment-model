@@ -15,8 +15,8 @@
 bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                         const std::shared_ptr<Obstacle> &obstacleK,
                                         const std::shared_ptr<Obstacle> &obstacleP) {
-    auto leftObstacles{obstacle_operations::obstaclesLeft(timeStep, world->getObstacles(), obstacleP,
-                                                          world->getRoadNetwork(), world->getIdCounterRef())};
+    auto leftObstacles{
+        obstacle_operations::obstaclesLeft(timeStep, world->getObstacles(), obstacleP, world->getRoadNetwork())};
     return std::any_of(leftObstacles.begin(), leftObstacles.end(), [obstacleK](const std::shared_ptr<Obstacle> &obs) {
         return obstacleK->getId() == obs->getId();
     });

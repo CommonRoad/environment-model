@@ -38,10 +38,8 @@ ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &t
 std::shared_ptr<Obstacle>
 obstacle_operations::obstacleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                           const std::shared_ptr<Obstacle> &obstacleK,
-                                          const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                          const std::shared_ptr<size_t> &idCounter) {
-    std::vector<std::shared_ptr<Obstacle>> vehicles_left =
-        obstaclesLeft(timeStep, obstacles, obstacleK, roadNetwork, idCounter);
+                                          const std::shared_ptr<RoadNetwork> &roadNetwork) {
+    std::vector<std::shared_ptr<Obstacle>> vehicles_left = obstaclesLeft(timeStep, obstacles, obstacleK, roadNetwork);
     if (vehicles_left.empty())
         return nullptr;
     else if (vehicles_left.size() == 1)
@@ -49,8 +47,8 @@ obstacle_operations::obstacleDirectlyLeft(size_t timeStep, const std::vector<std
     else {
         std::shared_ptr<Obstacle> vehicle_directly_left = vehicles_left[0];
         for (const auto &obs : vehicles_left)
-            if (obs->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)) <
-                vehicle_directly_left->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)))
+            if (obs->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)) <
+                vehicle_directly_left->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)))
                 vehicle_directly_left = obs;
 
         return vehicle_directly_left;
@@ -60,11 +58,10 @@ obstacle_operations::obstacleDirectlyLeft(size_t timeStep, const std::vector<std
 std::vector<std::shared_ptr<Obstacle>>
 obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                    const std::shared_ptr<Obstacle> &obstacleK,
-                                   const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                   const std::shared_ptr<size_t> &idCounter) {
+                                   const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_left;
     std::vector<std::shared_ptr<Obstacle>> vehicles_adj =
-        obstaclesAdjacent(timeStep, obstacles, obstacleK, roadNetwork, idCounter);
+        obstaclesAdjacent(timeStep, obstacles, obstacleK, roadNetwork);
     // use cross product between a line and a point to evaluate whether obstacle is left
     vertex vertA{obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].x(),
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].y()};
@@ -95,10 +92,9 @@ obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::share
 std::vector<std::shared_ptr<Obstacle>>
 obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                        const std::shared_ptr<Obstacle> &obstacleK,
-                                       const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                       const std::shared_ptr<size_t> &idCounter) {
+                                       const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::vector<std::shared_ptr<Obstacle>> vehiclesAdj;
-    auto refLaneObstacleK{obstacleK->getReferenceLane(roadNetwork, timeStep, idCounter)};
+    auto refLaneObstacleK{obstacleK->getReferenceLane(roadNetwork, timeStep)};
     // use cross product between a line and a point to evaluate whether obstacle is adjacent
     vertex vertA{obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].x(),
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[1].y()};
@@ -145,10 +141,8 @@ obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::s
 std::shared_ptr<Obstacle>
 obstacle_operations::obstacleDirectlyRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                            const std::shared_ptr<Obstacle> &obstacleK,
-                                           const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                           const std::shared_ptr<size_t> &idCounter) {
-    std::vector<std::shared_ptr<Obstacle>> vehicles_right =
-        obstaclesRight(timeStep, obstacles, obstacleK, roadNetwork, idCounter);
+                                           const std::shared_ptr<RoadNetwork> &roadNetwork) {
+    std::vector<std::shared_ptr<Obstacle>> vehicles_right = obstaclesRight(timeStep, obstacles, obstacleK, roadNetwork);
     if (vehicles_right.empty())
         return nullptr;
     else if (vehicles_right.size() == 1)
@@ -156,8 +150,8 @@ obstacle_operations::obstacleDirectlyRight(size_t timeStep, const std::vector<st
     else {
         std::shared_ptr<Obstacle> vehicle_directly_right = vehicles_right[0];
         for (const auto &obs : vehicles_right)
-            if (obs->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)) >
-                vehicle_directly_right->getLatPosition(timeStep, obstacleK->getReferenceLane(timeStep)))
+            if (obs->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)) >
+                vehicle_directly_right->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)))
                 vehicle_directly_right = obs;
         return vehicle_directly_right;
     }
@@ -166,11 +160,10 @@ obstacle_operations::obstacleDirectlyRight(size_t timeStep, const std::vector<st
 std::vector<std::shared_ptr<Obstacle>>
 obstacle_operations::obstaclesRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                    const std::shared_ptr<size_t> &idCounter) {
+                                    const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_right;
     std::vector<std::shared_ptr<Obstacle>> vehicles_adj =
-        obstaclesAdjacent(timeStep, obstacles, obstacleK, roadNetwork, idCounter);
+        obstaclesAdjacent(timeStep, obstacles, obstacleK, roadNetwork);
     // use cross product between a line and a point to evaluate whether obstacle is right
     vertex vertA{obstacleK->getOccupancyPolygonShape(timeStep).outer()[2].x(),
                  obstacleK->getOccupancyPolygonShape(timeStep).outer()[2].y()};
