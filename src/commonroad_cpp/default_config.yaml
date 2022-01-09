@@ -18,7 +18,7 @@ simulation_param:
   performance_measurement: true
   operating_mode: boolean # one of boolean, constraint, robustness
   output_directory: "src/commonroad_cpp/predicates"
-  output_file_name: "predicate_satisfaction.txt"
+  output_file_name: "predicate_satisfaction.csv"
 
 # parameters for predicate evaluation
 ###
