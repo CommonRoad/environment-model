@@ -18,7 +18,7 @@ void PredicateManagerTest::extractRelevantPredicatesHelper(int num_threads) cons
     size_t egoVehicleID{0};
     bool performanceEvaluation{true};
     std::string outputDirectory{TestUtils::getTestScenarioDirectory() + "/"};
-    std::string outputFileName{"test.txt"};
+    std::string outputFileName{"test.csv"};
     PredicateManager predicateManager{
         PredicateManager(num_threads,
                          SimulationParameters(dirs, egoVehicleID, benchmarkID, evalMode, performanceEvaluation,
@@ -43,7 +43,7 @@ void PredicateManagerTest::extractRelevantPredicatesHelper(int num_threads) cons
               predicates["in_standstill"]->getStatistics().minComputationTime);
     EXPECT_GE(predicates["in_standstill"]->getStatistics().totalComputationTime,
               predicates["in_standstill"]->getStatistics().maxComputationTime);
-    EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() + "/test.txt"));
+    EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() + "/test.csv"));
     predicateManager.reset();
 }
 
@@ -65,7 +65,7 @@ TEST_F(PredicateManagerTest, Reset) {
     size_t egoVehicleID{0};
     bool performanceEvaluation{true};
     std::string outputDirectory{TestUtils::getTestScenarioDirectory() + "/"};
-    std::string outputFileName{"test.txt"};
+    std::string outputFileName{"test.csv"};
     PredicateManager predicateManager{
         PredicateManager(num_threads,
                          SimulationParameters(dirs, egoVehicleID, benchmarkID, evalMode, performanceEvaluation,
@@ -87,7 +87,27 @@ TEST_F(PredicateManagerTest, Reset) {
     EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime, 0);
     EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime, LONG_MAX);
     EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime, LONG_MIN);
-    EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() + "/test.txt"));
+    EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() + "/test.csv"));
+    predicateManager.reset();
+}
+
+TEST_F(PredicateManagerTest, NotExistingOutputDirectory) {
+    int num_threads{4};
+    std::string benchmarkID{"DEU_test_safe_distance"};
+    std::vector<std::string> dirs{TestUtils::getTestScenarioDirectory() + "/predicates"};
+    EvaluationMode evalMode{EvaluationMode::directory};
+    size_t egoVehicleID{0};
+    bool performanceEvaluation{true};
+    std::string outputDirectory{std::string{"test123"}.append("/")};
+    std::string outputFileName{"test.csv"};
+    PredicateManager predicateManager{
+        PredicateManager(num_threads,
+                         SimulationParameters(dirs, egoVehicleID, benchmarkID, evalMode, performanceEvaluation,
+                                              outputDirectory, outputFileName),
+                         {"keeps_safe_distance_prec"})};
+    predicateManager.extractPredicateSatisfaction();
+    EXPECT_TRUE(std::filesystem::remove(std::filesystem::current_path() / "test.csv"));
+    predicateManager.reset();
 }
 
 TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
@@ -128,7 +148,8 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
     EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().minComputationTime, LONG_MAX);
     EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().maxComputationTime, LONG_MIN);
     EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() +
-                                        "/../commonroad_cpp_tests/predicate_satisfaction.txt"));
+                                        "/../commonroad_cpp_tests/predicate_satisfaction.csv"));
     EXPECT_TRUE(
         std::filesystem::remove(TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/test_config.yaml"));
+    eval.reset();
 }

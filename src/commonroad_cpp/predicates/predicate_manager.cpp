@@ -10,6 +10,7 @@
 #include "../world.h"
 #include "commonroad_predicate.h"
 #include "yaml-cpp/yaml.h"
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -111,13 +112,22 @@ void PredicateManager::extractPredicateSatisfaction() {
 }
 
 void PredicateManager::writeFile() {
-    spdlog::info("Write evaluation results to file.");
     std::ofstream file;
     double globalMinExecutionTime{std::numeric_limits<double>::max()};
     double globalMaxExecutionTime{std::numeric_limits<double>::lowest()};
     double globalMinAvgExecutionTime{std::numeric_limits<double>::max()};
     double globalMaxAvgExecutionTime{std::numeric_limits<double>::lowest()};
-    file.open(simulationParameters.outputDirectory + "/" + simulationParameters.outputFileName);
+    if (std::filesystem::exists(simulationParameters.outputDirectory)) {
+        file.open(simulationParameters.outputDirectory + "/" + simulationParameters.outputFileName);
+        spdlog::info("Write evaluation results to " + simulationParameters.outputDirectory +
+                     simulationParameters.outputFileName);
+    } else {
+        file.open(std::filesystem::current_path() / simulationParameters.outputFileName);
+        spdlog::info(std::string("Write evaluation results to ")
+                         .append(std::filesystem::current_path())
+                         .append("/")
+                         .append(simulationParameters.outputFileName));
+    }
     file << "Predicate Name,Num. Satisfactions,Num. Executions,Satisfaction in %,Max. Comp. Time,"
             "Min. Comp. Time,Avg. Comp. Time,Weight Max. Comp. Time,Weight Avg. Comp. Time \n";
     std::map<std::string, std::tuple<size_t, size_t, double, double, double, double>> predicateStatistics;
