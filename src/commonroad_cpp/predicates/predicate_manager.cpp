@@ -18,6 +18,7 @@
 #include <utility>
 
 void PredicateManager::extractPredicateSatisfaction() {
+    spdlog::info("Start evaluation.");
     auto rng = std::default_random_engine{};
     // evaluate scenarios
     omp_set_num_threads(numThreads);
@@ -105,10 +106,12 @@ void PredicateManager::extractPredicateSatisfaction() {
             }
         }
     }
+    spdlog::info("Evaluation finished.");
     writeFile();
 }
 
 void PredicateManager::writeFile() {
+    spdlog::info("Write evaluation results to file.");
     std::ofstream file;
     double globalMinExecutionTime{std::numeric_limits<double>::max()};
     double globalMaxExecutionTime{std::numeric_limits<double>::lowest()};
