@@ -47,4 +47,4 @@ struct PredicateParameters {
     double desiredInterstateVelocity{36.11}; // desired velocity on interstates
 };
 
-extern std::map<std::string, PredicateSatisfaction> predicateSatisfaction;
+extern std::map<std::string, std::array<double, 2>> predicateSatisfaction;

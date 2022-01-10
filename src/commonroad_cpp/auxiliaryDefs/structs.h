@@ -60,13 +60,6 @@ struct Constraint {
     double realValuedConstraint;
 };
 
-struct PredicateSatisfaction {
-    PredicateSatisfaction(double costs, double satisfaction_probability)
-        : costs(costs), satisfactionProbability(satisfaction_probability) {}
-    double costs{100.0};
-    double satisfactionProbability{0.0};
-};
-
 struct SimulationParameters {
     SimulationParameters(std::vector<std::string> directoryPaths, size_t egoVehicleId, std::string benchmarkId,
                          EvaluationMode evaluationMode, bool performanceMeasurement, std::string outputDirectory,

@@ -27,7 +27,7 @@ void PredicateParameters::checkParameterValidity() const {
     assert(aboveCenterlineTh > 0);
 }
 
-std::map<std::string, PredicateSatisfaction> predicateSatisfaction{
+std::map<std::string, std::array<double, 2>> predicateSatisfaction{
     {"keeps_safe_distance_prec", {95.0, 85.0}},
     {"unnecessary_braking", {90.0, 5.0}},
     {"in_same_lane", {1.0, 15.0}},
