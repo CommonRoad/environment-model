@@ -46,3 +46,5 @@ struct PredicateParameters {
         std::numeric_limits<double>::max()}; // max double value close to zero for different purposes
     double desiredInterstateVelocity{36.11}; // desired velocity on interstates
 };
+
+extern std::map<std::string, PredicateSatisfaction> predicateSatisfaction;
