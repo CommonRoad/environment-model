@@ -31,7 +31,7 @@ int InputUtils::readCommandLineValues(int argc, char *const *argv, int &num_thre
     try {
         std::string xmlFileName;
         po::options_description desc;
-        po::variables_map vm;
+        po::variables_map variablesMap;
         desc.add_options()("help", "produce help message")(
             "input-file",
             boost::program_options::value<std::string>(&xmlFilePath)
@@ -39,12 +39,14 @@ int InputUtils::readCommandLineValues(int argc, char *const *argv, int &num_thre
                 ->required(),
             "Input file")("threads,t", po::value<int>(&num_threads)->default_value(1),
                           "set number of threads to run with");
-        po::positional_options_description p;
-        p.add("input-file", -1);
-        boost::program_options::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
-        po::notify(vm);
+        po::positional_options_description positionalOptionsDescription;
+        positionalOptionsDescription.add("input-file", -1);
+        boost::program_options::store(
+            po::command_line_parser(argc, argv).options(desc).positional(positionalOptionsDescription).run(),
+            variablesMap);
+        po::notify(variablesMap);
 
-        if (vm.count("help") != 0u) {
+        if (variablesMap.count("help") != 0u) {
             std::cout << desc << "\n";
             return 0;
         }
@@ -54,10 +56,10 @@ int InputUtils::readCommandLineValues(int argc, char *const *argv, int &num_thre
 
         return 0;
     } catch (std::exception &e) {
-        std::cerr << "error: " << e.what() << "\n";
+        spdlog::error(std::string{"InputUtils::readCommandLineValues: "} + e.what());
         return 1;
     } catch (...) {
-        std::cerr << "Exception of unknown type!\n";
+        std::cerr << "InputUtils::readCommandLineValues: Exception of unknown type!\n";
         return 1;
     }
 }
@@ -69,6 +71,7 @@ int InputUtils::readCommandLineValues(int argc, char *const *argv, int &num_thre
  */
 std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
 InputUtils::getDataFromCommonRoad(const std::string &xmlFilePath) {
+    spdlog::info("Read file: {}", xmlFilePath);
     // Read and parse CommonRoad scenario file
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
     std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
@@ -83,7 +86,7 @@ InputUtils::getDataFromCommonRoad(const std::string &xmlFilePath) {
         std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, trafficSigns, trafficLights, intersections))};
 
     auto timeStepSize{XMLReader::extractTimeStepSize(xmlFilePath)};
-
+    spdlog::info("File successfully read: {}", xmlFilePath);
     return std::make_tuple(obstacles, roadNetwork, timeStepSize);
 }
 

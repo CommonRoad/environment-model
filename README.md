@@ -31,7 +31,7 @@ These dependencies should be available as a system package.
 
 You require at least Ubuntu 20.04.
 On Debian/Ubuntu, you'll most likely need to install the following packages:  
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libcgal-dev libspdlog-dev`
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev`
 
 For building the documentation, you'll need to install `doxygen` and `graphviz`.
 
