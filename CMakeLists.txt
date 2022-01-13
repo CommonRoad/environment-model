@@ -35,7 +35,7 @@ if(NOT CMAKE_BUILD_TYPE)
             STRING "Choose the type of build." FORCE)
 endif()
 
-# Include Eigen3, Boost filesystem, and OpenMP
+# Include Eigen3, Boost filesystem, spdlog, and OpenMP
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)
 find_package(spdlog REQUIRED)
