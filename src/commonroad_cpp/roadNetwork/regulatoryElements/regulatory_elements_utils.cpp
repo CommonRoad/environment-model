@@ -91,7 +91,7 @@ double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lan
 
 double regulatory_elements_utils::speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
                                              const std::string &signId) {
-    std::vector<double> speedLimits;
+    std::vector<double> speedLimits{std::numeric_limits<double>::max()};
     for (const auto &lanelet : lanelets) {
         speedLimits.push_back(speedLimit(lanelet, signId));
     }
@@ -124,7 +124,7 @@ double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet
 
 double regulatory_elements_utils::requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
                                                    const std::string &signId) {
-    std::vector<double> speedLimits;
+    std::vector<double> speedLimits{0.0};
     for (const auto &lanelet : lanelets) {
         speedLimits.push_back(requiredVelocity(lanelet, signId));
     }
