@@ -23,7 +23,8 @@ void PredicateParameters::checkParameterValidity() const {
     assert(closeToLaneBorder > 0);
     assert(closeToOtherVehicle > 0);
     assert(slightlyHigherSpeedDifference > 0);
-    assert(uTurn > 0);
+    assert(uTurnUpper > 0);
+    assert(uTurnLower > 0);
     assert(aboveCenterlineTh > 0);
 }
 

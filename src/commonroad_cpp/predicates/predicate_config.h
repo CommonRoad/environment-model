@@ -10,6 +10,7 @@
 #include "../auxiliaryDefs/structs.h"
 
 #include <cassert>
+#include <cmath>
 #include <limits>
 #include <map>
 #include <string>
@@ -34,7 +35,8 @@ struct PredicateParameters {
     double closeToLaneBorder{0.2};              // indicator if vehicle is close to lane border
     double closeToOtherVehicle{0.5};            // indicator if vehicle is close to another vehicle
     double slightlyHigherSpeedDifference{5.55}; // indicator for slightly higher speed
-    double uTurn{1.57};                         // angle [rad] indicating u-turn
+    double uTurnLower{0.25 * M_PI};             // lower angle [rad] indicating u-turn on interstates
+    double uTurnUpper{0.75 * M_PI};             // upper angle [rad] indicating u-turn on interstates
     double aboveCenterlineTh{0.1};              // indicator for necessary distance to be classified above centerline
     double epsilon{1e-6};                       // small value close to zero for different purposes
     double stopLineDistance{1.0};               // maximum distance vehicle waiting in front of stop line has to wait
