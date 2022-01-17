@@ -45,6 +45,11 @@ struct PredicateParameters {
     double maxPositiveDouble{
         std::numeric_limits<double>::max()}; // max double value close to zero for different purposes
     double desiredInterstateVelocity{36.11}; // desired velocity on interstates
+
+    double fovSpeedLimit{50}; //**< compute with calc_v_max_fov(ego_vehicle_param, simulation_param) */
+    double brakingSpeedLimit{
+        43}; //**< compute with calc_v_max_braking(ego_vehicle_param, simulation_param, traffic_rule_param) */
+    double roadConditionSpeedLimit{50};
 };
 
 extern std::map<std::string, std::array<double, 2>> predicateSatisfaction;

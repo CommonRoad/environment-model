@@ -76,13 +76,3 @@ struct SimulationParameters {
     std::string outputDirectory;   //**< Path to output directory of file to generate. */
     std::string outputFileName;    //**< name and file type for to generate. */
 };
-
-struct EgoVehicleParameters {
-    EgoVehicleParameters(double fovSpeedLimit, double brakingSpeedLimit)
-        : fovSpeedLimit(fovSpeedLimit), brakingSpeedLimit(brakingSpeedLimit){};
-    EgoVehicleParameters() = default;
-    double fovSpeedLimit{50}; //**< compute with calc_v_max_fov(ego_vehicle_param, simulation_param) */
-    double brakingSpeedLimit{
-        43}; //**< compute with calc_v_max_braking(ego_vehicle_param, simulation_param, traffic_rule_param) */
-    double roadConditionSpeedLimit{50};
-};
