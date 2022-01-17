@@ -5,6 +5,7 @@
 // Credits: BMW Car@TUM
 //
 #include "makes_u_turn_predicate.h"
+#include "../../geometry/geometric_operations.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
@@ -17,9 +18,10 @@ bool MakesUTurnPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
     return std::any_of(
         lanes.begin(), lanes.end(), [this, timeStep, obstacleK, world](const std::shared_ptr<Lane> &lane) {
             return parameters.uTurn <=
-                   abs(obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep) -
+                   abs(geometric_operations::subtractOrientations(
+                       obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep),
                        lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                                      obstacleK->getStateByTimeStep(timeStep)->getYPosition()));
+                                                      obstacleK->getStateByTimeStep(timeStep)->getYPosition())));
         });
 }
 
