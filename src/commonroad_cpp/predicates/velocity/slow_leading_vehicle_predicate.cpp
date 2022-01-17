@@ -29,7 +29,7 @@ bool SlowLeadingVehiclePredicate::booleanEvaluation(size_t timeStep, const std::
                                   obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
                                   world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED)),
                               regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
-                              EgoVehicleParameters().roadConditionSpeedLimit})};
+                              parameters.roadConditionSpeedLimit})};
         if (vMax - obs->getStateByTimeStep(timeStep)->getVelocity() >= parameters.minVelocityDif)
             return true;
     }

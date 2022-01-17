@@ -20,8 +20,7 @@ bool PreservesTrafficFlowPredicate::booleanEvaluation(size_t timeStep, const std
                               obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
                               world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED)),
                           regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
-                          EgoVehicleParameters().brakingSpeedLimit, EgoVehicleParameters().fovSpeedLimit,
-                          EgoVehicleParameters().roadConditionSpeedLimit})};
+                          parameters.brakingSpeedLimit, parameters.fovSpeedLimit, parameters.roadConditionSpeedLimit})};
     return (vMax - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.minVelocityDif;
 }
 

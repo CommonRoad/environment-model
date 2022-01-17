@@ -12,7 +12,7 @@
 bool KeepsBrakingSpeedLimitPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP) {
-    return obstacleK->getStateByTimeStep(timeStep)->getVelocity() <= EgoVehicleParameters().brakingSpeedLimit;
+    return obstacleK->getStateByTimeStep(timeStep)->getVelocity() <= parameters.brakingSpeedLimit;
 }
 
 double KeepsBrakingSpeedLimitPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
