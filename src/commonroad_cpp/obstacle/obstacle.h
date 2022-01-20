@@ -575,8 +575,8 @@ class Obstacle {
      * @param timeStep Time step of interest
      * @return List of pointers to occupied lanelets.
      */
-    std::vector<std::shared_ptr<Lanelet>>
-    setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+    std::vector<std::shared_ptr<Lanelet>> setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                                     size_t timeStep);
 
     /**
      * Private setter for polygon shape of obstacle at given time step.
