@@ -566,4 +566,34 @@ class Obstacle {
                // threshold since initial time step has special evaluation */
     const double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
     const double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
+
+    /**
+     * Private setter for occupied lanelets at a time steps within a road network.
+     * Used to define critical section around it.
+     *
+     * @param roadNetwork Road network object.
+     * @param timeStep Time step of interest
+     * @return List of pointers to occupied lanelets.
+     */
+    std::vector<std::shared_ptr<Lanelet>>
+    setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+
+    /**
+     * Private setter for polygon shape of obstacle at given time step.
+     * Used to define critical section around it.
+     *
+     * @param timeStep Time step of interest.
+     * @return Boost polygon.
+     */
+    polygon_type setOccupancyPolygonShape(size_t timeStep);
+
+    /**
+     * Private setter for reference lane.
+     * Used to define critical section around it.
+     *
+     * @param timeStep Time step of interest.
+     * @param roadNetwork Pointer to road network
+     * @return Pointer to lane object.
+     */
+    std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 };

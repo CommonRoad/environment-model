@@ -150,6 +150,17 @@ size_t Obstacle::getTrajectoryLength() const { return trajectoryPrediction.size(
 polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
     if (shapeAtTimeStep.count(timeStep) == 1)
         return shapeAtTimeStep[timeStep];
+    polygon_type polygonShape;
+#pragma omp critical(setOccupancyPolygonShape)
+    {
+        polygonShape = setOccupancyPolygonShape(timeStep);
+    }
+    return polygonShape;
+}
+
+polygon_type Obstacle::setOccupancyPolygonShape(size_t timeStep) {
+    if (shapeAtTimeStep.count(timeStep) == 1)
+        return shapeAtTimeStep[timeStep];
     std::vector<vertex> boundingRectangleVertices;
     polygon_type polygonShape;
     std::shared_ptr<State> state{this->getStateByTimeStep(timeStep)};
@@ -189,13 +200,24 @@ polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
 Shape &Obstacle::getGeoShape() { return geoShape; }
 
 std::vector<std::shared_ptr<Lanelet>>
-Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep){
     if (occupiedLanelets.find(timeStep) != occupiedLanelets.end())
         return occupiedLanelets.at(timeStep);
     polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
     std::vector<std::shared_ptr<Lanelet>> occupied{roadNetwork->findOccupiedLaneletsByShape(polygonShape)};
     occupiedLanelets.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occupied));
+    return occupied;
+}
 
+std::vector<std::shared_ptr<Lanelet>>
+Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep){
+    if (occupiedLanelets.find(timeStep) != occupiedLanelets.end())
+        return occupiedLanelets.at(timeStep);
+    std::vector<std::shared_ptr<Lanelet>> occupied;
+#pragma omp critical(setOccupiedLanelets)
+    {
+        occupied = setOccupiedLaneletsByShape(roadNetwork, timeStep);
+    }
     return occupied;
 }
 
@@ -379,7 +401,10 @@ double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &re
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPointToCurvilinear(timeStep, refLane);
+#pragma omp critical(getLonPosition)
+            {
+                convertPointToCurvilinear(timeStep, refLane);
+            }
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -397,7 +422,10 @@ double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &re
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPointToCurvilinear(timeStep, refLane);
+#pragma omp critical(getLatPosition)
+            {
+                convertPointToCurvilinear(timeStep, refLane);
+            }
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -422,7 +450,10 @@ double Obstacle::getCurvilinearOrientation(size_t timeStep, const std::shared_pt
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
-            convertPointToCurvilinear(timeStep, refLane);
+#pragma omp critical(getCurvilinearOrientation)
+            {
+                convertPointToCurvilinear(timeStep, refLane);
+            }
         } catch (...) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem().referencePath())
@@ -442,7 +473,18 @@ size_t Obstacle::getLastTrajectoryTimeStep() const {
     return trajectoryPrediction.begin()->second->getTimeStep() + getTrajectoryLength() - 1;
 }
 
-std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep){
+    if (referenceLane.count(timeStep) == 1 and referenceLane.at(timeStep) != nullptr)
+        return referenceLane.at(timeStep);
+    std::shared_ptr<Lane> refLane;
+#pragma omp critical(getReferenceLane)
+    {
+        refLane = setReferenceLane(roadNetwork, timeStep);
+    }
+    return refLane;
+}
+
+std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     if (referenceLane.count(timeStep) == 1 and referenceLane.at(timeStep) != nullptr)
         return referenceLane.at(timeStep);
     else if (!existsOccupiedLanes(timeStep))
@@ -542,7 +584,10 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwo
 void Obstacle::convertPointToCurvilinear(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     auto curReferenceLane{getReferenceLane(roadNetwork, timeStep)};
     try {
-        convertPointToCurvilinear(timeStep, curReferenceLane);
+#pragma omp critical(convertPointToCurvilinear)
+        {
+            convertPointToCurvilinear(timeStep, curReferenceLane);
+        }
     } catch (...) {
         std::string refInfo;
         for (const auto &ref : curReferenceLane->getCurvilinearCoordinateSystem().referencePath())
