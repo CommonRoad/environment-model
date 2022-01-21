@@ -109,14 +109,11 @@ obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::s
     for (const auto &obs : obstacles) {
         if (!obs->timeStepExists(timeStep) or obs->getId() == obstacleK->getId())
             continue;
-        vertex vertP0{obs->getOccupancyPolygonShape(timeStep).outer()[0].x(),
-                      obs->getOccupancyPolygonShape(timeStep).outer()[0].y()};
-        vertex vertP1{obs->getOccupancyPolygonShape(timeStep).outer()[1].x(),
-                      obs->getOccupancyPolygonShape(timeStep).outer()[1].y()};
-        vertex vertP2{obs->getOccupancyPolygonShape(timeStep).outer()[2].x(),
-                      obs->getOccupancyPolygonShape(timeStep).outer()[2].y()};
-        vertex vertP3{obs->getOccupancyPolygonShape(timeStep).outer()[3].x(),
-                      obs->getOccupancyPolygonShape(timeStep).outer()[3].y()};
+        auto shape{obs->getOccupancyPolygonShape(timeStep).outer()};
+        vertex vertP0{shape[0].x(), shape[0].y()};
+        vertex vertP1{shape[1].x(), shape[1].y()};
+        vertex vertP2{shape[2].x(), shape[2].y()};
+        vertex vertP3{shape[3].x(), shape[3].y()};
 
         auto crossProductF0{vertB.x * (vertP0.y - vertA.y) - vertB.y * (vertP0.x - vertA.x)};
         auto crossProductF1{vertB.x * (vertP1.y - vertA.y) - vertB.y * (vertP1.x - vertA.x)};

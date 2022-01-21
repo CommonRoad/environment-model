@@ -148,8 +148,6 @@ std::map<size_t, std::shared_ptr<State>> Obstacle::getTrajectoryPrediction() con
 size_t Obstacle::getTrajectoryLength() const { return trajectoryPrediction.size(); }
 
 polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
-    if (shapeAtTimeStep.count(timeStep) == 1)
-        return shapeAtTimeStep[timeStep];
     polygon_type polygonShape;
 #pragma omp critical(setOccupancyPolygonShape)
     { polygonShape = setOccupancyPolygonShape(timeStep); }
@@ -209,8 +207,6 @@ Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNet
 
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
-    if (occupiedLanelets.find(timeStep) != occupiedLanelets.end())
-        return occupiedLanelets.at(timeStep);
     std::vector<std::shared_ptr<Lanelet>> occupied;
 #pragma omp critical(setOccupiedLanelets)
     { occupied = setOccupiedLaneletsByShape(roadNetwork, timeStep); }
@@ -468,8 +464,6 @@ size_t Obstacle::getLastTrajectoryTimeStep() const {
 }
 
 std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
-    if (referenceLane.count(timeStep) == 1 and referenceLane.at(timeStep) != nullptr)
-        return referenceLane.at(timeStep);
     std::shared_ptr<Lane> refLane;
 #pragma omp critical(getReferenceLane)
     { refLane = setReferenceLane(roadNetwork, timeStep); }
