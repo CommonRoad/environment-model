@@ -15,6 +15,8 @@ double Circle::getRadius() const { return radius; }
 
 vertex Circle::getCenter() const { return center; }
 
+double Circle::getCircumradius() const { return radius; }
+
 void Circle::scaleShape(double factor) { this->setRadius(this->getRadius() * factor); }
 
 ShapeType Circle::getType() { return ShapeType::circle; }
