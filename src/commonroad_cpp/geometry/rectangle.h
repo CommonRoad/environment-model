@@ -51,6 +51,13 @@ class Rectangle : public Shape {
     [[nodiscard]] double getWidth() const override;
 
     /**
+     * Getter for rectangle circumradius (half of diagonal).
+     *
+     * @return Rectangle circumradius [m].
+     */
+    [[nodiscard]] double getCircumradius() const override;
+
+    /**
      * Getter for type.
      *
      * @return Rectangle shape type.

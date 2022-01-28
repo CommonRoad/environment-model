@@ -81,6 +81,13 @@ class Circle : public Shape {
     [[nodiscard]] vertex getCenter() const override;
 
     /**
+     * Getter for circle circumradius (for circles, this is equal to the radius).
+     *
+     * @return Circle circumradius.
+     */
+    [[nodiscard]] double getCircumradius() const override;
+
+    /**
      * Function for scaling a circle.
      *
      * @param factor Scaling factor.
