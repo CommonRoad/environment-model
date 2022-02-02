@@ -571,7 +571,15 @@ void Obstacle::convertPointToCurvilinear(const std::shared_ptr<RoadNetwork> &roa
     auto curReferenceLane{getReferenceLane(roadNetwork, timeStep)};
     try {
 #pragma omp critical(convertPointToCurvilinear)
-        { convertPointToCurvilinear(timeStep, curReferenceLane); }
+        {
+            convertPointToCurvilinear(timeStep, curReferenceLane);
+            getStateByTimeStep(timeStep)->setLonPosition(
+                convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][0]);
+            getStateByTimeStep(timeStep)->setLatPosition(
+                convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][1]);
+            getStateByTimeStep(timeStep)->setCurvilinearOrientation(
+                convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][2]);
+        }
     } catch (...) {
         std::string refInfo;
         for (const auto &ref : curReferenceLane->getCurvilinearCoordinateSystem().referencePath())
@@ -582,12 +590,6 @@ void Obstacle::convertPointToCurvilinear(const std::shared_ptr<RoadNetwork> &roa
                                  " - x-position: " + std::to_string(getStateByTimeStep(timeStep)->getXPosition()) +
                                  " - y-position: " + std::to_string(getStateByTimeStep(timeStep)->getYPosition()));
     }
-    getStateByTimeStep(timeStep)->setLonPosition(
-        convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][0]);
-    getStateByTimeStep(timeStep)->setLatPosition(
-        convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][1]);
-    getStateByTimeStep(timeStep)->setCurvilinearOrientation(
-        convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][2]);
 }
 
 void Obstacle::interpolateAcceleration(size_t timeStep, double timeStepSize) {

@@ -23,6 +23,7 @@ void PredicateManager::extractPredicateSatisfaction() {
     auto rng = std::default_random_engine{};
     // evaluate scenarios
     omp_set_num_threads(numThreads);
+    omp_set_nested(1);
 #pragma omp parallel for schedule(guided) shared(scenarios, predicates, rng) default(none)
     for (size_t i = 0; i < scenarios.size(); i++) {
         auto scen{scenarios.at(i)};
@@ -45,6 +46,7 @@ void PredicateManager::extractPredicateSatisfaction() {
             auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
             auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
             omp_set_num_threads(numThreads);
+            omp_set_nested(1);
 #pragma omp parallel for schedule(guided) shared(predicates, world)                                                    \
     firstprivate(ego, relevantPredicates, rng, scen) default(none)
             for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getLastTrajectoryTimeStep();
