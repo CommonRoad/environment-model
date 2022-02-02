@@ -23,23 +23,23 @@ State::State(size_t timeStep, double xPosition, double yPosition, double velocit
 
 double State::getXPosition() const { return xPosition; }
 
-void State::setXPosition(double x) {
+void State::setXPosition(double xPos) {
+    xPosition = xPos;
     validStates.xPosition = true;
-    xPosition = x;
 }
 
 double State::getYPosition() const { return yPosition; }
 
-void State::setYPosition(double y) {
+void State::setYPosition(double yPos) {
+    yPosition = yPos;
     validStates.yPosition = true;
-    yPosition = y;
 }
 
 double State::getVelocity() const { return velocity; }
 
 void State::setVelocity(double vel) {
-    validStates.velocity = true;
     State::velocity = vel;
+    validStates.velocity = true;
 }
 
 double State::getAcceleration() const {
@@ -49,8 +49,8 @@ double State::getAcceleration() const {
 }
 
 void State::setAcceleration(double acc) {
-    validStates.acceleration = true;
     acceleration = acc;
+    validStates.acceleration = true;
 }
 
 double State::getLonPosition() const {
@@ -59,9 +59,9 @@ double State::getLonPosition() const {
     return lonPosition;
 }
 
-void State::setLonPosition(double s) {
+void State::setLonPosition(double sPos) {
+    lonPosition = sPos;
     validStates.lonPosition = true;
-    lonPosition = s;
 }
 
 double State::getLatPosition() const {
@@ -70,16 +70,16 @@ double State::getLatPosition() const {
     return latPosition;
 }
 
-void State::setLatPosition(double d) {
+void State::setLatPosition(double dPos) {
+    latPosition = dPos;
     validStates.latPosition = true;
-    latPosition = d;
 }
 
 double State::getGlobalOrientation() const { return globalOrientation; }
 
 void State::setGlobalOrientation(double theta) {
-    validStates.globalOrientation = true;
     globalOrientation = theta;
+    validStates.globalOrientation = true;
 }
 
 double State::getCurvilinearOrientation() const {
@@ -89,8 +89,8 @@ double State::getCurvilinearOrientation() const {
 }
 
 void State::setCurvilinearOrientation(double theta) {
-    validStates.curvilinearOrientation = true;
     curvilinearOrientation = theta;
+    validStates.curvilinearOrientation = true;
 }
 
 size_t State::getTimeStep() const { return timeStep; }
