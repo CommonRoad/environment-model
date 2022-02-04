@@ -5,8 +5,8 @@
 // Credits: BMW Car@TUM
 //
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 #include "rectangle.h"
 
