@@ -100,6 +100,15 @@ in the `CMAKE_PREFIX_PATH` environment variable.
 
 It is not necessary to build the C++ standalone version first.
 
+### Setting up Git hooks
+
+For development, please install the pre-commit formatting check hook
+by running
+```bash
+  ./setup_git_hooks.sh
+```
+in the root directory of this repository.
+
 ## Usage:
 
 ### C++
