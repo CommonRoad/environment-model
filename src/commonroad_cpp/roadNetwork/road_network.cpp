@@ -7,6 +7,7 @@
 
 #include <utility>
 
+#include <boost/geometry.hpp>
 #include <boost/geometry/index/parameters.hpp>
 #include <boost/geometry/index/rtree.hpp>
 
