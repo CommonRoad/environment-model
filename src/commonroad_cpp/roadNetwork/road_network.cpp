@@ -7,7 +7,6 @@
 
 #include <utility>
 
-#include <boost/geometry.hpp>
 #include <boost/geometry/index/parameters.hpp>
 #include <boost/geometry/index/rtree.hpp>
 
@@ -69,11 +68,8 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
 
     // check intersection with relevant lanelets
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
-    // #pragma omp parallel for schedule(guided) shared(lanelets, occupiedLanelets, polygonShape) default(none)
-    for (unsigned long i = 0; i < lanelets.size(); ++i) {
-        std::shared_ptr<Lanelet> la{lanelets.at(i)};
+    for (auto la : lanelets) {
         if (la->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED)) {
-            // #pragma omp critical
             occupiedLanelets.push_back(la);
         }
     }
