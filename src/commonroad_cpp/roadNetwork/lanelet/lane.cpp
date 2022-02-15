@@ -13,14 +13,14 @@
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
            CurvilinearCoordinateSystem ccs)
     : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets), curvilinearCoordinateSystem(std::move(ccs)) {
-    for (const auto &la : containedLanelets)
-        containedLaneletIds.insert(la->getId());
+    for (const auto &coLa : containedLanelets)
+        containedLaneletIds.insert(coLa->getId());
 }
 
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet)
     : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets) {
-    for (const auto &la : containedLanelets)
-        containedLaneletIds.insert(la->getId());
+    for (const auto &coLa : containedLanelets)
+        containedLaneletIds.insert(coLa->getId());
 }
 
 const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const { return containedLanelets; }
