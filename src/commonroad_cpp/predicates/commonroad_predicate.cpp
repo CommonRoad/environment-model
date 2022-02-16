@@ -60,15 +60,17 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std:
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
     long compTime{evaluationTimer.stop(startTime)};
     omp_set_lock(&writelock);
-    statistics.numExecutions++;
-    statistics.totalComputationTime += static_cast<unsigned long>(compTime);
-    if (compTime > statistics.maxComputationTime)
-        statistics.maxComputationTime = compTime;
-    if (static_cast<unsigned long>(compTime) < statistics.minComputationTime)
-        statistics.minComputationTime = static_cast<size_t>(compTime);
-    if (result)
-        statistics.numSatisfaction++;
-    omp_unset_lock(&writelock);
+    {
+        statistics.numExecutions++;
+        statistics.totalComputationTime += static_cast<unsigned long>(compTime);
+        if (compTime > statistics.maxComputationTime)
+            statistics.maxComputationTime = compTime;
+        if (static_cast<unsigned long>(compTime) < statistics.minComputationTime)
+            statistics.minComputationTime = static_cast<size_t>(compTime);
+        if (result)
+            statistics.numSatisfaction++;
+        omp_unset_lock(&writelock);
+    }
     return result;
 }
 
