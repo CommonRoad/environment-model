@@ -19,6 +19,7 @@
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <omp.h>
 
 class Lanelet;
 class Lane;
