@@ -7,12 +7,14 @@
 
 #pragma once
 
+#include <Eigen/Core>
 #include <memory>
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/auxiliaryDefs/timer.h"
 
 #include "predicate_config.h"
+#include <omp.h>
 
 class Obstacle;
 class World;
@@ -127,6 +129,7 @@ class CommonRoadPredicate {
     PredicateStatistics statistics; //**< Struct storing statistics of a predicate, e.g., average computation
                                     // time,  number of calls, etc. */
     const bool vehicleDependent; //**< Boolean indicating whether predicate depends on one specific obstacle or two. */
+    omp_lock_t writelock;        //**< omp lock for statisticBooleanEvaluation*/
 };
 
 extern std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates; //**< List of all predicates **/
