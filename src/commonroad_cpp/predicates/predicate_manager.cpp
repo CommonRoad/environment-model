@@ -21,8 +21,10 @@
 void PredicateManager::extractPredicateSatisfaction() {
     spdlog::info("Start evaluation.");
     auto rng = std::default_random_engine{};
-    // evaluate scenarios, no nested evaluation due to blocking threads which increase computation time of predicates
-#pragma omp parallel for schedule(guided) shared(scenarios, predicates, rng) default(none) num_threads(numThreads)
+    // evaluate scenarios
+    omp_set_num_threads(numThreads);
+#pragma omp parallel for schedule(guided) shared(predicates, rng)                                                      \
+    firstprivate(scenarios, relevantPredicates) default(none)
     for (const auto &scen : scenarios) {
         const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(scen);
         // evaluate all obstacles
@@ -40,8 +42,8 @@ void PredicateManager::extractPredicateSatisfaction() {
                 others.push_back(obs);
             }
             // setObstacleProperties(ego, others);
-            auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
-            auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
+            const auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
+            const auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
             for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getLastTrajectoryTimeStep();
                  ++timeStep) {
                 std::shuffle(std::begin(relevantPredicates), std::end(relevantPredicates), rng);

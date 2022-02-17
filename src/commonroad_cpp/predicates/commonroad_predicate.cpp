@@ -91,7 +91,6 @@ void CommonRoadPredicate::resetStatistics() {
 const Timer &CommonRoadPredicate::getEvaluationTimer() const { return evaluationTimer; }
 
 CommonRoadPredicate::CommonRoadPredicate(bool vehicleDependent) : vehicleDependent(vehicleDependent) {
-    writelock = omp_lock_t();
     omp_init_lock(&writelock);
 }
 
