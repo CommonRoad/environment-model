@@ -567,9 +567,10 @@ class Obstacle {
                // threshold since initial time step has special evaluation */
     const double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
     const double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
-    mutable omp_lock_t writelock1;        //**< omp lock for getOccupancyPolygonShape*/
-    mutable omp_lock_t writelock2;        //**< omp lock for getOccupiedLaneletsByShape*/
-    mutable omp_lock_t writelock3;        //**< omp lock for convertPointToCurvilinear*/
+    omp_lock_t writelock1;                //**< omp lock for getOccupancyPolygonShape*/
+    omp_lock_t writelock2;                //**< omp lock for getOccupiedLaneletsByShape*/
+    omp_lock_t writelock3;                //**< omp lock for convertPointToCurvilinearReferenceLane*/
+    omp_lock_t writelock4;                //**< omp lock for convertPointToCurvilinearRoadNetwork*/
 
     /**
      * Private setter for occupied lanelets at a time steps within a road network.

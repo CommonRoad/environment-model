@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <Eigen/Core>
 #include <memory>
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
