@@ -571,6 +571,8 @@ class Obstacle {
     omp_lock_t writelock2;                //**< omp lock for getOccupiedLaneletsByShape*/
     omp_lock_t writelock3;                //**< omp lock for convertPointToCurvilinearReferenceLane*/
     omp_lock_t writelock4;                //**< omp lock for convertPointToCurvilinearRoadNetwork*/
+    omp_lock_t writelock5;                //**< omp lock for occupiedLanes*/
+    omp_lock_t writelock6;                //**< omp lock for occupiedLanes*/
 
     /**
      * Private setter for occupied lanelets at a time steps within a road network.
