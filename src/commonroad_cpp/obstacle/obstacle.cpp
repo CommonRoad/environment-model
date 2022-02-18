@@ -249,14 +249,14 @@ double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t 
 
 void Obstacle::convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     Eigen::Vector2d convertedPoint;
-    convertedPoint = refLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
-        getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
-    double theta = geometric_operations::subtractOrientations(
-        getStateByTimeStep(timeStep)->getGlobalOrientation(),
-        refLane->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
-                                          getStateByTimeStep(timeStep)->getYPosition()));
     omp_set_lock(&writelock3);
     {
+        convertedPoint = refLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+            getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
+        double theta = geometric_operations::subtractOrientations(
+            getStateByTimeStep(timeStep)->getGlobalOrientation(),
+            refLane->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                              getStateByTimeStep(timeStep)->getYPosition()));
         convertedPositions[timeStep][refLane->getContainedLaneletIDs()] = {convertedPoint.x(), convertedPoint.y(),
                                                                            theta};
     }
