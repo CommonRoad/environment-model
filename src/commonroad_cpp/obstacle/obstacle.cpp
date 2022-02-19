@@ -236,7 +236,7 @@ Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNet
 
 double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     double lonPosition = getLonPosition(roadNetwork, timeStep);
-    double theta = getStateByTimeStep(timeStep)->getCurvilinearOrientation();
+    double theta = getCurvilinearOrientation(roadNetwork, timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
 
@@ -369,7 +369,7 @@ double Obstacle::rearS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t t
     double lonPosition = getLonPosition(roadNetwork, timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
-    double theta = getStateByTimeStep(timeStep)->getCurvilinearOrientation();
+    double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
     // use minimum of all corners
     return std::min({(length / 2) * cos(theta) - (width / 2) * sin(theta) + lonPosition,
@@ -382,7 +382,7 @@ double Obstacle::rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t 
     double latPos = getLatPosition(roadNetwork, timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
-    double theta = getStateByTimeStep(timeStep)->getCurvilinearOrientation();
+    double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
     return std::min({(width / 2) * cos(theta) - (length / 2) * sin(theta) + latPos,
                      (width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPos,
@@ -394,7 +394,7 @@ double Obstacle::leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t t
     double latPos = getLatPosition(roadNetwork, timeStep);
     double width = geoShape.getWidth();
     double length = geoShape.getLength();
-    double theta = getStateByTimeStep(timeStep)->getCurvilinearOrientation();
+    double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
     return std::max({(width / 2) * cos(theta) - (length / 2) * sin(theta) + latPos,
                      (width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPos,
