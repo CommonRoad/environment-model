@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Compile command database is required for Clang-assisted parsing in Doxygen
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+
 option(ENV_MODEL_BUILD_DOXYGEN "Build doxygen" OFF)
 option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
 option(ENV_MODEL_BUILD_PYBIND "Build python interface" OFF)
