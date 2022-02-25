@@ -190,7 +190,7 @@ unsigned long Lanelet::findClosestIndex(double positionX,
     return closestIndex;
 }
 
-bool Lanelet::hasLaneletType(LaneletType laType) { return laneletTypes.find(laType) != laneletTypes.end(); }
+bool Lanelet::hasLaneletType(LaneletType laType) const { return laneletTypes.find(laType) != laneletTypes.end(); }
 
 void Lanelet::addLaneletType(LaneletType laType) { laneletTypes.insert(laType); }
 
@@ -202,25 +202,25 @@ LineMarking Lanelet::getLineMarkingRight() const { return lineMarkingRight; }
 
 void Lanelet::setLineMarkingRight(LineMarking marking) { lineMarkingRight = marking; }
 
-const std::vector<double> &Lanelet::getOrientation() {
+const std::vector<double> &Lanelet::getOrientation() const {
     if (orientation.empty())
         orientation = geometric_operations::computeOrientationFromPolyline(centerVertices);
     return orientation;
 }
 
-const std::vector<double> &Lanelet::getPathLength() {
+const std::vector<double> &Lanelet::getPathLength() const {
     if (pathLength.empty())
         pathLength = geometric_operations::computePathLengthFromPolyline(centerVertices);
     return pathLength;
 }
 
-const std::vector<double> &Lanelet::getWidthAlongLanelet() {
+const std::vector<double> &Lanelet::getWidthAlongLanelet() const {
     if (width.empty())
         width = geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder);
     return width;
 }
 
-double Lanelet::getWidth(double positionX, double positionY) {
+double Lanelet::getWidth(double positionX, double positionY) const {
     if (width.empty())
         width = geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder);
     unsigned long closestIndex = findClosestIndex(positionX, positionY);
