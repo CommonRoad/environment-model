@@ -30,6 +30,8 @@ class CommonRoadPredicate {
      */
     CommonRoadPredicate(bool vehicleDependent);
 
+    virtual ~CommonRoadPredicate();
+
     /**
      * Virtual function for the boolean evaluation of a predicate.
      *

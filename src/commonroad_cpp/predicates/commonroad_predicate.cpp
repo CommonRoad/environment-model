@@ -94,6 +94,8 @@ CommonRoadPredicate::CommonRoadPredicate(bool vehicleDependent) : vehicleDepende
     omp_init_lock(&writelock);
 }
 
+CommonRoadPredicate::~CommonRoadPredicate() {}
+
 bool CommonRoadPredicate::isVehicleDependent() const { return vehicleDependent; }
 
 std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
