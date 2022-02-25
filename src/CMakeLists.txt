@@ -156,7 +156,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
                 -Wfatal-errors)
     endif(ENV_MODEL_BUILD_EXECUTABLE)
     target_compile_options(env_model PRIVATE -Wall -Wextra -Wconversion
-            -pedantic -Wfatal-errors)
+            -pedantic -Wfatal-errors -Wno-unused-parameter)
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(env_model PRIVATE /W3 /WX)
