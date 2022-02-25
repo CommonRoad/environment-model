@@ -368,7 +368,7 @@ class Lanelet {
      * @param laType Lanelet type which existence should be checked.
      * @return Boolean indicating whether the lanelet type exists.
      */
-    bool hasLaneletType(LaneletType laType);
+    bool hasLaneletType(LaneletType laType) const;
 
     /**
      * Adds a lanelet type to the lanelet.
@@ -382,14 +382,14 @@ class Lanelet {
      *
      * @return List of orientation values.
      */
-    const std::vector<double> &getOrientation();
+    const std::vector<double> &getOrientation() const;
 
     /**
      * Computes list of path length values along lanelet center line or returns already computed values.
      *
      * @return List of path length values.
      */
-    const std::vector<double> &getPathLength();
+    const std::vector<double> &getPathLength() const;
 
     /**
      * Computes list of distance/width values along vertices of left and right border
@@ -397,7 +397,7 @@ class Lanelet {
      *
      * @return List of width values.
      */
-    const std::vector<double> &getWidthAlongLanelet();
+    const std::vector<double> &getWidthAlongLanelet() const;
 
     /**
      * Computes width at longitudinal position along centerline.
@@ -405,7 +405,7 @@ class Lanelet {
      * @param lonPosition Longitudinal position.
      * @return Width [m].
      */
-    double getWidth(double x, double y);
+    double getWidth(double x, double y) const;
 
     /**
      * Finds closest index on center line given 2D vertex.
@@ -437,7 +437,7 @@ class Lanelet {
     std::shared_ptr<StopLine> stopLine;        //**< stopLine assigned to lanelet*/
     LineMarking lineMarkingLeft;               //**< Line marking of left boundary*/
     LineMarking lineMarkingRight;              //**< Line marking of right boundary*/
-    std::vector<double> orientation;           //**< orientation along center line */
-    std::vector<double> pathLength;            //**< path length along center line */
-    std::vector<double> width;                 //**< width along center line */
+    mutable std::vector<double> orientation;   //**< orientation along center line */
+    mutable std::vector<double> pathLength;    //**< path length along center line */
+    mutable std::vector<double> width;         //**< width along center line */
 };
