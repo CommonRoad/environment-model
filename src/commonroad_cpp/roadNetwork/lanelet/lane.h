@@ -64,14 +64,14 @@ class Lane : public Lanelet {
      *
      * @return Set of IDs of the lanelets contained in lane.
      */
-    [[nodiscard]] const std::set<size_t> &getContainedLaneletIDs() const;
+    [[nodiscard]] const std::unordered_set<size_t> &getContainedLaneletIDs() const;
 
   private:
     mutable std::vector<std::shared_ptr<Lanelet>>
         containedLanelets; //**< list of pointers to lanelets constructing lane */
     mutable std::shared_ptr<CurvilinearCoordinateSystem>
-        curvilinearCoordinateSystem;              //**< curvilinear coordinate system defined by lane */
-    mutable std::set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
+        curvilinearCoordinateSystem;                //**< curvilinear coordinate system defined by lane */
+    std::unordered_set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
 
     omp_lock_t ccs_lock;
 };

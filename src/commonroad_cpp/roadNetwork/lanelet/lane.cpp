@@ -49,4 +49,4 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
     return curvilinearCoordinateSystem;
 }
 
-const std::set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
+const std::unordered_set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
