@@ -11,30 +11,42 @@
 #include <utility>
 
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
-           CurvilinearCoordinateSystem ccs)
+           std::shared_ptr<CurvilinearCoordinateSystem> ccs)
     : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets), curvilinearCoordinateSystem(std::move(ccs)) {
+
+    omp_init_lock(&ccs_lock);
+
     for (const auto &coLa : containedLanelets)
         containedLaneletIds.insert(coLa->getId());
 }
 
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet)
     : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets) {
+    omp_init_lock(&ccs_lock);
     for (const auto &coLa : containedLanelets)
         containedLaneletIds.insert(coLa->getId());
 }
 
 const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const { return containedLanelets; }
 
-const CurvilinearCoordinateSystem &Lane::getCurvilinearCoordinateSystem() {
-    if (!curvilinearCoordinateSystem) {
-        geometry::EigenPolyline reference_path;
-        for (auto vert : getCenterVertices())
-            reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordinateSystem() {
+    omp_set_lock(&ccs_lock);
 
-        geometry::util::resample_polyline(reference_path, 2, reference_path);
-        curvilinearCoordinateSystem = CurvilinearCoordinateSystem(reference_path);
+    if (!curvilinearCoordinateSystem) {
+        geometry::EigenPolyline temp_path;
+        geometry::EigenPolyline reference_path;
+        const auto &centerVertices = getCenterVertices();
+        temp_path.reserve(centerVertices.size());
+        for (auto vert : centerVertices)
+            temp_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+
+        geometry::util::resample_polyline(temp_path, 2, reference_path);
+        curvilinearCoordinateSystem = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
     }
-    return curvilinearCoordinateSystem.value();
+
+    omp_unset_lock(&ccs_lock);
+
+    return curvilinearCoordinateSystem;
 }
 
 const std::set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
