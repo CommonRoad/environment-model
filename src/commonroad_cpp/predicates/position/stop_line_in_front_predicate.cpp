@@ -8,6 +8,8 @@
 #include <Eigen/Dense>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
 #include <commonroad_cpp/world.h>

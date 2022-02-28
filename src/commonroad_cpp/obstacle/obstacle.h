@@ -18,7 +18,6 @@
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/types.h>
 #include <omp.h>
 

@@ -7,6 +7,8 @@
 #include "makes_u_turn_predicate.h"
 #include "../../geometry/geometric_operations.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
