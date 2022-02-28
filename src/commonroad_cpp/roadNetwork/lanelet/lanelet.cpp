@@ -9,6 +9,8 @@
 #include "../../geometry/geometric_operations.h"
 #include <utility>
 
+#include <limits>
+
 #include <boost/geometry/algorithms/correct.hpp>
 #include <boost/geometry/algorithms/simplify.hpp>
 #include <boost/geometry/algorithms/unique.hpp>
@@ -181,13 +183,34 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) con
 
 unsigned long Lanelet::findClosestIndex(double positionX,
                                         double positionY) const { // find the closest vertex to the given position
-    std::vector<double> dif(centerVertices.size() - 1);
+    assert(!centerVertices.empty());
+
+    double minimum_diff = std::numeric_limits<double>::infinity();
+    int minimum_index = -1;
+
     for (unsigned long i = 0; i < centerVertices.size() - 1; ++i) {
-        vertex vert{centerVertices[i]};
-        dif[i] = sqrt(pow(vert.x - positionX, 2) + pow(vert.y - positionY, 2));
+        double diffX = centerVertices[i].x - positionX;
+        double diffY = centerVertices[i].y - positionY;
+
+        // NOTE:
+        // Instead of calculating sqrt(diffX * diffX + diffY + diffY), we leave out the square root here!
+        // This is fine since we only calculate the distance in order to compare it with other distances,
+        // and sqrt(a) <= sqrt(b) iff a <= b.
+        // Therefore it is OK to use the squared distance, saving a few cycles of calculating the square root.
+        // Since findClosestIndex() is called quite often depending on the use case, this optimization
+        // can have a notable impact.
+        double squared_diff = diffX * diffX + diffY * diffY;
+
+        if (squared_diff < minimum_diff) {
+            minimum_diff = squared_diff;
+            minimum_index = i;
+        }
     }
-    unsigned long closestIndex{static_cast<unsigned long>(std::min_element(dif.begin(), dif.end()) - dif.begin())};
-    return closestIndex;
+
+    // Sanity check: Is there any vertex closer than infinity?
+    assert(minimum_diff != std::numeric_limits<double>::infinity());
+
+    return minimum_index;
 }
 
 bool Lanelet::hasLaneletType(LaneletType laType) const { return laneletTypes.find(laType) != laneletTypes.end(); }
