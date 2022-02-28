@@ -9,6 +9,8 @@
 #include "../geometry/geometric_operations.h"
 #include "../roadNetwork/lanelet/lanelet_operations.h"
 
+#include <geometry/curvilinear_coordinate_system.h>
+
 #include <algorithm> // for max, min
 #include <boost/range/adaptor/map.hpp>
 #include <boost/range/algorithm/copy.hpp>
