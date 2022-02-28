@@ -17,11 +17,11 @@ void InIntersectionMainAreaPredicateTest::SetUp() {
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(0, 26.5, -3.5, 0, 0, M_PI / 2, 0, 20, 0);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(0, 7.0, 3, 0, 0, M_PI, 0, 43, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
+    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
 

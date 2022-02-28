@@ -21,13 +21,13 @@ void AtRedTrafficLightPredicateTest::SetUp() {
 
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 23.5, -15.0, 0, 0, -M_PI / 2, 0, 41.5, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
+    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
 

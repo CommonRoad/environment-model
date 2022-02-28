@@ -15,7 +15,7 @@ void InStandstillPredicateTest::SetUp() {
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 1, 2, 0.001, 0, 0, 0, 1, 0);
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 1.001, 2, -0.001, 0, 0, 0, 1.001, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),

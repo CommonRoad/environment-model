@@ -29,24 +29,24 @@ void InQueueOfVehiclesPredicateTest::SetUp() {
     std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 75, 0, 2, 0, 0, 0, 75, 0);
     std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 80, 0, 2, 0, 0, 0, 80, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
     };
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
+    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleThree{
+    Obstacle::state_map_t trajectoryPredictionObstacleThree{
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleThree),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree)};
 

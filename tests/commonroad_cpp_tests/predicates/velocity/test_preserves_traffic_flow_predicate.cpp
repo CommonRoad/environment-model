@@ -14,7 +14,7 @@ void PreservesTrafficFlowPredicateTest::SetUp() {
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 2, 2, 20, 0, 0, 0, 2, 0);
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 22, 2, 50, 0, 0, 0, 22, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne)};
