@@ -13,11 +13,16 @@
 #include <set>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
+#include <boost/container_hash/hash.hpp>
+
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/types.h>
+
+#include <commonroad_cpp/roadNetwork/types.h>
 
 using value = std::pair<box, unsigned>;
 
@@ -191,7 +196,9 @@ class RoadNetwork {
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;   //**< set of traffic signs contained in road network */
     std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< set of traffic lights contained in road network */
     std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
-    std::map<std::set<size_t>, std::pair<std::set<size_t>, std::shared_ptr<Lane>>> lanes;
+
+    std::unordered_map<lanelet_id_set, std::pair<lanelet_id_set, std::shared_ptr<Lane>>, boost::hash<lanelet_id_set>>
+        lanes;
     //**< map of lanes contained in road network with the following structure: contained lanelet IDs, <base lanelets
     // used for creation of lane, lane object> */
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
@@ -201,3 +208,10 @@ class RoadNetwork {
     struct impl;
     std::unique_ptr<impl> pImpl;
 };
+
+namespace std {
+template <typename V, typename H, typename P, typename A>
+std::size_t hash_value(std::unordered_set<V, H, P, A> const &val) {
+    return boost::hash_range(val.begin(), val.end());
+}
+}; // namespace std

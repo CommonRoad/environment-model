@@ -7,6 +7,10 @@
 
 #pragma once
 
+#include <cstddef>
+
+using time_step_t = size_t; //**< type of history/trajectory prediction time steps */
+
 enum class EvaluationMode { directory, singleScenario, singleVehicle, directory_single_vehicle };
 
 enum class OperatingMode { boolean, constraint, robustness };
