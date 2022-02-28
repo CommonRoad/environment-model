@@ -186,9 +186,9 @@ unsigned long Lanelet::findClosestIndex(double positionX,
     assert(!centerVertices.empty());
 
     double minimum_diff = std::numeric_limits<double>::infinity();
-    int minimum_index = -1;
+    size_t minimum_index = 0;
 
-    for (unsigned long i = 0; i < centerVertices.size() - 1; ++i) {
+    for (size_t i = 0; i < centerVertices.size() - 1; ++i) {
         double diffX = centerVertices[i].x - positionX;
         double diffY = centerVertices[i].y - positionY;
 
