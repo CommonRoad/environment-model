@@ -15,7 +15,7 @@ void AtStopSignPredicateTest::SetUp() {
 
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 6, 10, 0, 0, 0, 20, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne)};
