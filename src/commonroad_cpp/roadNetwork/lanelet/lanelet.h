@@ -10,6 +10,7 @@
 #include <cstddef>
 #include <memory>
 #include <set>
+#include <unordered_set>
 #include <vector>
 
 #include <boost/geometry/geometries/point_xy.hpp>
@@ -21,6 +22,8 @@
 #include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
+
+#include <commonroad_cpp/roadNetwork/types.h>
 
 /**
  * Class representing a lanelet.
@@ -417,7 +420,7 @@ class Lanelet {
     size_t findClosestIndex(double positionX, double positionY) const;
 
   private:
-    size_t laneletId{};                                        //**< unique ID of lanelet */
+    lanelet_id_t laneletId{};                                  //**< unique ID of lanelet */
     std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
     std::vector<vertex> leftBorder;                            //**< vertices of left border */
     std::vector<vertex> rightBorder;                           //**< vertices of right border */
