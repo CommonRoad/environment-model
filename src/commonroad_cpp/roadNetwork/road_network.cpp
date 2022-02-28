@@ -7,9 +7,9 @@
 
 #include <utility>
 
-#include <boost/geometry.hpp>
 #include <boost/geometry/index/parameters.hpp>
 #include <boost/geometry/index/rtree.hpp>
+#include <boost/geometry/strategies/cartesian.hpp>
 
 #include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
