@@ -33,7 +33,7 @@ class Obstacle {
     /**
      * Default constructor without parameters for an obstacle.
      */
-    Obstacle() = default;
+    Obstacle();
 
     /**
      * Constructor initializing several obstacle attributes.

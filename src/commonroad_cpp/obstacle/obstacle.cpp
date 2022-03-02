@@ -30,6 +30,15 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
+Obstacle::Obstacle() {
+    omp_init_lock(&writelock1);
+    omp_init_lock(&writelock2);
+    omp_init_lock(&writelock3);
+    omp_init_lock(&writelock4);
+    omp_init_lock(&writelock5);
+    omp_init_lock(&writelock6);
+}
+
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
                    double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
                    std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width,
@@ -82,24 +91,12 @@ void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 
 
 void Obstacle::setTrajectoryPrediction(const std::map<size_t, std::shared_ptr<State>> &trajPrediction) {
     trajectoryPrediction = trajPrediction;
-    omp_init_lock(&writelock1);
-    omp_init_lock(&writelock2);
-    omp_init_lock(&writelock3);
-    omp_init_lock(&writelock4);
-    omp_init_lock(&writelock5);
-    omp_init_lock(&writelock6);
 }
 
 void Obstacle::setRectangleShape(double length, double width) { geoShape = Rectangle(length, width); }
 
 void Obstacle::appendStateToTrajectoryPrediction(const std::shared_ptr<State> &state) {
     trajectoryPrediction.insert(std::pair<size_t, std::shared_ptr<State>>(state->getTimeStep(), state));
-    omp_init_lock(&writelock1);
-    omp_init_lock(&writelock2);
-    omp_init_lock(&writelock3);
-    omp_init_lock(&writelock4);
-    omp_init_lock(&writelock5);
-    omp_init_lock(&writelock6);
 }
 
 void Obstacle::appendStateToHistory(const std::shared_ptr<State> &state) {
