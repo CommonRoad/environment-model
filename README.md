@@ -27,15 +27,43 @@ These dependencies should be available as a system package.
 - Doxygen (for building the documentation)
 - Graphviz (for building the documentation)
 
-#### Debian/Ubuntu
+### Debian/Ubuntu
 
-You require at least Ubuntu 20.04.
-On Debian/Ubuntu, you'll most likely need to install the following packages:  
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev`
+We recommend Ubuntu 20.04 or newer.  
+**Ubuntu 20.04:**  
+You need to install the following packages:
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev`  
+All other required packages should be part of the standard Ubuntu installation.
 
-For building the documentation, you'll need to install `doxygen` and `graphviz`.
+**Ubuntu 18.04:**  
+- You need to install the following packages:  
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev`  
+- Install gcc-9 and g++-9: because [filesystem header](https://askubuntu.com/questions/1256440/how-to-get-libstdc-with-c17-filesystem-headers-on-ubuntu-18-bionic):
+```bash
+  sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+  sudo apt update
+  sudo apt install gcc-9 g++-9
+```
+- Install [spdlog](https://github.com/gabime/spdlog)
+```bash
+git clone https://github.com/gabime/spdlog.git
+cd spdlog && mkdir build && cd build
+cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON .. && make -j
+udo make install
+```
+- Install
+  Override default gcc and g++ in current shell:
+```bash
+  export CC=/usr/bin/gcc-9
+  export CXX=/usr/bin/g++-9
+```
+!!! ATTENTION set the PATH to your gcc-9 and g++-9 !!!
+Then follow the original installation instructions.
 
-For test coverage, you'll need to install `gcovr`.
+**General**:  
+For building the documentation, you need to install `doxygen` and `graphviz`.  
+For test coverage, you need to install `gcovr`.
+
 
 ## Build and Compile
 
