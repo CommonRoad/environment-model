@@ -30,14 +30,6 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
-Obstacle::Obstacle() {
-    omp_init_lock(&writelock1);
-    omp_init_lock(&writelock2);
-    omp_init_lock(&writelock3);
-    omp_init_lock(&writelock4);
-    omp_init_lock(&writelock5);
-    omp_init_lock(&writelock6);
-}
 
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
                    double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
@@ -48,12 +40,6 @@ Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> curr
       trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(Rectangle(length, width)), route(route) {
     if (isStatic)
         setIsStatic(isStatic);
-    omp_init_lock(&writelock1);
-    omp_init_lock(&writelock2);
-    omp_init_lock(&writelock3);
-    omp_init_lock(&writelock4);
-    omp_init_lock(&writelock5);
-    omp_init_lock(&writelock6);
 
     if (route.empty()) {
         route.reserve(trajectoryPrediction.size());
@@ -163,13 +149,7 @@ std::map<size_t, std::shared_ptr<State>> Obstacle::getTrajectoryPrediction() con
 
 size_t Obstacle::getTrajectoryLength() const { return trajectoryPrediction.size(); }
 
-polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) {
-    polygon_type polygonShape;
-    omp_set_lock(&writelock1);
-    { polygonShape = setOccupancyPolygonShape(timeStep); }
-    omp_unset_lock(&writelock1);
-    return polygonShape;
-}
+polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) { return setOccupancyPolygonShape(timeStep); }
 
 polygon_type Obstacle::setOccupancyPolygonShape(size_t timeStep) {
     if (shapeAtTimeStep.count(timeStep) == 1)
@@ -224,11 +204,7 @@ Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNet
 
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
-    std::vector<std::shared_ptr<Lanelet>> occupied;
-    omp_set_lock(&writelock2);
-    { occupied = setOccupiedLaneletsByShape(roadNetwork, timeStep); }
-    omp_unset_lock(&writelock2);
-    return occupied;
+    return setOccupiedLaneletsByShape(roadNetwork, timeStep);;
 }
 
 double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
@@ -246,18 +222,13 @@ double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t 
 
 void Obstacle::convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     Eigen::Vector2d convertedPoint;
-    omp_set_lock(&writelock3);
-    {
-        convertedPoint = refLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
-            getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
-        double theta = geometric_operations::subtractOrientations(
-            getStateByTimeStep(timeStep)->getGlobalOrientation(),
-            refLane->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
-                                              getStateByTimeStep(timeStep)->getYPosition()));
-        convertedPositions[timeStep][refLane->getContainedLaneletIDs()] = {convertedPoint.x(), convertedPoint.y(),
-                                                                           theta};
-    }
-    omp_unset_lock(&writelock3);
+    convertedPoint = refLane->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(
+        getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition());
+    double theta = geometric_operations::subtractOrientations(
+        getStateByTimeStep(timeStep)->getGlobalOrientation(),
+        refLane->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                          getStateByTimeStep(timeStep)->getYPosition()));
+    convertedPositions[timeStep][refLane->getContainedLaneletIDs()] = {convertedPoint.x(), convertedPoint.y(), theta};
 }
 
 double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
@@ -481,11 +452,7 @@ size_t Obstacle::getLastTrajectoryTimeStep() const {
 }
 
 std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
-    std::shared_ptr<Lane> refLane;
-    omp_set_lock(&writelock5);
-    { refLane = setReferenceLane(roadNetwork, timeStep); }
-    omp_unset_lock(&writelock5);
-    return refLane;
+    return setReferenceLane(roadNetwork, timeStep);
 }
 
 std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
@@ -589,16 +556,12 @@ void Obstacle::convertPointToCurvilinear(const std::shared_ptr<RoadNetwork> &roa
     auto curReferenceLane{getReferenceLane(roadNetwork, timeStep)};
     try {
         convertPointToCurvilinear(timeStep, curReferenceLane);
-        omp_set_lock(&writelock4);
-        {
-            getStateByTimeStep(timeStep)->setLonPosition(
-                convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][0]);
-            getStateByTimeStep(timeStep)->setLatPosition(
-                convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][1]);
-            getStateByTimeStep(timeStep)->setCurvilinearOrientation(
-                convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][2]);
-        }
-        omp_unset_lock(&writelock4);
+        getStateByTimeStep(timeStep)->setLonPosition(
+            convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][0]);
+        getStateByTimeStep(timeStep)->setLatPosition(
+            convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][1]);
+        getStateByTimeStep(timeStep)->setCurvilinearOrientation(
+            convertedPositions[timeStep][curReferenceLane->getContainedLaneletIDs()][2]);
     } catch (...) {
         std::string refInfo;
         for (const auto &ref : curReferenceLane->getCurvilinearCoordinateSystem().referencePath())
@@ -662,11 +625,8 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shar
 
 std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                               size_t timeStep) {
-    if (occupiedLanes[timeStep].empty()) {
-        omp_set_lock(&writelock6);
+    if (occupiedLanes[timeStep].empty())
         setOccupiedLanes(roadNetwork, timeStep);
-        omp_unset_lock(&writelock6);
-    }
     return occupiedLanes[timeStep];
 }
 
@@ -677,17 +637,11 @@ void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, boo
         lanelet_operations::createLanesBySingleLanelets(lanelets, roadNetwork, fieldOfViewRear, fieldOfViewFront)};
     setOccupiedLanes(lanes, timeStamp);
     if (!isStatic) {
-        for (const auto &time : getPredictionTimeSteps()) {
-            omp_set_lock(&writelock6);
+        for (const auto &time : getPredictionTimeSteps())
             setOccupiedLanes(roadNetwork, time);
-            omp_unset_lock(&writelock6);
-        }
         if (considerHistory)
-            for (const auto &time : getHistoryTimeSteps()) {
-                omp_set_lock(&writelock6);
+            for (const auto &time : getHistoryTimeSteps())
                 setOccupiedLanes(roadNetwork, time);
-                omp_unset_lock(&writelock6);
-            }
     }
 }
 
