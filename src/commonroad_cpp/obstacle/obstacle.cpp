@@ -30,7 +30,6 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
-
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
                    double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
                    std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width,
@@ -204,7 +203,8 @@ Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNet
 
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
-    return setOccupiedLaneletsByShape(roadNetwork, timeStep);;
+    return setOccupiedLaneletsByShape(roadNetwork, timeStep);
+    ;
 }
 
 double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
