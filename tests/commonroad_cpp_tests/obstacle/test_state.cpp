@@ -148,3 +148,16 @@ TEST_F(StateTest, InitializationComplete) {
     EXPECT_EQ(stateThree->getValidStates().latPosition, validityStateThree.latPosition);
     EXPECT_EQ(stateThree->getValidStates().globalOrientation, validityStateThree.globalOrientation);
 }
+
+TEST_F(StateTest, IncompleteInitializationErrors) {
+    auto state{State()};
+    state.setTimeStep(0);
+    state.setXPosition(2.5);
+    state.setYPosition(0.5);
+    state.setVelocity(2.0);
+    state.setGlobalOrientation(0.0);
+    EXPECT_THROW(state.getAcceleration(), std::runtime_error);
+    EXPECT_THROW(state.getLonPosition(), std::runtime_error);
+    EXPECT_THROW(state.getLatPosition(), std::runtime_error);
+    EXPECT_THROW(state.getCurvilinearOrientation(), std::runtime_error);
+}
