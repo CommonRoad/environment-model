@@ -151,6 +151,7 @@ class TrafficLight {
      */
     [[nodiscard]] static TrafficLightState matchTrafficLightState(const std::string &trafficLightState);
 
+  private:
     size_t id;                                   //**< unique ID of traffic light */
     std::vector<TrafficLightCycleElement> cycle; //**< cycle of traffic light */
     size_t offset;                               //**< time offset of traffic light */
