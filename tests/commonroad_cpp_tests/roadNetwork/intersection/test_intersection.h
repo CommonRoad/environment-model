@@ -1,20 +1,23 @@
 //
-// Created by Sebastian Maierhofer on 31.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TEST_INTERSECTION_H
-#define ENV_MODEL_TEST_INTERSECTION_H
+#pragma once
 
+#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "test_incoming.h"
 
 class IntersectionTestInitialization : public IncomingTestInitialization {
   protected:
     void setUpIntersection();
+    std::shared_ptr<Intersection> intersection1;
+    std::shared_ptr<Intersection> intersection2;
 };
 
 class IntersectionTest : public IntersectionTestInitialization, public testing::Test {
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_INTERSECTION_H

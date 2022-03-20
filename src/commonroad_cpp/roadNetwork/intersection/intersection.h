@@ -15,11 +15,25 @@
 class Intersection {
   public:
     /**
+     * Default constructor of intersection class.
+     */
+    Intersection() = default;
+
+    /**
+     * Constructor of intersection class.
+     * @param intersectionId Id of intersection.
+     * @param incomings List of references to incomings of intersection.
+     * @param crossings List of references to crossing lanelets of intersection.
+     */
+    Intersection(size_t intersectionId, std::vector<std::shared_ptr<Incoming>> incomings,
+                 std::vector<std::shared_ptr<Lanelet>> crossings);
+
+    /**
      * Getter for intersection ID.
      *
      * @return ID of intersection.
      */
-    [[nodiscard]] int getId() const;
+    [[nodiscard]] size_t getId() const;
 
     /**
      * Getter for incomings belonging to intersection.
@@ -40,7 +54,7 @@ class Intersection {
      *
      * @param num ID of intersection.
      */
-    void setId(int num);
+    void setId(size_t num);
 
     /**
      * Setter for incomings.
@@ -59,12 +73,12 @@ class Intersection {
     /**
      * Setter for crossing lanelets belonging to intersection.
      *
-     * @param cr List of pointers to lanelets.
+     * @param cross List of pointers to lanelets.
      */
-    void setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cr);
+    void setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cross);
 
   private:
-    int id;                                           //**< ID of intersection. */
+    size_t id;                                        //**< ID of intersection. */
     std::vector<std::shared_ptr<Incoming>> incomings; //**< List of pointers to incomings belonging to intersection. */
     std::vector<std::shared_ptr<Lanelet>>
         crossings; //**< List of pointers to crossing lanelets belonging to intersection. */
