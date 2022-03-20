@@ -23,10 +23,10 @@ class TrafficSignElement {
     /**
      * Constructor of traffic sign element.
      *
-     * @param id ID of traffic sign element. Note this ID corresponds to the official national traffic sign ID of a
-     * country.
+     * @param trafficSignId ID of traffic sign element. Note this ID corresponds to the official national traffic sign
+     * ID of a country.
      */
-    explicit TrafficSignElement(std::string id, std::vector<std::string> values = {});
+    explicit TrafficSignElement(std::string trafficSignId, std::vector<std::string> values = {});
 
     /**
      * Copy constructor of traffic sign element.

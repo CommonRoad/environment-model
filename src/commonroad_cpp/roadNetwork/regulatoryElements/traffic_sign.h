@@ -19,12 +19,12 @@ class TrafficSign {
   public:
     /**
      * Constructor of traffic sign.
-     * @param id Traffic sign id.
+     * @param trafficSignId Traffic sign id.
      * @param traffic_sign_element List of traffic sign elements assigned to traffic sign.
      * @param position Position of traffic sign.
      * @param virtual_element Boolean indicating whether traffic sign is virtual.
      */
-    TrafficSign(size_t id, std::vector<std::shared_ptr<TrafficSignElement>> traffic_sign_element,
+    TrafficSign(size_t trafficSignId, std::vector<std::shared_ptr<TrafficSignElement>> traffic_sign_element,
                 const vertex &position, bool virtual_element = false);
 
     /**
