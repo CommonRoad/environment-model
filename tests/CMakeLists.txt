@@ -7,6 +7,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/roadNetwork/lanelet/test_lanelet_operations.cpp
         commonroad_cpp_tests/roadNetwork/lanelet/test_lane.cpp
         commonroad_cpp_tests/roadNetwork/lanelet/test_lanelet.cpp
+        commonroad_cpp_tests/roadNetwork/regulartoryElements/test_stop_line.cpp
         commonroad_cpp_tests/obstacle/test_obstacle.cpp
         commonroad_cpp_tests/obstacle/test_state.cpp
         commonroad_cpp_tests/obstacle/test_obstacle_operations.cpp
@@ -68,7 +69,7 @@ set(ENV_MODEL_TEST_SRC_FILES
 
 # Create executable for test
 if (ENV_MODEL_BUILD_TESTS)
-    add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES} commonroad_cpp_tests/predicates/predicate_manager_test.cpp commonroad_cpp_tests/predicates/predicate_manager_test.h commonroad_cpp_tests/test_commonroad_container.cpp commonroad_cpp_tests/test_commonroad_container.h commonroad_cpp_tests/auxiliaryDefs/test_timer.cpp commonroad_cpp_tests/auxiliaryDefs/test_timer.h commonroad_cpp_tests/roadNetwork/regulartoryElements/test_regulatory_elements_utils.cpp commonroad_cpp_tests/roadNetwork/regulartoryElements/test_regulatory_elements_utils.h commonroad_cpp_tests/roadNetwork/regulartoryElements/test_stop_line.cpp commonroad_cpp_tests/roadNetwork/regulartoryElements/test_stop_line.h)
+    add_executable(env_model_test ${ENV_MODEL_TEST_SRC_FILES})
 
     target_compile_features(env_model_test
             PUBLIC cxx_lambdas cxx_auto_type
