@@ -21,7 +21,20 @@ class TrafficLight {
     /**
      * Default Constructor without parameters for a traffic light.
      */
-    TrafficLight();
+    TrafficLight() = default;
+
+    /**
+     * Constructor of traffic light.
+     *
+     * @param trafficLightId Traffic light id.
+     * @param cycle Traffic light cycle.
+     * @param offset Traffic light offset.
+     * @param direction Traffic light direction.
+     * @param active Indicator whether traffic light is currently active.
+     * @param position Traffic light position.
+     */
+    TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset,
+                 TurningDirections direction, bool active, const vertex &position);
 
     /**
      * Setter for traffic light ID.
@@ -54,9 +67,9 @@ class TrafficLight {
     /**
      * Setter for traffic light activity.
      *
-     * @param ac Boolean indicating whether traffic light is active.
+     * @param trafficLightActive Boolean indicating whether traffic light is active.
      */
-    void setActive(bool ac);
+    void setActive(bool trafficLightActive);
 
     /**
      * Setter for traffic light position.
@@ -68,9 +81,9 @@ class TrafficLight {
     /**
      * Adds a cycle element to the traffic light.
      *
-     * @param ce Traffic light cycle element.
+     * @param cycleElement Traffic light cycle element.
      */
-    void addCycleElement(TrafficLightCycleElement ce);
+    void addCycleElement(TrafficLightCycleElement cycleElement);
 
     /**
      * Getter for traffic light ID.

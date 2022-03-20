@@ -7,8 +7,7 @@
 
 #include "traffic_light.h"
 #include <algorithm>
-
-TrafficLight::TrafficLight() : id(0), offset(0), direction(TurningDirections::all) {}
+#include <utility>
 
 void TrafficLight::setId(const size_t num) { id = num; }
 
@@ -46,9 +45,9 @@ void TrafficLight::setDirection(TurningDirections dir) { TrafficLight::direction
 
 bool TrafficLight::isActive() const { return active; }
 
-void TrafficLight::setActive(bool ac) { TrafficLight::active = ac; }
+void TrafficLight::setActive(bool trafficLightActive) { TrafficLight::active = trafficLightActive; }
 
-void TrafficLight::addCycleElement(TrafficLightCycleElement ce) { cycle.push_back(ce); }
+void TrafficLight::addCycleElement(TrafficLightCycleElement cycleElement) { cycle.push_back(cycleElement); }
 
 void TrafficLight::setPosition(vertex pos) { position = pos; }
 
@@ -81,3 +80,7 @@ TrafficLightState TrafficLight::matchTrafficLightState(const std::string &traffi
     else
         return TrafficLightState::red; // default case -> consider also trafficLightState == "red"
 }
+TrafficLight::TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset,
+                           TurningDirections direction, bool active, const vertex &position)
+    : id(trafficLightId), cycle(std::move(cycle)), offset(offset), direction(direction), active(active),
+      position(position) {}

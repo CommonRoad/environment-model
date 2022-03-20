@@ -11,7 +11,7 @@
 
 const std::vector<vertex> &StopLine::getPoints() const { return points; }
 
-void StopLine::setPoints(const std::vector<vertex> &po) { points = po; }
+void StopLine::setPoints(const std::vector<vertex> &pos) { points = pos; }
 
 std::vector<std::shared_ptr<TrafficSign>> StopLine::getTrafficSigns() const { return trafficSigns; }
 
