@@ -94,7 +94,7 @@ class World {
 
   private:
     size_t timeStep;                                    //**< reference time step where world was created. */
-    size_t idCounter;                                   //**< counter to ensure unique IDs among all objects. */
+    size_t idCounter{0};                                 //**< counter to ensure unique IDs among all objects. */
     std::shared_ptr<RoadNetwork> roadNetwork;           //**< road network containing lanelets, traffic signs, etc. */
     std::vector<std::shared_ptr<Obstacle>> egoVehicles; //**< pointers to ego vehicle objects */
     std::vector<std::shared_ptr<Obstacle>> obstacles;   //**< pointers to obstacles *
