@@ -1,7 +1,7 @@
 //
 // Created by Sebastian Maierhofer.
 // Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
 
@@ -14,6 +14,27 @@
  */
 class Incoming {
   public:
+    /**
+     * Default constructor.
+     */
+    Incoming() = default;
+
+    /**
+     * Constructor of incoming.
+     *
+     * @param incomingId Incoming ID.
+     * @param incomingLanelets Reference to lanelets belonging to incoming.
+     * @param isLeftOf Reference incoming orientated left.
+     * @param straightOutgoings Reference to straight outgoing lanelets.
+     * @param leftOutgoings Reference to left outgoing lanelets.
+     * @param rightOutgoings Reference to right outgoing lanelets.
+     * @param oncomings Reference to oncoming lanelets.
+     */
+    Incoming(size_t incomingId, std::vector<std::shared_ptr<Lanelet>> incomingLanelets,
+             std::shared_ptr<Incoming> isLeftOf, std::vector<std::shared_ptr<Lanelet>> straightOutgoings,
+             std::vector<std::shared_ptr<Lanelet>> leftOutgoings, std::vector<std::shared_ptr<Lanelet>> rightOutgoings,
+             std::vector<std::shared_ptr<Lanelet>> oncomings);
+
     /**
      * Getter for incoming ID.
      *
@@ -59,9 +80,9 @@ class Incoming {
     /**
      * Setter of incoming ID.
      *
-     * @param id Id of incoming.
+     * @param incomingId Id of incoming.
      */
-    void setId(size_t id);
+    void setId(size_t incomingId);
 
     /**
      * Setter for lanelets belonging to incoming.

@@ -11,9 +11,9 @@
 
 class IncomingTestInitialization {
   protected:
-    std::unique_ptr<Incoming> incomingOne;
-    std::unique_ptr<Incoming> incomingTwo;
-    std::unique_ptr<Incoming> incomingThree;
+    std::shared_ptr<Incoming> incomingOne;
+    std::shared_ptr<Incoming> incomingTwo;
+    std::shared_ptr<Incoming> incomingThree;
     void setUpIncoming();
 };
 

@@ -7,6 +7,8 @@
 
 #include "incoming.h"
 
+#include <utility>
+
 size_t Incoming::getId() const { return id; }
 
 void Incoming::setId(size_t index) { id = index; }
@@ -15,8 +17,8 @@ const std::vector<std::shared_ptr<Lanelet>> &Incoming::getIncomingLanelets() con
 
 void Incoming::setIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>> &incLa) {
     // each incoming lanelet should be of type incoming
-    for (const auto &la : incLa)
-        la->addLaneletType(LaneletType::incoming);
+    for (const auto &let : incLa)
+        let->addLaneletType(LaneletType::incoming);
     incomingLanelets = incLa;
 }
 
@@ -70,3 +72,11 @@ const std::vector<std::shared_ptr<Lanelet>> &Incoming::getOncomings() const { re
 void Incoming::setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomingLanelets) {
     oncomings = oncomingLanelets;
 }
+Incoming::Incoming(size_t incomingId, std::vector<std::shared_ptr<Lanelet>> incomingLanelets,
+                   std::shared_ptr<Incoming> isLeftOf, std::vector<std::shared_ptr<Lanelet>> straightOutgoings,
+                   std::vector<std::shared_ptr<Lanelet>> leftOutgoings,
+                   std::vector<std::shared_ptr<Lanelet>> rightOutgoings,
+                   std::vector<std::shared_ptr<Lanelet>> oncomings)
+    : id(incomingId), incomingLanelets(std::move(incomingLanelets)), isLeftOf(std::move(isLeftOf)),
+      straightOutgoings(std::move(straightOutgoings)), leftOutgoings(std::move(leftOutgoings)),
+      rightOutgoings(std::move(rightOutgoings)), oncomings(std::move(oncomings)) {}
