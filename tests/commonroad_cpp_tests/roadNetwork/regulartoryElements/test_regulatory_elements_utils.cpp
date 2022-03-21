@@ -102,14 +102,8 @@ TEST_F(RegulatoryElementsUtilsTest, SpeedLimitSuggested) {
               35.0);
 }
 
-TEST_F(RegulatoryElementsUtilsTest, TrafficSignReferencesStopSign) {
+TEST_F(RegulatoryElementsUtilsTest, TrafficSignReferencesStopSign) {}
 
-}
+TEST_F(RegulatoryElementsUtilsTest, AtRedTrafficLight) {}
 
-TEST_F(RegulatoryElementsUtilsTest, AtRedTrafficLight) {
-
-}
-
-TEST_F(RegulatoryElementsUtilsTest, ActiveTrafficLights) {
-
-}
+TEST_F(RegulatoryElementsUtilsTest, ActiveTrafficLights) {}
