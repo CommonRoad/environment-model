@@ -69,7 +69,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
 
     // check intersection with relevant lanelets
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
-    for (const auto& let : lanelets) {
+    for (const auto &let : lanelets) {
         if (let->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED)) {
             occupiedLanelets.push_back(let);
         }
@@ -87,7 +87,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double
 
 std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t laneletId) {
     auto iter = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork),
-                           [laneletId](auto val) { return val->getId() == laneletId; });
+                             [laneletId](auto val) { return val->getId() == laneletId; });
     if (iter == std::end(laneletNetwork))
         throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID" + std::to_string(laneletId) +
                                 " does not exist in road network!");

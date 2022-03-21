@@ -13,11 +13,11 @@
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <geometry/curvilinear_coordinate_system.h>
 
-
 void RoadNetworkTestInitialization::setUpRoadNetwork() {
     std::vector<std::shared_ptr<Lanelet>> lanelets{laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive};
 
-    roadNetwork = std::make_shared<RoadNetwork>(RoadNetwork(lanelets, SupportedTrafficSignCountry::GERMANY, {}, {}, {intersection1, intersection2}));
+    roadNetwork = std::make_shared<RoadNetwork>(
+        RoadNetwork(lanelets, SupportedTrafficSignCountry::GERMANY, {}, {}, {intersection1, intersection2}));
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     roadNetwork->setIdCounterRef(globalIdRef);
@@ -69,7 +69,7 @@ TEST_F(RoadNetworkTest, AddLanes) {
     lanes =
         lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, roadNetworkScenario);
     Lanelet let{100000, lanes.at(0)->getLeftBorderVertices(), lanes.at(0)->getRightBorderVertices(),
-               lanes.at(0)->getLaneletTypes()};
+                lanes.at(0)->getLaneletTypes()};
     geometry::EigenPolyline reference_path;
     for (auto vert : let.getCenterVertices())
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));

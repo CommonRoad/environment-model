@@ -9,8 +9,8 @@
 
 #include <memory>
 
-#include "lanelet/test_lane.h"
 #include "intersection/test_intersection.h"
+#include "lanelet/test_lane.h"
 
 class RoadNetwork;
 
