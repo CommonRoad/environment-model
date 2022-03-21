@@ -9,8 +9,8 @@
 
 void IntersectionTestInitialization::setUpIntersection() {
     size_t lanelet20Id{20};
-    std::vector<vertex> lanelet20LeftVertices{{20, -2}, {20, 12}};
-    std::vector<vertex> lanelet20RightVertices{{25, -2}, {25, 12}};
+    std::vector<vertex> lanelet20LeftVertices{{1020, -1002}, {1020, 1012}};
+    std::vector<vertex> lanelet20RightVertices{{1025, -1002}, {1025, 1012}};
     std::set<LaneletType> lanelet20LaneletTypes{LaneletType::crosswalk};
     auto lanelet20{
         std::make_shared<Lanelet>(lanelet20Id, lanelet20LeftVertices, lanelet20RightVertices, lanelet20LaneletTypes)};

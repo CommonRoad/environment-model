@@ -1,17 +1,20 @@
 //
-// Created by sebastian on 08.12.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_TEST_ROAD_NETWORK_H
-#define ENV_MODEL_TEST_ROAD_NETWORK_H
+#pragma once
 
 #include <memory>
 
 #include "lanelet/test_lane.h"
+#include "intersection/test_intersection.h"
 
 class RoadNetwork;
 
-class RoadNetworkTestInitialization : public LaneTestInitialization {
+class RoadNetworkTestInitialization : public LaneTestInitialization, public IntersectionTestInitialization {
   protected:
     std::shared_ptr<RoadNetwork> roadNetwork;
     void setUpRoadNetwork();
@@ -21,5 +24,3 @@ class RoadNetworkTest : public RoadNetworkTestInitialization, public testing::Te
   private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_ROAD_NETWORK_H

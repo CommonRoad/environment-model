@@ -13,6 +13,8 @@ class TrafficLightTest : public testing::Test {
   protected:
     std::shared_ptr<TrafficLight> light1;
     std::shared_ptr<TrafficLight> light2;
+    std::shared_ptr<TrafficLight> light3;
+    std::shared_ptr<TrafficLight> light4;
 
   private:
     void SetUp() override;

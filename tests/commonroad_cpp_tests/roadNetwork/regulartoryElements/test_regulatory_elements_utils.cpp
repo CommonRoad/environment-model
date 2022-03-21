@@ -101,3 +101,15 @@ TEST_F(RegulatoryElementsUtilsTest, SpeedLimitSuggested) {
     EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested({world->getRoadNetwork()->findLaneletById(111)}, "274"),
               35.0);
 }
+
+TEST_F(RegulatoryElementsUtilsTest, TrafficSignReferencesStopSign) {
+
+}
+
+TEST_F(RegulatoryElementsUtilsTest, AtRedTrafficLight) {
+
+}
+
+TEST_F(RegulatoryElementsUtilsTest, ActiveTrafficLights) {
+
+}

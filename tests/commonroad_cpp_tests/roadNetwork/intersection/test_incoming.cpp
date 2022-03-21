@@ -9,74 +9,74 @@
 
 void IncomingTestInitialization::setUpIncoming() {
     size_t lanelet1Id{1};
-    std::vector<vertex> lanelet1LeftVertices{{0, 5}, {-20, 5}};
-    std::vector<vertex> lanelet1RightVertices{{0, 10}, {-20, 10}};
+    std::vector<vertex> lanelet1LeftVertices{{1000, 1005}, {-1020, 1005}};
+    std::vector<vertex> lanelet1RightVertices{{1000, 1010}, {-1020, 1010}};
     std::set<LaneletType> lanelet1LaneletTypes{LaneletType::unknown};
     auto lanelet1{
         std::make_shared<Lanelet>(lanelet1Id, lanelet1LeftVertices, lanelet1RightVertices, lanelet1LaneletTypes)};
     size_t lanelet2Id{2};
-    std::vector<vertex> lanelet2LeftVertices{{-20, 5}, {0, 5}};
-    std::vector<vertex> lanelet2RightVertices{{-20, 0}, {0, 0}};
+    std::vector<vertex> lanelet2LeftVertices{{-1020, 1005}, {1000, 1005}};
+    std::vector<vertex> lanelet2RightVertices{{-1020, 1000}, {1000, 1000}};
     std::set<LaneletType> lanelet2LaneletTypes{LaneletType::incoming};
     auto lanelet2{
         std::make_shared<Lanelet>(lanelet2Id, lanelet2LeftVertices, lanelet2RightVertices, lanelet2LaneletTypes)};
     size_t lanelet3Id{3};
-    std::vector<vertex> lanelet3LeftVertices{{35, 5}, {15, 5}};
-    std::vector<vertex> lanelet3RightVertices{{35, 10}, {15, 10}};
+    std::vector<vertex> lanelet3LeftVertices{{1035, 1005}, {1015, 1005}};
+    std::vector<vertex> lanelet3RightVertices{{1035, 1010}, {1015, 1010}};
     std::set<LaneletType> lanelet3LaneletTypes{LaneletType::incoming};
     auto lanelet3{
         std::make_shared<Lanelet>(lanelet3Id, lanelet3LeftVertices, lanelet3RightVertices, lanelet3LaneletTypes)};
     size_t lanelet4Id{4};
-    std::vector<vertex> lanelet4LeftVertices{{15, 5}, {35, 5}};
-    std::vector<vertex> lanelet4RightVertices{{15, 0}, {35, 0}};
+    std::vector<vertex> lanelet4LeftVertices{{1015, 1005}, {1035, 1005}};
+    std::vector<vertex> lanelet4RightVertices{{1015, 1000}, {1035, 1000}};
     std::set<LaneletType> lanelet4LaneletTypes{LaneletType::unknown};
     auto lanelet4{
         std::make_shared<Lanelet>(lanelet4Id, lanelet4LeftVertices, lanelet4RightVertices, lanelet4LaneletTypes)};
     size_t lanelet5Id{5};
-    std::vector<vertex> lanelet5LeftVertices{{7, -2}, {7, -22}};
-    std::vector<vertex> lanelet5RightVertices{{2, -2}, {2, -22}};
+    std::vector<vertex> lanelet5LeftVertices{{1007, -1002}, {1007, -1022}};
+    std::vector<vertex> lanelet5RightVertices{{1002, -1002}, {1002, -1022}};
     std::set<LaneletType> lanelet5LaneletTypes{LaneletType::unknown};
     auto lanelet5{
         std::make_shared<Lanelet>(lanelet5Id, lanelet5LeftVertices, lanelet5RightVertices, lanelet5LaneletTypes)};
     size_t lanelet6Id{6};
-    std::vector<vertex> lanelet6LeftVertices{{7, -22}, {7, -2}};
-    std::vector<vertex> lanelet6RightVertices{{12, -22}, {12, -2}};
+    std::vector<vertex> lanelet6LeftVertices{{1007, -1022}, {107, -102}};
+    std::vector<vertex> lanelet6RightVertices{{1012, -1022}, {1012, -1002}};
     std::set<LaneletType> lanelet6LaneletTypes{LaneletType::incoming};
     auto lanelet6{
         std::make_shared<Lanelet>(lanelet6Id, lanelet6LeftVertices, lanelet6RightVertices, lanelet6LaneletTypes)};
     size_t lanelet7Id{7};
-    std::vector<vertex> lanelet7LeftVertices{{15, 5}, {0, 5}};
-    std::vector<vertex> lanelet7RightVertices{{15, 10}, {0, 10}};
+    std::vector<vertex> lanelet7LeftVertices{{1015, 1005}, {1000, 1005}};
+    std::vector<vertex> lanelet7RightVertices{{1015, 1010}, {1000, 1010}};
     std::set<LaneletType> lanelet7LaneletTypes{LaneletType::intersection};
     auto lanelet7{
         std::make_shared<Lanelet>(lanelet7Id, lanelet7LeftVertices, lanelet7RightVertices, lanelet7LaneletTypes)};
     size_t lanelet8Id{8};
-    std::vector<vertex> lanelet8LeftVertices{{0, 5}, {15, 5}};
-    std::vector<vertex> lanelet8RightVertices{{0, 10}, {15, 10}};
+    std::vector<vertex> lanelet8LeftVertices{{1000, 1005}, {1015, 1005}};
+    std::vector<vertex> lanelet8RightVertices{{1000, 1010}, {1015, 1010}};
     std::set<LaneletType> lanelet8LaneletTypes{LaneletType::intersection};
     auto lanelet8{
         std::make_shared<Lanelet>(lanelet8Id, lanelet8LeftVertices, lanelet8RightVertices, lanelet8LaneletTypes)};
     size_t lanelet9Id{9};
-    std::vector<vertex> lanelet9LeftVertices{{7, -2}, {7, 2}, {15, 5}};
-    std::vector<vertex> lanelet9RightVertices{{12, -2}, {12, -1}, {15, 0}};
+    std::vector<vertex> lanelet9LeftVertices{{1007, -1002}, {1007, 1002}, {1015, 1005}};
+    std::vector<vertex> lanelet9RightVertices{{1012, -1002}, {1012, -1001}, {1015, 1000}};
     std::set<LaneletType> lanelet9LaneletTypes{LaneletType::intersection};
     auto lanelet9{
         std::make_shared<Lanelet>(lanelet9Id, lanelet9LeftVertices, lanelet9RightVertices, lanelet9LaneletTypes)};
     size_t lanelet10Id{10};
-    std::vector<vertex> lanelet10LeftVertices{{15, 5}, {7, 2}, {7, -2}};
-    std::vector<vertex> lanelet10RightVertices{{15, 10}, {2, 8}, {2, -2}};
+    std::vector<vertex> lanelet10LeftVertices{{1015, 1005}, {1007, 1002}, {1007, -1002}};
+    std::vector<vertex> lanelet10RightVertices{{1015, 1010}, {1002, 1008}, {2, -1002}};
     std::set<LaneletType> lanelet10LaneletTypes{LaneletType::intersection};
     auto lanelet10{
         std::make_shared<Lanelet>(lanelet10Id, lanelet10LeftVertices, lanelet10RightVertices, lanelet10LaneletTypes)};
     size_t lanelet11Id{11};
-    std::vector<vertex> lanelet11LeftVertices{{0, 5}, {7, 2}, {7, -2}};
-    std::vector<vertex> lanelet11RightVertices{{0, 0}, {2, -1}, {2, -2}};
+    std::vector<vertex> lanelet11LeftVertices{{1000, 1005}, {1007, 1002}, {1007, -1002}};
+    std::vector<vertex> lanelet11RightVertices{{1000, 1000}, {1002, -1001}, {1002, -1002}};
     std::set<LaneletType> lanelet11LaneletTypes{LaneletType::intersection};
     auto lanelet11{
         std::make_shared<Lanelet>(lanelet11Id, lanelet11LeftVertices, lanelet11RightVertices, lanelet11LaneletTypes)};
     size_t lanelet12Id{12};
-    std::vector<vertex> lanelet12LeftVertices{{7, -2}, {7, 2}, {0, 5}};
-    std::vector<vertex> lanelet12RightVertices{{12, -2}, {12, 8}, {0, 10}};
+    std::vector<vertex> lanelet12LeftVertices{{1007, -1002}, {1007, 1002}, {0, 1005}};
+    std::vector<vertex> lanelet12RightVertices{{1012, -2}, {1012, 1008}, {0, 1010}};
     std::set<LaneletType> lanelet12LaneletTypes{LaneletType::intersection};
     auto lanelet12{
         std::make_shared<Lanelet>(lanelet12Id, lanelet12LeftVertices, lanelet12RightVertices, lanelet12LaneletTypes)};
