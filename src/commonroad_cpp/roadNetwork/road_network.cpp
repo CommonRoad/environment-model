@@ -40,8 +40,8 @@ RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, S
     : laneletNetwork(network), country(cou), trafficSigns(std::move(signs)), trafficLights(std::move(lights)),
       intersections(std::move(inters)), pImpl(std::make_unique<impl>()) {
     // construct Rtree out of lanelets
-    for (const std::shared_ptr<Lanelet> &la : network)
-        pImpl->rtree.insert(std::make_pair(la->getBoundingBox(), la->getId()));
+    for (const std::shared_ptr<Lanelet> &let : network)
+        pImpl->rtree.insert(std::make_pair(let->getBoundingBox(), let->getId()));
     trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(cou);
 }
 
@@ -64,14 +64,14 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
                        std::back_inserter(relevantLanelets));
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     lanelets.reserve(relevantLanelets.size());
-    for (auto la : relevantLanelets)
-        lanelets.push_back(findLaneletById(static_cast<size_t>(la.second)));
+    for (auto let : relevantLanelets)
+        lanelets.push_back(findLaneletById(static_cast<size_t>(let.second)));
 
     // check intersection with relevant lanelets
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
-    for (auto la : lanelets) {
-        if (la->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED)) {
-            occupiedLanelets.push_back(la);
+    for (const auto& let : lanelets) {
+        if (let->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED)) {
+            occupiedLanelets.push_back(let);
         }
     }
     return occupiedLanelets;
@@ -85,14 +85,14 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double
     return RoadNetwork::findOccupiedLaneletsByShape(polygonPos);
 }
 
-std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t id) {
-    auto it = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork),
-                           [id](auto val) { return val->getId() == id; });
-    if (it == std::end(laneletNetwork))
-        throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID" + std::to_string(id) +
+std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t laneletId) {
+    auto iter = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork),
+                           [laneletId](auto val) { return val->getId() == laneletId; });
+    if (iter == std::end(laneletNetwork))
+        throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID" + std::to_string(laneletId) +
                                 " does not exist in road network!");
 
-    return *it;
+    return *iter;
 }
 
 SupportedTrafficSignCountry RoadNetwork::getCountry() const { return country; }
@@ -115,17 +115,17 @@ std::string RoadNetwork::extractTrafficSignIDForCountry(TrafficSignTypes type) {
 std::vector<std::shared_ptr<Lane>> RoadNetwork::addLanes(const std::vector<std::shared_ptr<Lane>> &newLanes,
                                                          size_t initialLanelet) {
     std::vector<std::shared_ptr<Lane>> updatedLanes;
-    for (const auto &la : newLanes) {
-        if (lanes.count(la->getContainedLaneletIDs()) != 0u and
-            lanes[la->getContainedLaneletIDs()].first.count(initialLanelet) != 0u) {
-            updatedLanes.push_back(lanes.at(la->getContainedLaneletIDs()).second);
+    for (const auto &lane : newLanes) {
+        if (lanes.count(lane->getContainedLaneletIDs()) != 0u and
+            lanes[lane->getContainedLaneletIDs()].first.count(initialLanelet) != 0u) {
+            updatedLanes.push_back(lanes.at(lane->getContainedLaneletIDs()).second);
             continue;
-        } else if (lanes.count(la->getContainedLaneletIDs()) != 0u) {
-            lanes[la->getContainedLaneletIDs()].first.insert(initialLanelet);
-            updatedLanes.push_back(lanes.at(la->getContainedLaneletIDs()).second);
+        } else if (lanes.count(lane->getContainedLaneletIDs()) != 0u) {
+            lanes[lane->getContainedLaneletIDs()].first.insert(initialLanelet);
+            updatedLanes.push_back(lanes.at(lane->getContainedLaneletIDs()).second);
         } else {
-            lanes[la->getContainedLaneletIDs()] = {{initialLanelet}, la};
-            updatedLanes.push_back(la);
+            lanes[lane->getContainedLaneletIDs()] = {{initialLanelet}, lane};
+            updatedLanes.push_back(lane);
         }
     }
     return updatedLanes;
