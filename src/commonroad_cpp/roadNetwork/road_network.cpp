@@ -7,6 +7,9 @@
 
 #include <utility>
 
+// On Boost<1.78.0, this needs to be included before <boost/geometry/index/parameters.hpp>
+#include <boost/geometry/strategies/default_strategy.hpp>
+
 #include <boost/geometry/index/parameters.hpp>
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/geometry/strategies/cartesian.hpp>
