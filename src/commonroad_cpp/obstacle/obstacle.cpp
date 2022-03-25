@@ -208,6 +208,8 @@ polygon_type Obstacle::setOccupancyPolygonShape(size_t timeStep) {
             polygonShape.outer().back() =
                 point_type{adjustedBoundingRectangleVertices[0].x, adjustedBoundingRectangleVertices[0].y};
         }
+    } else {
+        throw std::runtime_error{"obstacle shapes other than rectangle not supported by setOccupancyPolygonShape"};
     }
     shapeAtTimeStep[timeStep] = polygonShape;
     return polygonShape;
