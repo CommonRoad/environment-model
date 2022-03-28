@@ -10,6 +10,14 @@
 #include <geometry/curvilinear_coordinate_system.h>
 #include <utility>
 
+/* NOTE: The Lane destructor is explicitly instantiated here so that the deallocation calls are hopefully
+ * compiled with the same settings as the allocation calls.
+ * This is critical since the CCS uses Eigen internally which uses a custom allocator to ensure appropriate
+ * alignment of certain structures. If different allocators are used for the allocation and deallocation,
+ * silent memory corruption will occur resulting in hard to find bugs.
+ */
+Lane::~Lane() {}
+
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
            CurvilinearCoordinateSystem ccs)
     : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets), curvilinearCoordinateSystem(std::move(ccs)) {
