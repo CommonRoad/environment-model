@@ -292,7 +292,7 @@ class Obstacle {
      *
      * @param timeStep Time step of interest.
      * @param refLane Pointer to reference lane which should be used.
-     * @return Longitudinal position.
+     * @return Longitudinal position of obstacle front
      */
     double frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane);
 
@@ -301,7 +301,7 @@ class Obstacle {
      *
      * @param roadNetwork Pointer to road network
      * @param timeStep time step of interest
-     * @return longitudinal position of obstacle front
+     * @return longitudinal position of obstacle rear
      */
     double rearS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
