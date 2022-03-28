@@ -7,7 +7,6 @@
 
 #include <utility>
 
-
 #include <boost/version.hpp>
 #if (BOOST_VERSION / 100000) == 1 && (BOOST_VERSION / 100 % 1000) < 78 // Minor version < 78
 // On Boost<1.78.0, the cartesian blanket header does not exist
