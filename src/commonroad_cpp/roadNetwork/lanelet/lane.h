@@ -43,6 +43,8 @@ class Lane : public Lanelet {
      */
     Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet);
 
+    ~Lane();
+
     /**
      * Getter for curvilinear coordinate system using center line of lane as reference.
      *
