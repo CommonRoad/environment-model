@@ -152,3 +152,5 @@ void RoadNetwork::setIdCounterRef(const std::shared_ptr<size_t> &idCounter) {
 }
 
 std::shared_ptr<size_t> RoadNetwork::getIdCounterRef() const { return idCounterRef; }
+
+

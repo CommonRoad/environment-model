@@ -26,3 +26,9 @@ void Intersection::setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cro
 Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<Incoming>> incomings,
                            std::vector<std::shared_ptr<Lanelet>> crossings)
     : id(intersectionId), incomings(std::move(incomings)), crossings(std::move(crossings)) {}
+
+const std::vector<std::shared_ptr<Lanelet>> &Intersection::getMemberLanelets() const { return memberLanelets; }
+
+void Intersection::setMemberLanelets(const std::vector<std::shared_ptr<Lanelet>> &memberLanelets) {
+    Intersection::memberLanelets = memberLanelets;
+}

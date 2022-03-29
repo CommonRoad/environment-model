@@ -52,6 +52,9 @@ struct PredicateParameters {
     double brakingSpeedLimit{
         43}; //**< compute with calc_v_max_braking(ego_vehicle_param, simulation_param, traffic_rule_param) */
     double roadConditionSpeedLimit{50};
+
+    double dBrakingIntersection{15.0};
+    double aBrakingIntersection{-1.0};
 };
 
 extern std::map<std::string, std::array<double, 2>> predicateSatisfaction;

@@ -20,8 +20,8 @@ bool AtStopSignPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP) {
     auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
-    for (const auto &la : lanelets) {
-        auto signs{la->getTrafficSigns()};
+    for (const auto &let : lanelets) {
+        auto signs{let->getTrafficSigns()};
         if (std::any_of(signs.begin(), signs.end(), [world](const std::shared_ptr<TrafficSign> &sign) {
                 return regulatory_elements_utils::trafficSignReferencesStopSign(sign,
                                                                                 world->getRoadNetwork()->getCountry());

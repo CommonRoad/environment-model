@@ -136,4 +136,18 @@ bool areLaneletsInDirectlyAdjacentLanes(const std::shared_ptr<Lane> &laneOne, co
  */
 double roadWidth(const std::shared_ptr<Lanelet> &lanelet, double xPosition, double yPosition);
 
+/**
+ *
+ * @param lanelet
+ * @return
+ */
+std::vector<std::shared_ptr<TrafficLight>> activeTlsByLanelet(size_t timeStep, const std::shared_ptr<Lanelet> &lanelet);
+
+/**
+ *
+ * @param lanes
+ * @return
+ */
+std::vector<std::shared_ptr<Lanelet>> extractLaneletsFromLanes(const std::vector<std::shared_ptr<Lane>> &lanes);
+
 } // namespace lanelet_operations

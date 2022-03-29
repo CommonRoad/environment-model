@@ -538,6 +538,9 @@ class Obstacle {
      */
     void convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<Lane> &refLane);
 
+    const polygon_type &getFov() const;
+    void setFov(const polygon_type &fov);
+
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     bool isStatic{false};                             //**< true if Obstacle is static */
@@ -565,8 +568,13 @@ class Obstacle {
     const double laneOrientationThresholdInitial{
         1.58}; //**< orientation threshold for assigning lanes at initial time step, should be larger than other
                // threshold since initial time step has special evaluation */
-    const double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
-    const double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
+    double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
+    double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
+    polygon_type fov{polygon_type{{{0.0, -400.0}, {400* cos(M_PI*(7/4)), 400* sin(M_PI*(7/4))},
+                                                        {400.0, 0.0}, {400* cos(M_PI*(1/4)), 400* sin(M_PI*(1/4))},
+                                                        {0.0, 400.0}, {400* cos(M_PI*(3/4)), 400* sin(M_PI*(3/4))},
+                                                        {-400.0, 0.0}, {400* cos(M_PI*(5/4)), 400* sin(M_PI*(5/4))},
+                                                        {0.0, -400.0}}}};
 
     /**
      * Private setter for occupied lanelets at a time steps within a road network.

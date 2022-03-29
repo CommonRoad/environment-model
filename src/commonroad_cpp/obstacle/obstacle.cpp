@@ -654,3 +654,7 @@ void Obstacle::setCurvilinearStates(const std::shared_ptr<RoadNetwork> &roadNetw
                 convertPointToCurvilinear(roadNetwork, timeStep);
 }
 bool Obstacle::existsOccupiedLanes(size_t timeStep) { return occupiedLanes.count(timeStep) >= 1; }
+
+const polygon_type &Obstacle::getFov() const { return fov; }
+
+void Obstacle::setFov(const polygon_type &fov) { Obstacle::fov = fov; }

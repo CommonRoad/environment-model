@@ -64,6 +64,16 @@ class Lane : public Lanelet {
      */
     [[nodiscard]] const std::set<size_t> &getContainedLaneletIDs() const;
 
+    /**
+     * Collects all successor lanelets within lane given a start lanelet.
+     *
+     * @param lanelet Starting lanelet.
+     * @return List of pointers to succeeding lanelets.
+     */
+    std::vector<std::shared_ptr<Lanelet>> getSuccessorLanelets(const std::shared_ptr<Lanelet> &lanelet) const;
+
+
+
   private:
     mutable std::vector<std::shared_ptr<Lanelet>>
         containedLanelets; //**< list of pointers to lanelets constructing lane */

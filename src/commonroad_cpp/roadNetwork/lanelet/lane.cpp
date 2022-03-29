@@ -38,3 +38,20 @@ const CurvilinearCoordinateSystem &Lane::getCurvilinearCoordinateSystem() {
 }
 
 const std::set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
+
+std::vector<std::shared_ptr<Lanelet>> Lane::getSuccessorLanelets(const std::shared_ptr<Lanelet> &lanelet) const{
+    if(getContainedLaneletIDs().find(lanelet->getId()) == getContainedLaneletIDs().end())
+        return {};
+    std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
+    auto succs{lanelet->getSuccessors()};
+    while(!succs.empty())
+        for(const auto &suc : succs){
+            if(getContainedLaneletIDs().find(suc->getId()) != getContainedLaneletIDs().end()) {
+                relevantLanelets.push_back(suc);
+                break;
+            }
+        succs = relevantLanelets.back()->getSuccessors();
+        }
+
+    return relevantLanelets;
+}

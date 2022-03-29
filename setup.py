@@ -16,7 +16,7 @@ setup(
     author_email='sebastian.maierhofer@tum.de',
     description='CommonRoad C++ Environment Model',
     install_requires=[
-        'commonroad-io>=2021.3',
+        'commonroad-io>=2021.4',
     ],
     extras_require={
         'tests': ['numpy>=1.20.0',
