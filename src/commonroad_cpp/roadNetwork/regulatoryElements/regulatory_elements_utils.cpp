@@ -140,6 +140,12 @@ double regulatory_elements_utils::typeSpeedLimit(ObstacleType obstacleType) {
     }
 }
 
-bool regulatory_elements_utils::trafficSignInFront(size_t timeStep, const std::shared_ptr<TrafficSign> &sign, const std::shared_ptr<Obstacle> &obstacle, const std::shared_ptr<RoadNetwork> &roadNetwork){
-    return obstacle->frontS(roadNetwork, timeStep) < obstacle->getReferenceLane(roadNetwork, timeStep)->getCurvilinearCoordinateSystem().convertToCurvilinearCoords(sign->getPosition().x, sign->getPosition().y).x();
+bool regulatory_elements_utils::trafficSignInFront(size_t timeStep, const std::shared_ptr<TrafficSign> &sign,
+                                                   const std::shared_ptr<Obstacle> &obstacle,
+                                                   const std::shared_ptr<RoadNetwork> &roadNetwork) {
+    return obstacle->frontS(roadNetwork, timeStep) <
+           obstacle->getReferenceLane(roadNetwork, timeStep)
+               ->getCurvilinearCoordinateSystem()
+               .convertToCurvilinearCoords(sign->getPosition().x, sign->getPosition().y)
+               .x();
 }

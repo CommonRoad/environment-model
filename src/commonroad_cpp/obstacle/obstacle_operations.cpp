@@ -7,8 +7,8 @@
 
 #include "obstacle_operations.h"
 #include "../geometry/geometric_operations.h"
-#include "../roadNetwork/lanelet//lanelet_operations.h"
 #include "../roadNetwork/intersection/intersection.h"
+#include "../roadNetwork/lanelet//lanelet_operations.h"
 
 std::shared_ptr<Obstacle>
 obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t obstacleId) {
@@ -217,13 +217,16 @@ obstacle_operations::laneletsLeftOfObstacle(size_t timeStep, const std::shared_p
     return leftLanelets;
 }
 
-std::vector<std::shared_ptr<Intersection>> obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                                                       const std::shared_ptr<Obstacle> &obs) {
+std::vector<std::shared_ptr<Intersection>>
+obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                      const std::shared_ptr<Obstacle> &obs) {
     std::vector<std::shared_ptr<Intersection>> relevantIntersections;
     auto relevantLanelets{lanelet_operations::extractLaneletsFromLanes(obs->getOccupiedLanes(roadNetwork, timeStep))};
-    for(const auto &inter : roadNetwork->getIntersections())
-        for(const auto &interLet : inter->getMemberLanelets())
-            if(std::any_of(relevantLanelets.begin(), relevantLanelets.end(), [interLet](const std::shared_ptr<Lanelet> &let){return let->getId() == interLet->getId();})) {
+    for (const auto &inter : roadNetwork->getIntersections())
+        for (const auto &interLet : inter->getMemberLanelets())
+            if (std::any_of(
+                    relevantLanelets.begin(), relevantLanelets.end(),
+                    [interLet](const std::shared_ptr<Lanelet> &let) { return let->getId() == interLet->getId(); })) {
                 relevantIntersections.push_back(inter);
                 break;
             }

@@ -86,5 +86,6 @@ class Intersection {
     std::vector<std::shared_ptr<Incoming>> incomings; //**< List of pointers to incomings belonging to intersection. */
     std::vector<std::shared_ptr<Lanelet>>
         crossings; //**< List of pointers to crossing lanelets belonging to intersection. */
-    std::vector<std::shared_ptr<Lanelet>> memberLanelets; //**< List of lanelets belonging to intersection starting from incoming until outgoing. Crossings are not considered. */
+    std::vector<std::shared_ptr<Lanelet>> memberLanelets; //**< List of lanelets belonging to intersection starting from
+                                                          //incoming until outgoing. Crossings are not considered. */
 };

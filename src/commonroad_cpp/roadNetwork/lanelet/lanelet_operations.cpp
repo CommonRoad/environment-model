@@ -269,20 +269,25 @@ double lanelet_operations::roadWidth(const std::shared_ptr<Lanelet> &lanelet, do
     return road_width;
 }
 
-std::vector<std::shared_ptr<TrafficLight>> lanelet_operations::activeTlsByLanelet(size_t timeStep, const std::shared_ptr<Lanelet> &lanelet){
+std::vector<std::shared_ptr<TrafficLight>>
+lanelet_operations::activeTlsByLanelet(size_t timeStep, const std::shared_ptr<Lanelet> &lanelet) {
     std::vector<std::shared_ptr<TrafficLight>> relevantTrafficLights;
-        for(const auto &light : lanelet->getTrafficLights())
-            if(light->isActive() or light->getElementAtTime(timeStep).color != TrafficLightState::inactive)
-                relevantTrafficLights.push_back(light);
+    for (const auto &light : lanelet->getTrafficLights())
+        if (light->isActive() or light->getElementAtTime(timeStep).color != TrafficLightState::inactive)
+            relevantTrafficLights.push_back(light);
 
     return relevantTrafficLights;
 }
 
-std::vector<std::shared_ptr<Lanelet>> lanelet_operations::extractLaneletsFromLanes(const std::vector<std::shared_ptr<Lane>> &lanes){
+std::vector<std::shared_ptr<Lanelet>>
+lanelet_operations::extractLaneletsFromLanes(const std::vector<std::shared_ptr<Lane>> &lanes) {
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
-    for(const auto &lane : lanes){
-        for(const auto &let : lane->getContainedLanelets())
-            if(!std::any_of(relevantLanelets.begin(), relevantLanelets.end(), [let](const std::shared_ptr<Lanelet> &letConsidered){return let->getId() == letConsidered->getId();}))
+    for (const auto &lane : lanes) {
+        for (const auto &let : lane->getContainedLanelets())
+            if (!std::any_of(relevantLanelets.begin(), relevantLanelets.end(),
+                             [let](const std::shared_ptr<Lanelet> &letConsidered) {
+                                 return let->getId() == letConsidered->getId();
+                             }))
                 relevantLanelets.push_back(let);
     }
     return relevantLanelets;

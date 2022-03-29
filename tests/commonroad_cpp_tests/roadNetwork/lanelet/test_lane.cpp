@@ -121,6 +121,4 @@ TEST_F(LaneTest, CheckIntersection) {
     EXPECT_EQ(laneOne->checkIntersection(polygonThree, ContainmentType::COMPLETELY_CONTAINED), false);
 }
 
-TEST_F(LaneTest, GetSuccessorLanelets) {
-    EXPECT_EQ(laneOne->getSuccessorLanelets(laneletOne).at(0)->getId(), 1);
-}
+TEST_F(LaneTest, GetSuccessorLanelets) { EXPECT_EQ(laneOne->getSuccessorLanelets(laneletOne).at(0)->getId(), 1); }

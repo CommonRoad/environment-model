@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "obstacle.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
+#include "obstacle.h"
 
 namespace obstacle_operations {
 
@@ -122,8 +122,8 @@ std::set<std::shared_ptr<Lanelet>> laneletsLeftOfObstacle(size_t timeStep,
                                                           const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                           const std::shared_ptr<Obstacle> &obs);
 
-
-std::vector<std::shared_ptr<Intersection>> getIntersections(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                                                 const std::shared_ptr<Obstacle> &obs);
+std::vector<std::shared_ptr<Intersection>> getIntersections(size_t timeStep,
+                                                            const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                            const std::shared_ptr<Obstacle> &obs);
 
 } // namespace obstacle_operations

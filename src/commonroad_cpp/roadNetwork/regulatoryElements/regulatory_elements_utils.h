@@ -107,6 +107,7 @@ double typeSpeedLimit(ObstacleType obstacleType);
  * @param roadNetwork Road network traffic sign an obstacle are located in.
  * @return Boolean indicating whether the sign is located in front of the obstacle.
  */
-bool trafficSignInFront(size_t timeStep, const std::shared_ptr<TrafficSign> &sign, const std::shared_ptr<Obstacle> &obstacle, const std::shared_ptr<RoadNetwork> &roadNetwork);
+bool trafficSignInFront(size_t timeStep, const std::shared_ptr<TrafficSign> &sign,
+                        const std::shared_ptr<Obstacle> &obstacle, const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 } // namespace regulatory_elements_utils
