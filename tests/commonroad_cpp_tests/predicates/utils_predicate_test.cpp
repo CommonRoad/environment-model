@@ -94,7 +94,7 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
     std::vector<std::string> trafficSignElementOneValues{"35"};
     auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
         trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)}};
-    auto vertexOne{vertex{0, 0}};
+    auto vertexOne{vertex{5, 0}};
     auto trafficSignOne{std::make_shared<TrafficSign>(trafficSignIdOne, trafficSignElementsOne, vertexOne, false)};
     // required speed traffic sign
     size_t trafficSignIdTwo = 201;

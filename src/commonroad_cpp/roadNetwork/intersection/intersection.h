@@ -77,9 +77,14 @@ class Intersection {
      */
     void setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cross);
 
+    const std::vector<std::shared_ptr<Lanelet>> &getMemberLanelets() const;
+
+    void setMemberLanelets(const std::vector<std::shared_ptr<Lanelet>> &memberLanelets);
+
   private:
     size_t id;                                        //**< ID of intersection. */
     std::vector<std::shared_ptr<Incoming>> incomings; //**< List of pointers to incomings belonging to intersection. */
     std::vector<std::shared_ptr<Lanelet>>
         crossings; //**< List of pointers to crossing lanelets belonging to intersection. */
+    std::vector<std::shared_ptr<Lanelet>> memberLanelets; //**< List of lanelets belonging to intersection starting from incoming until outgoing. Crossings are not considered. */
 };
