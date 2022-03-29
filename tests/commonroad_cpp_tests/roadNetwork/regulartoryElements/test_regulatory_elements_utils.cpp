@@ -109,12 +109,10 @@ TEST_F(RegulatoryElementsUtilsTest, AtRedTrafficLight) {}
 TEST_F(RegulatoryElementsUtilsTest, ActiveTrafficLights) {}
 
 TEST_F(RegulatoryElementsUtilsTest, TrafficSignInFront) {
-    EXPECT_TRUE(regulatory_elements_utils::trafficSignInFront(0,
-                                                  world->getRoadNetwork()->findLaneletById(111)->getTrafficSigns().at(0),
-                                                  obstacleOne,
-                                                  world->getRoadNetwork()));
-    EXPECT_FALSE(regulatory_elements_utils::trafficSignInFront(1,
-                                                              world->getRoadNetwork()->findLaneletById(111)->getTrafficSigns().at(0),
-                                                              obstacleOne,
-                                                              world->getRoadNetwork()));
+    EXPECT_TRUE(regulatory_elements_utils::trafficSignInFront(
+        0, world->getRoadNetwork()->findLaneletById(111)->getTrafficSigns().at(0), obstacleOne,
+        world->getRoadNetwork()));
+    EXPECT_FALSE(regulatory_elements_utils::trafficSignInFront(
+        1, world->getRoadNetwork()->findLaneletById(111)->getTrafficSigns().at(0), obstacleOne,
+        world->getRoadNetwork()));
 }

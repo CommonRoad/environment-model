@@ -72,8 +72,6 @@ class Lane : public Lanelet {
      */
     std::vector<std::shared_ptr<Lanelet>> getSuccessorLanelets(const std::shared_ptr<Lanelet> &lanelet) const;
 
-
-
   private:
     mutable std::vector<std::shared_ptr<Lanelet>>
         containedLanelets; //**< list of pointers to lanelets constructing lane */

@@ -570,11 +570,15 @@ class Obstacle {
                // threshold since initial time step has special evaluation */
     double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
     double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
-    polygon_type fov{polygon_type{{{0.0, -400.0}, {400* cos(M_PI*(7/4)), 400* sin(M_PI*(7/4))},
-                                                        {400.0, 0.0}, {400* cos(M_PI*(1/4)), 400* sin(M_PI*(1/4))},
-                                                        {0.0, 400.0}, {400* cos(M_PI*(3/4)), 400* sin(M_PI*(3/4))},
-                                                        {-400.0, 0.0}, {400* cos(M_PI*(5/4)), 400* sin(M_PI*(5/4))},
-                                                        {0.0, -400.0}}}};
+    polygon_type fov{polygon_type{{{0.0, -400.0},
+                                   {400 * cos(M_PI * (7 / 4)), 400 * sin(M_PI *(7 / 4))},
+                                   {400.0, 0.0},
+                                   {400 * cos(M_PI * (1 / 4)), 400 * sin(M_PI *(1 / 4))},
+                                   {0.0, 400.0},
+                                   {400 * cos(M_PI * (3 / 4)), 400 * sin(M_PI *(3 / 4))},
+                                   {-400.0, 0.0},
+                                   {400 * cos(M_PI * (5 / 4)), 400 * sin(M_PI *(5 / 4))},
+                                   {0.0, -400.0}}}};
 
     /**
      * Private setter for occupied lanelets at a time steps within a road network.
