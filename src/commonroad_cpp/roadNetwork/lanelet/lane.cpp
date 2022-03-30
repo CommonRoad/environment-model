@@ -48,9 +48,9 @@ std::vector<std::shared_ptr<Lanelet>> Lane::getSuccessorLanelets(const std::shar
         for (const auto &suc : succs) {
             if (getContainedLaneletIDs().find(suc->getId()) != getContainedLaneletIDs().end()) {
                 relevantLanelets.push_back(suc);
+                succs = relevantLanelets.back()->getSuccessors();
                 break;
             }
-            succs = relevantLanelets.back()->getSuccessors();
         }
 
     return relevantLanelets;

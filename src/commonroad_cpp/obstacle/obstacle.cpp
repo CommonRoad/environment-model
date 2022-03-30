@@ -33,7 +33,7 @@
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
                    double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
                    std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width,
-                   std::vector<vertex> route)
+                   std::vector<vertex> route, const std::vector<vertex> &fov)
     : obstacleId(obstacleId), isStatic(isStatic), currentState(std::move(currentState)), obstacleType(obstacleType),
       vMax(vMax), aMax(aMax), aMaxLong(aMaxLong), aMinLong(aMinLong), reactionTime(reactionTime),
       trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(Rectangle(length, width)), route(route) {
@@ -45,6 +45,16 @@ Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> curr
         size_t idx{0};
         for (const auto &state : trajectoryPrediction)
             route[idx] = {state.second->getXPosition(), state.second->getYPosition()};
+    }
+    if (fov.empty()) {
+        // TODO update default fov values
+        std::vector<vertex> fovVertices{{0.0, -400.0}, {400 * cos(M_PI * (7 / 4)), 400 * sin(M_PI * (7 / 4))},
+                                        {400.0, 0.0},  {400 * cos(M_PI * (1 / 4)), 400 * sin(M_PI * (1 / 4))},
+                                        {0.0, 400.0},  {400 * cos(M_PI * (3 / 4)), 400 * sin(M_PI * (3 / 4))},
+                                        {-400.0, 0.0}, {400 * cos(M_PI * (5 / 4)), 400 * sin(M_PI * (5 / 4))},
+                                        {0.0, -400.0}};
+        setFov(geometric_operations::rotateAndTranslateVertices(
+            fovVertices, {this->currentState->getXPosition(), this->currentState->getYPosition()}, 0));
     }
 }
 
@@ -657,4 +667,13 @@ bool Obstacle::existsOccupiedLanes(size_t timeStep) { return occupiedLanes.count
 
 const polygon_type &Obstacle::getFov() const { return fov; }
 
-void Obstacle::setFov(const polygon_type &fov) { Obstacle::fov = fov; }
+void Obstacle::setFov(const std::vector<vertex> &fovVertices) {
+    polygon_type polygon;
+    polygon.outer().resize(fovVertices.size() + 1);
+    size_t idx{0};
+    for (const auto &left : fovVertices) {
+        polygon.outer()[idx] = point_type{left.x, left.y};
+        idx++;
+    }
+    fov = polygon;
+}

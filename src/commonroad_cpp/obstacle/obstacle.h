@@ -12,6 +12,7 @@
 #include <memory>
 #include <vector>
 
+#include "commonroad_cpp/geometry/geometric_operations.h"
 #include "state.h"
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
@@ -52,11 +53,12 @@ class Obstacle {
      * @param length Length of the obstacle [m].
      * @param width Width of the obstacle [m].
      * @param route Planned route of obstacle.
+     * @param fov
      */
     Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
              double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
              std::map<size_t, std::shared_ptr<State>> trajectoryPrediction, double length, double width,
-             std::vector<vertex> route = {});
+             std::vector<vertex> route = {}, const std::vector<vertex> &fov = {});
 
     /**
      * Setter for ID of obstacle.
@@ -539,7 +541,8 @@ class Obstacle {
     void convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<Lane> &refLane);
 
     const polygon_type &getFov() const;
-    void setFov(const polygon_type &fov);
+
+    void setFov(const std::vector<vertex> &fovVertices);
 
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
@@ -570,15 +573,7 @@ class Obstacle {
                // threshold since initial time step has special evaluation */
     double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
     double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
-    polygon_type fov{polygon_type{{{0.0, -400.0},
-                                   {400 * cos(M_PI * (7 / 4)), 400 * sin(M_PI *(7 / 4))},
-                                   {400.0, 0.0},
-                                   {400 * cos(M_PI * (1 / 4)), 400 * sin(M_PI *(1 / 4))},
-                                   {0.0, 400.0},
-                                   {400 * cos(M_PI * (3 / 4)), 400 * sin(M_PI *(3 / 4))},
-                                   {-400.0, 0.0},
-                                   {400 * cos(M_PI * (5 / 4)), 400 * sin(M_PI *(5 / 4))},
-                                   {0.0, -400.0}}}};
+    polygon_type fov;
 
     /**
      * Private setter for occupied lanelets at a time steps within a road network.
