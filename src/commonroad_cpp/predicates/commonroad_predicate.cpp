@@ -59,6 +59,8 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std:
     auto startTime{Timer::start()};
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
     long compTime{evaluationTimer.stop(startTime)};
+
+    // TODO Thread-local storage for stats?
     omp_set_lock(&writelock);
     {
         statistics.numExecutions++;
@@ -94,7 +96,7 @@ CommonRoadPredicate::CommonRoadPredicate(bool vehicleDependent) : vehicleDepende
     omp_init_lock(&writelock);
 }
 
-CommonRoadPredicate::~CommonRoadPredicate() {}
+CommonRoadPredicate::~CommonRoadPredicate() { omp_destroy_lock(&writelock); }
 
 bool CommonRoadPredicate::isVehicleDependent() const { return vehicleDependent; }
 
