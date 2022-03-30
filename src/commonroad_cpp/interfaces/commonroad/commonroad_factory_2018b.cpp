@@ -18,6 +18,10 @@
 #include "commonroad_factory_2018b.h"
 #include "xml_reader.h"
 
+double CommonRoadFactory2018b::getTimeStepSize() {
+    return doc->child("commonRoad").attribute("timeStepSize").as_double();
+}
+
 std::vector<std::shared_ptr<Obstacle>> CommonRoadFactory2018b::createObstacles() {
     std::vector<std::shared_ptr<Obstacle>> obstacleList{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
