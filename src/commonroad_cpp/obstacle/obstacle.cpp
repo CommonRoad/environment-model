@@ -261,8 +261,6 @@ double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
 }
 
 double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    // spdlog::info("rearS self={} timeStep={}", obstacleId, timeStep);
-
     if (!(convertedPositions.count(timeStep) == 1 and
           convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
