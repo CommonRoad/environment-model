@@ -452,7 +452,6 @@ size_t Obstacle::getFirstTrajectoryTimeStep() {
     // NOTE: trajectoryPrediction is an unordered_map, so the first element (.begin()) is not
     // necessarily the minimum element!
 
-    // TODO Is ->first always equal to ->second->getTimeStep()?
     return std::min_element(trajectoryPrediction.begin(), trajectoryPrediction.end())->first;
 }
 
