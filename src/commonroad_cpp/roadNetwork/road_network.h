@@ -209,6 +209,7 @@ class RoadNetwork {
     std::unique_ptr<impl> pImpl;
 };
 
+// Required for lanes unordered_map in RoadNetwork class (unordered_set used as key)
 namespace std {
 template <typename V, typename H, typename P, typename A>
 std::size_t hash_value(std::unordered_set<V, H, P, A> const &val) {
