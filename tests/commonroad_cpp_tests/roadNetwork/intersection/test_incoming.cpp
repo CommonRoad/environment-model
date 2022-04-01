@@ -1,13 +1,19 @@
 //
 // Created by Sebastian Maierhofer.
 // Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
 
 #include "test_incoming.h"
 
 void IncomingTestInitialization::setUpIncoming() {
+    // left to right: 2->80-81->4
+    // right to left: 3->70-71->1
+    // bottom to right: 6->9->4
+    // right to bottom: 3->10->5
+    // bottom to left: 6->12->1
+    // left to bottom: 2->11->5
     size_t lanelet1Id{1};
     std::vector<vertex> lanelet1LeftVertices{{1000, 1005}, {-1020, 1005}};
     std::vector<vertex> lanelet1RightVertices{{1000, 1010}, {-1020, 1010}};
@@ -44,18 +50,30 @@ void IncomingTestInitialization::setUpIncoming() {
     std::set<LaneletType> lanelet6LaneletTypes{LaneletType::incoming};
     auto lanelet6{
         std::make_shared<Lanelet>(lanelet6Id, lanelet6LeftVertices, lanelet6RightVertices, lanelet6LaneletTypes)};
-    size_t lanelet7Id{7};
-    std::vector<vertex> lanelet7LeftVertices{{1015, 1005}, {1000, 1005}};
-    std::vector<vertex> lanelet7RightVertices{{1015, 1010}, {1000, 1010}};
-    std::set<LaneletType> lanelet7LaneletTypes{LaneletType::intersection};
-    auto lanelet7{
-        std::make_shared<Lanelet>(lanelet7Id, lanelet7LeftVertices, lanelet7RightVertices, lanelet7LaneletTypes)};
-    size_t lanelet8Id{8};
-    std::vector<vertex> lanelet8LeftVertices{{1000, 1005}, {1015, 1005}};
-    std::vector<vertex> lanelet8RightVertices{{1000, 1010}, {1015, 1010}};
-    std::set<LaneletType> lanelet8LaneletTypes{LaneletType::intersection};
-    auto lanelet8{
-        std::make_shared<Lanelet>(lanelet8Id, lanelet8LeftVertices, lanelet8RightVertices, lanelet8LaneletTypes)};
+    size_t lanelet70Id{70};
+    std::vector<vertex> lanelet70LeftVertices{{1015, 1005}, {1007.5, 1005}};
+    std::vector<vertex> lanelet70RightVertices{{1015, 1010}, {1007.5, 1010}};
+    std::set<LaneletType> lanelet70LaneletTypes{LaneletType::intersection};
+    auto lanelet70{
+        std::make_shared<Lanelet>(lanelet70Id, lanelet70LeftVertices, lanelet70RightVertices, lanelet70LaneletTypes)};
+    size_t lanelet7Id{71};
+    std::vector<vertex> lanelet71LeftVertices{{1007.5, 1005}, {1000, 1005}};
+    std::vector<vertex> lanelet71RightVertices{{1007.5, 1010}, {1000, 1010}};
+    std::set<LaneletType> lanelet71LaneletTypes{LaneletType::intersection};
+    auto lanelet71{
+        std::make_shared<Lanelet>(lanelet7Id, lanelet71LeftVertices, lanelet71RightVertices, lanelet71LaneletTypes)};
+    size_t lanelet80Id{80};
+    std::vector<vertex> lanelet80LeftVertices{{1000, 1005}, {1007.5, 1005}};
+    std::vector<vertex> lanelet80RightVertices{{1000, 1010}, {1007.5, 1010}};
+    std::set<LaneletType> lanelet80LaneletTypes{LaneletType::intersection};
+    auto lanelet80{
+        std::make_shared<Lanelet>(lanelet80Id, lanelet80LeftVertices, lanelet80RightVertices, lanelet80LaneletTypes)};
+    size_t lanelet81Id{81};
+    std::vector<vertex> lanelet81LeftVertices{{1007.5, 1005}, {1015, 1005}};
+    std::vector<vertex> lanelet81RightVertices{{1007.5, 1010}, {1015, 1010}};
+    std::set<LaneletType> lanelet81LaneletTypes{LaneletType::intersection};
+    auto lanelet81{
+        std::make_shared<Lanelet>(lanelet81Id, lanelet81LeftVertices, lanelet81RightVertices, lanelet81LaneletTypes)};
     size_t lanelet9Id{9};
     std::vector<vertex> lanelet9LeftVertices{{1007, -1002}, {1007, 1002}, {1015, 1005}};
     std::vector<vertex> lanelet9RightVertices{{1012, -1002}, {1012, -1001}, {1015, 1000}};
@@ -81,20 +99,24 @@ void IncomingTestInitialization::setUpIncoming() {
     auto lanelet12{
         std::make_shared<Lanelet>(lanelet12Id, lanelet12LeftVertices, lanelet12RightVertices, lanelet12LaneletTypes)};
 
-    lanelet1->addPredecessor(lanelet7);
+    lanelet1->addPredecessor(lanelet71);
     lanelet1->addPredecessor(lanelet12);
-    lanelet2->addSuccessor(lanelet8);
+    lanelet2->addSuccessor(lanelet80);
     lanelet2->addSuccessor(lanelet11);
-    lanelet3->addSuccessor(lanelet7);
+    lanelet3->addSuccessor(lanelet70);
     lanelet3->addSuccessor(lanelet10);
-    lanelet4->addPredecessor(lanelet8);
+    lanelet4->addPredecessor(lanelet81);
     lanelet4->addPredecessor(lanelet9);
     lanelet5->addPredecessor(lanelet11);
     lanelet6->addSuccessor(lanelet12);
-    lanelet7->addPredecessor(lanelet3);
-    lanelet7->addSuccessor(lanelet1);
-    lanelet8->addPredecessor(lanelet2);
-    lanelet8->addSuccessor(lanelet4);
+    lanelet70->addPredecessor(lanelet3);
+    lanelet71->addPredecessor(lanelet70);
+    lanelet70->addSuccessor(lanelet71);
+    lanelet71->addSuccessor(lanelet1);
+    lanelet80->addPredecessor(lanelet2);
+    lanelet81->addPredecessor(lanelet80);
+    lanelet80->addSuccessor(lanelet81);
+    lanelet81->addSuccessor(lanelet4);
     lanelet9->addPredecessor(lanelet6);
     lanelet9->addSuccessor(lanelet4);
     lanelet10->addPredecessor(lanelet3);
@@ -103,16 +125,18 @@ void IncomingTestInitialization::setUpIncoming() {
     lanelet11->addSuccessor(lanelet5);
     lanelet12->addPredecessor(lanelet6);
     lanelet12->addSuccessor(lanelet1);
-    lanelet7->setRightAdjacent(lanelet8, DrivingDirection::opposite);
-    lanelet8->setLeftAdjacent(lanelet7, DrivingDirection::opposite);
+    lanelet70->setRightAdjacent(lanelet81, DrivingDirection::opposite);
+    lanelet71->setRightAdjacent(lanelet80, DrivingDirection::opposite);
+    lanelet80->setLeftAdjacent(lanelet71, DrivingDirection::opposite);
+    lanelet81->setLeftAdjacent(lanelet70, DrivingDirection::opposite);
 
     size_t incomingId1{13};
     std::vector<std::shared_ptr<Lanelet>> incoming1IncomingLanelets{lanelet2};
     std::shared_ptr<Incoming> isLeftOfIncoming1{nullptr};
-    std::vector<std::shared_ptr<Lanelet>> straightOutgoingsIncoming1{lanelet8};
+    std::vector<std::shared_ptr<Lanelet>> straightOutgoingsIncoming1{lanelet81};
     std::vector<std::shared_ptr<Lanelet>> leftOutgoingsIncoming1{};
     std::vector<std::shared_ptr<Lanelet>> rightOutgoingsIncoming1{lanelet11};
-    std::vector<std::shared_ptr<Lanelet>> oncomingsIncoming1{lanelet7};
+    std::vector<std::shared_ptr<Lanelet>> oncomingsIncoming1{lanelet71};
     incomingOne = std::make_shared<Incoming>(incomingId1, incoming1IncomingLanelets, isLeftOfIncoming1,
                                              straightOutgoingsIncoming1, leftOutgoingsIncoming1,
                                              rightOutgoingsIncoming1, oncomingsIncoming1);
@@ -120,10 +144,10 @@ void IncomingTestInitialization::setUpIncoming() {
     size_t incomingId2{14};
     std::vector<std::shared_ptr<Lanelet>> incoming2IncomingLanelets{lanelet3};
     std::shared_ptr<Incoming> isLeftOfIncoming2{nullptr};
-    std::vector<std::shared_ptr<Lanelet>> straightOutgoingsIncoming2{lanelet7};
-    std::vector<std::shared_ptr<Lanelet>> leftOutgoingsIncoming2{lanelet12};
+    std::vector<std::shared_ptr<Lanelet>> straightOutgoingsIncoming2{lanelet71};
+    std::vector<std::shared_ptr<Lanelet>> leftOutgoingsIncoming2{lanelet10};
     std::vector<std::shared_ptr<Lanelet>> rightOutgoingsIncoming2{};
-    std::vector<std::shared_ptr<Lanelet>> oncomingsIncoming2{lanelet8};
+    std::vector<std::shared_ptr<Lanelet>> oncomingsIncoming2{lanelet81};
     incomingTwo = std::make_shared<Incoming>();
     incomingTwo->setId(incomingId2);
     incomingTwo->setIsLeftOf(isLeftOfIncoming2);
@@ -137,13 +161,15 @@ void IncomingTestInitialization::setUpIncoming() {
     std::vector<std::shared_ptr<Lanelet>> incoming3IncomingLanelets{lanelet6};
     std::shared_ptr<Incoming> isLeftOfIncoming3{incomingOne};
     std::vector<std::shared_ptr<Lanelet>> straightOutgoingsIncoming3{};
-    std::vector<std::shared_ptr<Lanelet>> leftOutgoingsIncoming3{lanelet10};
+    std::vector<std::shared_ptr<Lanelet>> leftOutgoingsIncoming3{lanelet12};
     std::vector<std::shared_ptr<Lanelet>> rightOutgoingsIncoming3{lanelet9};
     std::vector<std::shared_ptr<Lanelet>> oncomingsIncoming3{};
     incomingThree = std::make_shared<Incoming>(incomingId3, incoming3IncomingLanelets, isLeftOfIncoming3,
                                                straightOutgoingsIncoming3, leftOutgoingsIncoming3,
                                                rightOutgoingsIncoming3, oncomingsIncoming3);
     incomingTwo->setIsLeftOf(incomingThree);
+    lanelets = {lanelet1,  lanelet2,  lanelet3, lanelet4,  lanelet5,  lanelet6,
+                lanelet71, lanelet81, lanelet9, lanelet10, lanelet11, lanelet12};
 }
 
 void IncomingTest::SetUp() { setUpIncoming(); }
