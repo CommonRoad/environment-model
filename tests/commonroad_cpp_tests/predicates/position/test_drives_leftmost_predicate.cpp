@@ -19,14 +19,14 @@ void DrivesLeftmostPredicateTest::SetUp() {
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 7, 10, 0, 0);
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 7, 10, 0, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 

@@ -15,7 +15,7 @@ void KeepsLaneSpeedLimitPredicateTest::SetUp() {
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 95, 2, 45, 0, 0, 0, 95, 0);
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 150, 2, 30, 0, 0, 0, 150, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),

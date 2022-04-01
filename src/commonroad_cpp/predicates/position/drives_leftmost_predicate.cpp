@@ -9,6 +9,7 @@
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
 #include "commonroad_cpp/world.h"
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 
 #include "../../obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"

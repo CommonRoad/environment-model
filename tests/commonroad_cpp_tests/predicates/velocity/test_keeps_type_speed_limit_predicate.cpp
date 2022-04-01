@@ -18,10 +18,10 @@ void KeepsTypeSpeedLimitPredicateTest::SetUp() {
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 40, 2, 22.22, 0, 0);
     std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 50, 2, 30.0, 0, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne)};
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
+    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo)};
 

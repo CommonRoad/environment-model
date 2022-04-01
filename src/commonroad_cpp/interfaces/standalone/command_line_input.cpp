@@ -7,6 +7,9 @@
 
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
+
+#include <boost/algorithm/string/predicate.hpp>
+
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>

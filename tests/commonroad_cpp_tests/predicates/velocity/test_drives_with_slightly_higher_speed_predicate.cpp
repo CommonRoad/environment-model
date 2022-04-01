@@ -25,13 +25,13 @@ void DrivesWithSlightlyHigherSpeedPredicateTest::SetUp() {
     std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 0, 20, 0, 0, 0, 30, 0);
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 40, 0, 10, 0, 0, 0, 40, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
