@@ -77,9 +77,16 @@ class Intersection {
      */
     void setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cross);
 
+    /**
+     *
+     * @return
+     */
     const std::vector<std::shared_ptr<Lanelet>> &getMemberLanelets() const;
 
-    void setMemberLanelets(const std::vector<std::shared_ptr<Lanelet>> &memberLanelets);
+    /**
+     *
+     */
+    void computeMemberLanelets();
 
   private:
     size_t id;                                        //**< ID of intersection. */
