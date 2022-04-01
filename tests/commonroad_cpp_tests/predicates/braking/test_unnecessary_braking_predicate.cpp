@@ -47,19 +47,19 @@ void UnnecessaryBrakingPredicateTest::SetUp() {
 
     std::shared_ptr<State> stateFiveObstacleOne = std::make_shared<State>(5, 50, 2, 10, 2, 0, 0, 50, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
         std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
         std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
+    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleThree{
+    Obstacle::state_map_t trajectoryPredictionObstacleThree{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleThree),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleThree),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree)};

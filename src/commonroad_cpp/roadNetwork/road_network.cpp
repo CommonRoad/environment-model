@@ -7,7 +7,17 @@
 
 #include <utility>
 
-#include <boost/geometry.hpp>
+#include <boost/version.hpp>
+#if (BOOST_VERSION / 100000) == 1 && (BOOST_VERSION / 100 % 1000) < 78 // Minor version < 78
+// On Boost<1.78.0, the cartesian blanket header does not exist
+#include <boost/geometry/strategies/strategies.hpp>
+
+// On Boost<1.78.0, this needs to be included before <boost/geometry/index/parameters.hpp>
+#include <boost/geometry/strategies/default_strategy.hpp>
+#else
+#include <boost/geometry/strategies/cartesian.hpp>
+#endif
+
 #include <boost/geometry/index/parameters.hpp>
 #include <boost/geometry/index/rtree.hpp>
 
