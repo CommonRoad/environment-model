@@ -19,13 +19,13 @@ void MainCarriagewayRightLanePredicateTest::SetUp() {
     std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(7, 70, 4, 10, 0, 0);
     std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(8, 80, 2, 10, 0, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne)};
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
+    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(4, stateOneObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(5, stateTwoObstacleTwo)};
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleThree{
+    Obstacle::state_map_t trajectoryPredictionObstacleThree{
         std::pair<int, std::shared_ptr<State>>(7, stateOneObstacleThree),
         std::pair<int, std::shared_ptr<State>>(8, stateTwoObstacleThree)};
 

@@ -7,10 +7,11 @@
 
 #include "geometric_operations.h"
 
-#include <boost/geometry.hpp>
+#include <boost/geometry/algorithms/convex_hull.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <cmath>
 #include <commonroad_cpp/geometry/types.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 using CurvilinearCoordinateSystem = geometry::CurvilinearCoordinateSystem;
 using boost::geometry::get;

@@ -22,7 +22,7 @@ void MakesUTurnPredicateTest::SetUp() {
     std::shared_ptr<State> stateThreeEgoVehicle =
         std::make_shared<State>(3, 30, 0, 10, 0, 0, curvlinOrientation3, 30, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),

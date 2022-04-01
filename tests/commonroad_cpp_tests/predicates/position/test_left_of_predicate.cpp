@@ -53,7 +53,7 @@ void LeftOfPredicateTest::SetUp() {
     std::shared_ptr<State> stateTenEgoVehicle = std::make_shared<State>(10, 110, 2, 10, 0, 0, 0, 110, 0);
     std::shared_ptr<State> stateTenObstacleTwo = std::make_shared<State>(10, 110, -2, 10, 0, 0, 0, 110, -4);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
@@ -65,7 +65,7 @@ void LeftOfPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(9, stateNineEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(10, stateTenEgoVehicle)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleOne{
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
         std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
@@ -75,7 +75,7 @@ void LeftOfPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleOne),
         std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleOne)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleTwo{
+    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleTwo)};
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,

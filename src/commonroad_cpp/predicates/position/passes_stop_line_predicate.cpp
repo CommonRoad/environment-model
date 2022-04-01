@@ -8,9 +8,12 @@
 #include <Eigen/Dense>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
 #include <commonroad_cpp/world.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 #include "passes_stop_line_predicate.h"
 
@@ -25,11 +28,11 @@ bool PassesStopLinePredicate::booleanEvaluation(size_t timeStep, const std::shar
         Eigen::Vector2d stopLineLonPosOne =
             obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
                 ->getCurvilinearCoordinateSystem()
-                .convertToCurvilinearCoords(stopLine->getPoints().at(0).x, stopLine->getPoints().at(0).y);
+                ->convertToCurvilinearCoords(stopLine->getPoints().at(0).x, stopLine->getPoints().at(0).y);
         Eigen::Vector2d stopLineLonPosTwo =
             obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
                 ->getCurvilinearCoordinateSystem()
-                .convertToCurvilinearCoords(stopLine->getPoints().at(1).x, stopLine->getPoints().at(1).y);
+                ->convertToCurvilinearCoords(stopLine->getPoints().at(1).x, stopLine->getPoints().at(1).y);
         auto stopLineMinPos{std::min(stopLineLonPosOne.x(), stopLineLonPosTwo.x())};
 
         // maybe check orientation as in BA
