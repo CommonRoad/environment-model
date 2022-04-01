@@ -74,8 +74,8 @@ TEST_F(RoadNetworkTest, AddLanes) {
     for (auto vert : let.getCenterVertices())
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     geometry::util::resample_polyline(reference_path, 2, reference_path);
-    auto newLane{
-        std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), let, CurvilinearCoordinateSystem(reference_path))};
+    auto newLane{std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), let,
+                                        std::make_shared<CurvilinearCoordinateSystem>(reference_path))};
     std::vector<std::shared_ptr<Lane>> testLanes{newLane};
     updatedLanes = roadNetworkScenario->addLanes(testLanes, 4);
     EXPECT_EQ(lanes.size(), 1);

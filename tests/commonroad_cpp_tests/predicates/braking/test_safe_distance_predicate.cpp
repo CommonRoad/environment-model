@@ -17,10 +17,10 @@ void SafeDistancePredicateTest::SetUp() {
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 20, 0, 20, 0, 0);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 30, 0, 0, 0, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionOtherVehicle{
+    Obstacle::state_map_t trajectoryPredictionOtherVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
 

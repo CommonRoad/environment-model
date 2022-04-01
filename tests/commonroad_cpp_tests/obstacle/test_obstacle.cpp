@@ -12,6 +12,7 @@
 #include <cmath>
 #include <map>
 #include <memory>
+#include <unordered_set>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
@@ -114,7 +115,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     std::shared_ptr<State> stateTenObstacleThree = std::make_shared<State>(10, 100, 2, 10, 0, 0);
     std::shared_ptr<State> stateTenObstacleFive = std::make_shared<State>(10, 100, -2, 10, 0, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleThree{
+    Obstacle::state_map_t trajectoryPredictionObstacleThree{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleThree),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleThree),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree),
@@ -126,7 +127,7 @@ void ObstacleTestInitialization::setUpObstacles() {
         std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleThree),
         std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleThree)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleFour{
+    Obstacle::state_map_t trajectoryPredictionObstacleFour{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleFour),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleFour),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleFour),
@@ -136,7 +137,7 @@ void ObstacleTestInitialization::setUpObstacles() {
         std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleFour),
         std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleFour)};
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionObstacleFive{
+    Obstacle::state_map_t trajectoryPredictionObstacleFive{
         std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFive),
         std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleFive)};
 
@@ -295,13 +296,13 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     roadNetworkScenarioOne->setIdCounterRef(globalIdRef);
     auto obsOneScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1219)};
     obsOneScenarioOne->computeLanes(roadNetworkScenarioOne);
-    std::set<size_t> expRefLaneletsObsOneScenarioOne{3570, 3632, 3652, 3616, 3456, 3462, 3470};
+    std::unordered_set<size_t> expRefLaneletsObsOneScenarioOne{3570, 3632, 3652, 3616, 3456, 3462, 3470};
     EXPECT_EQ(expRefLaneletsObsOneScenarioOne,
               obsOneScenarioOne->getReferenceLane(roadNetwork, timeStep)->getContainedLaneletIDs());
 
     const auto obsTwoScenarioOne{obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
     obsTwoScenarioOne->computeLanes(roadNetworkScenarioOne);
-    std::set<size_t> expRefLaneletsObsTwoScenarioOne{3570, 3632, 3652, 3616, 3456, 3462, 3470};
+    std::unordered_set<size_t> expRefLaneletsObsTwoScenarioOne{3570, 3632, 3652, 3616, 3456, 3462, 3470};
     EXPECT_EQ(expRefLaneletsObsTwoScenarioOne,
               obsTwoScenarioOne->getReferenceLane(roadNetwork, timeStep)->getContainedLaneletIDs());
 

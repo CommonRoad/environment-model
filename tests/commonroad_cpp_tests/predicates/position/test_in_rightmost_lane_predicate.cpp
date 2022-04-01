@@ -18,7 +18,7 @@ void InLRightmostLanePredicateTest::SetUp() {
     std::shared_ptr<State> stateFiveEgoVehicle = std::make_shared<State>(5, 50, -2, 10, 0, 0, 0, 50, -2);
     std::shared_ptr<State> stateSixEgoVehicle = std::make_shared<State>(6, 60, 2, 10, 0, 0, 0, 60, 2);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
