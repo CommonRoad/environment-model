@@ -5,6 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
+#include "../../roadNetwork/lanelet/lane.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/world.h>
 

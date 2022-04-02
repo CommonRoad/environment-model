@@ -5,8 +5,7 @@
 // Credits: BMW Car@TUM
 //
 #include "test_unobstructed_intersection_view_predicate.h"
-#include "../utils_predicate_test.h"
-#include "commonroad_cpp/obstacle/state.h"
+#include "commonroad_cpp/geometry/geometric_operations.h"
 
 void UnobstructedIntersectionViewPredicateTest::SetUp() {
 
@@ -16,7 +15,7 @@ void UnobstructedIntersectionViewPredicateTest::SetUp() {
     std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 1030, 1004, 10, 0, 0);
     std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 1040, 1006, 10, 0, 0);
 
-    std::map<size_t, std::shared_ptr<State>> trajectoryPredictionEgoVehicle{
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
@@ -37,10 +36,8 @@ void UnobstructedIntersectionViewPredicateTest::SetUp() {
 TEST_F(UnobstructedIntersectionViewPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
-    std::vector<vertex> fovSmall{{0.0, -5.0}, {5 * cos(M_PI * (7 / 4)), 5 * sin(M_PI * (7 / 4))},
-                                 {5.0, 0.0},  {5 * cos(M_PI * (1 / 4)), 5 * sin(M_PI * (1 / 4))},
-                                 {0.0, 5.0},  {5 * cos(M_PI * (3 / 4)), 5 * sin(M_PI * (3 / 4))},
-                                 {-5.0, 0.0}, {5 * cos(M_PI * (5 / 4)), 5 * sin(M_PI * (5 / 4))},
+    std::vector<vertex> fovSmall{{0.0, -5.0}, {3.535533906, -3.535533906}, {5.0, 0.0},  {3.535533906, 3.535533906},
+                                 {0.0, 5.0},  {-3.535533906, 3.535533906}, {-5.0, 0.0}, {-3.535533906, -3.535533906},
                                  {0.0, -5.0}};
     egoVehicle->setFov(geometric_operations::rotateAndTranslateVertices(
         fovSmall, {egoVehicle->getCurrentState()->getXPosition(), egoVehicle->getCurrentState()->getYPosition()}, 0));

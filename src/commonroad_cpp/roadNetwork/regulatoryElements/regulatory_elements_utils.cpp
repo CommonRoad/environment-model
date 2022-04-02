@@ -7,8 +7,9 @@
 
 #include <algorithm>
 
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include "../lanelet/lane.h"
+#include "../lanelet/lanelet.h"
+#include "../regulatoryElements/traffic_light.h"
 
 #include "../../predicates/predicate_config.h"
 #include "../intersection/intersection_operations.h"
@@ -146,6 +147,6 @@ bool regulatory_elements_utils::trafficSignInFront(size_t timeStep, const std::s
     return obstacle->frontS(roadNetwork, timeStep) <
            obstacle->getReferenceLane(roadNetwork, timeStep)
                ->getCurvilinearCoordinateSystem()
-               .convertToCurvilinearCoords(sign->getPosition().x, sign->getPosition().y)
+               ->convertToCurvilinearCoords(sign->getPosition().x, sign->getPosition().y)
                .x();
 }

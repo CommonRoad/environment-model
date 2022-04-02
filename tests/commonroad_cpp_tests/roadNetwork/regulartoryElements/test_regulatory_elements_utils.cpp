@@ -7,6 +7,7 @@
 
 #include "test_regulatory_elements_utils.h"
 #include "../../predicates/utils_predicate_test.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 
 void RegulatoryElementsUtilsTest::SetUp() {

@@ -15,38 +15,38 @@ void IncomingTestInitialization::setUpIncoming() {
     // bottom to left: 6->12->1
     // left to bottom: 2->11->5
     size_t lanelet1Id{1};
-    std::vector<vertex> lanelet1LeftVertices{{1000, 1005}, {-1020, 1005}};
-    std::vector<vertex> lanelet1RightVertices{{1000, 1010}, {-1020, 1010}};
+    std::vector<vertex> lanelet1LeftVertices{{1000, 1005}, {900, 1005}};
+    std::vector<vertex> lanelet1RightVertices{{1000, 1010}, {900, 1010}};
     std::set<LaneletType> lanelet1LaneletTypes{LaneletType::unknown};
     auto lanelet1{
         std::make_shared<Lanelet>(lanelet1Id, lanelet1LeftVertices, lanelet1RightVertices, lanelet1LaneletTypes)};
     size_t lanelet2Id{2};
-    std::vector<vertex> lanelet2LeftVertices{{-1020, 1005}, {1000, 1005}};
-    std::vector<vertex> lanelet2RightVertices{{-1020, 1000}, {1000, 1000}};
+    std::vector<vertex> lanelet2LeftVertices{{900, 1005}, {1000, 1005}};
+    std::vector<vertex> lanelet2RightVertices{{900, 1000}, {1000, 1000}};
     std::set<LaneletType> lanelet2LaneletTypes{LaneletType::incoming};
     auto lanelet2{
         std::make_shared<Lanelet>(lanelet2Id, lanelet2LeftVertices, lanelet2RightVertices, lanelet2LaneletTypes)};
     size_t lanelet3Id{3};
-    std::vector<vertex> lanelet3LeftVertices{{1035, 1005}, {1015, 1005}};
-    std::vector<vertex> lanelet3RightVertices{{1035, 1010}, {1015, 1010}};
+    std::vector<vertex> lanelet3LeftVertices{{1200, 1005}, {1015, 1005}};
+    std::vector<vertex> lanelet3RightVertices{{1200, 1010}, {1015, 1010}};
     std::set<LaneletType> lanelet3LaneletTypes{LaneletType::incoming};
     auto lanelet3{
         std::make_shared<Lanelet>(lanelet3Id, lanelet3LeftVertices, lanelet3RightVertices, lanelet3LaneletTypes)};
     size_t lanelet4Id{4};
-    std::vector<vertex> lanelet4LeftVertices{{1015, 1005}, {1035, 1005}};
-    std::vector<vertex> lanelet4RightVertices{{1015, 1000}, {1035, 1000}};
+    std::vector<vertex> lanelet4LeftVertices{{1015, 1005}, {1200, 1005}};
+    std::vector<vertex> lanelet4RightVertices{{1015, 1000}, {1200, 1000}};
     std::set<LaneletType> lanelet4LaneletTypes{LaneletType::unknown};
     auto lanelet4{
         std::make_shared<Lanelet>(lanelet4Id, lanelet4LeftVertices, lanelet4RightVertices, lanelet4LaneletTypes)};
     size_t lanelet5Id{5};
-    std::vector<vertex> lanelet5LeftVertices{{1007, -1002}, {1007, -1022}};
-    std::vector<vertex> lanelet5RightVertices{{1002, -1002}, {1002, -1022}};
+    std::vector<vertex> lanelet5LeftVertices{{1007, 998}, {1007, 900}};
+    std::vector<vertex> lanelet5RightVertices{{1002, 998}, {1002, 900}};
     std::set<LaneletType> lanelet5LaneletTypes{LaneletType::unknown};
     auto lanelet5{
         std::make_shared<Lanelet>(lanelet5Id, lanelet5LeftVertices, lanelet5RightVertices, lanelet5LaneletTypes)};
     size_t lanelet6Id{6};
-    std::vector<vertex> lanelet6LeftVertices{{1007, -1022}, {107, -102}};
-    std::vector<vertex> lanelet6RightVertices{{1012, -1022}, {1012, -1002}};
+    std::vector<vertex> lanelet6LeftVertices{{1007, 900}, {1007, 998}};
+    std::vector<vertex> lanelet6RightVertices{{1012, 900}, {1012, 998}};
     std::set<LaneletType> lanelet6LaneletTypes{LaneletType::incoming};
     auto lanelet6{
         std::make_shared<Lanelet>(lanelet6Id, lanelet6LeftVertices, lanelet6RightVertices, lanelet6LaneletTypes)};
@@ -75,26 +75,26 @@ void IncomingTestInitialization::setUpIncoming() {
     auto lanelet81{
         std::make_shared<Lanelet>(lanelet81Id, lanelet81LeftVertices, lanelet81RightVertices, lanelet81LaneletTypes)};
     size_t lanelet9Id{9};
-    std::vector<vertex> lanelet9LeftVertices{{1007, -1002}, {1007, 1002}, {1015, 1005}};
-    std::vector<vertex> lanelet9RightVertices{{1012, -1002}, {1012, -1001}, {1015, 1000}};
+    std::vector<vertex> lanelet9LeftVertices{{1007, 998}, {1007, 1002}, {1015, 1005}};
+    std::vector<vertex> lanelet9RightVertices{{1012, 998}, {1012, 999}, {1015, 1000}};
     std::set<LaneletType> lanelet9LaneletTypes{LaneletType::intersection};
     auto lanelet9{
         std::make_shared<Lanelet>(lanelet9Id, lanelet9LeftVertices, lanelet9RightVertices, lanelet9LaneletTypes)};
     size_t lanelet10Id{10};
-    std::vector<vertex> lanelet10LeftVertices{{1015, 1005}, {1007, 1002}, {1007, -1002}};
-    std::vector<vertex> lanelet10RightVertices{{1015, 1010}, {1002, 1008}, {2, -1002}};
+    std::vector<vertex> lanelet10LeftVertices{{1015, 1005}, {1007, 1002}, {1007, 998}};
+    std::vector<vertex> lanelet10RightVertices{{1015, 1010}, {1002, 1008}, {1002, 998}};
     std::set<LaneletType> lanelet10LaneletTypes{LaneletType::intersection};
     auto lanelet10{
         std::make_shared<Lanelet>(lanelet10Id, lanelet10LeftVertices, lanelet10RightVertices, lanelet10LaneletTypes)};
     size_t lanelet11Id{11};
-    std::vector<vertex> lanelet11LeftVertices{{1000, 1005}, {1007, 1002}, {1007, -1002}};
-    std::vector<vertex> lanelet11RightVertices{{1000, 1000}, {1002, -1001}, {1002, -1002}};
+    std::vector<vertex> lanelet11LeftVertices{{1000, 1005}, {1007, 1002}, {1007, 998}};
+    std::vector<vertex> lanelet11RightVertices{{1000, 1000}, {1002, 999}, {1002, 998}};
     std::set<LaneletType> lanelet11LaneletTypes{LaneletType::intersection};
     auto lanelet11{
         std::make_shared<Lanelet>(lanelet11Id, lanelet11LeftVertices, lanelet11RightVertices, lanelet11LaneletTypes)};
     size_t lanelet12Id{12};
-    std::vector<vertex> lanelet12LeftVertices{{1007, -1002}, {1007, 1002}, {0, 1005}};
-    std::vector<vertex> lanelet12RightVertices{{1012, -2}, {1012, 1008}, {0, 1010}};
+    std::vector<vertex> lanelet12LeftVertices{{1007, 998}, {1007, 1002}, {1000, 1005}};
+    std::vector<vertex> lanelet12RightVertices{{1012, 990}, {1012, 1008}, {1000, 1010}};
     std::set<LaneletType> lanelet12LaneletTypes{LaneletType::intersection};
     auto lanelet12{
         std::make_shared<Lanelet>(lanelet12Id, lanelet12LeftVertices, lanelet12RightVertices, lanelet12LaneletTypes)};
@@ -189,8 +189,8 @@ TEST_F(IncomingTest, InitializationComplete) {
     EXPECT_EQ(incomingOne->getLeftOutgoings().size(), 0);
     EXPECT_EQ(incomingTwo->getLeftOutgoings().size(), 1);
     EXPECT_EQ(incomingThree->getLeftOutgoings().size(), 1);
-    EXPECT_EQ(incomingTwo->getLeftOutgoings().at(0)->getId(), 12);
-    EXPECT_EQ(incomingThree->getLeftOutgoings().at(0)->getId(), 10);
+    EXPECT_EQ(incomingTwo->getLeftOutgoings().at(0)->getId(), 10);
+    EXPECT_EQ(incomingThree->getLeftOutgoings().at(0)->getId(), 12);
 
     EXPECT_EQ(incomingOne->getRightOutgoings().size(), 1);
     EXPECT_EQ(incomingTwo->getRightOutgoings().size(), 0);
@@ -201,14 +201,14 @@ TEST_F(IncomingTest, InitializationComplete) {
     EXPECT_EQ(incomingOne->getStraightOutgoings().size(), 1);
     EXPECT_EQ(incomingTwo->getStraightOutgoings().size(), 1);
     EXPECT_EQ(incomingThree->getStraightOutgoings().size(), 0);
-    EXPECT_EQ(incomingOne->getStraightOutgoings().at(0)->getId(), 8);
-    EXPECT_EQ(incomingTwo->getStraightOutgoings().at(0)->getId(), 7);
+    EXPECT_EQ(incomingOne->getStraightOutgoings().at(0)->getId(), 81);
+    EXPECT_EQ(incomingTwo->getStraightOutgoings().at(0)->getId(), 71);
 
     EXPECT_EQ(incomingOne->getOncomings().size(), 1);
     EXPECT_EQ(incomingTwo->getOncomings().size(), 1);
     EXPECT_EQ(incomingThree->getOncomings().size(), 0);
-    EXPECT_EQ(incomingOne->getOncomings().at(0)->getId(), 7);
-    EXPECT_EQ(incomingTwo->getOncomings().at(0)->getId(), 8);
+    EXPECT_EQ(incomingOne->getOncomings().at(0)->getId(), 71);
+    EXPECT_EQ(incomingTwo->getOncomings().at(0)->getId(), 81);
 
     EXPECT_EQ(incomingOne->getIsLeftOf(), nullptr);
     EXPECT_EQ(incomingTwo->getIsLeftOf()->getId(), 15);
