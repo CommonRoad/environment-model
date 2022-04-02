@@ -50,12 +50,6 @@ TEST_F(IntersectionTest, InitializationComplete) {
 }
 
 TEST_F(IntersectionTest, ComputeMemberLanelets) {
-    EXPECT_EQ(intersection1->getMemberLanelets().size(), 0);
-    EXPECT_EQ(intersection2->getMemberLanelets().size(), 0);
-
-    intersection1->computeMemberLanelets();
-    intersection2->computeMemberLanelets();
-
     EXPECT_EQ(intersection1->getMemberLanelets().size(), 11);
     EXPECT_EQ(intersection2->getMemberLanelets().size(), 4);
 }
