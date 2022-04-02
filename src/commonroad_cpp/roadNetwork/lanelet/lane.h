@@ -14,6 +14,7 @@
 
 #include <omp.h>
 
+#include "geometry/curvilinear_coordinate_system.h"
 #include "lanelet.h"
 
 namespace geometry {

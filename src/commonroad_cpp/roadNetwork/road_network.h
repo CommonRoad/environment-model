@@ -215,4 +215,4 @@ template <typename V, typename H, typename P, typename A>
 std::size_t hash_value(std::unordered_set<V, H, P, A> const &val) {
     return boost::hash_range(val.begin(), val.end());
 }
-}; // namespace std
+} // namespace std

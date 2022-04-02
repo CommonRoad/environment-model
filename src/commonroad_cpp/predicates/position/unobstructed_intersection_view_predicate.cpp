@@ -6,6 +6,7 @@
 //
 
 #include "unobstructed_intersection_view_predicate.h"
+#include "../../geometry/geometric_operations.h"
 #include "../../obstacle/obstacle_operations.h"
 #include "../../roadNetwork/lanelet/lanelet_operations.h"
 #include "../../world.h"
@@ -17,21 +18,36 @@ bool UnobstructedIntersectionViewPredicate::booleanEvaluation(size_t timeStep, c
                                                               const std::shared_ptr<Obstacle> &obstacleP) {
     for (const auto &inter : obstacle_operations::getIntersections(timeStep, world->getRoadNetwork(), obstacleK)) {
         for (const auto &incom : inter->getIncomings()) {
-            auto newLanes{lanelet_operations::createLanesBySingleLanelets({incom->getIncomingLanelets()},
-                                                                          world->getRoadNetwork(), 50, 0, 1)};
-            for (const auto &lane : newLanes) {
-                bool laneContained{false};
-                auto dist{lane->getPathLength()};
-                for (size_t idx{lane->getCenterVertices().size()}; idx > 0; --idx) {
-                    if ((dist.back() - dist.at(idx)) > 50 and
-                        bg::within(point_type(lane->getCenterVertices().at(idx).x, lane->getCenterVertices().at(idx).y),
-                                   obstacleK->getFov())) {
-                        laneContained = true;
-                        break;
+            for (const auto &let : incom->getIncomingLanelets()) {
+                auto newLanes{lanelet_operations::combineLaneletAndPredecessorsToLane(let, 50, 0, {})};
+                for (const auto &laneLanelets : newLanes) {
+                    auto lane{lanelet_operations::createLaneByContainedLanelets(laneLanelets, 1)};
+                    bool laneContained{false};
+                    std::deque<polygon_type> laneletIntersection;
+                    bg::intersection(obstacleK->getFov(), lane->getOuterPolygon(), laneletIntersection);
+                    // lane is completely within fov
+                    if (laneletIntersection.empty() and bg::within(lane->getOuterPolygon(), obstacleK->getFov())) {
+                        if (geometric_operations::euclideanDistance2Dim(lane->getLeftBorderVertices().back(),
+                                                                        lane->getLeftBorderVertices().front()) > 50 or
+                            geometric_operations::euclideanDistance2Dim(lane->getRightBorderVertices().back(),
+                                                                        lane->getRightBorderVertices().front()) > 50)
+                            continue;
+                        else
+                            return false;
+                    } else if (laneletIntersection.empty())
+                        return false;
+                    for (const auto &vert : laneletIntersection.at(0).outer()) {
+                        if (geometric_operations::euclideanDistance2Dim(lane->getLeftBorderVertices().back(),
+                                                                        vertex{vert.x(), vert.y()}) > 50 or
+                            geometric_operations::euclideanDistance2Dim(lane->getRightBorderVertices().back(),
+                                                                        vertex{vert.x(), vert.y()}) > 50) {
+                            laneContained = true;
+                            break;
+                        }
                     }
+                    if (!laneContained)
+                        return false;
                 }
-                if (!laneContained)
-                    return false;
             }
         }
     }

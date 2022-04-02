@@ -34,8 +34,8 @@
 
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
                    double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
-                   Obstacle::state_map_t trajectoryPrediction, double length, double width,
-                   std::vector<vertex> route, const std::vector<vertex> &fov)
+                   Obstacle::state_map_t trajectoryPrediction, double length, double width, std::vector<vertex> route,
+                   const std::vector<vertex> &fov)
     : obstacleId(obstacleId), isStatic(isStatic), currentState(std::move(currentState)), obstacleType(obstacleType),
       vMax(vMax), aMax(aMax), aMaxLong(aMaxLong), aMinLong(aMinLong), reactionTime(reactionTime),
       trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(Rectangle(length, width)), route(route) {
@@ -50,11 +50,9 @@ Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> curr
     }
     if (fov.empty()) {
         // TODO update default fov values
-        std::vector<vertex> fovVertices{{0.0, -400.0}, {400 * cos(M_PI * (7 / 4)), 400 * sin(M_PI * (7 / 4))},
-                                        {400.0, 0.0},  {400 * cos(M_PI * (1 / 4)), 400 * sin(M_PI * (1 / 4))},
-                                        {0.0, 400.0},  {400 * cos(M_PI * (3 / 4)), 400 * sin(M_PI * (3 / 4))},
-                                        {-400.0, 0.0}, {400 * cos(M_PI * (5 / 4)), 400 * sin(M_PI * (5 / 4))},
-                                        {0.0, -400.0}};
+        std::vector<vertex> fovVertices{{0.0, -400.0},        {282.8427, -282.8427},  {400.0, 0.0},
+                                        {282.8427, 282.8427}, {0.0, 400.0},           {-282.8427, 282.8427},
+                                        {-400.0, 0.0},        {-282.8427, -282.8427}, {0.0, -400.0}};
         setFov(geometric_operations::rotateAndTranslateVertices(
             fovVertices, {this->currentState->getXPosition(), this->currentState->getYPosition()}, 0));
     }

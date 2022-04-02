@@ -61,8 +61,8 @@ class Obstacle {
      */
     Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
              double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
-             state_map_t trajectoryPrediction, double length, double width,
-             std::vector<vertex> route = {}, const std::vector<vertex> &fov = {});
+             state_map_t trajectoryPrediction, double length, double width, std::vector<vertex> route = {},
+             const std::vector<vertex> &fov = {});
 
     /**
      * Setter for ID of obstacle.
