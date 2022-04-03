@@ -77,6 +77,10 @@ TrafficLightState TrafficLight::matchTrafficLightState(const std::string &traffi
         return TrafficLightState::yellow;
     else if (trafficLightState == "red_yellow")
         return TrafficLightState::red_yellow;
+    else if (trafficLightState == "red")
+        return TrafficLightState::red;
+    else if (trafficLightState == "inactive")
+        return TrafficLightState::inactive;
     else
         return TrafficLightState::red; // default case -> consider also trafficLightState == "red"
 }
