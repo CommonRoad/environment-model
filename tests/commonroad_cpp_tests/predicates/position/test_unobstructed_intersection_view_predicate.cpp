@@ -35,15 +35,19 @@ void UnobstructedIntersectionViewPredicateTest::SetUp() {
 
 TEST_F(UnobstructedIntersectionViewPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle));
+
+    std::vector<vertex> fovMedium{{0.0, -100.0},   {70.71, -70.71}, {100.0, 0.0},     {70.71, 70.71}, {0.0, 100.0},
+                                  {-70.71, 70.71}, {-100.0, 0.0},   {-70.71, -70.71}, {0.0, -100.0}};
+    egoVehicle->setFov(geometric_operations::rotateAndTranslateVertices(
+        fovMedium, {egoVehicle->getCurrentState()->getXPosition(), egoVehicle->getCurrentState()->getYPosition()}, 0));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle));
+
     std::vector<vertex> fovSmall{{0.0, -5.0}, {3.535533906, -3.535533906}, {5.0, 0.0},  {3.535533906, 3.535533906},
                                  {0.0, 5.0},  {-3.535533906, 3.535533906}, {-5.0, 0.0}, {-3.535533906, -3.535533906},
                                  {0.0, -5.0}};
     egoVehicle->setFov(geometric_operations::rotateAndTranslateVertices(
         fovSmall, {egoVehicle->getCurrentState()->getXPosition(), egoVehicle->getCurrentState()->getYPosition()}, 0));
     EXPECT_FALSE(pred.booleanEvaluation(2, world, egoVehicle));
-    EXPECT_FALSE(pred.booleanEvaluation(3, world, egoVehicle));
-    EXPECT_FALSE(pred.booleanEvaluation(4, world, egoVehicle));
 }
 
 TEST_F(UnobstructedIntersectionViewPredicateTest, RobustEvaluation) {

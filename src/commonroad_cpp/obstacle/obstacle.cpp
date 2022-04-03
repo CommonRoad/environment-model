@@ -676,11 +676,15 @@ const polygon_type &Obstacle::getFov() const { return fov; }
 
 void Obstacle::setFov(const std::vector<vertex> &fovVertices) {
     polygon_type polygon;
-    polygon.outer().resize(fovVertices.size() + 1);
+    polygon.outer().resize(fovVertices.size());
     size_t idx{0};
     for (const auto &left : fovVertices) {
         polygon.outer()[idx] = point_type{left.x, left.y};
         idx++;
     }
+
     fov = polygon;
+    boost::geometry::simplify(polygon, fov, 0.01);
+    boost::geometry::unique(fov);
+    boost::geometry::correct(fov);
 }
