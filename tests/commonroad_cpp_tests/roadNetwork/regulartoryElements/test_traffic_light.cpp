@@ -84,3 +84,22 @@ TEST_F(TrafficLightTest, InitializationComplete) {
     EXPECT_EQ(light4->getId(), 4);
     EXPECT_EQ(light4->getDirection(), TurningDirections::leftRight);
 }
+
+TEST_F(TrafficLightTest, MatchTurningDirections) {
+    EXPECT_EQ(TrafficLight::matchTurningDirections("right"), TurningDirections::right);
+    EXPECT_EQ(TrafficLight::matchTurningDirections("straight"), TurningDirections::straight);
+    EXPECT_EQ(TrafficLight::matchTurningDirections("left"), TurningDirections::left);
+    EXPECT_EQ(TrafficLight::matchTurningDirections("leftStraight"), TurningDirections::leftStraight);
+    EXPECT_EQ(TrafficLight::matchTurningDirections("straightRight"), TurningDirections::straightRight);
+    EXPECT_EQ(TrafficLight::matchTurningDirections("leftRight"), TurningDirections::leftRight);
+    EXPECT_EQ(TrafficLight::matchTurningDirections("test"), TurningDirections::all);
+}
+
+TEST_F(TrafficLightTest, MatchTrafficLightState) {
+    EXPECT_EQ(TrafficLight::matchTrafficLightState("green"), TrafficLightState::green);
+    EXPECT_EQ(TrafficLight::matchTrafficLightState("yellow"), TrafficLightState::yellow);
+    EXPECT_EQ(TrafficLight::matchTrafficLightState("red_yellow"), TrafficLightState::red_yellow);
+    EXPECT_EQ(TrafficLight::matchTrafficLightState("red"), TrafficLightState::red);
+    EXPECT_EQ(TrafficLight::matchTrafficLightState("test"), TrafficLightState::red);
+    EXPECT_EQ(TrafficLight::matchTrafficLightState("inactive"), TrafficLightState::inactive);
+}
