@@ -24,18 +24,13 @@ bool UnobstructedIntersectionViewPredicate::booleanEvaluation(size_t timeStep, c
                     auto lane{lanelet_operations::createLaneByContainedLanelets(laneLanelets, 1)};
                     bool laneContained{false};
                     std::deque<polygon_type> laneletIntersection;
-                    bg::intersection(obstacleK->getFov(), lane->getOuterPolygon(), laneletIntersection);
-                    // lane is completely within fov
-                    if (laneletIntersection.empty() and bg::within(lane->getOuterPolygon(), obstacleK->getFov())) {
-                        if (geometric_operations::euclideanDistance2Dim(lane->getLeftBorderVertices().back(),
-                                                                        lane->getLeftBorderVertices().front()) > 50 or
-                            geometric_operations::euclideanDistance2Dim(lane->getRightBorderVertices().back(),
-                                                                        lane->getRightBorderVertices().front()) > 50)
-                            continue;
-                        else
-                            return false;
-                    } else if (laneletIntersection.empty())
+                    bg::intersection(obstacleK->getFov(), lane->getOuterPolygon(),
+                                     laneletIntersection); // boost intersection returns only the intersection points or
+                                                           // if lane is completely within fov, all lane vertices
+                    // lane is outside fov
+                    if (laneletIntersection.empty())
                         return false;
+                    // lane is partially or completely within fov
                     for (const auto &vert : laneletIntersection.at(0).outer()) {
                         if (geometric_operations::euclideanDistance2Dim(lane->getLeftBorderVertices().back(),
                                                                         vertex{vert.x(), vert.y()}) > 50 or
