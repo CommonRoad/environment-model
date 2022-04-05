@@ -151,3 +151,5 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"unobstructed_intersection_view", std::make_shared<UnobstructedIntersectionViewPredicate>()},
     {"traffic_sign_in_front", std::make_shared<TrafficSignInFrontPredicate>()},
 };
+
+OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType) : signType(signType) {}
