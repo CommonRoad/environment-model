@@ -16,7 +16,7 @@
 // automatically generated from commonroad-io with:
 // sed -r 's/([A-Z_0-9]+) = '\''([^'\'']+)'\''/ {"\1", TrafficSignTypes::\1}, /' traffic_sign.py
 
-TrafficSignTable TrafficSignNames = {
+const std::unordered_map<std::string, TrafficSignTypes> TrafficSignNames = {
     {"WARNING_DANGER_SPOT", TrafficSignTypes::WARNING_DANGER_SPOT},
     {"WARNING_RIGHT_BEFORE_LEFT", TrafficSignTypes::WARNING_RIGHT_BEFORE_LEFT},
     {"WARNING_LEFT_CURVE", TrafficSignTypes::WARNING_LEFT_CURVE},
