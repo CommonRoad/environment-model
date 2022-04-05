@@ -55,10 +55,10 @@
 #include "velocity/reverses_predicate.h"
 #include "velocity/slow_leading_vehicle_predicate.h"
 
-bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                                     OptionalPredicateParameters additionalFunctionParameters) {
+bool CommonRoadPredicate::statisticBooleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     auto startTime{Timer::start()};
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters)};
     long compTime{evaluationTimer.stop(startTime)};

@@ -13,10 +13,10 @@
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "on_urban_road_predicate.h"
 
-bool OnUrbanRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                             const std::shared_ptr<Obstacle> &obstacleK,
-                                             const std::shared_ptr<Obstacle> &obstacleP,
-                                             OptionalPredicateParameters additionalFunctionParameters) {
+bool OnUrbanRoadPredicate::booleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> lanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
@@ -24,17 +24,17 @@ bool OnUrbanRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_
     });
 }
 
-double OnUrbanRoadPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                              const std::shared_ptr<Obstacle> &obstacleK,
-                                              const std::shared_ptr<Obstacle> &obstacleP,
-                                              OptionalPredicateParameters additionalFunctionParameters) {
+double OnUrbanRoadPredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     throw std::runtime_error("OnExitRampPredicate does not support robust evaluation!");
 }
 
-Constraint OnUrbanRoadPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                      const std::shared_ptr<Obstacle> &obstacleK,
-                                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                                      OptionalPredicateParameters additionalFunctionParameters) {
+Constraint OnUrbanRoadPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     throw std::runtime_error("OnExitRampPredicate does not support constraint evaluation!");
 }
 
