@@ -17,9 +17,10 @@
 using TrafficSignTable = const std::unordered_map<TrafficSignTypes, std::string>;
 
 extern TrafficSignTable TrafficSignIDGermany;
-extern TrafficSignTable TrafficSignIDZamunda;
 extern TrafficSignTable TrafficSignIDUSA;
 extern TrafficSignTable TrafficSignIDSpain;
+
+extern TrafficSignTable TrafficSignNames;
 
 extern const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> TrafficSignLookupTableByCountry;
 
