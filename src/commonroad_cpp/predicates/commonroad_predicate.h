@@ -19,6 +19,7 @@ class Obstacle;
 class World;
 
 struct OptionalPredicateParameters {
+    OptionalPredicateParameters(TrafficSignTypes signType);
     TrafficSignTypes signType;
 };
 
