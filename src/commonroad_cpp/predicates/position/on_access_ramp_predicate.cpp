@@ -13,10 +13,10 @@
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "on_access_ramp_predicate.h"
 
-bool OnAccessRampPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                              const std::shared_ptr<Obstacle> &obstacleK,
-                                              const std::shared_ptr<Obstacle> &obstacleP,
-                                              OptionalPredicateParameters additionalFunctionParameters) {
+bool OnAccessRampPredicate::booleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> lanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
@@ -24,17 +24,17 @@ bool OnAccessRampPredicate::booleanEvaluation(size_t timeStep, const std::shared
     });
 }
 
-double OnAccessRampPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                               const std::shared_ptr<Obstacle> &obstacleK,
-                                               const std::shared_ptr<Obstacle> &obstacleP,
-                                               OptionalPredicateParameters additionalFunctionParameters) {
+double OnAccessRampPredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     throw std::runtime_error("On Access Ramp Predicate does not support robust evaluation!");
 }
 
-Constraint OnAccessRampPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                       const std::shared_ptr<Obstacle> &obstacleK,
-                                                       const std::shared_ptr<Obstacle> &obstacleP,
-                                                       OptionalPredicateParameters additionalFunctionParameters) {
+Constraint OnAccessRampPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     throw std::runtime_error("On Access Ramp Predicate does not support constraint evaluation!");
 }
 

@@ -15,17 +15,17 @@
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include "unnecessary_braking_predicate.h"
 
-bool UnnecessaryBrakingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                    const std::shared_ptr<Obstacle> &obstacleK,
-                                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                                    OptionalPredicateParameters additionalFunctionParameters) {
+bool UnnecessaryBrakingPredicate::booleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     return robustEvaluation(timeStep, world, obstacleK) > 0;
 }
 
-Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                             const std::shared_ptr<Obstacle> &obstacleK,
-                                                             const std::shared_ptr<Obstacle> &obstacleP,
-                                                             OptionalPredicateParameters additionalFunctionParameters) {
+Constraint UnnecessaryBrakingPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     std::vector<double> constraintValues;
     InSameLanePredicate sameLanePredicate;
     InFrontOfPredicate inFrontOfPredicate;
@@ -51,10 +51,10 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(size_t timeStep, co
         return {parameters.aAbrupt};
 }
 
-double UnnecessaryBrakingPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                                     OptionalPredicateParameters additionalFunctionParameters) {
+double UnnecessaryBrakingPredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
     std::vector<double> robustnessValues;
     InSameLanePredicate sameLanePredicate;
     InFrontOfPredicate inFrontOfPredicate;
