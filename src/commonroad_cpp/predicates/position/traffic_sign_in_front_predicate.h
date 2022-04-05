@@ -59,7 +59,6 @@ class TrafficSignInFrontPredicate : public CommonRoadPredicate {
                                     const std::shared_ptr<Obstacle> &obstacleP = {}) override;
 
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                           const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP,
+                           const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP,
                            TrafficSignTypes signType);
 };
