@@ -17,7 +17,8 @@
 
 bool DrivesLeftmostPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                 const std::shared_ptr<Obstacle> &obstacleK,
-                                                const std::shared_ptr<Obstacle> &obstacleP) {
+                                                const std::shared_ptr<Obstacle> &obstacleP,
+                                                OptionalPredicateParameters additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     std::shared_ptr<Obstacle> vehicle_directly_left =
@@ -47,13 +48,15 @@ bool DrivesLeftmostPredicate::booleanEvaluation(size_t timeStep, const std::shar
 
 double DrivesLeftmostPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
-                                                 const std::shared_ptr<Obstacle> &obstacleP) {
+                                                 const std::shared_ptr<Obstacle> &obstacleP,
+                                                 OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Drives Leftmost Predicate does not support robust evaluation!");
 }
 
 Constraint DrivesLeftmostPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
-                                                         const std::shared_ptr<Obstacle> &obstacleP) {
+                                                         const std::shared_ptr<Obstacle> &obstacleP,
+                                                         OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Drives Leftmost Predicate does not support constraint evaluation!");
 }
 

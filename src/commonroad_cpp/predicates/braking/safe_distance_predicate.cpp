@@ -22,7 +22,8 @@ double SafeDistancePredicate::computeSafeDistance(double velocityK, double veloc
 
 bool SafeDistancePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                               const std::shared_ptr<Obstacle> &obstacleK,
-                                              const std::shared_ptr<Obstacle> &obstacleP) {
+                                              const std::shared_ptr<Obstacle> &obstacleP,
+                                              OptionalPredicateParameters additionalFunctionParameters) {
     return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
 }
 
@@ -35,7 +36,8 @@ bool SafeDistancePredicate::booleanEvaluation(double lonPosK, double lonPosP, do
 
 Constraint SafeDistancePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
-                                                       const std::shared_ptr<Obstacle> &obstacleP) {
+                                                       const std::shared_ptr<Obstacle> &obstacleP,
+                                                       OptionalPredicateParameters additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
     double tReact{obstacleK->getReactionTime()};
@@ -55,7 +57,8 @@ Constraint SafeDistancePredicate::constraintEvaluation(double lonPosP, double ve
 
 double SafeDistancePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                const std::shared_ptr<Obstacle> &obstacleK,
-                                               const std::shared_ptr<Obstacle> &obstacleP) {
+                                               const std::shared_ptr<Obstacle> &obstacleP,
+                                               OptionalPredicateParameters additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
     double tReact{obstacleK->getReactionTime()};

@@ -12,7 +12,8 @@
 #include <commonroad_cpp/world.h>
 bool InSlowMovingTrafficPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
-                                                     const std::shared_ptr<Obstacle> &obstacleP) {
+                                                     const std::shared_ptr<Obstacle> &obstacleP,
+                                                     OptionalPredicateParameters additionalFunctionParameters) {
     InFrontOfPredicate inFrontOfPredicate;
     InSameLanePredicate inSameLanePredicate;
 
@@ -30,13 +31,15 @@ bool InSlowMovingTrafficPredicate::booleanEvaluation(size_t timeStep, const std:
 
 Constraint InSlowMovingTrafficPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                               const std::shared_ptr<Obstacle> &obstacleK,
-                                                              const std::shared_ptr<Obstacle> &obstacleP) {
+                                                              const std::shared_ptr<Obstacle> &obstacleP,
+                                                              OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("In Slow Moving Traffic Predicate does not support constraint evaluation!");
 }
 
 double InSlowMovingTrafficPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                       const std::shared_ptr<Obstacle> &obstacleK,
-                                                      const std::shared_ptr<Obstacle> &obstacleP) {
+                                                      const std::shared_ptr<Obstacle> &obstacleP,
+                                                      OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("In Slow Moving Traffic Predicate does not support robust evaluation!");
 }
 InSlowMovingTrafficPredicate::InSlowMovingTrafficPredicate() : CommonRoadPredicate(false) {}

@@ -16,7 +16,8 @@
 
 bool RightOfBroadLaneMarkingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
-                                                         const std::shared_ptr<Obstacle> &obstacleP) {
+                                                         const std::shared_ptr<Obstacle> &obstacleP,
+                                                         OptionalPredicateParameters additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> lanelets_occ =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
 
@@ -37,13 +38,15 @@ bool RightOfBroadLaneMarkingPredicate::booleanEvaluation(size_t timeStep, const 
 
 double RightOfBroadLaneMarkingPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                           const std::shared_ptr<Obstacle> &obstacleK,
-                                                          const std::shared_ptr<Obstacle> &obstacleP) {
+                                                          const std::shared_ptr<Obstacle> &obstacleP,
+                                                          OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Right of broad lane marking does not support robust evaluation!");
 }
 
 Constraint RightOfBroadLaneMarkingPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                                   const std::shared_ptr<Obstacle> &obstacleK,
-                                                                  const std::shared_ptr<Obstacle> &obstacleP) {
+                                                                  const std::shared_ptr<Obstacle> &obstacleP,
+                                                                  OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Right of broad lane marking does not support constraint evaluation!");
 }
 

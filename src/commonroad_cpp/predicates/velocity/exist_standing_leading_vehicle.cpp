@@ -13,7 +13,8 @@
 #include <commonroad_cpp/world.h>
 bool ExistStandingLeadingVehiclePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                              const std::shared_ptr<Obstacle> &obstacleK,
-                                                             const std::shared_ptr<Obstacle> &obstacleP) {
+                                                             const std::shared_ptr<Obstacle> &obstacleP,
+                                                             OptionalPredicateParameters additionalFunctionParameters) {
 
     InFrontOfPredicate inFrontOfPredicate;
     InSameLanePredicate inSameLanePredicate;
@@ -32,13 +33,15 @@ bool ExistStandingLeadingVehiclePredicate::booleanEvaluation(size_t timeStep, co
 Constraint ExistStandingLeadingVehiclePredicate::constraintEvaluation(size_t timeStep,
                                                                       const std::shared_ptr<World> &world,
                                                                       const std::shared_ptr<Obstacle> &obstacleK,
-                                                                      const std::shared_ptr<Obstacle> &obstacleP) {
+                                                                      const std::shared_ptr<Obstacle> &obstacleP,
+                                                                      OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Exist Standing Leading Vehicle Predicate does not support constraint evaluation!");
 }
 
 double ExistStandingLeadingVehiclePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                               const std::shared_ptr<Obstacle> &obstacleK,
-                                                              const std::shared_ptr<Obstacle> &obstacleP) {
+                                                              const std::shared_ptr<Obstacle> &obstacleP,
+                                                              OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Exist Standing Leading Vehicle Predicate does not support robust evaluation!");
 }
 
