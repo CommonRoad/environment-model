@@ -315,4 +315,6 @@ enum class TrafficSignTypes {
     WARNING_ARROW_LEFT,
     NO_WAITING,
     NO_STOPPING,
+    LINE_MARKING_MISSING,
+    UNKNOWN
 };

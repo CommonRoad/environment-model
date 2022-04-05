@@ -22,18 +22,19 @@ bool TrafficSignInFrontPredicate::booleanEvaluation(size_t timeStep, const std::
 }
 
 bool TrafficSignInFrontPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                    const std::shared_ptr<Obstacle> &obstacle,
+                                                    const std::shared_ptr<Obstacle> &obstacleK,
+                                                    const std::shared_ptr<Obstacle> &obstacleP,
                                                     TrafficSignTypes signType) {
-    auto lanelets{obstacle->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
+    auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
     const auto signId{TrafficSignLookupTableByCountry.at(world->getRoadNetwork()->getCountry())->at(signType)};
     for (const auto &lanelet : lanelets) {
         for (const auto &sign : lanelet->getTrafficSigns()) {
             for (const auto &signElement : sign->getTrafficSignElementsOfType(signId)) {
-                Eigen::Vector2d signPos{obstacle->getReferenceLane(world->getRoadNetwork(), timeStep)
+                Eigen::Vector2d signPos{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
                                             ->getCurvilinearCoordinateSystem()
                                             ->convertToCurvilinearCoords(sign->getPosition().x, sign->getPosition().y)};
 
-                if (obstacle->rearS(world->getRoadNetwork(), timeStep) < signPos.x())
+                if (obstacleK->rearS(world->getRoadNetwork(), timeStep) < signPos.x())
                     return true;
             }
         }
