@@ -98,16 +98,4 @@ double requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets, c
  */
 double typeSpeedLimit(ObstacleType obstacleType);
 
-/**
- * Evaluates whether traffic sign is in front of an obstacle.
- *
- * @param timeStep Time step of interest.
- * @param sign Traffic sign of interest.
- * @param obstacle Obstacle of interest.
- * @param roadNetwork Road network traffic sign an obstacle are located in.
- * @return Boolean indicating whether the sign is located in front of the obstacle.
- */
-bool trafficSignInFront(size_t timeStep, const std::shared_ptr<TrafficSign> &sign,
-                        const std::shared_ptr<Obstacle> &obstacle, const std::shared_ptr<RoadNetwork> &roadNetwork);
-
 } // namespace regulatory_elements_utils

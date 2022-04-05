@@ -35,6 +35,8 @@
 #include "position/passes_stop_line_predicate.h"
 #include "position/right_of_broad_lane_marking_predicate.h"
 #include "position/stop_line_in_front_predicate.h"
+#include "position/traffic_sign_in_front_predicate.h"
+#include "position/unobstructed_intersection_view_predicate.h"
 #include "regulatory/at_red_left_traffic_light_predicate.h"
 #include "regulatory/at_red_right_traffic_light_predicate.h"
 #include "regulatory/at_red_straight_traffic_light_predicate.h"
@@ -145,4 +147,6 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"keeps_sign_min_speed_limit", std::make_shared<RequiredSpeedPredicate>()},
     {"reverses", std::make_shared<ReversesPredicate>()},
     {"slow_leading_vehicle", std::make_shared<SlowLeadingVehiclePredicate>()},
+    {"unobstructed_intersection_view", std::make_shared<UnobstructedIntersectionViewPredicate>()},
+    {"traffic_sign_in_front", std::make_shared<TrafficSignInFrontPredicate>()},
 };
