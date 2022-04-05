@@ -32,10 +32,9 @@ double PreservesTrafficFlowPredicate::robustEvaluation(size_t timeStep, const st
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support robust evaluation!");
 }
 
-Constraint PreservesTrafficFlowPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                               const std::shared_ptr<Obstacle> &obstacleK,
-                                                               const std::shared_ptr<Obstacle> &obstacleP,
-                                                               OptionalPredicateParameters additionalFunctionParameters) {
+Constraint PreservesTrafficFlowPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support constraint evaluation!");
 }
 PreservesTrafficFlowPredicate::PreservesTrafficFlowPredicate() : CommonRoadPredicate(false) {}

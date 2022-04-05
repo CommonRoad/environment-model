@@ -24,10 +24,9 @@ double AtRedLeftTrafficLightPredicate::robustEvaluation(size_t timeStep, const s
                                                         OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("AtRedLeftTrafficLightPredicate does not support robust evaluation!");
 }
-Constraint AtRedLeftTrafficLightPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                                const std::shared_ptr<Obstacle> &obstacleK,
-                                                                const std::shared_ptr<Obstacle> &obstacleP,
-                                                                OptionalPredicateParameters additionalFunctionParameters) {
+Constraint AtRedLeftTrafficLightPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("AtRedLeftTrafficLightPredicate does not support constraint evaluation!");
 }
 AtRedLeftTrafficLightPredicate::AtRedLeftTrafficLightPredicate() : CommonRoadPredicate(false) {}

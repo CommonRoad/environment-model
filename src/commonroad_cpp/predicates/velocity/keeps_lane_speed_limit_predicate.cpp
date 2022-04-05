@@ -29,10 +29,9 @@ double KeepsLaneSpeedLimitPredicate::robustEvaluation(size_t timeStep, const std
     throw std::runtime_error("KeepsLaneSpeedLimitPredicate does not support robust evaluation!");
 }
 
-Constraint KeepsLaneSpeedLimitPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                              const std::shared_ptr<Obstacle> &obstacleK,
-                                                              const std::shared_ptr<Obstacle> &obstacleP,
-                                                              OptionalPredicateParameters additionalFunctionParameters) {
+Constraint KeepsLaneSpeedLimitPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("KeepsLaneSpeedLimitPredicate does not support constraint evaluation!");
 }
 KeepsLaneSpeedLimitPredicate::KeepsLaneSpeedLimitPredicate() : CommonRoadPredicate(false) {}

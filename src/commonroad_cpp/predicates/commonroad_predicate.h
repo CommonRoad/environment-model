@@ -18,10 +18,9 @@
 class Obstacle;
 class World;
 
-struct OptionalPredicateParameters{
+struct OptionalPredicateParameters {
     TrafficSignTypes signType;
 };
-
 
 /**
  * Interface for a predicate.
