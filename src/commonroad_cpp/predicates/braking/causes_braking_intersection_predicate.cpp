@@ -14,7 +14,8 @@
 
 bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                            const std::shared_ptr<Obstacle> &obstacleK,
-                                                           const std::shared_ptr<Obstacle> &obstacleP) {
+                                                           const std::shared_ptr<Obstacle> &obstacleP,
+                                                           OptionalPredicateParameters additionalFunctionParameters) {
     if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
         obstacleK->interpolateAcceleration(timeStep, world->getDt());
     if (!obstacleP->getStateByTimeStep(timeStep)->getValidStates().acceleration)
@@ -30,13 +31,15 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, cons
 Constraint CausesBrakingIntersectionPredicate::constraintEvaluation(size_t timeStep,
                                                                     const std::shared_ptr<World> &world,
                                                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                                                    const std::shared_ptr<Obstacle> &obstacleP) {
+                                                                    const std::shared_ptr<Obstacle> &obstacleP,
+                                                                    OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("CausesBrakingIntersectionPredicate does not support robust evaluation!");
 }
 
 double CausesBrakingIntersectionPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                             const std::shared_ptr<Obstacle> &obstacleK,
-                                                            const std::shared_ptr<Obstacle> &obstacleP) {
+                                                            const std::shared_ptr<Obstacle> &obstacleP,
+                                                            OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("CausesBrakingIntersectionPredicate does not support robust evaluation!");
 }
 

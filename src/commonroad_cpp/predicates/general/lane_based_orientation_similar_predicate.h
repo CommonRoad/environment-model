@@ -31,7 +31,8 @@ class LaneBasedOrientationSimilarPredicate : public CommonRoadPredicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleP,
-                           const std::shared_ptr<Obstacle> &obstacleK) override;
+                           const std::shared_ptr<Obstacle> &obstacleK = {},
+                           OptionalPredicateParameters additionalFunctionParameters = {}) override;
 
     /**
      * Constraint evaluation of predicate using objects.
@@ -44,7 +45,8 @@ class LaneBasedOrientationSimilarPredicate : public CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                    const std::shared_ptr<Obstacle> &obstacleK) override;
+                                    const std::shared_ptr<Obstacle> &obstacleK = {},
+                                    OptionalPredicateParameters additionalFunctionParameters = {}) override;
 
     /**
      * Robustness evaluation of predicate using objects.
@@ -57,5 +59,6 @@ class LaneBasedOrientationSimilarPredicate : public CommonRoadPredicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleP,
-                            const std::shared_ptr<Obstacle> &obstacleK) override;
+                            const std::shared_ptr<Obstacle> &obstacleK = {},
+                            OptionalPredicateParameters additionalFunctionParameters = {}) override;
 };

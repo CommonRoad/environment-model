@@ -15,7 +15,8 @@ namespace bg = boost::geometry;
 
 bool UnobstructedIntersectionViewPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                               const std::shared_ptr<Obstacle> &obstacleK,
-                                                              const std::shared_ptr<Obstacle> &obstacleP) {
+                                                              const std::shared_ptr<Obstacle> &obstacleP,
+                                                              OptionalPredicateParameters additionalFunctionParameters) {
     for (const auto &inter : obstacle_operations::getIntersections(timeStep, world->getRoadNetwork(), obstacleK)) {
         for (const auto &incom : inter->getIncomings()) {
             for (const auto &let : incom->getIncomingLanelets()) {
@@ -51,14 +52,16 @@ bool UnobstructedIntersectionViewPredicate::booleanEvaluation(size_t timeStep, c
 
 double UnobstructedIntersectionViewPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                                const std::shared_ptr<Obstacle> &obstacleK,
-                                                               const std::shared_ptr<Obstacle> &obstacleP) {
+                                                               const std::shared_ptr<Obstacle> &obstacleP,
+                                                               OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("UnobstructedIntersectionViewPredicate does not support robust evaluation!");
 }
 
 Constraint UnobstructedIntersectionViewPredicate::constraintEvaluation(size_t timeStep,
                                                                        const std::shared_ptr<World> &world,
                                                                        const std::shared_ptr<Obstacle> &obstacleK,
-                                                                       const std::shared_ptr<Obstacle> &obstacleP) {
+                                                                       const std::shared_ptr<Obstacle> &obstacleP,
+                                                                       OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("UnobstructedIntersectionViewPredicate does not support constraint evaluation!");
 }
 

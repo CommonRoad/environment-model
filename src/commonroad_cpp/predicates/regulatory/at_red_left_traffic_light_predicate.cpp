@@ -13,18 +13,21 @@
 
 bool AtRedLeftTrafficLightPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
-                                                       const std::shared_ptr<Obstacle> &obstacleP) {
+                                                       const std::shared_ptr<Obstacle> &obstacleP,
+                                                       OptionalPredicateParameters additionalFunctionParameters) {
     return regulatory_elements_utils::atRedTrafficLight(timeStep, obstacleK, world->getRoadNetwork(),
                                                         TurningDirections::left);
 }
 double AtRedLeftTrafficLightPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
-                                                        const std::shared_ptr<Obstacle> &obstacleP) {
+                                                        const std::shared_ptr<Obstacle> &obstacleP,
+                                                        OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("AtRedLeftTrafficLightPredicate does not support robust evaluation!");
 }
 Constraint AtRedLeftTrafficLightPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                                 const std::shared_ptr<Obstacle> &obstacleK,
-                                                                const std::shared_ptr<Obstacle> &obstacleP) {
+                                                                const std::shared_ptr<Obstacle> &obstacleP,
+                                                                OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("AtRedLeftTrafficLightPredicate does not support constraint evaluation!");
 }
 AtRedLeftTrafficLightPredicate::AtRedLeftTrafficLightPredicate() : CommonRoadPredicate(false) {}
