@@ -20,7 +20,7 @@ extern TrafficSignTable TrafficSignIDGermany;
 extern TrafficSignTable TrafficSignIDUSA;
 extern TrafficSignTable TrafficSignIDSpain;
 
-extern TrafficSignTable TrafficSignNames;
+extern const std::unordered_map<std::string, TrafficSignTypes> TrafficSignNames;
 
 extern const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> TrafficSignLookupTableByCountry;
 
