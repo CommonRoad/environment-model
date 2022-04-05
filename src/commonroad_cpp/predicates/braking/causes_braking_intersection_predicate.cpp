@@ -28,11 +28,9 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, cons
                parameters.aBrakingIntersection;
 }
 
-Constraint CausesBrakingIntersectionPredicate::constraintEvaluation(size_t timeStep,
-                                                                    const std::shared_ptr<World> &world,
-                                                                    const std::shared_ptr<Obstacle> &obstacleK,
-                                                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                                                    OptionalPredicateParameters additionalFunctionParameters) {
+Constraint CausesBrakingIntersectionPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("CausesBrakingIntersectionPredicate does not support robust evaluation!");
 }
 

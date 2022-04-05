@@ -24,10 +24,9 @@ bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const st
                        });
 }
 
-Constraint InterstateBroadEnoughPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                                const std::shared_ptr<Obstacle> &obstacleK,
-                                                                const std::shared_ptr<Obstacle> &obstacleP,
-                                                                OptionalPredicateParameters additionalFunctionParameters) {
+Constraint InterstateBroadEnoughPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Interstate Broad Enough Predicate does not support constraint evaluation!");
 }
 

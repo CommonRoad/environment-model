@@ -29,10 +29,9 @@ bool InSlowMovingTrafficPredicate::booleanEvaluation(size_t timeStep, const std:
     return num_vehicles >= parameters.numVehSlowMovingTraffic;
 }
 
-Constraint InSlowMovingTrafficPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                              const std::shared_ptr<Obstacle> &obstacleK,
-                                                              const std::shared_ptr<Obstacle> &obstacleP,
-                                                              OptionalPredicateParameters additionalFunctionParameters) {
+Constraint InSlowMovingTrafficPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("In Slow Moving Traffic Predicate does not support constraint evaluation!");
 }
 

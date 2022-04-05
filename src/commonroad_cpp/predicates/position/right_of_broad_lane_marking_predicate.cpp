@@ -43,10 +43,9 @@ double RightOfBroadLaneMarkingPredicate::robustEvaluation(size_t timeStep, const
     throw std::runtime_error("Right of broad lane marking does not support robust evaluation!");
 }
 
-Constraint RightOfBroadLaneMarkingPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                                  const std::shared_ptr<Obstacle> &obstacleK,
-                                                                  const std::shared_ptr<Obstacle> &obstacleP,
-                                                                  OptionalPredicateParameters additionalFunctionParameters) {
+Constraint RightOfBroadLaneMarkingPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Right of broad lane marking does not support constraint evaluation!");
 }
 

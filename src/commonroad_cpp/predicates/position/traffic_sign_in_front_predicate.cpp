@@ -20,7 +20,8 @@ bool TrafficSignInFrontPredicate::booleanEvaluation(size_t timeStep, const std::
                                                     const std::shared_ptr<Obstacle> &obstacleP,
                                                     OptionalPredicateParameters additionalFunctionParameters) {
     auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
-    const auto signId{TrafficSignLookupTableByCountry.at(world->getRoadNetwork()->getCountry())->at(additionalFunctionParameters.signType)};
+    const auto signId{TrafficSignLookupTableByCountry.at(world->getRoadNetwork()->getCountry())
+                          ->at(additionalFunctionParameters.signType)};
     for (const auto &lanelet : lanelets) {
         for (const auto &sign : lanelet->getTrafficSigns()) {
             for (const auto &signElement : sign->getTrafficSignElementsOfType(signId)) {

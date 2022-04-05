@@ -27,8 +27,7 @@ class ReversesPredicate : public CommonRoadPredicate {
      * @return Boolean indicating satisfaction of the predicate.
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                           const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::shared_ptr<Obstacle> &obstacleP = {},
+                           const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP = {},
                            OptionalPredicateParameters additionalFunctionParameters = {}) override;
 
     /**
@@ -41,8 +40,7 @@ class ReversesPredicate : public CommonRoadPredicate {
      * @return Real value indicating robustness of the predicate.
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                            const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::shared_ptr<Obstacle> &obstacleP = {},
+                            const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP = {},
                             OptionalPredicateParameters additionalFunctionParameters = {}) override;
 
     /**

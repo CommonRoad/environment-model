@@ -11,27 +11,23 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
-bool DrivesWithSlightlyHigherSpeedPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                               const std::shared_ptr<Obstacle> &obstacleK,
-                                                               const std::shared_ptr<Obstacle> &obstacleP,
-                                                               OptionalPredicateParameters additionalFunctionParameters) {
+bool DrivesWithSlightlyHigherSpeedPredicate::booleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     double diff =
         obstacleK->getStateByTimeStep(timeStep)->getVelocity() - obstacleP->getStateByTimeStep(timeStep)->getVelocity();
     return 0 < diff and diff < parameters.slightlyHigherSpeedDifference;
 }
 
-Constraint DrivesWithSlightlyHigherSpeedPredicate::constraintEvaluation(size_t timeStep,
-                                                                        const std::shared_ptr<World> &world,
-                                                                        const std::shared_ptr<Obstacle> &obstacleK,
-                                                                        const std::shared_ptr<Obstacle> &obstacleP,
-                                                                        OptionalPredicateParameters additionalFunctionParameters) {
+Constraint DrivesWithSlightlyHigherSpeedPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Drives With Slightly Higher Speed Predicate does not support constraint evaluation!");
 }
 
-double DrivesWithSlightlyHigherSpeedPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                                const std::shared_ptr<Obstacle> &obstacleK,
-                                                                const std::shared_ptr<Obstacle> &obstacleP,
-                                                                OptionalPredicateParameters additionalFunctionParameters) {
+double DrivesWithSlightlyHigherSpeedPredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP, OptionalPredicateParameters additionalFunctionParameters) {
     throw std::runtime_error("Drives With Slightly Higher Speed Predicate does not support robust evaluation!");
 }
 DrivesWithSlightlyHigherSpeedPredicate::DrivesWithSlightlyHigherSpeedPredicate() : CommonRoadPredicate(true) {}
