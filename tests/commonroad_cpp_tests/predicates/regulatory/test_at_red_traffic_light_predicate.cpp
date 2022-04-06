@@ -46,10 +46,10 @@ TEST_F(AtRedTrafficLightPredicateTest, BooleanEvaluation) {
     EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));  // standing on stop line -> partially in intersection
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne)); // inside intersection
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne)); // left intersection
-    EXPECT_FALSE(pred.booleanEvaluation(
+    EXPECT_TRUE(pred.booleanEvaluation(
         0, world,
         obstacleTwo)); // in front of intersection/traffic light with another direction -> completely on incoming
-    EXPECT_FALSE(pred.booleanEvaluation(
+    EXPECT_TRUE(pred.booleanEvaluation(
         1, world,
         obstacleTwo)); // standing on stop line -> partially in intersection, traffic light has another direction
 }
@@ -61,10 +61,10 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluation) {
         pred.statisticBooleanEvaluation(1, world, obstacleOne)); // standing on stop line -> partially in intersection
     EXPECT_FALSE(pred.statisticBooleanEvaluation(2, world, obstacleOne)); // inside intersection
     EXPECT_FALSE(pred.statisticBooleanEvaluation(3, world, obstacleOne)); // left intersection
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(
         0, world,
         obstacleTwo)); // in front of intersection/traffic light with another direction -> completely on incoming
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(
         1, world,
         obstacleTwo)); // standing on stop line -> partially in intersection, traffic light has another direction
 }

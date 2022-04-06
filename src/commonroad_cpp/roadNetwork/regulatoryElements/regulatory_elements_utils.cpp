@@ -33,7 +33,7 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
                                                   TurningDirections turnDir) {
     if (!intersection_operations::onIncoming(timeStep, obs, roadNetwork))
         return false;
-    std::vector<TurningDirections> relevantTrafficLightDirections;
+    std::unordered_set<TurningDirections> relevantTrafficLightDirections;
     switch (turnDir) {
     case TurningDirections::left:
         relevantTrafficLightDirections = {TurningDirections::left, TurningDirections::leftStraight,
@@ -48,10 +48,16 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
                                           TurningDirections::leftStraight, TurningDirections::all};
         break;
     case TurningDirections::all:
-        relevantTrafficLightDirections = {TurningDirections::all};
+        relevantTrafficLightDirections = {TurningDirections::left,      TurningDirections::leftStraight,
+                                          TurningDirections::leftRight, TurningDirections::all,
+                                          TurningDirections::right,     TurningDirections::straightRight,
+                                          TurningDirections::straight};
         break;
     default:
-        relevantTrafficLightDirections = {TurningDirections::all};
+        relevantTrafficLightDirections = {TurningDirections::left,      TurningDirections::leftStraight,
+                                          TurningDirections::leftRight, TurningDirections::all,
+                                          TurningDirections::right,     TurningDirections::straightRight,
+                                          TurningDirections::straight};
     }
     auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
     for (const auto &light : activeTl) {
