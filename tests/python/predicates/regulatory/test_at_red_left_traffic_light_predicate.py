@@ -25,9 +25,9 @@ class TestAtRedLeftTrafficLightPredicates(unittest.TestCase):
         exp_sol_monitor_mode_2 = True  # standing on stop line -> partially in intersection
         exp_sol_monitor_mode_3 = False  # inside intersection
         exp_sol_monitor_mode_4 = False  # left intersection
-        exp_sol_monitor_mode_5 = False  # in front of intersection/traffic light with
+        exp_sol_monitor_mode_5 = True  # in front of intersection/traffic light with
         # another direction -> completely on incoming
-        exp_sol_monitor_mode_6 = False  # standing on stop line -> partially in
+        exp_sol_monitor_mode_6 = True  # standing on stop line -> partially in
         # intersection, traffic light has another direction
 
         obstacle_1 = DynamicObstacle(1, ObstacleType.CAR, Rectangle(5, 2),
