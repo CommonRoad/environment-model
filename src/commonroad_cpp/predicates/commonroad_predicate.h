@@ -38,6 +38,9 @@ class CommonRoadPredicate {
 
     virtual ~CommonRoadPredicate();
 
+    CommonRoadPredicate(const CommonRoadPredicate &) = delete;
+    CommonRoadPredicate(CommonRoadPredicate &) = default;
+
     /**
      * Virtual function for the boolean evaluation of a predicate.
      *
