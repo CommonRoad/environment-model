@@ -49,3 +49,11 @@ TEST_F(TrafficSignTest, InitializationComplete) {
     EXPECT_EQ(sign2->getTrafficSignElements().at(0)->getId(), "275");
     EXPECT_EQ(sign2->getTrafficSignElements().at(1)->getId(), "274");
 }
+
+TEST_F(TrafficSignTest, GetTrafficSignElementsOfType) {
+    EXPECT_EQ(sign1->getTrafficSignElementsOfType("274").size(), 1);
+    EXPECT_EQ(sign1->getTrafficSignElementsOfType("123").size(), 0);
+
+    EXPECT_EQ(sign2->getTrafficSignElementsOfType("274").size(), 1);
+    EXPECT_EQ(sign2->getTrafficSignElementsOfType("275").size(), 1);
+}
