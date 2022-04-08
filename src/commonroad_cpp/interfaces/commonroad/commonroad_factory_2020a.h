@@ -63,4 +63,11 @@ class CommonRoadFactory2020a : public CommonRoadFactory {
      */
     std::vector<std::shared_ptr<Intersection>>
     createIntersections(const std::vector<std::shared_ptr<Lanelet>> &lanelets) override;
+
+    /**
+     * Function for extracting the time step size.
+     *
+     * @return Time step size.
+     */
+    double getTimeStepSize() override;
 };

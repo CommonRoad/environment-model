@@ -70,6 +70,13 @@ class CommonRoadFactory {
     virtual std::vector<std::shared_ptr<Intersection>>
     createIntersections(const std::vector<std::shared_ptr<Lanelet>> &lanelets) = 0;
 
+    /**
+     * Virtual function for extracting the time step size.
+     *
+     * @return Time step size.
+     */
+    virtual double getTimeStepSize() = 0;
+
   protected:
     std::unique_ptr<pugi::xml_document> doc; //**< Pointer to loaded CommonRoad XML. */
 };
