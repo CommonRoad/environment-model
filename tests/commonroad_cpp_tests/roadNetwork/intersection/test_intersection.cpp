@@ -52,4 +52,10 @@ TEST_F(IntersectionTest, InitializationComplete) {
 TEST_F(IntersectionTest, ComputeMemberLanelets) {
     EXPECT_EQ(intersection1->getMemberLanelets().size(), 11);
     EXPECT_EQ(intersection2->getMemberLanelets().size(), 4);
+
+    auto laneletTypeStraight{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionStraight}};
+    EXPECT_EQ(intersection1->getMemberLanelets().at(2)->getLaneletTypes(), laneletTypeStraight);
+    EXPECT_EQ(intersection1->getMemberLanelets().at(7)->getLaneletTypes(), laneletTypeStraight);
+    EXPECT_EQ(intersection1->getMemberLanelets().at(2)->getId(), 80);
+    EXPECT_EQ(intersection1->getMemberLanelets().at(7)->getId(), 70);
 }

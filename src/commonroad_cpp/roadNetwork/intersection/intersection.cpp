@@ -42,37 +42,43 @@ const std::vector<std::shared_ptr<Lanelet>> &Intersection::getMemberLanelets() c
 
 void Intersection::computeMemberLanelets() {
     memberLanelets = {};
-    std::unordered_set<size_t> outgoingIds;
+    // collect outgoings
     for (const auto &incom : incomings) {
-        for (const auto &let : incom->getLeftOutgoings()) {
+        for (const auto &let : incom->getIncomingLanelets())
             memberLanelets.push_back(let);
-            outgoingIds.insert(let->getId());
+        for (const auto &let : incom->getLeftOutgoings()) {
+            let->addLaneletType(LaneletType::intersectionLeftOutgoing);
+            addIntersectionMemberLanelets(let, TurningDirections::left);
         }
         for (const auto &let : incom->getStraightOutgoings()) {
-            memberLanelets.push_back(let);
-            outgoingIds.insert(let->getId());
+            let->addLaneletType(LaneletType::intersectionStraightOutgoing);
+            addIntersectionMemberLanelets(let, TurningDirections::straight);
         }
         for (const auto &let : incom->getRightOutgoings()) {
-            memberLanelets.push_back(let);
-            outgoingIds.insert(let->getId());
+            let->addLaneletType(LaneletType::intersectionRightOutgoing);
+            addIntersectionMemberLanelets(let, TurningDirections::right);
         }
     }
-    for (const auto &incom : incomings) {
-        for (const auto &let : incom->getIncomingLanelets()) {
-            memberLanelets.push_back(let);
-            std::deque<std::shared_ptr<Lanelet>> candidates{let->getSuccessors().begin(), let->getSuccessors().end()};
-            while (!candidates.empty()) {
-                std::shared_ptr<Lanelet> suc{candidates.front()};
-                candidates.pop_front();
-                if (outgoingIds.find(suc->getId()) == outgoingIds.end() and
-                    !std::any_of(memberLanelets.begin(), memberLanelets.end(),
-                                 [suc](const std::shared_ptr<Lanelet> &let) { return let->getId() == suc->getId(); })) {
-                    memberLanelets.push_back(suc);
-                    auto succs{memberLanelets.back()->getSuccessors()};
-                    candidates.insert(candidates.end(), succs.begin(), succs.end());
-                } else
-                    continue;
-            }
-        }
+}
+void Intersection::addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &let, TurningDirections turn) {
+    memberLanelets.push_back(let);
+    std::deque<std::shared_ptr<Lanelet>> candidates{let->getPredecessors().begin(), let->getPredecessors().end()};
+    while (!candidates.empty()) {
+        std::shared_ptr<Lanelet> pre{candidates.front()};
+        candidates.pop_front();
+        if (!std::any_of(memberLanelets.begin(), memberLanelets.end(),
+                         [pre](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == pre->getId(); })) {
+            memberLanelets.push_back(pre);
+            auto pres{memberLanelets.back()->getPredecessors()};
+            candidates.insert(candidates.end(), pres.begin(), pres.end());
+            pre->addLaneletType(LaneletType::intersection);
+            if (turn == TurningDirections::left)
+                pre->addLaneletType(LaneletType::intersectionLeftTurn);
+            else if (turn == TurningDirections::right)
+                pre->addLaneletType(LaneletType::intersectionRightTurn);
+            else if (turn == TurningDirections::straight)
+                pre->addLaneletType(LaneletType::intersectionStraight);
+        } else
+            continue;
     }
 }
