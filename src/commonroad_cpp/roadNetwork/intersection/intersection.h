@@ -81,7 +81,7 @@ class Intersection {
      *
      * @return
      */
-    const std::vector<std::shared_ptr<Lanelet>> &getMemberLanelets() const;
+    const std::vector<std::shared_ptr<Lanelet>> &getMemberLanelets();
 
     /**
      *
@@ -96,5 +96,10 @@ class Intersection {
     std::vector<std::shared_ptr<Lanelet>> memberLanelets; //**< List of lanelets belonging to intersection starting from
                                                           // incoming until outgoing. Crossings are not considered. */
 
-    void addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &let, TurningDirections turn);
+    /**
+     *
+     * @param lanelet
+     * @param turn
+     */
+    void addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &lanelet, TurningDirections turn);
 };
