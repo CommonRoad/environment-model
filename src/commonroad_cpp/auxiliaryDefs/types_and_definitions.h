@@ -36,6 +36,12 @@ enum class LaneletType {
     sidewalk,
     unknown,
     intersection,
+    intersectionLeftTurn,
+    intersectionRightTurn,
+    intersectionStraight,
+    intersectionLeftOutgoing,
+    intersectionRightOutgoing,
+    intersectionStraightOutgoing,
     incoming
 };
 
