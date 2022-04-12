@@ -49,13 +49,17 @@ void PredicateManager::extractPredicateSatisfaction() {
                 std::shuffle(std::begin(relevantPredicates), std::end(relevantPredicates), rng);
                 for (const auto &predName : relevantPredicates) {
                     auto pred{predicates[predName]};
+                    const std::shared_ptr<OptionalPredicateParameters> opt{
+                        std::make_shared<OptionalPredicateParameters>(
+                            TrafficSignTypes::MIN_SPEED,
+                            LaneletType::accessRamp)}; // TODO generalize for arbitrary types
                     try {
                         if (!pred->isVehicleDependent())
-                            pred->statisticBooleanEvaluation(timeStep, world, ego, nullptr);
+                            pred->statisticBooleanEvaluation(timeStep, world, ego, nullptr, opt);
                         else
                             for (const auto &obs : world->getObstacles())
                                 if (obs->timeStepExists(timeStep))
-                                    pred->statisticBooleanEvaluation(timeStep, world, ego, obs);
+                                    pred->statisticBooleanEvaluation(timeStep, world, ego, obs, opt);
                     } catch (const std::runtime_error &re) {
                         spdlog::error(std::string("PredicateManager::extractPredicateSatisfaction | Scenario: ")
                                           .append(scen)

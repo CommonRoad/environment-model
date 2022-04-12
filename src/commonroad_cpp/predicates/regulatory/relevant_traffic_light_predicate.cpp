@@ -15,7 +15,7 @@
 bool RelevantTrafficLightPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     if (!regulatory_elements_utils::activeTrafficLights(timeStep, obstacleK, world->getRoadNetwork()).empty())
         return true;
     else {
@@ -37,13 +37,13 @@ bool RelevantTrafficLightPredicate::booleanEvaluation(
 double RelevantTrafficLightPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("RelevantTrafficLightPredicate does not support robust evaluation!");
 }
 Constraint RelevantTrafficLightPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("RelevantTrafficLightPredicate does not support constraint evaluation!");
 }
 RelevantTrafficLightPredicate::RelevantTrafficLightPredicate() : CommonRoadPredicate(false) {}

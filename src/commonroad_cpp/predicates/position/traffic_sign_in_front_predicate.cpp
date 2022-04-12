@@ -18,7 +18,7 @@
 bool TrafficSignInFrontPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
     const auto signId{TrafficSignLookupTableByCountry.at(world->getRoadNetwork()->getCountry())
                           ->at(additionalFunctionParameters->signType)};
@@ -40,14 +40,14 @@ bool TrafficSignInFrontPredicate::booleanEvaluation(
 double TrafficSignInFrontPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("TrafficSignInFrontPredicate does not support robust evaluation!");
 }
 
 Constraint TrafficSignInFrontPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("TrafficSignInFrontPredicate does not support constraint evaluation!");
 }
 TrafficSignInFrontPredicate::TrafficSignInFrontPredicate() : CommonRoadPredicate(false) {}

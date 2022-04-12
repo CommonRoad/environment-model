@@ -14,20 +14,20 @@
 bool AtRedStraightTrafficLightPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     return regulatory_elements_utils::atRedTrafficLight(timeStep, obstacleK, world->getRoadNetwork(),
                                                         TurningDirections::straight);
 }
 double AtRedStraightTrafficLightPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("AtRedStraightTrafficLightPredicate does not support robust evaluation!");
 }
 Constraint AtRedStraightTrafficLightPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("AtRedStraightTrafficLightPredicate does not support constraint evaluation!");
 }
 AtRedStraightTrafficLightPredicate::AtRedStraightTrafficLightPredicate() : CommonRoadPredicate(false) {}

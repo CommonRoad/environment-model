@@ -16,7 +16,7 @@
 bool InSameLanePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     for (const auto &laneK : obstacleK->getDrivingPathLanes(world->getRoadNetwork(), timeStep)) {
         const auto &relevantIDs{laneK->getContainedLaneletIDs()};
         for (const auto &laneletP : obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep))
@@ -26,18 +26,17 @@ bool InSameLanePredicate::booleanEvaluation(
     return false;
 }
 
-double
-InSameLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                      const std::shared_ptr<Obstacle> &obstacleK,
-                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                      const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+double InSameLanePredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("In Same Lane Predicate does not support robust evaluation!");
 }
 
 Constraint InSameLanePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("In Same Lane Predicate does not support constraint evaluation!");
 }
 InSameLanePredicate::InSameLanePredicate() : CommonRoadPredicate(true) {}
