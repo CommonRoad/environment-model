@@ -38,15 +38,11 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_predicate.cpp
         commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.cpp
-        commonroad_cpp/predicates/position/on_access_ramp_predicate.cpp
-        commonroad_cpp/predicates/position/on_exit_ramp_predicate.cpp
-        commonroad_cpp/predicates/position/on_urban_road_predicate.cpp
-        commonroad_cpp/predicates/position/on_shoulder_predicate.cpp
+        commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.cpp
         commonroad_cpp/predicates/position/in_leftmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
         commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
-        commonroad_cpp/predicates/position/on_main_carriage_way_predicate.cpp
         commonroad_cpp/predicates/position/traffic_sign_in_front_predicate.cpp
         commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp

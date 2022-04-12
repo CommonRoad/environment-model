@@ -15,7 +15,7 @@
 bool MakesUTurnPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lane>> lanes = world->getRoadNetwork()->findLanesByContainedLanelet(
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]->getId());
     return std::any_of(
@@ -31,15 +31,14 @@ bool MakesUTurnPredicate::booleanEvaluation(
 Constraint MakesUTurnPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("Makes U Turn Predicate does not support constraint evaluation!");
 }
 
-double
-MakesUTurnPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                      const std::shared_ptr<Obstacle> &obstacleK,
-                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                      const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+double MakesUTurnPredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("Makes U Turn Predicate does not support robust evaluation!");
 }
 

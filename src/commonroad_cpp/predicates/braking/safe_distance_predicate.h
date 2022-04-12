@@ -44,7 +44,7 @@ class SafeDistancePredicate : public CommonRoadPredicate {
     bool
     booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                       const std::shared_ptr<Obstacle> &obstacleP,
-                      const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {}) override;
+                      const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
      * Boolean evaluation of predicate using parameter values.
@@ -73,10 +73,10 @@ class SafeDistancePredicate : public CommonRoadPredicate {
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Constraints defined by the predicate.
      */
-    Constraint
-    constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                         const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP,
-                         const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {}) override;
+    Constraint constraintEvaluation(
+        size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+        const std::shared_ptr<Obstacle> &obstacleP,
+        const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
      * Constraint evaluation of predicate using parameter values.
@@ -106,7 +106,7 @@ class SafeDistancePredicate : public CommonRoadPredicate {
     double
     robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                      const std::shared_ptr<Obstacle> &obstacleP,
-                     const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {}) override;
+                     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
      * Robustness evaluation of predicate using parameter values.

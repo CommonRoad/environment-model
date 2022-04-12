@@ -20,8 +20,9 @@ class World;
 
 struct OptionalPredicateParameters {
     OptionalPredicateParameters() = default;
-    OptionalPredicateParameters(TrafficSignTypes signType);
+    OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType);
     TrafficSignTypes signType;
+    LaneletType laneletType;
 };
 
 /**
@@ -54,7 +55,7 @@ class CommonRoadPredicate {
     virtual bool
     booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                       const std::shared_ptr<Obstacle> &obstacleP,
-                      const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {}) = 0;
+                      const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) = 0;
 
     /**
      * Virtual function for the robustness evaluation of a predicate.
@@ -68,7 +69,7 @@ class CommonRoadPredicate {
     virtual double
     robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                      const std::shared_ptr<Obstacle> &obstacleP,
-                     const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {}) = 0;
+                     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) = 0;
 
     /**
      * Virtual function for the constraint evaluation of a predicate.
@@ -82,7 +83,7 @@ class CommonRoadPredicate {
     virtual Constraint
     constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                          const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP,
-                         const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {}) = 0;
+                         const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) = 0;
 
     /**
      * Function for the statistical evaluation of a predicate.
@@ -96,7 +97,7 @@ class CommonRoadPredicate {
     statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                const std::shared_ptr<Obstacle> &obstacleK,
                                const std::shared_ptr<Obstacle> &obstacleP = {},
-                               const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {});
+                               const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {});
 
     /**
      * Getter for parameters.

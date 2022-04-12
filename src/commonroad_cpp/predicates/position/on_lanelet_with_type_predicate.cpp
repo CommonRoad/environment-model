@@ -1,7 +1,7 @@
 //
-// Created by Sebastian Maierhofer and Evald Nexhipi.
+// Created by Sebastian Maierhofer.
 // Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
+// Copyright (c) 2022 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
 
@@ -11,32 +11,31 @@
 #include <commonroad_cpp/world.h>
 
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "in_rightmost_lane_predicate.h"
+#include "on_lanelet_with_type_predicate.h"
 
-bool InRightmostLanePredicate::booleanEvaluation(
+bool OnLaneletWithTypePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> lanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
-        return lanelet->getAdjacentRight().adj == nullptr ||
-               lanelet->getAdjacentRight().dir != lanelet->getAdjacentRight().adj->getAdjacentLeft().dir;
-    });
+    return std::any_of(lanelets.begin(), lanelets.end(),
+                       [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
+                           return lanelet->hasLaneletType(additionalFunctionParameters->laneletType);
+                       });
 }
 
-double InRightmostLanePredicate::robustEvaluation(
+double OnLaneletWithTypePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    throw std::runtime_error("In Rightmost Lane Predicate does not support robust evaluation!");
+    throw std::runtime_error("OnLaneletWithTypePredicate does not support robust evaluation!");
 }
 
-Constraint InRightmostLanePredicate::constraintEvaluation(
+Constraint OnLaneletWithTypePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    throw std::runtime_error("In Rightmost Lane Predicate does not support constraint evaluation!");
+    throw std::runtime_error("OnLaneletWithTypePredicate does not support constraint evaluation!");
 }
-
-InRightmostLanePredicate::InRightmostLanePredicate() : CommonRoadPredicate(false) {}
+OnLaneletWithTypePredicate::OnLaneletWithTypePredicate() : CommonRoadPredicate(false) {}

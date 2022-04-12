@@ -10,14 +10,14 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- * Evaluates if a vehicle is on an urban road
+ * Evaluates if a vehicle is on an lanelet with a specific type
  */
-class OnUrbanRoadPredicate : public CommonRoadPredicate {
+class OnLaneletWithTypePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for OnUrbanRoadPredicate
+     * Constructor for OnShoulderPredicate
      */
-    OnUrbanRoadPredicate();
+    OnLaneletWithTypePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
@@ -31,7 +31,7 @@ class OnUrbanRoadPredicate : public CommonRoadPredicate {
     bool
     booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                       const std::shared_ptr<Obstacle> &obstacleP = {},
-                      const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {}) override;
+                      const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
      * Constraint evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -45,7 +45,7 @@ class OnUrbanRoadPredicate : public CommonRoadPredicate {
     double
     robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                      const std::shared_ptr<Obstacle> &obstacleP = {},
-                     const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {}) override;
+                     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
      * Robustness evaluation of predicate using objects. (Currently not supported for this predicate)
@@ -56,8 +56,8 @@ class OnUrbanRoadPredicate : public CommonRoadPredicate {
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
-    Constraint
-    constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                         const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP = {},
-                         const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters = {}) override;
+    Constraint constraintEvaluation(
+        size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+        const std::shared_ptr<Obstacle> &obstacleP = {},
+        const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 };

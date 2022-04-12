@@ -42,15 +42,11 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/position/test_in_intersection_main_area_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_stop_line_in_front_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_passes_stop_line_predicate.cpp
-        commonroad_cpp_tests/predicates/position/test_on_access_ramp_predicate.cpp
-        commonroad_cpp_tests/predicates/position/test_on_exit_ramp_predicate.cpp
-        commonroad_cpp_tests/predicates/position/test_on_shoulder_predicate.cpp
-        commonroad_cpp_tests/predicates/position/test_on_urban_road_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_on_lanelet_with_type_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_leftmost_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_rightmost_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_drives_leftmost_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_drives_rightmost_predicate.cpp
-        commonroad_cpp_tests/predicates/position/test_on_main_carriage_way_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_main_carriageway_right_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_right_of_broad_lane_marking_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_left_of_broad_lane_marking_predicate.cpp

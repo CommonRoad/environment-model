@@ -27,11 +27,7 @@
 #include "position/left_of_broad_lane_marking_predicate.h"
 #include "position/left_of_predicate.h"
 #include "position/main_carriageway_right_lane_predicate.h"
-#include "position/on_access_ramp_predicate.h"
-#include "position/on_exit_ramp_predicate.h"
-#include "position/on_main_carriage_way_predicate.h"
-#include "position/on_shoulder_predicate.h"
-#include "position/on_urban_road_predicate.h"
+#include "position/on_lanelet_with_type_predicate.h"
 #include "position/passes_stop_line_predicate.h"
 #include "position/right_of_broad_lane_marking_predicate.h"
 #include "position/stop_line_in_front_predicate.h"
@@ -58,7 +54,7 @@
 bool CommonRoadPredicate::statisticBooleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> additionalFunctionParameters) {
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     auto startTime{Timer::start()};
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters)};
     long compTime{evaluationTimer.stop(startTime)};
@@ -125,11 +121,7 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"left_of_broad_lane_marking", std::make_shared<LeftOfBroadLaneMarkingPredicate>()},
     {"left_of", std::make_shared<LeftOfPredicate>()},
     {"main_carriageway_right_lane", std::make_shared<MainCarriagewayRightLanePredicate>()},
-    {"on_access_ramp", std::make_shared<OnAccessRampPredicate>()},
-    {"on_exit_ramp", std::make_shared<OnExitRampPredicate>()},
-    {"on_main_carriage_way", std::make_shared<OnMainCarriageWayPredicate>()},
-    {"on_shoulder", std::make_shared<OnShoulderPredicate>()},
-    {"on_urban_road", std::make_shared<OnUrbanRoadPredicate>()},
+    {"on_lanelet_with_type", std::make_shared<OnLaneletWithTypePredicate>()},
     {"passes_stop_line", std::make_shared<PassesStopLinePredicate>()},
     {"right_of_broad_lane_marking", std::make_shared<RightOfBroadLaneMarkingPredicate>()},
     {"stop_line_in_front", std::make_shared<StopLineInFrontPredicate>()},
@@ -154,4 +146,5 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"traffic_sign_in_front", std::make_shared<TrafficSignInFrontPredicate>()},
 };
 
-OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType) : signType(signType) {}
+OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType)
+    : signType(signType), laneletType(laneletType) {}
