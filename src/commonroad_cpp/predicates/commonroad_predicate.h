@@ -20,6 +20,8 @@ class World;
 
 struct OptionalPredicateParameters {
     OptionalPredicateParameters() = default;
+    OptionalPredicateParameters(TrafficSignTypes signType);
+    OptionalPredicateParameters(LaneletType laneletType);
     OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType);
     TrafficSignTypes signType;
     LaneletType laneletType;
