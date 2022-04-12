@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cstddef>
+#include <unordered_map>
 
 using time_step_t = size_t; //**< type of history/trajectory prediction time steps */
 
