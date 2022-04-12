@@ -148,5 +148,7 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
 
 OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType)
     : signType(signType), laneletType(laneletType) {}
-OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType) {}
-OptionalPredicateParameters::OptionalPredicateParameters(LaneletType laneletType) {}
+
+OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType) : signType(signType) {}
+
+OptionalPredicateParameters::OptionalPredicateParameters(LaneletType laneletType) : laneletType(laneletType) {}
