@@ -50,12 +50,21 @@ TEST_F(IntersectionTest, InitializationComplete) {
 }
 
 TEST_F(IntersectionTest, ComputeMemberLanelets) {
-    EXPECT_EQ(intersection1->getMemberLanelets().size(), 11);
-    EXPECT_EQ(intersection2->getMemberLanelets().size(), 4);
+    EXPECT_EQ(intersection1->getMemberLanelets().size(), 15);
+    EXPECT_EQ(intersection2->getMemberLanelets().size(), 5);
 
+    auto laneletTypeIncoming{std::set<LaneletType>{LaneletType::incoming}};
     auto laneletTypeStraight{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionStraight}};
+    auto laneletTypeLeft{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionLeftTurn}};
+    auto laneletTypeRight{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionRightTurn}};
+
     EXPECT_EQ(intersection1->getMemberLanelets().at(2)->getLaneletTypes(), laneletTypeStraight);
-    EXPECT_EQ(intersection1->getMemberLanelets().at(7)->getLaneletTypes(), laneletTypeStraight);
+    EXPECT_EQ(intersection1->getMemberLanelets().at(5)->getLaneletTypes(), laneletTypeIncoming);
+    EXPECT_EQ(intersection1->getMemberLanelets().at(7)->getLaneletTypes(), laneletTypeLeft);
+    EXPECT_EQ(intersection1->getMemberLanelets().at(14)->getLaneletTypes(), laneletTypeRight);
+
     EXPECT_EQ(intersection1->getMemberLanelets().at(2)->getId(), 80);
-    EXPECT_EQ(intersection1->getMemberLanelets().at(7)->getId(), 70);
+    EXPECT_EQ(intersection1->getMemberLanelets().at(5)->getId(), 3);
+    EXPECT_EQ(intersection1->getMemberLanelets().at(7)->getId(), 100);
+    EXPECT_EQ(intersection1->getMemberLanelets().at(14)->getId(), 90);
 }
