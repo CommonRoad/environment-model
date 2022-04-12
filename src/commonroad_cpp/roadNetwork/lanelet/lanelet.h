@@ -445,3 +445,5 @@ class Lanelet {
     mutable std::vector<double> pathLength;    //**< path length along center line */
     mutable std::vector<double> width;         //**< width along center line */
 };
+
+extern const std::unordered_map<std::string, LaneletType> LaneletTypeNames;
