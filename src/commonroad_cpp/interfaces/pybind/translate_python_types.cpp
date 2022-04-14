@@ -287,7 +287,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             }
             incomings[incomignIndex]->setIncomingLanelets(incomingLanelets);
             // successor right lanelets
-            auto py_outgoingRight = py_incoming.attr("successors_right").cast<py::list>();
+            auto py_outgoingRight = py_incoming.attr("outgoings_right").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> outgoingRightLanelets;
             for (const auto &outgoingRightLaneletId : py_outgoingRight) {
                 size_t incId{outgoingRightLaneletId.cast<size_t>()};
@@ -298,9 +298,9 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
-            incomings[incomignIndex]->setOutgoingsRight(outgoingRightLanelets);
+            incomings[incomignIndex]->setRightOutgoings(outgoingRightLanelets);
             // successor left lanelets
-            auto py_outgoingLeft = py_incoming.attr("successors_left").cast<py::list>();
+            auto py_outgoingLeft = py_incoming.attr("outgoings_left").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> outgoingLeftLanelets;
             for (const auto &outgoingLeftLaneletId : py_outgoingLeft) {
                 size_t incId{outgoingLeftLaneletId.cast<size_t>()};
@@ -311,9 +311,9 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
-            incomings[incomignIndex]->setOutgoingsLeft(outgoingLeftLanelets);
+            incomings[incomignIndex]->setLeftOutgoings(outgoingLeftLanelets);
             // successor straight lanelets
-            auto py_outgoingsStraight = py_incoming.attr("successors_straight").cast<py::list>();
+            auto py_outgoingsStraight = py_incoming.attr("outgoings_straight").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> outgoingsStraightLanelets;
             for (const auto &outgoingsStraightLaneletId : py_outgoingsStraight) {
                 size_t incId{outgoingsStraightLaneletId.cast<size_t>()};
@@ -324,7 +324,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
-            incomings[incomignIndex]->setOutgoingsStraight(outgoingsStraightLanelets);
+            incomings[incomignIndex]->setStraightOutgoings(outgoingsStraightLanelets);
             // left of
             if (py_incoming.attr("left_of").get_type().attr("__name__").cast<std::string>() == "int") {
                 auto py_isLeftOf = py_incoming.attr("left_of").cast<size_t>();
