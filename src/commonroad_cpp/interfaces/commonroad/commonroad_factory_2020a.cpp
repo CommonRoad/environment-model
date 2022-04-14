@@ -272,10 +272,10 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
     // get the number of intersections
-    size_t n{static_cast<size_t>(
+    size_t numIntersections{static_cast<size_t>(
         std::distance(commonRoad.children("intersection").begin(), commonRoad.children("intersection").end()))};
     tempIntersectionContainer.clear();
-    tempIntersectionContainer.reserve(n); // Already know the size --> Faster memory allocation
+    tempIntersectionContainer.reserve(numIntersections); // Already know the size --> Faster memory allocation
 
     size_t arrayIndex{0};
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;
@@ -283,7 +283,7 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
         if ((strcmp(roadElements.name(), "intersection")) == 0) {
             std::shared_ptr<Intersection> tempIntersection = std::make_shared<Intersection>();
             tempIntersectionContainer.emplace_back(tempIntersection);
-            tempIntersectionContainer[arrayIndex]->setId(roadElements.first_attribute().as_int());
+            tempIntersectionContainer[arrayIndex]->setId(roadElements.first_attribute().as_ullong());
             std::map<size_t, size_t> tmpLeftOf;
 
             for (pugi::xml_node intersectionChildElement = roadElements.first_child();
@@ -294,41 +294,41 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
                     std::shared_ptr<Incoming> inc = std::make_shared<Incoming>();
                     inc->setId(intersectionChildElement.first_attribute().as_ullong());
                     std::vector<std::shared_ptr<Lanelet>> incomingLanelet;
-                    std::vector<std::shared_ptr<Lanelet>> successorRight;
-                    std::vector<std::shared_ptr<Lanelet>> successorStraight;
-                    std::vector<std::shared_ptr<Lanelet>> successorLeft;
+                    std::vector<std::shared_ptr<Lanelet>> outgoingsRight;
+                    std::vector<std::shared_ptr<Lanelet>> outgoingsStraight;
+                    std::vector<std::shared_ptr<Lanelet>> outgoingsLeft;
                     for (pugi::xml_node incomingChildElementChild = intersectionChildElement.first_child();
                          incomingChildElementChild != nullptr;
                          incomingChildElementChild = incomingChildElementChild.next_sibling()) {
                         if ((strcmp(incomingChildElementChild.name(), "incomingLanelet")) == 0) {
-                            for (const auto &la : lanelets) {
-                                if (incomingChildElementChild.attribute("ref").as_ullong() == la->getId()) {
-                                    incomingLanelet.push_back(la);
-                                    la->addLaneletType(LaneletType::incoming);
+                            for (const auto &let : lanelets) {
+                                if (incomingChildElementChild.attribute("ref").as_ullong() == let->getId()) {
+                                    incomingLanelet.push_back(let);
+                                    let->addLaneletType(LaneletType::incoming);
                                 }
                             }
                             inc->setIncomingLanelets(incomingLanelet);
                         }
-                        if ((strcmp(incomingChildElementChild.name(), "successorsRight")) == 0) {
-                            for (const auto &la : lanelets) {
-                                if (incomingChildElementChild.attribute("ref").as_ullong() == la->getId())
-                                    successorRight.push_back(la);
+                        if ((strcmp(incomingChildElementChild.name(), "outgoingRight")) == 0) {
+                            for (const auto &let : lanelets) {
+                                if (incomingChildElementChild.attribute("ref").as_ullong() == let->getId())
+                                    outgoingsRight.push_back(let);
                             }
-                            inc->setSuccessorsRight(successorRight);
+                            inc->setRightOutgoings(outgoingsRight);
                         }
-                        if ((strcmp(incomingChildElementChild.name(), "successorsStraight")) == 0) {
-                            for (const auto &la : lanelets) {
-                                if (incomingChildElementChild.attribute("ref").as_ullong() == la->getId())
-                                    successorStraight.push_back(la);
+                        if ((strcmp(incomingChildElementChild.name(), "outgoingStraight")) == 0) {
+                            for (const auto &let : lanelets) {
+                                if (incomingChildElementChild.attribute("ref").as_ullong() == let->getId())
+                                    outgoingsStraight.push_back(let);
                             }
-                            inc->setSuccessorsStraight(successorStraight);
+                            inc->setStraightOutgoings(outgoingsStraight);
                         }
-                        if ((strcmp(incomingChildElementChild.name(), "successorsLeft")) == 0) {
-                            for (const auto &la : lanelets) {
-                                if (incomingChildElementChild.attribute("ref").as_ullong() == la->getId())
-                                    successorLeft.push_back(la);
+                        if ((strcmp(incomingChildElementChild.name(), "outgoingLeft")) == 0) {
+                            for (const auto &let : lanelets) {
+                                if (incomingChildElementChild.attribute("ref").as_ullong() == let->getId())
+                                    outgoingsLeft.push_back(let);
                             }
-                            inc->setSuccessorsLeft(successorLeft);
+                            inc->setLeftOutgoings(outgoingsLeft);
                         }
                         if ((strcmp(incomingChildElementChild.name(), "isLeftOf")) == 0)
                             tmpLeftOf.insert_or_assign(inc->getId(),
