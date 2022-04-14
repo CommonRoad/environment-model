@@ -157,7 +157,7 @@ class Incoming {
   private:
     size_t id;
     std::vector<std::shared_ptr<Lanelet>> incomingLanelets; //**< set of pointers to lanelets belonging to incoming */
-    std::shared_ptr<Incoming> isLeftOf; //**< pointer to incoming which is left */
+    std::shared_ptr<Incoming> isLeftOf;                     //**< pointer to incoming which is left */
     std::vector<std::shared_ptr<Lanelet>>
         straightOutgoings; //**< set of pointers to straight outgoing lanelets of this incoming */
     std::vector<std::shared_ptr<Lanelet>>
