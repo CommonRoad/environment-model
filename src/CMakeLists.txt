@@ -39,6 +39,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/left_of_predicate.cpp
         commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.cpp
         commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.cpp
+        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.cpp
         commonroad_cpp/predicates/position/in_leftmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp

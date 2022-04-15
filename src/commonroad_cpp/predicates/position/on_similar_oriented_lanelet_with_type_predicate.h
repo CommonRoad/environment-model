@@ -10,14 +10,14 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- * Evaluates if a vehicle is on an lanelet with a specific type
+ * Evaluates if a vehicle is on an lanelet with similar orientation and a specific type
  */
-class OnLaneletWithTypePredicate : public CommonRoadPredicate {
+class OnSimilarOrientedLaneletWithTypePredicate : public CommonRoadPredicate {
   public:
     /**
      * Constructor for OnShoulderPredicate
      */
-    OnLaneletWithTypePredicate();
+    OnSimilarOrientedLaneletWithTypePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
