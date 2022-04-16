@@ -24,14 +24,14 @@ bool TrafficSignInFrontPredicate::booleanEvaluation(
                           ->at(additionalFunctionParameters->signType)};
     for (const auto &lanelet : lanelets) {
         for (const auto &sign : lanelet->getTrafficSigns()) {
-            for (const auto &signElement : sign->getTrafficSignElementsOfType(signId)) {
-                Eigen::Vector2d signPos{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
-                                            ->getCurvilinearCoordinateSystem()
-                                            ->convertToCurvilinearCoords(sign->getPosition().x, sign->getPosition().y)};
+            if (sign->getTrafficSignElementsOfType(signId).empty())
+                return false;
+            Eigen::Vector2d signPos{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+                                        ->getCurvilinearCoordinateSystem()
+                                        ->convertToCurvilinearCoords(sign->getPosition().x, sign->getPosition().y)};
 
-                if (obstacleK->frontS(world->getRoadNetwork(), timeStep) < signPos.x())
-                    return true;
-            }
+            if (obstacleK->frontS(world->getRoadNetwork(), timeStep) < signPos.x())
+                return true;
         }
     }
     return false;
