@@ -25,7 +25,7 @@ bool OnSimilarOrientedLaneletWithTypePredicate::booleanEvaluation(
                       ->findLanesByContainedLanelet(let->getId())
                       .at(0)}; // just use one lane since all lanes are generated based on single lanelet
         auto orientationDif{geometric_operations::subtractOrientations(
-            obstacleK->getCurvilinearOrientation(timeStep, lane),
+            obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation(),
             lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                            obstacleK->getStateByTimeStep(timeStep)->getYPosition()))};
         if (abs(orientationDif) < 0.3)
