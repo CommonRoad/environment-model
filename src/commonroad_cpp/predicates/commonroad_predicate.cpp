@@ -19,7 +19,6 @@
 #include "position/drives_leftmost_predicate.h"
 #include "position/drives_rightmost_predicate.h"
 #include "position/in_front_of_predicate.h"
-#include "position/in_intersection_main_area_predicate.h"
 #include "position/in_leftmost_lane_predicate.h"
 #include "position/in_rightmost_lane_predicate.h"
 #include "position/in_same_lane_predicate.h"
@@ -114,7 +113,6 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"drives_leftmost", std::make_shared<DrivesLeftmostPredicate>()},
     {"drives_rightmost", std::make_shared<DrivesRightmostPredicate>()},
     {"in_front_of", std::make_shared<InFrontOfPredicate>()},
-    {"in_intersection_main_area", std::make_shared<InIntersectionMainAreaPredicate>()},
     {"in_leftmost_lane", std::make_shared<InLeftmostLanePredicate>()},
     {"in_rightmost_lane", std::make_shared<InRightmostLanePredicate>()},
     {"in_same_lane", std::make_shared<InSameLanePredicate>()},

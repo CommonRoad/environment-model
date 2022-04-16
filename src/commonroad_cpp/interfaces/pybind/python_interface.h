@@ -22,7 +22,6 @@
 #include "commonroad_cpp/predicates/position/drives_leftmost_predicate.h"
 #include "commonroad_cpp/predicates/position/drives_rightmost_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
-#include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
 #include "commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h"
 #include "commonroad_cpp/predicates/position/in_rightmost_lane_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"

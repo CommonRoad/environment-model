@@ -6,6 +6,7 @@
 //
 #include "test_on_lanelet_with_type_predicate.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/obstacle/state.h"
 
 void OnLaneletWithTypePredicateTest::SetUp() {
@@ -78,6 +79,41 @@ void OnLaneletWithTypePredicateTest::initializeTestData(LaneletType laneletType1
     this->world = std::make_shared<World>(World(0, roadNetwork, {this->egoVehicle}, {}, 0.1));
     opt = std::make_shared<OptionalPredicateParameters>();
     opt->laneletType = laneletType1;
+}
+
+TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationIntersection) {
+    initializeTestData(LaneletType::intersection, LaneletType::urban);
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
+    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -7.5, 0, 0, M_PI / 2, 0, 15, 0);
+    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 26., 3, 0, 0, M_PI, 0, 25, 0);
+
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(0, 26.5, -3.5, 0, 0, M_PI / 2, 0, 20, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(0, 7.0, 3, 0, 0, M_PI, 0, 43, 0);
+
+    Obstacle::state_map_t trajectoryPredictionObstacleOne{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
+
+    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
+
+    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
+                                                     0.3, trajectoryPredictionObstacleOne, 5, 2));
+    std::shared_ptr<Obstacle> obstacleOne{
+        std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleTwo, ObstacleType::car, 50, 10, 3, -10, 0.3,
+                                            trajectoryPredictionObstacleTwo, 5, 2))};
+
+    world = std::make_shared<World>(
+        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{egoVehicle, obstacleOne}, {}, timeStepSize));
+    EXPECT_FALSE(
+        pred.booleanEvaluation(0, world, egoVehicle, {}, opt)); // in front of intersection / completely on incoming
+    EXPECT_TRUE(
+        pred.booleanEvaluation(1, world, egoVehicle, {}, opt)); // standing on stop line -> partially in intersection
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {}, opt));  // inside intersection
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, {}, opt)); // left intersection
 }
 
 TEST_F(OnLaneletWithTypePredicateTest, RobustEvaluation) {
