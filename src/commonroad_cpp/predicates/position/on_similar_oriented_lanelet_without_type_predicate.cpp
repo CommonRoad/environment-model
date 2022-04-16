@@ -28,10 +28,10 @@ bool OnSimilarOrientedLaneletWithoutTypePredicate::booleanEvaluation(
             obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation(),
             lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                            obstacleK->getStateByTimeStep(timeStep)->getYPosition()))};
-        if (abs(orientationDif) < 0.3)
+        if (abs(orientationDif) < parameters.laneletOccupancySimilarity)
             lanelets.push_back(let);
     }
-    return std::any_of(lanelets.begin(), lanelets.end(),
+    return std::all_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
                            return !lanelet->hasLaneletType(additionalFunctionParameters->laneletType);
                        });
