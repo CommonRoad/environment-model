@@ -28,7 +28,7 @@ bool OnSimilarOrientedLaneletWithTypePredicate::booleanEvaluation(
             obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation(),
             lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                            obstacleK->getStateByTimeStep(timeStep)->getYPosition()))};
-        if (abs(orientationDif) < 0.3)
+        if (abs(orientationDif) < 0.25) // TODO parameter
             lanelets.push_back(let);
     }
     return std::any_of(lanelets.begin(), lanelets.end(),
