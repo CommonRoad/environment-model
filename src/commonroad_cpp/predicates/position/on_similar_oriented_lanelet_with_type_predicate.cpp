@@ -5,6 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
+#include "commonroad_cpp/geometry/geometric_operations.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
@@ -23,9 +24,10 @@ bool OnSimilarOrientedLaneletWithTypePredicate::booleanEvaluation(
         auto lane{world->getRoadNetwork()
                       ->findLanesByContainedLanelet(let->getId())
                       .at(0)}; // just use one lane since all lanes are generated based on single lanelet
-        auto orientationDif{obstacleK->getCurvilinearOrientation(timeStep, lane) -
-                            lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                                           obstacleK->getStateByTimeStep(timeStep)->getYPosition())};
+        auto orientationDif{geometric_operations::subtractOrientations(
+            obstacleK->getCurvilinearOrientation(timeStep, lane),
+            lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                                           obstacleK->getStateByTimeStep(timeStep)->getYPosition()))};
         if (abs(orientationDif) < 0.3)
             lanelets.push_back(let);
     }
