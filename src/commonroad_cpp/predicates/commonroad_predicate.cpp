@@ -145,7 +145,7 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"slow_leading_vehicle", std::make_shared<SlowLeadingVehiclePredicate>()},
     {"unobstructed_intersection_view", std::make_shared<UnobstructedIntersectionViewPredicate>()},
     {"traffic_sign_in_front", std::make_shared<TrafficSignInFrontPredicate>()},
-    {"on_similar_oriented_lanelet", std::make_shared<OnSimilarOrientedLaneletWithTypePredicate>()},
+    {"on_similar_oriented_lanelet_with_type", std::make_shared<OnSimilarOrientedLaneletWithTypePredicate>()},
 };
 
 OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType)
