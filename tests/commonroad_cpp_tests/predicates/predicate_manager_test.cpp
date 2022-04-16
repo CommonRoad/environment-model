@@ -142,11 +142,11 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
               predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime);
     EXPECT_GE(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime,
               predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().numExecutions, 0);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().numSatisfaction, 0);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().totalComputationTime, 0);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().minComputationTime, LONG_MAX);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().maxComputationTime, LONG_MIN);
+    EXPECT_EQ(predicates["passes_stop_line"]->getStatistics().numExecutions, 0);
+    EXPECT_EQ(predicates["passes_stop_line"]->getStatistics().numSatisfaction, 0);
+    EXPECT_EQ(predicates["passes_stop_line"]->getStatistics().totalComputationTime, 0);
+    EXPECT_EQ(predicates["passes_stop_line"]->getStatistics().minComputationTime, LONG_MAX);
+    EXPECT_EQ(predicates["passes_stop_line"]->getStatistics().maxComputationTime, LONG_MIN);
     EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() +
                                         "/../commonroad_cpp_tests/predicate_satisfaction.csv"));
     EXPECT_TRUE(

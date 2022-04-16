@@ -28,6 +28,7 @@
 #include "position/main_carriageway_right_lane_predicate.h"
 #include "position/on_lanelet_with_type_predicate.h"
 #include "position/on_similar_oriented_lanelet_with_type_predicate.h"
+#include "position/on_similar_oriented_lanelet_without_type_predicate.h"
 #include "position/passes_stop_line_predicate.h"
 #include "position/right_of_broad_lane_marking_predicate.h"
 #include "position/stop_line_in_front_predicate.h"
@@ -144,6 +145,7 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"unobstructed_intersection_view", std::make_shared<UnobstructedIntersectionViewPredicate>()},
     {"traffic_sign_in_front", std::make_shared<TrafficSignInFrontPredicate>()},
     {"on_similar_oriented_lanelet_with_type", std::make_shared<OnSimilarOrientedLaneletWithTypePredicate>()},
+    {"similar_oriented_lanelet_without_type", std::make_shared<OnSimilarOrientedLaneletWithoutTypePredicate>()},
 };
 
 OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType)

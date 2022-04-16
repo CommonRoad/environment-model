@@ -13,9 +13,9 @@
 #include <commonroad_cpp/world.h>
 
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "on_similar_oriented_lanelet_with_type_predicate.h"
+#include "on_similar_oriented_lanelet_without_type_predicate.h"
 
-bool OnSimilarOrientedLaneletWithTypePredicate::booleanEvaluation(
+bool OnSimilarOrientedLaneletWithoutTypePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
@@ -33,21 +33,22 @@ bool OnSimilarOrientedLaneletWithTypePredicate::booleanEvaluation(
     }
     return std::any_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                           return lanelet->hasLaneletType(additionalFunctionParameters->laneletType);
+                           return !lanelet->hasLaneletType(additionalFunctionParameters->laneletType);
                        });
 }
 
-double OnSimilarOrientedLaneletWithTypePredicate::robustEvaluation(
+double OnSimilarOrientedLaneletWithoutTypePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    throw std::runtime_error("OnSimilarOrientedLaneletWithTypePredicate does not support robust evaluation!");
+    throw std::runtime_error("OnSimilarOrientedLaneletWithoutTypePredicate does not support robust evaluation!");
 }
 
-Constraint OnSimilarOrientedLaneletWithTypePredicate::constraintEvaluation(
+Constraint OnSimilarOrientedLaneletWithoutTypePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    throw std::runtime_error("OnSimilarOrientedLaneletWithTypePredicate does not support constraint evaluation!");
+    throw std::runtime_error("OnSimilarOrientedLaneletWithoutTypePredicate does not support constraint evaluation!");
 }
-OnSimilarOrientedLaneletWithTypePredicate::OnSimilarOrientedLaneletWithTypePredicate() : CommonRoadPredicate(false) {}
+OnSimilarOrientedLaneletWithoutTypePredicate::OnSimilarOrientedLaneletWithoutTypePredicate()
+    : CommonRoadPredicate(false) {}
