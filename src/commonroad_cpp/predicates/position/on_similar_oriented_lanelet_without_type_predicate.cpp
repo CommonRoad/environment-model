@@ -1,0 +1,54 @@
+//
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2022 Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
+//
+
+#include "commonroad_cpp/geometry/geometric_operations.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <commonroad_cpp/world.h>
+
+#include "commonroad_cpp/roadNetwork/road_network.h"
+#include "on_similar_oriented_lanelet_without_type_predicate.h"
+
+bool OnSimilarOrientedLaneletWithoutTypePredicate::booleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    for (const auto &let : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)) {
+        auto lane{world->getRoadNetwork()
+                      ->findLanesByContainedLanelet(let->getId())
+                      .at(0)}; // just use one lane since all lanes are generated based on single lanelet
+        auto orientationDif{geometric_operations::subtractOrientations(
+            obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation(),
+            lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                                           obstacleK->getStateByTimeStep(timeStep)->getYPosition()))};
+        if (abs(orientationDif) < 0.3)
+            lanelets.push_back(let);
+    }
+    return std::any_of(lanelets.begin(), lanelets.end(),
+                       [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
+                           return !lanelet->hasLaneletType(additionalFunctionParameters->laneletType);
+                       });
+}
+
+double OnSimilarOrientedLaneletWithoutTypePredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    throw std::runtime_error("OnSimilarOrientedLaneletWithoutTypePredicate does not support robust evaluation!");
+}
+
+Constraint OnSimilarOrientedLaneletWithoutTypePredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    throw std::runtime_error("OnSimilarOrientedLaneletWithoutTypePredicate does not support constraint evaluation!");
+}
+OnSimilarOrientedLaneletWithoutTypePredicate::OnSimilarOrientedLaneletWithoutTypePredicate()
+    : CommonRoadPredicate(false) {}
