@@ -31,7 +31,7 @@ bool OnSimilarOrientedLaneletWithoutTypePredicate::booleanEvaluation(
         if (abs(orientationDif) < 0.3)
             lanelets.push_back(let);
     }
-    return std::all_of(lanelets.begin(), lanelets.end(),
+    return std::any_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
                            return !lanelet->hasLaneletType(additionalFunctionParameters->laneletType);
                        });
