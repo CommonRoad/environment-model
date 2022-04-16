@@ -55,6 +55,8 @@ struct PredicateParameters {
 
     double dBrakingIntersection{15.0};
     double aBrakingIntersection{-1.0};
+
+    double laneletOccupancySimilarity{0.25};
 };
 
 extern std::map<std::string, std::array<double, 2>> predicateSatisfaction;
