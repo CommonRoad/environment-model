@@ -39,7 +39,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/general/test_in_queue_of_vehicles_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_makes_u_turn_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_interstate_broad_enough.cpp
-        commonroad_cpp_tests/predicates/position/test_in_intersection_main_area_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_stop_line_in_front_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_passes_stop_line_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_on_lanelet_with_type_predicate.cpp

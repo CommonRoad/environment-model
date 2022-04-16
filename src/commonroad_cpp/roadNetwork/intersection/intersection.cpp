@@ -46,16 +46,19 @@ void Intersection::computeMemberLanelets() {
             memberLanelets.push_back(let);
         for (const auto &let : incom->getLeftOutgoings()) {
             let->addLaneletType(LaneletType::intersectionLeftOutgoing);
+            let->addLaneletType(LaneletType::intersection);
             let->addLaneletType(LaneletType::intersectionLeftTurn);
             addIntersectionMemberLanelets(let, TurningDirections::left);
         }
         for (const auto &let : incom->getStraightOutgoings()) {
             let->addLaneletType(LaneletType::intersectionStraightOutgoing);
+            let->addLaneletType(LaneletType::intersection);
             let->addLaneletType(LaneletType::intersectionStraight);
             addIntersectionMemberLanelets(let, TurningDirections::straight);
         }
         for (const auto &let : incom->getRightOutgoings()) {
             let->addLaneletType(LaneletType::intersectionRightOutgoing);
+            let->addLaneletType(LaneletType::intersection);
             let->addLaneletType(LaneletType::intersectionRightTurn);
             addIntersectionMemberLanelets(let, TurningDirections::right);
         }
