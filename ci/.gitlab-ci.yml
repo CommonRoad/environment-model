@@ -130,35 +130,35 @@ test:
     reports:
       junit: ./report.xml
 
-build-test-python-37:
-  stage: test
-  before_script:
-    - source activate cr37
-    - *python-prepare
-  script:
-    - python setup.py install
-    - python -m pytest tests/python
-  needs: []
-
-build-test-python-38:
-  stage: test
-  before_script:
-    - source activate cr38
-    - *python-prepare
-  script:
-    - python setup.py install
-    - python -m pytest tests/python
-  needs: []
-
-build-test-python-39:
-  stage: test
-  before_script:
-    - source activate cr39
-    - *python-prepare
-  script:
-    - python setup.py install
-    - python -m pytest tests/python
-  needs: []
+#build-test-python-37:
+#  stage: test
+#  before_script:
+#    - source activate cr37
+#    - *python-prepare
+#  script:
+#    - python setup.py install
+#    - python -m pytest tests/python
+#  needs: []
+#
+#build-test-python-38:
+#  stage: test
+#  before_script:
+#    - source activate cr38
+#    - *python-prepare
+#  script:
+#    - python setup.py install
+#    - python -m pytest tests/python
+#  needs: []
+#
+#build-test-python-39:
+#  stage: test
+#  before_script:
+#    - source activate cr39
+#    - *python-prepare
+#  script:
+#    - python setup.py install
+#    - python -m pytest tests/python
+#  needs: []
 
 ### coverage ###
 coverage-analyze:
