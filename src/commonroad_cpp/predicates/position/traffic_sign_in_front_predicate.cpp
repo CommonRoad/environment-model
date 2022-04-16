@@ -29,7 +29,7 @@ bool TrafficSignInFrontPredicate::booleanEvaluation(
                                             ->getCurvilinearCoordinateSystem()
                                             ->convertToCurvilinearCoords(sign->getPosition().x, sign->getPosition().y)};
 
-                if (obstacleK->rearS(world->getRoadNetwork(), timeStep) < signPos.x())
+                if (obstacleK->frontS(world->getRoadNetwork(), timeStep) < signPos.x())
                     return true;
             }
         }
