@@ -27,6 +27,7 @@
 #include "position/left_of_broad_lane_marking_predicate.h"
 #include "position/left_of_predicate.h"
 #include "position/main_carriageway_right_lane_predicate.h"
+#include "position/on_incoming_left_of_predicate.h"
 #include "position/on_lanelet_with_type_predicate.h"
 #include "position/on_similar_oriented_lanelet_with_type_predicate.h"
 #include "position/on_similar_oriented_lanelet_without_type_predicate.h"
@@ -146,6 +147,7 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"on_similar_oriented_lanelet_without_type", std::make_shared<OnSimilarOrientedLaneletWithoutTypePredicate>()},
     {"same_priority", std::make_shared<SamePriorityPredicate>()},
     {"has_priority", std::make_shared<HasPriorityPredicate>()},
+    {"on_incoming_left_of", std::make_shared<OnIncomingLeftOfPredicate>()},
 };
 
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType,
