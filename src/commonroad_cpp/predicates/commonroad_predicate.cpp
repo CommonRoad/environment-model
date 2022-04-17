@@ -37,6 +37,8 @@
 #include "position/unobstructed_intersection_view_predicate.h"
 #include "regulatory/at_red_traffic_light_predicate.h"
 #include "regulatory/at_stop_sign_predicate.h"
+#include "regulatory/has_priority_predicate.h"
+#include "regulatory/same_priority_predicate.h"
 #include "velocity/drives_faster_predicate.h"
 #include "velocity/drives_with_slightly_higher_speed_predicate.h"
 #include "velocity/exist_standing_leading_vehicle_predicate.h"
@@ -142,6 +144,8 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"traffic_sign_in_front", std::make_shared<TrafficSignInFrontPredicate>()},
     {"on_similar_oriented_lanelet_with_type", std::make_shared<OnSimilarOrientedLaneletWithTypePredicate>()},
     {"on_similar_oriented_lanelet_without_type", std::make_shared<OnSimilarOrientedLaneletWithoutTypePredicate>()},
+    {"same_priority", std::make_shared<SamePriorityPredicate>()},
+    {"has_priority", std::make_shared<HasPriorityPredicate>()},
 };
 
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType,
