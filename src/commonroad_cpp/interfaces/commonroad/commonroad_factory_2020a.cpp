@@ -209,16 +209,17 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
     // get the number of traffic lights
-    size_t n{static_cast<size_t>(
+    size_t numTrafficLights{static_cast<size_t>(
         std::distance(commonRoad.children("trafficLight").begin(), commonRoad.children("trafficLight").end()))};
     tempLaneletContainer.clear();
-    tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
+    tempLaneletContainer.reserve(numTrafficLights); // Already know the size --> Faster memory allocation
 
     size_t arrayIndex{0};
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;
          roadElements = roadElements.next_sibling()) {
         // get traffic lights
         if ((strcmp(roadElements.name(), "trafficLight")) == 0) {
+            bool directionSet{false}; // if not direction is provided in -> direction::all
             std::shared_ptr<TrafficLight> tempTrafficLight = std::make_shared<TrafficLight>();
             tempLaneletContainer.emplace_back(tempTrafficLight);
             tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_ullong());
@@ -246,6 +247,7 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                 if ((strcmp(trafficLightChildElement.name(), "direction")) == 0) {
                     tempLaneletContainer[arrayIndex]->setDirection(
                         TrafficLight::matchTurningDirections(trafficLightChildElement.first_child().value()));
+                    directionSet = true;
                 }
                 if ((strcmp(trafficLightChildElement.name(), "active")) == 0) {
                     tempLaneletContainer[arrayIndex]->setActive(
@@ -260,6 +262,8 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                     }
                 }
             }
+            if (!directionSet)
+                tempLaneletContainer[arrayIndex]->setDirection(TurningDirection::all);
             ++arrayIndex;
         }
     }
