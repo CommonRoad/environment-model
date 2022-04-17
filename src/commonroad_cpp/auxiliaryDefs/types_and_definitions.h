@@ -18,8 +18,6 @@ enum class OperatingMode { boolean, constraint, robustness };
 
 enum class ObstacleType { car, truck, pedestrian, bus, unknown, vehicle };
 
-enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };
-
 enum class LaneletType {
     interstate,
     urban,
@@ -46,9 +44,11 @@ enum class LaneletType {
     incoming
 };
 
+enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };
+
 enum class TrafficLightState { red, green, yellow, red_yellow, inactive };
 
-enum class TurningDirections { left, straight, right, leftStraight, straightRight, leftRight, all };
+enum class TurningDirection { left, straight, right, leftStraight, straightRight, leftRight, all };
 
 enum class DrivingDirection { same, opposite, invalid };
 

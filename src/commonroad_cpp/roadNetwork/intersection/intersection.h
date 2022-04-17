@@ -101,5 +101,5 @@ class Intersection {
      * @param lanelet
      * @param turn
      */
-    void addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &lanelet, TurningDirections turn);
+    void addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &lanelet, TurningDirection turn);
 };

@@ -48,23 +48,23 @@ void Intersection::computeMemberLanelets() {
             let->addLaneletType(LaneletType::intersectionLeftOutgoing);
             let->addLaneletType(LaneletType::intersection);
             let->addLaneletType(LaneletType::intersectionLeftTurn);
-            addIntersectionMemberLanelets(let, TurningDirections::left);
+            addIntersectionMemberLanelets(let, TurningDirection::left);
         }
         for (const auto &let : incom->getStraightOutgoings()) {
             let->addLaneletType(LaneletType::intersectionStraightOutgoing);
             let->addLaneletType(LaneletType::intersection);
             let->addLaneletType(LaneletType::intersectionStraight);
-            addIntersectionMemberLanelets(let, TurningDirections::straight);
+            addIntersectionMemberLanelets(let, TurningDirection::straight);
         }
         for (const auto &let : incom->getRightOutgoings()) {
             let->addLaneletType(LaneletType::intersectionRightOutgoing);
             let->addLaneletType(LaneletType::intersection);
             let->addLaneletType(LaneletType::intersectionRightTurn);
-            addIntersectionMemberLanelets(let, TurningDirections::right);
+            addIntersectionMemberLanelets(let, TurningDirection::right);
         }
     }
 }
-void Intersection::addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &let, TurningDirections turn) {
+void Intersection::addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &let, TurningDirection turn) {
     memberLanelets.push_back(let);
     std::deque<std::shared_ptr<Lanelet>> candidates{let->getPredecessors().begin(), let->getPredecessors().end()};
     while (!candidates.empty()) {
@@ -76,11 +76,11 @@ void Intersection::addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> 
             auto pres{memberLanelets.back()->getPredecessors()};
             candidates.insert(candidates.end(), pres.begin(), pres.end());
             pre->addLaneletType(LaneletType::intersection);
-            if (turn == TurningDirections::left)
+            if (turn == TurningDirection::left)
                 pre->addLaneletType(LaneletType::intersectionLeftTurn);
-            else if (turn == TurningDirections::right)
+            else if (turn == TurningDirection::right)
                 pre->addLaneletType(LaneletType::intersectionRightTurn);
-            else if (turn == TurningDirections::straight)
+            else if (turn == TurningDirection::straight)
                 pre->addLaneletType(LaneletType::intersectionStraight);
         } else
             continue;

@@ -11,7 +11,7 @@
 
 #include "../../predicates/predicate_config.h"
 #include "../intersection/intersection_operations.h"
-#include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "regulatory_elements_utils.h"
 
 std::set<std::shared_ptr<TrafficLight>>
@@ -30,39 +30,39 @@ regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::share
 
 bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
                                                   const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                  TurningDirections turnDir) {
+                                                  TurningDirection turnDir) {
     if (!intersection_operations::onIncoming(timeStep, obs, roadNetwork))
         return false;
-    std::unordered_set<TurningDirections> relevantTrafficLightDirections;
+    std::unordered_set<TurningDirection> relevantTrafficLightDirections;
     switch (turnDir) {
-    case TurningDirections::left:
-        relevantTrafficLightDirections = {TurningDirections::left, TurningDirections::leftStraight,
-                                          TurningDirections::leftRight, TurningDirections::all};
+    case TurningDirection::left:
+        relevantTrafficLightDirections = {TurningDirection::left, TurningDirection::leftStraight,
+                                          TurningDirection::leftRight, TurningDirection::all};
         break;
-    case TurningDirections::right:
-        relevantTrafficLightDirections = {TurningDirections::leftRight, TurningDirections::right,
-                                          TurningDirections::straightRight, TurningDirections::all};
+    case TurningDirection::right:
+        relevantTrafficLightDirections = {TurningDirection::leftRight, TurningDirection::right,
+                                          TurningDirection::straightRight, TurningDirection::all};
         break;
-    case TurningDirections::straight:
-        relevantTrafficLightDirections = {TurningDirections::straight, TurningDirections::straightRight,
-                                          TurningDirections::leftStraight, TurningDirections::all};
+    case TurningDirection::straight:
+        relevantTrafficLightDirections = {TurningDirection::straight, TurningDirection::straightRight,
+                                          TurningDirection::leftStraight, TurningDirection::all};
         break;
-    case TurningDirections::all:
-        relevantTrafficLightDirections = {TurningDirections::left,      TurningDirections::leftStraight,
-                                          TurningDirections::leftRight, TurningDirections::all,
-                                          TurningDirections::right,     TurningDirections::straightRight,
-                                          TurningDirections::straight};
+    case TurningDirection::all:
+        relevantTrafficLightDirections = {TurningDirection::left,      TurningDirection::leftStraight,
+                                          TurningDirection::leftRight, TurningDirection::all,
+                                          TurningDirection::right,     TurningDirection::straightRight,
+                                          TurningDirection::straight};
         break;
     default:
-        relevantTrafficLightDirections = {TurningDirections::left,      TurningDirections::leftStraight,
-                                          TurningDirections::leftRight, TurningDirections::all,
-                                          TurningDirections::right,     TurningDirections::straightRight,
-                                          TurningDirections::straight};
+        relevantTrafficLightDirections = {TurningDirection::left,      TurningDirection::leftStraight,
+                                          TurningDirection::leftRight, TurningDirection::all,
+                                          TurningDirection::right,     TurningDirection::straightRight,
+                                          TurningDirection::straight};
     }
     auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
     for (const auto &light : activeTl) {
         if (std::any_of(relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
-                        [light](const TurningDirections &relevantDirection) {
+                        [light](const TurningDirection &relevantDirection) {
                             return relevantDirection == light->getDirection();
                         }) and
             light->getElementAtTime(timeStep).color == TrafficLightState::red)

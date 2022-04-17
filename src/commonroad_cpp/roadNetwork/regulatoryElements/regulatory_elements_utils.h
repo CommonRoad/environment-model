@@ -34,7 +34,7 @@ std::set<std::shared_ptr<TrafficLight>> activeTrafficLights(size_t timeStep, con
  * @return Boolean indicating whether obstacle is at red traffic light.
  */
 bool atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                       const std::shared_ptr<RoadNetwork> &roadNetwork, TurningDirections turnDir);
+                       const std::shared_ptr<RoadNetwork> &roadNetwork, TurningDirection turnDir);
 
 /**
  * Evaluates whether traffic sign is a stop sign.
