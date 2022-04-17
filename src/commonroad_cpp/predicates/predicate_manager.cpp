@@ -51,8 +51,8 @@ void PredicateManager::extractPredicateSatisfaction() {
                     auto pred{predicates[predName]};
                     const std::shared_ptr<OptionalPredicateParameters> opt{
                         std::make_shared<OptionalPredicateParameters>(
-                            TrafficSignTypes::MIN_SPEED,
-                            LaneletType::accessRamp)}; // TODO generalize for arbitrary types
+                            TrafficSignTypes::MIN_SPEED, LaneletType::accessRamp,
+                            TurningDirections::all)}; // TODO generalize for arbitrary types
                     try {
                         if (!pred->isVehicleDependent())
                             pred->statisticBooleanEvaluation(timeStep, world, ego, nullptr, opt);
