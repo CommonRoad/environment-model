@@ -190,6 +190,8 @@ class RoadNetwork {
      */
     std::shared_ptr<size_t> getIdCounterRef() const;
 
+    std::shared_ptr<Incoming> findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet);
+
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
     SupportedTrafficSignCountry country;                      //**< country where road network is located */

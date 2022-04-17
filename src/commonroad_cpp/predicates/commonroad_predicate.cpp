@@ -6,6 +6,7 @@
 //
 
 #include "commonroad_predicate.h"
+
 #include "braking/brakes_stronger_predicate.h"
 #include "braking/safe_distance_predicate.h"
 #include "braking/unnecessary_braking_predicate.h"
@@ -48,6 +49,7 @@
 #include "velocity/required_speed_predicate.h"
 #include "velocity/reverses_predicate.h"
 #include "velocity/slow_leading_vehicle_predicate.h"
+#include <utility>
 
 bool CommonRoadPredicate::statisticBooleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
@@ -142,13 +144,14 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"on_similar_oriented_lanelet_without_type", std::make_shared<OnSimilarOrientedLaneletWithoutTypePredicate>()},
 };
 
-OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType,
-                                                         TurningDirection turningDirection)
-    : signType(signType), laneletType(laneletType), turningDirection(turningDirection) {}
-
-OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType) : signType(signType) {}
-
-OptionalPredicateParameters::OptionalPredicateParameters(LaneletType laneletType) : laneletType(laneletType) {}
-
-OptionalPredicateParameters::OptionalPredicateParameters(TurningDirection turningDirection)
-    : turningDirection(turningDirection) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType,
+                                                         std::vector<LaneletType> laneletType,
+                                                         std::vector<TurningDirection> turningDirection)
+    : signType(std::move(signType)), laneletType(std::move(laneletType)),
+      turningDirection(std::move(turningDirection)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType)
+    : signType(std::move(signType)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<LaneletType> laneletType)
+    : laneletType(std::move(laneletType)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TurningDirection> turningDirection)
+    : turningDirection(std::move(turningDirection)) {}
