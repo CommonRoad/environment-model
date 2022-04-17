@@ -6,7 +6,7 @@
 //
 
 #include "traffic_sign_element.h"
-#include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
+#include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 
 #include <utility>
 

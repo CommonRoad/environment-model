@@ -10,7 +10,7 @@
 #include <map>
 #include <unordered_map>
 
-#include "traffic_signs.h"
+#include "regulatory_elements.h"
 #include "types_and_definitions.h"
 
 // automatically generated from commonroad-io with:
@@ -589,4 +589,14 @@ const std::unordered_map<std::string, std::vector<int>> priorityTable{
     std::pair<std::string, std::vector<int>>("206", {1, 1, 1}),
     std::pair<std::string, std::vector<int>>("102", {3, 3, 3}),
     std::pair<std::string, std::vector<int>>("720", {-1, -1, 0}),
+};
+
+const std::unordered_map<std::string, TurningDirection> TurningDirectionNames{
+    {"LEFT", TurningDirection::left},
+    {"STRAIGHT", TurningDirection::straight},
+    {"RIGHT", TurningDirection::right},
+    {"LEFT_STRAIGHT", TurningDirection::leftStraight},
+    {"STRAIGHT_RIGHT", TurningDirection::straightRight},
+    {"LEFT_RIGHT", TurningDirection::leftRight},
+    {"ALL", TurningDirection::all},
 };

@@ -22,11 +22,11 @@ struct OptionalPredicateParameters {
     OptionalPredicateParameters() = default;
     OptionalPredicateParameters(TrafficSignTypes signType);
     OptionalPredicateParameters(LaneletType laneletType);
-    OptionalPredicateParameters(TurningDirections turningDirection);
-    OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType, TurningDirections turningDirection);
+    OptionalPredicateParameters(TurningDirection turningDirection);
+    OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType, TurningDirection turningDirection);
     TrafficSignTypes signType;
     LaneletType laneletType;
-    TurningDirections turningDirection;
+    TurningDirection turningDirection;
 };
 
 /**

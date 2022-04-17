@@ -1,5 +1,5 @@
 set(ENV_MODEL_SRC_FILES
-        commonroad_cpp/auxiliaryDefs/traffic_signs.cpp
+        commonroad_cpp/auxiliaryDefs/regulatory_elements.cpp
         commonroad_cpp/roadNetwork/road_network.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet.cpp
         commonroad_cpp/roadNetwork/lanelet/lane.cpp

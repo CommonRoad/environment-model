@@ -32,7 +32,7 @@ TEST_F(LaneletOperationsTest, MatchStringToLaneletType) {
     EXPECT_EQ(lanelet_operations::matchStringToLaneletType("bikeLane"), LaneletType::bikeLane);
     EXPECT_EQ(lanelet_operations::matchStringToLaneletType("sidewalk"), LaneletType::sidewalk);
     EXPECT_EQ(lanelet_operations::matchStringToLaneletType("busLane"), LaneletType::busLane);
-    EXPECT_EQ(lanelet_operations::matchStringToLaneletType("test"), LaneletType::unknown);
+    EXPECT_THROW(lanelet_operations::matchStringToLaneletType("test"), std::logic_error);
 }
 
 TEST_F(LaneletOperationsTest, MatchStringToLineMarking) {

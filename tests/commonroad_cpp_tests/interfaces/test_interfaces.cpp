@@ -6,7 +6,7 @@
 //
 
 #include "test_interfaces.h"
-#include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 

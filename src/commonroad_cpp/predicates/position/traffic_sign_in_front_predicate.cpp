@@ -6,7 +6,7 @@
 //
 
 #include "traffic_sign_in_front_predicate.h"
-#include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lane.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"

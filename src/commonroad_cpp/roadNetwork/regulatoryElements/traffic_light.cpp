@@ -39,9 +39,9 @@ TrafficLightCycleElement TrafficLight::getElementAtTime(size_t time) {
     return cycle.at(static_cast<unsigned long>(cycleIndex));
 }
 
-TurningDirections TrafficLight::getDirection() const { return direction; }
+TurningDirection TrafficLight::getDirection() const { return direction; }
 
-void TrafficLight::setDirection(TurningDirections dir) { TrafficLight::direction = dir; }
+void TrafficLight::setDirection(TurningDirection dir) { TrafficLight::direction = dir; }
 
 bool TrafficLight::isActive() const { return active; }
 
@@ -53,21 +53,21 @@ void TrafficLight::setPosition(vertex pos) { position = pos; }
 
 vertex TrafficLight::getPosition() const { return position; }
 
-TurningDirections TrafficLight::matchTurningDirections(const std::string &dir) {
+TurningDirection TrafficLight::matchTurningDirections(const std::string &dir) {
     if (dir == "right")
-        return TurningDirections::right;
+        return TurningDirection::right;
     else if (dir == "straight")
-        return TurningDirections::straight;
+        return TurningDirection::straight;
     else if (dir == "left")
-        return TurningDirections::left;
+        return TurningDirection::left;
     else if (dir == "leftStraight")
-        return TurningDirections::leftStraight;
+        return TurningDirection::leftStraight;
     else if (dir == "straightRight")
-        return TurningDirections::straightRight;
+        return TurningDirection::straightRight;
     else if (dir == "leftRight")
-        return TurningDirections::leftRight;
+        return TurningDirection::leftRight;
     else
-        return TurningDirections::all;
+        return TurningDirection::all;
 }
 
 TrafficLightState TrafficLight::matchTrafficLightState(const std::string &trafficLightState) {
@@ -85,6 +85,6 @@ TrafficLightState TrafficLight::matchTrafficLightState(const std::string &traffi
         return TrafficLightState::red; // default case -> consider also trafficLightState == "red"
 }
 TrafficLight::TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset,
-                           TurningDirections direction, bool active, const vertex &position)
+                           TurningDirection direction, bool active, const vertex &position)
     : id(trafficLightId), cycle(std::move(cycle)), offset(offset), direction(direction), active(active),
       position(position) {}

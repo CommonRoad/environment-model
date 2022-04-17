@@ -10,38 +10,12 @@
 #include <utility>
 
 LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type) {
-    if (type == "interstate")
-        return LaneletType::interstate;
-    else if (type == "urban")
-        return LaneletType::urban;
-    else if (type == "crosswalk")
-        return LaneletType::crosswalk;
-    else if (type == "busStop")
-        return LaneletType::busStop;
-    else if (type == "country")
-        return LaneletType::country;
-    else if (type == "highway")
-        return LaneletType::highway;
-    else if (type == "driveWay")
-        return LaneletType::driveWay;
-    else if (type == "mainCarriageWay")
-        return LaneletType::mainCarriageWay;
-    else if (type == "accessRamp")
-        return LaneletType::accessRamp;
-    else if (type == "exitRamp")
-        return LaneletType::exitRamp;
-    else if (type == "shoulder")
-        return LaneletType::shoulder;
-    else if (type == "bikeLane")
-        return LaneletType::bikeLane;
-    else if (type == "sidewalk")
-        return LaneletType::sidewalk;
-    else if (type == "busLane")
-        return LaneletType::busLane;
-    else if (type == "intersection")
-        return LaneletType::intersection;
+    std::string str{type};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    if (LaneletTypeNames.count(str) == 1)
+        return LaneletTypeNames.at(str);
     else
-        return LaneletType::unknown;
+        throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type!");
 }
 
 LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type) {
