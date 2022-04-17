@@ -33,7 +33,7 @@ bool OnSimilarOrientedLaneletWithoutTypePredicate::booleanEvaluation(
     }
     return std::all_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                           return !lanelet->hasLaneletType(additionalFunctionParameters->laneletType);
+                           return !lanelet->hasLaneletType(additionalFunctionParameters->laneletType.at(0));
                        });
 }
 

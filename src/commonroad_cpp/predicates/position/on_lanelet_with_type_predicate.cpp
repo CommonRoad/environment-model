@@ -21,7 +21,7 @@ bool OnLaneletWithTypePredicate::booleanEvaluation(
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                           return lanelet->hasLaneletType(additionalFunctionParameters->laneletType);
+                           return lanelet->hasLaneletType(additionalFunctionParameters->laneletType.at(0));
                        });
 }
 

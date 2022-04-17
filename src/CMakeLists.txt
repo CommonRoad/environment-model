@@ -46,6 +46,8 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
         commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
         commonroad_cpp/predicates/position/traffic_sign_in_front_predicate.cpp
+        commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.cpp
+        commonroad_cpp/predicates/position/on_incoming_left_of_predicate.cpp
         commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
         commonroad_cpp/predicates/general/in_congestion_predicate.cpp
@@ -68,7 +70,8 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.cpp
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.cpp
+        commonroad_cpp/predicates/regulatory/same_priority_predicate.cpp
+        commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/predicates/predicate_config.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp

@@ -78,7 +78,7 @@ void OnLaneletWithTypePredicateTest::initializeTestData(LaneletType laneletType1
     auto roadNetwork{utils_predicate_test::create_road_network({laneletType1, laneletType2})};
     this->world = std::make_shared<World>(World(0, roadNetwork, {this->egoVehicle}, {}, 0.1));
     opt = std::make_shared<OptionalPredicateParameters>();
-    opt->laneletType = laneletType1;
+    opt->laneletType = {laneletType1};
 }
 
 TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationIntersection) {
