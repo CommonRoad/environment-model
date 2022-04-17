@@ -78,7 +78,10 @@ int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork
                                         incomingLanelets.end());
     }
     auto prioTrafficSign{extractPriorityTrafficSign(relevantIncomingLanelets)};
-    return priorityTable.at(prioTrafficSign->getId()).at(static_cast<size_t>(dir));
+    if (prioTrafficSign != nullptr)
+        return priorityTable.at(prioTrafficSign->getId()).at(static_cast<size_t>(dir));
+    else
+        return priorityTable.at("102").at(static_cast<size_t>(dir));
 }
 
 bool HasPriorityPredicate::booleanEvaluation(
