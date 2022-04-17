@@ -65,9 +65,6 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.cpp
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp

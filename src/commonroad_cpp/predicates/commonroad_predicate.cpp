@@ -34,9 +34,6 @@
 #include "position/stop_line_in_front_predicate.h"
 #include "position/traffic_sign_in_front_predicate.h"
 #include "position/unobstructed_intersection_view_predicate.h"
-#include "regulatory/at_red_left_traffic_light_predicate.h"
-#include "regulatory/at_red_right_traffic_light_predicate.h"
-#include "regulatory/at_red_straight_traffic_light_predicate.h"
 #include "regulatory/at_red_traffic_light_predicate.h"
 #include "regulatory/at_stop_sign_predicate.h"
 #include "velocity/drives_faster_predicate.h"
@@ -126,9 +123,6 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"right_of_broad_lane_marking", std::make_shared<RightOfBroadLaneMarkingPredicate>()},
     {"stop_line_in_front", std::make_shared<StopLineInFrontPredicate>()},
     {"at_red_traffic_light", std::make_shared<AtRedTrafficLightPredicate>()},
-    {"at_red_straight_traffic_light", std::make_shared<AtRedStraightTrafficLightPredicate>()},
-    {"at_red_left_traffic_light", std::make_shared<AtRedLeftTrafficLightPredicate>()},
-    {"at_red_right_traffic_light", std::make_shared<AtRedRightTrafficLightPredicate>()},
     {"at_stop_sign", std::make_shared<AtStopSignPredicate>()},
     {"drives_faster", std::make_shared<DrivesFasterPredicate>()},
     {"drives_with_slightly_higher_speed", std::make_shared<DrivesWithSlightlyHigherSpeedPredicate>()},
@@ -148,9 +142,13 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"on_similar_oriented_lanelet_without_type", std::make_shared<OnSimilarOrientedLaneletWithoutTypePredicate>()},
 };
 
-OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType)
-    : signType(signType), laneletType(laneletType) {}
+OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType, LaneletType laneletType,
+                                                         TurningDirections turningDirection)
+    : signType(signType), laneletType(laneletType), turningDirection(turningDirection) {}
 
 OptionalPredicateParameters::OptionalPredicateParameters(TrafficSignTypes signType) : signType(signType) {}
 
 OptionalPredicateParameters::OptionalPredicateParameters(LaneletType laneletType) : laneletType(laneletType) {}
+
+OptionalPredicateParameters::OptionalPredicateParameters(TurningDirections turningDirection)
+    : turningDirection(turningDirection) {}
