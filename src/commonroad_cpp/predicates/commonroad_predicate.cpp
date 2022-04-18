@@ -10,6 +10,7 @@
 #include "braking/brakes_stronger_predicate.h"
 #include "braking/safe_distance_predicate.h"
 #include "braking/unnecessary_braking_predicate.h"
+#include "braking/causes_braking_intersection_predicate.h"
 #include "general/in_congestion_predicate.h"
 #include "general/in_queue_of_vehicles_predicate.h"
 #include "general/in_slow_moving_traffic_predicate.h"
@@ -150,6 +151,7 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"has_priority", std::make_shared<HasPriorityPredicate>()},
     {"on_incoming_left_of", std::make_shared<OnIncomingLeftOfPredicate>()},
     {"relevant_traffic_light", std::make_shared<RelevantTrafficLightPredicate>()},
+    {"causes_braking_intersection", std::make_shared<CausesBrakingIntersectionPredicate>()},
 };
 
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType,
