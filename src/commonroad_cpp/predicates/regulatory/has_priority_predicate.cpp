@@ -66,6 +66,7 @@ std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::vector
         else
             return trs;
     }
+    return nullptr;
 }
 
 int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<Obstacle> &obs,
