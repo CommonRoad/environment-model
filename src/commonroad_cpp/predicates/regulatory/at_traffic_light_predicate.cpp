@@ -16,7 +16,7 @@ bool AtTrafficLightPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     return regulatory_elements_utils::atTrafficLightDirState(timeStep, obstacleK, world->getRoadNetwork(),
-                                                        additionalFunctionParameters->turningDirection.at(0),
+                                                             additionalFunctionParameters->turningDirection.at(0),
                                                              additionalFunctionParameters->trafficLightState.at(0));
 }
 double AtTrafficLightPredicate::robustEvaluation(

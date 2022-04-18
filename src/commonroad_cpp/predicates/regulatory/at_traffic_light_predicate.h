@@ -9,7 +9,8 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate which checks whether the kth vehicle is on a lanelet which references a traffic light with a certain direction and color.
+ * Predicate which checks whether the kth vehicle is on a lanelet which references a traffic light with a certain
+ * direction and color.
  */
 class AtTrafficLightPredicate : public CommonRoadPredicate {
   public:

@@ -30,8 +30,8 @@ TEST_F(AtTrafficSignPredicateTest, BooleanEvaluationAtStopSign) {
 
     auto opt{std::make_shared<OptionalPredicateParameters>(std::vector<TrafficSignTypes>{TrafficSignTypes::STOP})};
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {}, opt)); // occupied lanelet references stop sign
-    EXPECT_TRUE(
-        pred.booleanEvaluation(1, world, obstacleOne, {}, opt)); // one occupied lanelet references stop sign the other not
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, {},
+                                       opt)); // one occupied lanelet references stop sign the other not
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, {}, opt)); // occupied lanelet does not occupy stop sign
 }
 

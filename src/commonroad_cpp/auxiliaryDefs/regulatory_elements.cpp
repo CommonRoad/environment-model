@@ -595,8 +595,14 @@ const std::unordered_map<std::string, TurningDirection> TurningDirectionNames{
     {"LEFT", TurningDirection::left},
     {"STRAIGHT", TurningDirection::straight},
     {"RIGHT", TurningDirection::right},
-    {"LEFT_STRAIGHT", TurningDirection::leftStraight},
-    {"STRAIGHT_RIGHT", TurningDirection::straightRight},
-    {"LEFT_RIGHT", TurningDirection::leftRight},
+    {"LEFTSTRAIGHT", TurningDirection::leftStraight},
+    {"STRAIGHTRIGHT", TurningDirection::straightRight},
+    {"LEFTRIGHT", TurningDirection::leftRight},
     {"ALL", TurningDirection::all},
+};
+
+const std::unordered_map<std::string, TrafficLightState> TrafficLightStateNames{
+    {"RED", TrafficLightState::red},           {"GREEN", TrafficLightState::green},
+    {"YELLOW", TrafficLightState::yellow},     {"REDYELLOW", TrafficLightState::red_yellow},
+    {"INACTIVE", TrafficLightState::inactive},
 };

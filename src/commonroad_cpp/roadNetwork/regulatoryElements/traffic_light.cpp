@@ -6,6 +6,7 @@
 //
 
 #include "traffic_light.h"
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include <algorithm>
 #include <utility>
 
@@ -54,36 +55,23 @@ void TrafficLight::setPosition(vertex pos) { position = pos; }
 vertex TrafficLight::getPosition() const { return position; }
 
 TurningDirection TrafficLight::matchTurningDirections(const std::string &dir) {
-    if (dir == "right")
-        return TurningDirection::right;
-    else if (dir == "straight")
-        return TurningDirection::straight;
-    else if (dir == "left")
-        return TurningDirection::left;
-    else if (dir == "leftStraight")
-        return TurningDirection::leftStraight;
-    else if (dir == "straightRight")
-        return TurningDirection::straightRight;
-    else if (dir == "leftRight")
-        return TurningDirection::leftRight;
+    std::string str{dir};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    if (TurningDirectionNames.count(str) == 1)
+        return TurningDirectionNames.at(str);
     else
-        return TurningDirection::all;
+        throw std::logic_error("TrafficLight::matchTurningDirections: Invalid turning direction state!");
 }
 
 TrafficLightState TrafficLight::matchTrafficLightState(const std::string &trafficLightState) {
-    if (trafficLightState == "green")
-        return TrafficLightState::green;
-    else if (trafficLightState == "yellow")
-        return TrafficLightState::yellow;
-    else if (trafficLightState == "red_yellow")
-        return TrafficLightState::red_yellow;
-    else if (trafficLightState == "red")
-        return TrafficLightState::red;
-    else if (trafficLightState == "inactive")
-        return TrafficLightState::inactive;
+    std::string str{trafficLightState};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    if (TrafficLightStateNames.count(str) == 1)
+        return TrafficLightStateNames.at(str);
     else
-        return TrafficLightState::red; // default case -> consider also trafficLightState == "red"
+        throw std::logic_error("TrafficLight::matchTrafficLightState: Invalid traffic light state!");
 }
+
 TrafficLight::TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset,
                            TurningDirection direction, bool active, const vertex &position)
     : id(trafficLightId), cycle(std::move(cycle)), offset(offset), direction(direction), active(active),

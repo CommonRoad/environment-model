@@ -29,8 +29,8 @@ regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::share
 }
 
 bool regulatory_elements_utils::atTrafficLightDirState(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                                                  const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                  TurningDirection turnDir, TrafficLightState tlState) {
+                                                       const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                       TurningDirection turnDir, TrafficLightState tlState) {
     if (!intersection_operations::onIncoming(timeStep, obs, roadNetwork))
         return false;
     std::unordered_set<TurningDirection> relevantTrafficLightDirections;

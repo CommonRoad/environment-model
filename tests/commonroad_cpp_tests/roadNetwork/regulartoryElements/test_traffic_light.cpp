@@ -92,14 +92,14 @@ TEST_F(TrafficLightTest, MatchTurningDirections) {
     EXPECT_EQ(TrafficLight::matchTurningDirections("leftStraight"), TurningDirection::leftStraight);
     EXPECT_EQ(TrafficLight::matchTurningDirections("straightRight"), TurningDirection::straightRight);
     EXPECT_EQ(TrafficLight::matchTurningDirections("leftRight"), TurningDirection::leftRight);
-    EXPECT_EQ(TrafficLight::matchTurningDirections("test"), TurningDirection::all);
+    EXPECT_THROW(TrafficLight::matchTurningDirections("test"), std::logic_error);
 }
 
 TEST_F(TrafficLightTest, MatchTrafficLightState) {
     EXPECT_EQ(TrafficLight::matchTrafficLightState("green"), TrafficLightState::green);
     EXPECT_EQ(TrafficLight::matchTrafficLightState("yellow"), TrafficLightState::yellow);
-    EXPECT_EQ(TrafficLight::matchTrafficLightState("red_yellow"), TrafficLightState::red_yellow);
+    EXPECT_EQ(TrafficLight::matchTrafficLightState("redYellow"), TrafficLightState::red_yellow);
     EXPECT_EQ(TrafficLight::matchTrafficLightState("red"), TrafficLightState::red);
-    EXPECT_EQ(TrafficLight::matchTrafficLightState("test"), TrafficLightState::red);
+    EXPECT_THROW(TrafficLight::matchTrafficLightState("test"), std::logic_error);
     EXPECT_EQ(TrafficLight::matchTrafficLightState("inactive"), TrafficLightState::inactive);
 }
