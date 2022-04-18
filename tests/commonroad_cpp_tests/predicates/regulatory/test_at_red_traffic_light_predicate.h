@@ -8,7 +8,7 @@
 
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.h"
+#include "commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
 #include <gtest/gtest.h>
@@ -18,5 +18,5 @@ class AtRedTrafficLightPredicateTest : public testing::Test {
     std::shared_ptr<Obstacle> obstacleOne;
     std::shared_ptr<Obstacle> obstacleTwo;
     std::shared_ptr<World> world;
-    AtRedTrafficLightPredicate pred;
+    AtTrafficLightPredicate pred;
 };

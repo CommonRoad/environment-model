@@ -54,7 +54,9 @@ void PredicateManager::extractPredicateSatisfaction() {
                             std::vector<TrafficSignTypes>{TrafficSignTypes::MIN_SPEED},
                             std::vector<LaneletType>{LaneletType::accessRamp},
                             std::vector<TurningDirection>{
-                                TurningDirection::all})}; // TODO generalize for arbitrary types
+                                TurningDirection::all},
+                            std::vector<TrafficLightState>{
+                                TrafficLightState::red})}; // TODO generalize for arbitrary types
                     try {
                         if (!pred->isVehicleDependent())
                             pred->statisticBooleanEvaluation(timeStep, world, ego, nullptr, opt);

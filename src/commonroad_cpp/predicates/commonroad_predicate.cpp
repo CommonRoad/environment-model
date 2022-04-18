@@ -8,9 +8,9 @@
 #include "commonroad_predicate.h"
 
 #include "braking/brakes_stronger_predicate.h"
+#include "braking/causes_braking_intersection_predicate.h"
 #include "braking/safe_distance_predicate.h"
 #include "braking/unnecessary_braking_predicate.h"
-#include "braking/causes_braking_intersection_predicate.h"
 #include "general/in_congestion_predicate.h"
 #include "general/in_queue_of_vehicles_predicate.h"
 #include "general/in_slow_moving_traffic_predicate.h"
@@ -37,11 +37,11 @@
 #include "position/stop_line_in_front_predicate.h"
 #include "position/traffic_sign_in_front_predicate.h"
 #include "position/unobstructed_intersection_view_predicate.h"
-#include "regulatory/at_red_traffic_light_predicate.h"
-#include "regulatory/at_stop_sign_predicate.h"
+#include "regulatory/at_traffic_light_predicate.h"
+#include "regulatory/at_traffic_sign_predicate.h"
 #include "regulatory/has_priority_predicate.h"
-#include "regulatory/same_priority_predicate.h"
 #include "regulatory/relevant_traffic_light_predicate.h"
+#include "regulatory/same_priority_predicate.h"
 #include "velocity/drives_faster_predicate.h"
 #include "velocity/drives_with_slightly_higher_speed_predicate.h"
 #include "velocity/exist_standing_leading_vehicle_predicate.h"
@@ -129,8 +129,7 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"passes_stop_line", std::make_shared<PassesStopLinePredicate>()},
     {"right_of_broad_lane_marking", std::make_shared<RightOfBroadLaneMarkingPredicate>()},
     {"stop_line_in_front", std::make_shared<StopLineInFrontPredicate>()},
-    {"at_red_traffic_light", std::make_shared<AtRedTrafficLightPredicate>()},
-    {"at_stop_sign", std::make_shared<AtStopSignPredicate>()},
+    {"at_traffic_light", std::make_shared<AtTrafficLightPredicate>()},
     {"drives_faster", std::make_shared<DrivesFasterPredicate>()},
     {"drives_with_slightly_higher_speed", std::make_shared<DrivesWithSlightlyHigherSpeedPredicate>()},
     {"exist_standing_leading_vehicle", std::make_shared<ExistStandingLeadingVehiclePredicate>()},
@@ -145,6 +144,7 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"slow_leading_vehicle", std::make_shared<SlowLeadingVehiclePredicate>()},
     {"unobstructed_intersection_view", std::make_shared<UnobstructedIntersectionViewPredicate>()},
     {"traffic_sign_in_front", std::make_shared<TrafficSignInFrontPredicate>()},
+    {"at_traffic_sign", std::make_shared<AtTrafficSignPredicate>()},
     {"on_similar_oriented_lanelet_with_type", std::make_shared<OnSimilarOrientedLaneletWithTypePredicate>()},
     {"on_similar_oriented_lanelet_without_type", std::make_shared<OnSimilarOrientedLaneletWithoutTypePredicate>()},
     {"same_priority", std::make_shared<SamePriorityPredicate>()},
@@ -154,14 +154,17 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"causes_braking_intersection", std::make_shared<CausesBrakingIntersectionPredicate>()},
 };
 
-OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType,
-                                                         std::vector<LaneletType> laneletType,
-                                                         std::vector<TurningDirection> turningDirection)
-    : signType(std::move(signType)), laneletType(std::move(laneletType)),
-      turningDirection(std::move(turningDirection)) {}
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType)
     : signType(std::move(signType)) {}
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<LaneletType> laneletType)
     : laneletType(std::move(laneletType)) {}
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TurningDirection> turningDirection)
     : turningDirection(std::move(turningDirection)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(const std::vector<TrafficSignTypes> &signType,
+                                                         const std::vector<LaneletType> &laneletType,
+                                                         const std::vector<TurningDirection> &turningDirection,
+                                                         const std::vector<TrafficLightState> &trafficLightState)
+    : signType(signType), laneletType(laneletType), turningDirection(turningDirection),
+      trafficLightState(trafficLightState) {}
+OptionalPredicateParameters::OptionalPredicateParameters(const std::vector<TrafficLightState> &trafficLightState)
+    : trafficLightState(trafficLightState) {}

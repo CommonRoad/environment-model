@@ -9,14 +9,14 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate which checks whether the kth vehicle is in front of a red traffic light.
+ * Predicate which checks whether the kth vehicle is on a lanelet which references a traffic light with a certain direction and color.
  */
-class AtRedTrafficLightPredicate : public CommonRoadPredicate {
+class AtTrafficLightPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for AtRedTrafficLightPredicate.
+     * Constructor for AtTrafficLightPredicate.
      */
-    AtRedTrafficLightPredicate();
+    AtTrafficLightPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
