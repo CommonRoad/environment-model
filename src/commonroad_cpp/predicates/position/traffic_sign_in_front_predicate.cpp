@@ -25,7 +25,7 @@ bool TrafficSignInFrontPredicate::booleanEvaluation(
     for (const auto &lanelet : lanelets) {
         for (const auto &sign : lanelet->getTrafficSigns()) {
             if (sign->getTrafficSignElementsOfType(signId).empty())
-                return false;
+                continue;
             Eigen::Vector2d signPos{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
                                         ->getCurvilinearCoordinateSystem()
                                         ->convertToCurvilinearCoords(sign->getPosition().x, sign->getPosition().y)};

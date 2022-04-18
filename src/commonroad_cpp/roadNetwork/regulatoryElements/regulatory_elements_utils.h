@@ -31,19 +31,11 @@ std::set<std::shared_ptr<TrafficLight>> activeTrafficLights(size_t timeStep, con
  * @param obs Pointer to obstacle.
  * @param roadNetwork Pointer to road network.
  * @param turnDir Turning direction which should be considered.
+ * @param tlState Traffic light state (color) which should be considered.
  * @return Boolean indicating whether obstacle is at red traffic light.
  */
-bool atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                       const std::shared_ptr<RoadNetwork> &roadNetwork, TurningDirection turnDir);
-
-/**
- * Evaluates whether traffic sign is a stop sign.
- *
- * @param sign Traffic sign which should be evaluated.
- * @param country Country for which ID should be checked.
- * @return Boolean indicating whether traffic sign is a stop sign.
- */
-bool trafficSignReferencesStopSign(const std::shared_ptr<TrafficSign> &sign, SupportedTrafficSignCountry country);
+bool atTrafficLightDirState(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
+                       const std::shared_ptr<RoadNetwork> &roadNetwork, TurningDirection turnDir, TrafficLightState tlState);
 
 /**
  * Computes applicable speed limit on provided lanelet.

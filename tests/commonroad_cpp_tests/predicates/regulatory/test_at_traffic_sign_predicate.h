@@ -8,18 +8,15 @@
 
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.h"
+#include "commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
 #include <gtest/gtest.h>
 
-class AtStopSignPredicateTest : public testing::Test {
+class AtTrafficSignPredicateTest : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> obstacleOne;
     std::shared_ptr<Obstacle> obstacleTwo;
     std::shared_ptr<World> world;
-    AtStopSignPredicate pred;
-
-  private:
-    void SetUp() override;
+    AtTrafficSignPredicate pred;
 };

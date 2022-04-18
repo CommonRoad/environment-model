@@ -4,11 +4,11 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "test_at_stop_sign_predicate.h"
+#include "test_at_traffic_sign_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 
-void AtStopSignPredicateTest::SetUp() {
+TEST_F(AtTrafficSignPredicateTest, BooleanEvaluationAtStopSign) {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 10, 0, 0, 0, 0, 0);
 
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 10, 4, 10, 0, 0, 0, 10, 0);
@@ -27,19 +27,18 @@ void AtStopSignPredicateTest::SetUp() {
 
     world =
         std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
-}
 
-TEST_F(AtStopSignPredicateTest, BooleanEvaluation) {
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne)); // occupied lanelet references stop sign
+    auto opt{std::make_shared<OptionalPredicateParameters>(std::vector<TrafficSignTypes>{TrafficSignTypes::STOP})};
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {}, opt)); // occupied lanelet references stop sign
     EXPECT_TRUE(
-        pred.booleanEvaluation(1, world, obstacleOne)); // one occupied lanelet references stop sign the other not
-    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne)); // occupied lanelet does not occupy stop sign
+        pred.booleanEvaluation(1, world, obstacleOne, {}, opt)); // one occupied lanelet references stop sign the other not
+    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, {}, opt)); // occupied lanelet does not occupy stop sign
 }
 
-TEST_F(AtStopSignPredicateTest, RobustEvaluation) {
+TEST_F(AtTrafficSignPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }
 
-TEST_F(AtStopSignPredicateTest, ConstraintEvaluation) {
+TEST_F(AtTrafficSignPredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }

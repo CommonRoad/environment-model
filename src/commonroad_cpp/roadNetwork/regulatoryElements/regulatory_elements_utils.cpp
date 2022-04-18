@@ -28,9 +28,9 @@ regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::share
     return trafficLights;
 }
 
-bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
+bool regulatory_elements_utils::atTrafficLightDirState(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
                                                   const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                  TurningDirection turnDir) {
+                                                  TurningDirection turnDir, TrafficLightState tlState) {
     if (!intersection_operations::onIncoming(timeStep, obs, roadNetwork))
         return false;
     std::unordered_set<TurningDirection> relevantTrafficLightDirections;
@@ -65,18 +65,10 @@ bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::sh
                         [light](const TurningDirection &relevantDirection) {
                             return relevantDirection == light->getDirection();
                         }) and
-            light->getElementAtTime(timeStep).color == TrafficLightState::red)
+            light->getElementAtTime(timeStep).color == tlState)
             return true;
     }
     return false;
-}
-
-bool regulatory_elements_utils::trafficSignReferencesStopSign(const std::shared_ptr<TrafficSign> &sign,
-                                                              SupportedTrafficSignCountry country) {
-    const auto signId{TrafficSignLookupTableByCountry.at(country)->at(TrafficSignTypes::STOP)};
-    auto elements{sign->getTrafficSignElements()};
-    return std::any_of(elements.begin(), elements.end(),
-                       [signId](const std::shared_ptr<TrafficSignElement> &elem) { return elem->getId() == signId; });
 }
 
 double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lanelet, const std::string &signId) {
