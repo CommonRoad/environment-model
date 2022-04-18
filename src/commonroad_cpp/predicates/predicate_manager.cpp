@@ -53,8 +53,7 @@ void PredicateManager::extractPredicateSatisfaction() {
                         std::make_shared<OptionalPredicateParameters>(
                             std::vector<TrafficSignTypes>{TrafficSignTypes::MIN_SPEED},
                             std::vector<LaneletType>{LaneletType::accessRamp},
-                            std::vector<TurningDirection>{
-                                TurningDirection::all},
+                            std::vector<TurningDirection>{TurningDirection::all},
                             std::vector<TrafficLightState>{
                                 TrafficLightState::red})}; // TODO generalize for arbitrary types
                     try {
