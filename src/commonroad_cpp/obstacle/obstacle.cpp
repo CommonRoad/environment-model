@@ -270,8 +270,8 @@ double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
 }
 
 double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    if (!(convertedPositions.count(timeStep) == 1 and
-          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
+    if (!(convertedPositions.count(timeStep) == 1) or
+        !(convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
         try {
             convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
