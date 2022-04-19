@@ -26,7 +26,7 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
                 if (letK->getId() != letP->getId() and
                     (letP->getAdjacentLeft().adj == nullptr or
                      letK->getId() != letP->getAdjacentLeft().adj->getId()) and
-                    (letP->getAdjacentLeft().adj == nullptr or
+                    (letP->getAdjacentRight().adj == nullptr or
                      letK->getId() != letP->getAdjacentRight().adj->getId()) and
                     !std::any_of(
                         letP->getPredecessors().begin(), letP->getPredecessors().end(),
