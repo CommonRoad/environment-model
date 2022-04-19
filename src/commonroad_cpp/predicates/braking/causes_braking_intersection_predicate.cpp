@@ -5,6 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
+#include "../../roadNetwork/lanelet/lane.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
@@ -21,6 +22,12 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(
     if (!obstacleP->getStateByTimeStep(timeStep)->getValidStates().acceleration)
         obstacleP->interpolateAcceleration(timeStep, world->getDt());
 
+    // check whether kth obstacle is in the projection domain of the reference of the pth vehicle -> otherwise ccs fails
+    if (!obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
+             ->getCurvilinearCoordinateSystem()
+             ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                                                obstacleK->getStateByTimeStep(timeStep)->getYPosition()))
+        return false;
     auto distance{obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)) -
                   obstacleP->frontS(world->getRoadNetwork(), timeStep)};
     return 0 <= distance and distance <= parameters.dBrakingIntersection and

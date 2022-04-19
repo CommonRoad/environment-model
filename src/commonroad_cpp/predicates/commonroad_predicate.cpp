@@ -21,6 +21,7 @@
 #include "position/drives_leftmost_predicate.h"
 #include "position/drives_rightmost_predicate.h"
 #include "position/in_front_of_predicate.h"
+#include "position/in_intersection_conflict_area_predicate.h"
 #include "position/in_leftmost_lane_predicate.h"
 #include "position/in_rightmost_lane_predicate.h"
 #include "position/in_same_lane_predicate.h"
@@ -152,6 +153,7 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"on_incoming_left_of", std::make_shared<OnIncomingLeftOfPredicate>()},
     {"relevant_traffic_light", std::make_shared<RelevantTrafficLightPredicate>()},
     {"causes_braking_intersection", std::make_shared<CausesBrakingIntersectionPredicate>()},
+    {"in_intersection_conflict_area", std::make_shared<InIntersectionConflictAreaPredicate>()},
 };
 
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType)
@@ -160,11 +162,11 @@ OptionalPredicateParameters::OptionalPredicateParameters(std::vector<LaneletType
     : laneletType(std::move(laneletType)) {}
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TurningDirection> turningDirection)
     : turningDirection(std::move(turningDirection)) {}
-OptionalPredicateParameters::OptionalPredicateParameters(const std::vector<TrafficSignTypes> &signType,
-                                                         const std::vector<LaneletType> &laneletType,
-                                                         const std::vector<TurningDirection> &turningDirection,
-                                                         const std::vector<TrafficLightState> &trafficLightState)
-    : signType(signType), laneletType(laneletType), turningDirection(turningDirection),
-      trafficLightState(trafficLightState) {}
-OptionalPredicateParameters::OptionalPredicateParameters(const std::vector<TrafficLightState> &trafficLightState)
-    : trafficLightState(trafficLightState) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType,
+                                                         std::vector<LaneletType> laneletType,
+                                                         std::vector<TurningDirection> turningDirection,
+                                                         std::vector<TrafficLightState> trafficLightState)
+    : signType(std::move(signType)), laneletType(std::move(laneletType)), turningDirection(std::move(turningDirection)),
+      trafficLightState(std::move(trafficLightState)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficLightState> trafficLightState)
+    : trafficLightState(std::move(trafficLightState)) {}

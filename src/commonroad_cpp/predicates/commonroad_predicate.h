@@ -20,14 +20,13 @@ class World;
 
 struct OptionalPredicateParameters {
     OptionalPredicateParameters() = default;
-    OptionalPredicateParameters(const std::vector<TrafficSignTypes> &signType,
-                                const std::vector<LaneletType> &laneletType,
-                                const std::vector<TurningDirection> &turningDirection,
-                                const std::vector<TrafficLightState> &trafficLightState);
+    OptionalPredicateParameters(std::vector<TrafficSignTypes> signType, std::vector<LaneletType> laneletType,
+                                std::vector<TurningDirection> turningDirection,
+                                std::vector<TrafficLightState> trafficLightState);
     OptionalPredicateParameters(std::vector<TrafficSignTypes> signType);
     OptionalPredicateParameters(std::vector<LaneletType> laneletType);
     OptionalPredicateParameters(std::vector<TurningDirection> turningDirection);
-    OptionalPredicateParameters(const std::vector<TrafficLightState> &trafficLightState);
+    OptionalPredicateParameters(std::vector<TrafficLightState> trafficLightState);
     std::vector<TrafficSignTypes> signType;
     std::vector<LaneletType> laneletType;
     std::vector<TurningDirection> turningDirection;
