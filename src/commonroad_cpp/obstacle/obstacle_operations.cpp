@@ -7,7 +7,6 @@
 
 #include "obstacle_operations.h"
 #include "../geometry/geometric_operations.h"
-#include "../roadNetwork/intersection/intersection.h"
 #include "../roadNetwork/lanelet//lanelet_operations.h"
 
 std::shared_ptr<Obstacle>

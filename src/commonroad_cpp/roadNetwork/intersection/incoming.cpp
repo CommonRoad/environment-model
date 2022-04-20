@@ -7,6 +7,8 @@
 
 #include "incoming.h"
 
+#include <algorithm>
+#include <deque>
 #include <utility>
 
 size_t Incoming::getId() const { return id; }
@@ -53,3 +55,40 @@ Incoming::Incoming(size_t incomingId, std::vector<std::shared_ptr<Lanelet>> inco
     : id(incomingId), incomingLanelets(std::move(incomingLanelets)), isLeftOf(std::move(isLeftOf)),
       straightOutgoings(std::move(straightOutgoings)), leftOutgoings(std::move(leftOutgoings)),
       rightOutgoings(std::move(rightOutgoings)), oncomings(std::move(oncomings)) {}
+
+std::vector<std::shared_ptr<Lanelet>> Incoming::getAllSuccessorLeft() {
+
+    std::deque<std::shared_ptr<Lanelet>> candidates{leftOutgoings.begin(), leftOutgoings.end()};
+    return collectIncomingSuccessors(candidates);
+}
+
+std::vector<std::shared_ptr<Lanelet>> Incoming::getAllSuccessorRight() {
+
+    std::deque<std::shared_ptr<Lanelet>> candidates{rightOutgoings.begin(), rightOutgoings.end()};
+    return collectIncomingSuccessors(candidates);
+}
+
+std::vector<std::shared_ptr<Lanelet>> Incoming::getAllSuccessorStraight() {
+
+    std::deque<std::shared_ptr<Lanelet>> candidates{straightOutgoings.begin(), straightOutgoings.end()};
+    return collectIncomingSuccessors(candidates);
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+Incoming::collectIncomingSuccessors(std::deque<std::shared_ptr<Lanelet>> &candidates) {
+    std::vector<std::shared_ptr<Lanelet>> memberLanelets;
+    while (!candidates.empty()) {
+        std::shared_ptr<Lanelet> pre{candidates.front()};
+        candidates.pop_front();
+        if (!std::any_of(memberLanelets.begin(), memberLanelets.end(),
+                         [pre](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == pre->getId(); }) and
+            !std::any_of(incomingLanelets.begin(), incomingLanelets.end(),
+                         [pre](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == pre->getId(); })) {
+            memberLanelets.push_back(pre);
+            auto pres{memberLanelets.back()->getPredecessors()};
+            candidates.insert(candidates.end(), pres.begin(), pres.end());
+        } else
+            continue;
+    }
+    return memberLanelets;
+}
