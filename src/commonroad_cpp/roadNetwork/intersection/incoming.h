@@ -8,6 +8,7 @@
 #pragma once
 
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include <deque>
 
 /**
  * Class representing an incoming of an intersection.
@@ -48,27 +49,6 @@ class Incoming {
      * @return List of pointers to lanelets.
      */
     [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getIncomingLanelets() const;
-
-    /**
-     * Getter for successor right lanelets of incoming.
-     *
-     * @return List of pointers to lanelets.
-     */
-    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getSuccessorsRight() const;
-
-    /**
-     * Getter for successor straight lanelets of incoming.
-     *
-     * @return List of pointers to lanelets.
-     */
-    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getSuccessorsStraight() const;
-
-    /**
-     * Getter for successor left lanelets of incoming.
-     *
-     * @return List of pointers to lanelets.
-     */
-    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getSuccessorsLeft() const;
 
     /**
      * Getter for incoming which is left of this incoming.
@@ -154,6 +134,10 @@ class Incoming {
      */
     void setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings);
 
+    std::vector<std::shared_ptr<Lanelet>> getAllSuccessorLeft();
+    std::vector<std::shared_ptr<Lanelet>> getAllSuccessorRight();
+    std::vector<std::shared_ptr<Lanelet>> getAllSuccessorStraight();
+
   private:
     size_t id;
     std::vector<std::shared_ptr<Lanelet>> incomingLanelets; //**< set of pointers to lanelets belonging to incoming */
@@ -165,4 +149,6 @@ class Incoming {
     std::vector<std::shared_ptr<Lanelet>>
         rightOutgoings; //**< set of pointers to right outgoing lanelets of this incoming */
     std::vector<std::shared_ptr<Lanelet>> oncomings; //**< set of pointers to oncoming lanelets of this incoming */
+
+    std::vector<std::shared_ptr<Lanelet>> collectIncomingSuccessors(std::deque<std::shared_ptr<Lanelet>> &candidates);
 };
