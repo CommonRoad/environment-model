@@ -37,7 +37,7 @@ bool OnOncomingOfPredicate::booleanEvaluation(
         for (const auto &incom : incomings) {
             auto straightSuccessors{incom->getAllSuccessorStraight()};
             if (std::any_of(straightSuccessors.begin(), straightSuccessors.end(),
-                            [let](const std::shared_ptr<Lanelet> la) { return let->getId() == la->getId(); }))
+                            [let](const std::shared_ptr<Lanelet>& letSuc) { return let->getId() == letSuc->getId(); }))
                 return true;
         }
     return false;
