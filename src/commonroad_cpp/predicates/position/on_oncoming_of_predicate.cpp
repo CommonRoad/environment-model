@@ -34,10 +34,12 @@ bool OnOncomingOfPredicate::booleanEvaluation(
         world->getRoadNetwork(), obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
         obstacleK->getStateByTimeStep(timeStep), parameters.laneletOccupancySimilarity)};
     for (const auto &let : lanelets)
-        for (const auto &incom : incomings)
-            if (std::any_of(incom->getAllSuccessorStraight().begin(), incom->getAllSuccessorStraight().end(),
+        for (const auto &incom : incomings) {
+            auto straightSuccessors{incom->getAllSuccessorStraight()};
+            if (std::any_of(straightSuccessors.begin(), straightSuccessors.end(),
                             [let](const std::shared_ptr<Lanelet> la) { return let->getId() == la->getId(); }))
                 return true;
+        }
     return false;
 }
 
