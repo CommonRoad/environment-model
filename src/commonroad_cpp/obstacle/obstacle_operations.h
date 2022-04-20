@@ -126,4 +126,9 @@ std::vector<std::shared_ptr<Intersection>> getIntersections(size_t timeStep,
                                                             const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                             const std::shared_ptr<Obstacle> &obs);
 
+std::vector<std::shared_ptr<Lanelet>>
+getSimilarlyOrientedLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                             const std::vector<std::shared_ptr<Lanelet>> &baseLanelets,
+                             const std::shared_ptr<State> &state, double similarityParameter);
+
 } // namespace obstacle_operations

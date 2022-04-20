@@ -6,6 +6,7 @@
 //
 #include "lanelet_operations.h"
 #include "../../geometry/geometric_operations.h"
+#include "commonroad_cpp/obstacle/state.h"
 #include <algorithm>
 #include <utility>
 
