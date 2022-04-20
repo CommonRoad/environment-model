@@ -21,8 +21,8 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(
     OnLaneletWithTypePredicate onLaneletWithTypePredicate;
     std::shared_ptr<OptionalPredicateParameters> opt{
         std::make_shared<OptionalPredicateParameters>(std::vector<LaneletType>{LaneletType::intersection})};
-    if (onLaneletWithTypePredicate.booleanEvaluation(timeStep, world, obstacleK, {}, opt) or
-        onLaneletWithTypePredicate.booleanEvaluation(timeStep, world, obstacleP, {}, opt))
+    if (!onLaneletWithTypePredicate.booleanEvaluation(timeStep, world, obstacleK, {}, opt) or
+        !onLaneletWithTypePredicate.booleanEvaluation(timeStep, world, obstacleP, {}, opt))
         return false;
 
     for (const auto &laneK : obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep))
