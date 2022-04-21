@@ -137,6 +137,9 @@ class Incoming {
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorLeft();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorRight();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorStraight();
+    std::vector<std::shared_ptr<Lanelet>> getAllLeftTurningLanelets();
+    std::vector<std::shared_ptr<Lanelet>> getAllRightTurningLanelets();
+    std::vector<std::shared_ptr<Lanelet>> getAllStraightGoingLanelets();
 
   private:
     size_t id;
@@ -150,5 +153,6 @@ class Incoming {
         rightOutgoings; //**< set of pointers to right outgoing lanelets of this incoming */
     std::vector<std::shared_ptr<Lanelet>> oncomings; //**< set of pointers to oncoming lanelets of this incoming */
 
-    std::vector<std::shared_ptr<Lanelet>> collectIncomingSuccessors(std::deque<std::shared_ptr<Lanelet>> &candidates);
+    std::vector<std::shared_ptr<Lanelet>> collectIncomingSuccessors(std::deque<std::shared_ptr<Lanelet>> &candidates,
+                                                                    bool considerIncomings);
 };

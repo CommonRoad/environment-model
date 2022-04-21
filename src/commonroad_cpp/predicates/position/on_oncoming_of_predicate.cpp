@@ -35,7 +35,7 @@ bool OnOncomingOfPredicate::booleanEvaluation(
         obstacleK->getStateByTimeStep(timeStep), parameters.laneletOccupancySimilarity)};
     for (const auto &let : lanelets)
         for (const auto &incom : incomings) {
-            auto straightSuccessors{incom->getAllSuccessorStraight()};
+            auto straightSuccessors{incom->getAllStraightGoingLanelets()};
             if (std::any_of(straightSuccessors.begin(), straightSuccessors.end(),
                             [let](const std::shared_ptr<Lanelet> &letSuc) { return let->getId() == letSuc->getId(); }))
                 return true;
