@@ -12,7 +12,6 @@
 #include "../../world.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "on_lanelet_with_type_predicate.h"
-#include "in_front_of_predicate.h"
 
 bool InIntersectionConflictAreaPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
@@ -33,13 +32,7 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
     for (const auto &simLaneletP : simLaneletsP)
         for (const auto &lane : world->getRoadNetwork()->findLanesByContainedLanelet(simLaneletP->getId()))
             lanes.push_back(lane);
-    InFrontOfPredicate inFrontOfPredicate;
     for (const auto &lane : lanes) {
-        if (!lane->getCurvilinearCoordinateSystem()->cartesianPointInProjectionDomain(
-                obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                obstacleK->getStateByTimeStep(timeStep)->getYPosition()) or
-            !inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obstacleP))
-            continue;
         for (const auto &letP : lane->getContainedLanelets()) {
             if (!letP->hasLaneletType(LaneletType::intersection))
                 continue;
