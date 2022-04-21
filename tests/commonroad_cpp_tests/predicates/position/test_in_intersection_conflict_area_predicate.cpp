@@ -20,18 +20,18 @@ void InIntersectionConflictAreaPredicateTest::SetUp() {
     std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 1009.5, 995, 10, 0, 1.5708);
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 1007.5, 1007.5, 10, 0, 3.14);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
-        std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle)};
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
+                                                         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle)};
     Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),};
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+    };
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
-                                                     0.3, trajectoryPredictionObstacleOne, 5, 2));
+                                                      0.3, trajectoryPredictionObstacleOne, 5, 2));
 
     setUpIncoming();
     setUpIntersection();
@@ -45,7 +45,7 @@ TEST_F(InIntersectionConflictAreaPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, obstacleOne));
 
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne,egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, egoVehicle, obstacleOne));
 
     EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne, egoVehicle));
@@ -58,15 +58,16 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario1) {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" + scen};
         const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
             InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-        auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+        auto world{
+            std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
-//        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(0)));
-//        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
-//
-//        EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
-//        EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-//
-//        EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+
+        EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
         EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
     }
 }
