@@ -550,6 +550,9 @@ class Obstacle {
 
     void setFov(const std::vector<vertex> &fovVertices);
 
+    const std::vector<std::shared_ptr<Lane>> &
+    getReferenceLaneCandidates(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     bool isStatic{false};                             //**< true if Obstacle is static */
@@ -571,6 +574,8 @@ class Obstacle {
 
     std::unordered_map<time_step_t, std::shared_ptr<Lane>>
         referenceLane; //**< lane which is used as reference for curvilinear projection */
+    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lane>>> referenceLaneCandidates;
+    //**< possible candidates from which referenceLane was selected */
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lane>>>
         occupiedLanes; //**< map of time steps to lanes occupied by the obstacle */
 
