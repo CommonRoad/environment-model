@@ -61,11 +61,47 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario1) {
         auto world{
             std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
         EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+        EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+
         EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+        EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+        EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+        EXPECT_TRUE(
+            pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1))); // todo check
+    }
+}
+
+TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario2) {
+    std::array<std::string, 1> scenarios{"DEU_test_right_before_left_2.xml"};
+    for (const auto &scen : scenarios) {
+        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" + scen};
+        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+            InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+        auto world{
+            std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+
+        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+        EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+        EXPECT_TRUE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+
+        EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+        EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+
+        EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
         EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
         EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));

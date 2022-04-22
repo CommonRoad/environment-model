@@ -478,6 +478,7 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
     else if (!existsOccupiedLanes(timeStep))
         setOccupiedLanes(roadNetwork, timeStep);
 
+    referenceLaneCandidates[timeStep] = {};
     std::vector<std::shared_ptr<Lane>> relevantOccupiedLanes;
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
     // 1. check which currently occupied lanelets match direction
@@ -505,7 +506,7 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
         // choose lane with most occupancies; if initial lane is adjacent use this lane
         std::map<size_t, size_t> numOccupancies;
         for (size_t newTimeStep{timeStep}; newTimeStep <= getLastTrajectoryTimeStep(); ++newTimeStep) {
-            std::multimap<double, size_t> bestOccupancies;
+            std::multimap<double, size_t> bestOccupancies; // ordered map
             for (const auto &lane : relevantOccupiedLanes) {
                 auto curPointOrientation{lane->getOrientationAtPosition(
                     getStateByTimeStep(newTimeStep)->getXPosition(), getStateByTimeStep(newTimeStep)->getYPosition())};
@@ -515,7 +516,7 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
                     bestOccupancies.insert({orientationDif, lane->getId()});
             }
             for (const auto &elem : bestOccupancies) {
-                if (elem.first != bestOccupancies.begin()->first)
+                if (abs(geometric_operations::subtractOrientations(elem.first, bestOccupancies.begin()->first)) > 0.1)
                     break;
                 numOccupancies[elem.second]++;
             }
@@ -523,7 +524,6 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
         if (!numOccupancies.empty()) { // find lane with most occupancies (orientation must also match)
             std::vector<size_t> ids;
             std::multimap<int, size_t> multimap;
-            std::vector<std::shared_ptr<Lane>> referenceLaneCandidates;
             for (auto &&occupancy : numOccupancies)
                 multimap.insert(std::make_pair(occupancy.second, occupancy.first));
             auto it1 = multimap.rbegin(); // get the elem with the highest key
@@ -533,25 +533,25 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
             for (const auto &relLane : relevantOccupiedLanes)
                 for (const auto &canLaneId : ids)
                     if (relLane->getId() == canLaneId)
-                        referenceLaneCandidates.push_back(relLane);
-            if (referenceLaneCandidates.size() > 1) {
+                        referenceLaneCandidates[timeStep].push_back(relLane);
+            if (referenceLaneCandidates[timeStep].size() > 1) {
                 std::vector<double> avgLaneOrientationChange;
-                avgLaneOrientationChange.reserve(referenceLaneCandidates.size());
-                for (size_t i{0}; i < referenceLaneCandidates.size(); ++i) {
-                    std::vector<double> orientation = referenceLaneCandidates[i]->getOrientation();
+                avgLaneOrientationChange.reserve(referenceLaneCandidates[timeStep].size());
+                for (size_t i{0}; i < referenceLaneCandidates[timeStep].size(); ++i) {
+                    std::vector<double> orientation = referenceLaneCandidates[timeStep][i]->getOrientation();
                     double tmp{0};
                     for (size_t j{1}; j < orientation.size(); ++j)
                         tmp += abs(geometric_operations::subtractOrientations(orientation[j], orientation[j - 1]));
                     avgLaneOrientationChange.push_back(
-                        tmp / static_cast<double>(referenceLaneCandidates[i]->getCenterVertices().size()));
+                        tmp / static_cast<double>(referenceLaneCandidates[timeStep][i]->getCenterVertices().size()));
                 }
                 auto laneIdx{
                     std::distance(avgLaneOrientationChange.begin(),
                                   std::min_element(avgLaneOrientationChange.begin(), avgLaneOrientationChange.end()))};
-                referenceLane[timeStep] = referenceLaneCandidates.at(static_cast<unsigned long>(laneIdx));
+                referenceLane[timeStep] = referenceLaneCandidates[timeStep].at(static_cast<unsigned long>(laneIdx));
 
-            } else if (referenceLaneCandidates.size() == 1)
-                referenceLane[timeStep] = referenceLaneCandidates.front();
+            } else if (referenceLaneCandidates[timeStep].size() == 1)
+                referenceLane[timeStep] = referenceLaneCandidates[timeStep].front();
         }
     }
     // if no reference lane found: check previous reference lane, if no previous exist try to use future reference lane
@@ -687,4 +687,10 @@ void Obstacle::setFov(const std::vector<vertex> &fovVertices) {
     boost::geometry::simplify(polygon, fov, 0.01);
     boost::geometry::unique(fov);
     boost::geometry::correct(fov);
+}
+
+const std::vector<std::shared_ptr<Lane>> &
+Obstacle::getReferenceLaneCandidates(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+    setReferenceLane(roadNetwork, timeStep);
+    return referenceLaneCandidates.at(timeStep);
 }
