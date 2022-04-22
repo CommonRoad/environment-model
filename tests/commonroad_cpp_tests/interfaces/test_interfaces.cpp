@@ -220,6 +220,6 @@ TEST_F(InterfacesTest, StringToEvaluationMode) {
 
 TEST_F(InterfacesTest, FindRelevantScenarioFileNames) {
     EXPECT_EQ(InputUtils::findRelevantScenarioFileNames(TestUtils::getTestScenarioDirectory() + "/predicates").size(),
-              4);
+              6);
     EXPECT_EQ(InputUtils::findRelevantScenarioFileNames(TestUtils::getTestScenarioDirectory()).size(), 12);
 }
