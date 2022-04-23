@@ -212,7 +212,7 @@ TEST_F(ObstacleTest, InitializationComplete) {
                            obstacleOne->getReferenceLane(roadNetwork, obstacleOne->getCurrentState()->getTimeStep())
                                ->getCenterVertices()
                                .back()},
-                          {laneletThree->getCenterVertices().front(), laneletSix->getCenterVertices().back()});
+                          {laneletSeven->getCenterVertices().front(), laneletSix->getCenterVertices().back()});
     for (size_t i = 2; i <= 3; ++i)
         compareStates(trajectoryPredictionObstacleOne.at(i), obstacleOne->getTrajectoryPrediction().at(i));
     EXPECT_EQ(obstacleOne->getTrajectoryLength(), 3);
@@ -277,12 +277,12 @@ TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
     stateOne->setXPosition(25.0);
     stateOne->setYPosition(1.5);
     obstacleOne->convertPointToCurvilinear(roadNetwork, 0);
-    EXPECT_NEAR(stateOne->getLonPosition(), 75.0, 0.0005);
+    EXPECT_NEAR(stateOne->getLonPosition(), 65.05921, 0.0005);
     EXPECT_EQ(stateOne->getLatPosition(), 0.0);
     stateOne->setXPosition(25.0);
     stateOne->setYPosition(-2.75);
     obstacleOne->convertPointToCurvilinear(roadNetwork, 0);
-    EXPECT_NEAR(stateOne->getLonPosition(), 75.0, 0.0005);
+    EXPECT_NEAR(stateOne->getLonPosition(), 65.05921, 0.0005);
     EXPECT_EQ(stateOne->getLatPosition(), -4.25);
 }
 
@@ -312,7 +312,7 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     roadNetworkScenarioTwo->setIdCounterRef(globalIdRef);
     auto obsOneScenarioTwo{obstacle_operations::getObstacleById(obstaclesScenarioTwo, 325)};
     obsOneScenarioTwo->computeLanes(roadNetworkScenarioTwo);
-    EXPECT_EQ(77695,
+    EXPECT_EQ(77062,
               obsOneScenarioTwo->getReferenceLane(roadNetwork, timeStep)->getContainedLanelets().front()->getId());
 
     std::string pathToTestFileThree{TestUtils::getTestScenarioDirectory() + "/USA_Peach-2_1_T-1.xml"};
@@ -323,7 +323,7 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     obsOneScenarioThree->computeLanes(roadNetworkScenarioThree);
     EXPECT_EQ(53758,
               obsOneScenarioThree->getReferenceLane(roadNetwork, timeStep)->getContainedLanelets().front()->getId());
-    EXPECT_EQ(53788,
+    EXPECT_EQ(53786,
               obsOneScenarioThree->getReferenceLane(roadNetwork, timeStep)->getContainedLanelets().back()->getId());
 
     std::string pathToTestFileFour{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4_1_T-1.xml"};
