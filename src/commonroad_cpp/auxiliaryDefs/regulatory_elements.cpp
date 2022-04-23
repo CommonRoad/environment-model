@@ -572,6 +572,7 @@ const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> Traffi
     {SupportedTrafficSignCountry::SPAIN, &TrafficSignIDSpain},
 };
 
+// left, straight right
 const std::unordered_map<std::string, std::vector<int>> priorityTable{
     std::pair<std::string, std::vector<int>>("1002-10", {5, 4, 4}),
     std::pair<std::string, std::vector<int>>("1002-12", {5, 4, -1}),
