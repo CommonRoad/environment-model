@@ -51,9 +51,9 @@ std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::shared
     for (const auto &tse : relevantTrafficSignElements) {
         if (std::any_of(relevantTrafficSignElements.begin(), relevantTrafficSignElements.end(),
                         [tse](const std::shared_ptr<TrafficSignElement> &tel) { return tel->getId() == tse->getId(); }))
-            continue;
-        else
             return tse; // TODO don't just return first sign -> look at BA there it is different
+        else
+            continue;
     }
     return nullptr;
 }
