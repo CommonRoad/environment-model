@@ -48,25 +48,31 @@ std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::shared
         relevantTrafficSignElements.insert(relevantTrafficSignElements.end(), trafficSignElements.begin(),
                                            trafficSignElements.end());
     }
+    std::shared_ptr<TrafficSignElement> tmpSign{std::make_shared<TrafficSignElement>("102")};
     for (const auto &tse : relevantTrafficSignElements) {
-        if (std::any_of(relevantTrafficSignElements.begin(), relevantTrafficSignElements.end(),
-                        [tse](const std::shared_ptr<TrafficSignElement> &tel) { return tel->getId() == tse->getId(); }))
-            return tse; // TODO don't just return first sign -> look at BA there it is different
-        else
+        if (!std::any_of(
+                relevantTrafficSignElements.begin(), relevantTrafficSignElements.end(),
+                [tse](const std::shared_ptr<TrafficSignElement> &tel) { return tel->getId() == tse->getId(); }))
             continue;
+        if (tmpSign->getId() != TrafficSignIDGermany.at(TrafficSignTypes::WARNING_RIGHT_BEFORE_LEFT) and
+            (tse->getId() == TrafficSignIDGermany.at(TrafficSignTypes::PRIORITY) or
+             tse->getId() == TrafficSignIDGermany.at(TrafficSignTypes::YIELD)))
+            continue;
+        tmpSign = tse;
     }
-    return nullptr;
+    return tmpSign;
 }
 
-std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets) {
-    for (const auto &let : lanelets) { // TODO don't use just first value
+int extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets, TurningDirection dir) {
+    std::shared_ptr<TrafficSignElement> tmpSign;
+    int currentPriorityValue{-123456789}; // todo use min int
+    for (const auto &let : lanelets) {
         auto trs{extractPriorityTrafficSign(let)};
-        if (trs == nullptr)
-            continue;
-        else
-            return trs;
+        if (currentPriorityValue == -123456789 or
+            priorityTable.at(trs->getId()).at(static_cast<size_t>(dir)) < currentPriorityValue)
+            currentPriorityValue = priorityTable.at(trs->getId()).at(static_cast<size_t>(dir));
     }
-    return nullptr;
+    return currentPriorityValue;
 }
 
 int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<Obstacle> &obs,
@@ -74,25 +80,21 @@ int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork
     auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
     std::vector<std::shared_ptr<Lanelet>> relevantIncomingLanelets;
     for (const auto &let : lanelets) {
-        auto incomingLanelets{incomingLaneletOfLanelet(let)};
-        relevantIncomingLanelets.insert(relevantIncomingLanelets.end(), incomingLanelets.begin(),
-                                        incomingLanelets.end());
+        if (let->hasLaneletType(LaneletType::incoming))
+            relevantIncomingLanelets.push_back(let);
     }
-    auto prioTrafficSign{extractPriorityTrafficSign(relevantIncomingLanelets)};
-    if (prioTrafficSign != nullptr)
-        return priorityTable.at(prioTrafficSign->getId()).at(static_cast<size_t>(dir));
-    else
-        return priorityTable.at("102").at(static_cast<size_t>(dir));
+    return extractPriorityTrafficSign(relevantIncomingLanelets, dir);
 }
 
 bool HasPriorityPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return getPriority(timeStep, world->getRoadNetwork(), obstacleK,
-                       additionalFunctionParameters->turningDirection.at(0)) >
-           getPriority(timeStep, world->getRoadNetwork(), obstacleP,
-                       additionalFunctionParameters->turningDirection.at(0));
+    int prioK{getPriority(timeStep, world->getRoadNetwork(), obstacleK,
+                          additionalFunctionParameters->turningDirection.at(0))};
+    int prioP{getPriority(timeStep, world->getRoadNetwork(), obstacleP,
+                          additionalFunctionParameters->turningDirection.at(1))};
+    return prioK > prioP and prioK != -123456789 and prioP != -123456789;
 }
 
 double HasPriorityPredicate::robustEvaluation(
