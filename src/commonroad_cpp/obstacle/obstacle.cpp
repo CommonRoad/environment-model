@@ -526,32 +526,44 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
             std::multimap<int, size_t> multimap;
             for (auto &&occupancy : numOccupancies)
                 multimap.insert(std::make_pair(occupancy.second, occupancy.first));
-            auto it1 = multimap.rbegin(); // get the elem with the highest key
-            auto range = multimap.equal_range(it1->first);
-            for (auto it2 = range.first; it2 != range.second; ++it2)
-                ids.push_back(it2->second);
-            for (const auto &relLane : relevantOccupiedLanes)
-                for (const auto &canLaneId : ids)
-                    if (relLane->getId() == canLaneId)
-                        referenceLaneCandidates[timeStep].push_back(relLane);
-            if (referenceLaneCandidates[timeStep].size() > 1) {
-                std::vector<double> avgLaneOrientationChange;
-                avgLaneOrientationChange.reserve(referenceLaneCandidates[timeStep].size());
-                for (size_t i{0}; i < referenceLaneCandidates[timeStep].size(); ++i) {
-                    std::vector<double> orientation = referenceLaneCandidates[timeStep][i]->getOrientation();
-                    double tmp{0};
-                    for (size_t j{1}; j < orientation.size(); ++j)
-                        tmp += abs(geometric_operations::subtractOrientations(orientation[j], orientation[j - 1]));
-                    avgLaneOrientationChange.push_back(
-                        tmp / static_cast<double>(referenceLaneCandidates[timeStep][i]->getCenterVertices().size()));
-                }
-                auto laneIdx{
-                    std::distance(avgLaneOrientationChange.begin(),
-                                  std::min_element(avgLaneOrientationChange.begin(), avgLaneOrientationChange.end()))};
-                referenceLane[timeStep] = referenceLaneCandidates[timeStep].at(static_cast<unsigned long>(laneIdx));
+            auto itup = multimap.end().operator--();             // get the elem with the highest key
+            auto itlow = multimap.upper_bound(itup->first - 15); // todo parameter
+            for (std::multimap<int, size_t>::iterator it{itlow}; it != itup; ++it)
+                ids.push_back(it->second);
+            ids.push_back(itup->second);
 
-            } else if (referenceLaneCandidates[timeStep].size() == 1)
+            if (ids.size() > 1) {
+                for (int newTimeStep{static_cast<int>(timeStep - 1)};
+                     newTimeStep >= static_cast<int>(currentState->getTimeStep()); --newTimeStep) {
+                    for (const auto &lane : numOccupancies) {
+                        if (referenceLaneCandidates[static_cast<size_t>(newTimeStep)].empty())
+                            setReferenceLane(roadNetwork, static_cast<size_t>(newTimeStep));
+                        for (const auto &refLane : referenceLaneCandidates[static_cast<size_t>(newTimeStep)])
+                            if (refLane->getId() == lane.first)
+                                numOccupancies[lane.first]++;
+                    }
+                }
+                ids.clear();
+                multimap.clear();
+                for (auto &&occupancy : numOccupancies)
+                    multimap.insert(std::make_pair(occupancy.second, occupancy.first));
+                itup = multimap.end().operator--();
+                itlow = multimap.upper_bound(itup->first - 15);
+                for (std::multimap<int, size_t>::iterator it{itlow}; it != itup; ++it)
+                    ids.push_back(it->second);
+                ids.push_back(itup->second);
+                for (const auto &relLane : relevantOccupiedLanes) // todo replace by find lane by id
+                    for (const auto &canLaneId : ids)
+                        if (relLane->getId() == canLaneId)
+                            referenceLaneCandidates[timeStep].push_back(relLane);
                 referenceLane[timeStep] = referenceLaneCandidates[timeStep].front();
+            } else if (ids.size() == 1) {
+                for (const auto &relLane : relevantOccupiedLanes) // todo replace by find lane by id
+                    for (const auto &canLaneId : ids)
+                        if (relLane->getId() == canLaneId)
+                            referenceLaneCandidates[timeStep].push_back(relLane);
+                referenceLane[timeStep] = referenceLaneCandidates[timeStep].front();
+            }
         }
     }
     // if no reference lane found: check previous reference lane, if no previous exist try to use future reference lane
