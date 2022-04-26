@@ -68,8 +68,8 @@ int extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lane
     int currentPriorityValue{-123456789}; // todo use min int
     for (const auto &let : lanelets) {
         auto trs{extractPriorityTrafficSign(let)};
-        if (currentPriorityValue == -123456789 or
-            priorityTable.at(trs->getId()).at(static_cast<size_t>(dir)) < currentPriorityValue)
+        if (priorityTable.count(trs->getId()) == 1 and (currentPriorityValue == -123456789 or
+                                                        priorityTable.at(trs->getId()).at(static_cast<size_t>(dir)) < currentPriorityValue))
             currentPriorityValue = priorityTable.at(trs->getId()).at(static_cast<size_t>(dir));
     }
     return currentPriorityValue;
