@@ -25,9 +25,6 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
     auto simLaneletsK{obstacle_operations::getSimilarlyOrientedLanelets(
         world->getRoadNetwork(), obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
         obstacleK->getStateByTimeStep(timeStep), parameters.laneletOccupancySimilarity)};
-    auto simLaneletsP{obstacle_operations::getSimilarlyOrientedLanelets(
-        world->getRoadNetwork(), obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
-        obstacleP->getStateByTimeStep(timeStep), parameters.laneletOccupancySimilarity)};
     std::vector<std::shared_ptr<Lane>> lanes{obstacleP->getReferenceLaneCandidates(world->getRoadNetwork(), timeStep)};
     for (const auto &lane : lanes) {
         for (const auto &letP : lane->getContainedLanelets()) {
