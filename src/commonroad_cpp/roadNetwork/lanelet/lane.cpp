@@ -48,7 +48,7 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
         for (auto vert : centerVertices)
             temp_path.push_back(Eigen::Vector2d(vert.x, vert.y));
 
-        geometry::util::resample_polyline(temp_path, 2, reference_path);
+        geometry::util::resample_polyline(temp_path, 2, reference_path); // todo parameter
         curvilinearCoordinateSystem = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
     }
 
