@@ -143,7 +143,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
 
     // left lanelet
     size_t idLaneletTwo = 222;
-    auto laneletTypeLaneletTwo = std::set<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate};
+    auto laneletTypeLaneletTwo =
+        std::set<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate, LaneletType::incoming};
     auto userOneWayLaneletTwo = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     auto userBidirectionalLaneletTwo = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
     auto leftBorderLaneletTwo =
@@ -162,7 +163,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
 
     // third lanelet
     size_t idLaneletThree = 333;
-    auto laneletTypeLaneletThree = std::set<LaneletType>{LaneletType::shoulder, LaneletType::interstate};
+    auto laneletTypeLaneletThree =
+        std::set<LaneletType>{LaneletType::shoulder, LaneletType::interstate, LaneletType::incoming};
     auto userOneWayLaneletThree = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     auto userBidirectionalLaneletThree = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
     auto rightBorderLaneletThree =
