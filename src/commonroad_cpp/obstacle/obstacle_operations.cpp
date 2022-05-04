@@ -21,18 +21,27 @@ obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>
 }
 
 ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &type) {
-    if (type == "car")
-        return ObstacleType::car;
-    else if (type == "truck")
-        return ObstacleType::truck;
-    else if (type == "pedestrian")
-        return ObstacleType::pedestrian;
-    else if (type == "bus")
-        return ObstacleType::bus;
-    else if (type == "vehicle")
-        return ObstacleType::vehicle;
-    else
-        return ObstacleType::unknown;
+    static std::unordered_map obstacleTypes = {{"parkedVehicle", ObstacleType::parkedVehicle},
+                                               {"constructionZone", ObstacleType::constructionZone},
+                                               {"roadBoundary", ObstacleType::roadBoundary},
+
+                                               {"car", ObstacleType::car},
+                                               {"truck", ObstacleType::truck},
+                                               {"pedestrian", ObstacleType::pedestrian},
+                                               {"bus", ObstacleType::bus},
+                                               {"motorcycle", ObstacleType::motorcycle},
+                                               {"bicycle", ObstacleType::bicycle},
+                                               {"pedestrian", ObstacleType::pedestrian},
+                                               {"priorityVehicle", ObstacleType::priorityVehicle},
+                                               {"train", ObstacleType::train},
+
+                                               {"building", ObstacleType::building},
+                                               {"pillar", ObstacleType::pillar},
+                                               {"median_strip", ObstacleType::medianStrip},
+
+                                               {"vehicle", ObstacleType::unknownDynamic}};
+    // TODO Unknown obstacle depends on context (staticObstacle/dynamicObstacle/environmentObstacle)
+    return obstacleTypes.at(type);
 }
 
 std::shared_ptr<Obstacle>
