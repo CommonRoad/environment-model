@@ -15,7 +15,30 @@ enum class EvaluationMode { directory, singleScenario, singleVehicle, directory_
 
 enum class OperatingMode { boolean, constraint, robustness };
 
-enum class ObstacleType { car, truck, pedestrian, bus, unknown, vehicle };
+enum class ObstacleType {
+    // Static
+    parkedVehicle,
+    constructionZone,
+    roadBoundary,
+    unknownStatic,
+    // Dynamic
+    car,
+    truck,
+    bus,
+    motorcycle,
+    bicycle,
+    pedestrian,
+    priorityVehicle,
+    train,
+    unknownDynamic,
+    // Environment
+    building,
+    pillar,
+    median_strip,
+    unknownEnvironment,
+    // FIXME: Remove unkonwn?
+    unknown
+};
 
 enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };
 
