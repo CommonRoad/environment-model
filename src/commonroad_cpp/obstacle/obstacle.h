@@ -626,5 +626,6 @@ class Obstacle {
      * @param roadNetwork Pointer to road network
      * @return Pointer to lane object.
      */
-    std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+    std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep,
+                                           bool forward = true);
 };

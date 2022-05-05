@@ -312,7 +312,7 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     roadNetworkScenarioTwo->setIdCounterRef(globalIdRef);
     auto obsOneScenarioTwo{obstacle_operations::getObstacleById(obstaclesScenarioTwo, 325)};
     obsOneScenarioTwo->computeLanes(roadNetworkScenarioTwo);
-    EXPECT_EQ(77062,
+    EXPECT_EQ(77695,
               obsOneScenarioTwo->getReferenceLane(roadNetwork, timeStep)->getContainedLanelets().front()->getId());
 
     std::string pathToTestFileThree{TestUtils::getTestScenarioDirectory() + "/USA_Peach-2_1_T-1.xml"};
