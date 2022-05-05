@@ -472,7 +472,8 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwo
     return setReferenceLane(roadNetwork, timeStep);
 }
 
-std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                                 bool forward) {
     if (referenceLane.count(timeStep) == 1 and referenceLane.at(timeStep) != nullptr)
         return referenceLane.at(timeStep);
     else if (!existsOccupiedLanes(timeStep))
@@ -526,8 +527,8 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
             std::multimap<int, size_t> multimap;
             for (auto &&occupancy : numOccupancies)
                 multimap.insert(std::make_pair(occupancy.second, occupancy.first));
-            auto itup = multimap.end().operator--();             // get the elem with the highest key
-            auto itlow = multimap.upper_bound(itup->first - 15); // todo parameter
+            auto itup = multimap.end().operator--();            // get the elem with the highest key
+            auto itlow = multimap.upper_bound(itup->first - 5); // todo parameter
             for (std::multimap<int, size_t>::iterator it{itlow}; it != itup; ++it)
                 ids.push_back(it->second);
             ids.push_back(itup->second);
@@ -536,8 +537,8 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
                 for (int newTimeStep{static_cast<int>(timeStep - 1)};
                      newTimeStep >= static_cast<int>(currentState->getTimeStep()); --newTimeStep) {
                     for (const auto &lane : numOccupancies) {
-                        if (referenceLaneCandidates[static_cast<size_t>(newTimeStep)].empty())
-                            setReferenceLane(roadNetwork, static_cast<size_t>(newTimeStep));
+                        if (referenceLaneCandidates[static_cast<size_t>(newTimeStep)].empty() and !forward)
+                            setReferenceLane(roadNetwork, static_cast<size_t>(newTimeStep), false);
                         for (const auto &refLane : referenceLaneCandidates[static_cast<size_t>(newTimeStep)])
                             if (refLane->getId() == lane.first)
                                 numOccupancies[lane.first]++;
@@ -548,7 +549,7 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
                 for (auto &&occupancy : numOccupancies)
                     multimap.insert(std::make_pair(occupancy.second, occupancy.first));
                 itup = multimap.end().operator--();
-                itlow = multimap.upper_bound(itup->first - 15);
+                itlow = multimap.upper_bound(itup->first - 5);
                 for (std::multimap<int, size_t>::iterator it{itlow}; it != itup; ++it)
                     ids.push_back(it->second);
                 ids.push_back(itup->second);
@@ -568,12 +569,16 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
     }
     // if no reference lane found: check previous reference lane, if no previous exist try to use future reference lane
     if (referenceLane.count(timeStep) != 1) {
-        if (referenceLane.count(timeStep - 1) == 1 and referenceLane.at(timeStep - 1) != nullptr)
-            referenceLane[timeStep] = referenceLane.at(timeStep - 1);
-        else
-            for (size_t newTimeStep{timeStep + 1}; newTimeStep <= getLastTrajectoryTimeStep(); ++newTimeStep) {
-                referenceLane[timeStep] = getReferenceLane(roadNetwork, newTimeStep);
+        for (size_t step{1}; step < (this->getLastTrajectoryTimeStep() - this->currentState->getTimeStep()); ++step) {
+            if (this->timeStepExists(timeStep - step)) {
+                referenceLane[timeStep] = referenceLane[timeStep] =
+                    setReferenceLane(roadNetwork, timeStep - step, false);
+                break;
+            } else if (this->timeStepExists(timeStep + step)) {
+                referenceLane[timeStep] = setReferenceLane(roadNetwork, timeStep + step, true);
+                break;
             }
+        }
     }
     if (referenceLane.count(timeStep) == 0 or referenceLane.at(timeStep) == nullptr)
         throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
