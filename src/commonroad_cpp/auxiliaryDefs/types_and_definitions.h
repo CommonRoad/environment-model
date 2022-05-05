@@ -16,7 +16,19 @@ enum class EvaluationMode { directory, singleScenario, singleVehicle, directory_
 
 enum class OperatingMode { boolean, constraint, robustness };
 
-enum class ObstacleType { car, truck, pedestrian, bus, unknown, vehicle };
+enum class ObstacleType {
+    car,
+    truck,
+    pedestrian,
+    bus,
+    unknown,
+    vehicle,
+    bicycle,
+    priority_vehicle,
+    train,
+    motorcycle,
+    taxi
+};
 
 enum class LaneletType {
     interstate,
