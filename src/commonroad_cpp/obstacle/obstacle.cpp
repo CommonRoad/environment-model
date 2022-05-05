@@ -570,11 +570,11 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
     // if no reference lane found: check previous reference lane, if no previous exist try to use future reference lane
     if (referenceLane.count(timeStep) != 1) {
         for (size_t step{1}; step < (this->getLastTrajectoryTimeStep() - this->currentState->getTimeStep()); ++step) {
-            if (this->timeStepExists(timeStep - step)) {
+            if (this->timeStepExists(timeStep - step) and not forward) {
                 referenceLane[timeStep] = referenceLane[timeStep] =
                     setReferenceLane(roadNetwork, timeStep - step, false);
                 break;
-            } else if (this->timeStepExists(timeStep + step)) {
+            } else if (this->timeStepExists(timeStep + step) and forward) {
                 referenceLane[timeStep] = setReferenceLane(roadNetwork, timeStep + step, true);
                 break;
             }
