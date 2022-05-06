@@ -19,9 +19,7 @@ bool OnSimilarOrientedLaneletWithTypePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    auto lanelets{obstacle_operations::getSimilarlyOrientedLanelets(
-        world->getRoadNetwork(), obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
-        obstacleK->getStateByTimeStep(timeStep), parameters.laneletOccupancySimilarity)};
+    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
     return std::any_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
                            return lanelet->hasLaneletType(additionalFunctionParameters->laneletType.at(0));

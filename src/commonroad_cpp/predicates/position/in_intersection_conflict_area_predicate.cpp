@@ -22,10 +22,13 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
         std::make_shared<OptionalPredicateParameters>(std::vector<LaneletType>{LaneletType::intersection})};
     if (!onLaneletWithTypePredicate.booleanEvaluation(timeStep, world, obstacleK, obstacleP, opt))
         return false;
-    auto simLaneletsK{obstacle_operations::getSimilarlyOrientedLanelets(
-        world->getRoadNetwork(), obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
-        obstacleK->getStateByTimeStep(timeStep), parameters.laneletOccupancySimilarity)};
-    std::vector<std::shared_ptr<Lane>> lanes{obstacleP->getReferenceLaneCandidates(world->getRoadNetwork(), timeStep)};
+    auto simLaneletsK{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
+    std::vector<std::shared_ptr<Lane>> lanes;
+    for (const auto &letP : obstacleP->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)) {
+        for (const auto &laP : world->getRoadNetwork()->findLanesByBaseLanelet(letP->getId())) {
+            lanes.push_back(laP);
+        }
+    }
     for (const auto &lane : lanes) {
         for (const auto &letP : lane->getContainedLanelets()) {
             if (!letP->hasLaneletType(LaneletType::intersection))

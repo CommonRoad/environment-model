@@ -216,7 +216,11 @@ Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNet
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     return setOccupiedLaneletsByShape(roadNetwork, timeStep);
-    ;
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+Obstacle::getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+    return setOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep);
 }
 
 double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
@@ -710,4 +714,37 @@ const std::vector<std::shared_ptr<Lane>> &
 Obstacle::getReferenceLaneCandidates(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     setReferenceLane(roadNetwork, timeStep);
     return referenceLaneCandidates.at(timeStep);
+}
+std::vector<std::shared_ptr<Lanelet>>
+Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                     time_step_t timeStep) {
+    if (occupiedLaneletsDrivingDir.find(timeStep) != occupiedLaneletsDrivingDir.end())
+        return occupiedLaneletsDrivingDir[timeStep];
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    std::vector<std::shared_ptr<Lanelet>> refLanelets;
+    auto baseLanelets{setOccupiedLaneletsByShape(roadNetwork, timeStep)};
+    if (baseLanelets.size() == 1) {
+        occupiedLaneletsDrivingDir[timeStep] = baseLanelets;
+        return occupiedLaneletsDrivingDir[timeStep];
+    }
+    for(const auto &cand : getReferenceLaneCandidates(roadNetwork, timeStep))
+        for(const auto &candLet : cand->getContainedLanelets()){
+            if(!std::any_of(refLanelets.begin(), refLanelets.end(), [candLet](const std::shared_ptr<Lanelet>& let){return let->getId() == candLet->getId();}))
+                refLanelets.push_back(candLet);
+        }
+    for (const auto &letBase : setOccupiedLaneletsByShape(roadNetwork, timeStep)) {
+        for (const auto &letRef : refLanelets) {
+            if (letRef->getId() == letBase->getId()) {
+                lanelets.push_back(letBase);
+                break;
+            }
+            for (const auto &adj : lanelet_operations::adjacentLanelets(letRef))
+                if (adj->getId() == letBase->getId()) {
+                    lanelets.push_back(letBase);
+                    break;
+                }
+        }
+    }
+    occupiedLaneletsDrivingDir[timeStep] = lanelets;
+    return occupiedLaneletsDrivingDir[timeStep];
 }
