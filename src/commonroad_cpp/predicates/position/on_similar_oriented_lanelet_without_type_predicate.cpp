@@ -19,18 +19,7 @@ bool OnSimilarOrientedLaneletWithoutTypePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    std::vector<std::shared_ptr<Lanelet>> lanelets;
-    for (const auto &let : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)) {
-        auto lane{world->getRoadNetwork()
-                      ->findLanesByContainedLanelet(let->getId())
-                      .at(0)}; // just use one lane since all lanes are generated based on single lanelet
-        auto orientationDif{geometric_operations::subtractOrientations(
-            obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation(),
-            lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                           obstacleK->getStateByTimeStep(timeStep)->getYPosition()))};
-        if (abs(orientationDif) < parameters.laneletOccupancySimilarity)
-            lanelets.push_back(let);
-    }
+    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
     return std::all_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
                            return !lanelet->hasLaneletType(additionalFunctionParameters->laneletType.at(0));
