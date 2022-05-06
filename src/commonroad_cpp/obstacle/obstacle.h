@@ -268,6 +268,9 @@ class Obstacle {
     [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
     getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
+    getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+
     /**
      * Provides state given a time step. The time step can belong to the current state, history, or prediction.
      *
@@ -572,6 +575,9 @@ class Obstacle {
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
         occupiedLanelets; //**< map of time steps to lanelets occupied by the obstacle */
 
+    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
+        occupiedLaneletsDrivingDir; //**< map of time steps to lanelets in driving direction occupied by the obstacle */
+
     std::unordered_map<time_step_t, std::shared_ptr<Lane>>
         referenceLane; //**< lane which is used as reference for curvilinear projection */
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lane>>> referenceLaneCandidates;
@@ -608,6 +614,9 @@ class Obstacle {
      */
     std::vector<std::shared_ptr<Lanelet>> setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                                      time_step_t timeStep);
+
+    std::vector<std::shared_ptr<Lanelet>>
+    setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
     /**
      * Private setter for polygon shape of obstacle at given time step.
