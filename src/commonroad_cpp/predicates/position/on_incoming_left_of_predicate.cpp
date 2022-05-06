@@ -25,20 +25,20 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(
         !onLaneletWithTypePredicate.booleanEvaluation(timeStep, world, obstacleP, {}, opt))
         return false;
 
-    for (const auto &laneK : obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep))
-        for (const auto &laneP : obstacleP->getOccupiedLanes(world->getRoadNetwork(), timeStep))
-            for (const auto &letK : laneK->getContainedLanelets()) {
-                if (!letK->hasLaneletType(LaneletType::incoming))
-                    continue;
-                auto incomingK{world->getRoadNetwork()->findIncomingByLanelet(letK)};
-                for (const auto &letP : laneP->getContainedLanelets()) {
-                    if (!letP->hasLaneletType(LaneletType::incoming))
-                        continue;
-                    auto incomingP{world->getRoadNetwork()->findIncomingByLanelet(letP)};
-                    if (incomingK->getIsLeftOf()->getId() == incomingP->getId())
-                        return true;
-                };
-            }
+    auto laneK = obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep);
+    auto laneP = obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep);
+    for (const auto &letK : laneK->getContainedLanelets()) {
+        if (!letK->hasLaneletType(LaneletType::incoming))
+            continue;
+        auto incomingK{world->getRoadNetwork()->findIncomingByLanelet(letK)};
+        for (const auto &letP : laneP->getContainedLanelets()) {
+            if (!letP->hasLaneletType(LaneletType::incoming))
+                continue;
+            auto incomingP{world->getRoadNetwork()->findIncomingByLanelet(letP)};
+            if (incomingK->getIsLeftOf()->getId() == incomingP->getId())
+                return true;
+        };
+    }
     return false;
 }
 
