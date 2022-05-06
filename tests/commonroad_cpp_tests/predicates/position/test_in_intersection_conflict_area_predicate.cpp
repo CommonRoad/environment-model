@@ -96,6 +96,9 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario2) {
         EXPECT_FALSE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
         EXPECT_TRUE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
+        EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+        EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+
         EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
         EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
