@@ -78,7 +78,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/predicates/predicate_config.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
-        )
+        commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp)
 
 # Create environment model library
 if(ENV_MODEL_BUILD_SHARED_LIBS)

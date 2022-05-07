@@ -82,6 +82,7 @@ TEST_F(RoadNetworkTest, AddLanes) {
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.size(), updatedLanes.size());
     EXPECT_NE(testLanes.at(0)->getId(), updatedLanes.at(0)->getId());
+    roadNetworkScenario->getTopologicalMap()->findPaths(1, 2, false);
 }
 
 TEST_F(RoadNetworkTest, GetIntersections) {

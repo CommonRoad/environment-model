@@ -171,3 +171,10 @@ std::shared_ptr<Incoming> RoadNetwork::findIncomingByLanelet(const std::shared_p
                     return incom;
     return {};
 }
+
+const std::shared_ptr<LaneletGraph> &RoadNetwork::getTopologicalMap() const {
+    if (topologicalMap != nullptr)
+        return topologicalMap;
+    topologicalMap = std::make_shared<LaneletGraph>(laneletNetwork);
+    return topologicalMap;
+}

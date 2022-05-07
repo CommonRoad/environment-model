@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "lanelet/lanelet_graph.h"
+#include <boost/container_hash/hash.hpp>
 #include <cstddef>
 #include <map>
 #include <memory>
@@ -17,12 +19,12 @@
 #include <utility>
 #include <vector>
 
-#include <boost/container_hash/hash.hpp>
-
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/types.h>
 
 #include <commonroad_cpp/roadNetwork/types.h>
+
+#include <boost/graph/adjacency_list.hpp>
 
 using value = std::pair<box, unsigned>;
 
@@ -192,12 +194,15 @@ class RoadNetwork {
 
     std::shared_ptr<Incoming> findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet);
 
+    const std::shared_ptr<LaneletGraph> &getTopologicalMap() const;
+
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
     SupportedTrafficSignCountry country;                      //**< country where road network is located */
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;   //**< set of traffic signs contained in road network */
     std::vector<std::shared_ptr<TrafficLight>> trafficLights; //**< set of traffic lights contained in road network */
     std::vector<std::shared_ptr<Intersection>> intersections; //**< set of intersections contained in road network */
+    mutable std::shared_ptr<LaneletGraph> topologicalMap;
 
     std::unordered_map<lanelet_id_set, std::pair<lanelet_id_set, std::shared_ptr<Lane>>, boost::hash<lanelet_id_set>>
         lanes;
