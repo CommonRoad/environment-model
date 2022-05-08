@@ -312,8 +312,9 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     roadNetworkScenarioTwo->setIdCounterRef(globalIdRef);
     auto obsOneScenarioTwo{obstacle_operations::getObstacleById(obstaclesScenarioTwo, 325)};
     obsOneScenarioTwo->computeLanes(roadNetworkScenarioTwo);
-    EXPECT_EQ(77695,
-              obsOneScenarioTwo->getReferenceLane(roadNetworkScenarioTwo, timeStep)->getContainedLanelets().front()->getId());
+    EXPECT_EQ(
+        77695,
+        obsOneScenarioTwo->getReferenceLane(roadNetworkScenarioTwo, timeStep)->getContainedLanelets().front()->getId());
 
     std::string pathToTestFileThree{TestUtils::getTestScenarioDirectory() + "/USA_Peach-2_1_T-1.xml"};
     const auto &[obstaclesScenarioThree, roadNetworkScenarioThree, timeStepSizeThree] =
@@ -321,10 +322,14 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     roadNetworkScenarioThree->setIdCounterRef(globalIdRef);
     auto obsOneScenarioThree{obstacle_operations::getObstacleById(obstaclesScenarioThree, 500)};
     obsOneScenarioThree->computeLanes(roadNetworkScenarioThree);
-    EXPECT_EQ(53758,
-              obsOneScenarioThree->getReferenceLane(roadNetworkScenarioThree, timeStep)->getContainedLanelets().front()->getId());
-    EXPECT_EQ(53786,
-              obsOneScenarioThree->getReferenceLane(roadNetworkScenarioThree, timeStep)->getContainedLanelets().back()->getId());
+    EXPECT_EQ(53758, obsOneScenarioThree->getReferenceLane(roadNetworkScenarioThree, timeStep)
+                         ->getContainedLanelets()
+                         .front()
+                         ->getId());
+    EXPECT_EQ(53786, obsOneScenarioThree->getReferenceLane(roadNetworkScenarioThree, timeStep)
+                         ->getContainedLanelets()
+                         .back()
+                         ->getId());
 
     std::string pathToTestFileFour{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4_1_T-1.xml"};
     const auto &[obstaclesScenarioFour, roadNetworkScenarioFour, timeStepSizeFour] =
@@ -332,15 +337,21 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     roadNetworkScenarioFour->setIdCounterRef(globalIdRef);
     auto obsOneScenarioFour{obstacle_operations::getObstacleById(obstaclesScenarioFour, 88)};
     obsOneScenarioFour->computeLanes(roadNetworkScenarioFour);
-    EXPECT_EQ(43349,
-              obsOneScenarioFour->getReferenceLane(roadNetworkScenarioFour, timeStep)->getContainedLanelets().front()->getId());
-    EXPECT_EQ(43486,
-              obsOneScenarioFour->getReferenceLane(roadNetworkScenarioFour, timeStep)->getContainedLanelets().back()->getId());
-//    timeStep = 1;
-//    EXPECT_EQ(43349,
-//              obsOneScenarioFour->getReferenceLane(roadNetworkScenarioFour, timeStep)->getContainedLanelets().front()->getId());
-//    EXPECT_EQ(43486,
-//              obsOneScenarioFour->getReferenceLane(roadNetworkScenarioFour, timeStep)->getContainedLanelets().back()->getId());
+    EXPECT_EQ(43349, obsOneScenarioFour->getReferenceLane(roadNetworkScenarioFour, timeStep)
+                         ->getContainedLanelets()
+                         .front()
+                         ->getId());
+    EXPECT_EQ(43486, obsOneScenarioFour->getReferenceLane(roadNetworkScenarioFour, timeStep)
+                         ->getContainedLanelets()
+                         .back()
+                         ->getId());
+    //    timeStep = 1;
+    //    EXPECT_EQ(43349,
+    //              obsOneScenarioFour->getReferenceLane(roadNetworkScenarioFour,
+    //              timeStep)->getContainedLanelets().front()->getId());
+    //    EXPECT_EQ(43486,
+    //              obsOneScenarioFour->getReferenceLane(roadNetworkScenarioFour,
+    //              timeStep)->getContainedLanelets().back()->getId());
 
     timeStep = 200;
     std::string pathToTestFileFive{TestUtils::getTestScenarioDirectory() + "/DEU_Frankfurt-70_12_I-1.xml"};
@@ -349,7 +360,12 @@ TEST_F(ObstacleTest, SetReferenceGeneral) {
     roadNetworkScenarioFive->setIdCounterRef(globalIdRef);
     auto obsOneScenarioFive{obstacle_operations::getObstacleById(obstaclesScenarioFive, 30503)};
     obsOneScenarioFive->computeLanes(roadNetworkScenarioFive);
-    EXPECT_EQ(865,
-              obsOneScenarioFive->getReferenceLane(roadNetworkScenarioFive, timeStep)->getContainedLanelets().front()->getId());
-    EXPECT_EQ(876, obsOneScenarioFive->getReferenceLane(roadNetworkScenarioFive, timeStep)->getContainedLanelets().back()->getId());
+    EXPECT_EQ(865, obsOneScenarioFive->getReferenceLane(roadNetworkScenarioFive, timeStep)
+                       ->getContainedLanelets()
+                       .front()
+                       ->getId());
+    EXPECT_EQ(876, obsOneScenarioFive->getReferenceLane(roadNetworkScenarioFive, timeStep)
+                       ->getContainedLanelets()
+                       .back()
+                       ->getId());
 }
