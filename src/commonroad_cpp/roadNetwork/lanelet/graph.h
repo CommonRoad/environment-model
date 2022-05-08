@@ -5,6 +5,7 @@
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 
+#include <cassert>
 #include <ostream>
 #include <queue>
 #include <set>
