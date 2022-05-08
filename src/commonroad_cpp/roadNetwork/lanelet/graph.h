@@ -11,6 +11,7 @@
 #include <sstream>
 #include <vector>
 
+// taken from https://gitlab.com/MartenBE/varia/-/blob/master/include/graph/graph.hpp
 template <class V, class E>
 class graph
 {

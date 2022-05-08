@@ -16,6 +16,7 @@
 #include <unordered_set>
 #include <vector>
 
+// taken from https://gitlab.com/MartenBE/varia/-/blob/master/include/graph/dijkstra.hpp
 template <class V, class E>
 class dijkstra
 {
