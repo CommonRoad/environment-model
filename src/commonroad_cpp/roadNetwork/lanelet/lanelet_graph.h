@@ -5,8 +5,8 @@
 #pragma once
 
 // class to get all paths from a source to destination.
-#include "lanelet.h"
 #include "dijkstra.h"
+#include "lanelet.h"
 #include <map>
 #include <vector>
 
@@ -17,8 +17,8 @@ class LaneletGraph {
     std::unordered_map<size_t, size_t> verticesSuc;
     std::unordered_map<size_t, size_t> verticesAdjSucRes;
     std::unordered_map<size_t, size_t> verticesSucRes;
-    graph<std::size_t , size_t> graphAdjSuc;
-    graph<std::size_t , size_t> graphSuc;
+    graph<std::size_t, size_t> graphAdjSuc;
+    graph<std::size_t, size_t> graphSuc;
 
   public:
     LaneletGraph(const std::vector<std::shared_ptr<Lanelet>> &lanelets);

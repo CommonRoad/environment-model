@@ -62,12 +62,13 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
     if (!onLaneletWithTypePredicate.booleanEvaluation(timeStep, world, obstacleK, obstacleP, opt))
         return false;
     auto simLaneletsK{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
-    std::vector<std::shared_ptr<Lane>> lanes;
-    for (const auto &letP : obstacleP->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)) {
-        for (const auto &laP : world->getRoadNetwork()->findLanesByBaseLanelet(letP->getId())) {
-            lanes.push_back(laP);
-        }
-    }
+    std::vector<std::shared_ptr<Lane>> lanes{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
+    //    for (const auto &letP : obstacleP->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(),
+    //    timeStep)) {
+    //        for (const auto &laP : world->getRoadNetwork()->findLanesByBaseLanelet(letP->getId())) {
+    //            lanes.push_back(laP);
+    //        }
+    //    }
     for (const auto &lane : lanes) {
         for (const auto &letP : lane->getContainedLanelets()) {
             for (const auto &letK : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)) {
