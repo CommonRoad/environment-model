@@ -729,6 +729,10 @@ Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
                  roadNetwork->getTopologicalMap()->findPaths(initialLet->getId(), finalLet->getId(), false))
                 relevantLanelets.insert(path.begin(), path.end());
 
+    for (const auto &letBase : relevantLanelets)
+        for (const auto &adj : lanelet_operations::adjacentLanelets(roadNetwork->findLaneletById(letBase), true))
+            relevantLanelets.insert(adj->getId());
+
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for (const auto &letBase : setOccupiedLaneletsByShape(roadNetwork, timeStep))
         if (relevantLanelets.find(letBase->getId()) != relevantLanelets.end())
