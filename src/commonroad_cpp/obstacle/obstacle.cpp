@@ -485,6 +485,7 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
         setOccupiedLanes(roadNetwork, timeStep);
 
     referenceLaneCandidates[timeStep] = {};
+    std::vector<std::shared_ptr<Lane>> relevantOccupiedLanesTmp;
     std::vector<std::shared_ptr<Lane>> relevantOccupiedLanes;
     // 1. check which currently occupied lanelets match direction
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets{
@@ -493,8 +494,19 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
     for (const auto &lane : getOccupiedLanes(roadNetwork, timeStep))
         for (const auto &lanelet : relevantLanelets)
             if (lane->getContainedLaneletIDs().count(lanelet->getId()) == 1)
-                relevantOccupiedLanes.push_back(lane);
-    // 3. calc num occupancies starting from provided time step
+                relevantOccupiedLanesTmp.push_back(lane);
+    // 3. check correspondence with driving direction lanelets
+    std::vector<size_t> relevantLaneIdx(relevantOccupiedLanesTmp.size(), 0);
+    for (size_t idx{0}; idx < relevantOccupiedLanesTmp.size(); ++idx)
+        for (const auto &lanelet : relevantLanelets)
+            if (relevantOccupiedLanesTmp.at(idx)->getContainedLaneletIDs().count(lanelet->getId()) == 1)
+                relevantLaneIdx.at(idx)++;
+    auto maxElem{*std::max_element(relevantLaneIdx.begin(), relevantLaneIdx.end())};
+    for (size_t idx{0}; idx < relevantOccupiedLanesTmp.size(); ++idx)
+        if (relevantLaneIdx.at(idx) == maxElem)
+            relevantOccupiedLanes.push_back(relevantOccupiedLanesTmp.at(idx));
+
+    // 4. calc num occupancies starting from provided time step
     if (relevantOccupiedLanes.size() == 1) { // only one relevant lane is occupied
         referenceLane[timeStep] = relevantOccupiedLanes.at(0);
     } else if (relevantOccupiedLanes.size() > 1) { // iterate over all time steps and check whether orientation fits and
