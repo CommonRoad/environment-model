@@ -3,104 +3,52 @@
 //
 
 #include "lanelet_graph.h"
-#include "iostream"
-#include <algorithm>
-#include <queue>
 #include <vector>
 
-void LaneletGraph::printPath(std::vector<size_t> &path) {
-    size_t size = path.size();
-    for (size_t i = 0; i < size; i++)
-        std::cout << path[i] << " ";
-    std::cout << std::endl;
-}
-
-// utility function to check if current
-// vertex is already present in path
-bool LaneletGraph::isNotVisited(size_t node, std::vector<size_t> &path) {
-    for (const auto &elem : path)
-        if (elem == node)
-            return false;
-    return true;
-}
-
-bool LaneletGraph::exists(const std::vector<std::vector<size_t>> &paths, const std::vector<size_t> &newPath) {
-    for (const auto &path : paths) {
-        if (newPath.size() != path.size())
-            continue;
-        bool identical{true};
-        for (size_t idx{0}; idx < newPath.size(); ++idx)
-            if (newPath.at(idx) != path.at(idx)) {
-                identical = false;
-                break;
-            }
-        if (identical)
-            return true;
-    }
-    return false;
-}
-
-std::vector<std::vector<size_t>> LaneletGraph::findPaths(size_t src, size_t dst, bool considerAdjacency) {
-    if (considerAdjacency)
-        return findPaths(src, dst, graphAdjSuc);
-    else
-        return findPaths(src, dst, graphSuc);
-}
-
-std::vector<std::vector<size_t>> LaneletGraph::findPaths(size_t src, size_t dst,
-                                                         const std::map<size_t, std::vector<size_t>> &graph) {
-    // create a queue which stores the paths
-    std::vector<std::vector<size_t>> paths;
-    std::queue<std::vector<size_t>> que;
-
-    // path vector to store the current path
+std::vector<size_t> LaneletGraph::findPaths(size_t src, size_t dst, bool considerAdjacency) {
     std::vector<size_t> path;
-    path.push_back(src);
-    que.push(path);
-    while (!que.empty()) {
-        path = que.front();
-        que.pop();
-        size_t last = path[path.size() - 1];
-
-        // if last vertex is the desired destination
-        // then print the path
-        if (last == dst and !exists(paths, path)) {
-            paths.push_back(path);
-        }
-
-        // traverse to all the nodes connected to
-        // current vertex and push new path to queue
-        for (size_t idx = 0; idx < graph.at(last).size(); idx++) {
-            if (isNotVisited(graph.at(last)[idx], path)) {
-                std::vector<size_t> newPath(path);
-                newPath.push_back(graph.at(last)[idx]);
-                que.push(newPath);
-            }
-        }
+    std::optional<std::pair<std::vector<std::ptrdiff_t>, std::ptrdiff_t>> result;
+    if (considerAdjacency){
+        dijkstra<size_t , size_t> searcher{graphAdjSuc, static_cast<ptrdiff_t>(verticesAdjSuc.at(src))};
+        result= searcher.search_path(static_cast<ptrdiff_t>(verticesAdjSuc.at(dst)));
+        for(const auto & res : result->first)
+            path.push_back(verticesAdjSucRes.at(static_cast<const unsigned long>(res)));
     }
-    return paths;
+    else {
+        dijkstra<size_t , size_t> searcher{graphSuc, static_cast<ptrdiff_t>(verticesAdjSuc.at(src))};
+        result= searcher.search_path(static_cast<ptrdiff_t>(verticesAdjSuc.at(dst)));
+        for(const auto & res : result->first)
+            path.push_back(verticesSucRes.at(static_cast<const unsigned long>(res)));
+    }
+    return path;
 }
+
 LaneletGraph::LaneletGraph(const std::vector<std::shared_ptr<Lanelet>> &lanelets) {
     for (const auto &let : lanelets) {
-        if (graphAdjSuc.find(let->getId()) == graphAdjSuc.end())
-            graphAdjSuc[let->getId()] = {};
-        if (graphSuc.find(let->getId()) == graphSuc.end())
-            graphSuc[let->getId()] = {};
-        if (let->getAdjacentLeft().adj != nullptr and let->getAdjacentLeft().dir == DrivingDirection::same and
-            !std::any_of(graphAdjSuc[let->getId()].begin(), graphAdjSuc[let->getId()].end(),
-                         [let](size_t lid) { return lid == let->getAdjacentLeft().adj->getId(); })) {
-            graphAdjSuc[let->getId()].push_back(let->getAdjacentLeft().adj->getId());
-            graphAdjSuc[let->getAdjacentLeft().adj->getId()].push_back(let->getId());
+        verticesAdjSuc.insert({let->getId(), graphAdjSuc.add_vertex(let->getId())});
+        verticesSuc.insert({let->getId(), graphSuc.add_vertex(let->getId())});
+        verticesAdjSucRes.insert({verticesAdjSuc.at(let->getId()), let->getId()});
+        verticesSucRes.insert({verticesSuc.at(let->getId()), let->getId()});
+    }
+
+    for (const auto &let : lanelets) {
+        if (let->getAdjacentLeft().adj != nullptr and let->getAdjacentLeft().dir == DrivingDirection::same) {
+            graphAdjSuc.add_edge(static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getId())),
+                          static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getAdjacentLeft().adj->getId())), 4);
+            graphAdjSuc.add_edge(static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getAdjacentLeft().adj->getId())),
+                                 static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getId())), 4);
         }
-        if (let->getAdjacentRight().adj != nullptr and let->getAdjacentRight().dir == DrivingDirection::same and
-            !std::any_of(graphAdjSuc[let->getId()].begin(), graphAdjSuc[let->getId()].end(),
-                         [let](size_t lid) { return lid == let->getAdjacentRight().adj->getId(); })) {
-            graphAdjSuc[let->getId()].push_back(let->getAdjacentRight().adj->getId());
-            graphAdjSuc[let->getAdjacentRight().adj->getId()].push_back(let->getId());
+        if (let->getAdjacentRight().adj != nullptr and let->getAdjacentRight().dir == DrivingDirection::same) {
+            graphAdjSuc.add_edge(static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getId())),
+                                 static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getAdjacentRight().adj->getId())), 4);
+            graphAdjSuc.add_edge(static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getAdjacentRight().adj->getId())),
+                                 static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getId())), 4);
         }
         for (const auto &suc : let->getSuccessors()) {
-            graphAdjSuc[let->getId()].push_back(suc->getId());
-            graphSuc[let->getId()].push_back(suc->getId());
+            graphAdjSuc.add_edge(static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getId())),
+                                 static_cast<ptrdiff_t>(verticesAdjSuc.at(suc->getId())), 1);
+            graphSuc.add_edge(static_cast<ptrdiff_t>(verticesSuc.at(let->getId())),
+                                 static_cast<ptrdiff_t>(verticesSuc.at(suc->getId())), 1);
         }
     }
 }
