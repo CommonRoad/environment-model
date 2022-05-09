@@ -31,9 +31,15 @@ bool lineInFront(const std::vector<vertex> line, std::shared_ptr<Obstacle> obs, 
         if(!ccs->cartesianPointInProjectionDomain(point.x(), point.y()))
             return false;
         auto c{ccs->convertToCurvilinearCoords(point.x(), point.y())};
-        //  std::cout << (stopLine->getPoints().at(1).x - stopLine->getPoints().at(0).x) * (point.y() - stopLine->getPoints().at(0).y) - (stopLine->getPoints().at(0).y() - stopLine->getPoints().at(0).y) * (point.x() - stopLine->getPoints().at(0).x) << " - time: " << std::to_string(timeStep) <<'\n';
-        if(((b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x())) > 0)
-            return false;
+        if(b.y() < 0) {
+            //  std::cout << (stopLine->getPoints().at(1).x - stopLine->getPoints().at(0).x) * (point.y() - stopLine->getPoints().at(0).y) - (stopLine->getPoints().at(0).y() - stopLine->getPoints().at(0).y) * (point.x() - stopLine->getPoints().at(0).x) << " - time: " << std::to_string(timeStep) <<'\n';
+            if (((b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x())) > 0)
+                return false;
+        }
+        else {
+            if (((a.x() - b.x()) * (c.y() - b.y()) - (a.y() - b.y()) * (c.x() - b.x())) > 0)
+                return false;
+        }
     }
     return true;
 }
