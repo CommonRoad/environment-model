@@ -22,6 +22,8 @@
 
 #include <boost/container_hash/hash.hpp>
 
+#include "kinematic_parameters.h"
+
 class Lanelet;
 class Lane;
 class RoadNetwork;
@@ -61,6 +63,10 @@ class Obstacle {
              double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
              state_map_t trajectoryPrediction, double length, double width, const std::vector<vertex> &fov = {});
 
+    Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
+             KinematicParameters kinematicParameters, double reactionTime, state_map_t trajectoryPrediction,
+             std::unique_ptr<Shape> shape, const std::vector<vertex> &fov);
+
     /**
      * Setter for ID of obstacle.
      *
@@ -88,6 +94,13 @@ class Obstacle {
      * @param type Type of the obstacle.
      */
     void setObstacleType(ObstacleType type);
+
+    /**
+     * Setter for kinematic parameters.
+     *
+     * @param kinematicParameters Kinematic parameters
+     */
+    void setKinematicParameters(KinematicParameters kinematicParameters);
 
     /**
      * Setter for maximum velocity the obstacle can drive.
@@ -534,11 +547,10 @@ class Obstacle {
     bool isStatic{false};                             //**< true if Obstacle is static */
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
-    double vMax{50.0};                                //**< maximum velocity of obstacle in m/s */
-    double aMax{3.0};                                 //**< maximum absolute acceleration of obstacle in [m/s^2] */
-    double aMaxLong{3.0};                             //**< maximal longitudinal acceleration of obstacle in [m/s^2] */
-    double aMinLong{-10.0};                           //**< minimal longitudinal acceleration of obstacle in [m/s^2] */
-    double reactionTime{0.3};                         //**< reaction time of obstacle in [s] */
+
+    std::optional<KinematicParameters> kinematicParameters;
+
+    double reactionTime{0.3}; //**< reaction time of obstacle in [s] */
 
     state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
     state_map_t history{};              //**< previous states of the obstacle */
