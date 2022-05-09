@@ -17,11 +17,22 @@
 
 #include "stop_line_in_front_predicate.h"
 
-bool lineInFront(const std::vector<vertex> line, polygon_type shape){
-    for(const auto &point : shape.outer()){
-        //  auto obsPoint{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(point.x(), point.x())};
+bool lineInFront(const std::vector<vertex> line, std::shared_ptr<Obstacle> obs, size_t timeStep, std::shared_ptr<RoadNetwork> roadNetwork){
+    auto ccs{obs->getReferenceLane(roadNetwork, timeStep)->getCurvilinearCoordinateSystem()};
+    if(!ccs->cartesianPointInProjectionDomain(line.at(0).x, line.at(0).y))
+        return false;
+    auto a{ccs->convertToCurvilinearCoords(line.at(0).x, line.at(0).y)};
+    if(!ccs->cartesianPointInProjectionDomain(line.at(1).x, line.at(1).y))
+        return false;
+    auto b{ccs->convertToCurvilinearCoords(line.at(1).x, line.at(1).y)};
+    polygon_type shape{obs->getOccupancyPolygonShape(timeStep)};
+    for(size_t idx{0}; idx < shape.outer().size(); ++idx){
+        auto point{shape.outer().at(idx)};
+        if(!ccs->cartesianPointInProjectionDomain(point.x(), point.y()))
+            return false;
+        auto c{ccs->convertToCurvilinearCoords(point.x(), point.y())};
         //  std::cout << (stopLine->getPoints().at(1).x - stopLine->getPoints().at(0).x) * (point.y() - stopLine->getPoints().at(0).y) - (stopLine->getPoints().at(0).y() - stopLine->getPoints().at(0).y) * (point.x() - stopLine->getPoints().at(0).x) << " - time: " << std::to_string(timeStep) <<'\n';
-        if(((line.at(1).x - line.at(0).x) * (point.y() - line.at(0).y) - (line.at(1).y - line.at(0).y) * (point.x() - line.at(0).x)) < 0)
+        if(((b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x())) > 0)
             return false;
     }
     return true;
@@ -48,6 +59,7 @@ bool StopLineInFrontPredicate::booleanEvaluation(
         std::shared_ptr<StopLine> stopLine{lanelet->getStopLine()};
         if (stopLine == nullptr)
             continue;
+
         //        Eigen::Vector2d stopLineLonPosOne =
         //            obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
         //                ->getCurvilinearCoordinateSystem()
@@ -58,12 +70,17 @@ bool StopLineInFrontPredicate::booleanEvaluation(
         //                ->convertToCurvilinearCoords(stopLine->getPoints().at(1).x, stopLine->getPoints().at(1).y);
         //        auto stopLineMaxPos{std::max(stopLineLonPosOne.x(), stopLineLonPosTwo.x())};
 
-        //  for(const auto &point : obstacleK->getOccupancyPolygonShape(timeStep).outer()){
-        //  auto obsPoint{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(point.x(), point.x())};
+        //        for(const auto &point : obstacleK->getOccupancyPolygonShape(timeStep).outer()) {
+        //            auto ccs{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+        //                         ->getCurvilinearCoordinateSystem()};
+        //            if(ccs->cartesianPointInProjectionDomain(point.x(), point.x()))
+        //                auto obsPoint{ccs
+        //                                  ->convertToCurvilinearCoords(point.x(), point.x())};
+        //        }
         //  std::cout << (stopLine->getPoints().at(1).x - stopLine->getPoints().at(0).x) * (point.y() - stopLine->getPoints().at(0).y) - (stopLine->getPoints().at(0).y() - stopLine->getPoints().at(0).y) * (point.x() - stopLine->getPoints().at(0).x) << " - time: " << std::to_string(timeStep) <<'\n';
-        //        std::cout << timeStep << " - in front: " <<lineInFront(stopLine->getPoints(), obstacleK->getOccupancyPolygonShape(timeStep)) << '\n';
-        //        std::cout << timeStep << " - distance: " <<minDistance(stopLine->getPoints(), obstacleK->getOccupancyPolygonShape(timeStep)) << '\n';
-        if(lineInFront(stopLine->getPoints(), obstacleK->getOccupancyPolygonShape(timeStep)) and minDistance(stopLine->getPoints(), obstacleK->getOccupancyPolygonShape(timeStep)) < parameters.stopLineDistance)
+        //     std::cout << timeStep << " - in front: " <<lineInFront(stopLine->getPoints(), obstacleK, timeStep, world->getRoadNetwork()) << '\n';
+        //      std::cout << timeStep << " - distance: " <<minDistance(stopLine->getPoints(), obstacleK->getOccupancyPolygonShape(timeStep)) << '\n';
+        if(lineInFront(stopLine->getPoints(), obstacleK, timeStep, world->getRoadNetwork()) and minDistance(stopLine->getPoints(), obstacleK->getOccupancyPolygonShape(timeStep)) < parameters.stopLineDistance)
             return true;
         // }
         //        if (stopLineMaxPos - parameters.stopLineDistance < obstacleK->frontS(world->getRoadNetwork(), timeStep) and
