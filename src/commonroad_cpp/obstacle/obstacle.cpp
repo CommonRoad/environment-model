@@ -75,9 +75,22 @@ Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> curr
                    double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
                    Obstacle::state_map_t trajectoryPrediction, double length, double width,
                    const std::vector<vertex> &fov)
+    : Obstacle{obstacleId,
+               isStatic,
+               currentState,
+               obstacleType,
+               KinematicParameters{vMax, aMax, aMaxLong, aMinLong, aMinLong},
+               reactionTime,
+               trajectoryPrediction,
+               std::make_unique<Rectangle>(length, width),
+               fov} {}
+
+Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
+                   KinematicParameters kinematicParameters, double reactionTime,
+                   Obstacle::state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape, const std::vector<vertex> &fov)
     : obstacleId(obstacleId), isStatic(isStatic), currentState(std::move(currentState)), obstacleType(obstacleType),
-      vMax(vMax), aMax(aMax), aMaxLong(aMaxLong), aMinLong(aMinLong), reactionTime(reactionTime),
-      trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(std::make_unique<Rectangle>(length, width)), route(route) {
+      kinematicParameters(kinematicParameters), reactionTime(reactionTime),
+      trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(std::move(shape)) {
     if (isStatic)
         setIsStatic(isStatic);
 
@@ -96,10 +109,10 @@ void Obstacle::setId(const size_t oId) { obstacleId = oId; }
 void Obstacle::setIsStatic(bool staticObstacle) {
     isStatic = staticObstacle;
     if (staticObstacle) {
-        vMax = 0.0;
-        aMax = 0.0;
-        aMinLong = 0.0;
-        aMaxLong = 0.0;
+        kinematicParameters->vMax = 0.0;
+        kinematicParameters->aMax = 0.0;
+        kinematicParameters->aMinLong = 0.0;
+        kinematicParameters->aMaxLong = 0.0;
     }
 }
 
@@ -107,13 +120,15 @@ void Obstacle::setCurrentState(const std::shared_ptr<State> &state) { currentSta
 
 void Obstacle::setObstacleType(ObstacleType type) { obstacleType = type; }
 
-void Obstacle::setVmax(const double vmax) { vMax = isStatic ? 0.0 : vmax; }
+void Obstacle::setKinematicParameters(KinematicParameters params) { kinematicParameters = params; }
 
-void Obstacle::setAmax(const double amax) { aMax = isStatic ? 0.0 : amax; }
+void Obstacle::setVmax(const double vmax) { kinematicParameters->vMax = isStatic ? 0.0 : vmax; }
 
-void Obstacle::setAmaxLong(const double amax) { aMaxLong = isStatic ? 0.0 : amax; }
+void Obstacle::setAmax(const double amax) { kinematicParameters->aMax = isStatic ? 0.0 : amax; }
 
-void Obstacle::setAminLong(const double amin) { aMinLong = isStatic ? 0.0 : amin; }
+void Obstacle::setAmaxLong(const double amax) { kinematicParameters->aMaxLong = isStatic ? 0.0 : amax; }
+
+void Obstacle::setAminLong(const double amin) { kinematicParameters->aMinLong = isStatic ? 0.0 : amin; }
 
 void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 0.0 : tReact; }
 
@@ -158,13 +173,25 @@ std::shared_ptr<State> Obstacle::getStateByTimeStep(size_t timeStep) const {
 
 ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
 
-double Obstacle::getVmax() const { return vMax; }
+double Obstacle::getVmax() const {
+    assert(kinematicParameters);
+    return kinematicParameters->vMax;
+}
 
-double Obstacle::getAmax() const { return aMax; }
+double Obstacle::getAmax() const {
+    assert(kinematicParameters);
+    return kinematicParameters->aMax;
+}
 
-double Obstacle::getAmaxLong() const { return aMaxLong; }
+double Obstacle::getAmaxLong() const {
+    assert(kinematicParameters);
+    return kinematicParameters->aMaxLong;
+}
 
-double Obstacle::getAminLong() const { return aMinLong; }
+double Obstacle::getAminLong() const {
+    assert(kinematicParameters);
+    return kinematicParameters->aMinLong;
+}
 
 double Obstacle::getReactionTime() const { return reactionTime; }
 
