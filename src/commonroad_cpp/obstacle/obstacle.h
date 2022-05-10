@@ -543,7 +543,8 @@ class Obstacle {
     state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
     state_map_t history{};              //**< previous states of the obstacle */
 
-    Rectangle geoShape; // TODO make general                                          //**< shape of the obstacle */
+    std::unique_ptr<Shape>
+        geoShape; // TODO make general                                          //**< shape of the obstacle */
 
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
         occupiedLanelets; //**< map of time steps to lanelets occupied by the obstacle */
