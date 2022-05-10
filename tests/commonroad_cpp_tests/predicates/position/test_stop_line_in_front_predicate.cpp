@@ -53,7 +53,7 @@ TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo)); // stop line completely in front
     EXPECT_TRUE(pred.booleanEvaluation(
         1, world, obstacleTwo)); // stop line exactly at obstacle front (one min lon. position of stop line)
-    EXPECT_FALSE(pred.booleanEvaluation(
+    EXPECT_TRUE(pred.booleanEvaluation(
         2, world, obstacleTwo)); // stop line with two different lon. positions; obstacle above stop line
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleTwo)); // stop line behind obstacle
 }

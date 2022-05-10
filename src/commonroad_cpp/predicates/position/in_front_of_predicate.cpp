@@ -44,7 +44,7 @@ InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<Worl
              ->getCurvilinearCoordinateSystem()
              ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                                 obstacleK->getStateByTimeStep(timeStep)->getYPosition()))
-        return false;
+        return false; // todo logging
     return obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)) -
            obstacleP->frontS(world->getRoadNetwork(), timeStep);
 }
