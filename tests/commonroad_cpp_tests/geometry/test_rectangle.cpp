@@ -5,6 +5,8 @@
 // Credits: BMW Car@TUM
 //
 
+#include <cmath>
+
 #include "test_rectangle.h"
 
 void RectangleTestInitialization::SetUpRectangle() {
@@ -42,3 +44,9 @@ TEST_F(RectangleTest, ScaleShape) {
 }
 
 TEST_F(RectangleTest, PrintParameters) { rectangleOne.printParameters(); }
+
+TEST_F(RectangleTest, GetCircumradius) {
+    EXPECT_EQ(rectangleOne.getCircumradius(), std::hypot(rectangleOneLength, rectangleOneWidth) / 2.0);
+    EXPECT_EQ(rectangleTwo.getCircumradius(), std::hypot(rectangleTwoLength, rectangleTwoWidth) / 2.0);
+    EXPECT_EQ(rectangleThree.getCircumradius(), std::hypot(rectangleThreeLength, rectangleThreeWidth) / 2.0);
+}
