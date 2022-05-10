@@ -27,6 +27,8 @@ void IntersectionTestInitialization::setUpIntersection() {
     intersection2->setId(intersection2Id);
     intersection2->setCrossings(crossingsIntersection2);
     intersection2->setIncomings(incomingsIntersection2);
+    roadNetwork = std::make_shared<RoadNetwork>(
+        RoadNetwork(lanelets, SupportedTrafficSignCountry::GERMANY, {}, {}, {intersection1, intersection2}));
 }
 
 void IntersectionTest::SetUp() {
@@ -50,21 +52,21 @@ TEST_F(IntersectionTest, InitializationComplete) {
 }
 
 TEST_F(IntersectionTest, ComputeMemberLanelets) {
-    EXPECT_EQ(intersection1->getMemberLanelets().size(), 15);
-    EXPECT_EQ(intersection2->getMemberLanelets().size(), 5);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).size(), 15);
+    EXPECT_EQ(intersection2->getMemberLanelets(roadNetwork).size(), 5);
 
     auto laneletTypeIncoming{std::set<LaneletType>{LaneletType::incoming}};
     auto laneletTypeStraight{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionStraight}};
     auto laneletTypeLeft{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionLeftTurn}};
     auto laneletTypeRight{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionRightTurn}};
 
-    EXPECT_EQ(intersection1->getMemberLanelets().at(2)->getLaneletTypes(), laneletTypeStraight);
-    EXPECT_EQ(intersection1->getMemberLanelets().at(5)->getLaneletTypes(), laneletTypeIncoming);
-    EXPECT_EQ(intersection1->getMemberLanelets().at(7)->getLaneletTypes(), laneletTypeLeft);
-    EXPECT_EQ(intersection1->getMemberLanelets().at(14)->getLaneletTypes(), laneletTypeRight);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(1)->getLaneletTypes(), laneletTypeStraight);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(5)->getLaneletTypes(), laneletTypeIncoming);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(6)->getLaneletTypes(), laneletTypeLeft);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(13)->getLaneletTypes(), laneletTypeRight);
 
-    EXPECT_EQ(intersection1->getMemberLanelets().at(2)->getId(), 80);
-    EXPECT_EQ(intersection1->getMemberLanelets().at(5)->getId(), 3);
-    EXPECT_EQ(intersection1->getMemberLanelets().at(7)->getId(), 100);
-    EXPECT_EQ(intersection1->getMemberLanelets().at(14)->getId(), 90);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(1)->getId(), 80);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(5)->getId(), 3);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(6)->getId(), 100);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(13)->getId(), 90);
 }

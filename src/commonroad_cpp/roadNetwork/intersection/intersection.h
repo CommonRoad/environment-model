@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 #include "incoming.h"
 
 /**
@@ -81,12 +83,12 @@ class Intersection {
      *
      * @return
      */
-    const std::vector<std::shared_ptr<Lanelet>> &getMemberLanelets();
+    const std::vector<std::shared_ptr<Lanelet>> &getMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
     /**
      *
      */
-    void computeMemberLanelets();
+    void computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
   private:
     size_t id;                                        //**< ID of intersection. */

@@ -356,7 +356,6 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
                         }
                 }
             }
-            tempIntersectionContainer[arrayIndex]->computeMemberLanelets();
             ++arrayIndex;
         }
     }

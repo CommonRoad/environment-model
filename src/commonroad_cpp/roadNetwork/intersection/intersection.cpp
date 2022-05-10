@@ -32,57 +32,64 @@ Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<In
                            std::vector<std::shared_ptr<Lanelet>> crossings)
     : id(intersectionId), incomings(std::move(incomings)), crossings(std::move(crossings)) {}
 
-const std::vector<std::shared_ptr<Lanelet>> &Intersection::getMemberLanelets() {
+const std::vector<std::shared_ptr<Lanelet>> &
+Intersection::getMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork) {
     if (memberLanelets.empty())
-        computeMemberLanelets();
+        computeMemberLanelets(roadNetwork);
     return memberLanelets;
 }
 
-void Intersection::computeMemberLanelets() {
+void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork) {
     memberLanelets = {};
     // collect outgoings
     for (const auto &incom : incomings) {
-        for (const auto &let : incom->getIncomingLanelets())
-            memberLanelets.push_back(let);
-        for (const auto &let : incom->getLeftOutgoings()) {
-            let->addLaneletType(LaneletType::intersectionLeftOutgoing);
-            let->addLaneletType(LaneletType::intersection);
-            let->addLaneletType(LaneletType::intersectionLeftTurn);
-            addIntersectionMemberLanelets(let, TurningDirection::left);
+        for (const auto &letInc : incom->getIncomingLanelets()) {
+            memberLanelets.push_back(letInc);
+            for (const auto &letOut : incom->getLeftOutgoings()) {
+                letOut->addLaneletType(LaneletType::intersectionLeftOutgoing);
+                letOut->addLaneletType(LaneletType::intersection);
+                auto path{roadNetwork->getTopologicalMap()->findPaths(letInc->getId(), letOut->getId(), false)};
+                for (const auto &pathLet : path) {
+                    auto let{roadNetwork->findLaneletById(pathLet)};
+                    if (!std::any_of(
+                            memberLanelets.begin(), memberLanelets.end(),
+                            [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
+                        memberLanelets.push_back(let);
+                        let->addLaneletType(LaneletType::intersection);
+                        let->addLaneletType(LaneletType::intersectionLeftTurn);
+                    }
+                }
+            }
+            for (const auto &letOut : incom->getStraightOutgoings()) {
+                letOut->addLaneletType(LaneletType::intersectionStraightOutgoing);
+                letOut->addLaneletType(LaneletType::intersection);
+                auto path{roadNetwork->getTopologicalMap()->findPaths(letInc->getId(), letOut->getId(), false)};
+                for (const auto &pathLet : path) {
+                    auto let{roadNetwork->findLaneletById(pathLet)};
+                    if (!std::any_of(
+                            memberLanelets.begin(), memberLanelets.end(),
+                            [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
+                        memberLanelets.push_back(let);
+                        let->addLaneletType(LaneletType::intersection);
+                        let->addLaneletType(LaneletType::intersectionStraight);
+                    }
+                }
+            }
+            for (const auto &letOut : incom->getRightOutgoings()) {
+                letOut->addLaneletType(LaneletType::intersectionRightOutgoing);
+                letOut->addLaneletType(LaneletType::intersection);
+                auto path{roadNetwork->getTopologicalMap()->findPaths(letInc->getId(), letOut->getId(), false)};
+                for (const auto &pathLet : path) {
+                    auto let{roadNetwork->findLaneletById(pathLet)};
+                    if (!std::any_of(
+                            memberLanelets.begin(), memberLanelets.end(),
+                            [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
+                        memberLanelets.push_back(let);
+                        let->addLaneletType(LaneletType::intersection);
+                        let->addLaneletType(LaneletType::intersectionRightTurn);
+                    }
+                }
+            }
         }
-        for (const auto &let : incom->getStraightOutgoings()) {
-            let->addLaneletType(LaneletType::intersectionStraightOutgoing);
-            let->addLaneletType(LaneletType::intersection);
-            let->addLaneletType(LaneletType::intersectionStraight);
-            addIntersectionMemberLanelets(let, TurningDirection::straight);
-        }
-        for (const auto &let : incom->getRightOutgoings()) {
-            let->addLaneletType(LaneletType::intersectionRightOutgoing);
-            let->addLaneletType(LaneletType::intersection);
-            let->addLaneletType(LaneletType::intersectionRightTurn);
-            addIntersectionMemberLanelets(let, TurningDirection::right);
-        }
-    }
-}
-void Intersection::addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &let, TurningDirection turn) {
-    memberLanelets.push_back(let);
-    std::deque<std::shared_ptr<Lanelet>> candidates{let->getPredecessors().begin(), let->getPredecessors().end()};
-    while (!candidates.empty()) {
-        std::shared_ptr<Lanelet> pre{candidates.front()};
-        candidates.pop_front();
-        if (!std::any_of(memberLanelets.begin(), memberLanelets.end(),
-                         [pre](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == pre->getId(); })) {
-            memberLanelets.push_back(pre);
-            auto pres{memberLanelets.back()->getPredecessors()};
-            candidates.insert(candidates.end(), pres.begin(), pres.end());
-            pre->addLaneletType(LaneletType::intersection);
-            if (turn == TurningDirection::left)
-                pre->addLaneletType(LaneletType::intersectionLeftTurn);
-            else if (turn == TurningDirection::right)
-                pre->addLaneletType(LaneletType::intersectionRightTurn);
-            else if (turn == TurningDirection::straight)
-                pre->addLaneletType(LaneletType::intersectionStraight);
-        } else
-            continue;
     }
 }
