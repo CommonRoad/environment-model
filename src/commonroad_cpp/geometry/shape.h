@@ -66,6 +66,13 @@ class Shape {
     [[nodiscard]] virtual double getRadius() const { return 0.0; };
 
     /**
+     * Virtual getter for shape circumradius (radius of circumscribed circle).
+     *
+     * @return Shape circumradius [m].
+     */
+    [[nodiscard]] virtual double getCircumradius() const { return 0.0; };
+
+    /**
      * Virtual getter for shape center. Function can only be used for circles.
      *
      * @return Shape center.

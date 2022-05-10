@@ -45,3 +45,10 @@ TEST_F(CircleTest, SetCenter) {
 }
 
 TEST_F(CircleTest, PrintParameters) { circleOne.printParameters(); }
+
+TEST_F(CircleTest, GetCircumradius) {
+    EXPECT_EQ(circleOne.getCircumradius(), circleOne.getRadius());
+    EXPECT_EQ(circleTwo.getCircumradius(), circleTwo.getRadius());
+    EXPECT_EQ(circleThree.getCircumradius(), circleThree.getRadius());
+    EXPECT_EQ(circleFour.getCircumradius(), circleFour.getRadius());
+}
