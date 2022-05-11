@@ -12,11 +12,11 @@
  */
 
 /**
- * KinematicParameters includes all the static information required in order to predict
+ * ActuatorParameters includes all the static information required in order to predict
  * the motion of an obstacle, i.e., acceleration and velocity bounds but no dynamic
  * information such as current velocity or acceleration.
  *
- * KinematicParameters + State + Global Parameters = Information required for Occupancy Prediction
+ * ActuatorParameters + State + Global Parameters = Information required for Occupancy Prediction
  *
  * Note: The following assumptions about the quantites are enforced in the constructors:
  *   - \f$vMax \geq 0.0\f$
@@ -26,10 +26,9 @@
  *   - \f$aBraking \leq 0.0\f$
  *   - \f$aMaxLong \leq aMax\f$
  *   - \f$|aBraking| \leq |aMinLong|\f$
- *   - \f$reactionTime \geq 0.0\f$
  *
  */
-class KinematicParameters {
+class ActuatorParameters {
     /** maximum velocity of obstacle in m/s */
     double vMax;
     /** maximum absolute acceleration of obstacle in [m/s^2] */
@@ -40,26 +39,21 @@ class KinematicParameters {
     double aMinLong;
     /** minimal (longitudinal) braking acceleration of obstacle in [m/s^2] */
     double aBraking;
-    /** reaction time of obstacle in [s] */
-    std::optional<double> reactionTime;
 
   public:
-    KinematicParameters() = delete;
+    ActuatorParameters() = delete;
 
     /**
-     * Complete constructor for KinematicParameters.
+     * Complete constructor for ActuatorParameters.
      *
      * @param vMax maximum velocity of obstacle in [m/s]
      * @param aMax maximum absolute acceleration of obstacle in [m/s^2]
      * @param aMaxLong maximal longitudinal acceleration of obstacle in [m/s^2]
      * @param aMinLong minimal longitudinal acceleration of obstacle in [m/s^2]
      * @param aBraking minimal (longitudinal) braking acceleration of obstacle in [m/s^2]
-     * @param reactionTime reaction time of obstacle in [s]
      */
-    KinematicParameters(double vMax, double aMax, double aMaxLong, double aMinLong, double aBraking,
-                        std::optional<double> reactionTime = std::nullopt)
-        : vMax{vMax}, aMax{aMax}, aMaxLong{aMaxLong}, aMinLong{aMinLong}, aBraking{aBraking}, reactionTime{
-                                                                                                  reactionTime} {
+    ActuatorParameters(double vMax, double aMax, double aMaxLong, double aMinLong, double aBraking)
+        : vMax{vMax}, aMax{aMax}, aMaxLong{aMaxLong}, aMinLong{aMinLong}, aBraking{aBraking} {
         // TODO These assertions might make more sense as a std::domain_error exception
         assert(vMax >= 0.0);
         assert(aMax >= 0.0);
@@ -68,7 +62,6 @@ class KinematicParameters {
         assert(aBraking <= 0.0);
         assert(aMaxLong <= aMax);
         assert(std::abs(aBraking) <= std::abs(aMinLong));
-        assert(reactionTime.value_or(0.0) >= 0.0);
 
         // Currently disabled, based on current assumptions
         // assert(std::abs(aBraking) < aMax);
@@ -76,14 +69,13 @@ class KinematicParameters {
     }
 
     /**
-     * Simplified constructor for KinematicParameters,
+     * Simplified constructor for ActuatorParameters,
      * setting all acceleration limits based on aMax.
      *
      * @param vMax maximum velocity of obstacle in [m/s]
      * @param aMax maximum absolute acceleration of obstacle in [m/s^2]
      */
-    KinematicParameters(double vMax, double aMax, std::optional<double> reactionTime = std::nullopt)
-        : KinematicParameters{vMax, aMax, aMax, -aMax, -aMax, reactionTime} {}
+    ActuatorParameters(double vMax, double aMax) : ActuatorParameters{vMax, aMax, aMax, -aMax, -aMax} {}
 
     /**
      * Getter for maximum velocity the vehicle can drive.
@@ -121,21 +113,13 @@ class KinematicParameters {
     [[nodiscard]] double getAbraking() const noexcept { return aBraking; }
 
     /**
-     * Getter for reaction time.
-     *
-     * @return Reaction time [s].
-     */
-    [[nodiscard]] std::optional<double> getReactionTime() const noexcept { return reactionTime; }
-
-    /**
      * Default kinematic parameters for vehicles:
-     * vMax = 50.0 m/s, aMax = 3.0 m/s^2, aMaxLong = 3 m/s^2, aMinLong = -10.0 m/s^2, aBraking = -5.0 m/s^2,
-     * reaction time = 0.3 s.
+     * vMax = 50.0 m/s, aMax = 3.0 m/s^2, aMaxLong = 3 m/s^2, aMinLong = -10.0 m/s^2, aBraking = -5.0 m/s^2
      *
      *
      * @return Default vehicle kinematic parameters.
      */
-    static KinematicParameters vehicleDefaults() { return KinematicParameters{50.0, 3.0, 3.0, -10.0, -5.0, 0.3}; }
+    static ActuatorParameters vehicleDefaults() { return ActuatorParameters{50.0, 3.0, 3.0, -10.0, -5.0}; }
 
     /**
      * Default kinematic parameters for pedestrians:
@@ -144,7 +128,7 @@ class KinematicParameters {
      *
      * @return Default pedestrain kinematic parameters.
      */
-    static KinematicParameters pedestrianDefaults() { return KinematicParameters{2.0, 0.6, 0.3}; }
+    static ActuatorParameters pedestrianDefaults() { return ActuatorParameters{2.0, 0.6}; }
 
     /**
      * Default kinematic parameters for static obstacles:
@@ -152,5 +136,5 @@ class KinematicParameters {
      *
      * @return Default static obstacle kinematic parameters.
      */
-    static KinematicParameters staticDefaults() { return KinematicParameters{0.0, 0.0, std::nullopt}; }
+    static ActuatorParameters staticDefaults() { return ActuatorParameters{0.0, 0.0}; }
 };

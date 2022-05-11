@@ -22,7 +22,8 @@
 
 #include <boost/container_hash/hash.hpp>
 
-#include "kinematic_parameters.h"
+#include "actuator_parameters.h"
+#include "sensor_parameters.h"
 
 class Lanelet;
 class Lane;
@@ -71,13 +72,13 @@ class Obstacle {
      * @param isStatic Boolean indicating whether the obstacle is static or not.
      * @param currentState Pointer to current state of obstacle.
      * @param obstacleType Type of the obstacle.
-     * @param kinematicParameters Kinematic parameters of the obstacle.
+     * @param actuatorParameters Kinematic parameters of the obstacle.
      * @param trajectoryPrediction Map matching time step to state.
      * @param shape Obstacle shape. (only rectangles are currently supported!)
      * @param fov
      */
     Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-             KinematicParameters kinematicParameters, state_map_t trajectoryPrediction,
+             ActuatorParameters actuatorParameters, SensorParameters sensorParameters, state_map_t trajectoryPrediction,
              std::unique_ptr<Shape> shape, const std::vector<vertex> &fov);
 
     /**
@@ -109,11 +110,18 @@ class Obstacle {
     void setObstacleType(ObstacleType type);
 
     /**
-     * Setter for kinematic parameters.
+     * Setter for actuator parameters.
      *
-     * @param kinematicParameters Kinematic parameters
+     * @param actuatorParameters Actuator parameters
      */
-    void setKinematicParameters(KinematicParameters kinematicParameters);
+    void setActuatorParameters(ActuatorParameters actuatorParameters);
+
+    /**
+     * Setter for sensor parameters.
+     *
+     * @param sensorParameters Sensor parameters
+     */
+    void setSensorParameters(SensorParameters sensorParameters);
 
     /**
      * Setter for trajectory prediction.
@@ -526,7 +534,8 @@ class Obstacle {
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
 
-    std::optional<KinematicParameters> kinematicParameters;
+    std::optional<ActuatorParameters> actuatorParameters;
+    std::optional<SensorParameters> sensorParameters;
 
     state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
     state_map_t history{};              //**< previous states of the obstacle */
