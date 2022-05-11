@@ -19,7 +19,7 @@ class ObstacleTestInitialization : public StateTestInitialization {
     double aMaxObstacleOne;
     double aMaxLongObstacleOne;
     double aMinLongObstacleOne;
-    double reactionTimeObstacleOne;
+    std::optional<double> reactionTimeObstacleOne;
     double lengthObstacleOne;
     double widthObstacleOne;
     std::map<size_t, std::shared_ptr<Lane>> occupiedLaneObstacleOne{};
@@ -36,7 +36,7 @@ class ObstacleTestInitialization : public StateTestInitialization {
     double aMaxObstacleTwo;
     double aMaxLongObstacleTwo;
     double aMinLongObstacleTwo;
-    double reactionTimeObstacleTwo;
+    std::optional<double> reactionTimeObstacleTwo;
     double lengthObstacleTwo;
     double widthObstacleTwo;
     Obstacle::state_map_t trajectoryPredictionObstacleTwo{};

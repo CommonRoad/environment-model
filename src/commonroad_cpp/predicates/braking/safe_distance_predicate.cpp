@@ -41,7 +41,13 @@ Constraint SafeDistancePredicate::constraintEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
-    double tReact{obstacleK->getReactionTime()};
+    double tReact;
+    try {
+        tReact = obstacleK->getReactionTime().value();
+    } catch (const std::bad_optional_access &e) {
+        throw std::logic_error{
+            "tried to evaluate SafeDistancePredicate on an obstacle which does not have a reaction time defined"};
+    }
 
     return {obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
             0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength() -
@@ -62,7 +68,13 @@ double SafeDistancePredicate::robustEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
-    double tReact{obstacleK->getReactionTime()};
+    double tReact;
+    try {
+        tReact = obstacleK->getReactionTime().value();
+    } catch (const std::bad_optional_access &e) {
+        throw std::logic_error{
+            "tried to evaluate SafeDistancePredicate on an obstacle which does not have a reaction time defined"};
+    }
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
     double deltaS{0};

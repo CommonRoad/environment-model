@@ -72,25 +72,24 @@ static double rotatedMaximumLongitude(const Rectangle &rect, const double theta)
 }
 
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-                   double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
+                   double vMax, double aMax, double aMaxLong, double aMinLong, std::optional<double> reactionTime,
                    Obstacle::state_map_t trajectoryPrediction, double length, double width,
                    const std::vector<vertex> &fov)
     : Obstacle{obstacleId,
                isStatic,
                currentState,
                obstacleType,
-               KinematicParameters{vMax, aMax, aMaxLong, aMinLong, aMinLong},
-               reactionTime,
+               KinematicParameters{vMax, aMax, aMaxLong, aMinLong, aMinLong, reactionTime},
                trajectoryPrediction,
                std::make_unique<Rectangle>(length, width),
                fov} {}
 
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-                   KinematicParameters kinematicParameters, double reactionTime,
+                   KinematicParameters kinematicParameters,
                    Obstacle::state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape, const std::vector<vertex> &fov)
     : obstacleId(obstacleId), isStatic(isStatic), currentState(std::move(currentState)), obstacleType(obstacleType),
-      kinematicParameters(kinematicParameters), reactionTime(reactionTime),
-      trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(std::move(shape)) {
+      kinematicParameters(kinematicParameters), trajectoryPrediction(std::move(trajectoryPrediction)),
+      geoShape(std::move(shape)) {
     if (isStatic)
         setIsStatic(isStatic);
 
@@ -109,10 +108,7 @@ void Obstacle::setId(const size_t oId) { obstacleId = oId; }
 void Obstacle::setIsStatic(bool staticObstacle) {
     isStatic = staticObstacle;
     if (staticObstacle) {
-        kinematicParameters->vMax = 0.0;
-        kinematicParameters->aMax = 0.0;
-        kinematicParameters->aMinLong = 0.0;
-        kinematicParameters->aMaxLong = 0.0;
+        kinematicParameters = KinematicParameters::staticDefaults();
     }
 }
 
@@ -121,16 +117,6 @@ void Obstacle::setCurrentState(const std::shared_ptr<State> &state) { currentSta
 void Obstacle::setObstacleType(ObstacleType type) { obstacleType = type; }
 
 void Obstacle::setKinematicParameters(KinematicParameters params) { kinematicParameters = params; }
-
-void Obstacle::setVmax(const double vmax) { kinematicParameters->vMax = isStatic ? 0.0 : vmax; }
-
-void Obstacle::setAmax(const double amax) { kinematicParameters->aMax = isStatic ? 0.0 : amax; }
-
-void Obstacle::setAmaxLong(const double amax) { kinematicParameters->aMaxLong = isStatic ? 0.0 : amax; }
-
-void Obstacle::setAminLong(const double amin) { kinematicParameters->aMinLong = isStatic ? 0.0 : amin; }
-
-void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 0.0 : tReact; }
 
 void Obstacle::setTrajectoryPrediction(const Obstacle::state_map_t &trajPrediction) {
     trajectoryPrediction = trajPrediction;
@@ -175,25 +161,28 @@ ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
 
 double Obstacle::getVmax() const {
     assert(kinematicParameters);
-    return kinematicParameters->vMax;
+    return kinematicParameters->getVmax();
 }
 
 double Obstacle::getAmax() const {
     assert(kinematicParameters);
-    return kinematicParameters->aMax;
+    return kinematicParameters->getAmax();
 }
 
 double Obstacle::getAmaxLong() const {
     assert(kinematicParameters);
-    return kinematicParameters->aMaxLong;
+    return kinematicParameters->getAmaxLong();
 }
 
 double Obstacle::getAminLong() const {
     assert(kinematicParameters);
-    return kinematicParameters->aMinLong;
+    return kinematicParameters->getAminLong();
 }
 
-double Obstacle::getReactionTime() const { return reactionTime; }
+std::optional<double> Obstacle::getReactionTime() const {
+    assert(kinematicParameters);
+    return kinematicParameters->getReactionTime();
+}
 
 std::vector<size_t> Obstacle::getPredictionTimeSteps() {
     std::vector<size_t> timeSteps;
