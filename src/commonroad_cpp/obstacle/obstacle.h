@@ -60,11 +60,24 @@ class Obstacle {
      * @param fov
      */
     Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-             double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
+             double vMax, double aMax, double aMaxLong, double aMinLong, std::optional<double> reactionTime,
              state_map_t trajectoryPrediction, double length, double width, const std::vector<vertex> &fov = {});
 
+    /**
+     * Constructor initializing several obstacle attributes.
+     * If the obstacle is static, certain values are overwritten.
+     *
+     * @param obstacleId ID of obstacle.
+     * @param isStatic Boolean indicating whether the obstacle is static or not.
+     * @param currentState Pointer to current state of obstacle.
+     * @param obstacleType Type of the obstacle.
+     * @param kinematicParameters Kinematic parameters of the obstacle.
+     * @param trajectoryPrediction Map matching time step to state.
+     * @param shape Obstacle shape. (only rectangles are currently supported!)
+     * @param fov
+     */
     Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-             KinematicParameters kinematicParameters, double reactionTime, state_map_t trajectoryPrediction,
+             KinematicParameters kinematicParameters, state_map_t trajectoryPrediction,
              std::unique_ptr<Shape> shape, const std::vector<vertex> &fov);
 
     /**
@@ -101,41 +114,6 @@ class Obstacle {
      * @param kinematicParameters Kinematic parameters
      */
     void setKinematicParameters(KinematicParameters kinematicParameters);
-
-    /**
-     * Setter for maximum velocity the obstacle can drive.
-     *
-     * @param vmax Maximum velocity [m/s]
-     */
-    void setVmax(double vmax);
-
-    /**
-     * Setter for maximum acceleration the obstacle can have.
-     *
-     * @param amax Maximum acceleration [m/s^2]
-     */
-    void setAmax(double amax);
-
-    /**
-     * Setter for maximum acceleration the obstacle can have in longitudinal direction.
-     *
-     * @param amax Maximum acceleration [m/s^2]
-     */
-    void setAmaxLong(double amax);
-
-    /**
-     * Setter for minimum acceleration the obstacle can have in the longitudinal direction.
-     *
-     * @param amin Minimum acceleration [m/s^2]
-     */
-    void setAminLong(double amin);
-
-    /**
-     * Setter for reaction time.
-     *
-     * @param tReact Reaction time of the obstacle [s].
-     */
-    void setReactionTime(double tReact);
 
     /**
      * Setter for trajectory prediction.
@@ -227,7 +205,7 @@ class Obstacle {
      *
      * @return Reaction time [s].
      */
-    [[nodiscard]] double getReactionTime() const;
+    [[nodiscard]] std::optional<double> getReactionTime() const;
 
     /**
      * Getter for reference lane.
@@ -549,8 +527,6 @@ class Obstacle {
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
 
     std::optional<KinematicParameters> kinematicParameters;
-
-    double reactionTime{0.3}; //**< reaction time of obstacle in [s] */
 
     state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
     state_map_t history{};              //**< previous states of the obstacle */
