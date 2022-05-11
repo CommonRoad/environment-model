@@ -412,6 +412,7 @@ std::shared_ptr<State> extractState(py::handle py_state) {
 std::shared_ptr<Obstacle> createDynamicObstacle(py::handle py_singleObstacle) {
     // TODO: add other prediction than trajectory prediction
     std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
+    tempObstacle->setActuatorParameters(ActuatorParameters::vehicleDefaults());
     for (const auto &py_state :
          py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list").cast<py::list>()) {
         tempObstacle->appendStateToTrajectoryPrediction(extractState(py_state));

@@ -14,7 +14,6 @@
 #include <memory>
 #include <unordered_set>
 
-#include <commonroad_cpp/obstacle/kinematic_parameters.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
@@ -53,9 +52,11 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->setIsStatic(isStaticObstacleOne);
     obstacleOne->setCurrentState(stateTwo);
     obstacleOne->setObstacleType(obstacleTypeObstacleOne);
-    KinematicParameters paramsObstacleOne(vMaxObstacleOne, aMaxObstacleOne, aMaxLongObstacleOne, aMinLongObstacleOne,
-                                          aMinLongObstacleOne, reactionTimeObstacleOne);
-    obstacleOne->setKinematicParameters(paramsObstacleOne);
+    ActuatorParameters actuatorParamsObstacleOne(vMaxObstacleOne, aMaxObstacleOne, aMaxLongObstacleOne,
+                                                 aMinLongObstacleOne, aMinLongObstacleOne);
+    SensorParameters sensorParamsObstacleOne(reactionTimeObstacleOne);
+    obstacleOne->setActuatorParameters(actuatorParamsObstacleOne);
+    obstacleOne->setSensorParameters(sensorParamsObstacleOne);
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
     obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);

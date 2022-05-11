@@ -133,7 +133,8 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
                                       const pugi::xml_node &roadElements) {
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
 
-    tempObstacle->setKinematicParameters(KinematicParameters::vehicleDefaults());
+    tempObstacle->setActuatorParameters(ActuatorParameters::vehicleDefaults());
+    tempObstacle->setSensorParameters(SensorParameters::dynamicDefaults());
 
     // extract ID, type, shape, initial state, and trajectory
     tempObstacle->setId(roadElements.first_attribute().as_ullong());

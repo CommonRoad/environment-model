@@ -79,17 +79,18 @@ Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> curr
                isStatic,
                currentState,
                obstacleType,
-               KinematicParameters{vMax, aMax, aMaxLong, aMinLong, aMinLong, reactionTime},
+               ActuatorParameters{vMax, aMax, aMaxLong, aMinLong, aMinLong},
+               SensorParameters{250.0, 250.0, reactionTime},
                trajectoryPrediction,
                std::make_unique<Rectangle>(length, width),
                fov} {}
 
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-                   KinematicParameters kinematicParameters,
+                   ActuatorParameters actuatorParameters, SensorParameters sensorParameters,
                    Obstacle::state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape, const std::vector<vertex> &fov)
     : obstacleId(obstacleId), isStatic(isStatic), currentState(std::move(currentState)), obstacleType(obstacleType),
-      kinematicParameters(kinematicParameters), trajectoryPrediction(std::move(trajectoryPrediction)),
-      geoShape(std::move(shape)) {
+      actuatorParameters(actuatorParameters), sensorParameters(sensorParameters),
+      trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(std::move(shape)) {
     if (isStatic)
         setIsStatic(isStatic);
 
@@ -108,7 +109,7 @@ void Obstacle::setId(const size_t oId) { obstacleId = oId; }
 void Obstacle::setIsStatic(bool staticObstacle) {
     isStatic = staticObstacle;
     if (staticObstacle) {
-        kinematicParameters = KinematicParameters::staticDefaults();
+        actuatorParameters = ActuatorParameters::staticDefaults();
     }
 }
 
@@ -116,7 +117,9 @@ void Obstacle::setCurrentState(const std::shared_ptr<State> &state) { currentSta
 
 void Obstacle::setObstacleType(ObstacleType type) { obstacleType = type; }
 
-void Obstacle::setKinematicParameters(KinematicParameters params) { kinematicParameters = params; }
+void Obstacle::setActuatorParameters(ActuatorParameters params) { actuatorParameters = params; }
+
+void Obstacle::setSensorParameters(SensorParameters params) { sensorParameters = params; }
 
 void Obstacle::setTrajectoryPrediction(const Obstacle::state_map_t &trajPrediction) {
     trajectoryPrediction = trajPrediction;
@@ -160,28 +163,28 @@ std::shared_ptr<State> Obstacle::getStateByTimeStep(size_t timeStep) const {
 ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
 
 double Obstacle::getVmax() const {
-    assert(kinematicParameters);
-    return kinematicParameters->getVmax();
+    assert(actuatorParameters);
+    return actuatorParameters->getVmax();
 }
 
 double Obstacle::getAmax() const {
-    assert(kinematicParameters);
-    return kinematicParameters->getAmax();
+    assert(actuatorParameters);
+    return actuatorParameters->getAmax();
 }
 
 double Obstacle::getAmaxLong() const {
-    assert(kinematicParameters);
-    return kinematicParameters->getAmaxLong();
+    assert(actuatorParameters);
+    return actuatorParameters->getAmaxLong();
 }
 
 double Obstacle::getAminLong() const {
-    assert(kinematicParameters);
-    return kinematicParameters->getAminLong();
+    assert(actuatorParameters);
+    return actuatorParameters->getAminLong();
 }
 
 std::optional<double> Obstacle::getReactionTime() const {
-    assert(kinematicParameters);
-    return kinematicParameters->getReactionTime();
+    assert(sensorParameters);
+    return sensorParameters->getReactionTime();
 }
 
 std::vector<size_t> Obstacle::getPredictionTimeSteps() {
@@ -607,8 +610,9 @@ void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes,
 
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     auto lanelets{getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep)};
+    assert(sensorParameters);
     std::vector<std::shared_ptr<Lane>> occLanes{
-        lanelet_operations::createLanesBySingleLanelets(lanelets, roadNetwork, fieldOfViewRear, fieldOfViewFront)};
+        lanelet_operations::createLanesBySingleLanelets(lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront())};
     occupiedLanes[timeStep] = occLanes;
 }
 
@@ -643,8 +647,8 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
 void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, bool considerHistory) {
     const size_t timeStamp{currentState->getTimeStep()};
     auto lanelets{getOccupiedLaneletsByShape(roadNetwork, timeStamp)};
-    auto lanes{
-        lanelet_operations::createLanesBySingleLanelets(lanelets, roadNetwork, fieldOfViewRear, fieldOfViewFront)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets(
+        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront())};
     setOccupiedLanes(lanes, timeStamp);
     if (!isStatic) {
         for (const auto &time : getPredictionTimeSteps())
