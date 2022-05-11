@@ -30,13 +30,15 @@ bool OnOncomingOfPredicate::booleanEvaluation(
             if (angleDif > -0.75 and angleDif < 0.75) // TODO parameter
                 incomings.push_back(incom);
         }
-    auto lanelets{obstacle_operations::getSimilarlyOrientedLanelets(
-        world->getRoadNetwork(), obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
-        obstacleK->getStateByTimeStep(timeStep), parameters.laneletOccupancySimilarity)};
+    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
     for (const auto &let : lanelets)
         for (const auto &incom : incomings) {
             auto straightSuccessors{incom->getAllStraightGoingLanelets()};
             if (std::any_of(straightSuccessors.begin(), straightSuccessors.end(),
+                            [let](const std::shared_ptr<Lanelet> &letSuc) { return let->getId() == letSuc->getId(); }))
+                return true;
+            auto rightSuccessors{incom->getAllRightTurningLanelets()};
+            if (std::any_of(rightSuccessors.begin(), rightSuccessors.end(),
                             [let](const std::shared_ptr<Lanelet> &letSuc) { return let->getId() == letSuc->getId(); }))
                 return true;
         }
