@@ -19,7 +19,7 @@ struct PredicateParameters {
     PredicateParameters() { checkParameterValidity(); }
     double aAbrupt{-2};           // acceleration difference which indicates abrupt braking
     double jAbrupt{-2};           // used for go vehicle emergency profile calculation
-    double standstillError{0.01}; // velocity deviation from zero which is still classified to be standstill
+    double standstillError{0.1}; // velocity deviation from zero which is still classified to be standstill
     double minVelocityDif{15.0};  // minimum velocity difference
     uint8_t numVehCongestion{
         3}; // minimum number of leading vehicles so that a vehicle can be assumed to be part of a congestion
