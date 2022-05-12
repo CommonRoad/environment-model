@@ -275,8 +275,8 @@ double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
 }
 
 double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    if (!(convertedPositions.count(timeStep) == 1) or
-        !(convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
+    if (convertedPositions.count(timeStep) != 1 or
+        convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) != 1) {
         try {
             convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
@@ -573,20 +573,6 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
             }
         }
     }
-    //    // if no reference lane found: check previous reference lane, if no previous exist try to use future reference
-    //    lane if (referenceLane.count(timeStep) != 1) {
-    //        for (size_t step{1}; step < (this->getLastTrajectoryTimeStep() - this->currentState->getTimeStep());
-    //        ++step) {
-    //            if (this->timeStepExists(timeStep - step) and not forward) {
-    //                referenceLane[timeStep] = referenceLane[timeStep] =
-    //                    setReferenceLane(roadNetwork, timeStep - step, false);
-    //                break;
-    //            } else if (this->timeStepExists(timeStep + step) and forward) {
-    //                referenceLane[timeStep] = setReferenceLane(roadNetwork, timeStep + step, true);
-    //                break;
-    //            }
-    //        }
-    //    }
     if (referenceLane.count(timeStep) == 0 or referenceLane.at(timeStep) == nullptr)
         throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
                                  std::to_string(getId()) + " at time step " + std::to_string(timeStep));
@@ -740,8 +726,6 @@ Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
         if (relevantLanelets.find(letBase->getId()) != relevantLanelets.end())
             lanelets.push_back(letBase);
 
-    //    auto lanelets{obstacle_operations::getSimilarlyOrientedLanelets(
-    //        roadNetwork, getOccupiedLaneletsByShape(roadNetwork, timeStep), getStateByTimeStep(timeStep), 0.25)};
     occupiedLaneletsDrivingDir[timeStep] = lanelets;
     return occupiedLaneletsDrivingDir[timeStep];
 }

@@ -25,12 +25,12 @@ void LaneletTestInitialization::setUpLanelets() {
     laneletTypeLaneletOne = std::set<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate};
     userOneWayLaneletOne = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     userBidirectionalLaneletOne = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
-    centerVerticesLaneletOne = std::vector<vertex>{vertex{0, 1.5},  vertex{10, 1.5}, vertex{20, 1.5},
-                                                   vertex{30, 1.5}, vertex{40, 1.5}, vertex{50, 1.5}};
-    leftBorderLaneletOne = std::vector<vertex>{vertex{0, 3},    vertex{10, 3},   vertex{20, 3},
-                                               vertex{30, 3.0}, vertex{40, 3.0}, vertex{50, 3.0}};
-    rightBorderLaneletOne =
-        std::vector<vertex>{vertex{0, 0}, vertex{10, 0}, vertex{20, 0}, vertex{30, 0}, vertex{40, 0}, vertex{50, 0}};
+    centerVerticesLaneletOne = std::vector<vertex>{vertex{0, 1.5},  vertex{10, 1.5}, vertex{20, 1.5}, vertex{30, 1.5},
+                                                   vertex{40, 1.5}, vertex{50, 1.5}, vertex{60, 1.5}};
+    leftBorderLaneletOne = std::vector<vertex>{vertex{0, 3},    vertex{10, 3},   vertex{20, 3},  vertex{30, 3.0},
+                                               vertex{40, 3.0}, vertex{50, 3.0}, vertex{60, 3.0}};
+    rightBorderLaneletOne = std::vector<vertex>{vertex{0, 0},  vertex{10, 0}, vertex{20, 0}, vertex{30, 0},
+                                                vertex{40, 0}, vertex{50, 0}, vertex{60, 0}};
     laneletOne =
         std::make_shared<Lanelet>(Lanelet(idLaneletOne, leftBorderLaneletOne, rightBorderLaneletOne,
                                           laneletTypeLaneletOne, userOneWayLaneletOne, userBidirectionalLaneletOne));
@@ -216,7 +216,7 @@ TEST_F(LaneletTest, CheckIntersection) {
 TEST_F(LaneletTest, ConstructOuterPolygon) {
     // evaluates whether in setUp creates outer polygon is valid (this test case does not check the vertices directly)
     // lanelet one
-    std::vector<double> expXVerticesLaneletOne{0.0, 0.0, 50.0, 50.0};
+    std::vector<double> expXVerticesLaneletOne{0.0, 0.0, 60.0, 60.0};
     std::vector<double> expYVerticesLaneletOne{0.0, 0.0, 3.0, 3.0};
     std::vector<double> expXVerticesLaneletTwo{60.0, 60.0, 110.0, 110.0, 120.0, 120.0};
     std::vector<double> expYVerticesLaneletTwo{0.0, 0.0, 3.0, 3.0, 3.0, 6.0};
@@ -250,7 +250,7 @@ TEST_F(LaneletTest, ConstructOuterPolygon) {
 
 TEST_F(LaneletTest, GetBoundingBox) {
     // lanelet one
-    EXPECT_EQ(laneletOne->getBoundingBox().max_corner().x(), 50.0);
+    EXPECT_EQ(laneletOne->getBoundingBox().max_corner().x(), 60.0);
     EXPECT_EQ(laneletOne->getBoundingBox().max_corner().y(), 3.0);
     EXPECT_EQ(laneletOne->getBoundingBox().min_corner().x(), 0.0);
     EXPECT_EQ(laneletOne->getBoundingBox().min_corner().y(), 0.0);

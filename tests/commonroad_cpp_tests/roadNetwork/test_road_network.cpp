@@ -14,7 +14,8 @@
 #include <geometry/curvilinear_coordinate_system.h>
 
 void RoadNetworkTestInitialization::setUpRoadNetwork() {
-    std::vector<std::shared_ptr<Lanelet>> lanelets{laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive};
+    std::vector<std::shared_ptr<Lanelet>> lanelets{laneletOne,  laneletTwo, laneletThree, laneletFour,
+                                                   laneletFive, laneletSix, laneletSeven};
 
     roadNetwork = std::make_shared<RoadNetwork>(
         RoadNetwork(lanelets, SupportedTrafficSignCountry::GERMANY, {}, {}, {intersection1, intersection2}));
@@ -31,12 +32,12 @@ void RoadNetworkTest::SetUp() {
 }
 
 TEST_F(RoadNetworkTest, InitializationComplete) {
-    EXPECT_EQ(roadNetwork->getLaneletNetwork().size(), 5);
+    EXPECT_EQ(roadNetwork->getLaneletNetwork().size(), 7);
     EXPECT_EQ(roadNetwork->getLaneletNetwork().at(0)->getId(), 1);
 }
 
 TEST_F(RoadNetworkTest, FindOccupiedLaneletsByShape) {
-    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonOne).size(), 2); // order can be random
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonOne).size(), 3); // order can be random
     EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonTwo).at(0)->getId(), 1);
     EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonThree).size(), 0);
 }

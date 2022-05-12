@@ -286,6 +286,10 @@ TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
     EXPECT_EQ(stateOne->getLatPosition(), -4.25);
 }
 
+TEST_F(ObstacleTest, SetOccupiedLaneletsDrivingDirectionByShape) {
+    obstacleOne->getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, 0);
+}
+
 TEST_F(ObstacleTest, SetReferenceGeneral) {
     size_t timeStep{0};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
