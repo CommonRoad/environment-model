@@ -19,7 +19,6 @@
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
 #include <commonroad_cpp/roadNetwork/types.h>
-#include <omp.h>
 
 #include <boost/container_hash/hash.hpp>
 
@@ -602,7 +601,7 @@ class Obstacle {
                // threshold since initial time step has special evaluation */
     double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
     double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
-    polygon_type fov;
+    polygon_type fov;               //**< fov of vehicle captured by sensors */
 
     /**
      * Private setter for occupied lanelets at a time steps within a road network.
@@ -615,6 +614,12 @@ class Obstacle {
     std::vector<std::shared_ptr<Lanelet>> setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                                      time_step_t timeStep);
 
+    /**
+     *
+     * @param roadNetwork
+     * @param timeStep
+     * @return
+     */
     std::vector<std::shared_ptr<Lanelet>>
     setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 

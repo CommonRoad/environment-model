@@ -1,6 +1,6 @@
 PROJECT_NAME           = "CommonRoad C++ Environment Model"
 
-PROJECT_BRIEF          = Classes and methods to represent the CommonRoad format in C++17
+PROJECT_BRIEF          = "Classes and methods to represent the CommonRoad format in C++17"
 PROJECT_LOGO           = @CMAKE_SOURCE_DIR@/docs/commonroad_logo.svg
 
 STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@
