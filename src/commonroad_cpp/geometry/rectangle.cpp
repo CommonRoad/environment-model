@@ -5,10 +5,10 @@
 // Credits: BMW Car@TUM
 //
 
+#include <cmath>
 #include <iostream>
 
 #include "rectangle.h"
-#include <iostream>
 
 void Rectangle::setLength(const double len) { length = len; }
 
@@ -17,6 +17,11 @@ void Rectangle::setWidth(const double wid) { width = wid; }
 double Rectangle::getLength() const { return length; }
 
 double Rectangle::getWidth() const { return width; }
+
+double Rectangle::getCircumradius() const {
+    double diagonal = std::hypot(length, width);
+    return diagonal / 2.0;
+}
 
 void Rectangle::scaleShape(double factor) {
     this->setWidth(this->getWidth() * factor);
