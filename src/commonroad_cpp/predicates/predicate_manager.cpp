@@ -41,7 +41,7 @@ void PredicateManager::extractPredicateSatisfaction() {
                     continue;
                 others.push_back(obs);
             }
-            // setObstacleProperties(ego, others);
+            // setObstacleProperties(ego, others); // todo
             const auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
             const auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
             for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getLastTrajectoryTimeStep();
