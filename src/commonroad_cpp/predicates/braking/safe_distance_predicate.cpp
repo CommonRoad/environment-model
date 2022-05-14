@@ -8,6 +8,7 @@
 #include <cmath>
 #include <stdexcept>
 
+#include "../../roadNetwork/lanelet/lane.h"
 #include "../../world.h"
 #include "safe_distance_predicate.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
@@ -64,8 +65,16 @@ double SafeDistancePredicate::robustEvaluation(
     double tReact{obstacleK->getReactionTime()};
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
-    double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
-                  obstacleK->frontS(world->getRoadNetwork(), timeStep)};
+    double deltaS{0};
+    // check whether pth vehicle is in projection domain, e.g. for intersections
+    if (obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+            ->getCurvilinearCoordinateSystem()
+            ->cartesianPointInProjectionDomain(obstacleP->getStateByTimeStep(timeStep)->getXPosition(),
+                                               obstacleP->getStateByTimeStep(timeStep)->getYPosition()))
+        deltaS = obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
+                 obstacleK->frontS(world->getRoadNetwork(), timeStep);
+    else
+        return parameters.epsilon;
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
     // robustness
     if (deltaS < 0)
