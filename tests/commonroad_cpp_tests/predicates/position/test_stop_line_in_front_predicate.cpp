@@ -58,6 +58,57 @@ TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleTwo)); // stop line behind obstacle
 }
 
+TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
+    std::array<std::string, 1> scenarios{"DEU_test_stop_line.xml"};
+    for (const auto &scen : scenarios) {
+        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" + scen};
+        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+            InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+        auto world{
+            std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+
+        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1)));
+        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(2)));
+        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(3)));
+
+        EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1)));
+        EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(2)));
+        EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(3)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(1)));
+        EXPECT_TRUE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(2)));
+        EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(3)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(1)));
+        EXPECT_TRUE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(2)));
+        EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(3)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0)));
+        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1)));
+        EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(2)));
+        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(3)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(0)));
+        EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(1)));
+        EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(2)));
+        EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(3)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(0)));
+        EXPECT_TRUE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(1)));
+        EXPECT_FALSE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(2)));
+        EXPECT_TRUE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(3)));
+
+        EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(0)));
+        EXPECT_TRUE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(1)));
+        EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(2)));
+        EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(3)));
+    }
+}
+
 TEST_F(StopLineInFrontPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }

@@ -32,11 +32,12 @@ bool lineInFront(const std::vector<vertex> &line, const std::shared_ptr<Obstacle
         if (!ccs->cartesianPointInProjectionDomain(point.x(), point.y()))
             return false;
         auto c{ccs->convertToCurvilinearCoords(point.x(), point.y())};
-        if (b.y() < 0) {
-            if (((b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x())) < 0)
+        // ((b.X - a.X)*(c.Y - a.Y) > (b.Y - a.Y)*(c.X - a.X)) -> left of line a.y < b.y
+        if (a.y() < 0) {
+            if ((b.x() - a.x()) * (c.y() - a.y()) < (b.y() - a.y()) * (c.x() - a.x()))
                 return false;
         } else {
-            if (((b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x())) > 0)
+            if ((b.x() - a.x()) * (c.y() - a.y()) > (b.y() - a.y()) * (c.x() - a.x()))
                 return false;
         }
     }
