@@ -17,8 +17,8 @@
 
 #include "stop_line_in_front_predicate.h"
 
-bool lineInFront(const std::vector<vertex> line, std::shared_ptr<Obstacle> obs, size_t timeStep,
-                 std::shared_ptr<RoadNetwork> roadNetwork) {
+bool lineInFront(const std::vector<vertex> &line, const std::shared_ptr<Obstacle> &obs, size_t timeStep,
+                 const std::shared_ptr<RoadNetwork> &roadNetwork) {
     auto ccs{obs->getReferenceLane(roadNetwork, timeStep)->getCurvilinearCoordinateSystem()};
     if (!ccs->cartesianPointInProjectionDomain(line.at(0).x, line.at(0).y))
         return false;
@@ -33,17 +33,17 @@ bool lineInFront(const std::vector<vertex> line, std::shared_ptr<Obstacle> obs, 
             return false;
         auto c{ccs->convertToCurvilinearCoords(point.x(), point.y())};
         if (b.y() < 0) {
-            if (((b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x())) > 0)
+            if (((b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x())) < 0)
                 return false;
         } else {
-            if (((a.x() - b.x()) * (c.y() - b.y()) - (a.y() - b.y()) * (c.x() - b.x())) > 0)
+            if (((b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x())) > 0)
                 return false;
         }
     }
     return true;
 }
 
-double minDistance(const std::vector<vertex> line, polygon_type shape) {
+double minDistance(const std::vector<vertex> &line, polygon_type shape) {
     auto a{(line.at(0).y - line.at(1).y)};
     auto b{line.at(1).x - line.at(0).x};
     auto c{(line.at(0).x - line.at(1).x) * line.at(0).y + (line.at(1).y - line.at(0).y) * line.at(0).x};
