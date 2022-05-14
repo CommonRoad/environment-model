@@ -25,8 +25,8 @@ void PredicateManagerTest::extractRelevantPredicatesHelper(int num_threads) cons
                                               outputDirectory, outputFileName),
                          {"keeps_safe_distance_prec", "in_standstill"})};
     predicateManager.extractPredicateSatisfaction();
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 9713);
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 8847);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 9792);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 8923);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime, 0);
@@ -72,8 +72,8 @@ TEST_F(PredicateManagerTest, Reset) {
                                               outputDirectory, outputFileName),
                          {"keeps_safe_distance_prec"})};
     predicateManager.extractPredicateSatisfaction();
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 9713);
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 8847);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 9792);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 8923);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime, 0);
