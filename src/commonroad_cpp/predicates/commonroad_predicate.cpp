@@ -35,16 +35,15 @@
 #include "position/on_lanelet_with_type_predicate.h"
 #include "position/on_similar_oriented_lanelet_with_type_predicate.h"
 #include "position/on_similar_oriented_lanelet_without_type_predicate.h"
-#include "position/passes_stop_line_predicate.h"
 #include "position/right_of_broad_lane_marking_predicate.h"
-#include "position/stop_line_in_front_predicate.h"
-#include "position/traffic_sign_in_front_predicate.h"
 #include "position/unobstructed_intersection_view_predicate.h"
+#include "regulatory//stop_line_in_front_predicate.h"
 #include "regulatory/at_traffic_light_predicate.h"
 #include "regulatory/at_traffic_sign_predicate.h"
 #include "regulatory/has_priority_predicate.h"
 #include "regulatory/relevant_traffic_light_predicate.h"
 #include "regulatory/same_priority_predicate.h"
+#include "regulatory/traffic_sign_in_front_predicate.h"
 #include "velocity/drives_faster_predicate.h"
 #include "velocity/drives_with_slightly_higher_speed_predicate.h"
 #include "velocity/exist_standing_leading_vehicle_predicate.h"
@@ -129,7 +128,6 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"left_of", std::make_shared<LeftOfPredicate>()},
     {"main_carriageway_right_lane", std::make_shared<MainCarriagewayRightLanePredicate>()},
     {"on_lanelet_with_type", std::make_shared<OnLaneletWithTypePredicate>()},
-    {"passes_stop_line", std::make_shared<PassesStopLinePredicate>()},
     {"right_of_broad_lane_marking", std::make_shared<RightOfBroadLaneMarkingPredicate>()},
     {"stop_line_in_front", std::make_shared<StopLineInFrontPredicate>()},
     {"at_traffic_light", std::make_shared<AtTrafficLightPredicate>()},

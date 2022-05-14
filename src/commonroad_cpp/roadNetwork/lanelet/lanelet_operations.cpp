@@ -275,3 +275,14 @@ lanelet_operations::extractLaneletsFromLanes(const std::vector<std::shared_ptr<L
     }
     return relevantLanelets;
 }
+
+std::vector<std::shared_ptr<Lanelet>>
+lanelet_operations::combineLaneLanelets(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &lanes) {
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    for (const auto &lane : lanes)
+        for (const auto &let : lane)
+            if (!(std::any_of(lanelets.begin(), lanelets.end(),
+                              [let](const std::shared_ptr<Lanelet> &exLet) { return exLet->getId() == let->getId(); })))
+                lanelets.push_back(let);
+    return lanelets;
+}
