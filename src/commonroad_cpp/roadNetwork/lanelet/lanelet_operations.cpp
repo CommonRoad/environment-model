@@ -186,6 +186,10 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet
     auto curLanelet{std::move(lanelet)};
 
     while (curLanelet->getAdjacentRight().adj != nullptr and
+           !std::any_of(adjacentLanelets.begin(), adjacentLanelets.end(),
+                        [curLanelet](const std::shared_ptr<Lanelet> &let) {
+                            return let->getId() == curLanelet->getAdjacentRight().adj->getId();
+                        }) and
            (!sameDirection or curLanelet->getAdjacentRight().dir == DrivingDirection::same)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentRight().adj);
         curLanelet = curLanelet->getAdjacentRight().adj;
@@ -199,6 +203,10 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(
     auto curLanelet{std::move(lanelet)};
 
     while (curLanelet->getAdjacentLeft().adj != nullptr and
+           !std::any_of(adjacentLanelets.begin(), adjacentLanelets.end(),
+                        [curLanelet](const std::shared_ptr<Lanelet> &let) {
+                            return let->getId() == curLanelet->getAdjacentLeft().adj->getId();
+                        }) and
            (!sameDirection or curLanelet->getAdjacentLeft().dir == DrivingDirection::same)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentLeft().adj);
         curLanelet = curLanelet->getAdjacentLeft().adj;

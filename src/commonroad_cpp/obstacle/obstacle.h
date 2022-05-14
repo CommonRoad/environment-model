@@ -55,13 +55,11 @@ class Obstacle {
      * @param trajectoryPrediction Map matching time step to state.
      * @param length Length of the obstacle [m].
      * @param width Width of the obstacle [m].
-     * @param route Planned route of obstacle.
      * @param fov
      */
     Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
              double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
-             state_map_t trajectoryPrediction, double length, double width, std::vector<vertex> route = {},
-             const std::vector<vertex> &fov = {});
+             state_map_t trajectoryPrediction, double length, double width, const std::vector<vertex> &fov = {});
 
     /**
      * Setter for ID of obstacle.
@@ -154,13 +152,6 @@ class Obstacle {
      * @param state Pointer to state object.
      */
     void appendStateToHistory(const std::shared_ptr<State> &state);
-
-    /**
-     * Setter for route.
-     *
-     * @param newRoute New route of obstacle.
-     */
-    void setRoute(const std::vector<vertex> &newRoute);
 
     /**
      * Getter for obstacle ID.
@@ -433,13 +424,6 @@ class Obstacle {
                           time_step_t timeStep); // TODO create test case
 
     /**
-     * Checks whether occupied lanes are already computed for a time step.
-     *
-     * @param timeStep Time step of interest.
-     */
-    bool existsOccupiedLanes(time_step_t timeStep); // TODO create test case
-
-    /**
      * Extracts first time step of trajectory
      *
      * @return first time step of trajectory
@@ -472,13 +456,6 @@ class Obstacle {
      */
     std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                            time_step_t timeStep); // TODO create test case
-
-    /**
-     * Getter for route.
-     *
-     * @return Route as list of vertices.
-     */
-    const std::vector<vertex> &getRoute() const;
 
     /**
      * Converts the x- and y-coordinate into the Curvilinear domain given own reference lane.
@@ -552,9 +529,6 @@ class Obstacle {
 
     void setFov(const std::vector<vertex> &fovVertices);
 
-    const std::vector<std::shared_ptr<Lane>> &
-    getReferenceLaneCandidates(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
-
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     bool isStatic{false};                             //**< true if Obstacle is static */
@@ -579,8 +553,6 @@ class Obstacle {
 
     std::unordered_map<time_step_t, std::shared_ptr<Lane>>
         referenceLane; //**< lane which is used as reference for curvilinear projection */
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lane>>> referenceLaneCandidates;
-    //**< possible candidates from which referenceLane was selected */
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lane>>>
         occupiedLanes; //**< map of time steps to lanes occupied by the obstacle */
 
@@ -594,11 +566,6 @@ class Obstacle {
 
     std::unordered_map<time_step_t, polygon_type> shapeAtTimeStep; //**< occupied polygon shape at time steps */
 
-    std::vector<vertex> route;                  //**< planned route of the obstacle */
-    const double laneOrientationThreshold{0.7}; //**< orientation threshold for assigning lanes */
-    const double laneOrientationThresholdInitial{
-        1.58}; //**< orientation threshold for assigning lanes at initial time step, should be larger than other
-               // threshold since initial time step has special evaluation */
     double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
     double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */
     polygon_type fov;               //**< fov of vehicle captured by sensors */
@@ -640,6 +607,8 @@ class Obstacle {
      * @param roadNetwork Pointer to road network
      * @return Pointer to lane object.
      */
-    std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep,
-                                           bool forward = true);
+    std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+
+    std::vector<std::shared_ptr<Lane>> computeMainRef(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                                      const std::vector<std::shared_ptr<Lane>> &lane);
 };

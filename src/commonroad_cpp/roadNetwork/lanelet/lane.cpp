@@ -75,3 +75,10 @@ std::vector<std::shared_ptr<Lanelet>> Lane::getSuccessorLanelets(const std::shar
 
     return relevantLanelets;
 }
+
+bool Lane::contains(std::vector<std::shared_ptr<Lanelet>> lanelets) {
+    auto containedLaneletIdsTmp{containedLaneletIds};
+    return std::any_of(lanelets.begin(), lanelets.end(), [containedLaneletIdsTmp](const std::shared_ptr<Lanelet> &let) {
+        return containedLaneletIdsTmp.find(let->getId()) != containedLaneletIdsTmp.end();
+    });
+}

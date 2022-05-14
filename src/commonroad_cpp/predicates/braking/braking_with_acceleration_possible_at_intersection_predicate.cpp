@@ -18,7 +18,7 @@ bool BrakingWithAccelerationPossibleAtIntersection::booleanEvaluation(
     double distanceIntersection{0.0};
 
     double brakingDistance{std::pow(obstacleK->getStateByTimeStep(timeStep)->getVelocity(), 2) /
-                           (2 * abs(parameters.intersectionBrakingPossible))}; // todo parameter
+                           (2 * abs(parameters.intersectionBrakingPossible))};
     for (const auto &lane : lanelet_operations::createLanesBySingleLanelets(
              obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep), world->getRoadNetwork())) {
         for (const auto &letLane : lane->getContainedLanelets()) {

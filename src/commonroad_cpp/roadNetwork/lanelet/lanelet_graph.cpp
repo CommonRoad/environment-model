@@ -6,9 +6,13 @@
 #include <vector>
 
 std::vector<size_t> LaneletGraph::findPaths(size_t src, size_t dst, bool considerAdjacency) {
+    if (queries.find({src, dst}) != queries.end())
+        return queries[{src, dst}];
     std::vector<size_t> path;
     std::optional<std::pair<std::vector<std::ptrdiff_t>, std::ptrdiff_t>> result;
-    if (considerAdjacency) {
+    if (src == dst)
+        path = {src};
+    else if (considerAdjacency) {
         dijkstra<size_t, size_t> searcher{graphAdjSuc, static_cast<ptrdiff_t>(verticesAdjSuc.at(src))};
         result = searcher.search_path(static_cast<ptrdiff_t>(verticesAdjSuc.at(dst)));
         for (const auto &res : result->first)
@@ -19,6 +23,7 @@ std::vector<size_t> LaneletGraph::findPaths(size_t src, size_t dst, bool conside
         for (const auto &res : result->first)
             path.push_back(verticesSucRes.at(static_cast<const unsigned long>(res)));
     }
+    queries[{src, dst}] = path;
     return path;
 }
 
