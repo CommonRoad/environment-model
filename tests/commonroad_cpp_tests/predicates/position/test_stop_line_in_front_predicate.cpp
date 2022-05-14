@@ -9,11 +9,11 @@
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 
 void StopLineInFrontPredicateTest::SetUp() {
-    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 17.5, 0, 0, 0, 0, 0);
-    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 0, 6, 17.5, 0, 0, 0, 0, 0);
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 5, 2, 17.5, 0, 0, 0, 5, 0);
+    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 5, 6, 17.5, 0, 0, 0, 5, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 17.5, 2, 2.5, 0, 0, 0, 17.5, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 17.5, 6, 0.5, 0, 0, 0, 17.5, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 17.4, 2, 2.5, 0, 0, 0, 17.4, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 17.4, 6, 0.5, 0, 0, 0, 17.4, 0);
 
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 2, 5.0, 0, 0, 0, 20, 0);
     std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 17.55, 6, 4.95, 0, 0, 0, 17.55, 0);
@@ -52,7 +52,7 @@ TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne)); // stop line behind obstacle
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo)); // stop line completely in front
     EXPECT_TRUE(pred.booleanEvaluation(
-        1, world, obstacleTwo)); // stop line exactly at obstacle front (one min lon. position of stop line)
+        1, world, obstacleTwo)); // stop line exactly at obstacle front (on min lon. position of stop line)
     EXPECT_TRUE(pred.booleanEvaluation(
         2, world, obstacleTwo)); // stop line with two different lon. positions; obstacle above stop line
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleTwo)); // stop line behind obstacle

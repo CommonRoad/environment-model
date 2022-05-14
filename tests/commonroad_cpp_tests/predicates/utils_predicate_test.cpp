@@ -188,8 +188,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
     auto laneletFour2 = std::make_shared<Lanelet>(
         Lanelet(idLaneletFour, leftBorderLaneletFour, rightBorderLaneletFour, laneletTypeLaneletThree));
 
-    laneletFour2->addPredecessor(laneletTwo2);
-    laneletTwo2->addSuccessor(laneletFour2);
+    laneletFour2->addPredecessor(laneletThree2);
+    laneletThree2->addSuccessor(laneletFour2);
 
     return std::make_shared<RoadNetwork>(RoadNetwork({laneletOne2, laneletTwo2, laneletThree2, laneletFour2},
                                                      SupportedTrafficSignCountry::GERMANY,

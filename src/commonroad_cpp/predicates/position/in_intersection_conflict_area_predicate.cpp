@@ -62,30 +62,24 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
     if (!onLaneletWithTypePredicate.booleanEvaluation(timeStep, world, obstacleK, obstacleP, opt))
         return false;
     auto simLaneletsK{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
-    std::vector<std::shared_ptr<Lane>> lanes{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
-    //    for (const auto &letP : obstacleP->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(),
-    //    timeStep)) {
-    //        for (const auto &laP : world->getRoadNetwork()->findLanesByBaseLanelet(letP->getId())) {
-    //            lanes.push_back(laP);
-    //        }
-    //    }
-    for (const auto &lane : lanes) {
-        for (const auto &letP : lane->getContainedLanelets()) {
-            for (const auto &letK : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)) {
-                if (!letK->hasLaneletType(LaneletType::intersection))
-                    continue;
-                if (letK->getId() == letP->getId() and
-                    !std::any_of(
-                        simLaneletsK.begin(), simLaneletsK.end(),
-                        [letK](const std::shared_ptr<Lanelet> &letSim) { return letSim->getId() == letK->getId(); }) and
-                    !std::any_of(simLaneletsK.begin(), simLaneletsK.end(),
-                                 [letP, world](const std::shared_ptr<Lanelet> &letSim) {
-                                     return checkSameIncoming(letP, letSim, world->getRoadNetwork());
-                                 }))
-                    return true;
-            }
+    std::shared_ptr<Lane> lane{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
+
+    for (const auto &letP : lane->getContainedLanelets()) {
+        for (const auto &letK : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)) {
+            if (!letK->hasLaneletType(LaneletType::intersection))
+                continue;
+            if (letK->getId() == letP->getId() and
+                !std::any_of(
+                    simLaneletsK.begin(), simLaneletsK.end(),
+                    [letK](const std::shared_ptr<Lanelet> &letSim) { return letSim->getId() == letK->getId(); }) and
+                !std::any_of(simLaneletsK.begin(), simLaneletsK.end(),
+                             [letP, world](const std::shared_ptr<Lanelet> &letSim) {
+                                 return checkSameIncoming(letP, letSim, world->getRoadNetwork());
+                             }))
+                return true;
         }
     }
+
     return false;
 }
 

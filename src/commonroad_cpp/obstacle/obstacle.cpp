@@ -477,16 +477,28 @@ std::vector<std::shared_ptr<Lane>> Obstacle::computeMainRef(const std::shared_pt
     std::vector<std::shared_ptr<Lane>> relevantOccupiedLanes;
     // use currently occupied lanelets in driving direction as lane candidates, already return if lane contains lanelet
     // of initial and final time step
+    bool startEnd{false};
+    bool startOrEnd{false};
     for (const auto &lane : lanes)
         if (lane->contains(getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, currentState->getTimeStep())) and
             lane->contains(getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, getLastTrajectoryTimeStep()))) {
-            relevantOccupiedLanes.push_back(lane);
-            break;
-        } else if (lane->contains(
-                       getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, getLastTrajectoryTimeStep()))) {
-            relevantOccupiedLanes.push_back(lane);
-            break;
-        } else
+            if (startEnd)
+                relevantOccupiedLanes.push_back(lane);
+            else {
+                startEnd = true;
+                relevantOccupiedLanes = {lane};
+            }
+            continue;
+        } else if (!startEnd and lane->contains(getOccupiedLaneletsDrivingDirectionByShape(
+                                     roadNetwork, getLastTrajectoryTimeStep()))) {
+            if (startOrEnd)
+                relevantOccupiedLanes.push_back(lane);
+            else {
+                startOrEnd = true;
+                relevantOccupiedLanes = {lane};
+            }
+            continue;
+        } else if (!startEnd and !startOrEnd)
             relevantOccupiedLanes.push_back(lane);
 
     if (relevantOccupiedLanes.size() > 1) { // iterate over all time steps starting from current time step and count
