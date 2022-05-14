@@ -29,7 +29,7 @@ simulation_param:
 predicate_eval:
   predicate_category:
     intersection: ["in_intersection_main_area", "at_red_traffic_light", "at_red_straight_traffic_light",
-                   "at_red_left_traffic_light", "at_red_right_traffic_light", "stop_line_in_front", "passes_stop_line"]
+                   "at_red_left_traffic_light", "at_red_right_traffic_light", "stop_line_in_front"]
     general: ["keeps_safe_distance_prec", "unnecessary_braking", "in_front_of", "in_same_lane",
               "keeps_lane_speed_limit", "preserves_traffic_flow", "keeps_sign_min_speed_limit", "slow_leading_vehicle",
               "orientation_towards", "lane_based_orientation_similar", "in_single_lane", "in_standstill",

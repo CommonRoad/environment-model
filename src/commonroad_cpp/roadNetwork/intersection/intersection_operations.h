@@ -20,4 +20,14 @@ namespace intersection_operations {
  */
 bool onIncoming(size_t timeStep, const std::shared_ptr<Obstacle> &obs, const std::shared_ptr<RoadNetwork> &roadNetwork);
 
+/**
+ *
+ * @param letK
+ * @param letP
+ * @param roadNetwork
+ * @return
+ */
+bool checkSameIncoming(const std::shared_ptr<Lanelet> &letK, const std::shared_ptr<Lanelet> &letP,
+                       const std::shared_ptr<RoadNetwork> &roadNetwork);
+
 } // namespace intersection_operations

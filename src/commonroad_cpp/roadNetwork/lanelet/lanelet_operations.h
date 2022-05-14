@@ -150,4 +150,12 @@ std::vector<std::shared_ptr<TrafficLight>> activeTlsByLanelet(size_t timeStep, c
  */
 std::vector<std::shared_ptr<Lanelet>> extractLaneletsFromLanes(const std::vector<std::shared_ptr<Lane>> &lanes);
 
+/**
+ *
+ * @param lanes
+ * @return
+ */
+std::vector<std::shared_ptr<Lanelet>>
+combineLaneLanelets(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &lanes);
+
 } // namespace lanelet_operations

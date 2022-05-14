@@ -33,8 +33,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_single_lane_predicate.cpp
-        commonroad_cpp/predicates/position/stop_line_in_front_predicate.cpp
-        commonroad_cpp/predicates/position/passes_stop_line_predicate.cpp
+        commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.cpp
         commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_predicate.cpp
@@ -46,7 +45,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
         commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
-        commonroad_cpp/predicates/position/traffic_sign_in_front_predicate.cpp
+        commonroad_cpp/predicates/regulatory/traffic_sign_in_front_predicate.cpp
         commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.cpp
         commonroad_cpp/predicates/position/on_incoming_left_of_predicate.cpp
         commonroad_cpp/predicates/position/on_oncoming_of_predicate.cpp
