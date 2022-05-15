@@ -4,7 +4,7 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "test_at_red_traffic_light_predicate.h"
+#include "test_at_traffic_light_predicate.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 
 TEST_F(AtRedTrafficLightPredicateTest, BooleanEvaluationDirectionAll) {

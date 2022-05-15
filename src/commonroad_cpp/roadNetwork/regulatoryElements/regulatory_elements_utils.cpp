@@ -136,3 +136,61 @@ double regulatory_elements_utils::typeSpeedLimit(ObstacleType obstacleType) {
         return std::numeric_limits<double>::max();
     }
 }
+
+std::vector<std::string> regulatory_elements_utils::getRelevantPrioritySignIDs() {
+    std::vector<std::string> keys;
+    keys.reserve(priorityTable.size());
+    for (const auto &[key, value] : priorityTable) {
+        keys.push_back(key);
+    }
+    return keys;
+}
+
+std::shared_ptr<TrafficSignElement>
+regulatory_elements_utils::extractPriorityTrafficSign(const std::shared_ptr<Lanelet> &lanelet) {
+    static const std::vector<std::string> relevantPrioritySignIds{getRelevantPrioritySignIDs()};
+    std::vector<std::shared_ptr<TrafficSignElement>> relevantTrafficSignElements;
+    for (const auto &trs : lanelet->getTrafficSigns()) {
+        auto trafficSignElements{trs->getTrafficSignElements()};
+        relevantTrafficSignElements.insert(relevantTrafficSignElements.end(), trafficSignElements.begin(),
+                                           trafficSignElements.end());
+    }
+    std::shared_ptr<TrafficSignElement> tmpSign{std::make_shared<TrafficSignElement>("102")};
+    for (const auto &tse : relevantTrafficSignElements) {
+        if (!std::any_of(
+                relevantTrafficSignElements.begin(), relevantTrafficSignElements.end(),
+                [tse](const std::shared_ptr<TrafficSignElement> &tel) { return tel->getId() == tse->getId(); }))
+            continue;
+        if (tmpSign->getId() != TrafficSignIDGermany.at(TrafficSignTypes::WARNING_RIGHT_BEFORE_LEFT) and
+            (tse->getId() == TrafficSignIDGermany.at(TrafficSignTypes::PRIORITY) or
+             tse->getId() == TrafficSignIDGermany.at(TrafficSignTypes::YIELD)))
+            continue;
+        tmpSign = tse;
+    }
+    return tmpSign;
+}
+
+int regulatory_elements_utils::extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
+                                                          TurningDirection dir) {
+    std::shared_ptr<TrafficSignElement> tmpSign;
+    int currentPriorityValue{std::numeric_limits<int>::min()}; // todo use min int
+    for (const auto &let : lanelets) {
+        auto trs{regulatory_elements_utils::extractPriorityTrafficSign(let)};
+        if (priorityTable.count(trs->getId()) == 1 and
+            (currentPriorityValue == std::numeric_limits<int>::min() or
+             priorityTable.at(trs->getId()).at(static_cast<size_t>(dir)) < currentPriorityValue))
+            currentPriorityValue = priorityTable.at(trs->getId()).at(static_cast<size_t>(dir));
+    }
+    return currentPriorityValue;
+}
+
+int regulatory_elements_utils::getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                           const std::shared_ptr<Obstacle> &obs, TurningDirection dir) {
+    auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
+    std::vector<std::shared_ptr<Lanelet>> relevantIncomingLanelets;
+    for (const auto &let : lanelets) {
+        if (let->hasLaneletType(LaneletType::incoming))
+            relevantIncomingLanelets.push_back(let);
+    }
+    return regulatory_elements_utils::extractPriorityTrafficSign(relevantIncomingLanelets, dir);
+}
