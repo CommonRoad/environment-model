@@ -7,6 +7,7 @@
 
 #include "test_regulatory_elements_utils.h"
 #include "../../predicates/utils_predicate_test.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 
 void RegulatoryElementsUtilsTest::SetUp() {
@@ -101,3 +102,18 @@ TEST_F(RegulatoryElementsUtilsTest, SpeedLimitSuggested) {
     EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested({world->getRoadNetwork()->findLaneletById(111)}, "274"),
               35.0);
 }
+
+TEST_F(RegulatoryElementsUtilsTest, TrafficSignReferencesStopSign) {}
+
+TEST_F(RegulatoryElementsUtilsTest, AtRedTrafficLight) {}
+
+TEST_F(RegulatoryElementsUtilsTest, ActiveTrafficLights) {}
+
+// TEST_F(RegulatoryElementsUtilsTest, TrafficSignInFront) {
+//    EXPECT_TRUE(regulatory_elements_utils::trafficSignInFront(
+//        0, world->getRoadNetwork()->findLaneletById(111)->getTrafficSigns().at(0), obstacleOne,
+//        world->getRoadNetwork()));
+//    EXPECT_FALSE(regulatory_elements_utils::trafficSignInFront(
+//        1, world->getRoadNetwork()->findLaneletById(111)->getTrafficSigns().at(0), obstacleOne,
+//        world->getRoadNetwork()));
+//}

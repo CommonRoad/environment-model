@@ -33,7 +33,17 @@ void TrafficSign::setPosition(vertex pos) { position = pos; }
 
 vertex TrafficSign::getPosition() const { return position; }
 
-TrafficSign::TrafficSign(size_t id, std::vector<std::shared_ptr<TrafficSignElement>> traffic_sign_element,
+TrafficSign::TrafficSign(size_t trafficSignId, std::vector<std::shared_ptr<TrafficSignElement>> traffic_sign_element,
                          const vertex &position, bool virtual_element)
-    : id(id), trafficSignElement(std::move(traffic_sign_element)), position(position), virtualElement(virtual_element) {
+    : id(trafficSignId), trafficSignElement(std::move(traffic_sign_element)), position(position),
+      virtualElement(virtual_element) {}
+
+std::vector<std::shared_ptr<TrafficSignElement>>
+TrafficSign::getTrafficSignElementsOfType(const std::string &signId) const {
+    std::vector<std::shared_ptr<TrafficSignElement>> relevantTrafficSignElements;
+    for (const auto &signElement : trafficSignElement) {
+        if (signElement->getId() == signId)
+            relevantTrafficSignElements.push_back(signElement);
+    }
+    return relevantTrafficSignElements;
 }

@@ -150,6 +150,8 @@ The standalone execution can be configured via the config file and be executed v
 pathToExecutable/env_model_example_node --input-file pathToRepository/src/commonroad_cpp/default_config.yaml --t 6
 ```
 where *--input-file* specifies the path to a configuration file based on the default configuration file and *--t* specifies the number of threads which should be used.
+**Attention**: The environment-model library is not developed for parallelization. 
+Therefore, we recommend to use copies inside threads.
 
 ### Python 
 The subsequent code snippet shows important functions needed for using the predicates within Python:

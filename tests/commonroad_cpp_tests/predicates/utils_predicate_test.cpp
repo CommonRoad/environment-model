@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include <commonroad_cpp/auxiliaryDefs/traffic_signs.h>
+#include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
@@ -94,7 +94,7 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
     std::vector<std::string> trafficSignElementOneValues{"35"};
     auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
         trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)}};
-    auto vertexOne{vertex{0, 0}};
+    auto vertexOne{vertex{5, 0}};
     auto trafficSignOne{std::make_shared<TrafficSign>(trafficSignIdOne, trafficSignElementsOne, vertexOne, false)};
     // required speed traffic sign
     size_t trafficSignIdTwo = 201;
@@ -143,7 +143,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
 
     // left lanelet
     size_t idLaneletTwo = 222;
-    auto laneletTypeLaneletTwo = std::set<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate};
+    auto laneletTypeLaneletTwo =
+        std::set<LaneletType>{LaneletType::mainCarriageWay, LaneletType::interstate, LaneletType::incoming};
     auto userOneWayLaneletTwo = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     auto userBidirectionalLaneletTwo = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
     auto leftBorderLaneletTwo =
@@ -162,7 +163,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
 
     // third lanelet
     size_t idLaneletThree = 333;
-    auto laneletTypeLaneletThree = std::set<LaneletType>{LaneletType::shoulder, LaneletType::interstate};
+    auto laneletTypeLaneletThree =
+        std::set<LaneletType>{LaneletType::shoulder, LaneletType::interstate, LaneletType::incoming};
     auto userOneWayLaneletThree = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
     auto userBidirectionalLaneletThree = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
     auto rightBorderLaneletThree =
@@ -186,8 +188,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
     auto laneletFour2 = std::make_shared<Lanelet>(
         Lanelet(idLaneletFour, leftBorderLaneletFour, rightBorderLaneletFour, laneletTypeLaneletThree));
 
-    laneletFour2->addPredecessor(laneletTwo2);
-    laneletTwo2->addSuccessor(laneletFour2);
+    laneletFour2->addPredecessor(laneletThree2);
+    laneletThree2->addSuccessor(laneletFour2);
 
     return std::make_shared<RoadNetwork>(RoadNetwork({laneletOne2, laneletTwo2, laneletThree2, laneletFour2},
                                                      SupportedTrafficSignCountry::GERMANY,

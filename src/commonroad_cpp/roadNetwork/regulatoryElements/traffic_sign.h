@@ -95,6 +95,9 @@ class TrafficSign {
      */
     [[nodiscard]] vertex getPosition() const;
 
+    [[nodiscard]] std::vector<std::shared_ptr<TrafficSignElement>>
+    getTrafficSignElementsOfType(const std::string &signId) const;
+
   private:
     size_t id; //**< unique ID of traffic sign */
     std::vector<std::shared_ptr<TrafficSignElement>>

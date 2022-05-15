@@ -6,9 +6,13 @@
 //
 
 #include "commonroad_predicate.h"
+
 #include "braking/brakes_stronger_predicate.h"
+#include "braking/braking_with_acceleration_possible_at_intersection_predicate.h"
+#include "braking/causes_braking_intersection_predicate.h"
 #include "braking/safe_distance_predicate.h"
 #include "braking/unnecessary_braking_predicate.h"
+#include "commonroad_cpp/predicates/position/on_oncoming_of_predicate.h"
 #include "general/in_congestion_predicate.h"
 #include "general/in_queue_of_vehicles_predicate.h"
 #include "general/in_slow_moving_traffic_predicate.h"
@@ -19,7 +23,7 @@
 #include "position/drives_leftmost_predicate.h"
 #include "position/drives_rightmost_predicate.h"
 #include "position/in_front_of_predicate.h"
-#include "position/in_intersection_main_area_predicate.h"
+#include "position/in_intersection_conflict_area_predicate.h"
 #include "position/in_leftmost_lane_predicate.h"
 #include "position/in_rightmost_lane_predicate.h"
 #include "position/in_same_lane_predicate.h"
@@ -27,19 +31,18 @@
 #include "position/left_of_broad_lane_marking_predicate.h"
 #include "position/left_of_predicate.h"
 #include "position/main_carriageway_right_lane_predicate.h"
-#include "position/on_access_ramp_predicate.h"
-#include "position/on_exit_ramp_predicate.h"
-#include "position/on_main_carriage_way_predicate.h"
-#include "position/on_shoulder_predicate.h"
-#include "position/on_urban_road_predicate.h"
-#include "position/passes_stop_line_predicate.h"
+#include "position/on_incoming_left_of_predicate.h"
+#include "position/on_lanelet_with_type_predicate.h"
+#include "position/on_similar_oriented_lanelet_with_type_predicate.h"
+#include "position/on_similar_oriented_lanelet_without_type_predicate.h"
 #include "position/right_of_broad_lane_marking_predicate.h"
-#include "position/stop_line_in_front_predicate.h"
-#include "regulatory/at_red_left_traffic_light_predicate.h"
-#include "regulatory/at_red_right_traffic_light_predicate.h"
-#include "regulatory/at_red_straight_traffic_light_predicate.h"
-#include "regulatory/at_red_traffic_light_predicate.h"
-#include "regulatory/at_stop_sign_predicate.h"
+#include "position/unobstructed_intersection_view_predicate.h"
+#include "regulatory//stop_line_in_front_predicate.h"
+#include "regulatory/at_traffic_light_predicate.h"
+#include "regulatory/at_traffic_sign_predicate.h"
+#include "regulatory/has_priority_predicate.h"
+#include "regulatory/relevant_traffic_light_predicate.h"
+#include "regulatory/same_priority_predicate.h"
 #include "velocity/drives_faster_predicate.h"
 #include "velocity/drives_with_slightly_higher_speed_predicate.h"
 #include "velocity/exist_standing_leading_vehicle_predicate.h"
@@ -52,12 +55,14 @@
 #include "velocity/required_speed_predicate.h"
 #include "velocity/reverses_predicate.h"
 #include "velocity/slow_leading_vehicle_predicate.h"
+#include <utility>
 
-bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                                     const std::shared_ptr<Obstacle> &obstacleP) {
+bool CommonRoadPredicate::statisticBooleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     auto startTime{Timer::start()};
-    bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP)};
+    bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters)};
     long compTime{evaluationTimer.stop(startTime)};
 
     // TODO Thread-local storage for stats?
@@ -114,7 +119,6 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"drives_leftmost", std::make_shared<DrivesLeftmostPredicate>()},
     {"drives_rightmost", std::make_shared<DrivesRightmostPredicate>()},
     {"in_front_of", std::make_shared<InFrontOfPredicate>()},
-    {"in_intersection_main_area", std::make_shared<InIntersectionMainAreaPredicate>()},
     {"in_leftmost_lane", std::make_shared<InLeftmostLanePredicate>()},
     {"in_rightmost_lane", std::make_shared<InRightmostLanePredicate>()},
     {"in_same_lane", std::make_shared<InSameLanePredicate>()},
@@ -122,19 +126,10 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"left_of_broad_lane_marking", std::make_shared<LeftOfBroadLaneMarkingPredicate>()},
     {"left_of", std::make_shared<LeftOfPredicate>()},
     {"main_carriageway_right_lane", std::make_shared<MainCarriagewayRightLanePredicate>()},
-    {"on_access_ramp", std::make_shared<OnAccessRampPredicate>()},
-    {"on_exit_ramp", std::make_shared<OnExitRampPredicate>()},
-    {"on_main_carriage_way", std::make_shared<OnMainCarriageWayPredicate>()},
-    {"on_shoulder", std::make_shared<OnShoulderPredicate>()},
-    {"on_urban_road", std::make_shared<OnUrbanRoadPredicate>()},
-    {"passes_stop_line", std::make_shared<PassesStopLinePredicate>()},
+    {"on_lanelet_with_type", std::make_shared<OnLaneletWithTypePredicate>()},
     {"right_of_broad_lane_marking", std::make_shared<RightOfBroadLaneMarkingPredicate>()},
     {"stop_line_in_front", std::make_shared<StopLineInFrontPredicate>()},
-    {"at_red_traffic_light", std::make_shared<AtRedTrafficLightPredicate>()},
-    {"at_red_straight_traffic_light", std::make_shared<AtRedStraightTrafficLightPredicate>()},
-    {"at_red_left_traffic_light", std::make_shared<AtRedLeftTrafficLightPredicate>()},
-    {"at_red_right_traffic_light", std::make_shared<AtRedRightTrafficLightPredicate>()},
-    {"at_stop_sign", std::make_shared<AtStopSignPredicate>()},
+    {"at_traffic_light", std::make_shared<AtTrafficLightPredicate>()},
     {"drives_faster", std::make_shared<DrivesFasterPredicate>()},
     {"drives_with_slightly_higher_speed", std::make_shared<DrivesWithSlightlyHigherSpeedPredicate>()},
     {"exist_standing_leading_vehicle", std::make_shared<ExistStandingLeadingVehiclePredicate>()},
@@ -147,4 +142,31 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"keeps_sign_min_speed_limit", std::make_shared<RequiredSpeedPredicate>()},
     {"reverses", std::make_shared<ReversesPredicate>()},
     {"slow_leading_vehicle", std::make_shared<SlowLeadingVehiclePredicate>()},
+    {"unobstructed_intersection_view", std::make_shared<UnobstructedIntersectionViewPredicate>()},
+    {"at_traffic_sign", std::make_shared<AtTrafficSignPredicate>()},
+    {"on_similar_oriented_lanelet_with_type", std::make_shared<OnSimilarOrientedLaneletWithTypePredicate>()},
+    {"on_similar_oriented_lanelet_without_type", std::make_shared<OnSimilarOrientedLaneletWithoutTypePredicate>()},
+    {"same_priority", std::make_shared<SamePriorityPredicate>()},
+    {"has_priority", std::make_shared<HasPriorityPredicate>()},
+    {"on_incoming_left_of", std::make_shared<OnIncomingLeftOfPredicate>()},
+    {"relevant_traffic_light", std::make_shared<RelevantTrafficLightPredicate>()},
+    {"causes_braking_intersection", std::make_shared<CausesBrakingIntersectionPredicate>()},
+    {"in_intersection_conflict_area", std::make_shared<InIntersectionConflictAreaPredicate>()},
+    {"on_oncoming_of", std::make_shared<OnOncomingOfPredicate>()},
+    {"braking_at_intersection_possible", std::make_shared<BrakingWithAccelerationPossibleAtIntersection>()},
 };
+
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType)
+    : signType(std::move(signType)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<LaneletType> laneletType)
+    : laneletType(std::move(laneletType)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TurningDirection> turningDirection)
+    : turningDirection(std::move(turningDirection)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType,
+                                                         std::vector<LaneletType> laneletType,
+                                                         std::vector<TurningDirection> turningDirection,
+                                                         std::vector<TrafficLightState> trafficLightState)
+    : signType(std::move(signType)), laneletType(std::move(laneletType)), turningDirection(std::move(turningDirection)),
+      trafficLightState(std::move(trafficLightState)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficLightState> trafficLightState)
+    : trafficLightState(std::move(trafficLightState)) {}

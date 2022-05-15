@@ -8,6 +8,7 @@
 #include <cmath>
 #include <stdexcept>
 
+#include "../../roadNetwork/lanelet/lane.h"
 #include "../../world.h"
 #include "safe_distance_predicate.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
@@ -20,9 +21,10 @@ double SafeDistancePredicate::computeSafeDistance(double velocityK, double veloc
            pow(velocityK, 2) / (-2 * std::abs(minAccelerationK)) + velocityK * tReact;
 }
 
-bool SafeDistancePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                              const std::shared_ptr<Obstacle> &obstacleK,
-                                              const std::shared_ptr<Obstacle> &obstacleP) {
+bool SafeDistancePredicate::booleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
 }
 
@@ -33,9 +35,10 @@ bool SafeDistancePredicate::booleanEvaluation(double lonPosK, double lonPosP, do
                             lengthP) > 0;
 }
 
-Constraint SafeDistancePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                       const std::shared_ptr<Obstacle> &obstacleK,
-                                                       const std::shared_ptr<Obstacle> &obstacleP) {
+Constraint SafeDistancePredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
     double tReact{obstacleK->getReactionTime()};
@@ -53,16 +56,25 @@ Constraint SafeDistancePredicate::constraintEvaluation(double lonPosP, double ve
             computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact)};
 }
 
-double SafeDistancePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                               const std::shared_ptr<Obstacle> &obstacleK,
-                                               const std::shared_ptr<Obstacle> &obstacleP) {
+double SafeDistancePredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
     double tReact{obstacleK->getReactionTime()};
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
-    double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
-                  obstacleK->frontS(world->getRoadNetwork(), timeStep)};
+    double deltaS{0};
+    // check whether pth vehicle is in projection domain, e.g. for intersections
+    if (obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+            ->getCurvilinearCoordinateSystem()
+            ->cartesianPointInProjectionDomain(obstacleP->getStateByTimeStep(timeStep)->getXPosition(),
+                                               obstacleP->getStateByTimeStep(timeStep)->getYPosition()))
+        deltaS = obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
+                 obstacleK->frontS(world->getRoadNetwork(), timeStep);
+    else
+        return parameters.epsilon;
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
     // robustness
     if (deltaS < 0)

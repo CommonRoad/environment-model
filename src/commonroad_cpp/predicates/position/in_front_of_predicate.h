@@ -39,9 +39,10 @@ class InFrontOfPredicate : public CommonRoadPredicate {
      * @param obstacleP The pth obstacle.
      * @return Boolean indicating satisfaction of the predicate.
      */
-    bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                           const std::shared_ptr<Obstacle> &obstacleP,
-                           const std::shared_ptr<Obstacle> &obstacleK) override;
+    bool
+    booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
+                      const std::shared_ptr<Obstacle> &obstacleK,
+                      const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
      * Constraint evaluation of predicate using objects.
@@ -52,9 +53,10 @@ class InFrontOfPredicate : public CommonRoadPredicate {
      * @param obstacleP The pth obstacle.
      * @return Constraints defined by the predicate.
      */
-    Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                    const std::shared_ptr<Obstacle> &obstacleK) override;
+    Constraint constraintEvaluation(
+        size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
+        const std::shared_ptr<Obstacle> &obstacleK,
+        const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
      * Constraint evaluation of predicate using parameter values.
@@ -75,9 +77,10 @@ class InFrontOfPredicate : public CommonRoadPredicate {
      * @param obstacleP The pth obstacle. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
-    double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                            const std::shared_ptr<Obstacle> &obstacleP,
-                            const std::shared_ptr<Obstacle> &obstacleK) override;
+    double
+    robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
+                     const std::shared_ptr<Obstacle> &obstacleK,
+                     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
      * Robustness evaluation of predicate using parameter values.

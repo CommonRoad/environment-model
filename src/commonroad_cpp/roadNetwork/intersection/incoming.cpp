@@ -7,6 +7,8 @@
 
 #include "incoming.h"
 
+#include <algorithm>
+#include <deque>
 #include <utility>
 
 size_t Incoming::getId() const { return id; }
@@ -20,33 +22,6 @@ void Incoming::setIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>> &
     for (const auto &let : incLa)
         let->addLaneletType(LaneletType::incoming);
     incomingLanelets = incLa;
-}
-
-const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsRight() const { return successorsRight; }
-
-void Incoming::setSuccessorsRight(const std::vector<std::shared_ptr<Lanelet>> &sucRight) {
-    successorsRight = sucRight;
-    // each successor lanelet should be of type intersection
-    for (const auto &la : sucRight)
-        la->addLaneletType(LaneletType::intersection);
-}
-
-const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsStraight() const { return successorsStraight; }
-
-void Incoming::setSuccessorsStraight(const std::vector<std::shared_ptr<Lanelet>> &sucStraight) {
-    successorsStraight = sucStraight;
-    // each successor lanelet should be of type intersection
-    for (const auto &la : sucStraight)
-        la->addLaneletType(LaneletType::intersection);
-}
-
-const std::vector<std::shared_ptr<Lanelet>> &Incoming::getSuccessorsLeft() const { return successorsLeft; }
-
-void Incoming::setSuccessorsLeft(const std::vector<std::shared_ptr<Lanelet>> &sucLeft) {
-    successorsLeft = sucLeft;
-    // each successor lanelet should be of type intersection
-    for (const auto &la : sucLeft)
-        la->addLaneletType(LaneletType::intersection);
 }
 
 const std::shared_ptr<Incoming> &Incoming::getIsLeftOf() const { return isLeftOf; }
@@ -80,3 +55,65 @@ Incoming::Incoming(size_t incomingId, std::vector<std::shared_ptr<Lanelet>> inco
     : id(incomingId), incomingLanelets(std::move(incomingLanelets)), isLeftOf(std::move(isLeftOf)),
       straightOutgoings(std::move(straightOutgoings)), leftOutgoings(std::move(leftOutgoings)),
       rightOutgoings(std::move(rightOutgoings)), oncomings(std::move(oncomings)) {}
+
+std::vector<std::shared_ptr<Lanelet>> Incoming::getAllSuccessorLeft() {
+
+    std::deque<std::shared_ptr<Lanelet>> candidates{leftOutgoings.begin(), leftOutgoings.end()};
+    return collectIncomingSuccessors(candidates, false);
+}
+
+std::vector<std::shared_ptr<Lanelet>> Incoming::getAllSuccessorRight() {
+
+    std::deque<std::shared_ptr<Lanelet>> candidates{rightOutgoings.begin(), rightOutgoings.end()};
+    return collectIncomingSuccessors(candidates, false);
+}
+
+std::vector<std::shared_ptr<Lanelet>> Incoming::getAllSuccessorStraight() {
+
+    std::deque<std::shared_ptr<Lanelet>> candidates{straightOutgoings.begin(), straightOutgoings.end()};
+    return collectIncomingSuccessors(candidates, false);
+}
+
+std::vector<std::shared_ptr<Lanelet>> Incoming::getAllLeftTurningLanelets() {
+
+    std::deque<std::shared_ptr<Lanelet>> candidates{leftOutgoings.begin(), leftOutgoings.end()};
+    return collectIncomingSuccessors(candidates, true);
+}
+
+std::vector<std::shared_ptr<Lanelet>> Incoming::getAllRightTurningLanelets() {
+
+    std::deque<std::shared_ptr<Lanelet>> candidates{rightOutgoings.begin(), rightOutgoings.end()};
+    return collectIncomingSuccessors(candidates, true);
+}
+
+std::vector<std::shared_ptr<Lanelet>> Incoming::getAllStraightGoingLanelets() {
+
+    std::deque<std::shared_ptr<Lanelet>> candidates{straightOutgoings.begin(), straightOutgoings.end()};
+    return collectIncomingSuccessors(candidates, true);
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+Incoming::collectIncomingSuccessors(std::deque<std::shared_ptr<Lanelet>> &candidates, bool considerIncomings) {
+    std::vector<std::shared_ptr<Lanelet>> memberLanelets;
+    std::vector<std::shared_ptr<Lanelet>> incomings;
+    while (!candidates.empty()) {
+        std::shared_ptr<Lanelet> pre{candidates.front()};
+        candidates.pop_front();
+        if (!std::any_of(memberLanelets.begin(), memberLanelets.end(),
+                         [pre](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == pre->getId(); }) and
+            (!std::any_of(incomingLanelets.begin(), incomingLanelets.end(),
+                          [pre](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == pre->getId(); }))) {
+            memberLanelets.push_back(pre);
+            auto pres{memberLanelets.back()->getPredecessors()};
+            candidates.insert(candidates.end(), pres.begin(), pres.end());
+        } else if (considerIncomings and
+                   std::any_of(incomingLanelets.begin(), incomingLanelets.end(),
+                               [pre](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == pre->getId(); }))
+            incomings.push_back(pre);
+        else
+            continue;
+    }
+    if (considerIncomings)
+        memberLanelets.insert(memberLanelets.end(), incomings.begin(), incomings.end());
+    return memberLanelets;
+}

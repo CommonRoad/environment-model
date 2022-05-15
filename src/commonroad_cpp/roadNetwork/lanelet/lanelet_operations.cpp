@@ -6,42 +6,17 @@
 //
 #include "lanelet_operations.h"
 #include "../../geometry/geometric_operations.h"
+#include "commonroad_cpp/obstacle/state.h"
 #include <algorithm>
 #include <utility>
 
 LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type) {
-    if (type == "interstate")
-        return LaneletType::interstate;
-    else if (type == "urban")
-        return LaneletType::urban;
-    else if (type == "crosswalk")
-        return LaneletType::crosswalk;
-    else if (type == "busStop")
-        return LaneletType::busStop;
-    else if (type == "country")
-        return LaneletType::country;
-    else if (type == "highway")
-        return LaneletType::highway;
-    else if (type == "driveWay")
-        return LaneletType::driveWay;
-    else if (type == "mainCarriageWay")
-        return LaneletType::mainCarriageWay;
-    else if (type == "accessRamp")
-        return LaneletType::accessRamp;
-    else if (type == "exitRamp")
-        return LaneletType::exitRamp;
-    else if (type == "shoulder")
-        return LaneletType::shoulder;
-    else if (type == "bikeLane")
-        return LaneletType::bikeLane;
-    else if (type == "sidewalk")
-        return LaneletType::sidewalk;
-    else if (type == "busLane")
-        return LaneletType::busLane;
-    else if (type == "intersection")
-        return LaneletType::intersection;
+    std::string str{type};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    if (LaneletTypeNames.count(str) == 1)
+        return LaneletTypeNames.at(str);
     else
-        return LaneletType::unknown;
+        throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type!");
 }
 
 LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type) {
@@ -211,6 +186,10 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet
     auto curLanelet{std::move(lanelet)};
 
     while (curLanelet->getAdjacentRight().adj != nullptr and
+           !std::any_of(adjacentLanelets.begin(), adjacentLanelets.end(),
+                        [curLanelet](const std::shared_ptr<Lanelet> &let) {
+                            return let->getId() == curLanelet->getAdjacentRight().adj->getId();
+                        }) and
            (!sameDirection or curLanelet->getAdjacentRight().dir == DrivingDirection::same)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentRight().adj);
         curLanelet = curLanelet->getAdjacentRight().adj;
@@ -224,6 +203,10 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(
     auto curLanelet{std::move(lanelet)};
 
     while (curLanelet->getAdjacentLeft().adj != nullptr and
+           !std::any_of(adjacentLanelets.begin(), adjacentLanelets.end(),
+                        [curLanelet](const std::shared_ptr<Lanelet> &let) {
+                            return let->getId() == curLanelet->getAdjacentLeft().adj->getId();
+                        }) and
            (!sameDirection or curLanelet->getAdjacentLeft().dir == DrivingDirection::same)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentLeft().adj);
         curLanelet = curLanelet->getAdjacentLeft().adj;
@@ -267,4 +250,39 @@ double lanelet_operations::roadWidth(const std::shared_ptr<Lanelet> &lanelet, do
         road_width += adjLanelet->getWidth(xPosition, yPosition);
 
     return road_width;
+}
+
+std::vector<std::shared_ptr<TrafficLight>>
+lanelet_operations::activeTlsByLanelet(size_t timeStep, const std::shared_ptr<Lanelet> &lanelet) {
+    std::vector<std::shared_ptr<TrafficLight>> relevantTrafficLights;
+    for (const auto &light : lanelet->getTrafficLights())
+        if (light->isActive() or light->getElementAtTime(timeStep).color != TrafficLightState::inactive)
+            relevantTrafficLights.push_back(light);
+
+    return relevantTrafficLights;
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+lanelet_operations::extractLaneletsFromLanes(const std::vector<std::shared_ptr<Lane>> &lanes) {
+    std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
+    for (const auto &lane : lanes) {
+        for (const auto &let : lane->getContainedLanelets())
+            if (!std::any_of(relevantLanelets.begin(), relevantLanelets.end(),
+                             [let](const std::shared_ptr<Lanelet> &letConsidered) {
+                                 return let->getId() == letConsidered->getId();
+                             }))
+                relevantLanelets.push_back(let);
+    }
+    return relevantLanelets;
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+lanelet_operations::combineLaneLanelets(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &lanes) {
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    for (const auto &lane : lanes)
+        for (const auto &let : lane)
+            if (!(std::any_of(lanelets.begin(), lanelets.end(),
+                              [let](const std::shared_ptr<Lanelet> &exLet) { return exLet->getId() == let->getId(); })))
+                lanelets.push_back(let);
+    return lanelets;
 }

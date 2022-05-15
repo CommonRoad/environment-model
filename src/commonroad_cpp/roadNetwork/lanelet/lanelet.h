@@ -403,12 +403,13 @@ class Lanelet {
     const std::vector<double> &getWidthAlongLanelet() const;
 
     /**
-     * Computes width at longitudinal position along centerline.
+     * Computes width at x- and y-position along centerline.
      *
-     * @param lonPosition Longitudinal position.
+     * @param xPos x-position.
+     * @param yPos y-position.
      * @return Width [m].
      */
-    double getWidth(double x, double y) const;
+    double getWidth(double xPos, double yPos) const;
 
     /**
      * Finds closest index on center line given 2D vertex.
@@ -444,3 +445,5 @@ class Lanelet {
     mutable std::vector<double> pathLength;    //**< path length along center line */
     mutable std::vector<double> width;         //**< width along center line */
 };
+
+extern const std::unordered_map<std::string, LaneletType> LaneletTypeNames;

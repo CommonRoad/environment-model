@@ -257,3 +257,29 @@ double Lanelet::getWidth(double positionX, double positionY) const {
         geometric_operations::euclideanDistance2Dim(centerVertices[closestIndex], centerVertices[closestIndex + 1])};
     return width[closestIndex] + (width[closestIndex + 1] - width[closestIndex]) * scalar;
 }
+
+const std::unordered_map<std::string, LaneletType> LaneletTypeNames = {
+    {"INTERSTATE", LaneletType::interstate},
+    {"URBAN", LaneletType::urban},
+    {"CROSSWALK", LaneletType::crosswalk},
+    {"BUSSTOP", LaneletType::busStop},
+    {"COUNTRY", LaneletType::country},
+    {"HIGHWAY", LaneletType::highway},
+    {"DRIVEWAY", LaneletType::driveWay},
+    {"MAINCARRIAGEWAY", LaneletType::mainCarriageWay},
+    {"ACCESSRAMP", LaneletType::accessRamp},
+    {"EXITRAMP", LaneletType::exitRamp},
+    {"SHOULDER", LaneletType::shoulder},
+    {"BUSLANE", LaneletType::busLane},
+    {"BIKELANE", LaneletType::bikeLane},
+    {"SIDEWALK", LaneletType::sidewalk},
+    {"UNKNOWN", LaneletType::unknown},
+    {"INTERSECTION", LaneletType::intersection},
+    {"INTERSECTION_LEFT_TURN", LaneletType::intersectionLeftTurn},
+    {"INTERSECTION_RIGHT_TURN", LaneletType::intersectionRightTurn},
+    {"INTERSECTION_STRAIGHT", LaneletType::intersectionStraight},
+    {"INTERSECTION_LEFT_OUTGOING", LaneletType::intersectionLeftOutgoing},
+    {"INTERSECTION_RIGHT_OUTGOING", LaneletType::intersectionRightOutgoing},
+    {"INTERSECTION_STRAIGHT_OUTGOING", LaneletType::intersectionStraightOutgoing},
+    {"INCOMING", LaneletType::incoming},
+};

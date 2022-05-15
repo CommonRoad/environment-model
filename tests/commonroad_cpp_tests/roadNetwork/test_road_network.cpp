@@ -14,27 +14,30 @@
 #include <geometry/curvilinear_coordinate_system.h>
 
 void RoadNetworkTestInitialization::setUpRoadNetwork() {
-    std::vector<std::shared_ptr<Lanelet>> lanelets{laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive};
+    std::vector<std::shared_ptr<Lanelet>> lanelets{laneletOne,  laneletTwo, laneletThree, laneletFour,
+                                                   laneletFive, laneletSix, laneletSeven};
 
-    roadNetwork = std::make_shared<RoadNetwork>(RoadNetwork(lanelets));
+    roadNetwork = std::make_shared<RoadNetwork>(
+        RoadNetwork(lanelets, SupportedTrafficSignCountry::GERMANY, {}, {}, {intersection1, intersection2}));
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     roadNetwork->setIdCounterRef(globalIdRef);
-    // TODO add intersection
 }
 
 void RoadNetworkTest::SetUp() {
     setUpLane();
+    setUpIncoming();
+    setUpIntersection();
     setUpRoadNetwork();
 }
 
 TEST_F(RoadNetworkTest, InitializationComplete) {
-    EXPECT_EQ(roadNetwork->getLaneletNetwork().size(), 5);
+    EXPECT_EQ(roadNetwork->getLaneletNetwork().size(), 7);
     EXPECT_EQ(roadNetwork->getLaneletNetwork().at(0)->getId(), 1);
 }
 
 TEST_F(RoadNetworkTest, FindOccupiedLaneletsByShape) {
-    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonOne).size(), 2); // order can be random
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonOne).size(), 3); // order can be random
     EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonTwo).at(0)->getId(), 1);
     EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonThree).size(), 0);
 }
@@ -67,17 +70,23 @@ TEST_F(RoadNetworkTest, AddLanes) {
 
     lanes =
         lanelet_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, roadNetworkScenario);
-    Lanelet la{100000, lanes.at(0)->getLeftBorderVertices(), lanes.at(0)->getRightBorderVertices(),
-               lanes.at(0)->getLaneletTypes()};
+    Lanelet let{100000, lanes.at(0)->getLeftBorderVertices(), lanes.at(0)->getRightBorderVertices(),
+                lanes.at(0)->getLaneletTypes()};
     geometry::EigenPolyline reference_path;
-    for (auto vert : la.getCenterVertices())
+    for (auto vert : let.getCenterVertices())
         reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
     geometry::util::resample_polyline(reference_path, 2, reference_path);
-    auto newLane{std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), la,
+    auto newLane{std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), let,
                                         std::make_shared<CurvilinearCoordinateSystem>(reference_path))};
     std::vector<std::shared_ptr<Lane>> testLanes{newLane};
     updatedLanes = roadNetworkScenario->addLanes(testLanes, 4);
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.size(), updatedLanes.size());
     EXPECT_NE(testLanes.at(0)->getId(), updatedLanes.at(0)->getId());
+}
+
+TEST_F(RoadNetworkTest, GetIntersections) {
+    EXPECT_EQ(roadNetwork->getIntersections().size(), 2);
+    EXPECT_EQ(roadNetwork->getIntersections().at(0)->getId(), 1000);
+    EXPECT_EQ(roadNetwork->getIntersections().at(1)->getId(), 1001);
 }

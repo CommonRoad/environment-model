@@ -8,6 +8,7 @@
 #include "obstacle_operations.h"
 #include "../geometry/geometric_operations.h"
 #include "../roadNetwork/lanelet//lanelet_operations.h"
+
 std::shared_ptr<Obstacle>
 obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t obstacleId) {
     std::shared_ptr<Obstacle> temp{nullptr};
@@ -31,6 +32,16 @@ ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &t
         return ObstacleType::bus;
     else if (type == "vehicle")
         return ObstacleType::vehicle;
+    else if (type == "bicycle")
+        return ObstacleType::bicycle;
+    else if (type == "priority_vehicle")
+        return ObstacleType::priority_vehicle;
+    else if (type == "train")
+        return ObstacleType::train;
+    else if (type == "motorcycle")
+        return ObstacleType::motorcycle;
+    else if (type == "taxi")
+        return ObstacleType::taxi;
     else
         return ObstacleType::unknown;
 }
@@ -209,4 +220,39 @@ obstacle_operations::laneletsLeftOfObstacle(size_t timeStep, const std::shared_p
             leftLanelets.emplace(lanelet);
     }
     return leftLanelets;
+}
+
+std::vector<std::shared_ptr<Intersection>>
+obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                      const std::shared_ptr<Obstacle> &obs) {
+    std::vector<std::shared_ptr<Intersection>> relevantIntersections;
+    auto relevantLanelets{lanelet_operations::extractLaneletsFromLanes(obs->getOccupiedLanes(roadNetwork, timeStep))};
+    for (const auto &inter : roadNetwork->getIntersections())
+        for (const auto &interLet : inter->getMemberLanelets(roadNetwork))
+            if (std::any_of(
+                    relevantLanelets.begin(), relevantLanelets.end(),
+                    [interLet](const std::shared_ptr<Lanelet> &let) { return let->getId() == interLet->getId(); })) {
+                relevantIntersections.push_back(inter);
+                break;
+            }
+    return relevantIntersections;
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+obstacle_operations::getSimilarlyOrientedLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                  const std::vector<std::shared_ptr<Lanelet>> &baseLanelets,
+                                                  const std::shared_ptr<State> &state, double similarityParameter) {
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    for (const auto &let : baseLanelets) {
+        auto lanes{roadNetwork->findLanesByBaseLanelet(
+            let->getId())}; // just use one lane since all lanes are generated based on single lanelet
+        if (lanes.empty())
+            lanes = lanelet_operations::createLanesBySingleLanelets({let}, roadNetwork);
+        auto orientationDif{geometric_operations::subtractOrientations(
+            state->getGlobalOrientation(),
+            lanes.at(0)->getOrientationAtPosition(state->getXPosition(), state->getYPosition()))};
+        if (abs(orientationDif) < similarityParameter)
+            lanelets.push_back(let);
+    }
+    return lanelets;
 }

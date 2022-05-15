@@ -14,6 +14,7 @@
 
 #include <omp.h>
 
+#include "geometry/curvilinear_coordinate_system.h"
 #include "lanelet.h"
 
 namespace geometry {
@@ -67,6 +68,16 @@ class Lane : public Lanelet {
      * @return Set of IDs of the lanelets contained in lane.
      */
     [[nodiscard]] const std::unordered_set<size_t> &getContainedLaneletIDs() const;
+
+    /**
+     * Collects all successor lanelets within lane given a start lanelet.
+     *
+     * @param lanelet Starting lanelet.
+     * @return List of pointers to succeeding lanelets.
+     */
+    std::vector<std::shared_ptr<Lanelet>> getSuccessorLanelets(const std::shared_ptr<Lanelet> &lanelet) const;
+
+    bool contains(std::vector<std::shared_ptr<Lanelet>> lanelets);
 
   private:
     mutable std::vector<std::shared_ptr<Lanelet>>

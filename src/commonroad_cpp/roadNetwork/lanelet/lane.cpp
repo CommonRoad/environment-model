@@ -48,7 +48,7 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
         for (auto vert : centerVertices)
             temp_path.push_back(Eigen::Vector2d(vert.x, vert.y));
 
-        geometry::util::resample_polyline(temp_path, 2, reference_path);
+        geometry::util::resample_polyline(temp_path, 2, reference_path); // todo parameter
         curvilinearCoordinateSystem = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
     }
 
@@ -58,3 +58,27 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
 }
 
 const std::unordered_set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
+
+std::vector<std::shared_ptr<Lanelet>> Lane::getSuccessorLanelets(const std::shared_ptr<Lanelet> &lanelet) const {
+    if (getContainedLaneletIDs().find(lanelet->getId()) == getContainedLaneletIDs().end())
+        return {};
+    std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
+    auto succs{lanelet->getSuccessors()};
+    while (!succs.empty())
+        for (const auto &suc : succs) {
+            if (getContainedLaneletIDs().find(suc->getId()) != getContainedLaneletIDs().end()) {
+                relevantLanelets.push_back(suc);
+                succs = relevantLanelets.back()->getSuccessors();
+                break;
+            }
+        }
+
+    return relevantLanelets;
+}
+
+bool Lane::contains(std::vector<std::shared_ptr<Lanelet>> lanelets) {
+    auto containedLaneletIdsTmp{containedLaneletIds};
+    return std::any_of(lanelets.begin(), lanelets.end(), [containedLaneletIdsTmp](const std::shared_ptr<Lanelet> &let) {
+        return containedLaneletIdsTmp.find(let->getId()) != containedLaneletIdsTmp.end();
+    });
+}

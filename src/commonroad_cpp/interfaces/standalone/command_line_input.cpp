@@ -6,6 +6,7 @@
 //
 
 #include "commonroad_cpp/obstacle/obstacle.h"
+#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 
 #include <boost/algorithm/string/predicate.hpp>
@@ -87,6 +88,8 @@ InputUtils::getDataFromCommonRoad(const std::string &xmlFilePath) {
 
     std::shared_ptr<RoadNetwork> roadNetwork{
         std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, trafficSigns, trafficLights, intersections))};
+    for (const auto &inter : roadNetwork->getIntersections())
+        inter->computeMemberLanelets(roadNetwork);
 
     auto timeStepSize{XMLReader::extractTimeStepSize(xmlFilePath)};
     spdlog::info("File successfully read: {}", xmlFilePath);

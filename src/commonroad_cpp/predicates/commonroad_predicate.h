@@ -18,6 +18,21 @@
 class Obstacle;
 class World;
 
+struct OptionalPredicateParameters {
+    OptionalPredicateParameters() = default;
+    OptionalPredicateParameters(std::vector<TrafficSignTypes> signType, std::vector<LaneletType> laneletType,
+                                std::vector<TurningDirection> turningDirection,
+                                std::vector<TrafficLightState> trafficLightState);
+    OptionalPredicateParameters(std::vector<TrafficSignTypes> signType);
+    OptionalPredicateParameters(std::vector<LaneletType> laneletType);
+    OptionalPredicateParameters(std::vector<TurningDirection> turningDirection);
+    OptionalPredicateParameters(std::vector<TrafficLightState> trafficLightState);
+    std::vector<TrafficSignTypes> signType;
+    std::vector<LaneletType> laneletType;
+    std::vector<TurningDirection> turningDirection;
+    std::vector<TrafficLightState> trafficLightState;
+};
+
 /**
  * Interface for a predicate.
  */
@@ -45,9 +60,10 @@ class CommonRoadPredicate {
      * @param obstacles Pointers to all obstacles. This is an optional parameter.
      * @return Boolean indicating satisfaction of the predicate.
      */
-    virtual bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                   const std::shared_ptr<Obstacle> &obstacleK,
-                                   const std::shared_ptr<Obstacle> &obstacleP) = 0;
+    virtual bool
+    booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+                      const std::shared_ptr<Obstacle> &obstacleP,
+                      const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) = 0;
 
     /**
      * Virtual function for the robustness evaluation of a predicate.
@@ -58,9 +74,10 @@ class CommonRoadPredicate {
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      * @return Real value indicating robustness of the predicate.
      */
-    virtual double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                    const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP) = 0;
+    virtual double
+    robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+                     const std::shared_ptr<Obstacle> &obstacleP,
+                     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) = 0;
 
     /**
      * Virtual function for the constraint evaluation of a predicate.
@@ -71,9 +88,10 @@ class CommonRoadPredicate {
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      * @return Constraints defined by the predicate.
      */
-    virtual Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                            const std::shared_ptr<Obstacle> &obstacleK,
-                                            const std::shared_ptr<Obstacle> &obstacleP) = 0;
+    virtual Constraint
+    constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                         const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP,
+                         const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) = 0;
 
     /**
      * Function for the statistical evaluation of a predicate.
@@ -83,9 +101,11 @@ class CommonRoadPredicate {
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      */
-    bool statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                    const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP = {});
+    bool
+    statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                               const std::shared_ptr<Obstacle> &obstacleK,
+                               const std::shared_ptr<Obstacle> &obstacleP = {},
+                               const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {});
 
     /**
      * Getter for parameters.

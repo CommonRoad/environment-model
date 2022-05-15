@@ -6,7 +6,7 @@
 //
 
 #include "test_stop_line.h"
-#include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 
 void StopLineTest::SetUp() {
     const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);
@@ -28,7 +28,7 @@ void StopLineTest::SetUp() {
     trafficSign = std::make_shared<TrafficSign>(trafficSignId, trafficSignElements, trafficSignLightVertex, false);
     size_t trafficLightId = 6000;
     std::vector<TrafficLightCycleElement> trafficLightCycleElement{{TrafficLightState::green, 20}};
-    trafficLight = std::make_shared<TrafficLight>(trafficLightId, trafficLightCycleElement, 0, TurningDirections::all,
+    trafficLight = std::make_shared<TrafficLight>(trafficLightId, trafficLightCycleElement, 0, TurningDirection::all,
                                                   true, trafficSignLightVertex);
     stopLine1 = StopLine(pointsStopLine1, {trafficSign}, {trafficLight}, lineMarkingStopLine1);
     stopLine2 = StopLine(pointsStopLine2, {trafficSign}, lineMarkingStopLine2);

@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cstddef>
+#include <unordered_map>
 
 using time_step_t = size_t; //**< type of history/trajectory prediction time steps */
 
@@ -15,9 +16,19 @@ enum class EvaluationMode { directory, singleScenario, singleVehicle, directory_
 
 enum class OperatingMode { boolean, constraint, robustness };
 
-enum class ObstacleType { car, truck, pedestrian, bus, unknown, vehicle };
-
-enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };
+enum class ObstacleType {
+    car,
+    truck,
+    pedestrian,
+    bus,
+    unknown,
+    vehicle,
+    bicycle,
+    priority_vehicle,
+    train,
+    motorcycle,
+    taxi
+};
 
 enum class LaneletType {
     interstate,
@@ -36,12 +47,20 @@ enum class LaneletType {
     sidewalk,
     unknown,
     intersection,
+    intersectionLeftTurn,
+    intersectionRightTurn,
+    intersectionStraight,
+    intersectionLeftOutgoing,
+    intersectionRightOutgoing,
+    intersectionStraightOutgoing,
     incoming
 };
 
+enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };
+
 enum class TrafficLightState { red, green, yellow, red_yellow, inactive };
 
-enum class TurningDirections { left, straight, right, leftStraight, straightRight, leftRight, all };
+enum class TurningDirection { left, straight, right, leftStraight, straightRight, leftRight, all };
 
 enum class DrivingDirection { same, opposite, invalid };
 
@@ -315,4 +334,6 @@ enum class TrafficSignTypes {
     WARNING_ARROW_LEFT,
     NO_WAITING,
     NO_STOPPING,
+    LINE_MARKING_MISSING,
+    UNKNOWN
 };
