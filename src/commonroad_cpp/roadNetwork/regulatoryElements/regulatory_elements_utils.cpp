@@ -173,7 +173,7 @@ regulatory_elements_utils::extractPriorityTrafficSign(const std::shared_ptr<Lane
 int regulatory_elements_utils::extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
                                                           TurningDirection dir) {
     std::shared_ptr<TrafficSignElement> tmpSign;
-    int currentPriorityValue{std::numeric_limits<int>::min()}; // todo use min int
+    int currentPriorityValue{std::numeric_limits<int>::min()};
     for (const auto &let : lanelets) {
         auto trs{regulatory_elements_utils::extractPriorityTrafficSign(let)};
         if (priorityTable.count(trs->getId()) == 1 and
