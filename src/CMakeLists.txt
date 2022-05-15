@@ -45,7 +45,6 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
         commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
-        commonroad_cpp/predicates/regulatory/traffic_sign_in_front_predicate.cpp
         commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.cpp
         commonroad_cpp/predicates/position/on_incoming_left_of_predicate.cpp
         commonroad_cpp/predicates/position/on_oncoming_of_predicate.cpp

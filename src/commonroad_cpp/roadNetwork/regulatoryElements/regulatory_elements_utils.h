@@ -91,4 +91,13 @@ double requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets, c
  */
 double typeSpeedLimit(ObstacleType obstacleType);
 
+std::vector<std::string> getRelevantPrioritySignIDs();
+
+std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::shared_ptr<Lanelet> &lanelet);
+
+int extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets, TurningDirection dir);
+
+int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<Obstacle> &obs,
+                TurningDirection dir);
+
 } // namespace regulatory_elements_utils
