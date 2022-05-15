@@ -8,7 +8,7 @@
 
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/predicates/position/stop_line_in_front_predicate.h"
+#include "commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
 #include <gtest/gtest.h>
