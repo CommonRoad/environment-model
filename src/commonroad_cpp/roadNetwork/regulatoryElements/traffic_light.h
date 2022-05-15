@@ -34,7 +34,7 @@ class TrafficLight {
      * @param position Traffic light position.
      */
     TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset,
-                 TurningDirections direction, bool active, const vertex &position);
+                 TurningDirection direction, bool active, const vertex &position);
 
     /**
      * Setter for traffic light ID.
@@ -62,7 +62,7 @@ class TrafficLight {
      *
      * @param dir Direction of the traffic light.
      */
-    void setDirection(TurningDirections dir);
+    void setDirection(TurningDirection dir);
 
     /**
      * Setter for traffic light activity.
@@ -111,7 +111,7 @@ class TrafficLight {
      *
      * @return Direction of traffic light.
      */
-    [[nodiscard]] TurningDirections getDirection() const;
+    [[nodiscard]] TurningDirection getDirection() const;
 
     /**
      * Getter for traffic light activity indicator.
@@ -141,7 +141,7 @@ class TrafficLight {
      * @param dir String representing turning direction.
      * @return Turning direction enum value.
      */
-    [[nodiscard]] static TurningDirections matchTurningDirections(const std::string &dir);
+    [[nodiscard]] static TurningDirection matchTurningDirections(const std::string &dir);
 
     /**
      * Matches a traffic light state given as string to the corresponding enum value.
@@ -155,7 +155,7 @@ class TrafficLight {
     size_t id;                                   //**< unique ID of traffic light */
     std::vector<TrafficLightCycleElement> cycle; //**< cycle of traffic light */
     size_t offset;                               //**< time offset of traffic light */
-    TurningDirections direction;                 //**< direction for which traffic light is valid */
+    TurningDirection direction;                  //**< direction for which traffic light is valid */
     bool active;                                 //**< boolean indicating whether traffic light is valid */
     vertex position;                             //**< position of traffic light */
 };

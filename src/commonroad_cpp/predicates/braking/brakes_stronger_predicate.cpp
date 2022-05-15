@@ -9,23 +9,26 @@
 #include "../../world.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 
-bool BrakesStrongerPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                const std::shared_ptr<Obstacle> &obstacleK,
-                                                const std::shared_ptr<Obstacle> &obstacleP) {
+bool BrakesStrongerPredicate::booleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
 }
 
-Constraint BrakesStrongerPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                         const std::shared_ptr<Obstacle> &obstacleK,
-                                                         const std::shared_ptr<Obstacle> &obstacleP) {
+Constraint BrakesStrongerPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     if (!obstacleP->getStateByTimeStep(timeStep)->getValidStates().acceleration)
         obstacleP->interpolateAcceleration(timeStep, world->getDt());
     return {std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(), 0.0)};
 }
 
-double BrakesStrongerPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                 const std::shared_ptr<Obstacle> &obstacleK,
-                                                 const std::shared_ptr<Obstacle> &obstacleP) {
+double BrakesStrongerPredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
         obstacleK->interpolateAcceleration(timeStep, world->getDt());
     if (!obstacleP->getStateByTimeStep(timeStep)->getValidStates().acceleration)

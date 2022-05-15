@@ -14,6 +14,7 @@ class IncomingTestInitialization {
     std::shared_ptr<Incoming> incomingOne;
     std::shared_ptr<Incoming> incomingTwo;
     std::shared_ptr<Incoming> incomingThree;
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
     void setUpIncoming();
 };
 

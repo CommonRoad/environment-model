@@ -10,9 +10,10 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
-bool InQueueOfVehiclesPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                   const std::shared_ptr<Obstacle> &obstacleK,
-                                                   const std::shared_ptr<Obstacle> &obstacleP) {
+bool InQueueOfVehiclesPredicate::booleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     InFrontOfPredicate inFrontOfPredicate;
     InSameLanePredicate inSameLanePredicate;
 
@@ -28,15 +29,17 @@ bool InQueueOfVehiclesPredicate::booleanEvaluation(size_t timeStep, const std::s
     return num_vehicles >= parameters.numVehQueueOfVehicles;
 }
 
-Constraint InQueueOfVehiclesPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                            const std::shared_ptr<Obstacle> &obstacleK,
-                                                            const std::shared_ptr<Obstacle> &obstacleP) {
+Constraint InQueueOfVehiclesPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("In Queue of Vehicles Predicate does not support constraint evaluation!");
 }
 
-double InQueueOfVehiclesPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                    const std::shared_ptr<Obstacle> &obstacleK,
-                                                    const std::shared_ptr<Obstacle> &obstacleP) {
+double InQueueOfVehiclesPredicate::robustEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("In Queue of Vehicles Predicate does not support robust evaluation!");
 }
 

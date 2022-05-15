@@ -68,6 +68,8 @@ std::shared_ptr<World> XMLReader::createWorldFromXML(const std::string &xmlFile)
     auto lanelets = factory->createLanelets(signs, lights);
     auto inters = factory->createIntersections(lanelets);
     auto roadNetwork = std::make_shared<RoadNetwork>(lanelets, cou, signs, lights, inters);
+    for (const auto &inter : roadNetwork->getIntersections())
+        inter->computeMemberLanelets(roadNetwork);
     double dt{factory->getTimeStepSize()};
     return std::make_shared<World>(0, roadNetwork, dummyEgo, obstacle, dt);
 }

@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 #include "incoming.h"
 
 /**
@@ -77,9 +79,29 @@ class Intersection {
      */
     void setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cross);
 
+    /**
+     *
+     * @return
+     */
+    const std::vector<std::shared_ptr<Lanelet>> &getMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork);
+
+    /**
+     *
+     */
+    void computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork);
+
   private:
     size_t id;                                        //**< ID of intersection. */
     std::vector<std::shared_ptr<Incoming>> incomings; //**< List of pointers to incomings belonging to intersection. */
     std::vector<std::shared_ptr<Lanelet>>
         crossings; //**< List of pointers to crossing lanelets belonging to intersection. */
+    std::vector<std::shared_ptr<Lanelet>> memberLanelets; //**< List of lanelets belonging to intersection starting from
+                                                          // incoming until outgoing. Crossings are not considered. */
+
+    /**
+     *
+     * @param lanelet
+     * @param turn
+     */
+    void addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &lanelet, TurningDirection turn);
 };

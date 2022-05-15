@@ -6,7 +6,7 @@
 //
 
 #include "test_interfaces.h"
-#include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 
@@ -220,6 +220,6 @@ TEST_F(InterfacesTest, StringToEvaluationMode) {
 
 TEST_F(InterfacesTest, FindRelevantScenarioFileNames) {
     EXPECT_EQ(InputUtils::findRelevantScenarioFileNames(TestUtils::getTestScenarioDirectory() + "/predicates").size(),
-              4);
+              8);
     EXPECT_EQ(InputUtils::findRelevantScenarioFileNames(TestUtils::getTestScenarioDirectory()).size(), 12);
 }

@@ -25,8 +25,8 @@ void PredicateManagerTest::extractRelevantPredicatesHelper(int num_threads) cons
                                               outputDirectory, outputFileName),
                          {"keeps_safe_distance_prec", "in_standstill"})};
     predicateManager.extractPredicateSatisfaction();
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 9588);
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 8736);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 12326);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 11439);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime, 0);
@@ -34,8 +34,8 @@ void PredicateManagerTest::extractRelevantPredicatesHelper(int num_threads) cons
               predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime);
     EXPECT_GE(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime,
               predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime);
-    EXPECT_EQ(predicates["in_standstill"]->getStatistics().numExecutions, 1173);
-    EXPECT_EQ(predicates["in_standstill"]->getStatistics().numSatisfaction, 51);
+    EXPECT_EQ(predicates["in_standstill"]->getStatistics().numExecutions, 2303);
+    EXPECT_EQ(predicates["in_standstill"]->getStatistics().numSatisfaction, 262);
     EXPECT_GT(predicates["in_standstill"]->getStatistics().totalComputationTime, 0);
     EXPECT_GT(predicates["in_standstill"]->getStatistics().minComputationTime, 0);
     EXPECT_GT(predicates["in_standstill"]->getStatistics().maxComputationTime, 0);
@@ -72,8 +72,8 @@ TEST_F(PredicateManagerTest, Reset) {
                                               outputDirectory, outputFileName),
                          {"keeps_safe_distance_prec"})};
     predicateManager.extractPredicateSatisfaction();
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 9588);
-    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 8736);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numExecutions, 12326);
+    EXPECT_EQ(predicates["keeps_safe_distance_prec"]->getStatistics().numSatisfaction, 11439);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime, 0);
     EXPECT_GT(predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime, 0);
@@ -142,11 +142,11 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
               predicates["keeps_safe_distance_prec"]->getStatistics().minComputationTime);
     EXPECT_GE(predicates["keeps_safe_distance_prec"]->getStatistics().totalComputationTime,
               predicates["keeps_safe_distance_prec"]->getStatistics().maxComputationTime);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().numExecutions, 0);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().numSatisfaction, 0);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().totalComputationTime, 0);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().minComputationTime, LONG_MAX);
-    EXPECT_EQ(predicates["in_intersection_main_area"]->getStatistics().maxComputationTime, LONG_MIN);
+    EXPECT_EQ(predicates["stop_line_in_front"]->getStatistics().numExecutions, 0);
+    EXPECT_EQ(predicates["stop_line_in_front"]->getStatistics().numSatisfaction, 0);
+    EXPECT_EQ(predicates["stop_line_in_front"]->getStatistics().totalComputationTime, 0);
+    EXPECT_EQ(predicates["stop_line_in_front"]->getStatistics().minComputationTime, LONG_MAX);
+    EXPECT_EQ(predicates["stop_line_in_front"]->getStatistics().maxComputationTime, LONG_MIN);
     EXPECT_TRUE(std::filesystem::remove(TestUtils::getTestScenarioDirectory() +
                                         "/../commonroad_cpp_tests/predicate_satisfaction.csv"));
     EXPECT_TRUE(

@@ -27,8 +27,8 @@ TEST_F(LaneTest, Initialization) {
     EXPECT_EQ(laneOne->getId(), 1000);
     EXPECT_EQ(laneOne->getCenterVertices().begin()->x, laneletThree->getCenterVertices().begin()->x);
     EXPECT_EQ(laneOne->getCenterVertices().begin()->y, laneletThree->getCenterVertices().begin()->y);
-    EXPECT_EQ(laneOne->getCenterVertices().at(16).x, laneletTwo->getCenterVertices().at(6).x);
-    EXPECT_EQ(laneOne->getCenterVertices().at(16).y, laneletTwo->getCenterVertices().at(6).y);
+    EXPECT_EQ(laneOne->getCenterVertices().at(17).x, laneletTwo->getCenterVertices().at(6).x);
+    EXPECT_EQ(laneOne->getCenterVertices().at(17).y, laneletTwo->getCenterVertices().at(6).y);
 }
 
 TEST_F(LaneTest, ConvertPoint) {
@@ -119,4 +119,18 @@ TEST_F(LaneTest, CheckIntersection) {
     EXPECT_EQ(laneOne->checkIntersection(polygonOne, ContainmentType::COMPLETELY_CONTAINED), true);
     EXPECT_EQ(laneOne->checkIntersection(polygonTwo, ContainmentType::COMPLETELY_CONTAINED), false);
     EXPECT_EQ(laneOne->checkIntersection(polygonThree, ContainmentType::COMPLETELY_CONTAINED), false);
+}
+
+TEST_F(LaneTest, GetSuccessorLanelets) {
+    EXPECT_EQ(laneOne->getSuccessorLanelets(laneletOne).size(), 1);
+    EXPECT_EQ(laneOne->getSuccessorLanelets(laneletOne).at(0)->getId(), 2);
+    EXPECT_EQ(laneOne->getSuccessorLanelets(laneletTwo).size(), 0);
+    EXPECT_EQ(laneOne->getSuccessorLanelets(laneletThree).size(), 2);
+    EXPECT_EQ(laneOne->getSuccessorLanelets(laneletThree).at(0)->getId(), 1);
+    EXPECT_EQ(laneOne->getSuccessorLanelets(laneletThree).at(1)->getId(), 2);
+
+    EXPECT_EQ(laneTwo->getSuccessorLanelets(laneletFour).size(), 0);
+
+    EXPECT_EQ(laneThree->getSuccessorLanelets(laneletFive).size(), 0);
+    EXPECT_EQ(laneThree->getSuccessorLanelets(laneletOne).size(), 0);
 }

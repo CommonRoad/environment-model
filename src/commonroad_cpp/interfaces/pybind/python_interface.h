@@ -22,16 +22,13 @@
 #include "commonroad_cpp/predicates/position/drives_leftmost_predicate.h"
 #include "commonroad_cpp/predicates/position/drives_rightmost_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
-#include "commonroad_cpp/predicates/position/in_intersection_main_area_predicate.h"
 #include "commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h"
 #include "commonroad_cpp/predicates/position/in_rightmost_lane_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include "commonroad_cpp/predicates/position/in_single_lane_predicate.h"
 #include "commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h"
 #include "commonroad_cpp/predicates/position/left_of_predicate.h"
-#include "commonroad_cpp/predicates/position/on_access_ramp_predicate.h"
-#include "commonroad_cpp/predicates/position/on_main_carriage_way_predicate.h"
-#include "commonroad_cpp/predicates/position/on_shoulder_predicate.h"
+#include "commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h"
 #include "commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h"
 #include "commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.h"
 #include "commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.h"
@@ -180,10 +177,6 @@ PYBIND11_MODULE(crcpp, m) {
           "Boolean evaluation of left of broad lane marking predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
-    m.def("on_access_ramp_evaluation", &py_boolean_evaluation<OnAccessRampPredicate>,
-          "Boolean evaluation of on access ramp predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
-
     m.def("makes_u_turn_evaluation", &py_boolean_evaluation<MakesUTurnPredicate>,
           "Boolean evaluation of makes u turn predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
@@ -193,10 +186,6 @@ PYBIND11_MODULE(crcpp, m) {
 
     m.def("interstate_broad_enough_evaluation", &py_boolean_evaluation<InterstateBroadEnoughPredicate>,
           "Boolean evaluation of interstate broad enough predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
-
-    m.def("on_shoulder_evaluation", &py_boolean_evaluation<OnShoulderPredicate>,
-          "Boolean evaluation of on shoulder predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
     m.def("in_leftmost_lane_evaluation", &py_boolean_evaluation<InLeftmostLanePredicate>,
@@ -219,17 +208,15 @@ PYBIND11_MODULE(crcpp, m) {
           "Boolean evaluation of in single lane predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 
-    m.def("on_main_carriage_way_evaluation", &py_boolean_evaluation<OnMainCarriageWayPredicate>,
-          "Boolean evaluation of on main carriage way predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
-
     m.def("orientation_towards_boolean_evaluation", &py_boolean_evaluation<OrientationTowardsPredicate>,
           "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
+
     m.def("lane_based_orientation_similar_boolean_evaluation",
           &py_boolean_evaluation<LaneBasedOrientationSimilarPredicate>,
           "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
+
     m.def("in_intersection_main_area_boolean_evaluation",
           &py_boolean_single_evaluation<InIntersectionMainAreaPredicate>,
           "Boolean evaluation of intersection-main-area predicate", py::arg("scenarioId"), py::arg("time_step"),

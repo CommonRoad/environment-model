@@ -41,7 +41,7 @@ void PredicateManager::extractPredicateSatisfaction() {
                     continue;
                 others.push_back(obs);
             }
-            // setObstacleProperties(ego, others);
+            // setObstacleProperties(ego, others); // todo
             const auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
             const auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
             for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getLastTrajectoryTimeStep();
@@ -49,13 +49,20 @@ void PredicateManager::extractPredicateSatisfaction() {
                 std::shuffle(std::begin(relevantPredicates), std::end(relevantPredicates), rng);
                 for (const auto &predName : relevantPredicates) {
                     auto pred{predicates[predName]};
+                    const std::shared_ptr<OptionalPredicateParameters> opt{
+                        std::make_shared<OptionalPredicateParameters>(
+                            std::vector<TrafficSignTypes>{TrafficSignTypes::MIN_SPEED},
+                            std::vector<LaneletType>{LaneletType::accessRamp},
+                            std::vector<TurningDirection>{TurningDirection::all},
+                            std::vector<TrafficLightState>{
+                                TrafficLightState::red})}; // TODO generalize for arbitrary types
                     try {
                         if (!pred->isVehicleDependent())
-                            pred->statisticBooleanEvaluation(timeStep, world, ego, nullptr);
+                            pred->statisticBooleanEvaluation(timeStep, world, ego, nullptr, opt);
                         else
                             for (const auto &obs : world->getObstacles())
                                 if (obs->timeStepExists(timeStep))
-                                    pred->statisticBooleanEvaluation(timeStep, world, ego, obs);
+                                    pred->statisticBooleanEvaluation(timeStep, world, ego, obs, opt);
                     } catch (const std::runtime_error &re) {
                         spdlog::error(std::string("PredicateManager::extractPredicateSatisfaction | Scenario: ")
                                           .append(scen)

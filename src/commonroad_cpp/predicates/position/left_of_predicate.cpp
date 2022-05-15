@@ -12,9 +12,10 @@
 
 #include "left_of_predicate.h"
 
-bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                        const std::shared_ptr<Obstacle> &obstacleK,
-                                        const std::shared_ptr<Obstacle> &obstacleP) {
+bool LeftOfPredicate::booleanEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     auto leftObstacles{
         obstacle_operations::obstaclesLeft(timeStep, world->getObstacles(), obstacleP, world->getRoadNetwork())};
     return std::any_of(leftObstacles.begin(), leftObstacles.end(), [obstacleK](const std::shared_ptr<Obstacle> &obs) {
@@ -22,15 +23,18 @@ bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<W
     });
 }
 
-double LeftOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                         const std::shared_ptr<Obstacle> &obstacleK,
-                                         const std::shared_ptr<Obstacle> &obstacleP) {
+double
+LeftOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                  const std::shared_ptr<Obstacle> &obstacleK,
+                                  const std::shared_ptr<Obstacle> &obstacleP,
+                                  const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("Left Of does not support robust evaluation!");
 }
 
-Constraint LeftOfPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                 const std::shared_ptr<Obstacle> &obstacleK,
-                                                 const std::shared_ptr<Obstacle> &obstacleP) {
+Constraint LeftOfPredicate::constraintEvaluation(
+    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const std::shared_ptr<Obstacle> &obstacleP,
+    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("Left Of does not support constraint evaluation!");
 }
 

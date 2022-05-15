@@ -7,12 +7,11 @@
 
 #include <algorithm>
 
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include "../lanelet/lane.h"
 
 #include "../../predicates/predicate_config.h"
 #include "../intersection/intersection_operations.h"
-#include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "regulatory_elements_utils.h"
 
 std::set<std::shared_ptr<TrafficLight>>
@@ -29,49 +28,47 @@ regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::share
     return trafficLights;
 }
 
-bool regulatory_elements_utils::atRedTrafficLight(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                                                  const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                  TurningDirections turnDir) {
+bool regulatory_elements_utils::atTrafficLightDirState(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
+                                                       const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                       TurningDirection turnDir, TrafficLightState tlState) {
     if (!intersection_operations::onIncoming(timeStep, obs, roadNetwork))
         return false;
-    std::vector<TurningDirections> relevantTrafficLightDirections;
+    std::unordered_set<TurningDirection> relevantTrafficLightDirections;
     switch (turnDir) {
-    case TurningDirections::left:
-        relevantTrafficLightDirections = {TurningDirections::left, TurningDirections::leftStraight,
-                                          TurningDirections::leftRight, TurningDirections::all};
+    case TurningDirection::left:
+        relevantTrafficLightDirections = {TurningDirection::left, TurningDirection::leftStraight,
+                                          TurningDirection::leftRight, TurningDirection::all};
         break;
-    case TurningDirections::right:
-        relevantTrafficLightDirections = {TurningDirections::leftRight, TurningDirections::right,
-                                          TurningDirections::straightRight, TurningDirections::all};
+    case TurningDirection::right:
+        relevantTrafficLightDirections = {TurningDirection::leftRight, TurningDirection::right,
+                                          TurningDirection::straightRight, TurningDirection::all};
         break;
-    case TurningDirections::straight:
-        relevantTrafficLightDirections = {TurningDirections::straight, TurningDirections::straightRight,
-                                          TurningDirections::leftStraight, TurningDirections::all};
+    case TurningDirection::straight:
+        relevantTrafficLightDirections = {TurningDirection::straight, TurningDirection::straightRight,
+                                          TurningDirection::leftStraight, TurningDirection::all};
         break;
-    case TurningDirections::all:
-        relevantTrafficLightDirections = {TurningDirections::all};
+    case TurningDirection::all:
+        relevantTrafficLightDirections = {TurningDirection::left,      TurningDirection::leftStraight,
+                                          TurningDirection::leftRight, TurningDirection::all,
+                                          TurningDirection::right,     TurningDirection::straightRight,
+                                          TurningDirection::straight};
         break;
     default:
-        relevantTrafficLightDirections = {TurningDirections::all};
+        relevantTrafficLightDirections = {TurningDirection::left,      TurningDirection::leftStraight,
+                                          TurningDirection::leftRight, TurningDirection::all,
+                                          TurningDirection::right,     TurningDirection::straightRight,
+                                          TurningDirection::straight};
     }
     auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
     for (const auto &light : activeTl) {
         if (std::any_of(relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
-                        [light](const TurningDirections &relevantDirection) {
+                        [light](const TurningDirection &relevantDirection) {
                             return relevantDirection == light->getDirection();
                         }) and
-            light->getElementAtTime(timeStep).color == TrafficLightState::red)
+            light->getElementAtTime(timeStep).color == tlState)
             return true;
     }
     return false;
-}
-
-bool regulatory_elements_utils::trafficSignReferencesStopSign(const std::shared_ptr<TrafficSign> &sign,
-                                                              SupportedTrafficSignCountry country) {
-    const auto signId{TrafficSignLookupTableByCountry.at(country)->at(TrafficSignTypes::STOP)};
-    auto elements{sign->getTrafficSignElements()};
-    return std::any_of(elements.begin(), elements.end(),
-                       [signId](const std::shared_ptr<TrafficSignElement> &elem) { return elem->getId() == signId; });
 }
 
 double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lanelet, const std::string &signId) {
@@ -138,4 +135,62 @@ double regulatory_elements_utils::typeSpeedLimit(ObstacleType obstacleType) {
     default:
         return std::numeric_limits<double>::max();
     }
+}
+
+std::vector<std::string> regulatory_elements_utils::getRelevantPrioritySignIDs() {
+    std::vector<std::string> keys;
+    keys.reserve(priorityTable.size());
+    for (const auto &[key, value] : priorityTable) {
+        keys.push_back(key);
+    }
+    return keys;
+}
+
+std::shared_ptr<TrafficSignElement>
+regulatory_elements_utils::extractPriorityTrafficSign(const std::shared_ptr<Lanelet> &lanelet) {
+    static const std::vector<std::string> relevantPrioritySignIds{getRelevantPrioritySignIDs()};
+    std::vector<std::shared_ptr<TrafficSignElement>> relevantTrafficSignElements;
+    for (const auto &trs : lanelet->getTrafficSigns()) {
+        auto trafficSignElements{trs->getTrafficSignElements()};
+        relevantTrafficSignElements.insert(relevantTrafficSignElements.end(), trafficSignElements.begin(),
+                                           trafficSignElements.end());
+    }
+    std::shared_ptr<TrafficSignElement> tmpSign{std::make_shared<TrafficSignElement>("102")};
+    for (const auto &tse : relevantTrafficSignElements) {
+        if (!std::any_of(
+                relevantTrafficSignElements.begin(), relevantTrafficSignElements.end(),
+                [tse](const std::shared_ptr<TrafficSignElement> &tel) { return tel->getId() == tse->getId(); }))
+            continue;
+        if (tmpSign->getId() != TrafficSignIDGermany.at(TrafficSignTypes::WARNING_RIGHT_BEFORE_LEFT) and
+            (tse->getId() == TrafficSignIDGermany.at(TrafficSignTypes::PRIORITY) or
+             tse->getId() == TrafficSignIDGermany.at(TrafficSignTypes::YIELD)))
+            continue;
+        tmpSign = tse;
+    }
+    return tmpSign;
+}
+
+int regulatory_elements_utils::extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
+                                                          TurningDirection dir) {
+    std::shared_ptr<TrafficSignElement> tmpSign;
+    int currentPriorityValue{std::numeric_limits<int>::min()};
+    for (const auto &let : lanelets) {
+        auto trs{regulatory_elements_utils::extractPriorityTrafficSign(let)};
+        if (priorityTable.count(trs->getId()) == 1 and
+            (currentPriorityValue == std::numeric_limits<int>::min() or
+             priorityTable.at(trs->getId()).at(static_cast<size_t>(dir)) < currentPriorityValue))
+            currentPriorityValue = priorityTable.at(trs->getId()).at(static_cast<size_t>(dir));
+    }
+    return currentPriorityValue;
+}
+
+int regulatory_elements_utils::getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                           const std::shared_ptr<Obstacle> &obs, TurningDirection dir) {
+    auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
+    std::vector<std::shared_ptr<Lanelet>> relevantIncomingLanelets;
+    for (const auto &let : lanelets) {
+        if (let->hasLaneletType(LaneletType::incoming))
+            relevantIncomingLanelets.push_back(let);
+    }
+    return regulatory_elements_utils::extractPriorityTrafficSign(relevantIncomingLanelets, dir);
 }

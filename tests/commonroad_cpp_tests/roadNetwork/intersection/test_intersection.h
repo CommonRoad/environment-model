@@ -15,6 +15,7 @@ class IntersectionTestInitialization : public IncomingTestInitialization {
     void setUpIntersection();
     std::shared_ptr<Intersection> intersection1;
     std::shared_ptr<Intersection> intersection2;
+    std::shared_ptr<RoadNetwork> roadNetwork;
 };
 
 class IntersectionTest : public IntersectionTestInitialization, public testing::Test {

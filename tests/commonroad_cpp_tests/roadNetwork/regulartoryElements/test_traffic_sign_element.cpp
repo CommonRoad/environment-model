@@ -6,7 +6,7 @@
 //
 
 #include "test_traffic_sign_element.h"
-#include "commonroad_cpp/auxiliaryDefs/traffic_signs.h"
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 
 void TrafficSignElementTest::SetUp() {
     const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);

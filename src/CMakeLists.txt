@@ -1,5 +1,5 @@
 set(ENV_MODEL_SRC_FILES
-        commonroad_cpp/auxiliaryDefs/traffic_signs.cpp
+        commonroad_cpp/auxiliaryDefs/regulatory_elements.cpp
         commonroad_cpp/roadNetwork/road_network.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet.cpp
         commonroad_cpp/roadNetwork/lanelet/lane.cpp
@@ -28,24 +28,27 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
+        commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.cpp
+        commonroad_cpp/predicates/braking/braking_with_acceleration_possible_at_intersection_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_single_lane_predicate.cpp
-        commonroad_cpp/predicates/position/stop_line_in_front_predicate.cpp
-        commonroad_cpp/predicates/position/passes_stop_line_predicate.cpp
+        commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.cpp
         commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_predicate.cpp
         commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.cpp
-        commonroad_cpp/predicates/position/on_access_ramp_predicate.cpp
-        commonroad_cpp/predicates/position/on_exit_ramp_predicate.cpp
-        commonroad_cpp/predicates/position/on_urban_road_predicate.cpp
-        commonroad_cpp/predicates/position/on_shoulder_predicate.cpp
+        commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.cpp
+        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.cpp
+        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.cpp
         commonroad_cpp/predicates/position/in_leftmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
         commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
-        commonroad_cpp/predicates/position/on_main_carriage_way_predicate.cpp
+        commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.cpp
+        commonroad_cpp/predicates/position/on_incoming_left_of_predicate.cpp
+        commonroad_cpp/predicates/position/on_oncoming_of_predicate.cpp
+        commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.cpp
         commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
         commonroad_cpp/predicates/general/in_congestion_predicate.cpp
@@ -65,16 +68,15 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_stop_sign_predicate.cpp
-        commonroad_cpp/predicates/position/in_intersection_main_area_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.cpp
+        commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/same_priority_predicate.cpp
+        commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/predicates/predicate_config.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
-        )
+        commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp)
 
 # Create environment model library
 if(ENV_MODEL_BUILD_SHARED_LIBS)

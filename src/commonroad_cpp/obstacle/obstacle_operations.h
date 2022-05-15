@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "obstacle.h"
 
 namespace obstacle_operations {
@@ -120,5 +121,14 @@ std::set<std::shared_ptr<Lanelet>> laneletsRightOfObstacle(size_t timeStep,
 std::set<std::shared_ptr<Lanelet>> laneletsLeftOfObstacle(size_t timeStep,
                                                           const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                           const std::shared_ptr<Obstacle> &obs);
+
+std::vector<std::shared_ptr<Intersection>> getIntersections(size_t timeStep,
+                                                            const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                            const std::shared_ptr<Obstacle> &obs);
+
+std::vector<std::shared_ptr<Lanelet>>
+getSimilarlyOrientedLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                             const std::vector<std::shared_ptr<Lanelet>> &baseLanelets,
+                             const std::shared_ptr<State> &state, double similarityParameter);
 
 } // namespace obstacle_operations

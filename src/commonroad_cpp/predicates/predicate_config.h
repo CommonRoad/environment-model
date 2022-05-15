@@ -17,10 +17,10 @@
 
 struct PredicateParameters {
     PredicateParameters() { checkParameterValidity(); }
-    double aAbrupt{-2};           // acceleration difference which indicates abrupt braking
-    double jAbrupt{-2};           // used for go vehicle emergency profile calculation
-    double standstillError{0.01}; // velocity deviation from zero which is still classified to be standstill
-    double minVelocityDif{15.0};  // minimum velocity difference
+    double aAbrupt{-2};          // acceleration difference which indicates abrupt braking
+    double jAbrupt{-2};          // used for go vehicle emergency profile calculation
+    double standstillError{0.1}; // velocity deviation from zero which is still classified to be standstill
+    double minVelocityDif{15.0}; // minimum velocity difference
     uint8_t numVehCongestion{
         3}; // minimum number of leading vehicles so that a vehicle can be assumed to be part of a congestion
     double maxCongestionVelocity{2.78}; // maximum velocity of a vehicle withing a congestion
@@ -52,6 +52,13 @@ struct PredicateParameters {
     double brakingSpeedLimit{
         43}; //**< compute with calc_v_max_braking(ego_vehicle_param, simulation_param, traffic_rule_param) */
     double roadConditionSpeedLimit{50};
+
+    double dBrakingIntersection{15.0};
+    double aBrakingIntersection{-1.0};
+
+    double laneletOccupancySimilarity{0.25};
+
+    double intersectionBrakingPossible{-4.0};
 };
 
 extern std::map<std::string, std::array<double, 2>> predicateSatisfaction;
