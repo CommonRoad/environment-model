@@ -30,10 +30,6 @@
 #include "commonroad_cpp/predicates/position/left_of_predicate.h"
 #include "commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h"
 #include "commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h"
-#include "commonroad_cpp/predicates/regulatory/at_red_left_traffic_light_predicate.h"
-#include "commonroad_cpp/predicates/regulatory/at_red_right_traffic_light_predicate.h"
-#include "commonroad_cpp/predicates/regulatory/at_red_straight_traffic_light_predicate.h"
-#include "commonroad_cpp/predicates/regulatory/at_red_traffic_light_predicate.h"
 #include "commonroad_cpp/predicates/velocity/drives_faster_predicate.h"
 #include "commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h"
 #include "commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.h"
@@ -216,27 +212,4 @@ PYBIND11_MODULE(crcpp, m) {
           &py_boolean_evaluation<LaneBasedOrientationSimilarPredicate>,
           "Boolean evaluation of orientation towards predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
-
-    m.def("in_intersection_main_area_boolean_evaluation",
-          &py_boolean_single_evaluation<InIntersectionMainAreaPredicate>,
-          "Boolean evaluation of intersection-main-area predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
-
-    m.def("at_red_right_traffic_light_boolean_evaluation",
-          &py_boolean_single_evaluation<AtRedRightTrafficLightPredicate>,
-          "Boolean evaluation of at red right traffic light predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
-
-    m.def("at_red_straight_traffic_light_boolean_evaluation",
-          &py_boolean_single_evaluation<AtRedStraightTrafficLightPredicate>,
-          "Boolean evaluation of at red straight traffic light predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
-
-    m.def("at_red_traffic_light_boolean_evaluation", &py_boolean_single_evaluation<AtRedTrafficLightPredicate>,
-          "Boolean evaluation of at red traffic light predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
-
-    m.def("at_red_left_traffic_light_boolean_evaluation", &py_boolean_single_evaluation<AtRedLeftTrafficLightPredicate>,
-          "Boolean evaluation of at red left traffic light predicate", py::arg("scenarioId"), py::arg("time_step"),
-          py::arg("py_egoVehicleId"), py::arg("py_obstacleId") = 0);
 }
