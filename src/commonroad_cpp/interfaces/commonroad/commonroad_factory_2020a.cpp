@@ -10,7 +10,7 @@
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_factory_2020a.h"
-#include "xml_reader.h"
+#include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
 double CommonRoadFactory2020a::getTimeStepSize() {
     return doc->child("commonRoad").attribute("timeStepSize").as_double();

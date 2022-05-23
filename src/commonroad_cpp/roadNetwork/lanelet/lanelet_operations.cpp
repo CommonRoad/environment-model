@@ -4,10 +4,10 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "lanelet_operations.h"
-#include "../../geometry/geometric_operations.h"
-#include "commonroad_cpp/obstacle/state.h"
 #include <algorithm>
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/obstacle/state.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <utility>
 
 LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type) {

@@ -5,11 +5,6 @@
 // Credits: BMW Car@TUM
 //
 
-#include "obstacle.h"
-#include "../geometry/geometric_operations.h"
-#include "../roadNetwork/lanelet/lanelet_operations.h"
-#include "obstacle_operations.h"
-
 #include <geometry/curvilinear_coordinate_system.h>
 
 #include <algorithm> // for max, min
@@ -26,11 +21,15 @@
 
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
+#include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/geometry/shape.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
 static std::array<double, 4> rotatedCornerLatitudes(const Rectangle &rect, const double theta) {

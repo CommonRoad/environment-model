@@ -10,8 +10,8 @@
 #include <map>
 #include <unordered_map>
 
-#include "regulatory_elements.h"
-#include "types_and_definitions.h"
+#include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
+#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 
 // automatically generated from commonroad-io with:
 // sed -r 's/([A-Z_0-9]+) = '\''([^'\'']+)'\''/ {"\1", TrafficSignTypes::\1}, /' traffic_sign.py

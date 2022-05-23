@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "state.h"
+#include <commonroad_cpp/obstacle/state.h>
 #include <stdexcept>
 
 State::State(size_t timeStep, double xPosition, double yPosition, double velocity, double acceleration,

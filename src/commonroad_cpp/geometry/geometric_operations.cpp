@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "geometric_operations.h"
+#include <commonroad_cpp/geometry/geometric_operations.h>
 
 #include <boost/geometry/algorithms/convex_hull.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>

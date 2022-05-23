@@ -5,9 +5,10 @@
 // Credits: BMW Car@TUM
 //
 
-#include "traffic_light.h"
-#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include <algorithm>
+#include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <stdexcept>
 #include <utility>
 
 void TrafficLight::setId(const size_t num) { id = num; }
