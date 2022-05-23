@@ -9,6 +9,7 @@
 
 #include "../auxiliaryDefs/structs.h"
 
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <limits>

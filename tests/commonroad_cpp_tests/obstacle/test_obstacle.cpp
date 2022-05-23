@@ -52,11 +52,11 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->setIsStatic(isStaticObstacleOne);
     obstacleOne->setCurrentState(stateTwo);
     obstacleOne->setObstacleType(obstacleTypeObstacleOne);
-    obstacleOne->setVmax(vMaxObstacleOne);
-    obstacleOne->setAmax(aMaxObstacleOne);
-    obstacleOne->setAmaxLong(aMaxLongObstacleOne);
-    obstacleOne->setAminLong(aMinLongObstacleOne);
-    obstacleOne->setReactionTime(reactionTimeObstacleOne);
+    ActuatorParameters actuatorParamsObstacleOne(vMaxObstacleOne, aMaxObstacleOne, aMaxLongObstacleOne,
+                                                 aMinLongObstacleOne, aMinLongObstacleOne);
+    SensorParameters sensorParamsObstacleOne(reactionTimeObstacleOne);
+    obstacleOne->setActuatorParameters(actuatorParamsObstacleOne);
+    obstacleOne->setSensorParameters(sensorParamsObstacleOne);
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
     obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);
@@ -69,13 +69,14 @@ void ObstacleTestInitialization::setUpObstacles() {
     aMaxObstacleTwo = 2.5;
     aMaxLongObstacleTwo = 2.0;
     aMinLongObstacleTwo = -8.0;
-    reactionTimeObstacleTwo = 1.5;
+    // NOTE: Static obsatcles have reactionTime = std::nullopt
+    reactionTimeObstacleTwo = std::nullopt;
     widthObstacleTwo = 2.5;
     lengthObstacleTwo = 10.0;
-    obstacleTwo = std::make_shared<Obstacle>(
-        Obstacle(idObstacleTwo, isStaticObstacleTwo, stateFive, obstacleTypeObstacleTwo, vMaxObstacleTwo,
-                 aMaxObstacleTwo, aMaxLongObstacleTwo, aMinLongObstacleTwo, reactionTimeObstacleTwo,
-                 trajectoryPredictionObstacleTwo, lengthObstacleTwo, widthObstacleTwo));
+    obstacleTwo = std::make_shared<Obstacle>(idObstacleTwo, isStaticObstacleTwo, stateFive, obstacleTypeObstacleTwo,
+                                             vMaxObstacleTwo, aMaxObstacleTwo, aMaxLongObstacleTwo, aMinLongObstacleTwo,
+                                             reactionTimeObstacleTwo, trajectoryPredictionObstacleTwo,
+                                             lengthObstacleTwo, widthObstacleTwo);
     obstacleTwo->computeLanes(roadNetwork);
 
     // Obstacle three, four, and five

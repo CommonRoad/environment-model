@@ -133,6 +133,9 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
                                       const pugi::xml_node &roadElements) {
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
 
+    tempObstacle->setActuatorParameters(ActuatorParameters::vehicleDefaults());
+    tempObstacle->setSensorParameters(SensorParameters::dynamicDefaults());
+
     // extract ID, type, shape, initial state, and trajectory
     tempObstacle->setId(roadElements.first_attribute().as_ullong());
     tempObstacle->setObstacleType(
@@ -140,9 +143,8 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
         if ((strcmp(child.name(), "shape")) == 0) { // TODO: other shape types
             if ((strcmp(child.first_child().name(), "rectangle")) == 0) {
-                auto &geoRectangle = dynamic_cast<Rectangle &>(tempObstacle->getGeoShape());
-                geoRectangle.setLength(child.first_child().child("length").text().as_double());
-                geoRectangle.setWidth(child.first_child().child("width").text().as_double());
+                tempObstacle->setRectangleShape(child.first_child().child("length").text().as_double(),
+                                                child.first_child().child("width").text().as_double());
             }
             continue;
         }
@@ -155,6 +157,7 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
             }
         }
     }
+
     obstacleList.emplace_back(tempObstacle);
 }
 
@@ -170,9 +173,8 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
         if ((strcmp(child.name(), "shape")) == 0) {
             if ((strcmp(child.first_child().name(), "rectangle")) == 0) { // TODO: other shape types
-                auto &geoRectangle = dynamic_cast<Rectangle &>(tempObstacle->getGeoShape());
-                geoRectangle.setLength(child.first_child().child("length").text().as_double());
-                geoRectangle.setWidth(child.first_child().child("width").text().as_double());
+                tempObstacle->setRectangleShape(child.first_child().child("length").text().as_double(),
+                                                child.first_child().child("width").text().as_double());
             }
             continue;
         } else if ((strcmp(child.name(), "initialState")) == 0) {
