@@ -22,6 +22,9 @@
 
 #include <boost/container_hash/hash.hpp>
 
+#include "actuator_parameters.h"
+#include "sensor_parameters.h"
+
 class Lanelet;
 class Lane;
 class RoadNetwork;
@@ -58,8 +61,25 @@ class Obstacle {
      * @param fov
      */
     Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-             double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
+             double vMax, double aMax, double aMaxLong, double aMinLong, std::optional<double> reactionTime,
              state_map_t trajectoryPrediction, double length, double width, const std::vector<vertex> &fov = {});
+
+    /**
+     * Constructor initializing several obstacle attributes.
+     * If the obstacle is static, certain values are overwritten.
+     *
+     * @param obstacleId ID of obstacle.
+     * @param isStatic Boolean indicating whether the obstacle is static or not.
+     * @param currentState Pointer to current state of obstacle.
+     * @param obstacleType Type of the obstacle.
+     * @param actuatorParameters Kinematic parameters of the obstacle.
+     * @param trajectoryPrediction Map matching time step to state.
+     * @param shape Obstacle shape. (only rectangles are currently supported!)
+     * @param fov
+     */
+    Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
+             ActuatorParameters actuatorParameters, SensorParameters sensorParameters, state_map_t trajectoryPrediction,
+             std::unique_ptr<Shape> shape, const std::vector<vertex> &fov);
 
     /**
      * Setter for ID of obstacle.
@@ -90,39 +110,18 @@ class Obstacle {
     void setObstacleType(ObstacleType type);
 
     /**
-     * Setter for maximum velocity the obstacle can drive.
+     * Setter for actuator parameters.
      *
-     * @param vmax Maximum velocity [m/s]
+     * @param actuatorParameters Actuator parameters
      */
-    void setVmax(double vmax);
+    void setActuatorParameters(ActuatorParameters actuatorParameters);
 
     /**
-     * Setter for maximum acceleration the obstacle can have.
+     * Setter for sensor parameters.
      *
-     * @param amax Maximum acceleration [m/s^2]
+     * @param sensorParameters Sensor parameters
      */
-    void setAmax(double amax);
-
-    /**
-     * Setter for maximum acceleration the obstacle can have in longitudinal direction.
-     *
-     * @param amax Maximum acceleration [m/s^2]
-     */
-    void setAmaxLong(double amax);
-
-    /**
-     * Setter for minimum acceleration the obstacle can have in the longitudinal direction.
-     *
-     * @param amin Minimum acceleration [m/s^2]
-     */
-    void setAminLong(double amin);
-
-    /**
-     * Setter for reaction time.
-     *
-     * @param tReact Reaction time of the obstacle [s].
-     */
-    void setReactionTime(double tReact);
+    void setSensorParameters(SensorParameters sensorParameters);
 
     /**
      * Setter for trajectory prediction.
@@ -214,7 +213,7 @@ class Obstacle {
      *
      * @return Reaction time [s].
      */
-    [[nodiscard]] double getReactionTime() const;
+    [[nodiscard]] std::optional<double> getReactionTime() const;
 
     /**
      * Getter for reference lane.
@@ -534,16 +533,15 @@ class Obstacle {
     bool isStatic{false};                             //**< true if Obstacle is static */
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
-    double vMax{50.0};                                //**< maximum velocity of obstacle in m/s */
-    double aMax{3.0};                                 //**< maximum absolute acceleration of obstacle in [m/s^2] */
-    double aMaxLong{3.0};                             //**< maximal longitudinal acceleration of obstacle in [m/s^2] */
-    double aMinLong{-10.0};                           //**< minimal longitudinal acceleration of obstacle in [m/s^2] */
-    double reactionTime{0.3};                         //**< reaction time of obstacle in [s] */
+
+    std::optional<ActuatorParameters> actuatorParameters;
+    std::optional<SensorParameters> sensorParameters;
 
     state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
     state_map_t history{};              //**< previous states of the obstacle */
 
-    Rectangle geoShape; // TODO make general                                          //**< shape of the obstacle */
+    std::unique_ptr<Shape>
+        geoShape; // TODO make general                                          //**< shape of the obstacle */
 
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
         occupiedLanelets; //**< map of time steps to lanelets occupied by the obstacle */

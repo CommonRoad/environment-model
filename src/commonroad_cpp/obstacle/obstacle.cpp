@@ -33,13 +33,65 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
+static std::array<double, 4> rotatedCornerLatitudes(const Rectangle &rect, const double theta) {
+    const double width = rect.getWidth();
+    const double length = rect.getLength();
+
+    return {(width / 2) * cos(theta) - (length / 2) * sin(theta), (width / 2) * cos(theta) - (-length / 2) * sin(theta),
+            (-width / 2) * cos(theta) - (length / 2) * sin(theta),
+            (-width / 2) * cos(theta) - (-length / 2) * sin(theta)};
+}
+
+static std::array<double, 4> rotatedCornerLongitudes(const Rectangle &rect, const double theta) {
+    const double width = rect.getWidth();
+    const double length = rect.getLength();
+
+    return {(length / 2) * cos(theta) - (width / 2) * sin(theta), (length / 2) * cos(theta) - (-width / 2) * sin(theta),
+            (-length / 2) * cos(theta) - (width / 2) * sin(theta),
+            (-length / 2) * cos(theta) - (-width / 2) * sin(theta)};
+}
+
+static double rotatedMinimumLatitude(const Rectangle &rect, const double theta) {
+    const auto latitudes = rotatedCornerLatitudes(rect, theta);
+    return *std::min_element(latitudes.cbegin(), latitudes.cend());
+}
+
+static double rotatedMaximumLatitude(const Rectangle &rect, const double theta) {
+    const auto latitudes = rotatedCornerLatitudes(rect, theta);
+    return *std::max_element(latitudes.cbegin(), latitudes.cend());
+}
+
+static double rotatedMinimumLongitude(const Rectangle &rect, const double theta) {
+    const auto longitudes = rotatedCornerLongitudes(rect, theta);
+    return *std::min_element(longitudes.cbegin(), longitudes.cend());
+}
+
+static double rotatedMaximumLongitude(const Rectangle &rect, const double theta) {
+    const auto longitudes = rotatedCornerLongitudes(rect, theta);
+    return *std::max_element(longitudes.cbegin(), longitudes.cend());
+}
+
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-                   double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
+                   double vMax, double aMax, double aMaxLong, double aMinLong, std::optional<double> reactionTime,
                    Obstacle::state_map_t trajectoryPrediction, double length, double width,
                    const std::vector<vertex> &fov)
+    : Obstacle{obstacleId,
+               isStatic,
+               currentState,
+               obstacleType,
+               ActuatorParameters{vMax, aMax, aMaxLong, aMinLong, aMinLong},
+               SensorParameters{250.0, 250.0, reactionTime},
+               trajectoryPrediction,
+               std::make_unique<Rectangle>(length, width),
+               fov} {}
+
+Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
+                   ActuatorParameters actuatorParameters, SensorParameters sensorParameters,
+                   Obstacle::state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape,
+                   const std::vector<vertex> &fov)
     : obstacleId(obstacleId), isStatic(isStatic), currentState(std::move(currentState)), obstacleType(obstacleType),
-      vMax(vMax), aMax(aMax), aMaxLong(aMaxLong), aMinLong(aMinLong), reactionTime(reactionTime),
-      trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(Rectangle(length, width)) {
+      actuatorParameters(actuatorParameters), sensorParameters(sensorParameters),
+      trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(std::move(shape)) {
     if (isStatic)
         setIsStatic(isStatic);
 
@@ -58,10 +110,7 @@ void Obstacle::setId(const size_t oId) { obstacleId = oId; }
 void Obstacle::setIsStatic(bool staticObstacle) {
     isStatic = staticObstacle;
     if (staticObstacle) {
-        vMax = 0.0;
-        aMax = 0.0;
-        aMinLong = 0.0;
-        aMaxLong = 0.0;
+        actuatorParameters = ActuatorParameters::staticDefaults();
     }
 }
 
@@ -69,21 +118,15 @@ void Obstacle::setCurrentState(const std::shared_ptr<State> &state) { currentSta
 
 void Obstacle::setObstacleType(ObstacleType type) { obstacleType = type; }
 
-void Obstacle::setVmax(const double vmax) { vMax = isStatic ? 0.0 : vmax; }
+void Obstacle::setActuatorParameters(ActuatorParameters params) { actuatorParameters = params; }
 
-void Obstacle::setAmax(const double amax) { aMax = isStatic ? 0.0 : amax; }
-
-void Obstacle::setAmaxLong(const double amax) { aMaxLong = isStatic ? 0.0 : amax; }
-
-void Obstacle::setAminLong(const double amin) { aMinLong = isStatic ? 0.0 : amin; }
-
-void Obstacle::setReactionTime(const double tReact) { reactionTime = isStatic ? 0.0 : tReact; }
+void Obstacle::setSensorParameters(SensorParameters params) { sensorParameters = params; }
 
 void Obstacle::setTrajectoryPrediction(const Obstacle::state_map_t &trajPrediction) {
     trajectoryPrediction = trajPrediction;
 }
 
-void Obstacle::setRectangleShape(double length, double width) { geoShape = Rectangle(length, width); }
+void Obstacle::setRectangleShape(double length, double width) { geoShape = std::make_unique<Rectangle>(length, width); }
 
 void Obstacle::appendStateToTrajectoryPrediction(const std::shared_ptr<State> &state) {
     trajectoryPrediction.insert(std::pair<size_t, std::shared_ptr<State>>(state->getTimeStep(), state));
@@ -120,15 +163,30 @@ std::shared_ptr<State> Obstacle::getStateByTimeStep(size_t timeStep) const {
 
 ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
 
-double Obstacle::getVmax() const { return vMax; }
+double Obstacle::getVmax() const {
+    assert(actuatorParameters);
+    return actuatorParameters->getVmax();
+}
 
-double Obstacle::getAmax() const { return aMax; }
+double Obstacle::getAmax() const {
+    assert(actuatorParameters);
+    return actuatorParameters->getAmax();
+}
 
-double Obstacle::getAmaxLong() const { return aMaxLong; }
+double Obstacle::getAmaxLong() const {
+    assert(actuatorParameters);
+    return actuatorParameters->getAmaxLong();
+}
 
-double Obstacle::getAminLong() const { return aMinLong; }
+double Obstacle::getAminLong() const {
+    assert(actuatorParameters);
+    return actuatorParameters->getAminLong();
+}
 
-double Obstacle::getReactionTime() const { return reactionTime; }
+std::optional<double> Obstacle::getReactionTime() const {
+    assert(sensorParameters);
+    return sensorParameters->getReactionTime();
+}
 
 std::vector<size_t> Obstacle::getPredictionTimeSteps() {
     std::vector<size_t> timeSteps;
@@ -196,7 +254,7 @@ polygon_type Obstacle::setOccupancyPolygonShape(size_t timeStep) {
     return polygonShape;
 }
 
-Shape &Obstacle::getGeoShape() { return geoShape; }
+Shape &Obstacle::getGeoShape() { return *geoShape; }
 
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
@@ -221,14 +279,10 @@ Obstacle::getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
 double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     double lonPosition = getLonPosition(roadNetwork, timeStep);
     double theta = getCurvilinearOrientation(roadNetwork, timeStep);
-    double width = geoShape.getWidth();
-    double length = geoShape.getLength();
+    const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
     // use maximum of all corners
-    return std::max({(length / 2) * cos(theta) - (width / 2) * sin(theta) + lonPosition,
-                     (length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition,
-                     (-length / 2) * cos(theta) - (width / 2) * sin(theta) + lonPosition,
-                     (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition});
+    return lonPosition + rotatedMaximumLongitude(rect, theta);
 }
 
 void Obstacle::convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
@@ -258,14 +312,10 @@ double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     }
     double lonPosition = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][0];
     double theta = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][2];
-    double width = geoShape.getWidth();
-    double length = geoShape.getLength();
+    const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
     // use maximum of all corners
-    return std::max({(length / 2) * cos(theta) - (width / 2) * sin(theta) + lonPosition,
-                     (length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition,
-                     (-length / 2) * cos(theta) - (width / 2) * sin(theta) + lonPosition,
-                     (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition});
+    return lonPosition + rotatedMaximumLongitude(rect, theta);
 }
 
 double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
@@ -284,14 +334,10 @@ double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     }
     double lonPosition = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][0];
     double theta = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][2];
-    double width = geoShape.getWidth();
-    double length = geoShape.getLength();
+    const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
     // use minimum of all corners
-    return std::min({(length / 2) * cos(theta) - (width / 2) * sin(theta) + lonPosition,
-                     (length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition,
-                     (-length / 2) * cos(theta) - (width / 2) * sin(theta) + lonPosition,
-                     (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition});
+    return lonPosition + rotatedMinimumLongitude(rect, theta);
 }
 
 double Obstacle::rightD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
@@ -310,13 +356,9 @@ double Obstacle::rightD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     }
     double latPosition = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][1];
     double theta = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][2];
-    double width = geoShape.getWidth();
-    double length = geoShape.getLength();
+    const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
-    return std::min({(width / 2) * cos(theta) - (length / 2) * sin(theta) + latPosition,
-                     (width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPosition,
-                     (-width / 2) * cos(theta) - (length / 2) * sin(theta) + latPosition,
-                     (-width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPosition});
+    return latPosition + rotatedMinimumLatitude(rect, theta);
 }
 
 double Obstacle::leftD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
@@ -335,50 +377,34 @@ double Obstacle::leftD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
     }
     double latPosition = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][1];
     double theta = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][2];
-    double width = geoShape.getWidth();
-    double length = geoShape.getLength();
+    const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
-    return std::max({(width / 2) * cos(theta) - (length / 2) * sin(theta) + latPosition,
-                     (width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPosition,
-                     (-width / 2) * cos(theta) - (length / 2) * sin(theta) + latPosition,
-                     (-width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPosition});
+    return latPosition + rotatedMaximumLatitude(rect, theta);
 }
 
 double Obstacle::rearS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     double lonPosition = getLonPosition(roadNetwork, timeStep);
-    double width = geoShape.getWidth();
-    double length = geoShape.getLength();
+    const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
     double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
     // use minimum of all corners
-    return std::min({(length / 2) * cos(theta) - (width / 2) * sin(theta) + lonPosition,
-                     (length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition,
-                     (-length / 2) * cos(theta) - (width / 2) * sin(theta) + lonPosition,
-                     (-length / 2) * cos(theta) - (-width / 2) * sin(theta) + lonPosition});
+    return lonPosition + rotatedMinimumLongitude(rect, theta);
 }
 
 double Obstacle::rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     double latPos = getLatPosition(roadNetwork, timeStep);
-    double width = geoShape.getWidth();
-    double length = geoShape.getLength();
+    const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
     double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
-    return std::min({(width / 2) * cos(theta) - (length / 2) * sin(theta) + latPos,
-                     (width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPos,
-                     (-width / 2) * cos(theta) - (length / 2) * sin(theta) + latPos,
-                     (-width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPos});
+    return latPos + rotatedMinimumLatitude(rect, theta);
 }
 
 double Obstacle::leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     double latPos = getLatPosition(roadNetwork, timeStep);
-    double width = geoShape.getWidth();
-    double length = geoShape.getLength();
+    const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
     double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
-    return std::max({(width / 2) * cos(theta) - (length / 2) * sin(theta) + latPos,
-                     (width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPos,
-                     (-width / 2) * cos(theta) - (length / 2) * sin(theta) + latPos,
-                     (-width / 2) * cos(theta) - (-length / 2) * sin(theta) + latPos});
+    return latPos + rotatedMaximumLatitude(rect, theta);
 }
 
 double Obstacle::getLonPosition(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
@@ -585,8 +611,9 @@ void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes,
 
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     auto lanelets{getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep)};
-    std::vector<std::shared_ptr<Lane>> occLanes{
-        lanelet_operations::createLanesBySingleLanelets(lanelets, roadNetwork, fieldOfViewRear, fieldOfViewFront)};
+    assert(sensorParameters);
+    std::vector<std::shared_ptr<Lane>> occLanes{lanelet_operations::createLanesBySingleLanelets(
+        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront())};
     occupiedLanes[timeStep] = occLanes;
 }
 
@@ -621,8 +648,8 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
 void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, bool considerHistory) {
     const size_t timeStamp{currentState->getTimeStep()};
     auto lanelets{getOccupiedLaneletsByShape(roadNetwork, timeStamp)};
-    auto lanes{
-        lanelet_operations::createLanesBySingleLanelets(lanelets, roadNetwork, fieldOfViewRear, fieldOfViewFront)};
+    auto lanes{lanelet_operations::createLanesBySingleLanelets(
+        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront())};
     setOccupiedLanes(lanes, timeStamp);
     if (!isStatic) {
         for (const auto &time : getPredictionTimeSteps())
