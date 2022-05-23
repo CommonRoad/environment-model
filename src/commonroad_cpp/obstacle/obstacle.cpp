@@ -87,7 +87,8 @@ Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> curr
 
 Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
                    ActuatorParameters actuatorParameters, SensorParameters sensorParameters,
-                   Obstacle::state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape, const std::vector<vertex> &fov)
+                   Obstacle::state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape,
+                   const std::vector<vertex> &fov)
     : obstacleId(obstacleId), isStatic(isStatic), currentState(std::move(currentState)), obstacleType(obstacleType),
       actuatorParameters(actuatorParameters), sensorParameters(sensorParameters),
       trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(std::move(shape)) {
@@ -611,8 +612,8 @@ void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes,
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     auto lanelets{getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep)};
     assert(sensorParameters);
-    std::vector<std::shared_ptr<Lane>> occLanes{
-        lanelet_operations::createLanesBySingleLanelets(lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront())};
+    std::vector<std::shared_ptr<Lane>> occLanes{lanelet_operations::createLanesBySingleLanelets(
+        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront())};
     occupiedLanes[timeStep] = occLanes;
 }
 
