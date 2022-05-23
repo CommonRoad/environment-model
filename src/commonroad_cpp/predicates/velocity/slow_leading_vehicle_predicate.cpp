@@ -9,10 +9,10 @@
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
-#include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
-#include "slow_leading_vehicle_predicate.h"
+#include <commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 
 bool SlowLeadingVehiclePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

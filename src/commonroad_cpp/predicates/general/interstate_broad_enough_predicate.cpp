@@ -4,10 +4,10 @@
 // Copyright (c) 2021 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "interstate_broad_enough_predicate.h"
-#include "../../roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
+#include <commonroad_cpp/predicates/general/interstate_broad_enough_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/world.h>
 
 bool InterstateBroadEnoughPredicate::booleanEvaluation(

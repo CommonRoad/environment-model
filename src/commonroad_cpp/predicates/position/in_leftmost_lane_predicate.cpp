@@ -11,7 +11,7 @@
 #include <commonroad_cpp/world.h>
 
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "in_leftmost_lane_predicate.h"
+#include <commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h>
 
 bool InLeftmostLanePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

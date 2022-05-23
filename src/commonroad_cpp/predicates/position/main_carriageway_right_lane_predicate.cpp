@@ -5,10 +5,10 @@
 // Credits: BMW Car@TUM
 //
 
-#include "main_carriageway_right_lane_predicate.h"
-#include "../../world.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/world.h>
 
 bool MainCarriagewayRightLanePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

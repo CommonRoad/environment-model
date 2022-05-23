@@ -5,15 +5,15 @@
 // Credits: BMW Car@TUM
 //
 
-#include "in_intersection_conflict_area_predicate.h"
-#include "../../obstacle/obstacle.h"
-#include "../../obstacle/obstacle_operations.h"
-#include "../../roadNetwork/intersection/intersection_operations.h"
-#include "../../roadNetwork/lanelet/lane.h"
-#include "../../roadNetwork/lanelet/lanelet_operations.h"
-#include "../../world.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "on_lanelet_with_type_predicate.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/obstacle/obstacle_operations.h>
+#include <commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.h>
+#include <commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/world.h>
 
 bool InIntersectionConflictAreaPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

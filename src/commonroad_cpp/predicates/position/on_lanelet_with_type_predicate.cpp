@@ -11,7 +11,7 @@
 #include <commonroad_cpp/world.h>
 
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "on_lanelet_with_type_predicate.h"
+#include <commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h>
 
 bool OnLaneletWithTypePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
