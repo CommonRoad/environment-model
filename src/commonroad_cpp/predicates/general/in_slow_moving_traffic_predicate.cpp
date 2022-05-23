@@ -4,10 +4,10 @@
 // Copyright (c) 2021 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "in_slow_moving_traffic_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 bool InSlowMovingTrafficPredicate::booleanEvaluation(

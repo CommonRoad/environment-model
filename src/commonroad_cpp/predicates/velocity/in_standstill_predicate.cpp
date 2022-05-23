@@ -5,8 +5,8 @@
 // Credits: BMW Car@TUM
 //
 
-#include "in_standstill_predicate.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/velocity/in_standstill_predicate.h>
 
 bool InStandstillPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

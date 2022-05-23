@@ -9,9 +9,9 @@
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
-#include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
-#include "keeps_lane_speed_limit_predicate.h"
-#include "preserves_traffic_flow_predicate.h"
+#include <commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.h>
+#include <commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 
 bool PreservesTrafficFlowPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

@@ -5,11 +5,11 @@
 // Credits: BMW Car@TUM
 //
 
-#include "at_traffic_sign_predicate.h"
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h>
 #include <commonroad_cpp/world.h>
 
 bool AtTrafficSignPredicate::booleanEvaluation(

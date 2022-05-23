@@ -8,10 +8,10 @@
 #include <cmath>
 #include <stdexcept>
 
-#include "../../roadNetwork/lanelet/lane.h"
-#include "../../world.h"
-#include "safe_distance_predicate.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/world.h>
 
 double SafeDistancePredicate::computeSafeDistance(double velocityK, double velocityP, double minAccelerationK,
                                                   double minAccelerationP, double tReact) {

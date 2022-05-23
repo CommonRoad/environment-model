@@ -9,7 +9,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/world.h>
 
-#include "in_single_lane_predicate.h"
+#include <commonroad_cpp/predicates/position/in_single_lane_predicate.h>
 
 bool InSingleLanePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

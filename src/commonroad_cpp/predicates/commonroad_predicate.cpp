@@ -37,12 +37,12 @@
 #include <commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.h>
 #include <commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h>
 #include <commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.h>
-#include <commonroad_cpp/predicates/regulatory //stop_line_in_front_predicate.h>
 #include <commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h>
 #include <commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h>
 #include <commonroad_cpp/predicates/regulatory/has_priority_predicate.h>
 #include <commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h>
 #include <commonroad_cpp/predicates/regulatory/same_priority_predicate.h>
+#include <commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h>
 #include <commonroad_cpp/predicates/velocity/drives_faster_predicate.h>
 #include <commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h>
 #include <commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.h>

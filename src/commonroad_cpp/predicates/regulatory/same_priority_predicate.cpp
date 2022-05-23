@@ -14,8 +14,8 @@
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 #include <commonroad_cpp/world.h>
 
-#include "has_priority_predicate.h"
-#include "same_priority_predicate.h"
+#include <commonroad_cpp/predicates/regulatory/has_priority_predicate.h>
+#include <commonroad_cpp/predicates/regulatory/same_priority_predicate.h>
 
 bool SamePriorityPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

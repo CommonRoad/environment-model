@@ -5,13 +5,13 @@
 // Credits: BMW Car@TUM
 //
 
-#include "../../roadNetwork/lanelet/lane.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
-#include "causes_braking_intersection_predicate.h"
+#include <commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h>
 
 bool CausesBrakingIntersectionPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
