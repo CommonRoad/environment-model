@@ -5,8 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
-#include "lanelet.h"
-#include "../../geometry/geometric_operations.h"
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+
 #include <utility>
 
 #include <limits>

@@ -5,8 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
-#include "lane.h"
-#include "../../geometry/geometric_operations.h"
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+
 #include <geometry/curvilinear_coordinate_system.h>
 #include <utility>
 

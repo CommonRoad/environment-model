@@ -94,9 +94,7 @@ set_property(TARGET env_model PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_include_directories(env_model
     PUBLIC
         $<INSTALL_INTERFACE:include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     )
 
 target_link_libraries(env_model

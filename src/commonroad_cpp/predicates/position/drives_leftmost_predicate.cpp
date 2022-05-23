@@ -11,9 +11,9 @@
 #include "commonroad_cpp/world.h"
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 
-#include "../../obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "drives_leftmost_predicate.h"
+#include <commonroad_cpp/obstacle/obstacle_operations.h>
+#include <commonroad_cpp/predicates/position/drives_leftmost_predicate.h>
 
 bool DrivesLeftmostPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

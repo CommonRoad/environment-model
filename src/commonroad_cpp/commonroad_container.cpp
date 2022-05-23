@@ -9,7 +9,7 @@
 
 #include <commonroad_cpp/world.h>
 
-#include "commonroad_container.h"
+#include <commonroad_cpp/commonroad_container.h>
 
 // Global static pointer used to ensure a single instance of the class.
 std::shared_ptr<CommonRoadContainer> CommonRoadContainer::instance =

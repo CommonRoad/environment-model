@@ -15,7 +15,7 @@
 #include <commonroad_cpp/world.h>
 #include <geometry/curvilinear_coordinate_system.h>
 
-#include "stop_line_in_front_predicate.h"
+#include <commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h>
 
 bool lineInFront(const std::vector<vertex> &line, const std::shared_ptr<Obstacle> &obs, size_t timeStep,
                  const std::shared_ptr<RoadNetwork> &roadNetwork) {

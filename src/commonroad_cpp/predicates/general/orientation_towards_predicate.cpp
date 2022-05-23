@@ -9,7 +9,7 @@
 #include <commonroad_cpp/predicates/position/in_same_lane_predicate.h>
 #include <commonroad_cpp/world.h>
 
-#include "orientation_towards_predicate.h"
+#include <commonroad_cpp/predicates/general/orientation_towards_predicate.h>
 
 bool OrientationTowardsPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

@@ -4,7 +4,8 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "predicate_config.h"
+
+#include <commonroad_cpp/predicates/predicate_config.h>
 
 void PredicateParameters::checkParameterValidity() const {
     assert(aAbrupt < 0);

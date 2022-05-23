@@ -5,11 +5,11 @@
 // Credits: BMW Car@TUM
 //
 
-#include "../../roadNetwork/lanelet/lanelet_operations.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/world.h>
 
-#include "braking_with_acceleration_possible_at_intersection_predicate.h"
+#include <commonroad_cpp/predicates/braking/braking_with_acceleration_possible_at_intersection_predicate.h>
 
 bool BrakingWithAccelerationPossibleAtIntersection::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

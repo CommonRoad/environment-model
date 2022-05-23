@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "incoming.h"
+#include <commonroad_cpp/roadNetwork/intersection/incoming.h>
 
 #include <algorithm>
 #include <deque>

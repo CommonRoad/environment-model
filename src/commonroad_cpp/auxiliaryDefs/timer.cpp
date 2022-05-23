@@ -1,4 +1,4 @@
-#include "timer.h"
+#include <commonroad_cpp/auxiliaryDefs/timer.h>
 #include <stdexcept>
 
 using namespace std::chrono;

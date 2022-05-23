@@ -5,11 +5,11 @@
 // Credits: BMW Car@TUM
 //
 
-#include "unobstructed_intersection_view_predicate.h"
-#include "../../geometry/geometric_operations.h"
-#include "../../obstacle/obstacle_operations.h"
-#include "../../roadNetwork/lanelet/lanelet_operations.h"
-#include "../../world.h"
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/obstacle/obstacle_operations.h>
+#include <commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/world.h>
 
 namespace bg = boost::geometry;
 

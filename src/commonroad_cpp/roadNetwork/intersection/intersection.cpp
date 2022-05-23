@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "intersection.h"
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 
 #include <algorithm>
 #include <deque>

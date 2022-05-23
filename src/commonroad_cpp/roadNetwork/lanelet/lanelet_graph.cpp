@@ -2,7 +2,8 @@
 // Created by sebastian on 07.05.22.
 //
 
-#include "lanelet_graph.h"
+#include <array>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h>
 #include <vector>
 
 std::vector<size_t> LaneletGraph::findPaths(size_t src, size_t dst, bool considerAdjacency) {

@@ -5,12 +5,12 @@
 // Credits: BMW Car@TUM
 //
 
-#include "on_incoming_left_of_predicate.h"
-#include "../../obstacle/obstacle.h"
-#include "../../roadNetwork/intersection/incoming.h"
-#include "../../roadNetwork/lanelet/lane.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "on_lanelet_with_type_predicate.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h>
+#include <commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h>
+#include <commonroad_cpp/roadNetwork/intersection/incoming.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
 bool OnIncomingLeftOfPredicate::booleanEvaluation(

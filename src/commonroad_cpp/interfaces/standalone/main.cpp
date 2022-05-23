@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include "command_line_input.h"
 #include "commonroad_cpp/predicates/predicate_manager.h"
 #include <boost/stacktrace.hpp>
 #include <iostream>
