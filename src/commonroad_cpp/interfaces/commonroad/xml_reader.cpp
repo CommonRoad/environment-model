@@ -23,7 +23,7 @@
 #include "commonroad_factory_2018b.h"
 #include "commonroad_factory_2020a.h"
 
-#include "xml_reader.h"
+#include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
 double XMLReader::extractTimeStepSize(const std::string &xmlFile) {
     std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();

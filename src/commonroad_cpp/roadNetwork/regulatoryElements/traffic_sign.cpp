@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "traffic_sign.h"
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
 #include <utility>
 

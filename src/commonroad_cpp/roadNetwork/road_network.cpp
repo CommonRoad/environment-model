@@ -27,7 +27,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 
-#include "road_network.h"
+#include <commonroad_cpp/roadNetwork/road_network.h>
 
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;

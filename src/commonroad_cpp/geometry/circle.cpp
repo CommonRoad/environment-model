@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "circle.h"
+#include <commonroad_cpp/geometry/circle.h>
 
 void Circle::setRadius(const double rad) { radius = rad; }
 

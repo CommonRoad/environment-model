@@ -9,14 +9,14 @@
 #include <memory>
 #include <vector>
 
-#include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
 
 #include "commonroad_factory_2018b.h"
-#include "xml_reader.h"
+#include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
 double CommonRoadFactory2018b::getTimeStepSize() {
     return doc->child("commonRoad").attribute("timeStepSize").as_double();

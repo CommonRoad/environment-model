@@ -8,7 +8,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "rectangle.h"
+#include <commonroad_cpp/geometry/rectangle.h>
 
 void Rectangle::setLength(const double len) { length = len; }
 
