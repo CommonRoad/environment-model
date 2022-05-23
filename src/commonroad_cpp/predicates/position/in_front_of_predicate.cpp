@@ -5,10 +5,10 @@
 // Credits: BMW Car@TUM
 //
 
-#include "in_front_of_predicate.h"
-#include "../../roadNetwork/lanelet/lane.h"
-#include "../../world.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/position/in_front_of_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/world.h>
 
 bool InFrontOfPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,

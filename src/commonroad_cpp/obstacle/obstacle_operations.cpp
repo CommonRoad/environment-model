@@ -5,9 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
-#include "obstacle_operations.h"
-#include "../geometry/geometric_operations.h"
-#include "../roadNetwork/lanelet//lanelet_operations.h"
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/obstacle/obstacle_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 
 std::shared_ptr<Obstacle>
 obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t obstacleId) {

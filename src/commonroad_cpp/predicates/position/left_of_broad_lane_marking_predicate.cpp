@@ -10,9 +10,9 @@
 #include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
 #include "commonroad_cpp/world.h"
 
-#include "../../obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "left_of_broad_lane_marking_predicate.h"
+#include <commonroad_cpp/obstacle/obstacle_operations.h>
+#include <commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h>
 
 bool LeftOfBroadLaneMarkingPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

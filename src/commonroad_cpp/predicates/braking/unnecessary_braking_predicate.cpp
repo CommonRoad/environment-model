@@ -13,7 +13,7 @@
 #include "commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
-#include "unnecessary_braking_predicate.h"
+#include <commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h>
 
 bool UnnecessaryBrakingPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

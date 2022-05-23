@@ -7,12 +7,11 @@
 
 #include <algorithm>
 
-#include "../lanelet/lane.h"
-
-#include "../../predicates/predicate_config.h"
-#include "../intersection/intersection_operations.h"
-#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
-#include "regulatory_elements_utils.h"
+#include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
+#include <commonroad_cpp/predicates/predicate_config.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 
 std::set<std::shared_ptr<TrafficLight>>
 regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::shared_ptr<Obstacle> &obs,

@@ -9,8 +9,8 @@
 #include <tuple>
 #include <vector>
 
-#include "../commonroad/xml_reader.h"
 #include <boost/program_options.hpp>
+#include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
 class RoadNetwork;
 

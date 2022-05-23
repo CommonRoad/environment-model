@@ -5,14 +5,14 @@
 // Credits: BMW Car@TUM
 //
 
-#include "on_oncoming_of_predicate.h"
-#include "../../geometry/geometric_operations.h"
-#include "../../obstacle/obstacle.h"
-#include "../../roadNetwork/intersection/incoming.h"
-#include "../../roadNetwork/lanelet/lane.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <cmath>
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/position/on_oncoming_of_predicate.h>
+#include <commonroad_cpp/roadNetwork/intersection/incoming.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
 bool OnOncomingOfPredicate::booleanEvaluation(

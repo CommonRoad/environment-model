@@ -15,7 +15,7 @@
 #include <commonroad_cpp/world.h>
 
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
-#include "has_priority_predicate.h"
+#include <commonroad_cpp/predicates/regulatory/has_priority_predicate.h>
 
 bool HasPriorityPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

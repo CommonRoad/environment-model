@@ -5,9 +5,9 @@
 // Credits: BMW Car@TUM
 //
 
-#include "required_speed_predicate.h"
-#include "../../roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/velocity/required_speed_predicate.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 #include <commonroad_cpp/world.h>
 
 bool RequiredSpeedPredicate::booleanEvaluation(

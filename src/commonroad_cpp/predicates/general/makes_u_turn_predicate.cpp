@@ -4,9 +4,9 @@
 // Copyright (c) 2021 Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "makes_u_turn_predicate.h"
-#include "../../geometry/geometric_operations.h"
+#include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/general/makes_u_turn_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>

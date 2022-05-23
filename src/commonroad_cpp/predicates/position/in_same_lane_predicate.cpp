@@ -11,7 +11,7 @@
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/world.h>
 
-#include "in_same_lane_predicate.h"
+#include <commonroad_cpp/predicates/position/in_same_lane_predicate.h>
 
 bool InSameLanePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

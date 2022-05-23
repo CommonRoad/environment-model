@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "stop_line.h"
+#include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
 
 #include <utility>
 

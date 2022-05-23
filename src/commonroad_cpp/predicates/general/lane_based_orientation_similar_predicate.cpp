@@ -5,10 +5,10 @@
 // Credits: BMW Car@TUM
 //
 
-#include "lane_based_orientation_similar_predicate.h"
-#include "../../geometry/geometric_operations.h"
-#include "../../world.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h>
+#include <commonroad_cpp/world.h>
 #include <stdexcept>
 
 bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
