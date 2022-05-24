@@ -90,7 +90,7 @@ used by setuptools don't clash with any names CMake uses currently, but you shou
 
 Generate the build files with `cmake`.
 Consider specifying the following options:
- * Specify the path where you installed the CommonRoad Drivability Checker using `-DCMAKE_PREFIX_PATH`.
+ * Specify the path where you wanr to install the CommonRoad Drivability Checker using `-DCMAKE_PREFIX_PATH`.
  * Optionally specify an installation prefix where you want to install the Environment Model
    using `-DCMAKE_INSTALL_PREFIX`.
  * The recommended approach is to use a user-writable folder as the installation prefix.
