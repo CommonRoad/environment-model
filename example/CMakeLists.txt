@@ -13,6 +13,8 @@ target_link_libraries(env_model_example_node
         Boost::filesystem
         spdlog::spdlog
         yaml-cpp
+        Threads::Threads
+        ${CMAKE_DL_LIBS}
     )
 
 # this adds many warnings to the build. They usually help to find some bugs
