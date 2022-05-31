@@ -6,8 +6,8 @@
 //
 #include "test_on_similar_oriented_lanelet_without_type_predicate.h"
 #include "../utils_predicate_test.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/obstacle/state.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void OnSimilarOrientedLaneletWithoutTypePredicateTest::SetUp() {}
 

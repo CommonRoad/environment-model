@@ -7,9 +7,11 @@
 
 #include "predicate_manager_test.h"
 #include "../interfaces/utility_functions.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
-#include <commonroad_cpp/predicates/predicate_manager.h>
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+// #include <commonroad_cpp/predicates/predicate_manager.h>
 #include <filesystem>
+
+#if 0
 
 void PredicateManagerTest::extractRelevantPredicatesHelper(int num_threads) const {
     std::string benchmarkID{"DEU_test_safe_distance"};
@@ -153,3 +155,5 @@ TEST_F(PredicateManagerTest, ReadConfigFileConstructor) {
         std::filesystem::remove(TestUtils::getTestScenarioDirectory() + "/../commonroad_cpp_tests/test_config.yaml"));
     eval.reset();
 }
+
+#endif

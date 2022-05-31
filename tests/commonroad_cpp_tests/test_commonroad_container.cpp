@@ -7,8 +7,8 @@
 
 #include "test_commonroad_container.h"
 #include "commonroad_cpp/commonroad_container.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "interfaces/utility_functions.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void CommonRoadContainerTest::SetUp() {
     std::array<std::string, 6> scenarios{"ZAM_Urban-2_1.xml",      "USA_Peach-4_1_T-1.xml",

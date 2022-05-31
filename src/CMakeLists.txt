@@ -21,9 +21,8 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2018b.cpp
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2020a.cpp
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
-        commonroad_cpp/interfaces/standalone/command_line_input.cpp
+        commonroad_cpp/interfaces/commonroad/input_utils.cpp
         commonroad_cpp/world.cpp
-        commonroad_cpp/predicates/predicate_manager.cpp
         commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
@@ -101,31 +100,14 @@ target_link_libraries(env_model
     PUBLIC
         Eigen3::Eigen
         DrivabilityChecker::crccosy
-        yaml-cpp
     )
 
 target_link_libraries(env_model
     PRIVATE
-        Boost::program_options
-        Boost::filesystem
         OpenMP::OpenMP_CXX
         pugixml-static
         spdlog::spdlog
     )
-
-if(ENV_MODEL_BUILD_EXECUTABLE)
-    # Create environment model test node
-    add_executable(env_model_example_node commonroad_cpp/interfaces/standalone/main.cpp)
-
-    target_link_libraries(env_model_example_node
-        PRIVATE
-            env_model
-            Boost::program_options
-            spdlog::spdlog
-            yaml-cpp
-            pthread dl
-        )
-endif(ENV_MODEL_BUILD_EXECUTABLE)
 
 # add pybind module
 if(SKBUILD)
@@ -151,18 +133,11 @@ endif(ENV_MODEL_BUILD_PYBIND)
 
 # this adds many warnings to the build. They usually help to find some bugs
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    if(ENV_MODEL_BUILD_EXECUTABLE)
-        target_compile_options(env_model_example_node PRIVATE -Wall -Wextra -Wconversion -pedantic
-                -Wfatal-errors)
-    endif(ENV_MODEL_BUILD_EXECUTABLE)
     target_compile_options(env_model PRIVATE -Wall -Wextra -Wconversion
             -pedantic -Wfatal-errors -Wno-unused-parameter)
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(env_model PRIVATE /W3 /WX)
-    if(ENV_MODEL_BUILD_EXECUTABLE)
-        target_compile_options(env_model_example_node PRIVATE /W3 /WX)
-    endif(ENV_MODEL_BUILD_EXECUTABLE)
 endif()
 
 

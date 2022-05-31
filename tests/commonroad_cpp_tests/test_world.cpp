@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 #include "test_world.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp"
 #include "commonroad_cpp/world.h"

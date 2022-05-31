@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 #include "test_has_priority_predicate.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 TEST_F(HasPriorityPredicateTest, BooleanEvaluationAtStopSign) {}
 

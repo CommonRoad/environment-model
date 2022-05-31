@@ -6,7 +6,7 @@
 //
 #include "test_same_priority_predicate.h"
 #include "../utils_predicate_test.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 TEST_F(SamePriorityPredicateTest, BooleanEvaluation) {}
 
