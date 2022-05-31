@@ -7,7 +7,7 @@
 #include "test_in_intersection_conflict_area_predicate.h"
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/geometry/geometric_operations.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void InIntersectionConflictAreaPredicateTest::SetUp() {
 

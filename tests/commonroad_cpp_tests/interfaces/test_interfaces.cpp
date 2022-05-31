@@ -7,7 +7,7 @@
 
 #include "test_interfaces.h"
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 
 TEST_F(InterfacesTest, Read2018bFileSingleThread) {

@@ -27,14 +27,6 @@ namespace InputUtils {
 int readCommandLineValues(int argc, char *const *argv, int &num_threads, std::string &xmlFilePath);
 
 /**
- * Loads and sets up CR scenario.
- * @param xmlFilePath Path to CommonRoad xml file
- * @return Tuple of obstacles, roadNetwork, and time step size.
- */
-std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
-getDataFromCommonRoad(const std::string &xmlFilePath);
-
-/**
  * Initializes CommonRoad evaluation.
  * @param path Path to config file.
  */

@@ -68,34 +68,6 @@ int InputUtils::readCommandLineValues(int argc, char *const *argv, int &num_thre
     }
 }
 
-/**
- * Loads and sets up CR scenario.
- * @param xmlFilePath Path to CommonRoad xml file
- * @return Tuple of obstacles and roadNetwork.
- */
-std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
-InputUtils::getDataFromCommonRoad(const std::string &xmlFilePath) {
-    spdlog::info("Read file: {}", xmlFilePath);
-    // Read and parse CommonRoad scenario file
-    std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
-    std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
-    std::vector<std::shared_ptr<Lanelet>> lanelets =
-        XMLReader::createLaneletFromXML(xmlFilePath, trafficSigns, trafficLights);
-    std::vector<std::shared_ptr<Obstacle>> obstacles = XMLReader::createObstacleFromXML(xmlFilePath);
-    std::vector<std::shared_ptr<Intersection>> intersections =
-        XMLReader::createIntersectionFromXML(xmlFilePath, lanelets);
-    auto country{XMLReader::extractCountryFromXML(xmlFilePath)};
-
-    std::shared_ptr<RoadNetwork> roadNetwork{
-        std::make_shared<RoadNetwork>(RoadNetwork(lanelets, country, trafficSigns, trafficLights, intersections))};
-    for (const auto &inter : roadNetwork->getIntersections())
-        inter->computeMemberLanelets(roadNetwork);
-
-    auto timeStepSize{XMLReader::extractTimeStepSize(xmlFilePath)};
-    spdlog::info("File successfully read: {}", xmlFilePath);
-    return std::make_tuple(obstacles, roadNetwork, timeStepSize);
-}
-
 SimulationParameters InputUtils::initializeSimulationParameters(const std::string &configPath) {
     YAML::Node config = YAML::LoadFile(configPath);
     return {config["simulation_param"]["directories"].as<std::vector<std::string>>(),

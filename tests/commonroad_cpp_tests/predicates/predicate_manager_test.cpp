@@ -7,8 +7,8 @@
 
 #include "predicate_manager_test.h"
 #include "../interfaces/utility_functions.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
-#include <commonroad_cpp/predicates/predicate_manager.h>
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+// #include <commonroad_cpp/predicates/predicate_manager.h>
 #include <filesystem>
 
 void PredicateManagerTest::extractRelevantPredicatesHelper(int num_threads) const {

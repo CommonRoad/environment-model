@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 #include "test_relevant_traffic_light_predicate.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 TEST_F(RelevantRedTrafficLightPredicateTest, BooleanEvaluation) {}
 

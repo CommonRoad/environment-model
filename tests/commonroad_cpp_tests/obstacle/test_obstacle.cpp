@@ -6,10 +6,10 @@
 //
 #include "test_obstacle.h"
 #include "../interfaces/utility_functions.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include <cmath>
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <map>
 #include <memory>
 #include <unordered_set>

@@ -6,7 +6,7 @@
 //
 #include "test_at_traffic_sign_predicate.h"
 #include "../utils_predicate_test.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 TEST_F(AtTrafficSignPredicateTest, BooleanEvaluationAtStopSign) {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 10, 0, 0, 0, 0, 0);

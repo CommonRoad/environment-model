@@ -21,6 +21,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2018b.cpp
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2020a.cpp
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
+        commonroad_cpp/interfaces/commonroad/input_utils.cpp
         commonroad_cpp/world.cpp
         commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
