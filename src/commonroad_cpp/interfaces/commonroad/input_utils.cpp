@@ -18,7 +18,6 @@
 #include <boost/program_options.hpp>
 #include <iostream>
 
-#include "yaml-cpp/yaml.h"
 #include <spdlog/spdlog.h>
 
 /**
