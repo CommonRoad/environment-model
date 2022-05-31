@@ -8,9 +8,9 @@
 #include "test_in_same_lane_predicate.h"
 #include "../../interfaces/utility_functions.h"
 #include "../utils_predicate_test.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/obstacle/state.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void TestInSameLanePredicate::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 10, 0, 0, 0, 0, 0);

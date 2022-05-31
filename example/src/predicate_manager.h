@@ -6,8 +6,8 @@
 //
 #pragma once
 
-#include "commonroad_predicate.h"
-#include "predicate_config.h"
+#include <commonroad_cpp/predicates/commonroad_predicate.h>
+#include <commonroad_cpp/predicates/predicate_config.h>
 #include <memory>
 #include <vector>
 

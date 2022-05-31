@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 #include "test_at_traffic_light_predicate.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 TEST_F(AtRedTrafficLightPredicateTest, BooleanEvaluationDirectionAll) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};

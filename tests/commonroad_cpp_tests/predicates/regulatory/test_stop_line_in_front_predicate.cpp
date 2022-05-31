@@ -6,7 +6,7 @@
 //
 #include "test_stop_line_in_front_predicate.h"
 #include "../utils_predicate_test.h"
-#include "commonroad_cpp/interfaces/standalone/command_line_input.h"
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void StopLineInFrontPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 5, 2, 17.5, 0, 0, 0, 5, 0);

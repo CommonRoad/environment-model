@@ -42,6 +42,7 @@ endif()
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)
 find_package(spdlog REQUIRED)
+find_package(Threads REQUIRED)
 find_package(OpenMP)
 if(NOT OpenMP_CXX_FOUND)
     message(SEND_ERROR "Can't find the OpenMP package")
@@ -57,6 +58,10 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Add Environment model node
 add_subdirectory(src)
+
+if(ENV_MODEL_BUILD_EXECUTABLE)
+    add_subdirectory(example)
+endif(ENV_MODEL_BUILD_EXECUTABLE)
 
 ## Doxygen
 if(ENV_MODEL_BUILD_DOXYGEN)

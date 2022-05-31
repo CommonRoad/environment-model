@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "../auxiliaryDefs/structs.h"
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
 
 #include <array>
 #include <cassert>
