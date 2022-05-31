@@ -4,11 +4,11 @@
 // Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
 // Credits: BMW Car@TUM
 //
-#include "../interfaces/standalone/command_line_input.h"
+#include "command_line_input.h"
 #include "yaml-cpp/yaml.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/commonroad_predicate.h>
-#include <commonroad_cpp/predicates/predicate_manager.h>
+#include "predicate_manager.h"
 #include <commonroad_cpp/world.h>
 #include <filesystem>
 #include <fstream>

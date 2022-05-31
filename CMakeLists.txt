@@ -58,6 +58,10 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 # Add Environment model node
 add_subdirectory(src)
 
+if(ENV_MODEL_BUILD_EXECUTABLE)
+    add_subdirectory(example)
+endif(ENV_MODEL_BUILD_EXECUTABLE)
+
 ## Doxygen
 if(ENV_MODEL_BUILD_DOXYGEN)
     include(doxygen)
