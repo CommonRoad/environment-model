@@ -127,6 +127,8 @@ void Obstacle::setTrajectoryPrediction(const Obstacle::state_map_t &trajPredicti
 
 void Obstacle::setRectangleShape(double length, double width) { geoShape = std::make_unique<Rectangle>(length, width); }
 
+void Obstacle::setGeoShape(std::unique_ptr<Shape> shape) { geoShape = std::move(shape); }
+
 void Obstacle::appendStateToTrajectoryPrediction(const std::shared_ptr<State> &state) {
     trajectoryPrediction.insert(std::pair<size_t, std::shared_ptr<State>>(state->getTimeStep(), state));
 }
@@ -161,6 +163,8 @@ std::shared_ptr<State> Obstacle::getStateByTimeStep(size_t timeStep) const {
 }
 
 ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
+
+ObstacleRole Obstacle::getObstacleRole() const { return obstacleRole; }
 
 double Obstacle::getVmax() const {
     assert(actuatorParameters);
@@ -607,6 +611,8 @@ void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes,
     if (occupiedLanes.count(timeStep) == 0)
         occupiedLanes[timeStep] = lanes;
 }
+
+void Obstacle::setObstacleRole(ObstacleRole type) { obstacleRole = type; }
 
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     auto lanelets{getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep)};

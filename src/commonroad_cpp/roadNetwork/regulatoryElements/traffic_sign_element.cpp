@@ -15,6 +15,8 @@ TrafficSignElement::TrafficSignElement(std::string el_id, std::vector<std::strin
 
 std::string TrafficSignElement::getId() const { return id; }
 
+void TrafficSignElement::setId(std::string trafficSignId) { this->id = std::move(trafficSignId); }
+
 std::vector<std::string> TrafficSignElement::getAdditionalValues() const { return additionalValues; }
 
 void TrafficSignElement::addAdditionalValue(const std::string &value) { additionalValues.push_back(value); }

@@ -80,6 +80,13 @@ class Intersection {
     void setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cross);
 
     /**
+     * Adds crossing to list of crossings.
+     *
+     * @param cross Crossing
+     */
+    void addCrossing(const std::shared_ptr<Lanelet> & cross);
+
+    /**
      *
      * @return
      */

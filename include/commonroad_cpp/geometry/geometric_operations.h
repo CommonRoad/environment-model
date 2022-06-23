@@ -101,4 +101,14 @@ double subtractOrientations(double lhs, double rhs);
  */
 double scalarProduct(const vertex &vertA, const vertex &vertB);
 
+/**
+ * Compares two double values with threshold.
+ *
+ * @param fstValue First value
+ * @param sndValue Second value
+ * @param thresh Threshold
+ * @return Equal or not
+ */
+bool equalValues(double fstValue, double sndValue, double thresh = std::numeric_limits<double>::epsilon());
+
 } // namespace geometric_operations

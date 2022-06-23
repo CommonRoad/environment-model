@@ -6,7 +6,7 @@ stages:
   - docs
   - publish
 
-image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci:1.0
+image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci:1.2
 
 before_script:
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
@@ -170,6 +170,7 @@ coverage-analyze:
     - gcovr
       -f src/
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
+      -e src/commonroad_cpp/interfaces/commonroad/protobufFormat
       -e src/commonroad_cpp/geometry/shape.h
       -e src/commonroad_cpp/interfaces/pybind/
       -e /commonroad/dist/include/yaml-cpp/
@@ -194,6 +195,7 @@ coverage-report:
     - gcovr
       -f src/
       -e src/commonroad_cpp/interfaces/standalone/main.cpp
+      -e src/commonroad_cpp/interfaces/commonroad/protobufFormat
       -e src/commonroad_cpp/geometry/shape.h
       -e src/commonroad_cpp/interfaces/pybind/
       -e /commonroad/dist/include/yaml-cpp/

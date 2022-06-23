@@ -260,3 +260,7 @@ std::vector<double> geometric_operations::computeDistanceFromPolylines(const std
 double geometric_operations::scalarProduct(const vertex &vertA, const vertex &vertB) {
     return vertA.x * vertB.x + vertA.y * vertB.y;
 }
+
+bool geometric_operations::equalValues(double fstValue, double sndValue, double thresh) {
+    return fabs(fstValue - sndValue) < thresh;
+}

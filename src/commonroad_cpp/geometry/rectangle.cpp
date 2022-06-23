@@ -5,7 +5,6 @@
 // Credits: BMW Car@TUM
 //
 
-#include <cmath>
 #include <iostream>
 
 #include <commonroad_cpp/geometry/rectangle.h>
