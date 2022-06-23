@@ -19,6 +19,15 @@ LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type
         throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type!");
 }
 
+DrivingDirection lanelet_operations::matchStringToDrivingDirection(const std::string &type) {
+    std::string str{type};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    if (DrivingDirectionNames.count(str) == 1)
+        return DrivingDirectionNames.at(str);
+    else
+        return DrivingDirection::invalid;
+}
+
 LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type) {
     if (type == "solid")
         return LineMarking::solid;

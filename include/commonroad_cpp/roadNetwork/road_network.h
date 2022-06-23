@@ -91,6 +91,20 @@ class RoadNetwork {
     [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getLaneletNetwork() const;
 
     /**
+     * Getter for traffic signs.
+     *
+     * @return list of traffic signs
+     */
+    [[nodiscard]] const std::vector<std::shared_ptr<TrafficSign>> &getTrafficSigns() const;
+
+    /**
+     * Getter for traffic lights.
+     *
+     * @return list of traffic lights
+     */
+    [[nodiscard]] const std::vector<std::shared_ptr<TrafficLight>> &getTrafficLights() const;
+
+    /**
      * Getter for lanes.
      *
      * @return list of pointers to lanes

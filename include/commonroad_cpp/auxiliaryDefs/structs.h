@@ -13,6 +13,7 @@
 #include <climits>
 #include <cstddef>
 #include <utility>
+#include <cmath>
 
 struct TrafficLightCycleElement {
     TrafficLightState color;
@@ -27,6 +28,8 @@ struct vertex {
     vertex operator-(const vertex &vert) const { return {this->x - vert.x, this->y - vert.y}; }
     vertex operator*(const vertex &vert) const { return {this->x * vert.x, this->y * vert.y}; }
     vertex operator*(const double &scalar) const { return {this->x * scalar, this->y * scalar}; }
+    vertex operator/(const vertex &vert) const { return {this->x / vert.x, this->y / vert.y}; }
+    vertex operator/(const double &scalar) const { return {this->x / scalar, this->y / scalar}; }
     void operator+=(const vertex &vert) {
         this->x += vert.x;
         this->y += vert.y;
@@ -34,6 +37,10 @@ struct vertex {
     void operator-=(const vertex &vert) {
         this->x -= vert.x;
         this->y -= vert.y;
+    }
+    bool operator==(const vertex &vert) const {
+        float epsilon = std::numeric_limits<double>::epsilon();
+        return fabs(this->x - vert.x) < epsilon and fabs(this->y - vert.y) < epsilon;
     }
 };
 

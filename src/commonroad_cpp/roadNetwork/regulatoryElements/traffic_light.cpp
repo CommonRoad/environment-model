@@ -58,6 +58,7 @@ vertex TrafficLight::getPosition() const { return position; }
 TurningDirection TrafficLight::matchTurningDirections(const std::string &dir) {
     std::string str{dir};
     std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    str.erase(remove(str.begin(), str.end(), '_'), str.end());
     if (TurningDirectionNames.count(str) == 1)
         return TurningDirectionNames.at(str);
     else

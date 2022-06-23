@@ -6,29 +6,26 @@
 //
 
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+#include <commonroad_cpp/interfaces/commonroad/protobuf_reader.hpp>
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
-#include <boost/algorithm/string/predicate.hpp>
-
-#include <boost/filesystem.hpp>
-#include <boost/program_options.hpp>
 #include <iostream>
 
 #include <spdlog/spdlog.h>
 
+namespace {
+
 /**
- * Loads and sets up CR scenario.
- * @param xmlFilePath Path to CommonRoad xml file
- * @return Tuple of obstacles and roadNetwork.
+ * Reads CR scenario from file in xml format.
+ *
+ * @param xmlFilePath File path
+ * @return Scenario
  */
-std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
-InputUtils::getDataFromCommonRoad(const std::string &xmlFilePath) {
-    spdlog::info("Read file: {}", xmlFilePath);
-    // Read and parse CommonRoad scenario file
+Scenario readFromXMLFile(const std::string &xmlFilePath) {
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = XMLReader::createTrafficSignFromXML(xmlFilePath);
     std::vector<std::shared_ptr<TrafficLight>> trafficLights = XMLReader::createTrafficLightFromXML(xmlFilePath);
     std::vector<std::shared_ptr<Lanelet>> lanelets =
@@ -44,6 +41,35 @@ InputUtils::getDataFromCommonRoad(const std::string &xmlFilePath) {
         inter->computeMemberLanelets(roadNetwork);
 
     auto timeStepSize{XMLReader::extractTimeStepSize(xmlFilePath)};
-    spdlog::info("File successfully read: {}", xmlFilePath);
+
     return std::make_tuple(obstacles, roadNetwork, timeStepSize);
+}
+
+/**
+ * Reads CR scenario from file in protobuf format.
+ *
+ * @param pbFilePath File path
+ * @return Scenario
+ */
+Scenario readFromProtobufFile(const std::string &pbFilePath) {
+    commonroad::CommonRoad commonRoadMsg = ProtobufReader::loadProtobufMessage(pbFilePath);
+
+    return ProtobufReader::createCommonRoadFromMessage(commonRoadMsg);
+}
+
+} // namespace
+
+Scenario InputUtils::getDataFromCommonRoad(const std::string &filePath, FileFormat fileFormat)
+// Loads and sets up CR scenario
+{
+    spdlog::info("Read file: {}", filePath);
+
+    Scenario scenario;
+    if (fileFormat == XML)
+        scenario = readFromXMLFile(filePath);
+    else
+        scenario = readFromProtobufFile(filePath);
+
+    spdlog::info("File successfully read: {}", filePath);
+    return scenario;
 }

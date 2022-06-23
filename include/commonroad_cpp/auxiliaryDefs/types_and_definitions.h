@@ -30,6 +30,8 @@ enum class ObstacleType {
     taxi
 };
 
+enum class ObstacleRole { STATIC, DYNAMIC, ENVIRONMENT, PHANTOM };
+
 enum class LaneletType {
     interstate,
     urban,
