@@ -284,3 +284,6 @@ const std::unordered_map<std::string, LaneletType> LaneletTypeNames = {
     {"INTERSECTION_STRAIGHT_OUTGOING", LaneletType::intersectionStraightOutgoing},
     {"INCOMING", LaneletType::incoming},
 };
+
+const std::unordered_map<std::string, DrivingDirection> DrivingDirectionNames = {
+    {"SAME", DrivingDirection::same}, {"OPPOSITE", DrivingDirection::opposite}, {"INVALID", DrivingDirection::invalid}};

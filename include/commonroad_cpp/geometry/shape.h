@@ -15,6 +15,9 @@
  */
 class Shape {
   public:
+
+    virtual ~Shape() = default;
+
     /**
      * Virtual setter for shape length. Function can only be used for rectangles.
      *

@@ -57,6 +57,10 @@ RoadNetwork::RoadNetwork(const std::vector<std::shared_ptr<Lanelet>> &network, S
 
 const std::vector<std::shared_ptr<Lanelet>> &RoadNetwork::getLaneletNetwork() const { return laneletNetwork; }
 
+const std::vector<std::shared_ptr<TrafficSign>> &RoadNetwork::getTrafficSigns() const { return trafficSigns; }
+
+const std::vector<std::shared_ptr<TrafficLight>> &RoadNetwork::getTrafficLights() const { return trafficLights; }
+
 std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() {
     std::vector<std::shared_ptr<Lane>> collectedLanes;
     for (const auto &containedLanes : lanes) {

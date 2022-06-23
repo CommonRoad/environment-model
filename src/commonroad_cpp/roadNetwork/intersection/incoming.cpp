@@ -117,3 +117,19 @@ Incoming::collectIncomingSuccessors(std::deque<std::shared_ptr<Lanelet>> &candid
         memberLanelets.insert(memberLanelets.end(), incomings.begin(), incomings.end());
     return memberLanelets;
 }
+
+void Incoming::addIncomingLanelet(const std::shared_ptr<Lanelet> &incomingLanelet) {
+    incomingLanelets.push_back(incomingLanelet);
+}
+
+void Incoming::addStraightOutgoing(const std::shared_ptr<Lanelet> &straightOutgoing) {
+    straightOutgoings.push_back(straightOutgoing);
+}
+
+void Incoming::addLeftOutgoing(const std::shared_ptr<Lanelet> &leftOutgoing) { leftOutgoings.push_back(leftOutgoing); }
+
+void Incoming::addRightOutgoing(const std::shared_ptr<Lanelet> &rightOutgoing) {
+    rightOutgoings.push_back(rightOutgoing);
+}
+
+void Incoming::addOncoming(const std::shared_ptr<Lanelet> &oncoming) { oncomings.push_back(oncoming); }

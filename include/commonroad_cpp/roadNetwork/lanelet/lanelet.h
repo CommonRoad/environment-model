@@ -447,3 +447,5 @@ class Lanelet {
 };
 
 extern const std::unordered_map<std::string, LaneletType> LaneletTypeNames;
+
+extern const std::unordered_map<std::string, DrivingDirection> DrivingDirectionNames;

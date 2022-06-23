@@ -29,6 +29,12 @@ class TrafficSignElement {
     explicit TrafficSignElement(std::string trafficSignId, std::vector<std::string> values = {});
 
     /**
+     * Default Constructor without parameters for a traffic sign element.
+     *
+     */
+    TrafficSignElement() = default;
+
+    /**
      * Copy constructor of traffic sign element.
      *
      */
@@ -40,6 +46,12 @@ class TrafficSignElement {
      * @return ID of traffic sign element.
      */
     [[nodiscard]] std::string getId() const;
+
+    /**
+     * Adds ID of traffic sign element.
+     *
+     */
+    void setId(std::string trafficSignId);
 
     /**
      * Getter for additional values of traffic sign element.
