@@ -28,6 +28,8 @@ void Intersection::setIncomings(const std::vector<std::shared_ptr<Incoming>> &in
 
 void Intersection::setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cross) { crossings = cross; }
 
+void Intersection::addCrossing(const std::shared_ptr<Lanelet> &cross) { crossings.push_back(cross); }
+
 Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<Incoming>> incomings,
                            std::vector<std::shared_ptr<Lanelet>> crossings)
     : id(intersectionId), incomings(std::move(incomings)), crossings(std::move(crossings)) {}

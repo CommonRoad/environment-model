@@ -8,6 +8,7 @@
 #pragma once
 
 #include "shape.h"
+#include <commonroad_cpp/geometry/geometric_operations.h>
 
 /**
  * Class representing a rectangle.

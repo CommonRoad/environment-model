@@ -134,6 +134,41 @@ class Incoming {
      */
     void setOncomings(const std::vector<std::shared_ptr<Lanelet>> &oncomings);
 
+    /**
+     * Adds incoming lanelet to list of incoming lanelets.
+     *
+     * @param incomingLanelet Incoming lanelet
+     */
+    void addIncomingLanelet(const std::shared_ptr<Lanelet> &incomingLanelet);
+
+    /**
+     * Adds straight outgoing to list of straight outgoings.
+     *
+     * @param straightOutgoing Straight outgoing
+     */
+    void addStraightOutgoing(const std::shared_ptr<Lanelet> &straightOutgoing);
+
+    /**
+     * Adds left outgoing to list of left outgoings.
+     *
+     * @param leftOutgoing Left outgoing
+     */
+    void addLeftOutgoing(const std::shared_ptr<Lanelet> &leftOutgoing);
+
+    /**
+     * Adds right outgoing to list of right outgoings.
+     *
+     * @param rightOutgoing Right outgoing
+     */
+    void addRightOutgoing(const std::shared_ptr<Lanelet> &rightOutgoing);
+
+    /**
+     * Adds oncoming to list of oncomings.
+     *
+     * @param oncoming Oncoming
+     */
+    void addOncoming(const std::shared_ptr<Lanelet> &oncoming);
+
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorLeft();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorRight();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorStraight();

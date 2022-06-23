@@ -9,6 +9,7 @@
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "shape.h"
+#include <commonroad_cpp/geometry/geometric_operations.h>
 
 /**
  * Class representing a circle.

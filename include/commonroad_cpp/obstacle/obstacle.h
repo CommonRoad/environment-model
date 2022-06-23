@@ -96,6 +96,13 @@ class Obstacle {
     void setIsStatic(bool staticObstacle);
 
     /**
+     * Setter for obstacle role.
+     *
+     * @param type Role of obstacle
+     */
+     void setObstacleRole(ObstacleRole type);
+
+    /**
      * Setter for current state.
      *
      * @param currentState Current state of obstacle.
@@ -139,6 +146,12 @@ class Obstacle {
     void setRectangleShape(double length, double width);
 
     /**
+     * Setter for obstacle shape
+     * @param geoShape Shape
+     */
+    void setGeoShape(std::unique_ptr<Shape> shape);
+
+    /**
      * Appends a state to the trajectory prediction.
      *
      * @param state Pointer to state object.
@@ -165,6 +178,13 @@ class Obstacle {
      * @return Boolean indicating whether the obstacle is static or not.
      */
     [[nodiscard]] bool getIsStatic() const;
+
+    /**
+     * Getter for obstacle role.
+     *
+     * @return Role of obstacle
+     */
+    [[nodiscard]] ObstacleRole getObstacleRole() const;
 
     /**
      * Getter for current state.
@@ -531,6 +551,7 @@ class Obstacle {
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     bool isStatic{false};                             //**< true if Obstacle is static */
+    ObstacleRole obstacleRole{ObstacleRole::DYNAMIC}; //**< CommonRoad obstacle role */
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
 

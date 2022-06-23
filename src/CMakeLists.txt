@@ -75,7 +75,22 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/predicates/predicate_config.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
-        commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp)
+        commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp
+        commonroad_cpp/interfaces/commonroad/protobuf_reader.cpp
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/commonroad.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/dynamic_obstacle.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/environment_obstacle.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/intersection.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/lanelet.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/location.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/obstacle.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/phantom_obstacle.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/planning_problem.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/scenario_tags.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/static_obstacle.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/traffic_light.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/traffic_sign.pb.cc
+        commonroad_cpp/interfaces/commonroad/protobufFormat/generatedClasses/util.pb.cc)
 
 # Create environment model library
 if(ENV_MODEL_BUILD_SHARED_LIBS)
@@ -91,23 +106,32 @@ target_compile_features(env_model
 set_property(TARGET env_model PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(env_model
-    PUBLIC
+        PUBLIC
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    )
+        )
 
 target_link_libraries(env_model
-    PUBLIC
+        PUBLIC
         Eigen3::Eigen
         DrivabilityChecker::crccosy
-    )
+        )
 
 target_link_libraries(env_model
-    PRIVATE
+        PUBLIC
+        Eigen3::Eigen
+        DrivabilityChecker::crccosy
+        yaml-cpp
+        ${PROTOBUF_LIBRARY}
+        )
+
+
+target_link_libraries(env_model
+        PRIVATE
         OpenMP::OpenMP_CXX
         pugixml-static
         spdlog::spdlog
-    )
+        )
 
 # add pybind module
 if(SKBUILD)
