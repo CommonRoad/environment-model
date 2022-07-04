@@ -115,7 +115,8 @@ target_link_libraries(env_model
         PUBLIC
         Eigen3::Eigen
         DrivabilityChecker::crccosy
-        )
+        range-v3::range-v3
+    )
 
 target_link_libraries(env_model
         PUBLIC

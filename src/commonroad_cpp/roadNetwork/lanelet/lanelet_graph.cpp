@@ -9,20 +9,27 @@
 std::vector<size_t> LaneletGraph::findPaths(size_t src, size_t dst, bool considerAdjacency) {
     if (queries.find({src, dst}) != queries.end())
         return queries[{src, dst}];
+
     std::vector<size_t> path;
-    std::optional<std::pair<std::vector<std::ptrdiff_t>, std::ptrdiff_t>> result;
+
     if (src == dst)
         path = {src};
-    else if (considerAdjacency) {
-        dijkstra<size_t, size_t> searcher{graphAdjSuc, static_cast<ptrdiff_t>(verticesAdjSuc.at(src))};
-        result = searcher.search_path(static_cast<ptrdiff_t>(verticesAdjSuc.at(dst)));
-        for (const auto &res : result->first)
-            path.push_back(verticesAdjSucRes.at(static_cast<const unsigned long>(res)));
-    } else {
-        dijkstra<size_t, size_t> searcher{graphSuc, static_cast<ptrdiff_t>(verticesAdjSuc.at(src))};
-        result = searcher.search_path(static_cast<ptrdiff_t>(verticesAdjSuc.at(dst)));
-        for (const auto &res : result->first)
-            path.push_back(verticesSucRes.at(static_cast<const unsigned long>(res)));
+    else {
+        const auto srcId = static_cast<ptrdiff_t>(verticesAdjSuc.at(src));
+        const auto dstId = static_cast<ptrdiff_t>(verticesAdjSuc.at(dst));
+
+        const auto &graph = considerAdjacency ? graphAdjSuc : graphSuc;
+        auto &vertices = considerAdjacency ? verticesAdjSucRes : verticesSucRes;
+
+        dijkstra<size_t, size_t> searcher{graph, srcId};
+
+        using result_type = std::optional<std::pair<std::vector<std::ptrdiff_t>, std::ptrdiff_t>>;
+        result_type result = searcher.search_path(dstId);
+
+        if (result.has_value()) {
+            for (const auto &res : result.value().first)
+                path.push_back(vertices.at(static_cast<const unsigned long>(res)));
+        }
     }
     queries[{src, dst}] = path;
     return path;
