@@ -38,6 +38,13 @@ FetchContent_Declare(
         GIT_TAG yaml-cpp-0.6.3
 )
 
+# range-v3
+FetchContent_Declare(
+  range-v3
+  GIT_REPOSITORY https://github.com/ericniebler/range-v3
+  GIT_TAG        0.12.0
+)
+
 
 # Stage 2: Run FetchContent_MakeAvailable
 # CMake recommends running FetchContent_Declare for all third-party projects first
@@ -55,6 +62,8 @@ install(
 set(PYBIND11_CPP_STANDARD -std=c++17)
 FetchContent_MakeAvailable(external_pybind11)
 
+FetchContent_MakeAvailable(range-v3)
+
 FetchContent_MakeAvailable(external_googletest)
 
 # Add google-test
@@ -67,6 +76,7 @@ set_target_properties(gtest PROPERTIES FOLDER extern)
 set_target_properties(gtest_main PROPERTIES FOLDER extern)
 set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
+set(INSTALL_GTEST OFF)
 
 
 

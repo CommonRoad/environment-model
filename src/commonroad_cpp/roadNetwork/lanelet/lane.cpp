@@ -60,6 +60,10 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
 
 const std::unordered_set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
 
+bool Lane::containsLanelet(const std::shared_ptr<Lanelet> &lanelet) const { return containsLanelet(lanelet->getId()); }
+
+bool Lane::containsLanelet(size_t id) const { return containedLaneletIds.find(id) != containedLaneletIds.cend(); }
+
 std::vector<std::shared_ptr<Lanelet>> Lane::getSuccessorLanelets(const std::shared_ptr<Lanelet> &lanelet) const {
     if (getContainedLaneletIDs().find(lanelet->getId()) == getContainedLaneletIDs().end())
         return {};
