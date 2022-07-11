@@ -99,9 +99,8 @@ target_include_directories(env_model
         )
 
 target_link_libraries(env_model
-        PUBLIC
-        Eigen3::Eigen
-        DrivabilityChecker::crccosy
+        PRIVATE
+        # Not used in any headers
         range-v3::range-v3
     )
 
