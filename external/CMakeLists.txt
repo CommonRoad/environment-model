@@ -35,7 +35,8 @@ FetchContent_Declare(
 FetchContent_Declare(
         external_yaml_cpp
         GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-        GIT_TAG yaml-cpp-0.6.3
+        GIT_TAG        yaml-cpp-0.7.0
+        GIT_PROGRESS   true
 )
 
 # range-v3
@@ -85,8 +86,6 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 set(YAML_CPP_BUILD_TESTS OFF)
 set(YAML_CPP_BUILD_TOOLS OFF)
 FetchContent_MakeAvailable(external_yaml_cpp)
-set_property(TARGET yaml-cpp
-        PROPERTY POSITION_INDEPENDENT_CODE ON)
 # Install rule for yaml-cpp headers
 install(
         DIRECTORY ${external_yaml_cpp_SOURCE_DIR}/src/
