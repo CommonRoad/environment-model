@@ -80,7 +80,7 @@ if(ENV_MODEL_BUILD_TESTS)
 endif(ENV_MODEL_BUILD_TESTS)
 
 
-install(TARGETS env_model commonroad_protobuf
+install(TARGETS env_model commonroad_protobuf yaml-cpp
         EXPORT ${PROJECT_NAME}_Targets
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
