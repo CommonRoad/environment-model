@@ -184,7 +184,9 @@ coverage-analyze:
   coverage: /^\s*lines:\s*\d+.\d+\%/
   artifacts:
     reports:
-      cobertura: coverage.xml
+      coverage_report:
+          coverage_format: cobertura
+          path: coverage.xml
 
 coverage-report:
   stage: coverage
