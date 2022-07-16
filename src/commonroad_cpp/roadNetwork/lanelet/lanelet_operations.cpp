@@ -10,6 +10,8 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <utility>
 
+#include <range/v3/all.hpp>
+
 LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type) {
     std::string str{type};
     std::transform(str.begin(), str.end(), str.begin(), ::toupper);
@@ -225,12 +227,11 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(
 
 std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet,
                                                                            bool sameDirection) {
-    std::vector<std::shared_ptr<Lanelet>> relevantLanelets{lanelet};
     auto leftLanelets{laneletsLeftOfLanelet(lanelet, sameDirection)};
     auto rightLanelets{laneletsRightOfLanelet(lanelet, sameDirection)};
-    relevantLanelets.insert(relevantLanelets.end(), leftLanelets.begin(), leftLanelets.end());
-    relevantLanelets.insert(relevantLanelets.end(), rightLanelets.begin(), rightLanelets.end());
-    return relevantLanelets;
+    std::initializer_list<std::shared_ptr<Lanelet>> initial_lanelet{lanelet};
+
+    return ranges::concat_view(initial_lanelet, leftLanelets, rightLanelets) | ranges::to<std::vector>;
 }
 
 bool lanelet_operations::areLaneletsInDirectlyAdjacentLanes(
@@ -254,35 +255,40 @@ bool lanelet_operations::areLaneletsInDirectlyAdjacentLanes(
 
 double lanelet_operations::roadWidth(const std::shared_ptr<Lanelet> &lanelet, double xPosition, double yPosition) {
     std::vector<std::shared_ptr<Lanelet>> adj_lanelets = adjacentLanelets(lanelet, false);
-    double road_width{0};
-    for (auto &adjLanelet : adj_lanelets)
-        road_width += adjLanelet->getWidth(xPosition, yPosition);
 
-    return road_width;
+    auto lanelet_widths = adj_lanelets | ranges::views::transform([xPosition, yPosition](auto &adjLanelet) -> double {
+                              return adjLanelet->getWidth(xPosition, yPosition);
+                          });
+
+    return ranges::accumulate(lanelet_widths, 0.0);
 }
 
 std::vector<std::shared_ptr<TrafficLight>>
 lanelet_operations::activeTlsByLanelet(size_t timeStep, const std::shared_ptr<Lanelet> &lanelet) {
-    std::vector<std::shared_ptr<TrafficLight>> relevantTrafficLights;
-    for (const auto &light : lanelet->getTrafficLights())
-        if (light->isActive() or light->getElementAtTime(timeStep).color != TrafficLightState::inactive)
-            relevantTrafficLights.push_back(light);
-
-    return relevantTrafficLights;
+    return lanelet->getTrafficLights() | ranges::views::filter([timeStep](const auto &light) {
+               return light->isActive() or light->getElementAtTime(timeStep).color != TrafficLightState::inactive;
+           }) |
+           ranges::to<std::vector>;
 }
 
 std::vector<std::shared_ptr<Lanelet>>
 lanelet_operations::extractLaneletsFromLanes(const std::vector<std::shared_ptr<Lane>> &lanes) {
-    std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
-    for (const auto &lane : lanes) {
-        for (const auto &let : lane->getContainedLanelets())
-            if (!std::any_of(relevantLanelets.begin(), relevantLanelets.end(),
-                             [let](const std::shared_ptr<Lanelet> &letConsidered) {
-                                 return let->getId() == letConsidered->getId();
-                             }))
-                relevantLanelets.push_back(let);
-    }
-    return relevantLanelets;
+    std::unordered_set<size_t> ids;
+    auto lanelets = lanes |
+                    ranges::views::transform([](const auto &lane) { return lane->getContainedLanelets(); })
+                    // Join vector of vectors into vector
+                    | ranges::actions::join;
+
+    return lanelets
+           // Only keep lanelets we haven't seen yet
+           | ranges::views::filter([&ids](const auto &lanelet) {
+                 const auto id = lanelet->getId();
+                 bool not_exists = ids.count(id) == 0;
+                 if (not_exists)
+                     ids.insert(id);
+                 return not_exists;
+             }) |
+           ranges::to<std::vector>;
 }
 
 std::vector<std::shared_ptr<Lanelet>>
