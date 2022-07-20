@@ -16,10 +16,11 @@ FetchContent_Declare(
   external_pybind11
 
   GIT_REPOSITORY https://github.com/pybind/pybind11.git
-  GIT_TAG        v2.8.1
+  GIT_TAG        v2.10.0
   GIT_PROGRESS   true
 
 )
+
 
 # GoogleTest
 FetchContent_Declare(
