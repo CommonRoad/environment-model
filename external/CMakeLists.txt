@@ -7,7 +7,7 @@ FetchContent_Declare(
   external_pugixml
 
   GIT_REPOSITORY https://github.com/zeux/pugixml.git
-  GIT_TAG        v1.11.4
+  GIT_TAG        v1.12.1
   GIT_PROGRESS   true
 )
 
