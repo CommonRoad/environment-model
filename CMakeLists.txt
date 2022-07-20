@@ -44,7 +44,8 @@ find_package(Boost REQUIRED COMPONENTS filesystem program_options)
 find_package(spdlog REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Protobuf REQUIRED)
-include_directories(${PROTOBUF_INCLUDE_DIR})
+set_target_properties(protobuf::protoc PROPERTIES IMPORTED_GLOBAL TRUE)
+
 find_package(OpenMP)
 if(NOT OpenMP_CXX_FOUND)
     message(SEND_ERROR "Can't find the OpenMP package")
@@ -57,6 +58,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 
 # Add Environment model node
 add_subdirectory(src)
@@ -77,7 +80,7 @@ if(ENV_MODEL_BUILD_TESTS)
 endif(ENV_MODEL_BUILD_TESTS)
 
 
-install(TARGETS env_model
+install(TARGETS env_model commonroad_protobuf
         EXPORT ${PROJECT_NAME}_Targets
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
