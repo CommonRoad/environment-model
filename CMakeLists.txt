@@ -27,7 +27,7 @@ FetchContent_Declare(
         external_cmake_modules
 
         GIT_REPOSITORY git@gitlab.lrz.de:cps/rapid-prototyping-setup.git
-        GIT_TAG        fe64e917d3b0173c006e8ca04a6a8ed23c2292c7
+        GIT_TAG        bd72447377c5c9552d826f11e3899210a7e3539b
         GIT_PROGRESS   true
         )
 
@@ -127,10 +127,11 @@ install(FILES
         )
 
 # Export target configuration (for local building)
-export(EXPORT ${PROJECT_NAME}_Targets
-        FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
-        NAMESPACE ${PROJECT_NAME}::
-        )
+# FIXME: Does not work for now
+# export(EXPORT ${PROJECT_NAME}_Targets
+#         FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
+#         NAMESPACE ${PROJECT_NAME}::
+#         )
 
 install(
         DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
