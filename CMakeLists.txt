@@ -53,6 +53,9 @@ endif()
 include(extras/DiscoverLLD OPTIONAL)
 include(extras/DiscoverSanitizers)
 
+# Required for proper pthread discovery on some systems
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+
 # Include Eigen3, Boost filesystem, spdlog, and OpenMP
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)
