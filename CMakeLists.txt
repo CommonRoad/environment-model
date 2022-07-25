@@ -50,9 +50,6 @@ if(NOT CMAKE_BUILD_TYPE)
             STRING "Choose the type of build." FORCE)
 endif()
 
-include(extras/DiscoverLLD OPTIONAL)
-include(extras/DiscoverSanitizers)
-
 # Required for proper pthread discovery on some systems
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
@@ -65,6 +62,8 @@ find_package(Protobuf REQUIRED)
 find_package(OpenMP REQUIRED)
 set_target_properties(protobuf::protoc PROPERTIES IMPORTED_GLOBAL TRUE)
 
+include(extras/DiscoverLLD OPTIONAL)
+include(extras/DiscoverSanitizers)
 
 include(external/ExternalGoogleTest)
 include(external/ExternalDrivabilityChecker)
