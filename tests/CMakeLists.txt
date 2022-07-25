@@ -124,7 +124,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
                 spdlog::spdlog
                 )
 
-        include(CodeCoverage)
+        include(extras/CodeCoverage)
         append_coverage_compiler_flags()
         setup_target_for_coverage_gcovr_html(
                 NAME env_model_coverage                                          # New target name
