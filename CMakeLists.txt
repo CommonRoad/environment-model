@@ -21,9 +21,21 @@ include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
 # Appends dictionary where other cmake files are stored which install required Software
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/)
+include(FetchContent)
 
-# Set compiler optimizations for build types
+FetchContent_Declare(
+        external_cmake_modules
+
+        GIT_REPOSITORY git@gitlab.lrz.de:cps/rapid-prototyping-setup.git
+        GIT_TAG        fe64e917d3b0173c006e8ca04a6a8ed23c2292c7
+        GIT_PROGRESS   true
+        )
+
+FetchContent_MakeAvailable(external_cmake_modules)
+
+list(APPEND CMAKE_MODULE_PATH ${external_cmake_modules_SOURCE_DIR}/cmake)
+
+# Set  optimizations for build types
 set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
 set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
 
@@ -38,20 +50,25 @@ if(NOT CMAKE_BUILD_TYPE)
             STRING "Choose the type of build." FORCE)
 endif()
 
+include(extras/DiscoverLLD OPTIONAL)
+include(extras/DiscoverSanitizers)
+
 # Include Eigen3, Boost filesystem, spdlog, and OpenMP
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)
 find_package(spdlog REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Protobuf REQUIRED)
+find_package(OpenMP REQUIRED)
 set_target_properties(protobuf::protoc PROPERTIES IMPORTED_GLOBAL TRUE)
 
-find_package(OpenMP)
-if(NOT OpenMP_CXX_FOUND)
-    message(SEND_ERROR "Can't find the OpenMP package")
-endif()
 
-add_subdirectory(external)
+include(external/ExternalGoogleTest)
+include(external/ExternalDrivabilityChecker)
+include(external/ExternalPugixml)
+include(external/ExternalPybind)
+include(external/ExternalRange)
+include(external/ExternalYamlCpp)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -70,7 +87,7 @@ endif(ENV_MODEL_BUILD_EXECUTABLE)
 
 ## Doxygen
 if(ENV_MODEL_BUILD_DOXYGEN)
-    include(doxygen)
+    include(extras/Doxygen)
 endif(ENV_MODEL_BUILD_DOXYGEN)
 
 # add unit testing
