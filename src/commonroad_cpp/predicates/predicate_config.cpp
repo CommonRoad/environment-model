@@ -30,15 +30,15 @@ void PredicateParameters::checkParameterValidity() const {
 }
 
 std::map<std::string, std::array<double, 2>> predicateSatisfaction{
-    {"keeps_safe_distance_prec", {95.0, 85.0}},
-    {"unnecessary_braking", {90.0, 5.0}},
-    {"in_same_lane", {1.0, 15.0}},
-    {"in_front_of", {85.0, 45.0}},
-    {"orientation_towards", {95.0, 1.0}},
+    {"keeps_safe_distance_prec", {95.0, 0.85}},
+    {"unnecessary_braking", {90.0, 0.05}},
+    {"in_same_lane", {1.0, 0.15}},
+    {"in_front_of", {85.0, 0.45}},
+    {"orientation_towards", {95.0, 0.01}},
     {"in_single_lane", {5.0, 80.0}},
-    {"keeps_lane_speed_limit", {1.0, 80.0}},
-    {"keeps_sign_min_speed_limit", {1.0, 95.0}},
-    {"lane_based_orientation_similar", {10.0, 99.0}},
-    {"preserves_traffic_flow", {30.0, 70.0}},
-    {"slow_leading_vehicle", {99.0, 10.0}},
+    {"keeps_lane_speed_limit", {1.0, 0.80}},
+    {"keeps_sign_min_speed_limit", {1.0, 0.95}},
+    {"lane_based_orientation_similar", {10.0, 0.99}},
+    {"preserves_traffic_flow", {30.0, 0.70}},
+    {"slow_leading_vehicle", {99.0, 0.10}},
 };
