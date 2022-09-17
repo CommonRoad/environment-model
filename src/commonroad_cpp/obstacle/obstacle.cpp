@@ -76,11 +76,11 @@ Obstacle::Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> curr
                    const std::vector<vertex> &fov)
     : Obstacle{obstacleId,
                isStatic,
-               currentState,
+               std::move(currentState),
                obstacleType,
                ActuatorParameters{vMax, aMax, aMaxLong, aMinLong, aMinLong},
                SensorParameters{250.0, 250.0, reactionTime},
-               trajectoryPrediction,
+               std::move(trajectoryPrediction),
                std::make_unique<Rectangle>(length, width),
                fov} {}
 
@@ -300,8 +300,8 @@ void Obstacle::convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<
 }
 
 double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    if (!(convertedPositions.count(timeStep) == 1 and
-          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
+    if (convertedPositions.count(timeStep) != 1 ||
+          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) != 1) {
         try {
             convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
@@ -344,8 +344,8 @@ double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
 }
 
 double Obstacle::rightD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    if (!(convertedPositions.count(timeStep) == 1 and
-          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
+    if (convertedPositions.count(timeStep) != 1 ||
+          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) != 1) {
         try {
             convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
@@ -365,8 +365,8 @@ double Obstacle::rightD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
 }
 
 double Obstacle::leftD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    if (!(convertedPositions.count(timeStep) == 1 and
-          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
+    if (convertedPositions.count(timeStep) != 1 ||
+          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) != 1) {
         try {
             convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
@@ -425,8 +425,8 @@ double Obstacle::getLatPosition(const std::shared_ptr<RoadNetwork> &roadNetwork,
 }
 
 double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    if (!(convertedPositions.count(timeStep) == 1 and
-          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
+    if (convertedPositions.count(timeStep) != 1 ||
+          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) != 1) {
         try {
             convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
@@ -443,8 +443,8 @@ double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &re
 }
 
 double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    if (!(convertedPositions.count(timeStep) == 1 and
-          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
+    if (convertedPositions.count(timeStep) != 1 ||
+          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) != 1) {
         try {
             convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
@@ -468,8 +468,8 @@ double Obstacle::getCurvilinearOrientation(const std::shared_ptr<RoadNetwork> &r
 }
 
 double Obstacle::getCurvilinearOrientation(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    if (!(convertedPositions.count(timeStep) == 1 and
-          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) == 1)) {
+    if (convertedPositions.count(timeStep) != 1 ||
+          convertedPositions[timeStep].count(refLane->getContainedLaneletIDs()) != 1) {
         try {
             convertPointToCurvilinear(timeStep, refLane);
         } catch (...) {
