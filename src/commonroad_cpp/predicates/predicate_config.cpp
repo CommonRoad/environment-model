@@ -35,7 +35,7 @@ std::map<std::string, std::array<double, 2>> predicateSatisfaction{
     {"in_same_lane", {1.0, 0.15}},
     {"in_front_of", {85.0, 0.45}},
     {"orientation_towards", {95.0, 0.01}},
-    {"in_single_lane", {5.0, 80.0}},
+    {"in_single_lane", {5.0, 0.80}},
     {"keeps_lane_speed_limit", {1.0, 0.80}},
     {"keeps_sign_min_speed_limit", {1.0, 0.95}},
     {"lane_based_orientation_similar", {10.0, 0.99}},
