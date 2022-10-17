@@ -1,6 +1,7 @@
+include(FetchContent)
 
 FetchContent_Declare(
-    external_yaml_cpp
+    yaml-cpp
     GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
     #GIT_TAG        c73ee34704c512ebe915b283645aefa9f424a22f
     #GIT_TAG        4ae4cb7309c07b2d8623d7e4f01efa6321441366
@@ -19,5 +20,5 @@ set(YAML_CPP_BUILD_CONTRIB OFF)
 set(YAML_CPP_INSTALL OFF)
 # set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "" FORCE)
 
-FetchContent_MakeAvailable(external_yaml_cpp)
+FetchContent_MakeAvailable(yaml-cpp)
 
