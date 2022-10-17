@@ -24,6 +24,12 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
         commonroad_cpp/interfaces/commonroad/input_utils.cpp
         commonroad_cpp/world.cpp
+        commonroad_cpp/commonroad_container.cpp
+        commonroad_cpp/auxiliaryDefs/timer.cpp
+        commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp
+        commonroad_cpp/interfaces/commonroad/protobuf_reader.cpp)
+
+set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
@@ -73,75 +79,124 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/same_priority_predicate.cpp
         commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
-        commonroad_cpp/commonroad_container.cpp
-        commonroad_cpp/predicates/predicate_config.cpp
-        commonroad_cpp/auxiliaryDefs/timer.cpp
-        commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp
-        commonroad_cpp/interfaces/commonroad/protobuf_reader.cpp)
+        commonroad_cpp/predicates/predicate_config.cpp)
 
+add_library(env_model_core OBJECT ${ENV_MODEL_SRC_FILES})
 
-# Create environment model library
-if(ENV_MODEL_BUILD_SHARED_LIBS)
-    add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
-else()
-    add_library(env_model STATIC ${ENV_MODEL_SRC_FILES})
-endif()
-
-target_compile_features(env_model
+target_compile_features(env_model_core
         PUBLIC cxx_lambdas cxx_auto_type
         PRIVATE cxx_lambdas cxx_auto_type)
 
-set_property(TARGET env_model PROPERTY POSITION_INDEPENDENT_CODE ON)
+set_property(TARGET env_model_core PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-target_include_directories(env_model
+target_include_directories(env_model_core
         PUBLIC
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         )
 
-target_link_libraries(env_model
+# if(pugixml_FOUND)
+#         add_library(pugixml ALIAS pugixml::pugixml)
+# elseif(SKBUILD)
+#         add_library(pugixml ALIAS pugixml::static)
+# else()
+#         add_library(pugixml ALIAS pugixml::pugixml)
+# endif()
+
+# find_package(pugixml)
+target_link_libraries(env_model_core
         PRIVATE
         # Not used in any headers
-        range-v3::range-v3
-    )
-
-target_link_libraries(env_model
-        PUBLIC
         Eigen3::Eigen
-        DrivabilityChecker::crccosy
-        yaml-cpp
+        $<BUILD_INTERFACE:yaml-cpp::yaml-cpp>
+        OpenMP::OpenMP_CXX
+        # pugixml::pugixml-static
+        # pugixml::pugixml
+        #pugixml-static
+        pugixml::pugixml
+        # spdlog::spdlog
+        $<BUILD_INTERFACE:spdlog::spdlog>
+)
+
+target_link_libraries(env_model_core
+        PUBLIC
+        crccosy
+        range-v3::range-v3
         commonroad_protobuf
         )
 
 
+add_library(env_model_predicates OBJECT ${ENV_MODEL_PREDICATES_SRC_FILES})
+
+target_include_directories(env_model_predicates
+        PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        )
+
+target_link_libraries(env_model_predicates
+        PUBLIC
+        Eigen3::Eigen
+        crccosy
+        #DrivabilityChecker::crccosy
+        range-v3
+        env_model_core
+        )
+
+set_property(TARGET env_model_predicates PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+
+# Create environment model library
+add_library(env_model)
+# if(ENV_MODEL_BUILD_SHARED_LIBS)
+#     add_library(env_model SHARED)
+# else()
+#     add_library(env_model STATIC)
+# endif()
+
 target_link_libraries(env_model
-        PRIVATE
-        OpenMP::OpenMP_CXX
-        pugixml-static
-        spdlog::spdlog
+        PUBLIC
+        env_model_core
+        env_model_predicates
+        commonroad_protobuf
         )
 
 # add pybind module
 if(SKBUILD)
     message(STATUS "The project is built using scikit-build")
 endif()
-if(ENV_MODEL_BUILD_PYBIND)
-    set(python_module_name crcpp)
-    pybind11_add_module(${python_module_name} MODULE
+#if(ENV_MODEL_BUILD_PYBIND)
+if(SKBUILD)
+    add_library(env_model_python OBJECT
             commonroad_cpp/interfaces/pybind/python_interface.cpp
             commonroad_cpp/interfaces/pybind/python_interface.h
             commonroad_cpp/interfaces/pybind/translate_python_types.cpp
             commonroad_cpp/interfaces/pybind/translate_python_types.h)
+    target_link_libraries(env_model_python PRIVATE env_model pybind11::module)
+    set_property(TARGET env_model_python PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+    set(python_module_name crcpp)
+    pybind11_add_module(${python_module_name} MODULE $<TARGET_OBJECTS:env_model_python>)
 
     target_link_libraries(${python_module_name} PRIVATE env_model)
 
     install(TARGETS ${python_module_name} env_model
             LIBRARY DESTINATION .
+            COMPONENT PythonModules
             )
 
-    set_property(TARGET ${python_module_name} PROPERTY INSTALL_RPATH "$ORIGIN")
+    add_custom_target(install-python-modules-${python_module_name}
+        ${CMAKE_COMMAND}
+        -DCMAKE_INSTALL_COMPONENT=PythonModules
+        -P "${PROJECT_BINARY_DIR}/cmake_install.cmake"
+        DEPENDS ${python_module_name}
+        )
 
-endif(ENV_MODEL_BUILD_PYBIND)
+
+    # include(utils/CheckRuntimeDependencies)
+    # check_python_runtime_dependencies(${python_module_name})
+
+endif(SKBUILD)
 
 # this adds many warnings to the build. They usually help to find some bugs
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
