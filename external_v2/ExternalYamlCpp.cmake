@@ -9,6 +9,8 @@ FetchContent_Declare(
     # yaml-cpp-0.7.0
     # GIT_SHALLOW    true
     GIT_PROGRESS   true
+
+    FIND_PACKAGE_ARGS 0.6.0
 )
 
 

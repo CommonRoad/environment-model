@@ -101,7 +101,6 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 endif()
 
-
 if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
@@ -119,24 +118,45 @@ find_package(OpenMP REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external_v2)
 
-# Include Eigen3, Boost filesystem, spdlog, and OpenMP
-if(DEFINED ENV{CIBUILDWHEEL} OR ${CMAKE_VERSION} VERSION_LESS "3.24.0")
+#if(${CMAKE_VERSION} VERSION_LESS "3.24.0")
+# Enable this for debugging Boost discovery
+# set(Boost_DEBUG ON)
+find_package(Boost 1.70 REQUIRED OPTIONAL_COMPONENTS program_options filesystem)
+if(NOT Boost_FOUND)
+    message(STATUS "Boost - falling back to external version")
     include(ExternalBoost)
+    else()
+        message(STATUS "Boost - SYSTEM")
+endif()
+
+find_package(Protobuf 3.0 REQUIRED)
+if(NOT Protobuf_FOUND)
+    message(STATUS "Protobuf - falling back to external version")
+    include(ExternalProtobuf)
+else()
+    message(STATUS "Protobuf - SYSTEM")
+endif()
+
+if(DEFINED ENV{CIBUILDWHEEL})
+    set(FETCHCONTENT_TRY_FIND_PACKAGE_MODE NEVER)
+endif()
+
+# Include Eigen3, Boost filesystem, spdlog, and OpenMP
+if(DEFINED ENV{CIBUILDWHEEL} OR ENV{CI} OR ${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.24.0")
     include(ExternalEigen)
     include(ExternalPugixml)
     include(ExternalSpdlog)
-    include(ExternalProtobuf)
     include(ExternalGoogleTest)
 
     # IMPORTANT: crdc needs to be installed *before* yaml-cpp because yaml-cpp will generate a duplicate uninstall target otherwise
     include(ExternalDrivabilityChecker)
     include(ExternalYamlCpp)
 else()
-    find_package(Boost 1.70 REQUIRED OPTIONAL_COMPONENTS program_options filesystem)
+    message(WARNING "Automatic fallback to external versions not yet implemented for CMake < 3.24.0")
+
     find_package(Eigen3 REQUIRED)
     find_package(pugixml 1.11 REQUIRED)
     find_package(spdlog 1.8.0 REQUIRED)
-    find_package(Protobuf 3.0 REQUIRED)
     find_package(GTest)
     find_package(yaml-cpp 0.6.0 REQUIRED)
 
@@ -156,9 +176,9 @@ add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 # Add Environment model node
 add_subdirectory(src)
 
-if(ENV_MODEL_BUILD_EXECUTABLE AND Boost_program_options_FOUND)
+if(ENV_MODEL_BUILD_EXECUTABLE AND TARGET Boost::program_options)
     add_subdirectory(example)
-elseif(NOT Boost_program_options_FOUND)
+elseif(NOT TARGET Boost::program_options)
     message(WARNING "disabling example because Boost::program_options was not found")
 endif()
 
