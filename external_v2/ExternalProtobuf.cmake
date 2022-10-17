@@ -10,6 +10,8 @@ include(FetchContent)
 #set(protobuf_BUILD_PROTOC_BINARIES ON CACHE BOOL "")
 #set(protobuf_MODULE_COMPATIBLE ON CACHE BOOL "")
 
+# set(ZLIB_USE_STATIC_LIBS ON)
+find_package(ZLIB REQUIRED)
 
 set(protobuf_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(protobuf_BUILD_TESTS OFF CACHE BOOL "" FORCE)
