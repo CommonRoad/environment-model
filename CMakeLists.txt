@@ -122,6 +122,9 @@ if(DEFINED ENV{CIBUILDWHEEL} OR ${CMAKE_VERSION} VERSION_LESS "3.24.0")
     include(ExternalPugixml)
     include(ExternalSpdlog)
     include(ExternalProtobuf)
+
+    # IMPORTANT: crdc needs to be installed *before* yaml-cpp because yaml-cpp will generate a duplicate uninstall target otherwise
+    include(ExternalDrivabilityChecker)
     include(ExternalYamlCpp)
 else()
     find_package(Boost 1.70 REQUIRED OPTIONAL_COMPONENTS program_options filesystem)
@@ -130,10 +133,10 @@ else()
     find_package(spdlog 1.8.0 REQUIRED)
     find_package(Protobuf 3.0 REQUIRED)
     find_package(yaml-cpp 0.6.0 REQUIRED)
+
+    include(ExternalDrivabilityChecker)
 endif()
 
-
-include(ExternalDrivabilityChecker)
 
 include(ExternalRange)
 
