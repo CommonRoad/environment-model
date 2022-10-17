@@ -29,7 +29,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS ON)
+# Extra debugging for project developers - safe to disable
+set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS ON)
+set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
 # Compile command database is required for Clang-assisted parsing in Doxygen
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
@@ -232,9 +234,6 @@ feature_summary(WHAT ALL)
 set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
 
-# set(ZLIB_USE_STATIC_LIBS ON)
-# find_package(ZLIB REQUIRED)
-# message(STATUS "zlib: ${ZLIB_LIBRARIES}")
 
 
 # TEMP for build
