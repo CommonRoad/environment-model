@@ -117,6 +117,18 @@ build-run-coverage:
       - ./dist/
     expire_in: 30 minutes
 
+build-wheel:
+  stage: compile
+  image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
+  script:
+    - pipx run build --sdist
+    - pipx run cibuildwheel --platform linux dist/commonroad-cpp-*.tar.gz
+  needs: []
+  artifacts:
+    paths:
+      - ./dist/
+    expire_in: 30 minutes
+
 
 ### tests ###
 test:
