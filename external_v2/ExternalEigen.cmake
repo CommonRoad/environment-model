@@ -6,7 +6,7 @@ FetchContent_Declare(
   # We need the fix provided by 68e03ab240aa340b91f0b6fea8d382ef5cfb9258
   GIT_TAG 23299632c246b77937fb78e8607863a2f02e191b
   GIT_PROGRESS TRUE
-  OVERRIDE_FIND_PACKAGE
+  FIND_PACKAGE_ARGS
   )
 
 set(EIGEN_BUILD_DOC OFF)
@@ -15,9 +15,7 @@ set(EIGEN_BUILD_CMAKE_PACKAGE OFF CACHE INTERNAL "" FORCE)
 set(EIGEN_BUILD_TESTING OFF CACHE INTERNAL "" FORCE)
 #set(EIGEN_BUILD_CMAKE_PACKAGE OFF)
 
-find_package(Eigen3 REQUIRED)
-
-#FetchContent_MakeAvailable(Eigen3)
+FetchContent_MakeAvailable(Eigen3)
 #FetchContent_GetProperties(Eigen3 SOURCE_DIR)
 
 # set(Eigen3_FOUND ON CACHE BOOL "" FORCE)
