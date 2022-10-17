@@ -1,20 +1,28 @@
 include(FetchContent)
 
-FetchContent_Declare(
-    pugixml
+# GIT_REPOSITORY https://github.com/zeux/pugixml.git
+# GIT_TAG        v1.12.1
+# GIT_SHALLOW    true
+# GIT_PROGRESS   true
 
-    URL http://github.com/zeux/pugixml/releases/download/v1.12/pugixml-1.12.tar.gz
-    URL_HASH SHA256=fd6922a4448ec2f3eb9db415d10a49660e5d84ce20ce66b8a07e72ffc84270a7
+if(CMAKE_VERSION VERSION_LESS "3.24.0")
+    FetchContent_Declare(
+        pugixml
 
-    FIND_PACKAGE_ARGS 1.11
+        URL http://github.com/zeux/pugixml/releases/download/v1.12/pugixml-1.12.tar.gz
+        URL_HASH SHA256=fd6922a4448ec2f3eb9db415d10a49660e5d84ce20ce66b8a07e72ffc84270a7
+        )
+else()
+    FetchContent_Declare(
+        pugixml
 
-    # GIT_REPOSITORY https://github.com/zeux/pugixml.git
-    # GIT_TAG        v1.12.1
-    # GIT_SHALLOW    true
-    # GIT_PROGRESS   true
-    )
+        URL http://github.com/zeux/pugixml/releases/download/v1.12/pugixml-1.12.tar.gz
+        URL_HASH SHA256=fd6922a4448ec2f3eb9db415d10a49660e5d84ce20ce66b8a07e72ffc84270a7
 
-#FetchContent_MakeAvailable(pugixml)
+        FIND_PACKAGE_ARGS 1.11
+        )
+endif()
+
 # Install rule for pugixml headers
 # install(
 #         DIRECTORY ${pugixml_SOURCE_DIR}/src/
