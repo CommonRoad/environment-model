@@ -114,7 +114,7 @@ find_package(OpenMP REQUIRED)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external_v2)
 
 # Include Eigen3, Boost filesystem, spdlog, and OpenMP
-if(DEFINED ENV{CIBUILDWHEEL})
+if(DEFINED ENV{CIBUILDWHEEL} OR ${CMAKE_VERSION} VERSION_LESS "3.24.0")
     include(ExternalBoost)
     include(ExternalEigen)
     include(ExternalPugixml)
