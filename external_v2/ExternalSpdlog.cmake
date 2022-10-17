@@ -1,17 +1,28 @@
 include(FetchContent)
 
-FetchContent_Declare(
-    spdlog
+# GIT_REPOSITORY https://github.com/gabime/spdlog.git
+# GIT_TAG        v1.10.0
+# GIT_PROGRESS   true
+# GIT_SHALLOW    true
 
-    URL https://github.com/gabime/spdlog/archive/refs/tags/v1.10.0.tar.gz
-    URL_HASH SHA256=697f91700237dbae2326b90469be32b876b2b44888302afbc7aceb68bcfe8224
-    # GIT_REPOSITORY https://github.com/gabime/spdlog.git
-    # GIT_TAG        v1.10.0
-    # GIT_PROGRESS   true
-    # GIT_SHALLOW    true
+if(CMAKE_VERSION VERSION_LESS "3.24.0")
+    FetchContent_Declare(
+        spdlog
 
-    FIND_PACKAGE_ARGS 1.8.0
-    )
+        URL https://github.com/gabime/spdlog/archive/refs/tags/v1.10.0.tar.gz
+        URL_HASH SHA256=697f91700237dbae2326b90469be32b876b2b44888302afbc7aceb68bcfe8224
+        )
+else()
+    FetchContent_Declare(
+        spdlog
+
+        URL https://github.com/gabime/spdlog/archive/refs/tags/v1.10.0.tar.gz
+        URL_HASH SHA256=697f91700237dbae2326b90469be32b876b2b44888302afbc7aceb68bcfe8224
+
+        FIND_PACKAGE_ARGS 1.8.0
+        )
+endif()
+
 set(SPDLOG_BUILD_SHARED OFF)
 
 FetchContent_MakeAvailable(spdlog)
