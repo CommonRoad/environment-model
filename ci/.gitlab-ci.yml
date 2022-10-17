@@ -120,13 +120,25 @@ build-run-coverage:
 build-wheel:
   stage: compile
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
+  # make a docker daemon available for cibuildwheel to use
+  services:
+    - name: docker:dind
+      entrypoint: ["env", "-u", "DOCKER_HOST"]
+      command: ["dockerd-entrypoint.sh"]
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    # See https://github.com/docker-library/docker/pull/166
+    DOCKER_TLS_CERTDIR: ""
   script:
-    - pipx run build --sdist
-    - pipx run cibuildwheel --platform linux dist/commonroad_cpp-2022.0.0.tar.gz
+    - curl -sSL https://get.docker.com/ | sh
+    - build --sdist
+    - cibuildwheel --platform linux dist/commonroad_cpp-2022.0.0.tar.gz
   needs: []
   artifacts:
     paths:
-      - ./dist/
+      - dist/
+      - wheelhouse/
     expire_in: 30 minutes
 
 
