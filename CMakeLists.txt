@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.20..3.24)
-project(EnvironmentModel C CXX)
+project(EnvironmentModel
+    LANGUAGES CXX
+    VERSION 2022.0
+    HOMEPAGE_URL "https://commonroad.in.tum.de/"
+    DESCRIPTION "Classes and methods to represent the CommonRoad format in C++17")
 
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 
@@ -154,6 +158,8 @@ add_subdirectory(src)
 
 if(ENV_MODEL_BUILD_EXECUTABLE AND Boost_program_options_FOUND)
     add_subdirectory(example)
+elseif(NOT Boost_program_options_FOUND)
+    message(WARNING "disabling example because Boost::program_options was not found")
 endif()
 
 ## Doxygen
