@@ -122,6 +122,7 @@ if(DEFINED ENV{CIBUILDWHEEL} OR ${CMAKE_VERSION} VERSION_LESS "3.24.0")
     include(ExternalPugixml)
     include(ExternalSpdlog)
     include(ExternalProtobuf)
+    include(ExternalGoogleTest)
 
     # IMPORTANT: crdc needs to be installed *before* yaml-cpp because yaml-cpp will generate a duplicate uninstall target otherwise
     include(ExternalDrivabilityChecker)
@@ -132,20 +133,13 @@ else()
     find_package(pugixml 1.11 REQUIRED)
     find_package(spdlog 1.8.0 REQUIRED)
     find_package(Protobuf 3.0 REQUIRED)
+    find_package(GTest)
     find_package(yaml-cpp 0.6.0 REQUIRED)
 
     include(ExternalDrivabilityChecker)
 endif()
 
-
 include(ExternalRange)
-
-
-
-
-set(INSTALL_GTEST OFF)
-#include(external/ExternalGoogleTest)
-find_package(GoogleTest)
 
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 # set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
