@@ -11,12 +11,12 @@ FetchContent_Declare(
     # GIT_PROGRESS   true
     )
 
-#FetchContent_MakeAvailable(external_pugixml)
+#FetchContent_MakeAvailable(pugixml)
 # Install rule for pugixml headers
 # install(
-#         DIRECTORY ${external_pugixml_SOURCE_DIR}/src/
+#         DIRECTORY ${pugixml_SOURCE_DIR}/src/
 #         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 #         FILES_MATCHING PATTERN "*.hpp"
 # )
 
-FetchContent_MakeAvailable(external_pugixml)
+FetchContent_MakeAvailable(pugixml)
