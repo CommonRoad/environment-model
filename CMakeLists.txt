@@ -142,7 +142,7 @@ if(DEFINED ENV{CIBUILDWHEEL})
 endif()
 
 # Include Eigen3, Boost filesystem, spdlog, and OpenMP
-if(DEFINED ENV{CIBUILDWHEEL} OR ENV{CI} OR ${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.24.0")
+if(DEFINED ENV{CIBUILDWHEEL} OR DEFINED ENV{CI} OR ${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.24.0")
     include(ExternalEigen)
     include(ExternalPugixml)
     include(ExternalSpdlog)
