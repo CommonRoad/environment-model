@@ -119,20 +119,20 @@ build-run-coverage:
 
 build-wheel:
   stage: compile
+  allow_failure: true
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   # make a docker daemon available for cibuildwheel to use
   services:
-    - name: docker:20.10-dind-rootless
+    - name: docker:20.10-dind
       entrypoint: ["env", "-u", "DOCKER_HOST"]
       command: ["dockerd-entrypoint.sh"]
   variables:
     DOCKER_HOST: tcp://docker:2375/
-    # DOCKER_DRIVER: overlay2
+    DOCKER_DRIVER: overlay2
     # See https://github.com/docker-library/docker/pull/166
     DOCKER_TLS_CERTDIR: ""
   before_script:
     - docker info
-
   script:
     - curl -sSL https://get.docker.com/ | sh
     - pipx run build --sdist
