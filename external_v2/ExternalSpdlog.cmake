@@ -12,6 +12,6 @@ FetchContent_Declare(
     )
 set(SPDLOG_BUILD_SHARED OFF)
 
-FetchContent_MakeAvailable(external_spdlog)
+FetchContent_MakeAvailable(spdlog)
 
 add_library(spdlog::spdlog ALIAS spdlog)
