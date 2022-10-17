@@ -22,3 +22,8 @@ set(YAML_CPP_INSTALL OFF)
 
 FetchContent_MakeAvailable(yaml-cpp)
 
+
+# yaml-cpp::yaml-cpp is only present in some configurations, so add it if it is not already present
+if(NOT TARGET yaml-cpp::yaml-cpp)
+    add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
+endif()
