@@ -121,7 +121,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external_v2)
 #if(${CMAKE_VERSION} VERSION_LESS "3.24.0")
 # Enable this for debugging Boost discovery
 # set(Boost_DEBUG ON)
-find_package(Boost 1.70 REQUIRED OPTIONAL_COMPONENTS program_options filesystem)
+find_package(Boost 1.70 OPTIONAL_COMPONENTS program_options filesystem)
 if(NOT Boost_FOUND)
     message(STATUS "Boost - falling back to external version")
     include(ExternalBoost)
@@ -129,12 +129,37 @@ if(NOT Boost_FOUND)
         message(STATUS "Boost - SYSTEM")
 endif()
 
-find_package(Protobuf 3.0 REQUIRED)
-if(NOT Protobuf_FOUND)
+option(COMMONROAD_SYSTEM_PROTOBUF "Use system Protobuf" OFF)
+if(COMMONROAD_SYSTEM_PROTOBUF)
+    find_package(Protobuf 3.6)
+endif()
+if(NOT COMMONROAD_SYSTEM_PROTOBUF OR NOT Protobuf_FOUND)
     message(STATUS "Protobuf - falling back to external version")
     include(ExternalProtobuf)
 else()
     message(STATUS "Protobuf - SYSTEM")
+
+    # Check Protobuf compiler version to be aligned with libraries version
+    execute_process(COMMAND ${Protobuf_PROTOC_EXECUTABLE} --version
+                    OUTPUT_VARIABLE _PROTOBUF_PROTOC_EXECUTABLE_VERSION)
+
+    if("${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}" MATCHES "libprotoc ([0-9.]+)")
+        set(_PROTOBUF_PROTOC_EXECUTABLE_VERSION "${CMAKE_MATCH_1}")
+    endif()
+
+    if(Protobuf_DEBUG)
+        message(STATUS "[ ${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE} ] "
+            "${Protobuf_PROTOC_EXECUTABLE} reveals version ${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
+    endif()
+
+    if(NOT "${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}" VERSION_EQUAL "${Protobuf_VERSION}")
+        message(FATAL_ERROR "Unfortunately, the system protobuf installation is unusable "
+            "due to a detected mismatch between the Protobuf compiler and the Protobuf libraries. "
+            "We can't proceed at this point since CMake already added the corresponding targets, "
+            "and there is no way to remove those targets now. "
+            "Please rerun the configuration, adding the -DCOMMONROAD_SYSTEM_PROTOBUF=ON to the "
+            "CMake command line.")
+    endif()
 endif()
 
 if(DEFINED ENV{CIBUILDWHEEL})
