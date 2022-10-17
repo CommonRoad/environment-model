@@ -29,7 +29,7 @@ target_include_directories(commonroad_protobuf
 
 target_link_libraries(commonroad_protobuf
         PUBLIC
-        protobuf::libprotobuf
+        $<BUILD_INTERFACE:protobuf::libprotobuf>
         )
 
 set_property(TARGET commonroad_protobuf PROPERTY POSITION_INDEPENDENT_CODE ON)

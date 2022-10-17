@@ -1,24 +1,28 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.16..3.24)
 project(EnvironmentModel C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS ON)
+
 # Compile command database is required for Clang-assisted parsing in Doxygen
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
+option(BUILD_SHARED_LIBS "Build environment model as a shared library" ON)
+
+option(ENV_MODEL_USE_LLD "Use lld if possible" ON)
 option(ENV_MODEL_BUILD_DOXYGEN "Build doxygen" OFF)
-option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
-option(ENV_MODEL_BUILD_PYBIND "Build python interface" OFF)
-option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ON)
+option(ENV_MODEL_BUILD_TESTS "Build tests" OFF)
+#option(ENV_MODEL_BUILD_PYBIND "Build python interface" OFF)
+# option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ON)
 option(ENV_MODEL_BUILD_CODE_COVERAGE "Build code coverage" OFF)
 option(ENV_MODEL_BUILD_EXECUTABLE "Build executable" ON)
 
-# Provides configure_package_config_file
-include(CMakePackageConfigHelpers)
-# Includes sane defaults for installation paths (CMAKE_INSTALL_LIBDIR, CMAKE_INSTALL_BINDIR etc.)
-include(GNUInstallDirs)
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+cmake_policy(SET CMP0077 NEW)
+cmake_policy(SET CMP0126 NEW)
 
 # Appends dictionary where other cmake files are stored which install required Software
 include(FetchContent)
@@ -36,10 +40,11 @@ FetchContent_MakeAvailable(external_cmake_modules)
 list(APPEND CMAKE_MODULE_PATH ${external_cmake_modules_SOURCE_DIR}/cmake)
 
 # Set  optimizations for build types
-set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
-set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
+# set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
+# set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
 
 # Set a default build type if none was specified
+if(OFF)
 set(default_build_type "Release")
 if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
     set(default_build_type "Debug")
@@ -76,16 +81,16 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 
 # Add Environment model node
 add_subdirectory(src)
 
-if(ENV_MODEL_BUILD_EXECUTABLE)
+if(ENV_MODEL_BUILD_EXECUTABLE AND NOT DEFINED ENV{CIBUILDWHEEL})
     add_subdirectory(example)
-endif(ENV_MODEL_BUILD_EXECUTABLE)
+endif()
 
 ## Doxygen
 if(ENV_MODEL_BUILD_DOXYGEN)
