@@ -1,3 +1,5 @@
+include(FetchContent)
+
 FetchContent_Declare(
   Eigen3
   GIT_REPOSITORY "https://gitlab.com/libeigen/eigen.git"
