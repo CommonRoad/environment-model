@@ -158,7 +158,7 @@ add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 # Add Environment model node
 add_subdirectory(src)
 
-if(ENV_MODEL_BUILD_EXECUTABLE AND NOT DEFINED ENV{CIBUILDWHEEL})
+if(ENV_MODEL_BUILD_EXECUTABLE AND Boost_program_options_FOUND)
     add_subdirectory(example)
 endif()
 
