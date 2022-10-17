@@ -1,3 +1,4 @@
+include(FetchContent)
 
 message(STATUS "DrivabilityChecker - using bundled version")
 FetchContent_Declare(
