@@ -87,7 +87,7 @@ if (ENV_MODEL_BUILD_TESTS)
     target_link_libraries(env_model_test
             PRIVATE
             env_model
-            gtest
+            GTest::gtest
             Boost::filesystem
             OpenMP::OpenMP_CXX
             spdlog::spdlog
@@ -101,9 +101,11 @@ if (ENV_MODEL_BUILD_TESTS)
     # queries the compiled executable for tests, this requires the executable to be runnable. if you are
     # cross compiling, make sure to properly set CMAKE_CROSSCOMPILING_EMULATOR.
     gtest_discover_tests(
-            env_model_test TEST_PREFIX "./"
+            env_model_test
+            # TEST_PREFIX "./"
             # increase the discovery timeout for `env_model_test --gtest_list_tests`
             DISCOVERY_TIMEOUT 60
+            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     )
 endif ()
 
@@ -116,7 +118,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         target_link_libraries(env_model_test_coverage PUBLIC
                 env_model
                 DrivabilityChecker::crccosy
-                gtest
+                GTest::gtest
                 Boost::filesystem
                 Boost::program_options
                 OpenMP::OpenMP_CXX
