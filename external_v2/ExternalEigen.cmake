@@ -23,12 +23,14 @@ find_package(Eigen3 REQUIRED)
 # set(Eigen3_FOUND ON CACHE BOOL "" FORCE)
 # set(EIGEN3_INCLUDE_DIR "${Eigen3_SOURCE_DIR}" CACHE PATH "" FORCE)
 
-install(TARGETS eigen
-        EXPORT EnvironmentModel_Targets
-        )
-install(TARGETS eigen
-        EXPORT fcl-targets
-        )
-install(TARGETS eigen
-        EXPORT DrivabilityChecker_Targets
-        )
+if(TARGET eigen)
+    install(TARGETS eigen
+            EXPORT EnvironmentModel_Targets
+            )
+    install(TARGETS eigen
+            EXPORT fcl-targets
+            )
+    install(TARGETS eigen
+            EXPORT DrivabilityChecker_Targets
+            )
+endif()
