@@ -122,7 +122,7 @@ build-wheel:
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   script:
     - pipx run build --sdist
-    - pipx run cibuildwheel --platform linux dist/commonroad-cpp-*.tar.gz
+    - pipx run cibuildwheel --platform linux dist/commonroad_cpp-2022.0.0.tar.gz
   needs: []
   artifacts:
     paths:
