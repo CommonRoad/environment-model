@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16..3.24)
+cmake_minimum_required(VERSION 3.20..3.24)
 project(EnvironmentModel C CXX)
 
 set(CMAKE_COLOR_DIAGNOSTICS ON)
