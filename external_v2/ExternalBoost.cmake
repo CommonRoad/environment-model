@@ -11,7 +11,6 @@ set(Boost_NO_SYSTEM_PATHS ON)
 # set(Boost_DEBUG ON)
 set(BOOST_ROOT ${boost_src_SOURCE_DIR})
 set(Boost_NO_BOOST_CMAKE ON)
-ERNAL "" FORCE)
 
 find_package(Boost 1.80.0 REQUIRED
         # OPTIONAL_COMPONENTS program_options
