@@ -14,4 +14,7 @@ set(SPDLOG_BUILD_SHARED OFF)
 
 FetchContent_MakeAvailable(spdlog)
 
-add_library(spdlog::spdlog ALIAS spdlog)
+# spdlog::spdlog is only present in some configurations, so add it if it is not already present
+if(NOT TARGET spdlog::spdlog)
+    add_library(spdlog::spdlog ALIAS spdlog)
+endif()
