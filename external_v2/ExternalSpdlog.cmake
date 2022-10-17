@@ -9,6 +9,8 @@ FetchContent_Declare(
     # GIT_TAG        v1.10.0
     # GIT_PROGRESS   true
     # GIT_SHALLOW    true
+
+    FIND_PACKAGE_ARGS 1.8.0
     )
 set(SPDLOG_BUILD_SHARED OFF)
 
