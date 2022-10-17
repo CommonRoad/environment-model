@@ -240,10 +240,6 @@ set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 # TEMP for build
 # include(utils/EnsureStatic)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
-include(local/DoxygenXml)
-
 # Sanity check: Ensure we are building all dependencies as static libraries
 if(SKBUILD)
     # ensure_all_static(env_model)
