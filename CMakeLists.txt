@@ -44,8 +44,8 @@ option(BUILD_SHARED_LIBS "Build environment model as a shared library" ON)
 
 option(ENV_MODEL_USE_LLD "Use lld if possible" ON)
 option(ENV_MODEL_BUILD_DOXYGEN "Build doxygen" OFF)
-option(ENV_MODEL_BUILD_TESTS "Build tests" OFF)
-#option(ENV_MODEL_BUILD_PYBIND "Build python interface" OFF)
+option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
+# TODO Eigen CMake has a nice approach to setting per-project BUILD_SHARED_LIBS
 # option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ON)
 option(ENV_MODEL_BUILD_CODE_COVERAGE "Build code coverage" OFF)
 option(ENV_MODEL_BUILD_EXECUTABLE "Build executable" ON)
