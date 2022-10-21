@@ -114,6 +114,16 @@ endif ()
 # Code coverage
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     if (ENV_MODEL_BUILD_CODE_COVERAGE)
+        include(FetchContent)
+        FetchContent_Declare(
+            bilke_cmake_modules
+
+            GIT_REPOSITORY https://github.com/bilke/cmake-modules.git
+            GIT_TAG        1b68d17d3e3321c08092f994a40e0b6a13dff817
+        )
+        FetchContent_MakeAvailable(bilke_cmake_modules)
+        include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage)
+
         add_executable(env_model_test_coverage ${ENV_MODEL_SRC_FILES} ${ENV_MODEL_TEST_SRC_FILES})
         target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
         target_link_libraries(env_model_test_coverage PUBLIC
@@ -127,7 +137,6 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
                 spdlog::spdlog
                 )
 
-        include(extras/CodeCoverage)
         append_coverage_compiler_flags()
         setup_target_for_coverage_gcovr_html(
                 NAME env_model_coverage                                          # New target name
