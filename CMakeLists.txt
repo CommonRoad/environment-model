@@ -69,7 +69,7 @@ if(SKBUILD)
   set(ENV_MODEL_BUILD_DOXYGEN OFF CACHE BOOL "" FORCE)
   set(ENV_MODEL_BUILD_EXECUTABLE OFF CACHE BOOL "" FORCE)
 
-  set(FETCHCONTENT_QUIET OFF)
+  set(FETCHCONTENT_QUIET ON)
 
   set(ADD_PYTHON_BINDINGS ON CACHE INTERNAL "" FORCE)
 
@@ -105,7 +105,17 @@ if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../commonroad-cmake)
+include(FetchContent)
+FetchContent_Declare(
+    commonroad-cmake
+
+    GIT_REPOSITORY https://gitlab.lrz.de/tum-cps/commonroad-cmake.git
+    GIT_TAG        feature/python
+)
+FetchContent_MakeAvailable(commonroad-cmake)
+
+list(APPEND CMAKE_MODULE_PATH ${commonroad_cmake_SOURCE_DIR})
+
 include(extras/DiscoverLLD OPTIONAL)
 include(extras/DiscoverSanitizers OPTIONAL)
 include(extras/GitIgnoreBinaryDir OPTIONAL)
