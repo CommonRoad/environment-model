@@ -7,7 +7,9 @@ add_executable(env_model_example_node
 
 # Add proper target for dl
 add_library(lib_dl INTERFACE IMPORTED)
-set_property(TARGET lib_dl PROPERTY IMPORTED_LOCATION ${CMAKE_DL_LIBS})
+set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS OFF)
+target_link_libraries(lib_dl INTERFACE ${CMAKE_DL_LIBS})
+set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS ON)
 
 target_link_libraries(env_model_example_node
     PRIVATE
