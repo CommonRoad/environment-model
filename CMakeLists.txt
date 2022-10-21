@@ -107,12 +107,12 @@ endif()
 
 include(FetchContent)
 FetchContent_Declare(
-    commonroad-cmake
+    commonroad_cmake
 
     GIT_REPOSITORY https://gitlab.lrz.de/tum-cps/commonroad-cmake.git
     GIT_TAG        feature/python
 )
-FetchContent_MakeAvailable(commonroad-cmake)
+FetchContent_MakeAvailable(commonroad_cmake)
 
 list(APPEND CMAKE_MODULE_PATH ${commonroad_cmake_SOURCE_DIR})
 
