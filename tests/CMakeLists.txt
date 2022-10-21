@@ -122,7 +122,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
             GIT_TAG        1b68d17d3e3321c08092f994a40e0b6a13dff817
         )
         FetchContent_MakeAvailable(bilke_cmake_modules)
-        include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage)
+        include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage.cmake)
 
         add_executable(env_model_test_coverage ${ENV_MODEL_SRC_FILES} ${ENV_MODEL_TEST_SRC_FILES})
         target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
