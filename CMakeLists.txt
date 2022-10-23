@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20..3.24)
 project(EnvironmentModel
-    LANGUAGES CXX
+    LANGUAGES C CXX
     VERSION 2022.0
     HOMEPAGE_URL "https://commonroad.in.tum.de/"
     DESCRIPTION "Classes and methods to represent the CommonRoad format in C++17")
