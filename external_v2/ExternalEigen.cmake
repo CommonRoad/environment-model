@@ -1,24 +1,20 @@
 include(FetchContent)
 
-
 if(CMAKE_VERSION VERSION_LESS "3.24.0")
-    FetchContent_Declare(
-        Eigen3
-        GIT_REPOSITORY "https://gitlab.com/libeigen/eigen.git"
-        # We need the fix provided by 68e03ab240aa340b91f0b6fea8d382ef5cfb9258
-        GIT_TAG 23299632c246b77937fb78e8607863a2f02e191b
-        GIT_PROGRESS TRUE
-    )
+    # set(FETCH_CONTENT_FIND_PACKAGE_OPTION "")
 else()
-    FetchContent_Declare(
-        Eigen3
-        GIT_REPOSITORY "https://gitlab.com/libeigen/eigen.git"
-        # We need the fix provided by 68e03ab240aa340b91f0b6fea8d382ef5cfb9258
-        GIT_TAG 23299632c246b77937fb78e8607863a2f02e191b
-        GIT_PROGRESS TRUE
-        FIND_PACKAGE_ARGS
-    )
+    set(FETCH_CONTENT_FIND_PACKAGE_OPTION "")
+    set(FETCH_CONTENT_FIND_PACKAGE_OPTION "FIND_PACKAGE_ARGS 3.3.7")
 endif()
+
+FetchContent_Declare(
+    Eigen3
+    GIT_REPOSITORY "https://gitlab.com/libeigen/eigen.git"
+    # We need the fix provided by 68e03ab240aa340b91f0b6fea8d382ef5cfb9258
+    GIT_TAG 23299632c246b77937fb78e8607863a2f02e191b
+    GIT_PROGRESS TRUE
+    FIND_PACKAGE_ARGS
+)
 
 set(EIGEN_BUILD_DOC OFF)
 set(EIGEN_BUILD_PKGCONFIG OFF)
