@@ -5,7 +5,7 @@ FetchContent_Declare(
 crdc
 GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
 # GIT_TAG "wip-skbuild"
-GIT_TAG fe34dcc46c1d85610aee24c1cc4def877820c5f6
+GIT_TAG 032550726bbef63e696b72258ee776b52e564b08
 GIT_PROGRESS   true
 # GIT_SUBMODULES third_party/gpc # not triangle
 GIT_SHALLOW    true
