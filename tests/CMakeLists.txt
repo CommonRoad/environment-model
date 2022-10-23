@@ -123,41 +123,23 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         FetchContent_MakeAvailable(bilke_cmake_modules)
         include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage.cmake)
 
-        # Add a proper target for gcov
-        # We use LINK_LIBRARIES_ONLY_TARGETS in order to only allow targets to be specified in target_link_libraries.
-        # However, there is no proper target for gcov as it is provided by the toolchain (GCC) itself.
-        # We create this toolchain library in order to still have a proper target for gcov.
-        # See https://cmake.org/cmake/help/v3.25/prop_tgt/LINK_LIBRARIES_ONLY_TARGETS.html
-        add_library(toolchain::gcov INTERFACE IMPORTED)
-        set_property(TARGET toolchain::gcov PROPERTY IMPORTED_LIBNAME "gcov")
-        add_library(gcov ALIAS toolchain::gcov)
+        # Add definition for toolchain::gcov
+        include(toolchain/ToolchainLibraries)
 
-        add_executable(env_model_test_coverage ${ENV_MODEL_SRC_FILES} ${ENV_MODEL_TEST_SRC_FILES})
-        target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
-        target_link_libraries(env_model_test_coverage PUBLIC
-                env_model
-                DrivabilityChecker::crccosy
-                GTest::gtest
-                Boost::filesystem
-                Boost::program_options
-                OpenMP::OpenMP_CXX
-                Eigen3::Eigen
-                spdlog::spdlog
-                )
+        # Unfortunately, append_coverage_compiler_flags_to_target is currently broken,
+        # so we simply add the required flags ourselves
 
-        append_coverage_compiler_flags()
+        set(COVERAGE_FLAGS -g -fprofile-arcs -ftest-coverage -fprofile-abs-path)
+
+        foreach(target env_model env_model_core env_model_predicates env_model_test)
+            # append_coverage_compiler_flags_to_target(${target})
+            target_compile_options(${target} PRIVATE ${COVERAGE_FLAGS})
+            target_link_libraries(${target} PRIVATE toolchain::gcov)
+        endforeach()
+
         setup_target_for_coverage_gcovr_html(
-                NAME env_model_coverage                                          # New target name
-                EXECUTABLE env_model_test_coverage                               # Executable in PROJECT_BINARY_DIR
-                DEPENDENCIES env_model_test_coverage                             # Dependencies to build first
-                BASE_DIRECTORY "../"                                             # Base directory for report
-                #  (defaults to PROJECT_SOURCE_DIR)
-                EXCLUDE                                                          # Patterns to exclude (can be relative
-                "src/interfaces/commonroad/pugi_xml/pugixml.hpp"             #  to BASE_DIRECTORY, with CMake 3.4+)
-                "src/interfaces/commonroad/pugi_xml/pugixml.cpp"
-                "ci/"
-                "docs/"
-                "external/"
+                NAME env_model_coverage
+                EXECUTABLE env_model_test
         )
     endif()
 endif()
