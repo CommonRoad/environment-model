@@ -5,11 +5,13 @@ add_executable(env_model_example_node
     src/main.cpp
     )
 
-# Add proper target for dl
-add_library(lib_dl INTERFACE IMPORTED)
-set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS OFF)
-target_link_libraries(lib_dl INTERFACE ${CMAKE_DL_LIBS})
-set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS ON)
+# Add a proper target for dl
+# We use LINK_LIBRARIES_ONLY_TARGETS in order to only allow targets to be specified in target_link_libraries.
+# However, there is no proper target for libdl as it is provided by the toolchain (glibc) itself.
+# We create this toolchain library in order to still have a proper target for dl.
+# See https://cmake.org/cmake/help/v3.25/prop_tgt/LINK_LIBRARIES_ONLY_TARGETS.html
+add_library(toolchain::dl INTERFACE IMPORTED)
+set_property(TARGET toolchain::dl PROPERTY IMPORTED_LIBNAME ${CMAKE_DL_LIBS})
 
 target_link_libraries(env_model_example_node
     PRIVATE
@@ -20,7 +22,7 @@ target_link_libraries(env_model_example_node
         spdlog::spdlog
         yaml-cpp::yaml-cpp
         Threads::Threads
-        lib_dl
+        toolchain::dl
     )
 
 # this adds many warnings to the build. They usually help to find some bugs
