@@ -123,6 +123,15 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
         FetchContent_MakeAvailable(bilke_cmake_modules)
         include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage.cmake)
 
+        # Add a proper target for gcov
+        # We use LINK_LIBRARIES_ONLY_TARGETS in order to only allow targets to be specified in target_link_libraries.
+        # However, there is no proper target for gcov as it is provided by the toolchain (GCC) itself.
+        # We create this toolchain library in order to still have a proper target for gcov.
+        # See https://cmake.org/cmake/help/v3.25/prop_tgt/LINK_LIBRARIES_ONLY_TARGETS.html
+        add_library(toolchain::gcov INTERFACE IMPORTED)
+        set_property(TARGET toolchain::gcov PROPERTY IMPORTED_LIBNAME "gcov")
+        add_library(gcov ALIAS toolchain::gcov)
+
         add_executable(env_model_test_coverage ${ENV_MODEL_SRC_FILES} ${ENV_MODEL_TEST_SRC_FILES})
         target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
         target_link_libraries(env_model_test_coverage PUBLIC
