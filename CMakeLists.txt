@@ -139,7 +139,14 @@ if(NOT Boost_FOUND)
         message(STATUS "Boost - SYSTEM")
 endif()
 
-option(COMMONROAD_SYSTEM_PROTOBUF "Use system Protobuf" OFF)
+option(COMMONROAD_SYSTEM_PROTOBUF "Use system Protobuf" ON)
+set(Protobuf_DEBUG ON)
+if(DEFINED ENV{CI})
+    # Ugly hack, as the CI environment has another protoc in /root/anaconda3/bin/protoc
+    # which is incompatible with the Protobuf libraries found by CMake
+    set(Protobuf_PROTOC_EXECUTABLE "/usr/bin/protoc" CACHE PATH "The protoc compiler" FORCE)
+endif()
+
 if(COMMONROAD_SYSTEM_PROTOBUF)
     find_package(Protobuf 3.6)
 endif()
@@ -167,7 +174,7 @@ else()
             "due to a detected mismatch between the Protobuf compiler and the Protobuf libraries. "
             "We can't proceed at this point since CMake already added the corresponding targets, "
             "and there is no way to remove those targets now. "
-            "Please rerun the configuration, adding the -DCOMMONROAD_SYSTEM_PROTOBUF=ON to the "
+            "Please rerun the configuration, adding the -DCOMMONROAD_SYSTEM_PROTOBUF=OFF to the "
             "CMake command line.")
     endif()
 endif()
