@@ -106,8 +106,9 @@ build-run-coverage:
   stage: compile
   script:
     - mkdir build && cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DENV_MODEL_BUILD_CODE_COVERAGE=ON -DCMAKE_CXX_FLAGS=--coverage ..
-    - make env_model_coverage -j4
+    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DENV_MODEL_BUILD_CODE_COVERAGE=ON ..
+    - make env_model_test -j4
+    - make env_model_coverage
   after_script:
     - mv /commonroad/dist/ ./
   needs: []
