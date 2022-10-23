@@ -120,6 +120,8 @@ build-run-coverage:
 
 build-wheel:
   stage: compile
+  tags:
+    - wheel
   allow_failure: true
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   # make a docker daemon available for cibuildwheel to use
