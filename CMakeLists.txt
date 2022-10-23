@@ -116,8 +116,9 @@ FetchContent_MakeAvailable(commonroad_cmake)
 
 list(APPEND CMAKE_MODULE_PATH ${commonroad_cmake_SOURCE_DIR})
 
-include(extras/DiscoverLLD OPTIONAL)
-include(extras/DiscoverSanitizers OPTIONAL)
+include(toolchain/DiscoverLLD OPTIONAL)
+include(toolchain/DiscoverSanitizers OPTIONAL)
+
 include(extras/GitIgnoreBinaryDir OPTIONAL)
 
 # Required for proper pthread discovery on some systems
