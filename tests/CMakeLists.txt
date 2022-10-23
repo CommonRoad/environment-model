@@ -111,35 +111,34 @@ endif ()
 
 
 # Code coverage
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-    if (ENV_MODEL_BUILD_CODE_COVERAGE)
-        include(FetchContent)
-        FetchContent_Declare(
-            bilke_cmake_modules
+# NOTE: The CodeCoverage module will already warn if the build type is not Debug
+if (ENV_MODEL_BUILD_CODE_COVERAGE)
+    include(FetchContent)
+    FetchContent_Declare(
+        bilke_cmake_modules
 
-            GIT_REPOSITORY https://github.com/bilke/cmake-modules.git
-            GIT_TAG        1b68d17d3e3321c08092f994a40e0b6a13dff817
-        )
-        FetchContent_MakeAvailable(bilke_cmake_modules)
-        include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage.cmake)
+        GIT_REPOSITORY https://github.com/bilke/cmake-modules.git
+        GIT_TAG        1b68d17d3e3321c08092f994a40e0b6a13dff817
+    )
+    FetchContent_MakeAvailable(bilke_cmake_modules)
+    include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage.cmake)
 
-        # Add definition for toolchain::gcov
-        include(toolchain/ToolchainLibraries)
+    # Add definition for toolchain::gcov
+    include(toolchain/ToolchainLibraries)
 
-        # Unfortunately, append_coverage_compiler_flags_to_target is currently broken,
-        # so we simply add the required flags ourselves
+    # Unfortunately, append_coverage_compiler_flags_to_target is currently broken,
+    # so we simply add the required flags ourselves
 
-        set(COVERAGE_FLAGS -g -fprofile-arcs -ftest-coverage -fprofile-abs-path)
+    set(COVERAGE_FLAGS -g -fprofile-arcs -ftest-coverage -fprofile-abs-path)
 
-        foreach(target env_model env_model_core env_model_predicates env_model_test)
-            # append_coverage_compiler_flags_to_target(${target})
-            target_compile_options(${target} PRIVATE ${COVERAGE_FLAGS})
-            target_link_libraries(${target} PRIVATE toolchain::gcov)
-        endforeach()
+    foreach(target env_model env_model_core env_model_predicates env_model_test)
+        # append_coverage_compiler_flags_to_target(${target})
+        target_compile_options(${target} PRIVATE ${COVERAGE_FLAGS})
+        target_link_libraries(${target} PRIVATE toolchain::gcov)
+    endforeach()
 
-        setup_target_for_coverage_gcovr_html(
-                NAME env_model_coverage
-                EXECUTABLE env_model_test
-        )
-    endif()
+    setup_target_for_coverage_gcovr_html(
+            NAME env_model_coverage
+            EXECUTABLE env_model_test
+    )
 endif()
