@@ -53,8 +53,3 @@ archs = ["auto"]
 #build-verbosity = 1
 
 #before-test = "pip install -r {project}/test_requirements.txt"
-
-[tool.cibuildwheel.linux]
-#manylinux-x86_64-image = "manylinux2014"
-manylinux-x86_64-image = "manylinux_2_24"
-
