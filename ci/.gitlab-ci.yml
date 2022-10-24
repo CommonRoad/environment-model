@@ -12,15 +12,6 @@ image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci-lite:1.0
 before_script:
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
 
-.python-prepare: &python-prepare
-  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
-  - pip install -r ./requirements.txt
-  - pip install -r ./test_requirements.txt
-
-.copy-cpp-dist: &copy-cpp-dist
-  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
-  - mv ./dist/include/ /commonroad/dist/
-
 ### static test ###
 clang-format:
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci:1.4
@@ -125,13 +116,12 @@ build-sdist:
     - wheel
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   script:
-    - python --version
+    - python3 --version
     - pipx run build --sdist
   needs: []
   artifacts:
     paths:
       - dist/*.tar.gz
-      - wheelhouse/
     expire_in: 30 minutes
 
 build-wheel:
@@ -155,13 +145,11 @@ build-wheel:
   script:
     - pipx run build --sdist
     - cibuildwheel --platform linux dist/*.tar.gz
-    - twine upload dist/*.tar.gz wheelhouse/*.whl
   needs:
     - job: build-sdist
       artifacts: true
   artifacts:
     paths:
-      - dist/*.tar.gz
       - wheelhouse/*.whl
     expire_in: 30 minutes
 
@@ -175,6 +163,8 @@ upload-wheel:
   script:
     - twine upload dist/*.tar.gz wheelhouse/*.whl
   needs:
+    - job: build-sdist
+      artifacts: true
     - job: build-wheel
       artifacts: true
   artifacts:
@@ -228,8 +218,6 @@ test:
 ### coverage ###
 coverage-analyze:
   stage: coverage
-  before_script:
-    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
@@ -255,8 +243,6 @@ coverage-analyze:
 
 coverage-report:
   stage: coverage
-  before_script:
-    - *copy-cpp-dist
   script:
     - gcovr --version
     - gcovr
