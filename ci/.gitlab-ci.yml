@@ -59,9 +59,10 @@ build-compile-commands:
 
 build-clang:
   stage: compile
+  variables:
+    CC: clang
+    CXX: clang++
   script:
-    - export CC=clang
-    - export CXX=clang++
     - mkdir build && cd build
     - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
@@ -71,9 +72,10 @@ build-clang:
 
 build-gcc:
   stage: compile
+  variables:
+    CC: gcc
+    CXX: g++
   script:
-    - export CC=gcc
-    - export CXX=g++
     - mkdir build && cd build
     - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
     - make env_model -j4
