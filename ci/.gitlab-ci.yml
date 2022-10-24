@@ -136,10 +136,13 @@ build-wheel:
     DOCKER_TLS_CERTDIR: ""
     CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\""
     CIBW_BUILD_VERBOSITY: 0
+    TWINE_USERNAME: gitlab-ci-token
+    TWINE_PASSWORD: ${CI_JOB_TOKEN}
+    TWINE_REPOSITORY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
   script:
     - pipx run build --sdist
     - cibuildwheel --platform linux dist/*.tar.gz
-    - twine upload --repository gitlab wheelhouse/*.whl
+    - twine upload wheelhouse/*.whl
   needs: []
   artifacts:
     paths:
