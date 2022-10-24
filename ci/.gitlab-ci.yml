@@ -57,6 +57,16 @@ build-compile-commands:
       - ./build/compile_commands.json
     expire_in: 20 minutes
 
+build-ninja-test:
+  stage: compile
+  script:
+    - cmake
+      -G "Ninja Multi-Config"
+      -S .
+      -B build
+    - cmake --build build --config Release --target env_model
+  needs: []
+
 build-clang:
   stage: compile
   variables:
