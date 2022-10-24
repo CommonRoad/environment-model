@@ -137,7 +137,6 @@ build-wheel:
     CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\""
     CIBW_BUILD_VERBOSITY: 0
   script:
-    - curl -sSL https://get.docker.com/ | sh
     - pipx run build --sdist
     - cibuildwheel --platform linux dist/*.tar.gz
     - twine upload --repository gitlab wheelhouse/*.whl
