@@ -1,6 +1,7 @@
 stages:
   - compile
   - test
+  - python
   - coverage
   - static-test
   - docs
@@ -130,11 +131,25 @@ build-run-coverage:
       - ./dist/
     expire_in: 30 minutes
 
-build-wheel:
-  stage: compile
+build-sdist:
+  stage: python
   tags:
     - wheel
-  allow_failure: true
+  image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
+  script:
+    - python --version
+    - pipx run build --sdist
+  needs: []
+  artifacts:
+    paths:
+      - dist/*.tar.gz
+      - wheelhouse/
+    expire_in: 30 minutes
+
+build-wheel:
+  stage: python
+  tags:
+    - wheel
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   # make a docker daemon available for cibuildwheel to use
   services:
@@ -148,15 +163,32 @@ build-wheel:
     DOCKER_TLS_CERTDIR: ""
     CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\""
     CIBW_BUILD_VERBOSITY: 0
-    TWINE_USERNAME: gitlab-ci-token
-    TWINE_PASSWORD: ${CI_JOB_TOKEN}
-    TWINE_REPOSITORY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
     CIBW_BUILD: '*'
   script:
     - pipx run build --sdist
     - cibuildwheel --platform linux dist/*.tar.gz
-    - twine upload wheelhouse/*.whl
-  needs: []
+    - twine upload dist/*.tar.gz wheelhouse/*.whl
+  needs:
+    - job: build-sdist
+      artifacts: true
+  artifacts:
+    paths:
+      - dist/*.tar.gz
+      - wheelhouse/*.whl
+    expire_in: 30 minutes
+
+upload-wheel:
+  stage: python
+  image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
+  variables:
+    TWINE_USERNAME: gitlab-ci-token
+    TWINE_PASSWORD: ${CI_JOB_TOKEN}
+    TWINE_REPOSITORY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
+  script:
+    - twine upload dist/*.tar.gz wheelhouse/*.whl
+  needs:
+    - job: build-wheel
+      artifacts: true
   artifacts:
     paths:
       - dist/
