@@ -121,6 +121,11 @@ include(toolchain/DiscoverSanitizers OPTIONAL)
 
 include(extras/GitIgnoreBinaryDir OPTIONAL)
 
+if(DEFINED ENV{CIBUILDWHEEL} AND CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
+    # Ugly hack for broken pthread detection on manylinux2014_i686
+    find_library(OpenMP_pthread_LIBRARY NAMES "pthread")
+endif()
+
 # Required for proper pthread discovery on some systems
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
