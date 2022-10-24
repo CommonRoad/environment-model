@@ -55,9 +55,39 @@ message(VERBOSE "Protobuf alt version=${PROTOBUF_ALT_VERSION}")
 
 set(PROTOBUF_BASE_URL "https://github.com/protocolbuffers/protobuf/releases/download")
 
+set(USE_BINARY_PROTOC TRUE)
+
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+        set(PROTOC_ARCH "linux-x86_64")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
+        set(PROTOC_ARCH "linux-x86_32")
+    else()
+        message(WARNING "Unknown system architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+        set(USE_BINARY_PROTOC FALSE)
+    endif()
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    # Untested!
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+        set(PROTOC_ARCH "win64")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
+        set(PROTOC_ARCH "win32")
+    else()
+        message(WARNING "Unknown system architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+        set(USE_BINARY_PROTOC FALSE)
+    endif()
+else()
+    message(WARNING "Unknown system name: ${CMAKE_SYSTEM_NAME}")
+    set(USE_BINARY_PROTOC FALSE)
+endif()
+
+if(NOT USE_BINARY_PROTOC)
+    message(FATAL_ERROR "External protoc download is not yet supported for your OS/architecture")
+endif()
+
 FetchContent_Declare(
   external_protobuf_protoc
-  URL  ${PROTOBUF_BASE_URL}/v${PROTOBUF_ALT_NUMERIC_VERSION}/protoc-${PROTOBUF_ALT_NUMERIC_VERSION}-linux-x86_64.zip
+  URL  ${PROTOBUF_BASE_URL}/v${PROTOBUF_ALT_NUMERIC_VERSION}/protoc-${PROTOBUF_ALT_NUMERIC_VERSION}-${PROTOC_ARCH}.zip
 )
 FetchContent_MakeAvailable(external_protobuf_protoc)
 FetchContent_GetProperties(external_protobuf_protoc)
