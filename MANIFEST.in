@@ -1,0 +1,12 @@
+graft example
+graft external
+graft external_v2
+
+graft src
+graft include
+graft tests/python
+graft tests/scenarios
+
+include CMakeLists.txt
+
+global-exclude *.pyc
