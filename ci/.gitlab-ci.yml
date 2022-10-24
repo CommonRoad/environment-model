@@ -23,11 +23,13 @@ before_script:
 
 ### static test ###
 clang-format:
+  image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci:1.4
   stage: static-test
   script: ./ci/clang-format.sh
   needs: []
 
 clang-tidy:
+  image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci:1.4
   stage: static-test
   script: ./ci/clang-tidy.sh
   needs:
