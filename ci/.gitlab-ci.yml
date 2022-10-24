@@ -139,7 +139,8 @@ build-wheel:
   script:
     - curl -sSL https://get.docker.com/ | sh
     - pipx run build --sdist
-    - cibuildwheel --platform linux dist/commonroad_cpp-2022.0.0.tar.gz
+    - cibuildwheel --platform linux dist/*.tar.gz
+    - twine upload --repository gitlab wheelhouse/*.whl
   needs: []
   artifacts:
     paths:
