@@ -63,10 +63,7 @@ build-compile-commands:
 build-ninja-test:
   stage: compile
   script:
-    - cmake
-      -G "Ninja Multi-Config"
-      -S .
-      -B build
+    - cmake -G "Ninja Multi-Config" -S . -B build
     - cmake --build build --config Release --target env_model
   needs: []
 
@@ -76,11 +73,8 @@ build-clang:
     CC: clang
     CXX: clang++
   script:
-    - mkdir build && cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
-    - make env_model -j4
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DENVMODEL_BUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release ..
-    - make env_model -j4
+    - cmake -G "Ninja Multi-Config" -S . -B build
+    - cmake --build build --config Release --target env_model
   needs: []
 
 build-gcc:
@@ -89,27 +83,22 @@ build-gcc:
     CC: gcc
     CXX: g++
   script:
-    - mkdir build && cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
-    - make env_model -j4
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DENVMODEL_BUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release ..
-    - make env_model -j4
+    - cmake -G "Ninja Multi-Config" -S . -B build
+    - cmake --build build --config Release --target env_model
   needs: []
 
 build-standalone:
   stage: compile
   script:
-    - mkdir build && cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Release ..
-    - make env_model_example_node -j4
+    - cmake -G "Ninja Multi-Config" -S . -B build
+    - cmake --build build --config Release --target env_model_example_node
   needs: []
 
 build-test:
   stage: compile
   script:
-    - mkdir build && cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug ..
-    - make env_model_test -j4
+    - cmake -G "Ninja Multi-Config" -S . -B build
+    - cmake --build build --config Debug --target env_model_test
   needs: []
   artifacts:
     paths:
@@ -120,12 +109,9 @@ build-test:
 build-run-coverage:
   stage: compile
   script:
-    - mkdir build && cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DENV_MODEL_BUILD_CODE_COVERAGE=ON ..
-    - make env_model_test -j4
-    - make env_model_coverage
-  after_script:
-    - mv /commonroad/dist/ ./
+    - cmake -G "Ninja Multi-Config" -S . -B build -DENV_MODEL_BUILD_CODE_COVERAGE=ON
+    - cmake --build build --config Debug --target env_model_test
+    - cmake --build build --config Debug --target env_model_coverage
   needs: []
   artifacts:
     paths:
@@ -196,7 +182,6 @@ upload-wheel:
       - dist/
       - wheelhouse/
     expire_in: 30 minutes
-
 
 ### tests ###
 test:
