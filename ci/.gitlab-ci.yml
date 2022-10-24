@@ -134,8 +134,6 @@ build-wheel:
     DOCKER_DRIVER: overlay2
     # See https://github.com/docker-library/docker/pull/166
     DOCKER_TLS_CERTDIR: ""
-  before_script:
-    - docker info
   script:
     - curl -sSL https://get.docker.com/ | sh
     - pipx run build --sdist
