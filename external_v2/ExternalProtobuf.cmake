@@ -73,7 +73,7 @@ if(USE_BINARY_PROTOC)
     set(protobuf_BUILD_PROTOBUF_BINARIES OFF CACHE BOOL "" FORCE)
     set(protobuf_BUILD_PROTOC_BINARIES OFF CACHE BOOL "" FORCE)
 
-    message(STATUS "Using binary protoc")
+    message(STATUS "Trying to use binary protoc")
     message(VERBOSE "Protoc system/architecture: ${PROTOC_ARCH}")
     message(VERBOSE "Protoc download URL: ${PROTOBUF_BASE_URL}/v${PROTOBUF_ALT_NUMERIC_VERSION}/protoc-${PROTOBUF_ALT_NUMERIC_VERSION}-${PROTOC_ARCH}.zip")
 
@@ -98,13 +98,17 @@ if(USE_BINARY_PROTOC)
         add_executable(protobuf::protoc IMPORTED)
         set_property(TARGET protobuf::protoc PROPERTY IMPORTED_LOCATION ${PROTOC})
     else()
+        message(WARNING "Binary protoc not usable for some reason. "
+            "The most likely is that we're running on Linux distribution based on musllibc, "
+            "e.g. Alpine Linux.")
         # Binary protoc not usable for some reason (most likely because we're running on Alpine Linux)
         set(USE_BINARY_PROTOC FALSE)
     endif()
 endif()
 
 if(NOT USE_BINARY_PROTOC)
-    message(FATAL_ERROR "Binary protoc is not available for your OS/architecture - we will need to compile protoc from source")
+    message(WARNING "Binary protoc is not available or usable for your OS/architecture. "
+        "We will need to compile protoc from source. This may take a while.")
 
     set(protobuf_BUILD_LIBPROTOC ON CACHE BOOL "" FORCE)
     set(protobuf_BUILD_PROTOBUF_BINARIES ON CACHE BOOL "" FORCE)
