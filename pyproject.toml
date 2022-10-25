@@ -3,7 +3,7 @@
 name = "commonroad_cpp"
 dynamic = ["version"]
 readme = "README.md"
-requires-python = ">=3.7,<3.11"
+requires-python = ">=3.7,<3.12"
 license = {file = "LICENSE"}
 authors = [
   {email = "sebastian.maierhofer@tum.de"},
@@ -46,7 +46,7 @@ language = "en"
 
 [tool.cibuildwheel]
 # build = "cp*"
-skip = "cp36-* pp* *-musllinux*"
+skip = "cp36-* pp*"
 
 archs = ["auto"]
 # archs = ["x86_64"]
