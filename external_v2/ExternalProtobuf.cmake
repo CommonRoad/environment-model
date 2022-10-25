@@ -85,6 +85,9 @@ if(NOT USE_BINARY_PROTOC)
     message(FATAL_ERROR "External protoc download is not yet supported for your OS/architecture")
 endif()
 
+message(STATUS "Protoc system/architecture: ${PROTOC_ARCH}")
+message(STATUS "Protoc download URL: ${PROTOBUF_BASE_URL}/v${PROTOBUF_ALT_NUMERIC_VERSION}/protoc-${PROTOBUF_ALT_NUMERIC_VERSION}-${PROTOC_ARCH}.zip")
+
 FetchContent_Declare(
   external_protobuf_protoc
   URL  ${PROTOBUF_BASE_URL}/v${PROTOBUF_ALT_NUMERIC_VERSION}/protoc-${PROTOBUF_ALT_NUMERIC_VERSION}-${PROTOC_ARCH}.zip
