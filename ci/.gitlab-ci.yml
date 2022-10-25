@@ -205,7 +205,8 @@ run-coverage:
           path: coverage.xml
 
 .python_test_template: &python_test_template
-  image: python:${JOB_PYTHON_VERSION}-alpine
+  # For musllinux: python:${JOB_PYTHON_VERSION}-alpine
+  image: python:${JOB_PYTHON_VERSION}-slim
   stage: test
   before_script:
     - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
