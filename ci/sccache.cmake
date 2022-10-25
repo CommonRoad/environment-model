@@ -16,6 +16,8 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(sccache)
 
+file(CHMOD ${sccache_SOURCE_DIR}/sccache FILE_PERMISSIONS OWNER_READ OWNER_EXECUTE)
+
 set(CMAKE_C_COMPILER_LAUNCHER ${sccache_SOURCE_DIR}/sccache)
 set(CMAKE_CXX_COMPILER_LAUNCHER ${sccache_SOURCE_DIR}/sccache)
 
