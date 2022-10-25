@@ -166,6 +166,7 @@ upload-wheel:
 test:
   stage: test
   script:
+    - build/Debug/env_model_test
     - cmake --build build --config Debug --target test
   needs:
     - job: build-test
@@ -209,6 +210,7 @@ run-coverage:
   image: python:${JOB_PYTHON_VERSION}-slim
   stage: test
   before_script:
+    - ls -l wheelhouse
     - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
   script:
     - python -m pytest tests/python
