@@ -8,5 +8,6 @@ graft tests/python
 graft tests/scenarios
 
 include CMakeLists.txt
+include ci/sccache.cmake
 
 global-exclude *.pyc
