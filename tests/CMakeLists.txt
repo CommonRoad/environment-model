@@ -107,6 +107,7 @@ if (ENV_MODEL_BUILD_TESTS)
             # increase the discovery timeout for `env_model_test --gtest_list_tests`
             DISCOVERY_TIMEOUT 60
             WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+            XML_OUTPUT_DIR ${PROJECT_BINARY_DIR}/test-reports
     )
 endif ()
 
