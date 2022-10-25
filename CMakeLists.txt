@@ -31,7 +31,7 @@ if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-if(TRUE OR DEFINED ENV{CIBUILDWHEEL})
+if(DEFINED ENV{CIBUILDWHEEL})
     include(ci/ccache.cmake)
     # include(ci/sccache.cmake)
 endif()
