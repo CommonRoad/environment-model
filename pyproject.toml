@@ -47,8 +47,7 @@ language = "en"
 [tool.cibuildwheel]
 # build = "cp*"
 
-# Skip Musllinux due to binary Protoc issue
-skip = "pp* *-musllinux*"
+skip = "pp*"
 
 archs = ["auto"]
 # archs = ["x86_64"]
