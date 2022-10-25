@@ -1,7 +1,7 @@
 stages:
   - compile
-  - test
   - python
+  - test
   - static-test
   - docs
   - publish
@@ -197,35 +197,37 @@ run-coverage:
           coverage_format: cobertura
           path: coverage.xml
 
-#build-test-python-37:
-#  stage: test
-#  before_script:
-#    - source activate cr37
-#    - *python-prepare
-#  script:
-#    - python setup.py install
-#    - python -m pytest tests/python
-#  needs: []
-#
-#build-test-python-38:
-#  stage: test
-#  before_script:
-#    - source activate cr38
-#    - *python-prepare
-#  script:
-#    - python setup.py install
-#    - python -m pytest tests/python
-#  needs: []
-#
-#build-test-python-39:
-#  stage: test
-#  before_script:
-#    - source activate cr39
-#    - *python-prepare
-#  script:
-#    - python setup.py install
-#    - python -m pytest tests/python
-#  needs: []
+.python_test_template: &python_test_template
+  image: python:${JOB_PYTHON_VERSION}-alpine
+  stage: test
+  before_script:
+    - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
+  script:
+    - python -m pytest tests/python
+    - python ./example.py
+  needs:
+    - job: build-wheel
+      artifacts: true
+
+test-python-37:
+  variables:
+    JOB_PYTHON_VERSION: "3.7"
+  <<: *python_test_template
+
+test-python-38:
+  variables:
+    JOB_PYTHON_VERSION: "3.8"
+  <<: *python_test_template
+
+test-python-39:
+  variables:
+    JOB_PYTHON_VERSION: "3.9"
+  <<: *python_test_template
+
+test-python-310:
+  variables:
+    JOB_PYTHON_VERSION: "3.10"
+  <<: *python_test_template
 
 ### create documentation ###
 docs:
