@@ -202,12 +202,16 @@ test-python:
   image: python:${JOB_PYTHON_VERSION}-${JOB_OS}
   stage: test
   before_script:
-    - if [ "$JOB_OS" == "alpine" ]; then apk --update --no-cache add py3-numpy; fi
+    # No wheels available for NumPy on Alpine, so use the system version and only install pytest
+    - >
+      if [ "$JOB_OS" == "alpine" ]; then
+          apk --update --no-cache add python3-dev build-base
+          pip install numpy>=1.20.0 pytest~=7.2.0 commonroad-io>=2021.4
+      else
+          pip install -r test_requirements.txt
+      fi
     - ls -l wheelhouse
     - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
-    # - pip install -r test_requirements.txt
-    # No wheels available for NumPy on Alpine, so use the system version and only install pytest
-    - pip install pytest~=7.2.0 commonroad-io>=2021.4
   script:
     - python -m pytest tests/python
     - python ./example.py
