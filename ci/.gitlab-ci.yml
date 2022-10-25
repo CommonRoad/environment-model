@@ -211,7 +211,7 @@ run-coverage:
   stage: test
   before_script:
     - ls -l wheelhouse
-    - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
+    - pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
   script:
     - python -m pytest tests/python
     - python ./example.py
