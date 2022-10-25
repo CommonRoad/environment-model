@@ -109,7 +109,7 @@ build-sdist:
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   script:
     - python3 --version
-    - pipx run build --sdist
+    - python3 -m build --sdist
   needs: []
   artifacts:
     paths:
@@ -135,7 +135,6 @@ build-wheel:
     CIBW_BUILD_VERBOSITY: 0
     CIBW_BUILD: '*'
   script:
-    - pipx run build --sdist
     - cibuildwheel --platform linux dist/*.tar.gz
   needs:
     - job: build-sdist
