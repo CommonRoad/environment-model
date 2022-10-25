@@ -90,9 +90,20 @@ if(USE_BINARY_PROTOC)
             REQUIRED
             NO_DEFAULT_PATH
             )
-    add_executable(protobuf::protoc IMPORTED)
-    set_property(TARGET protobuf::protoc PROPERTY IMPORTED_LOCATION ${PROTOC})
-else()
+
+    execute_process(COMMAND ${PROTOC} --version
+        RESULT_VARIABLE _PROTOBUF_PROTOC_RESULT)
+
+    if(_PROTOBUF_PROTOC_RESULT EQUAL "0")
+        add_executable(protobuf::protoc IMPORTED)
+        set_property(TARGET protobuf::protoc PROPERTY IMPORTED_LOCATION ${PROTOC})
+    else()
+        # Binary protoc not usable for some reason (most likely because we're running on Alpine Linux)
+        set(USE_BINARY_PROTOC FALSE)
+    endif()
+endif()
+
+if(NOT USE_BINARY_PROTOC)
     message(FATAL_ERROR "Binary protoc is not available for your OS/architecture - we will need to compile protoc from source")
 
     set(protobuf_BUILD_LIBPROTOC ON CACHE BOOL "" FORCE)
