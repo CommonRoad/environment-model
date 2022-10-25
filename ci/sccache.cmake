@@ -1,6 +1,7 @@
 include(FetchContent)
 
 if(NOT (CMAKE_SYSTEM_NAME MATCHES "Linux" AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64"))
+    message(STATUS "Skipping sccache setup: Unsupported architecture or OS")
     return()
 endif()
 
