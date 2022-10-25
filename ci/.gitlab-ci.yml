@@ -237,6 +237,11 @@ test-python-310:
     JOB_PYTHON_VERSION: "3.10"
   <<: *python_test_template
 
+test-python-311:
+  variables:
+    JOB_PYTHON_VERSION: "3.11"
+  <<: *python_test_template
+
 ### create documentation ###
 docs:
   stage: docs
