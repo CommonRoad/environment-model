@@ -32,7 +32,7 @@ if(POLICY CMP0135)
 endif()
 
 if(DEFINED ENV{CIBUILDWHEEL})
-    include(ci/ccache.cmake)
+    # include(ci/ccache.cmake)
     # include(ci/sccache.cmake)
 endif()
 
