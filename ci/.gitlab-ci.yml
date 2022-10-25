@@ -203,7 +203,8 @@ test-python:
   stage: test
   before_script:
     - ls -l wheelhouse
-    - pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
+    - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
+    - pip install -r test_requirements.txt
   script:
     - python -m pytest tests/python
     - python ./example.py
