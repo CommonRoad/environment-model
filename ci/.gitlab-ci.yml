@@ -206,8 +206,7 @@ run-coverage:
           path: coverage.xml
 
 test-python:
-  # For musllinux: python:${JOB_PYTHON_VERSION}-alpine
-  image: python:${JOB_PYTHON_VERSION}-slim
+  image: python:${JOB_PYTHON_VERSION}-${JOB_OS}
   stage: test
   before_script:
     - ls -l wheelhouse
@@ -220,7 +219,8 @@ test-python:
       artifacts: true
   parallel:
     matrix:
-      - JOB_PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+      - JOB_OS: ["slim", "alpine"]
+        JOB_PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
 ### create documentation ###
 docs:
