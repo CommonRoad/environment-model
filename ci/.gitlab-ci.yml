@@ -86,8 +86,7 @@ build-test:
   needs: []
   artifacts:
     paths:
-      - ./build/
-      - ./dist/
+      - build
     expire_in: 30 minutes
 
 build-coverage:
@@ -98,8 +97,7 @@ build-coverage:
   needs: []
   artifacts:
     paths:
-      - ./build/
-      - ./dist/
+      - build
     expire_in: 30 minutes
 
 build-sdist:
