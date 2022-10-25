@@ -29,6 +29,10 @@ endif()
 
 # cmake_policy(SET CMP0135 NEW)
 
+include(CMakePrintSystemInformation)
+message(STATUS "C launcher: ${CMAKE_C_COMPILER_LAUNCHER}")
+message(STATUS "CXX launcher: ${CMAKE_CXX_COMPILER_LAUNCHER}")
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
