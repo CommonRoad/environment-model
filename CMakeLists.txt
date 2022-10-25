@@ -146,7 +146,7 @@ if(NOT Boost_FOUND)
 endif()
 
 option(COMMONROAD_SYSTEM_PROTOBUF "Use system Protobuf" ON)
-set(Protobuf_DEBUG ON)
+# set(Protobuf_DEBUG ON)
 if(DEFINED ENV{CI})
     # Ugly hack, as the CI environment has another protoc in /root/anaconda3/bin/protoc
     # which is incompatible with the Protobuf libraries found by CMake
