@@ -90,12 +90,11 @@ build-test:
       - ./dist/
     expire_in: 30 minutes
 
-build-run-coverage:
+build-coverage:
   stage: compile
   script:
     - cmake -G "Ninja Multi-Config" -S . -B build -DENV_MODEL_BUILD_CODE_COVERAGE=ON
     - cmake --build build --config Debug --target env_model_test
-    - cmake --build build --config Debug --target env_model_coverage
   needs: []
   artifacts:
     paths:
@@ -174,6 +173,18 @@ test:
     when: always
     reports:
       junit: build/test-reports/*.xml
+
+run-coverage:
+  stage: test
+  script:
+    - cmake --build build --config Debug --target env_model_coverage
+  needs:
+    - job: build-coverage
+      artifacts: true
+  artifacts:
+    paths:
+      - ./build/
+    expire_in: 30 minutes
 
 #build-test-python-37:
 #  stage: test
