@@ -27,11 +27,13 @@ if(SKBUILD)
         find_package(pybind11 2.7.0 CONFIG REQUIRED)
 endif()
 
-# cmake_policy(SET CMP0135 NEW)
+if(POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
+endif()
 
-include(CMakePrintSystemInformation)
-message(STATUS "C launcher: ${CMAKE_C_COMPILER_LAUNCHER}")
-message(STATUS "CXX launcher: ${CMAKE_CXX_COMPILER_LAUNCHER}")
+if(DEFINED ENV{CIBUILDWHEEL})
+    include(ci/sccache.cmake)
+endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -103,10 +105,6 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
             STRING "Choose the type of build." FORCE)
 endif()
-endif()
-
-if(POLICY CMP0135)
-  cmake_policy(SET CMP0135 NEW)
 endif()
 
 include(FetchContent)
