@@ -176,6 +176,7 @@ test:
     when: always
     reports:
       junit: build/test-reports/*.xml
+    expire_in: 30 minutes
 
 run-coverage:
   stage: test
