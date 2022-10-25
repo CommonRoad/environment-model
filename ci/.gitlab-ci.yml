@@ -205,7 +205,7 @@ run-coverage:
           coverage_format: cobertura
           path: coverage.xml
 
-.python_test_template: &python_test_template
+test-python:
   # For musllinux: python:${JOB_PYTHON_VERSION}-alpine
   image: python:${JOB_PYTHON_VERSION}-slim
   stage: test
@@ -218,31 +218,9 @@ run-coverage:
   needs:
     - job: build-wheel
       artifacts: true
-
-test-python-37:
-  variables:
-    JOB_PYTHON_VERSION: "3.7"
-  <<: *python_test_template
-
-test-python-38:
-  variables:
-    JOB_PYTHON_VERSION: "3.8"
-  <<: *python_test_template
-
-test-python-39:
-  variables:
-    JOB_PYTHON_VERSION: "3.9"
-  <<: *python_test_template
-
-test-python-310:
-  variables:
-    JOB_PYTHON_VERSION: "3.10"
-  <<: *python_test_template
-
-test-python-311:
-  variables:
-    JOB_PYTHON_VERSION: "3.11"
-  <<: *python_test_template
+  parallel:
+    matrix:
+      - JOB_PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
 ### create documentation ###
 docs:
