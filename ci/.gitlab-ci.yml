@@ -126,15 +126,14 @@ build-wheel:
     DOCKER_DRIVER: overlay2
     # See https://github.com/docker-library/docker/pull/166
     DOCKER_TLS_CERTDIR: ""
+    CCACHE_DIR: $CI_PROJECT_DIR/.cache/ccache
     SCCACHE_DIR: $CI_PROJECT_DIR/.cache/sccache
     CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\""
-    CIBW_ENVIRONMENT: "SCCACHE_DIR=/host/${SCCACHE_DIR}"
+    CIBW_ENVIRONMENT: "CCACHE_DIR=/host/${CCACHE_DIR} SCCACHE_DIR=/host/${SCCACHE_DIR}"
     CIBW_BUILD_VERBOSITY: 0
     CIBW_BUILD: '*'
   script:
-    - sccache --show-stats
     - cibuildwheel dist/*.tar.gz
-    - sccache --show-stats
   needs:
     - job: build-sdist
       artifacts: true
@@ -145,6 +144,7 @@ build-wheel:
   cache:
     key: $CI_JOB_NAME
     paths:
+      - .cache/ccache
       - .cache/sccache
 
 upload-wheel:
