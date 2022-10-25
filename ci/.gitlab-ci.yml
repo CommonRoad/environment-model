@@ -129,7 +129,7 @@ build-wheel:
     CCACHE_DIR: $CI_PROJECT_DIR/.cache/ccache
     SCCACHE_DIR: $CI_PROJECT_DIR/.cache/sccache
     CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\""
-    CIBW_ENVIRONMENT: "CCACHE_DIR=/host/${CCACHE_DIR} SCCACHE_DIR=/host/${SCCACHE_DIR}"
+    CIBW_ENVIRONMENT: "CCACHE_DIR=/host/${CCACHE_DIR} SCCACHE_DIR=/host/${SCCACHE_DIR} PIP_DISABLE_PIP_VERSION_CHECK=1"
     CIBW_BUILD_VERBOSITY: 0
     CIBW_BUILD: '*'
   script:
