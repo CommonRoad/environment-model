@@ -2,7 +2,6 @@ stages:
   - compile
   - test
   - python
-  - coverage
   - static-test
   - docs
   - publish
@@ -175,13 +174,28 @@ run-coverage:
   stage: test
   script:
     - cmake --build build --config Debug --target env_model_coverage
+    - gcovr --version
+    - gcovr
+      -f src/
+      -e build/
+      --print-summary
+      --exclude-unreachable-branches
+      --output coverage.xml
+      --xml
+    - mv build/env_model_coverage coverage-report
   needs:
     - job: build-coverage
       artifacts: true
+  coverage: /^\s*lines:\s*\d+.\d+\%/
   artifacts:
     paths:
-      - ./build/
+      - coverage-report
+    expose_as: 'Coverage Report'
     expire_in: 30 minutes
+    reports:
+      coverage_report:
+          coverage_format: cobertura
+          path: coverage.xml
 
 #build-test-python-37:
 #  stage: test
@@ -212,59 +226,6 @@ run-coverage:
 #    - python setup.py install
 #    - python -m pytest tests/python
 #  needs: []
-
-### coverage ###
-coverage-analyze:
-  stage: coverage
-  script:
-    - gcovr --version
-    - gcovr
-      -f src/
-      -e src/commonroad_cpp/interfaces/standalone/main.cpp
-      -e src/commonroad_cpp/interfaces/commonroad/protobufFormat
-      -e src/commonroad_cpp/geometry/shape.h
-      -e src/commonroad_cpp/interfaces/pybind/
-      -e /commonroad/dist/include/yaml-cpp/
-      --print-summary
-      --exclude-unreachable-branches
-      --output coverage.xml
-      --xml
-  needs:
-    - job: build-run-coverage
-      artifacts: true
-  coverage: /^\s*lines:\s*\d+.\d+\%/
-  artifacts:
-    reports:
-      coverage_report:
-          coverage_format: cobertura
-          path: coverage.xml
-
-coverage-report:
-  stage: coverage
-  script:
-    - gcovr --version
-    - gcovr
-      -f src/
-      -e src/commonroad_cpp/interfaces/standalone/main.cpp
-      -e src/commonroad_cpp/interfaces/commonroad/protobufFormat
-      -e src/commonroad_cpp/geometry/shape.h
-      -e src/commonroad_cpp/interfaces/pybind/
-      -e /commonroad/dist/include/yaml-cpp/
-      --print-summary
-      --exclude-unreachable-branches
-      --output coverage.html
-      --html
-      --html-details
-    - mkdir coverage
-    - mv coverage*.html coverage
-  needs:
-    - job: build-run-coverage
-      artifacts: true
-  artifacts:
-    paths:
-      - coverage
-    expose_as: 'Coverage Report'
-    expire_in: 30 minutes
 
 ### create documentation ###
 docs:
