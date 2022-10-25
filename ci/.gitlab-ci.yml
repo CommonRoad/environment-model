@@ -204,7 +204,9 @@ test-python:
   before_script:
     - ls -l wheelhouse
     - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
-    - pip install -r test_requirements.txt
+    # - pip install -r test_requirements.txt
+    # No wheels available for NumPy on Alpine, so use the system version and only install pytest
+    - pip install pytest~=7.2.0
   script:
     - python -m pytest tests/python
     - python ./example.py
