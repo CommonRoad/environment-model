@@ -129,7 +129,8 @@ build-wheel:
     # See https://github.com/docker-library/docker/pull/166
     DOCKER_TLS_CERTDIR: ""
     SCCACHE_DIR: $CI_PROJECT_DIR/.cache/sccache
-    CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\" && export SCCACHE_DIR=/host/${SCCACHE_DIR} && export CMAKE_C_COMPILER_LAUNCHER=sccache && export CMAKE_CXX_COMPILER_LAUNCHER=sccache"
+    CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\""
+    CIBW_ENVIRONMENT: "SCCACHE_DIR=/host/${SCCACHE_DIR} CMAKE_C_COMPILER_LAUNCHER=sccache CMAKE_CXX_COMPILER_LAUNCHER=sccache"
     CIBW_BUILD_VERBOSITY: 0
     CIBW_BUILD: '*'
   script:
