@@ -167,23 +167,20 @@ upload-wheel:
       artifacts: true
     - job: build-wheel
       artifacts: true
-  artifacts:
-    paths:
-      - dist/
-      - wheelhouse/
-    expire_in: 30 minutes
 
 ### tests ###
 test:
   stage: test
   script:
-    - build/env_model_test --gtest_output="xml:report.xml"
+    - cmake --build build --config Debug --target test
   needs:
     - job: build-test
       artifacts: true
   artifacts:
+    # Upload reports even if tests fail
+    when: always
     reports:
-      junit: ./report.xml
+      junit: build/test-reports/*.xml
 
 #build-test-python-37:
 #  stage: test
