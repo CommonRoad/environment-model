@@ -23,11 +23,7 @@ struct TrafficLightCycleElement {
 struct vertex {
     double x{0};
     double y{0};
-
-    // User-provided constructors needed in C++20
     vertex() = default;
-    vertex(double x, double y) : x(x), y(y) {
-    };
     vertex operator+(const vertex &vert) const { return {this->x + vert.x, this->y + vert.y}; }
     vertex operator-(const vertex &vert) const { return {this->x - vert.x, this->y - vert.y}; }
     vertex operator*(const vertex &vert) const { return {this->x * vert.x, this->y * vert.y}; }
