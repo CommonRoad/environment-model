@@ -104,6 +104,9 @@ build-sdist:
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   script:
     - python3 --version
+    # Ensure we have all relevant tags
+    - git fetch --tags
+    - git tag --list
     - python3 -m build --sdist
   needs: []
   artifacts:
