@@ -60,4 +60,4 @@ test-skip = "*-musllinux*"
 
 test-extras = ["test"]
 
-test-command = "python -m pytest tests/python"
+test-command = "python -m pytest {package}/tests/python"
