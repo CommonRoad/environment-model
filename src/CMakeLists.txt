@@ -148,11 +148,6 @@ set_property(TARGET env_model_predicates PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # Create environment model library
 add_library(env_model)
-# if(ENV_MODEL_BUILD_SHARED_LIBS)
-#     add_library(env_model SHARED)
-# else()
-#     add_library(env_model STATIC)
-# endif()
 
 target_link_libraries(env_model
         PUBLIC
@@ -199,12 +194,17 @@ if(SKBUILD)
 endif(SKBUILD)
 
 # this adds many warnings to the build. They usually help to find some bugs
+# TODO: Check whether each warning flag is actually supported by the compiler before adding it
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    target_compile_options(env_model PRIVATE -Wall -Wextra -Wconversion
-            -pedantic -Wfatal-errors -Wno-unused-parameter)
+    foreach(target IN ITEMS env_model env_model_core env_model_predicates)
+        target_compile_options(env_model_core PRIVATE -Wall -Wextra -Wconversion
+                -pedantic -Wfatal-errors -Wno-unused-parameter)
+    endforeach()
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    target_compile_options(env_model PRIVATE /W3 /WX)
+    foreach(target IN ITEMS env_model env_model_core env_model_predicates)
+        target_compile_options(env_model_core PRIVATE /W3 /WX)
+    endforeach()
 endif()
 
 
