@@ -104,14 +104,12 @@ build-sdist:
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   script:
     - python3 --version
-    # Ensure we have all relevant tags
-    - git fetch --tags
-    - git tag --list
     - git describe
-    - pip install setuptools_scm
-    - python3 -m setuptools_scm
     - python3 -m build --sdist
   needs: []
+  variables:
+    # Necessary so that Git detects all tags
+    GIT_STRATEGY: clone
   artifacts:
     paths:
       - dist/*.tar.gz
