@@ -144,5 +144,6 @@ if (ENV_MODEL_BUILD_CODE_COVERAGE)
     setup_target_for_coverage_gcovr_html(
             NAME env_model_coverage
             EXECUTABLE env_model_test
+            EXCLUDES ${FETCHCONTENT_BASE_DIR}
     )
 endif()
