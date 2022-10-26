@@ -198,19 +198,32 @@ run-coverage:
           coverage_format: cobertura
           path: coverage.xml
 
-test-python:
-  image: python:${JOB_PYTHON_VERSION}-${JOB_OS}
+test-python-manylinux:
+  image: python:${JOB_PYTHON_VERSION}-slim-bullseye
   stage: test
   before_script:
+    - ls -l wheelhouse
+    - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
+    - pip install -r test_requirements.txt
+  script:
+    - python -m pytest tests/python
+    - python ./example.py
+  needs:
+    - job: build-wheel
+      artifacts: true
+  parallel:
+    matrix:
+      - JOB_PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+
+test-python-musllinux:
+  image: python:${JOB_PYTHON_VERSION}-alpine
+  stage: test
+  allow_failure: true
+  before_script:
     # No wheels available for NumPy on Alpine, so use the system version and only install pytest
-    - >
-      if [ "$JOB_OS" == "alpine" ]; then
-          apk --update --no-cache add python3-dev build-base gfortran openblas openblas-dev py3-wheel py3-pillow jpeg-dev freetype-dev
-          printf "[libs]\nsystem_freetype = true\n" > mplsetup.cfg
-          pip install numpy>=1.20.0 pytest~=7.2.0 commonroad-io>=2021.4
-      else
-          pip install -r test_requirements.txt
-      fi
+    - apk --update --no-cache add python3-dev build-base gfortran openblas openblas-dev py3-wheel py3-pillow jpeg-dev freetype-dev
+    - printf "[libs]\nsystem_freetype = true\n" > mplsetup.cfg
+    - pip install numpy>=1.20.0 pytest~=7.2.0 commonroad-io>=2021.4
     - ls -l wheelhouse
     - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
   script:
@@ -221,8 +234,7 @@ test-python:
       artifacts: true
   parallel:
     matrix:
-      - JOB_OS: ["slim", "alpine"]
-        JOB_PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+      - JOB_PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
 ### create documentation ###
 docs:
