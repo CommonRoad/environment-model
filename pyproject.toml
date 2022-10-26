@@ -33,13 +33,12 @@ requires = [
     "cmake~=3.24.0",
     "ninja",
     "pybind11~=2.10.0",
-    "setuptools-git-versioning<2",
+     "setuptools_scm[toml]>=6.2"
     ]
 
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools-git-versioning]
-enabled = true
+[tool.setuptools_scm]
 
 [tool.sphinx-pyproject]
 language = "en"
