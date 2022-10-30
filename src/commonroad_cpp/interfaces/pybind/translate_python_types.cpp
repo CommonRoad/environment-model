@@ -386,8 +386,7 @@ std::shared_ptr<Obstacle> createCommonObstaclePart(py::handle py_singleObstacle)
     if (commonroadShape == "Rectangle") { // TODO: add other shape types
         auto length{py_obstacleShape.attr("length").cast<double>()};
         auto width{py_obstacleShape.attr("width").cast<double>()};
-        tempObstacle->getGeoShape().setLength(length);
-        tempObstacle->getGeoShape().setWidth(width);
+        tempObstacle->setGeoShape(    std::make_unique<Rectangle>(length, width));
     } else {
         std::cout << "Unknown obstacle shape (only circles, polygons and rectangles supported) \n";
     }
@@ -417,6 +416,7 @@ std::shared_ptr<Obstacle> createDynamicObstacle(py::handle py_singleObstacle) {
          py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list").cast<py::list>()) {
         tempObstacle->appendStateToTrajectoryPrediction(extractState(py_state));
     }
+    tempObstacle->setSensorParameters(SensorParameters{250.0, 250.0, 0.3}); // TODO replace with proper setting of sensor parameters
     return tempObstacle;
 }
 
