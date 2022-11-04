@@ -143,6 +143,8 @@ build-wheel:
     CIBW_BUILD_VERBOSITY: 0
     CIBW_TEST_SKIP: "*i686 *-musllinux*"
     CIBW_BUILD: "*"
+    # We only use the artifacts (sdist/wheels) from previous jobs, so skip all Git operations
+    GIT_STRATEGY: none
   script:
     - cibuildwheel dist/*.tar.gz
   needs:
