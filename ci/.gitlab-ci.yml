@@ -153,6 +153,9 @@ build-wheel:
       - wheelhouse/*.whl
     expire_in: 30 minutes
   rules:
+    # Disable job for merge request pipelines (imitate default job behaviour)
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     # When we are building wheels for a tag/release, build wheel for all supported Python versions and platform
     - if: $CI_COMMIT_TAG
       variables:
@@ -185,6 +188,9 @@ upload-wheel:
     - job: build-wheel
       artifacts: true
   rules:
+    # Disable job for merge request pipelines (imitate default job behaviour)
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     # Only upload wheels whenever a tag is associated with the commit
     - if: $CI_COMMIT_TAG
     # Also upload wheels if the UPLOAD_WHEELS was manually set to true
