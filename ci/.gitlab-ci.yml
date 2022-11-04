@@ -162,7 +162,7 @@ build-wheel:
       variables:
         CIBW_BUILD: "*"
     # Routinely build all wheels for the default branch as well as develop (commits on these branches are infrequent)
-    - if: $CI_COMMIT_REF_PROTECTED || $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $CI_COMMIT_REF_NAME == "develop"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" || $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $CI_COMMIT_REF_NAME =~ /^(master|develop)$/
       variables:
         CIBW_BUILD: "*"
     # Fallback rule when we're not building wheels for a tag or a main branch:
