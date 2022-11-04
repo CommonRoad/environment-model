@@ -211,6 +211,11 @@ else()
     find_package(GTest)
     find_package(yaml-cpp 0.6.0 REQUIRED)
 
+    # yaml-cpp::yaml-cpp is not present in installed config file as of version 0.7.0
+    if(NOT TARGET yaml-cpp::yaml-cpp)
+        add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
+    endif()
+
     include(ExternalDrivabilityChecker)
 endif()
 
