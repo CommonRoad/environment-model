@@ -142,7 +142,6 @@ build-wheel:
     # to make cibuildwheel verbose in the pipeline created for the pushed commit.
     CIBW_BUILD_VERBOSITY: 0
     CIBW_TEST_SKIP: "*i686 *-musllinux*"
-    CIBW_BUILD: "*"
     # We only use the artifacts (sdist/wheels) from previous jobs, so skip all Git operations
     GIT_STRATEGY: none
   script:
@@ -196,7 +195,7 @@ upload-wheel:
     # Only upload wheels whenever a tag is associated with the commit
     - if: $CI_COMMIT_TAG
     # Also upload wheels if the UPLOAD_WHEELS was manually set to true
-    # For example, use git push -o ci.variable="UPLOAD_WHEELS=true" to test this
+    # For example, use git push -o ci.variable="UPLOAD_WHEELS=1" to test this
     - if: $UPLOAD_WHEELS == "1"
 
 ### tests ###
