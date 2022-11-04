@@ -119,6 +119,7 @@ build-sdist:
 
 build-wheel:
   stage: python
+  # Use the privileged runner as required for Docker-in-Docker (dind)
   tags:
     - wheel
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
@@ -133,9 +134,15 @@ build-wheel:
     # See https://github.com/docker-library/docker/pull/166
     DOCKER_TLS_CERTDIR: ""
     CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\""
-    CIBW_ENVIRONMENT: "PIP_DISABLE_PIP_VERSION_CHECK=1"
+    # NOTE: The following variables correspond to the default values.
+    # They are specified here so that it is possible to override them using
+    # Gitlab push options or in the UI when running a manual pipeline.
+    #
+    # For example, use git push -o ci.variable="CIBW_BUILD_VERBOSITY=1"
+    # to make cibuildwheel verbose in the pipeline created for the pushed commit.
     CIBW_BUILD_VERBOSITY: 0
-    CIBW_BUILD: '*'
+    CIBW_TEST_SKIP: "*i686 *-musllinux*"
+    CIBW_BUILD: "*"
   script:
     - cibuildwheel dist/*.tar.gz
   needs:
