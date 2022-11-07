@@ -77,9 +77,28 @@ class Lane : public Lanelet {
      */
     std::vector<std::shared_ptr<Lanelet>> getSuccessorLanelets(const std::shared_ptr<Lanelet> &lanelet) const;
 
+    /**
+     * Checks whether provided lanelet is part of lane.
+     *
+     * @param lanelet Pointer to lanelet object.
+     * @return Boolean indicating whether lanelet is part of lane.
+     */
     bool containsLanelet(const std::shared_ptr<Lanelet> &lanelet) const;
-    bool containsLanelet(size_t id) const;
 
+    /**
+     * Checks whether lanelet with provided lanelet ID is part of lane.
+     *
+     * @param laneletId Lanelet ID.
+     * @return Boolean indicating whether lanelet is part of lane.
+     */
+    bool containsLanelet(size_t laneletId) const;
+
+    /**
+     * Boolean indicating whether any provided lanelet is part of lane.
+     *
+     * @param lanelets List of pointers to lanelets.
+     * @return Boolean indicating whether any lanelet is part of lane.
+     */
     bool contains(std::vector<std::shared_ptr<Lanelet>> lanelets);
 
   private:

@@ -49,8 +49,9 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
         for (auto vert : centerVertices)
             temp_path.push_back(Eigen::Vector2d(vert.x, vert.y));
 
+        geometry::util::chaikins_corner_cutting(temp_path, 10, reference_path); // TODO parameter
         geometry::util::resample_polyline(temp_path, 2, reference_path); // todo parameter
-        curvilinearCoordinateSystem = std::make_shared<CurvilinearCoordinateSystem>(reference_path);
+        curvilinearCoordinateSystem = std::make_shared<CurvilinearCoordinateSystem>(reference_path, 20.0, 0.1, 1); // TODO parameter
     }
 
     omp_unset_lock(&ccs_lock);
@@ -62,7 +63,7 @@ const std::unordered_set<size_t> &Lane::getContainedLaneletIDs() const { return 
 
 bool Lane::containsLanelet(const std::shared_ptr<Lanelet> &lanelet) const { return containsLanelet(lanelet->getId()); }
 
-bool Lane::containsLanelet(size_t id) const { return containedLaneletIds.find(id) != containedLaneletIds.cend(); }
+bool Lane::containsLanelet(size_t laneletId) const { return containedLaneletIds.find(laneletId) != containedLaneletIds.cend(); }
 
 std::vector<std::shared_ptr<Lanelet>> Lane::getSuccessorLanelets(const std::shared_ptr<Lanelet> &lanelet) const {
     if (getContainedLaneletIDs().find(lanelet->getId()) == getContainedLaneletIDs().end())
