@@ -5,7 +5,6 @@
 // Credits: BMW Car@TUM
 //
 #include <algorithm>
-#include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <utility>
