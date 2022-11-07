@@ -308,9 +308,11 @@ double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem()->referencePath())
                 refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}, ";
-            throw std::runtime_error("Obstacle::frontS Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
-                                     std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) +
-                                     " - Reference Lane: " + refInfo);
+            throw std::runtime_error(
+                "Obstacle::frontS Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
+                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " +
+                refInfo + " - x-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getXPosition()) +
+                " - y-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getYPosition()));
         }
     }
     double lonPosition = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][0];
@@ -330,9 +332,11 @@ double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem()->referencePath())
                 refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}, ";
-            throw std::runtime_error("Obstacle::rearS Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
-                                     std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) +
-                                     " - Reference Lane: " + refInfo);
+            throw std::runtime_error(
+                "Obstacle::rearS Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
+                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " +
+                refInfo + " - x-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getXPosition()) +
+                " - y-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getYPosition()));
         }
     }
     double lonPosition = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][0];
@@ -352,9 +356,11 @@ double Obstacle::rightD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem()->referencePath())
                 refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}, ";
-            throw std::runtime_error("Obstacle::rightD Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
-                                     std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) +
-                                     " - Reference Lane: " + refInfo);
+            throw std::runtime_error(
+                "Obstacle::rightD Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
+                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " +
+                refInfo + " - x-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getXPosition()) +
+                " - y-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getYPosition()));
         }
     }
     double latPosition = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][1];
@@ -373,9 +379,11 @@ double Obstacle::leftD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
             std::string refInfo;
             for (const auto &ref : refLane->getCurvilinearCoordinateSystem()->referencePath())
                 refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}, ";
-            throw std::runtime_error("Obstacle::leftD Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
-                                     std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) +
-                                     " - Reference Lane: " + refInfo);
+            throw std::runtime_error(
+                "Obstacle::leftD Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
+                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " +
+                refInfo + " - x-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getXPosition()) +
+                " - y-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getYPosition()));
         }
     }
     double latPosition = convertedPositions[timeStep][refLane->getContainedLaneletIDs()][1];
@@ -435,8 +443,9 @@ double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &re
                 refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}, ";
             throw std::runtime_error(
                 "Obstacle::getLonPosition Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
-                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) +
-                " - Reference Lane: " + refInfo);
+                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " +
+                refInfo + " - x-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getXPosition()) +
+                " - y-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getYPosition()));
         }
     }
     return convertedPositions[timeStep][refLane->getContainedLaneletIDs()][0];
@@ -453,8 +462,9 @@ double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &re
                 refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}, ";
             throw std::runtime_error(
                 "Obstacle::getLatPosition Custom CCS - Curvilinear Projection Error - Obstacle ID: " +
-                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) +
-                " - Reference Lane: " + refInfo);
+                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " +
+                refInfo + " - x-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getXPosition()) +
+                " - y-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getYPosition()));
         }
     }
     return convertedPositions[timeStep][refLane->getContainedLaneletIDs()][1];
