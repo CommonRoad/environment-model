@@ -18,11 +18,11 @@ bool MakesUTurnPredicate::booleanEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lane>> lanes = world->getRoadNetwork()->findLanesByContainedLanelet(
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]->getId());
-    return std::any_of(
-        lanes.begin(), lanes.end(), [this, timeStep, obstacleK, world](const std::shared_ptr<Lane> &lane) {
-            auto orientationCcs{obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep)};
-            return parameters.uTurnLower <= orientationCcs and orientationCcs <= parameters.uTurnUpper;
-        });
+    return std::any_of(lanes.begin(), lanes.end(),
+                       [this, timeStep, obstacleK, world](const std::shared_ptr<Lane> &lane) {
+                           auto orientationCcs{obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep)};
+                           return parameters.uTurnLower <= orientationCcs and orientationCcs <= parameters.uTurnUpper;
+                       });
 }
 
 Constraint MakesUTurnPredicate::constraintEvaluation(
