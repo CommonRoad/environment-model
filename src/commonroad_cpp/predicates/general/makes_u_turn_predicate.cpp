@@ -20,11 +20,8 @@ bool MakesUTurnPredicate::booleanEvaluation(
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]->getId());
     return std::any_of(
         lanes.begin(), lanes.end(), [this, timeStep, obstacleK, world](const std::shared_ptr<Lane> &lane) {
-            auto orientationDif{abs(geometric_operations::subtractOrientations(
-                obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep),
-                lane->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                               obstacleK->getStateByTimeStep(timeStep)->getYPosition())))};
-            return parameters.uTurnLower <= orientationDif and orientationDif <= parameters.uTurnUpper;
+            auto orientationCcs{obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep)};
+            return parameters.uTurnLower <= orientationCcs and orientationCcs <= parameters.uTurnUpper;
         });
 }
 
