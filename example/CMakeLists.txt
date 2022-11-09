@@ -5,13 +5,8 @@ add_executable(env_model_example_node
     src/main.cpp
     )
 
-# Add a proper target for dl
-# We use LINK_LIBRARIES_ONLY_TARGETS in order to only allow targets to be specified in target_link_libraries.
-# However, there is no proper target for libdl as it is provided by the toolchain (glibc) itself.
-# We create this toolchain library in order to still have a proper target for dl.
-# See https://cmake.org/cmake/help/v3.25/prop_tgt/LINK_LIBRARIES_ONLY_TARGETS.html
-add_library(toolchain::dl INTERFACE IMPORTED)
-set_property(TARGET toolchain::dl PROPERTY IMPORTED_LIBNAME ${CMAKE_DL_LIBS})
+# Add definition for toolchain::dl
+include(toolchain/ToolchainLibraries)
 
 target_link_libraries(env_model_example_node
     PRIVATE
