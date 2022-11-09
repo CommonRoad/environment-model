@@ -94,26 +94,13 @@ target_include_directories(env_model_core
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         )
 
-# if(pugixml_FOUND)
-#         add_library(pugixml ALIAS pugixml::pugixml)
-# elseif(SKBUILD)
-#         add_library(pugixml ALIAS pugixml::static)
-# else()
-#         add_library(pugixml ALIAS pugixml::pugixml)
-# endif()
-
-# find_package(pugixml)
 target_link_libraries(env_model_core
         PRIVATE
-        # Not used in any headers
         Eigen3::Eigen
+        # Not used in any headers
         $<BUILD_INTERFACE:yaml-cpp::yaml-cpp>
         OpenMP::OpenMP_CXX
-        # pugixml::pugixml-static
-        # pugixml::pugixml
-        #pugixml-static
         pugixml::pugixml
-        # spdlog::spdlog
         $<BUILD_INTERFACE:spdlog::spdlog>
 )
 
