@@ -142,6 +142,8 @@ target_link_libraries(env_model
         commonroad_protobuf
         )
 
+add_library(EnvironmentModel::env_model ALIAS env_model)
+
 # add pybind module
 if(SKBUILD)
     message(STATUS "The project is built using scikit-build")
