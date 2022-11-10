@@ -25,6 +25,7 @@ docs = [
 ]
 
 [build-system]
+# NOTE: Update README.md if you change "requires" here
 requires = [
     "setuptools>=61.0",
     "wheel",
