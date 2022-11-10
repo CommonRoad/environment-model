@@ -4,143 +4,95 @@ The CommonRoad C++ Environment Model provides classes and methods to represent t
 It contains an interface to Python and predicates for evaluating traffic rules.  
 Note that the repository does not contain runtime verification algorithms and code for evaluating traffic rules.
 
+[[_TOC_]]
 
-## Dependencies
 
-### CommonRoad dependencies
+Before we begin, please note that the build system was recently overhauled
+in order to simplify the process of building and using the Environment Model.
+In most cases, building should be possible with no or minimal manual intervention.
+Please report any issues or problems you experience.
 
-- [commonroad-io](https://gitlab.lrz.de/cps/commonroad-io)
-- [CommonRoad Drivability Checker/Curvilinear Coordinate System](https://gitlab.lrz.de/cps/commonroad-drivability-checker) 
-Note that the drivability-checker is installed automatically. Therefore, you need access to the linked repository. 
-Additionally, an ssh key in your Gitlab account is required. 
-See [here](https://docs.gitlab.com/ee/ssh/) for instructions to add an ssh key.
+### Overview
+The required steps to build or use the Environment Model differ a lot depending on
+how you want to use it:
+- You want to simply *install and use* the Python side of the Environment Model?
+  Then the recommended option is to use the pre-built binary packages (wheels)
+  provided by us.
+  Look at the section on [Installing the binary wheels](#installing-the-binary-wheels)
+- You want to integrate the Environment Model into another CMake project?
+  Look at the section on [Integrating the Environment Model](#integrating-the-environment-model-into-another-c-project)
+- You want to work on the Environment Model itself?
 
-### Common dependencies
 
-These dependencies should be available as a system package.
+## Using the Environment Model
 
-- cmake > 3.16
-- Boost
-- Eigen3
-- spdlog
-- OpenMP
-- Doxygen (for building the documentation)
-- Graphviz (for building the documentation)
+### Installing the binary wheels
+Wheels are pre-built binary Python packages that save you the time of building
+the Environment Model yourself. We automatically build these wheels for releases.
 
-### Debian/Ubuntu
+At the time of writing, the wheels are not yet available on PyPI, so you'll have
+to instruct pip to download the packages from the Gitlab package repository.
+You'll probably need to set up a Gitlab personal acces token first
+if you don't already have one.
 
-We recommend Ubuntu 20.04 or newer.  
-**Ubuntu 20.04:**  
-You need to install the following packages:
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev`  
-All other required packages should be part of the standard Ubuntu installation.
-
-**Ubuntu 18.04:**  
-- You need to install the following packages:  
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev`  
-- Install gcc-9 and g++-9: because [filesystem header](https://askubuntu.com/questions/1256440/how-to-get-libstdc-with-c17-filesystem-headers-on-ubuntu-18-bionic):
-```bash
-  sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-  sudo apt update
-  sudo apt install gcc-9 g++-9
+For each available package listed in the [package registry](https://gitlab.lrz.de/maierhofer/environment-model/-/packages),
+Gitlab provides instructions on how to install it.
+For example, the following command should automatically select and
+install the most recent Environment Model version (replace `<your_personal_token>`
+with your personal access token):
 ```
-- Install [spdlog](https://github.com/gabime/spdlog)
-```bash
-git clone https://github.com/gabime/spdlog.git
-cd spdlog && mkdir build && cd build
-cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON .. && make -j
-udo make install
-```
-- Install
-  Override default gcc and g++ in current shell:
-```bash
-  export CC=/usr/bin/gcc-9
-  export CXX=/usr/bin/g++-9
-```
-!!! ATTENTION set the PATH to your gcc-9 and g++-9 !!!
-Then follow the original installation instructions.
-
-**General**:  
-For building the documentation, you need to install `doxygen` and `graphviz`.  
-For test coverage, you need to install `gcovr`.
-
-
-## Build and Compile
-
-Tested with
-- CMake 3.19/20
-- GCC 9.3.0
-- Clang 10/12
-
-For development the IDE [CLion](https://www.jetbrains.com/clion) is recommended.
-You can also take a look at the Docker container, or the .gitlab-ci.yml file to see how the software can be installed. Both are located in the *ci* directory.
-  
-### C++
-
-1. Make a build folder and change into it:
-```bash
-mkdir build-debug && cd build-debug
-```
-**NB:** You can in theory use `build` as a name
-for the build folder, however keep in mind that Python's setuptools will always use the `build` folder for
-their build process.
-This normally shouldn't cause any issues since the file names
-used by setuptools don't clash with any names CMake uses currently, but you should still consider using separate folders just in case.
-
-
-Generate the build files with `cmake`.
-Consider specifying the following options:
- * Specify the path where you wanr to install the CommonRoad Drivability Checker using `-DCMAKE_PREFIX_PATH`.
- * Optionally specify an installation prefix where you want to install the Environment Model
-   using `-DCMAKE_INSTALL_PREFIX`.
- * The recommended approach is to use a user-writable folder as the installation prefix.
-   It is totally fine to use the same installation prefix for several tools.
- * Replace the build type if necessary
-
-Example invocation:
-```bash
-cmake \
-  -DCMAKE_INSTALL_PREFIX=/path/to/install/prefix \
-  -DCMAKE_BUILD_TYPE=Debug \
-  ..
+pip install commonroad-cpp --extra-index-url https://__token__:<your_personal_token>@gitlab.lrz.de/api/v4/projects/63826/packages/pypi/simple
 ```
 
-Afterward build with make,
-```bash
-cmake --build . --parallel 4
+The following matrix shows the supported status for each combination of
+platform and Python version.
+If you're not sure which platform  you have, it will most likely be the
+most common one, `manylinux-x86_64`.
+In any case, don't worry about selecting the right wheel type as pip will automatically
+figure that out. In case binary wheels are not (yet) available for your platform,
+pip will build the package from source which might take a while.
+
+Wheels are not built for Windows or macOS at the moment.
+
+| Python version | manylinux-x86_64 | manylinux-i686 | musllinux-x86_64 | musllinux-i686
+| --- | :-----------: | :-----------: | :-----------: | :-----------: |
+| 3.6 or earlier | ✗ | ✗ | ✗ | ✗ |
+| 3.7 | ✓ | ~ | ~ | ~ |
+| 3.8 | ✓ | ~ | ~ | ~ |
+| 3.9 | ✓ | ~ | ~ | ~ |
+| 3.10 | ✓ | ~ | ~ | ~ |
+| 3.11 | ✓ | ~ | ~ | ~ |
+
+Legend:
+| symbol | description |
+| :---: | ----- |
+| ✓ | built and tested |
+| ~  | built but not tested (known issues) |
+| ✗ | not supported |
+
+No special steps are required in order to use the package with Anaconda.
+
+### Integrating the Environment Model into another C++ project
+Recent CMake provide the `FetchContent` module which vastly simplifies the integration
+for common use scenarios.
+Simply insert the following snippet somewhere in your `CMakeLists.txt`:
 ```
-where you can replace `4` in case more/fewer threads are available for the build.
+include(FetchContent)
 
-Install the CommonRoad Drivability Checker library by running
-```bash
-cmake --install .
+FetchContent_Declare(EnvironmentModel
+        GIT_REPOSITORY git@gitlab.lrz.de:maierhofer/environment-model.git
+        GIT_TAG <reference to commit, branch, tag...>
+)
+FetchContent_MakeAvailable(EnvironmentModel)
 ```
 
-### Python
-
-To use the environment model within Python, run 
-```bash
-python setup.py install
+Then add the Environment Model as a dependency to the targets which require it:
 ```
-from the root directory, giving the
-path to the Drivability Checker's install prefix
-in the `CMAKE_PREFIX_PATH` environment variable.
-
-It is not necessary to build the C++ standalone version first.
-
-### Setting up Git hooks
-
-For development, please install the pre-commit formatting check hook
-by running
-```bash
-  ./setup_git_hooks.sh
+target_link_libraries(<MyLibraryOrExecutable> PUBLIC EnvironmentModel::env_model)
 ```
-in the root directory of this repository.
-We suggest using the git hook only when you plan to commit/push from command line.
-The git hook does not work together with the commit/push function of Clion.
-In case you want to use Clion or another IDE, we recommend using the built-in functionality of the IDE.
 
-## Usage:
+
+## Using the Environment Model
 
 ### C++
 The main purpose of this code is to serve as library containing the main CommonRoad elements and predicates, e.g., for traffic rules.
@@ -176,10 +128,234 @@ For example, edit Run/Debug configurations for crenvmodel_python as follows:
 - working directory: `$ProjectFileDir$`
 - environment variables: `PYTHONPATH=$ROOT/cmake-build`
 
-## Documentation
-Add the `-DBUILD_DOXYGEN=ON` to the cmake command above.
-Afterward, the documentation can be generated with
+
+## Working on the Environment Model itself
+
+### Common requirements
+These requirements apply to both the Python module and the C++ library.
+
+#### CommonRoad Drivability Checker
+The Environment Model depends on the Curvilinear Coordinate System (`crccosy`)
+which is part of the [CommonRoad Drivability Checker](https://gitlab.lrz.de/cps/commonroad-drivability-checker).
+While the Drivability Checker is installed automatically,
+we currently use an internal Git repository so you'll need to ensure
+you have access to the repository.
+Additionally, an SSH key in your Gitlab account is required. 
+See [here](https://docs.gitlab.com/ee/ssh/) for instructions to add an SSH key.
+
+#### Compiler and Build System
+A recent C/C++ compiler is required in any case.
+CMake is required in order to build the C++ library.
+For the Python module, you don't need to have CMake installed as pip will
+automatically provide CMake to the build system.
+
+### Accelerating the build with system packages
+The build system can automatically download and configure all dependencies without
+further intervention [^1].
+However, if you install the dependencies on the system with your package manager,
+you can speed up the build process since it won't be necessary to build our own
+version of them, as long as the version is sufficient for our requirements.
+Certain dependencies take a long time to build, so this is generally a good idea.
+Try to install system packags at least for the following dependencies if possible:
+- Boost
+- Protobuf (the library `libprotobuf` and the compiler `protoc`)
+
+These other dependencies do not take a long time to download and build,
+but you might still want to install them to save some time:
+- Eigen3
+- spdlog
+- pugixml
+- yaml-cpp
+- GoogleTest
+
+The following optional tools are required only for certain tasks:
+- For building the documentation
+  * Doxygen
+  * Graphviz
+- For code coverage
+  * gcovr
+
+[^1]: For C++, there is one exception - CMake will need to be installed
+on the system.
+
+### Build instructions for the Python module
+In general, the following command should be sufficient to build the Python module:
+```
+pip install .
+```
+
+You might want to add the verbose flag `-v` in order to see some build output.
+Without it, the build might appear to be stuck
+(`Building wheel for commonroad-cpp (pyproject.toml) ...`).
+```
+pip install -v .
+```
+
+#### Caveat: Deprecated commands
+**Do not use** bare `setup.py` invocations like the following:
 ```bash
-cd build-debug
-make doc_doxygen
+python setup.py install
+```
+They do not consider modern Python packaging standards and can cause various issues.
+
+#### Accelerating repeated builds
+It is possible to significantly speed up repeated builds
+of the Python module by specifying the `--no-build-isolation` flag:
+```
+pip install -v --no-build-isolation .
+```
+This is completely optional. It might require some additional steps outlined below.
+
+Explanation: When build isolation is enabled (default in recent pip versions),
+pip will provide the Python interpreter files in a temporary directory.
+The name of the temporary changes for every invocation of `pip install`
+even if the files are identical.
+Therefore CMake will decide to reconfigure the project, requiring recompilation
+of all source files.
+By disabling build isolation for development builds,
+CMake won't need to reconfigure as the paths to the Python installation stay
+the same. Therefore CMake can reuse files from the previous build,
+making it the build faster.
+
+However, if you want to use `--no-build-isolation` you need to ensure all
+Python build requirements (PEP 518 requirements) as specified in
+`pyproject.toml` are already installed.
+To install them, run the following:
+```
+pip install setuptools>=61.0 wheel scikit-build~=0.15.0 cmake~=3.24.0 ninja pybind11~=2.10.0 setuptools_scm[toml]>=6.2
+```
+
+### Build instructions for the C++ library
+
+#### Modern build using the Ninja Multi-Config generator (recommended)
+The Ninja Multi-Config generator is a recent addition to CMake with some improvements over
+the classical Makefile generator:
+- The Ninja build system itself is generally faster than Make
+- Ninja automatically selects the number of parallel jobs based on the number of cores -
+  fiddling with `-j` options is no longer necessary
+- You can build any configuration from a single build directory.
+
+In order to use the Ninja Multi-Config generator, you need to have Ninja installed
+on your system.
+
+```bash
+# Configuration step
+cmake -G "Ninja Multi-Config" -S . -B build
+
+# Build default targets, default configuration (debug)
+cmake --build build
+# Build default targets, release configuration
+cmake --build build --config Release
+# Build and run tests
+cmake --build build --target test
+
+# Alternatively, you can invoke Ninja directly:
+cd build
+
+# Build default targets, default configuration (debug)
+ninja
+# Build default targets, release configuration
+ninja -f build-Release.ninja
+# Build and run tests
+ninja test
+```
+
+#### Classical build using the Makefile generator
+You can also build the Environment Model using the Makefile generator.
+```bash
+cmake -S . -B build
+# Or specify the build type:
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+
+# Build default targets
+cmake --build build
+# Replace 4 with the number of parallel jobs you want (generally, the CPU core count)
+cmake --build build --parallel 4
+# Build and run tests
+cmake --build build --target test
+
+# Alternatively, you can invoke Make directly:
+cd build
+
+# Build default targets
+make
+# Replace 4 with the number of parallel jobs you want (generally, the CPU core count)
+make -j4
+# Build and run tests
+make test
+```
+
+### Setting up Git hooks
+
+For development, please install the pre-commit formatting check hook
+by running
+```bash
+  ./setup_git_hooks.sh
+```
+in the root directory of this repository.
+We suggest using the git hook only when you plan to commit/push from command line.
+The git hook does not work together with the commit/push function of Clion.
+In case you want to use Clion or another IDE, we recommend using the built-in functionality of the IDE.
+
+### Building the Documentation
+Add the `-DBUILD_DOXYGEN=ON` to the cmake command above.
+Afterwards, the documentation can be generated with
+```bash
+cmake --build build --target doc_doxygen
+```
+
+## Installing Dependencies on on Common Distributions
+
+### Debian/Ubuntu
+
+We recommend Ubuntu 20.04 or newer.  
+#### Ubuntu 20.04
+You need to install the following packages:
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev`  
+All other required packages should be part of the standard Ubuntu installation.
+
+#### Ubuntu 18.04
+- You need to install the following packages:  
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev`  
+- Install gcc-9 and g++-9: because [filesystem header](https://askubuntu.com/questions/1256440/how-to-get-libstdc-with-c17-filesystem-headers-on-ubuntu-18-bionic):
+```bash
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt update
+sudo apt install gcc-9 g++-9
+```
+- Install [spdlog](https://github.com/gabime/spdlog)
+```bash
+git clone https://github.com/gabime/spdlog.git
+cd spdlog && mkdir build && cd build
+cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON .. && make -j
+sudo make install
+```
+- Install
+  Override default gcc and g++ in current shell:
+```bash
+export CC=/usr/bin/gcc-9
+export CXX=/usr/bin/g++-9
+```
+  Alternatively, specify the compiler paths in the CMake configuration command:
+```
+...
+-DCMAKE_C_COMPILER=/usr/bin/gcc-9
+-DCMAKE_CXX_COMPILER=/usr/bin/g++-9
+...
+```
+Keep in mind that you'll need to use a fresh CMake cache
+whenever you change the compiler. Either delete your build folder or 
+add the `--fresh` flag to your CMake configuration command line.
+
+**IMPORTANT:** Make sure that `PATH` includes the folder where gcc-9 and g++-9 are located.
+
+### Arch Linux
+
+```bash
+sudo pacman -S base-devel boost boost-libs pugixml spdlog yaml-cpp protobuf eigen gtest
+```
+
+Optional dependencies:
+```bash
+sudo pacman -S doxygen graphviz gcovr
 ```
