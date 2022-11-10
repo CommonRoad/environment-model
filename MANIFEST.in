@@ -1,6 +1,5 @@
 graft example
-graft external
-graft external_v2
+graft cmake
 
 graft src
 graft include
@@ -8,7 +7,5 @@ graft tests/python
 graft tests/scenarios
 
 include CMakeLists.txt
-include ci/ccache.cmake
-include ci/sccache.cmake
 
 global-exclude *.pyc
