@@ -85,6 +85,8 @@ include(FetchContent)
 
 FetchContent_Declare(EnvironmentModel
         GIT_REPOSITORY git@gitlab.lrz.de:maierhofer/environment-model.git
+        # You can specify any reference here, but prefer specifying a concrete commit if possible
+        # as that will speed up the build since Git won't need to check whether branch moved in the meantime
         GIT_TAG <reference to commit, branch, tag...>
 )
 FetchContent_MakeAvailable(EnvironmentModel)
