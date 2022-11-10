@@ -1,32 +1,32 @@
 # CommonRoad C++ Environment Model
 
-The CommonRoad C++ Environment Model provides classes and methods to represent the CommonRoad format in C++17.  
-It contains an interface to Python and predicates for evaluating traffic rules.  
+The CommonRoad C++ Environment Model provides classes and methods to represent the CommonRoad format in C++17.
+It contains an interface to Python and predicates for evaluating traffic rules.
 Note that the repository does not contain runtime verification algorithms and code for evaluating traffic rules.
 
+**Table of Contents**
 [[_TOC_]]
 
-
-Before we begin, please note that the build system was recently overhauled
-in order to simplify the process of building and using the Environment Model.
-In most cases, building should be possible with no or minimal manual intervention.
-Please report any issues or problems you experience.
-
 ### Overview
+
 The required steps to build or use the Environment Model differ a lot depending on
 how you want to use it:
 - You want to simply *install and use* the Python side of the Environment Model?
   Then the recommended option is to use the pre-built binary packages (wheels)
   provided by us.
-  Look at the section on [Installing the binary wheels](#installing-the-binary-wheels)
+  Look at the section on [Installing the Binary Wheels](#installing-the-binary-wheels)
 - You want to integrate the Environment Model into another CMake project?
   Look at the section on [Integrating the Environment Model](#integrating-the-environment-model-into-another-c-project)
-- You want to work on the Environment Model itself?
+- You want to set up a development environment for the Environment Model itself?
+  Look at the section on [Working on the Environment Model](#working-on-the-environment-model-itself).
+  Specific instructions are provided for
+  [the Python module](#build-instructions-for-the-python-module) and
+  [the C++ library](#build-instructions-for-the-c-library).
 
 
-## Using the Environment Model
+## Installing the Environment Model
 
-### Installing the binary wheels
+### Installing the Binary Wheels
 Wheels are pre-built binary Python packages that save you the time of building
 the Environment Model yourself. We automatically build these wheels for releases.
 
@@ -43,6 +43,8 @@ with your personal access token):
 ```
 pip install commonroad-cpp --extra-index-url https://__token__:<your_personal_token>@gitlab.lrz.de/api/v4/projects/63826/packages/pypi/simple
 ```
+
+#### Wheel Support Status
 
 The following matrix shows the supported status for each combination of
 platform and Python version.
@@ -70,9 +72,11 @@ Legend:
 | ~  | built but not tested (known issues) |
 | ✗ | not supported |
 
+#### Using the Python Module in Anaconda
+
 No special steps are required in order to use the package with Anaconda.
 
-### Integrating the Environment Model into another C++ project
+### Integrating the Environment Model into Another C++ Project
 Recent CMake provide the `FetchContent` module which vastly simplifies the integration
 for common use scenarios.
 Simply insert the following snippet somewhere in your `CMakeLists.txt`:
@@ -102,10 +106,10 @@ The standalone execution can be configured via the config file and be executed v
 pathToExecutable/env_model_example_node --input-file pathToRepository/src/commonroad_cpp/default_config.yaml --t 6
 ```
 where *--input-file* specifies the path to a configuration file based on the default configuration file and *--t* specifies the number of threads which should be used.
-**Attention**: The environment-model library is not developed for parallelization. 
+**Attention**: The environment-model library is not developed for parallelization.
 Therefore, we recommend to use copies inside threads.
 
-### Python 
+### Python
 The subsequent code snippet shows important functions needed for using the predicates within Python:
 ```Python
 import commonroad_cpp
@@ -116,11 +120,11 @@ print("Safe Distance satisfied: {}".format(cpp_env_model.in_same_lane_boolean_ev
 
 cpp_env_model.remove_scenario(123)
 ```
-Other predicates can be executed analgously.   
-It is necessary to register and remove each scenario before and after using the predicates.  
+Other predicates can be executed analgously.
+It is necessary to register and remove each scenario before and after using the predicates.
 You can also take a look at the Python test cases for further examples.
 
-For debugging the Python interface you can use the methods described [here](https://www.jetbrains.com/help/clion/debugging-python-extensions.html#debug-custom-py). 
+For debugging the Python interface you can use the methods described [here](https://www.jetbrains.com/help/clion/debugging-python-extensions.html#debug-custom-py).
 For example, edit Run/Debug configurations for crenvmodel_python as follows:
 - target: `cpp_env_model`
 - executable: `/your/python3/binary` (path to anaconda environment)
@@ -131,6 +135,11 @@ For example, edit Run/Debug configurations for crenvmodel_python as follows:
 
 ## Working on the Environment Model itself
 
+Before we begin, please note that the build system was recently overhauled
+in order to simplify the process of building and using the Environment Model.
+In most cases, building should be possible with no or minimal manual intervention.
+Please report any issues or problems you experience.
+
 ### Common requirements
 These requirements apply to both the Python module and the C++ library.
 
@@ -140,7 +149,7 @@ which is part of the [CommonRoad Drivability Checker](https://gitlab.lrz.de/cps/
 While the Drivability Checker is installed automatically,
 we currently use an internal Git repository so you'll need to ensure
 you have access to the repository.
-Additionally, an SSH key in your Gitlab account is required. 
+Additionally, an SSH key in your Gitlab account is required.
 See [here](https://docs.gitlab.com/ee/ssh/) for instructions to add an SSH key.
 
 #### Compiler and Build System
@@ -149,7 +158,7 @@ CMake is required in order to build the C++ library.
 For the Python module, you don't need to have CMake installed as pip will
 automatically provide CMake to the build system.
 
-### Accelerating the build with system packages
+### Accelerating the Build with System Packages
 The build system can automatically download and configure all dependencies without
 further intervention [^1].
 However, if you install the dependencies on the system with your package manager,
@@ -175,10 +184,12 @@ The following optional tools are required only for certain tasks:
 - For code coverage
   * gcovr
 
+[Specific installation instructions](#installing-dependencies-on-common-distributions) are provided for common distributions.
+
 [^1]: For C++, there is one exception - CMake will need to be installed
 on the system.
 
-### Build instructions for the Python module
+### Build Instructions for the Python Module
 In general, the following command should be sufficient to build the Python module:
 ```
 pip install .
@@ -191,14 +202,14 @@ Without it, the build might appear to be stuck
 pip install -v .
 ```
 
-#### Caveat: Deprecated commands
+#### Caveat: Deprecated Commands
 **Do not use** bare `setup.py` invocations like the following:
 ```bash
 python setup.py install
 ```
 They do not consider modern Python packaging standards and can cause various issues.
 
-#### Accelerating repeated builds
+#### Accelerating Repeated Builds
 It is possible to significantly speed up repeated builds
 of the Python module by specifying the `--no-build-isolation` flag:
 ```
@@ -225,9 +236,9 @@ To install them, run the following:
 pip install setuptools>=61.0 wheel scikit-build~=0.15.0 cmake~=3.24.0 ninja pybind11~=2.10.0 setuptools_scm[toml]>=6.2
 ```
 
-### Build instructions for the C++ library
+### Build Instructions for the C++ Library
 
-#### Modern build using the Ninja Multi-Config generator (recommended)
+#### Modern Build using the Ninja Multi-Config Generator (recommended)
 The Ninja Multi-Config generator is a recent addition to CMake with some improvements over
 the classical Makefile generator:
 - The Ninja build system itself is generally faster than Make
@@ -260,7 +271,7 @@ ninja -f build-Release.ninja
 ninja test
 ```
 
-#### Classical build using the Makefile generator
+#### Classical Build using the Makefile Generator
 You can also build the Environment Model using the Makefile generator.
 ```bash
 cmake -S . -B build
@@ -285,7 +296,7 @@ make -j4
 make test
 ```
 
-### Setting up Git hooks
+### Setting up Git Hooks
 
 For development, please install the pre-commit formatting check hook
 by running
@@ -304,19 +315,19 @@ Afterwards, the documentation can be generated with
 cmake --build build --target doc_doxygen
 ```
 
-## Installing Dependencies on on Common Distributions
+## Installing Dependencies on Common Distributions
 
 ### Debian/Ubuntu
 
-We recommend Ubuntu 20.04 or newer.  
+We recommend Ubuntu 20.04 or newer.
 #### Ubuntu 20.04
 You need to install the following packages:
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev`  
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev`
 All other required packages should be part of the standard Ubuntu installation.
 
 #### Ubuntu 18.04
-- You need to install the following packages:  
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev`  
+- You need to install the following packages:
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev`
 - Install gcc-9 and g++-9: because [filesystem header](https://askubuntu.com/questions/1256440/how-to-get-libstdc-with-c17-filesystem-headers-on-ubuntu-18-bionic):
 ```bash
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -344,7 +355,7 @@ export CXX=/usr/bin/g++-9
 ...
 ```
 Keep in mind that you'll need to use a fresh CMake cache
-whenever you change the compiler. Either delete your build folder or 
+whenever you change the compiler. Either delete your build folder or
 add the `--fresh` flag to your CMake configuration command line.
 
 **IMPORTANT:** Make sure that `PATH` includes the folder where gcc-9 and g++-9 are located.
