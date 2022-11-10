@@ -19,6 +19,7 @@ message(STATUS "Boost - found: ${Boost_FOUND}")
 message(STATUS "Boost - Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
 message(STATUS "Boost - Boost_VERSION: ${Boost_VERSION}")
 
+# FIXME: Remove these, added as a hack for Drivability Checker but not actually required
 add_library(Boost::geometry ALIAS Boost::headers)
 add_library(Boost::align ALIAS Boost::headers)
 add_library(Boost::polygon ALIAS Boost::headers)
