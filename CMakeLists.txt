@@ -294,28 +294,8 @@ install(
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
 )
 
-include(FeatureSummary)
-set_package_properties(Eigen3 PROPERTIES
-                       DESCRIPTION "C++ template library for linear algebra"
-                       URL "https://eigen.tuxfamily.org"
-                       TYPE REQUIRED)
-set_package_properties(Boost PROPERTIES
-                        URL "https://www.boost.org"
-                        TYPE REQUIRED)
-add_feature_info(coverage ENV_MODEL_BUILD_CODE_COVERAGE "code coverage")
 
-
-#add_subdirectory(external)
-
-feature_summary(WHAT ALL)
-
-#get_target_property(T_LL target property)
-set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
-
-
-
-
-# TEMP for build
+# TODO: Re-enable this and check whether things break
 # include(utils/EnsureStatic)
 
 # Sanity check: Ensure we are building all dependencies as static libraries
