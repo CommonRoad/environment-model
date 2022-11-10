@@ -9,3 +9,11 @@ graft tests/scenarios
 include CMakeLists.txt
 
 global-exclude *.pyc
+
+prune ci
+prune tests/commonroad_cpp_tests
+prune example
+prune docs
+prune scripts
+prune tests/scenarios
+prune tests
