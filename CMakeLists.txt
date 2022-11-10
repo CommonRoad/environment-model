@@ -135,7 +135,7 @@ set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 find_package(OpenMP REQUIRED)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external_v2)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/external)
 
 #if(${CMAKE_VERSION} VERSION_LESS "3.24.0")
 # Enable this for debugging Boost discovery
