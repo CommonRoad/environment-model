@@ -249,10 +249,17 @@ run-coverage:
   before_script:
     # Due to security concerns it is not recommended to mix pip commands
     # that download from PyPI with pip commands that should ignore PyPI.
-    # Therefore we first download all dependencies and then install them
-    # together with the commonroad_cpp wheel from a local directory.
-    - pip download -d wheelhouse/ '.[test]'
-    - pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
+    # At the same time, pip does not support installing only the dependencies.
+    # Therefore, we first extract the test dependencies to a temporary requirements
+    # file and then instruct pip to install them from that file.
+    # Finally, we install the built wheel from the wheelhouse directory.
+    - python -m venv test-venv
+    - source test-venv/bin/activate
+    - python -m pip install pip-tools
+    - SETUPTOOLS_SCM_PRETEND_VERSION_FOR_COMMONROAD_CPP=1
+      python -m piptools compile --extra=test -v -o test_requirements.txt pyproject.toml
+    - python -m pip install -r test_requirements.txt
+    - python -m pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
   script:
     - python -m pytest --junit-xml=pytest-report.xml tests/python
   needs:
