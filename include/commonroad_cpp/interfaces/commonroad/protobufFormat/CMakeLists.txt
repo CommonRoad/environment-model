@@ -77,8 +77,8 @@ endforeach()
 #protobuf_generate(TARGET commonroad_protobuf)
 
 target_include_directories(commonroad_protobuf
-        INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+        SYSTEM INTERFACE
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         )
 
 target_link_libraries(commonroad_protobuf
