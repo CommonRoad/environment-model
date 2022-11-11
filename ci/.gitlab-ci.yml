@@ -247,6 +247,11 @@ run-coverage:
   stage: test
   image: python:${JOB_PYTHON_VERSION}-slim-bullseye
   before_script:
+    # Due to security concerns it is not recommended to mix pip commands
+    # that download from PyPI with pip commands that should ignore PyPI.
+    # Therefore we first download all dependencies and then install them
+    # together with the commonroad_cpp wheel from a local directory.
+    - pip download -d wheelhouse/ '.[test]'
     - pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
   script:
     - python -m pytest --junit-xml=pytest-report.xml tests/python
