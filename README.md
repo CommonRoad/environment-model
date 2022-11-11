@@ -80,7 +80,7 @@ No special steps are required in order to use the package with Anaconda.
 Recent CMake provide the `FetchContent` module which vastly simplifies the integration
 for common use scenarios.
 Simply insert the following snippet somewhere in your `CMakeLists.txt`:
-```
+```cmake
 include(FetchContent)
 
 FetchContent_Declare(EnvironmentModel
@@ -93,7 +93,7 @@ FetchContent_MakeAvailable(EnvironmentModel)
 ```
 
 Then add the Environment Model as a dependency to the targets which require it:
-```
+```cmake
 target_link_libraries(<MyLibraryOrExecutable> PUBLIC EnvironmentModel::env_model)
 ```
 
