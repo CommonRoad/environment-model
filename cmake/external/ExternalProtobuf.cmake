@@ -1,5 +1,45 @@
 include(FetchContent)
 
+option(COMMONROAD_SYSTEM_PROTOBUF "Use system Protobuf" ON)
+
+# set(Protobuf_DEBUG ON)
+
+if(COMMONROAD_SYSTEM_PROTOBUF)
+    find_package(Protobuf 3.6)
+endif()
+
+if(COMMONROAD_SYSTEM_PROTOBUF AND Protobuf_FOUND)
+    message(STATUS "Protobuf - SYSTEM")
+
+    # NOTE: The following Protobuf check was adapted from FindProtobuf.cmake
+
+    # Check Protobuf compiler version to be aligned with libraries version
+    execute_process(COMMAND ${Protobuf_PROTOC_EXECUTABLE} --version
+                    OUTPUT_VARIABLE _PROTOBUF_PROTOC_EXECUTABLE_VERSION)
+
+    if("${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}" MATCHES "libprotoc ([0-9.]+)")
+        set(_PROTOBUF_PROTOC_EXECUTABLE_VERSION "${CMAKE_MATCH_1}")
+    endif()
+
+    if(Protobuf_DEBUG)
+        message(STATUS "[ ${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE} ] "
+            "${Protobuf_PROTOC_EXECUTABLE} reveals version ${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
+    endif()
+
+    if(NOT "${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}" VERSION_EQUAL "${Protobuf_VERSION}")
+        message(FATAL_ERROR "Unfortunately, the system protobuf installation is unusable "
+            "due to a detected mismatch between the Protobuf compiler and the Protobuf libraries. "
+            "We can't proceed at this point since CMake already added the corresponding targets, "
+            "and there is no way to remove those targets now. "
+            "Please rerun the configuration, adding the -DCOMMONROAD_SYSTEM_PROTOBUF=OFF to the "
+            "CMake command line.")
+    endif()
+
+    return()
+endif()
+
+message(STATUS "Protobuf - falling back to external version")
+
 # set(ZLIB_USE_STATIC_LIBS ON)
 # find_package(ZLIB REQUIRED)
 set(protobuf_WITH_ZLIB OFF CACHE BOOL "" FORCE)

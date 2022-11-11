@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20..3.24)
 project(EnvironmentModel
     LANGUAGES C CXX
+    # TODO: Find an automatic way to sync the version with setuptools_scm/Git tags
     VERSION 2022.0
     HOMEPAGE_URL "https://commonroad.in.tum.de/"
     DESCRIPTION "Classes and methods to represent the CommonRoad format in C++17")
@@ -15,7 +16,7 @@ if(SKBUILD)
         COMMAND "${PYTHON_EXECUTABLE}" -c
                 "import pybind11; print(pybind11.get_cmake_dir())"
         OUTPUT_VARIABLE _tmp_dir
-        OUTPUT_STRIP_TRAILING_WHITESPACE COMMAND_ECHO STDOUT)
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
         list(APPEND CMAKE_PREFIX_PATH "${_tmp_dir}")
 
         # set(Python_FIND_VIRTUALENV ONLY)
@@ -31,11 +32,6 @@ if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-if(DEFINED ENV{CIBUILDWHEEL})
-    # include(ci/ccache.cmake)
-    # include(ci/sccache.cmake)
-endif()
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -49,7 +45,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
 option(BUILD_SHARED_LIBS "Build environment model as a shared library" ON)
 
-option(ENV_MODEL_USE_LLD "Use lld if possible" ON)
 option(ENV_MODEL_BUILD_DOXYGEN "Build doxygen" OFF)
 option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
 # TODO Eigen CMake has a nice approach to setting per-project BUILD_SHARED_LIBS
@@ -57,6 +52,7 @@ option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
 option(ENV_MODEL_BUILD_CODE_COVERAGE "Build code coverage" OFF)
 option(ENV_MODEL_BUILD_EXECUTABLE "Build executable" ON)
 
+# TODO: Move these
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 cmake_policy(SET CMP0077 NEW)
 cmake_policy(SET CMP0126 NEW)
@@ -91,23 +87,6 @@ include(CMakePackageConfigHelpers)
 # Includes sane defaults for installation paths (CMAKE_INSTALL_LIBDIR, CMAKE_INSTALL_BINDIR etc.)
 include(GNUInstallDirs)
 
-# Set  optimizations for build types
-# set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
-# set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
-
-# Set a default build type if none was specified
-if(OFF)
-set(default_build_type "Release")
-if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
-    set(default_build_type "Debug")
-endif()
-if(NOT CMAKE_BUILD_TYPE)
-    message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
-    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
-            STRING "Choose the type of build." FORCE)
-endif()
-endif()
-
 include(FetchContent)
 FetchContent_Declare(
     commonroad_cmake
@@ -137,56 +116,9 @@ find_package(OpenMP REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/external)
 
-#if(${CMAKE_VERSION} VERSION_LESS "3.24.0")
-# Enable this for debugging Boost discovery
-# set(Boost_DEBUG ON)
-find_package(Boost 1.70 OPTIONAL_COMPONENTS program_options filesystem)
-if(NOT Boost_FOUND)
-    message(STATUS "Boost - falling back to external version")
-    include(ExternalBoost)
-    else()
-        message(STATUS "Boost - SYSTEM")
-endif()
+include(ExternalBoost)
 
-option(COMMONROAD_SYSTEM_PROTOBUF "Use system Protobuf" ON)
-# set(Protobuf_DEBUG ON)
-if(DEFINED ENV{CI})
-    # Ugly hack, as the CI environment has another protoc in /root/anaconda3/bin/protoc
-    # which is incompatible with the Protobuf libraries found by CMake
-    set(Protobuf_PROTOC_EXECUTABLE "/usr/bin/protoc" CACHE PATH "The protoc compiler" FORCE)
-endif()
-
-if(COMMONROAD_SYSTEM_PROTOBUF)
-    find_package(Protobuf 3.6)
-endif()
-if(NOT COMMONROAD_SYSTEM_PROTOBUF OR NOT Protobuf_FOUND)
-    message(STATUS "Protobuf - falling back to external version")
-    include(ExternalProtobuf)
-else()
-    message(STATUS "Protobuf - SYSTEM")
-
-    # Check Protobuf compiler version to be aligned with libraries version
-    execute_process(COMMAND ${Protobuf_PROTOC_EXECUTABLE} --version
-                    OUTPUT_VARIABLE _PROTOBUF_PROTOC_EXECUTABLE_VERSION)
-
-    if("${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}" MATCHES "libprotoc ([0-9.]+)")
-        set(_PROTOBUF_PROTOC_EXECUTABLE_VERSION "${CMAKE_MATCH_1}")
-    endif()
-
-    if(Protobuf_DEBUG)
-        message(STATUS "[ ${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE} ] "
-            "${Protobuf_PROTOC_EXECUTABLE} reveals version ${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
-    endif()
-
-    if(NOT "${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}" VERSION_EQUAL "${Protobuf_VERSION}")
-        message(FATAL_ERROR "Unfortunately, the system protobuf installation is unusable "
-            "due to a detected mismatch between the Protobuf compiler and the Protobuf libraries. "
-            "We can't proceed at this point since CMake already added the corresponding targets, "
-            "and there is no way to remove those targets now. "
-            "Please rerun the configuration, adding the -DCOMMONROAD_SYSTEM_PROTOBUF=OFF to the "
-            "CMake command line.")
-    endif()
-endif()
+include(ExternalProtobuf)
 
 if(DEFINED ENV{CIBUILDWHEEL})
     set(FETCHCONTENT_TRY_FIND_PACKAGE_MODE NEVER)
@@ -205,7 +137,7 @@ if(DEFINED ENV{CIBUILDWHEEL} OR DEFINED ENV{CI} OR ${CMAKE_VERSION} VERSION_GREA
 else()
     message(WARNING "Automatic fallback to external versions not yet implemented for CMake < 3.24.0")
 
-    find_package(Eigen3 REQUIRED)
+    find_package(Eigen3 3.3.7 REQUIRED)
     find_package(pugixml 1.11 REQUIRED)
     find_package(spdlog 1.8.0 REQUIRED)
     find_package(GTest)
@@ -224,8 +156,6 @@ include(ExternalRange)
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 # set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-
-# set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 
