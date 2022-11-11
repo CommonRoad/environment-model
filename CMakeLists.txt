@@ -36,8 +36,49 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Extra debugging for project developers - safe to disable
+include(CheckIncludeFileCXX)
+CHECK_INCLUDE_FILE_CXX("filesystem" COMPILER_SUPPORTS_CXX_FILESYSTEM)
+if(NOT COMPILER_SUPPORTS_CXX_FILESYSTEM)
+    message(FATAL_ERROR "Your C++ standard library is missing the <filesystem> header "
+        "which is required to build the Environment Model. Please try to install a newer "
+        "C++ standard library if possible and try again.\n"
+        "Remember to start over with a fresh build directory, for example by invoking CMake "
+        "with the \"--fresh\" flag.")
+endif()
+
+# Some extra debugging for project developers - safe to disable, but read on why they might be useful:
+
+# By enabling CMAKE_LINK_LIBRARIES_ONLY_TARGETS, CMake will report errors whenever
+# a name that does not refer to a target known to CMake is passed to
+# target_link_libraries and friends.
+# We use targets for all dependencies in this project, so if a non-target name is
+# passed it usually indicates a bug (usually a typo or a missing find_package call)
+# in the CMake configuration.
+# Example:
+#   target_link_libraries(example_library PUBLIC spdlog)
+# This is incorrect as spdlog is not always a target name provided by the spdlog project - it might
+# exist in the project itself when it is included via FetchContent, but not if we use a system-provided
+# spdlog version.
+# Normally, CMake would go on to add "spdlog" as a literal library to the linker command line (e.g. -lspdlog),
+# which is not what we want as it might not correct to the correct spdlog library *and* it does not ensure
+# the usage requirements (include directories, definitions, other compiler options) are correctly added
+# to the compiler command line for example_library.
+#
+# But since we have CMAKE_LINK_LIBRARIES_ONLY_TARGETS enabled, CMake will instead print an error like this:
+# CMake Error at CMakeLists.txt:123456 (target_link_libraries):
+#   Target "example_library" has LINK_LIBRARIES_ONLY_TARGETS enabled, but it
+#   links to:
+#
+#     spdlog
+#
+#   which is not a target.  Possible reasons include:
+#
+#     * There is a typo in the target name.
+#     * A find_package call is missing for an IMPORTED target.
+#     * An ALIAS target is missing.
+
 set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS ON)
+
 set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
 # Compile command database is required for Clang-assisted parsing in Doxygen
@@ -101,6 +142,9 @@ list(APPEND CMAKE_MODULE_PATH ${commonroad_cmake_SOURCE_DIR})
 include(toolchain/DiscoverLLD OPTIONAL)
 include(toolchain/DiscoverSanitizers OPTIONAL)
 
+# This is a helper script that will automatically add a .gitignore file to the
+# binary directory (build directory) so you don't have to do add every build folder
+# to your .gitignore.
 include(extras/GitIgnoreBinaryDir OPTIONAL)
 
 if(DEFINED ENV{CIBUILDWHEEL} AND CMAKE_SYSTEM_PROCESSOR MATCHES "i686")
