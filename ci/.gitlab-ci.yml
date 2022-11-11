@@ -193,8 +193,7 @@ upload-wheel:
       artifacts: true
   rules:
     # Disable job for merge request pipelines (imitate default job behaviour)
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
+    - *skip_merge_request_pipeline
     # Only upload wheels whenever a tag is associated with the commit
     - if: $CI_COMMIT_TAG
     # Also upload wheels if the UPLOAD_WHEELS was manually set to true
@@ -247,8 +246,9 @@ run-coverage:
 .test-python-common: &test-python-common
   stage: test
   image: python:${JOB_PYTHON_VERSION}-slim-bullseye
-  script:
+  before_script:
     - pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
+  script:
     - python -m pytest --junit-xml=pytest-report.xml tests/python
   needs:
     - job: build-wheel
