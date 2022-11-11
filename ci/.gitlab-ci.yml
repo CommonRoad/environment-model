@@ -247,13 +247,9 @@ run-coverage:
 .test-python-common: &test-python-common
   stage: test
   image: python:${JOB_PYTHON_VERSION}-slim-bullseye
-  before_script:
-    - pip install -r test_requirements.txt
   script:
-    - ls -l wheelhouse
-    - pip install --no-index --find-links=wheelhouse/ commonroad_cpp
+    - pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
     - python -m pytest --junit-xml=pytest-report.xml tests/python
-    - python ./example.py
   needs:
     - job: build-wheel
       artifacts: true
