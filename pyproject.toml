@@ -61,4 +61,4 @@ test-skip = "*i686 *-musllinux*"
 
 test-extras = ["test"]
 
-test-command = "python -m pytest {project}/tests/python"
+test-command = "python -m pytest {package}/tests/python"
