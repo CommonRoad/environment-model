@@ -276,12 +276,12 @@ const std::unordered_map<std::string, LaneletType> LaneletTypeNames = {
     {"SIDEWALK", LaneletType::sidewalk},
     {"UNKNOWN", LaneletType::unknown},
     {"INTERSECTION", LaneletType::intersection},
-    {"INTERSECTION_LEFT_TURN", LaneletType::intersectionLeftTurn},
-    {"INTERSECTION_RIGHT_TURN", LaneletType::intersectionRightTurn},
-    {"INTERSECTION_STRAIGHT", LaneletType::intersectionStraight},
-    {"INTERSECTION_LEFT_OUTGOING", LaneletType::intersectionLeftOutgoing},
-    {"INTERSECTION_RIGHT_OUTGOING", LaneletType::intersectionRightOutgoing},
-    {"INTERSECTION_STRAIGHT_OUTGOING", LaneletType::intersectionStraightOutgoing},
+    {"INTERSECTIONLEFTTURN", LaneletType::intersectionLeftTurn},
+    {"INTERSECTIONRIGHTTURN", LaneletType::intersectionRightTurn},
+    {"INTERSECTIONSTRAIGHT", LaneletType::intersectionStraight},
+    {"INTERSECTIONLEFTOUTGOING", LaneletType::intersectionLeftOutgoing},
+    {"INTERSECTIONRIGHTOUTGOING", LaneletType::intersectionRightOutgoing},
+    {"INTERSECTIONSTRAIGHTOUTGOING", LaneletType::intersectionStraightOutgoing},
     {"INCOMING", LaneletType::incoming},
 };
 

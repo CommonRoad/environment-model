@@ -27,11 +27,11 @@ void InIntersectionConflictAreaPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
     };
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
-                                                     0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
-                                                      0.3, trajectoryPredictionObstacleOne, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
 
     setUpIncoming();
     setUpIntersection();

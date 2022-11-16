@@ -78,12 +78,13 @@ void LeftOfPredicateTest::SetUp() {
     Obstacle::state_map_t trajectoryPredictionObstacleTwo{
         std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleTwo)};
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
-                                                     0.3, trajectoryPredictionEgoVehicle, 5, 2));
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
-                                                      0.3, trajectoryPredictionObstacleOne, 4.9, 2));
-    obstacleTwo = std::make_shared<Obstacle>(Obstacle(3, false, stateNineObstacleTwo, ObstacleType::truck, 50, 10, 3,
-                                                      -10, 0.3, trajectoryPredictionObstacleTwo, 8, 4.25));
+    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 4.9, 2));
+    obstacleTwo =
+        std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateNineObstacleTwo, ObstacleType::truck, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleTwo, 8, 4.25));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 

@@ -6,7 +6,7 @@
 //
 
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
-#include <commonroad_cpp/interfaces/commonroad/protobuf_reader.hpp>
+#include <commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
