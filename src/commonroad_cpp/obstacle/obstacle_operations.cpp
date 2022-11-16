@@ -237,22 +237,3 @@ obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<Roa
             }
     return relevantIntersections;
 }
-
-std::vector<std::shared_ptr<Lanelet>>
-obstacle_operations::getSimilarlyOrientedLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                  const std::vector<std::shared_ptr<Lanelet>> &baseLanelets,
-                                                  const std::shared_ptr<State> &state, double similarityParameter) {
-    std::vector<std::shared_ptr<Lanelet>> lanelets;
-    for (const auto &let : baseLanelets) {
-        auto lanes{roadNetwork->findLanesByBaseLanelet(
-            let->getId())}; // just use one lane since all lanes are generated based on single lanelet
-        if (lanes.empty())
-            lanes = lanelet_operations::createLanesBySingleLanelets({let}, roadNetwork);
-        auto orientationDif{geometric_operations::subtractOrientations(
-            state->getGlobalOrientation(),
-            lanes.at(0)->getOrientationAtPosition(state->getXPosition(), state->getYPosition()))};
-        if (abs(orientationDif) < similarityParameter)
-            lanelets.push_back(let);
-    }
-    return lanelets;
-}

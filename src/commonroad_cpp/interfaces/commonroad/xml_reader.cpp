@@ -6,7 +6,6 @@
 //
 
 #include <cstring>
-#include <sstream>
 #include <utility>
 
 #include <pugixml.hpp>
@@ -70,8 +69,8 @@ std::shared_ptr<World> XMLReader::createWorldFromXML(const std::string &xmlFile)
     auto roadNetwork = std::make_shared<RoadNetwork>(lanelets, cou, signs, lights, inters);
     for (const auto &inter : roadNetwork->getIntersections())
         inter->computeMemberLanelets(roadNetwork);
-    double dt{factory->getTimeStepSize()};
-    return std::make_shared<World>(0, roadNetwork, dummyEgo, obstacle, dt);
+    double timeStepSize{factory->getTimeStepSize()};
+    return std::make_shared<World>(0, roadNetwork, dummyEgo, obstacle, timeStepSize);
 }
 
 std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(const std::string &xmlFile) {
@@ -117,16 +116,35 @@ std::shared_ptr<State> XMLReader::extractInitialState(const pugi::xml_node &chil
     return std::make_shared<State>(initialState);
 }
 
+std::shared_ptr<SignalState> XMLReader::extractSignalState(const pugi::xml_node &child) {
+    pugi::xml_node states = child;
+    SignalState initialSignalState;
+    initialSignalState.setTimeStep(states.child("time").child("exact").text().as_ullong());
+    if (states.child("horn") != nullptr)
+        initialSignalState.setHorn(states.child("horn").text().as_bool());
+    if (states.child("indicatorLeft") != nullptr)
+        initialSignalState.setIndicatorLeft(states.child("indicatorLeft").text().as_bool());
+    if (states.child("indicatorRight") != nullptr)
+        initialSignalState.setIndicatorRight(states.child("indicatorRight").text().as_bool());
+    if (states.child("brakingLights") != nullptr)
+        initialSignalState.setBrakingLights(states.child("brakingLights").text().as_bool());
+    if (states.child("hazardWarningLights") != nullptr)
+        initialSignalState.setHazardWarningLights(states.child("hazardWarningLights").text().as_bool());
+    if (states.child("flashingBlueLights") != nullptr)
+        initialSignalState.setFlashingBlueLights(states.child("flashingBlueLights").text().as_bool());
+    return std::make_shared<SignalState>(initialSignalState);
+}
+
 std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
-    State st;
-    st.setTimeStep(states.child("time").child("exact").text().as_ullong());
-    st.setXPosition(states.child("position").child("point").child("x").text().as_double());
-    st.setYPosition(states.child("position").child("point").child("y").text().as_double());
-    st.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
-    st.setVelocity(states.child("velocity").child("exact").text().as_double());
+    State sta;
+    sta.setTimeStep(states.child("time").child("exact").text().as_ullong());
+    sta.setXPosition(states.child("position").child("point").child("x").text().as_double());
+    sta.setYPosition(states.child("position").child("point").child("y").text().as_double());
+    sta.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
+    sta.setVelocity(states.child("velocity").child("exact").text().as_double());
     if (states.child("acceleration").child("exact").text() != nullptr)
-        st.setAcceleration(states.child("acceleration").child("exact").text().as_double());
-    return std::make_shared<State>(st);
+        sta.setAcceleration(states.child("acceleration").child("exact").text().as_double());
+    return std::make_shared<State>(sta);
 }
 
 void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
@@ -135,6 +153,7 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
 
     tempObstacle->setActuatorParameters(ActuatorParameters::vehicleDefaults());
     tempObstacle->setSensorParameters(SensorParameters::dynamicDefaults());
+    tempObstacle->setObstacleRole(ObstacleRole::DYNAMIC);
 
     // extract ID, type, shape, initial state, and trajectory
     tempObstacle->setId(roadElements.first_attribute().as_ullong());
@@ -151,9 +170,16 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
         if ((strcmp(child.name(), "initialState")) == 0) {
             std::shared_ptr<State> initialState{XMLReader::extractInitialState(child)};
             tempObstacle->setCurrentState(initialState);
+        } else if ((strcmp(child.name(), "initialSignalState")) == 0) {
+            std::shared_ptr<SignalState> initialSignalState{XMLReader::extractSignalState(child)};
+            tempObstacle->setCurrentSignalState(initialSignalState);
         } else if ((strcmp(child.name(), "trajectory")) == 0) {
             for (pugi::xml_node states = child.first_child(); states != nullptr; states = states.next_sibling()) {
                 tempObstacle->appendStateToTrajectoryPrediction(XMLReader::extractState(states));
+            }
+        } else if ((strcmp(child.name(), "signalSeries")) == 0) {
+            for (pugi::xml_node states = child.first_child(); states != nullptr; states = states.next_sibling()) {
+                tempObstacle->appendSignalStateToSeries(XMLReader::extractSignalState(states));
             }
         }
     }
@@ -164,6 +190,7 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
 void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
                                       const pugi::xml_node &roadElements) {
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
+    tempObstacle->setObstacleRole(ObstacleRole::STATIC);
 
     // extract ID, type, shape, and initial state
     tempObstacle->setId(roadElements.first_attribute().as_ullong());
@@ -188,13 +215,13 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
 size_t XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                      const pugi::xml_node &commonRoad) {
     // get the number of lanelets
-    size_t n{static_cast<size_t>(
+    size_t numLanelets{static_cast<size_t>(
         std::distance(commonRoad.children("lanelet").begin(), commonRoad.children("lanelet").end()))};
     tempLaneletContainer.clear();
-    tempLaneletContainer.reserve(n); // Already know the size --> Faster memory allocation
+    tempLaneletContainer.reserve(numLanelets); // Already know the size --> Faster memory allocation
 
     // all lanelets must be initialized first because they are referencing each other
-    for (size_t i{0}; i < n; i++) {
+    for (size_t i{0}; i < numLanelets; i++) {
         std::shared_ptr<Lanelet> tempLanelet =
             std::make_shared<Lanelet>(); // make_shared is faster than (new Lanelet());
         tempLaneletContainer.emplace_back(tempLanelet);
@@ -210,7 +237,7 @@ size_t XMLReader::initializeLanelets(std::vector<std::shared_ptr<Lanelet>> &temp
             arrayIndex++;
         }
     }
-    return n;
+    return numLanelets;
 }
 
 void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
@@ -236,9 +263,9 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
 
 void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                      size_t arrayIndex, const pugi::xml_node &child, const char *type) {
-    size_t id{child.first_attribute().as_ullong()};
+    size_t lid{child.first_attribute().as_ullong()};
     for (size_t i{0}; i < tempLaneletContainer.size(); i++) {
-        if (tempLaneletContainer[i]->getId() == id) {
+        if (tempLaneletContainer[i]->getId() == lid) {
             if ((strcmp(type, "successor")) == 0)
                 tempLaneletContainer[arrayIndex]->addSuccessor(tempLaneletContainer[i]);
             else if ((strcmp(type, "predecessor")) == 0)

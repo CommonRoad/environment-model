@@ -76,6 +76,6 @@ double World::getDt() const { return dt; }
 
 void World::setCurvilinearStates() {
     for (auto &obs : egoVehicles)
-        if (!obs->getIsStatic())
+        if (!obs->isStatic())
             obs->setCurvilinearStates(roadNetwork);
 }

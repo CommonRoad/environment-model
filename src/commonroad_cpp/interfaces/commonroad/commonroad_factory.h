@@ -21,7 +21,7 @@ class CommonRoadFactory {
     /**
      * Virtual destructor (required for inheritance).
      */
-    virtual ~CommonRoadFactory() {}
+    virtual ~CommonRoadFactory() = default;
 
     /**
      * Constructor for CommonRoadFactory.

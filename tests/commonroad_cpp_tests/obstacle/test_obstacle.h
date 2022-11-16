@@ -8,12 +8,13 @@
 #pragma once
 
 #include "commonroad_cpp/obstacle/obstacle.h"
+#include "test_signal_state.h"
 #include "test_state.h"
 
-class ObstacleTestInitialization : public StateTestInitialization {
+class ObstacleTestInitialization : public StateTestInitialization, public SignalStateTestInitialization {
   protected:
     size_t idObstacleOne;
-    bool isStaticObstacleOne;
+    ObstacleRole roleObstacleOne;
     ObstacleType obstacleTypeObstacleOne;
     double vMaxObstacleOne;
     double aMaxObstacleOne;
@@ -30,7 +31,7 @@ class ObstacleTestInitialization : public StateTestInitialization {
     std::shared_ptr<Obstacle> obstacleOne;
 
     size_t idObstacleTwo;
-    bool isStaticObstacleTwo;
+    ObstacleRole roleObstacleTwo;
     ObstacleType obstacleTypeObstacleTwo;
     double vMaxObstacleTwo;
     double aMaxObstacleTwo;

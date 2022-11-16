@@ -50,14 +50,15 @@ void InQueueOfVehiclesPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleThree),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree)};
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
-                                                     0.3, trajectoryPredictionEgoVehicle, 5, 2));
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(2, false, stateOneObstacleOne, ObstacleType::car, 50, 10, 3, -10,
-                                                      0.3, trajectoryPredictionObstacleOne, 5, 2));
-    obstacleTwo = std::make_shared<Obstacle>(Obstacle(3, false, stateOneObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
-                                                      0.3, trajectoryPredictionObstacleTwo, 5, 2));
-    obstacleThree = std::make_shared<Obstacle>(Obstacle(4, false, stateTwoObstacleThree, ObstacleType::car, 50, 10, 3,
-                                                        -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateOneObstacleOne, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
+    obstacleTwo = std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateOneObstacleTwo, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
+    obstacleThree =
+        std::make_shared<Obstacle>(Obstacle(4, ObstacleRole::DYNAMIC, stateTwoObstacleThree, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 

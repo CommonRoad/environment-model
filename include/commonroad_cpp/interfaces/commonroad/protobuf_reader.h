@@ -265,6 +265,13 @@ std::vector<std::shared_ptr<State>> createTrajectoryFromMessage(const commonroad
 std::shared_ptr<State> createStateFromMessage(const commonroad::State& stateMsg);
 
 /**
+ * Creates signal state from protobuf message "SignalState".
+ * @param stateMsg Protobuf message
+ * @return State
+ */
+std::shared_ptr<SignalState> createSignalStateFromMessage(const commonroad::SignalState &stateMsg);
+
+/**
  * Creates vertex from protobuf message "Point".
  *
  * @param pointMsg Protobuf message
