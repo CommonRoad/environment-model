@@ -409,14 +409,41 @@ std::shared_ptr<State> extractState(py::handle py_state) {
     return state;
 }
 
+std::shared_ptr<SignalState> extractSignalState(py::handle py_state) {
+    auto state{std::make_shared<SignalState>()};
+    state->setTimeStep(py_state.attr("time_step").cast<size_t>());
+    if (py::hasattr(py_state, "horn"))
+        state->setHorn(py_state.attr("horn").cast<bool>());
+    if (py::hasattr(py_state, "indicator_left"))
+        state->setHorn(py_state.attr("indicator_left").cast<bool>());
+    if (py::hasattr(py_state, "indicator_rightorn"))
+        state->setHorn(py_state.attr("indicator_right").cast<bool>());
+    if (py::hasattr(py_state, "braking_lights"))
+        state->setHorn(py_state.attr("braking_lights").cast<bool>());
+    if (py::hasattr(py_state, "hazard_warning_lights"))
+        state->setHorn(py_state.attr("hazard_warning_lights").cast<bool>());
+    if (py::hasattr(py_state, "flashing_blue_lights"))
+        state->setHorn(py_state.attr("flashing_blue_lights").cast<bool>());
+    return state;
+}
+
 std::shared_ptr<Obstacle> createDynamicObstacle(py::handle py_singleObstacle) {
     // TODO: add other prediction than trajectory prediction
     std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
     tempObstacle->setActuatorParameters(ActuatorParameters::vehicleDefaults());
+
     for (const auto &py_state :
          py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list").cast<py::list>()) {
         tempObstacle->appendStateToTrajectoryPrediction(extractState(py_state));
     }
+    if (py::hasattr(py_singleObstacle, "initial_signal_state"))
+        tempObstacle->setCurrentSignalState(extractSignalState(py_singleObstacle.attr(
+            "initial_signal_state"))) if (py::hasattr(py_singleObstacle,
+                                                      "signal_series")) for (const auto &py_state :
+                                                                             py_singleObstacle.attr("signal_series")
+                                                                                 .cast<py::list>()) {
+            tempObstacle->appendSignalStateToSeries(extractSignalState(py_state));
+        }
     return tempObstacle;
 }
 
