@@ -19,8 +19,8 @@ void PreservesTrafficFlowPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne)};
 
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
-                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 

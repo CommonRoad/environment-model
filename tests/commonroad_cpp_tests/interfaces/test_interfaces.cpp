@@ -136,9 +136,16 @@ TEST_F(InterfacesTest, SameObstacles) {
         const std::shared_ptr<Obstacle> &obstaclePb = obstaclesPb[obstacleI];
 
         EXPECT_EQ(obstacleXml->getId(), obstaclePb->getId());
-        EXPECT_EQ(obstacleXml->getIsStatic(), obstaclePb->getIsStatic());
+        EXPECT_EQ(obstacleXml->isStatic(), obstaclePb->isStatic());
         EXPECT_EQ(obstacleXml->getObstacleType(), obstaclePb->getObstacleType());
     }
+}
+
+TEST_F(InterfacesTest, ReadingAll) {
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/" + "test_reading_all.xml";
+    std::string pathToTestPbFile = TestUtils::getTestScenarioDirectory() + "/protobuf/test_reading_all.pb";
+    EXPECT_NO_THROW(InputUtils::getDataFromCommonRoad(pathToTestXmlFile, FileFormat::XML));
+    EXPECT_NO_THROW(InputUtils::getDataFromCommonRoad(pathToTestPbFile, FileFormat::PROTOBUF));
 }
 
 std::tuple<Scenario, Scenario> InterfacesTest::loadXmlAndPbScenarios(const std::string &name) {

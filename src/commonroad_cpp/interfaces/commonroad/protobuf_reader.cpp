@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include "commonroad_cpp/interfaces/commonroad/protobuf_reader.hpp"
+#include "commonroad_cpp/interfaces/commonroad/protobuf_reader.h"
 #include <utility>
 
 commonroad::CommonRoad ProtobufReader::loadProtobufMessage(const std::string &filePath)
@@ -484,10 +484,16 @@ ProtobufReader::createDynamicObstacleFromMessage(const commonroad::DynamicObstac
 
     dynamicObstacle->setCurrentState(ProtobufReader::createStateFromMessage(dynamicObstacleMsg.initial_state()));
 
+    if (dynamicObstacleMsg.has_initial_signal_state())
+        dynamicObstacle->setCurrentSignalState(
+            ProtobufReader::createSignalStateFromMessage(dynamicObstacleMsg.initial_signal_state()));
     if (dynamicObstacleMsg.has_trajectory_prediction())
         for (const auto &state :
              ProtobufReader::createTrajectoryPredictionFromMessage(dynamicObstacleMsg.trajectory_prediction()))
             dynamicObstacle->appendStateToTrajectoryPrediction(state);
+    if (!dynamicObstacleMsg.signal_series().empty())
+        for (const auto &state : dynamicObstacleMsg.signal_series())
+            dynamicObstacle->appendSignalStateToSeries(ProtobufReader::createSignalStateFromMessage(state));
 
     return dynamicObstacle;
 }
@@ -569,6 +575,30 @@ std::shared_ptr<State> ProtobufReader::createStateFromMessage(const commonroad::
         if (acceleration.index() == 0)
             state->setAcceleration(std::get<double>(acceleration));
     }
+
+    return state;
+}
+
+std::shared_ptr<SignalState> ProtobufReader::createSignalStateFromMessage(const commonroad::SignalState &stateMsg) {
+    std::shared_ptr<SignalState> state = std::make_shared<SignalState>();
+
+    if (stateMsg.has_time_step()) {
+        IntegerExactOrInterval timeStep = ProtobufReader::createIntegerExactOrInterval(stateMsg.time_step());
+        if (timeStep.index() == 0)
+            state->setTimeStep((size_t)std::get<int>(timeStep));
+    }
+    if (stateMsg.has_horn())
+        state->setHorn(true);
+    if (stateMsg.indicator_left())
+        state->setIndicatorLeft(true);
+    if (stateMsg.indicator_right())
+        state->setIndicatorRight(true);
+    if (stateMsg.has_braking_lights())
+        state->setBrakingLights(true);
+    if (stateMsg.has_hazard_warning_lights())
+        state->setHazardWarningLights(true);
+    if (stateMsg.has_flashing_blue_lights())
+        state->setFlashingBlueLights(true);
 
     return state;
 }

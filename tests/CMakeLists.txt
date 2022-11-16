@@ -16,6 +16,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/roadNetwork/intersection/test_intersection.cpp
         commonroad_cpp_tests/obstacle/test_obstacle.cpp
         commonroad_cpp_tests/obstacle/test_state.cpp
+        commonroad_cpp_tests/obstacle/test_signal_state.cpp
         commonroad_cpp_tests/obstacle/test_obstacle_operations.cpp
         commonroad_cpp_tests/geometry/test_rectangle.cpp
         commonroad_cpp_tests/geometry/test_circle.cpp

@@ -25,8 +25,8 @@ void OnLaneletWithTypePredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle),
     };
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
-                                                     0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
 }
 
 TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnShoulder) {
@@ -100,11 +100,11 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationIntersection) {
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
-                                                     0.3, trajectoryPredictionObstacleOne, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
+                                                     50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
     std::shared_ptr<Obstacle> obstacleOne{
-        std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleTwo, ObstacleType::car, 50, 10, 3, -10, 0.3,
-                                            trajectoryPredictionObstacleTwo, 5, 2))};
+        std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2))};
 
     world = std::make_shared<World>(
         World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{egoVehicle, obstacleOne}, {}, timeStepSize));

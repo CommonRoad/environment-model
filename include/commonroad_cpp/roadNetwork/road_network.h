@@ -206,11 +206,21 @@ class RoadNetwork {
      */
     std::shared_ptr<size_t> getIdCounterRef() const;
 
+    /**
+     * Finds incoming object to which lanelet belongs. Returns empty pointer if lanelet is part of incoming.
+     *
+     * @param lanelet Lanelet of interest.
+     * @return Incoming object
+     */
     std::shared_ptr<Incoming> findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet);
 
+    /**
+     * Getter for topological map of road network.
+     *
+     * @return Lanelet graph.
+     */
     const std::shared_ptr<LaneletGraph> &getTopologicalMap() const;
 
-    void computerIntersectionMemberLanelets();
 
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
