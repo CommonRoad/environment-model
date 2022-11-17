@@ -1,5 +1,5 @@
 include(FetchContent)
-include(FetchContentHelper)
+include(utils/FetchContentHelper)
 
 FetchContent_Declare_Fallback(
     googletest

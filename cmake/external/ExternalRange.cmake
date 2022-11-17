@@ -1,4 +1,5 @@
 include(FetchContent)
+include(utils/FetchContentHelper)
 
 FetchContent_Declare_Fallback(
     range-v3

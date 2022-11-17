@@ -1,5 +1,5 @@
 include(FetchContent)
-include(FetchContentHelper)
+include(utils/FetchContentHelper)
 
 # GIT_REPOSITORY https://github.com/gabime/spdlog.git
 # GIT_TAG        v1.10.0
