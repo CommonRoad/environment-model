@@ -22,15 +22,6 @@ set(Boost_NO_SYSTEM_PATHS ON)
 set(BOOST_ROOT ${boost_src_SOURCE_DIR})
 set(Boost_NO_BOOST_CMAKE ON)
 
-find_package(Boost 1.80.0 REQUIRED
-        # OPTIONAL_COMPONENTS program_options
-        )
-message(STATUS "Boost - found: ${Boost_FOUND}")
-message(STATUS "Boost - Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
-message(STATUS "Boost - Boost_VERSION: ${Boost_VERSION}")
-
-# FIXME: Remove these, added as a hack for Drivability Checker but not actually required
-add_library(Boost::geometry ALIAS Boost::headers)
-add_library(Boost::align ALIAS Boost::headers)
-add_library(Boost::polygon ALIAS Boost::headers)
-add_library(Boost::foreach ALIAS Boost::headers)
+find_package(Boost 1.80.0 MODULE REQUIRED)
+message(VERBOSE "Boost - found: ${Boost_FOUND} (version ${Boost_VERSION})")
+message(VERBOSE "Boost - Boost_INCLUDE_DIRS=${Boost_INCLUDE_DIRS}")
