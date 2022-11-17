@@ -370,7 +370,7 @@ export(EXPORT ${PROJECT_NAME}_Targets
         )
 
 # Required for export()
-foreach(foreign_target spdlog::spdlog yaml-cpp::yaml-cpp)
+foreach(foreign_target spdlog::spdlog yaml-cpp::yaml-cpp protobuf::libprotobuf)
     get_target_property(aliased_target ${foreign_target} ALIASED_TARGET)
     if(aliased_target)
         set(foreign_target ${aliased_target})
