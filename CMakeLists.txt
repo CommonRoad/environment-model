@@ -38,6 +38,31 @@ if(SKBUILD)
 
         # Now we can find pybind11
         find_package(pybind11 2.7.0 CONFIG REQUIRED)
+
+        # SKBUILD_SELF_CONTAINED controls whether we try to build all dependencies
+        # ourselves. This is used in order to build cross-platform wheels
+        # using cibuildwheel.
+        # We don't enable this in normal Python builds since it will generally
+        # just slow down the build.
+        set(SKBUILD_SELF_CONTAINED OFF)
+
+        if(DEFINED ENV{CIBUILDWHEEL})
+            set(SKBUILD_SELF_CONTAINED ON)
+        endif()
+
+        message(STATUS "PYTHON MODE - assuming we are invoked by pip/setup.py")
+        message(STATUS "PYTHON MODE - building static libraries")
+
+        set(FETCHCONTENT_QUIET ON)
+
+        # Globally build static libraries (affects all calls to add_library
+        # without an explicit library type)
+        set(BUILD_SHARED_LIBS OFF)
+        set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+        # Globally set visibility preset
+        set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
+        set(CMAKE_CXX_VISIBILITY_PRESET default)
 endif()
 
 if(POLICY CMP0135)
@@ -98,42 +123,83 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
 option(BUILD_SHARED_LIBS "Build environment model as a shared library" ON)
 
-option(ENV_MODEL_BUILD_DOXYGEN "Build doxygen" OFF)
-option(ENV_MODEL_BUILD_TESTS "Build tests" ON)
+
+include(CMakeDependentOption)
+
+set(ENV_MODEL_BUILD_EXTRAS_DEFAULT ON)
+if(NOT EnvironmentModel_IS_TOP_LEVEL)
+    set(ENV_MODEL_BUILD_EXTRAS_DEFAULT OFF)
+endif()
+
+# TODO Move below dependency discovery
+find_package(Doxygen QUIET COMPONENTS dot)
+find_package(GTest QUIET)
+
+cmake_dependent_option(ENV_MODEL_BUILD_DOXYGEN
+    "Build doxygen"
+    ${ENV_MODEL_BUILD_EXTRAS_DEFAULT}
+    "Doxygen_FOUND;NOT SKBUILD"
+    OFF)
+
+# TODO Maybe involve BUILD_TESTING here?
+cmake_dependent_option(ENV_MODEL_BUILD_TESTS
+    "Build tests"
+    ${ENV_MODEL_BUILD_EXTRAS_DEFAULT}
+    "GTest_FOUND;NOT SKBUILD"
+    OFF)
+
 # TODO Eigen CMake has a nice approach to setting per-project BUILD_SHARED_LIBS
-# option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ON)
-option(ENV_MODEL_BUILD_CODE_COVERAGE "Build code coverage" OFF)
-option(ENV_MODEL_BUILD_EXECUTABLE "Build executable" ON)
+option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ${BUILD_SHARED_LIBS})
+
+cmake_dependent_option(ENV_MODEL_BUILD_CODE_COVERAGE
+    "Build code coverage"
+    OFF
+    "ENV_MODEL_BUILD_TESTS;NOT SKBUILD"
+    OFF)
+
+# NOTE: Depends on Boost::program_options, but we already handle the case where
+# Boost::program_options is not found below with an explicit warning for the user,
+# so no need to restrict ENV_MODEL_BUILD_EXECUTABLE further here.
+cmake_dependent_option(ENV_MODEL_BUILD_EXECUTABLE
+    "Build executable"
+    ${ENV_MODEL_BUILD_EXTRAS_DEFAULT}
+    "NOT SKBUILD"
+    OFF)
+
+set(CMAKE_SUPPORTS_TRY_FIND_PACKAGE OFF)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24.0)
+    set(CMAKE_SUPPORTS_TRY_FIND_PACKAGE ON)
+else()
+    message(WARNING "Your CMake version (${CMAKE_VERSION}) does not support "
+        "the FetchContent find_package integration introduced in CMake 3.24. "
+        "As a fallback, we will simply build all dependencies ourselves "
+        "irrespective of whether a suitable system version exists. "
+        "While this does not impair functionality, it might slow down the build "
+        "process a bit.\n"
+        "In case you have all required dependencies installed, you can try "
+        "enabling the option\n"
+        "\tENV_MODEL_SYSTEM_PACKAGES_FORCE\n\n"
+        "which will force using find_package for all dependencies.")
+endif()
+
+option(ENV_MODEL_SYSTEM_PACKAGES "Try to use system packages for dependencies" ON)
+cmake_dependent_option(ENV_MODEL_SYSTEM_PACKAGES_FORCE
+    "For CMake<3.24: Force using system packages for all dependencies"
+    OFF
+    "NOT CMAKE_SUPPORTS_TRY_FIND_PACKAGE"
+    OFF
+    )
 
 # TODO: Move these
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 cmake_policy(SET CMP0077 NEW)
-cmake_policy(SET CMP0126 NEW)
 
-if(SKBUILD)
-  message(STATUS "PYTHON MODE - assuming we are invoked by pip/setup.py")
-  message(STATUS "PYTHON MODE - building static libraries")
-  set(BUILD_SHARED_LIBS OFF)
-  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-  set(PYBIND11_FINDPYTHON ON)
-
-  #set(ENV_MODEL_BUILD_EXECUTABLE OFF)
-  set(CR_USE_SYSTEM_YAMLCPP OFF CACHE BOOL "" FORCE)
-  set(CR_USE_SYSTEM_PUGIXML OFF CACHE BOOL "" FORCE)
-
-  set(ENV_MODEL_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-  set(ENV_MODEL_BUILD_DOXYGEN OFF CACHE BOOL "" FORCE)
-  set(ENV_MODEL_BUILD_EXECUTABLE OFF CACHE BOOL "" FORCE)
-
-  set(FETCHCONTENT_QUIET ON)
-
-  set(ADD_PYTHON_BINDINGS ON CACHE INTERNAL "" FORCE)
-
-  cmake_policy(SET CMP0063 NEW)
-
-  set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
-  set(CMAKE_CXX_VISIBILITY_PRESET default)
+if(POLICY CMP0126)
+    cmake_policy(SET CMP0126 NEW)
 endif()
+
+# CMP0063 - Honor visibility properties for all target types
+cmake_policy(SET CMP0063 NEW)
 
 # Provides configure_package_config_file
 include(CMakePackageConfigHelpers)
@@ -172,26 +238,34 @@ find_package(OpenMP REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/external)
 
+# We have custom logic to check for system Boost/Protobuf, therefore we include
+# ExternalBoost and ExternalProtobuf unconditionally
 include(ExternalBoost)
 
 include(ExternalProtobuf)
 
-if(DEFINED ENV{CIBUILDWHEEL})
-    set(FETCHCONTENT_TRY_FIND_PACKAGE_MODE NEVER)
+if(CMAKE_SUPPORTS_TRY_FIND_PACKAGE)
+    if(SKBUILD_SELF_CONTAINED)
+        set(FETCHCONTENT_TRY_FIND_PACKAGE_MODE NEVER)
+    endif()
+    if(ENV_MODEL_SYSTEM_PACKAGES)
+        set(FETCHCONTENT_TRY_FIND_PACKAGE_MODE OPT_IN)
+    else()
+        set(FETCHCONTENT_TRY_FIND_PACKAGE_MODE OPT_IN)
+    endif()
 endif()
 
 # Include Eigen3, Boost filesystem, spdlog, and OpenMP
-if(DEFINED ENV{CIBUILDWHEEL} OR DEFINED ENV{CI} OR ${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.24.0")
-    include(ExternalEigen)
-    include(ExternalPugixml)
-    include(ExternalSpdlog)
-    include(ExternalGoogleTest)
+if(ENV_MODEL_SYSTEM_PACKAGES_FORCE)
+    # This is the fallback branch in case the CMake version is older than 3.24
+    # and the user requested we try to use system packages
+    # For CMake > 3.24, fallback is automatic through the FetchContent find_package
+    # integration.
 
-    # IMPORTANT: crdc needs to be installed *before* yaml-cpp because yaml-cpp will generate a duplicate uninstall target otherwise
-    include(ExternalDrivabilityChecker)
-    include(ExternalYamlCpp)
-else()
-    message(WARNING "Automatic fallback to external versions not yet implemented for CMake < 3.24.0")
+    message(WARNING "ENV_MODEL_SYSTEM_PACKAGES_FORCE is set - trying to satisfy "
+        "all dependencies using installed system packages.\n"
+        "If this fails, consider disabling ENV_MODEL_SYSTEM_PACKAGES_FORCE and "
+        "trying again.")
 
     find_package(Eigen3 3.3.7 REQUIRED)
     find_package(pugixml 1.11 REQUIRED)
@@ -205,6 +279,18 @@ else()
     endif()
 
     include(ExternalDrivabilityChecker)
+else()
+    # Normal path: We try to use find_package via FetchContent, otherwise we fall
+    # back to normal FetchContent
+
+    include(ExternalEigen)
+    include(ExternalPugixml)
+    include(ExternalSpdlog)
+    include(ExternalGoogleTest)
+
+    # IMPORTANT: crdc needs to be installed *before* yaml-cpp because yaml-cpp will generate a duplicate uninstall target otherwise
+    include(ExternalDrivabilityChecker)
+    include(ExternalYamlCpp)
 endif()
 
 include(ExternalRange)
@@ -282,7 +368,7 @@ install(
 
 
 # TODO: Re-enable this and check whether things break
-# include(utils/EnsureStatic)
+include(utils/EnsureStatic)
 
 # Sanity check: Ensure we are building all dependencies as static libraries
 if(SKBUILD)
