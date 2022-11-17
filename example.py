@@ -86,9 +86,6 @@ obstacle_1 = DynamicObstacle(1, ObstacleType.CAR, Rectangle(5, 2),
                                  CustomState(time_step=3, position=np.array([40, 4]), velocity=10,
                                        acceleration=0, orientation=-(1 / 4) * math.pi)]), Rectangle(5, 2)))
 
-print(CustomState(time_step=0, position=np.array([10, 2]), velocity=10, acceleration=0,
-            orientation=0).attributes)
-
 obstacle_2 = DynamicObstacle(2, ObstacleType.CAR, Rectangle(5, 2),
                              CustomState(time_step=0, position=np.array([0, 6]), velocity=10,
                                    acceleration=0, orientation=0),
