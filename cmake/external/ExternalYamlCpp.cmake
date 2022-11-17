@@ -1,4 +1,5 @@
 include(FetchContent)
+include(utils/FetchContentHelper)
 
 # GIT_TAG yaml-cpp-0.7.0
 # GIT_SHALLOW    true
