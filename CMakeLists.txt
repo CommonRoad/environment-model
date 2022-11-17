@@ -6,6 +6,18 @@ project(EnvironmentModel
     HOMEPAGE_URL "https://commonroad.in.tum.de/"
     DESCRIPTION "Classes and methods to represent the CommonRoad format in C++17")
 
+# Adapted from Eigen3 - snippet to get a value for PROJECT_IS_TOP_LEVEL
+# on CMake versions before v3.21.0
+if(CMAKE_VERSION VERSION_LESS 3.21.0)
+  if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(PROJECT_IS_TOP_LEVEL ON)
+  else()
+    set(PROJECT_IS_TOP_LEVEL OFF)
+  endif()
+  set(${PROJECT_NAME}_IS_TOP_LEVEL ${PROJECT_IS_TOP_LEVEL})
+endif()
+
+
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 if(SKBUILD)
