@@ -369,6 +369,22 @@ export(EXPORT ${PROJECT_NAME}_Targets
         NAMESPACE ${PROJECT_NAME}::
         )
 
+# Required for export()
+foreach(foreign_target spdlog::spdlog yaml-cpp::yaml-cpp)
+    get_target_property(aliased_target ${foreign_target} ALIASED_TARGET)
+    if(aliased_target)
+        set(foreign_target ${aliased_target})
+    endif()
+
+    get_target_property(target_imported ${foreign_target} IMPORTED)
+    if(NOT target_imported)
+        message(VERBOSE "Exporting ${foreign_target} because it is built locally")
+        install(TARGETS ${foreign_target}
+            EXPORT ${PROJECT_NAME}_Targets
+            LIBRARY ARCHIVE RUNTIME)
+    endif()
+endforeach()
+
 install(
         DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
