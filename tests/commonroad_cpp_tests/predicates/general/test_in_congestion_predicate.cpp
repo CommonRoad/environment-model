@@ -51,16 +51,19 @@ void InCongestionPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleFive),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleFive)};
 
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
-                                                      0.3, trajectoryPredictionEgoVehicle, 5, 2));
-    obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, false, stateOneObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
-                                                      0.3, trajectoryPredictionObstacleTwo, 5, 2));
-    obstacleThree = std::make_shared<Obstacle>(Obstacle(3, false, stateOneObstacleThree, ObstacleType::car, 50, 10, 3,
-                                                        -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
-    obstacleFour = std::make_shared<Obstacle>(Obstacle(4, false, stateTwoObstacleFour, ObstacleType::car, 50, 10, 3,
-                                                       -10, 0.3, trajectoryPredictionObstacleFour, 5, 2));
-    obstacleFive = std::make_shared<Obstacle>(Obstacle(5, false, stateZeroObstacleFive, ObstacleType::car, 50, 10, 3,
-                                                       -10, 0.3, trajectoryPredictionObstacleFive, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateOneObstacleTwo, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
+    obstacleThree =
+        std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateOneObstacleThree, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
+    obstacleFour =
+        std::make_shared<Obstacle>(Obstacle(4, ObstacleRole::DYNAMIC, stateTwoObstacleFour, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleFour, 5, 2));
+    obstacleFive =
+        std::make_shared<Obstacle>(Obstacle(5, ObstacleRole::DYNAMIC, stateZeroObstacleFive, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleFive, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 

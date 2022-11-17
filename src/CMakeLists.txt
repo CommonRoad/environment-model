@@ -15,6 +15,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/obstacle/obstacle.cpp
         commonroad_cpp/obstacle/obstacle_operations.cpp
         commonroad_cpp/obstacle/state.cpp
+        commonroad_cpp/obstacle/signal_state.cpp
         commonroad_cpp/geometry/circle.cpp
         commonroad_cpp/geometry/geometric_operations.cpp
         commonroad_cpp/geometry/rectangle.cpp

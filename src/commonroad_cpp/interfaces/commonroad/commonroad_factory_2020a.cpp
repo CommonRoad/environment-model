@@ -109,7 +109,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                 // set stop line
                 if ((strcmp(child.name(), "stopLine")) == 0) {
                     std::vector<vertex> points;
-                    std::shared_ptr<StopLine> sl = std::make_shared<StopLine>();
+                    std::shared_ptr<StopLine> stopL = std::make_shared<StopLine>();
                     for (pugi::xml_node elem = child.first_child(); elem != nullptr; elem = elem.next_sibling()) {
                         if ((strcmp(elem.name(), "point")) == 0) {
                             vertex newVertice{};
@@ -118,25 +118,25 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                             points.push_back(newVertice);
                         }
                         if ((strcmp(elem.name(), "lineMarking")) == 0)
-                            sl->setLineMarking(
+                            stopL->setLineMarking(
                                 lanelet_operations::matchStringToLineMarking(elem.first_child().value()));
                         if ((strcmp(elem.name(), "trafficSignRef")) == 0) {
                             for (const auto &sign : trafficSigns) {
                                 if (child.attribute("ref").as_ullong() == sign->getId()) {
-                                    sl->addTrafficSign(sign);
+                                    stopL->addTrafficSign(sign);
                                 }
                             }
                         }
                         if ((strcmp(elem.name(), "trafficLightRef")) == 0) {
                             for (const auto &light : trafficLights) {
                                 if (child.attribute("ref").as_ullong() == light->getId()) {
-                                    sl->addTrafficLight(light);
+                                    stopL->addTrafficLight(light);
                                 }
                             }
                         }
                     }
-                    sl->setPoints(points);
-                    tempLaneletContainer[arrayIndex]->setStopLine(sl);
+                    stopL->setPoints(points);
+                    tempLaneletContainer[arrayIndex]->setStopLine(stopL);
                 }
             }
             tempLaneletContainer[arrayIndex]->createCenterVertices();
@@ -155,10 +155,10 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
     // get the number of traffic signs in scenario
-    size_t n{static_cast<size_t>(
+    size_t numSigns{static_cast<size_t>(
         std::distance(commonRoad.children("trafficSign").begin(), commonRoad.children("trafficSign").end()))};
     tempLaneletContainer.clear();
-    tempLaneletContainer.reserve(n); // Size already known --> Faster memory allocation
+    tempLaneletContainer.reserve(numSigns); // Size already known --> Faster memory allocation
 
     size_t arrayIndex{0};
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;

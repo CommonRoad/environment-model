@@ -24,6 +24,7 @@
 
 #include "actuator_parameters.h"
 #include "sensor_parameters.h"
+#include "signal_state.h"
 
 class Lanelet;
 class Lane;
@@ -34,8 +35,10 @@ class RoadNetwork;
  */
 class Obstacle {
   public:
-    //** type of history/trajectory prediction maps */
+    //** type of history/trajectory prediction maps for physical states */
     using state_map_t = std::unordered_map<time_step_t, std::shared_ptr<State>>;
+    //** type of history/trajectory prediction maps for signal states*/
+    using signal_state_map_t = std::unordered_map<time_step_t, std::shared_ptr<SignalState>>;
 
     /**
      * Default constructor without parameters for an obstacle.
@@ -47,7 +50,7 @@ class Obstacle {
      * If the obstacle is static, certain values are overwritten.
      *
      * @param obstacleId ID of obstacle.
-     * @param isStatic Boolean indicating whether the obstacle is static or not.
+     * @param obstacleRole CommonRoad obstacle role, e.g, dynamic, static, environment, etc.
      * @param currentState Pointer to current state of obstacle.
      * @param obstacleType Type of the obstacle.
      * @param vMax Maximum velocity the obstacle can drive [m/s].
@@ -60,7 +63,7 @@ class Obstacle {
      * @param width Width of the obstacle [m].
      * @param fov
      */
-    Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
+    Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState, ObstacleType obstacleType,
              double vMax, double aMax, double aMaxLong, double aMinLong, std::optional<double> reactionTime,
              state_map_t trajectoryPrediction, double length, double width, const std::vector<vertex> &fov = {});
 
@@ -77,7 +80,7 @@ class Obstacle {
      * @param shape Obstacle shape. (only rectangles are currently supported!)
      * @param fov
      */
-    Obstacle(size_t obstacleId, bool isStatic, std::shared_ptr<State> currentState, ObstacleType obstacleType,
+    Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState, ObstacleType obstacleType,
              ActuatorParameters actuatorParameters, SensorParameters sensorParameters, state_map_t trajectoryPrediction,
              std::unique_ptr<Shape> shape, const std::vector<vertex> &fov);
 
@@ -108,6 +111,13 @@ class Obstacle {
      * @param currentState Current state of obstacle.
      */
     void setCurrentState(const std::shared_ptr<State> &currentState);
+
+    /**
+     * Setter for current signal state.
+     *
+     * @param state Current signal state of obstacle.
+     */
+    void setCurrentSignalState(const std::shared_ptr<SignalState> &state);
 
     /**
      * Setter for obstacle type.
@@ -166,18 +176,25 @@ class Obstacle {
     void appendStateToHistory(const std::shared_ptr<State> &state);
 
     /**
+     * Appends a signal state to the signal series.
+     *
+     * @param state Pointer to signal state object.
+     */
+    void appendSignalStateToSeries(const std::shared_ptr<SignalState> &state);
+
+    /**
+     * Appends a signal state to the history.
+     *
+     * @param state Pointer to signal state object.
+     */
+    void appendSignalStateToHistory(const std::shared_ptr<SignalState> &state);
+
+    /**
      * Getter for obstacle ID.
      *
      * @return Obstacle ID.
      */
     [[nodiscard]] size_t getId() const;
-
-    /**
-     * Getter for isStatic.
-     *
-     * @return Boolean indicating whether the obstacle is static or not.
-     */
-    [[nodiscard]] bool getIsStatic() const;
 
     /**
      * Getter for obstacle role.
@@ -192,6 +209,13 @@ class Obstacle {
      * @return Pointer to state object.
      */
     [[nodiscard]] const std::shared_ptr<State> &getCurrentState() const;
+
+    /**
+     * Getter current signal state.
+     *
+     * @return Pointer to signal state object.
+     */
+    [[nodiscard]] const std::shared_ptr<SignalState> &getCurrentSignalState() const;
 
     /**
      * Getter for obstacle type.
@@ -544,22 +568,56 @@ class Obstacle {
      */
     void convertPointToCurvilinear(time_step_t timeStep, const std::shared_ptr<Lane> &refLane);
 
+    /**
+     * Getter for field of view area.
+     *
+     * @return Field of view area as polygon.
+     */
     const polygon_type &getFov() const;
 
+    /**
+     * Setter for field of view area.
+     *
+     * @param fovVertices Vertices representing polygon.
+     */
     void setFov(const std::vector<vertex> &fovVertices);
+
+    /**
+     * Getter for signal series.
+     *
+     * @return Map representing signal series.
+     */
+    const signal_state_map_t &getSignalSeries() const;
+
+    /**
+     * Getter for signal series history.
+     *
+     * @return Map representing signal series history.
+     */
+    const signal_state_map_t &getSignalSeriesHistory() const;
+
+    /**
+     * Checks whether obstacle is static.
+     *
+     * @return Boolean indicating whether obstacle is static.
+     */
+    bool isStatic() const;
+
 
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
-    bool isStatic{false};                             //**< true if Obstacle is static */
     ObstacleRole obstacleRole{ObstacleRole::DYNAMIC}; //**< CommonRoad obstacle role */
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
+    std::shared_ptr<SignalState> currentSignalState;  //**< pointer to current signal state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
 
     std::optional<ActuatorParameters> actuatorParameters;
     std::optional<SensorParameters> sensorParameters;
 
     state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
-    state_map_t history{};              //**< previous states of the obstacle */
+    signal_state_map_t signalSeries{};         //**< signal series of the obstacle */
+    state_map_t trajectoryHistory{};              //**< previous states of the obstacle */
+    signal_state_map_t signalSeriesHistory{};         //**< previous signal states of the obstacle */
 
     std::unique_ptr<Shape>
         geoShape; // TODO make general                                          //**< shape of the obstacle */
@@ -601,10 +659,11 @@ class Obstacle {
                                                                      time_step_t timeStep);
 
     /**
+     * Sets the occupied lanelets in driving direction for a time step.
      *
-     * @param roadNetwork
-     * @param timeStep
-     * @return
+     * @param roadNetwork Road network.
+     * @param timeStep Time step of interest.
+     * @return List of occupied lanelets in driving direction.
      */
     std::vector<std::shared_ptr<Lanelet>>
     setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
@@ -628,6 +687,15 @@ class Obstacle {
      */
     std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
+    /**
+     * Computes main reference path of obstacle at given time step.
+     *
+     * @param roadNetwork Road network.
+     * @param timeStep Time step of interest.
+     * @param lane Relevant lanes used for computing reference path.
+     *
+     * @return Lane which is used as reference path.
+     */
     std::vector<std::shared_ptr<Lane>> computeMainRef(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
                                                       const std::vector<std::shared_ptr<Lane>> &lane);
 };

@@ -7,7 +7,6 @@
 #include "test_obstacle.h"
 #include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include <cmath>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <map>
@@ -18,7 +17,6 @@
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/road_network.h>
 
 void ObstacleTestInitialization::setUpObstacles() {
     size_t globalID{1234};
@@ -26,7 +24,7 @@ void ObstacleTestInitialization::setUpObstacles() {
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle());
     idObstacleOne = 1;
-    isStaticObstacleOne = false;
+    roleObstacleOne = ObstacleRole::DYNAMIC;
     obstacleTypeObstacleOne = ObstacleType::car;
     vMaxObstacleOne = 50.0;
     aMaxObstacleOne = 5.0;
@@ -49,8 +47,8 @@ void ObstacleTestInitialization::setUpObstacles() {
     occupiedLaneletsObstacleOne.insert(
         std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(0, std::vector<std::shared_ptr<Lanelet>>{laneletFive}));
     obstacleOne->setId(idObstacleOne);
-    obstacleOne->setIsStatic(isStaticObstacleOne);
     obstacleOne->setCurrentState(stateTwo);
+    obstacleOne->setObstacleRole(roleObstacleOne);
     obstacleOne->setObstacleType(obstacleTypeObstacleOne);
     ActuatorParameters actuatorParamsObstacleOne(vMaxObstacleOne, aMaxObstacleOne, aMaxLongObstacleOne,
                                                  aMinLongObstacleOne, aMinLongObstacleOne);
@@ -63,20 +61,20 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->computeLanes(roadNetwork, true);
 
     idObstacleTwo = 2;
-    isStaticObstacleTwo = true;
+    roleObstacleTwo = ObstacleRole::STATIC;
     obstacleTypeObstacleTwo = ObstacleType::bus;
     vMaxObstacleTwo = 30.0;
     aMaxObstacleTwo = 2.5;
     aMaxLongObstacleTwo = 2.0;
     aMinLongObstacleTwo = -8.0;
-    // NOTE: Static obsatcles have reactionTime = std::nullopt
+    // NOTE: Static obstacles have reactionTime = std::nullopt
     reactionTimeObstacleTwo = std::nullopt;
     widthObstacleTwo = 2.5;
     lengthObstacleTwo = 10.0;
-    obstacleTwo = std::make_shared<Obstacle>(idObstacleTwo, isStaticObstacleTwo, stateFive, obstacleTypeObstacleTwo,
-                                             vMaxObstacleTwo, aMaxObstacleTwo, aMaxLongObstacleTwo, aMinLongObstacleTwo,
-                                             reactionTimeObstacleTwo, trajectoryPredictionObstacleTwo,
-                                             lengthObstacleTwo, widthObstacleTwo);
+    obstacleTwo =
+        std::make_shared<Obstacle>(idObstacleTwo, roleObstacleTwo, stateFive, obstacleTypeObstacleTwo, vMaxObstacleTwo,
+                                   aMaxObstacleTwo, aMaxLongObstacleTwo, aMinLongObstacleTwo, reactionTimeObstacleTwo,
+                                   trajectoryPredictionObstacleTwo, lengthObstacleTwo, widthObstacleTwo);
     obstacleTwo->computeLanes(roadNetwork);
 
     // Obstacle three, four, and five
@@ -142,14 +140,17 @@ void ObstacleTestInitialization::setUpObstacles() {
         std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFive),
         std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleFive)};
 
-    obstacleThree = std::make_shared<Obstacle>(Obstacle(3, false, stateZeroObstacleThree, ObstacleType::car, 50, 10, 3,
-                                                        -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
-    obstacleFour = std::make_shared<Obstacle>(Obstacle(4, false, stateZeroObstacleFour, ObstacleType::car, 50, 10, 3,
-                                                       -10, 0.3, trajectoryPredictionObstacleFour, 5, 2));
-    obstacleFive = std::make_shared<Obstacle>(Obstacle(5, false, stateFourObstacleFive, ObstacleType::truck, 50, 10, 3,
-                                                       -10, 0.3, trajectoryPredictionObstacleFive, 8, 2));
+    obstacleThree =
+        std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
+    obstacleFour =
+        std::make_shared<Obstacle>(Obstacle(4, ObstacleRole::DYNAMIC, stateZeroObstacleFour, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleFour, 5, 2));
+    obstacleFive =
+        std::make_shared<Obstacle>(Obstacle(5, ObstacleRole::DYNAMIC, stateFourObstacleFive, ObstacleType::truck, 50,
+                                            10, 3, -10, 0.3, trajectoryPredictionObstacleFive, 8, 2));
     obstacleSix = std::make_shared<Obstacle>(
-        Obstacle(6, false, stateSevenObstacleSix, ObstacleType::car, 50, 10, 3, -10, 0.3, {}, 5, 2));
+        Obstacle(6, ObstacleRole::DYNAMIC, stateSevenObstacleSix, ObstacleType::car, 50, 10, 3, -10, 0.3, {}, 5, 2));
 
     obstacleList.push_back(obstacleOne);
     obstacleList.push_back(obstacleTwo);
@@ -163,6 +164,7 @@ void ObstacleTest::SetUp() {
     setUpLanelets();
     setUpLane();
     setUpRoadNetwork();
+    setUpSignalStates();
     setUpStates();
     setUpObstacles();
 }
@@ -189,8 +191,8 @@ void ObstacleTestInitialization::compareStates(const std::shared_ptr<State> &sta
 TEST_F(ObstacleTest, InitializationComplete) {
     EXPECT_EQ(obstacleOne->getId(), idObstacleOne);
     EXPECT_EQ(obstacleTwo->getId(), idObstacleTwo);
-    EXPECT_EQ(obstacleOne->getIsStatic(), isStaticObstacleOne);
-    EXPECT_EQ(obstacleTwo->getIsStatic(), isStaticObstacleTwo);
+    EXPECT_EQ(obstacleOne->getObstacleRole(), roleObstacleOne);
+    EXPECT_EQ(obstacleTwo->getObstacleRole(), roleObstacleTwo);
     compareStates(obstacleOne->getCurrentState(), stateTwo);
     compareStates(obstacleTwo->getCurrentState(), stateFive);
     EXPECT_EQ(obstacleOne->getObstacleType(), obstacleTypeObstacleOne);
@@ -272,6 +274,12 @@ TEST_F(ObstacleTest, GetStateByTimeStep) {
     EXPECT_EQ(obstacleOne->getStateByTimeStep(0)->getTimeStep(), 0);
     EXPECT_EQ(obstacleOne->getStateByTimeStep(1)->getTimeStep(), 1);
     EXPECT_EQ(obstacleOne->getStateByTimeStep(2)->getTimeStep(), 2);
+    EXPECT_THROW(obstacleOne->getStateByTimeStep(2000)->getTimeStep(), std::logic_error);
+}
+
+TEST_F(ObstacleTest, TestObstacleRole) {
+    EXPECT_EQ(obstacleOne->getObstacleRole(), ObstacleRole::DYNAMIC);
+    EXPECT_EQ(obstacleTwo->getObstacleRole(), ObstacleRole::STATIC);
 }
 
 TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
@@ -288,7 +296,7 @@ TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
 }
 
 TEST_F(ObstacleTest, SetOccupiedLaneletsDrivingDirectionByShape) {
-    obstacleOne->getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, 0);
+    EXPECT_NO_THROW(obstacleOne->getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, 0));
 }
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario1) {
@@ -388,26 +396,43 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario6) {
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     roadNetworkScenario->setIdCounterRef(globalIdRef);
     auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 1000)};
-    //    EXPECT_EQ(1, obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)
-    //                        ->getContainedLanelets()
-    //                        .front()
-    //                        ->getId());
-    //    EXPECT_EQ(402, obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)
-    //                       ->getContainedLanelets()
-    //                       .back()
-    //                       ->getId());
-    //    timeStep = 39;
-    //    EXPECT_EQ(1, obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)
-    //                     ->getContainedLanelets()
-    //                     .front()
-    //                     ->getId());
-    //    EXPECT_EQ(402, obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)
-    //                       ->getContainedLanelets()
-    //                       .back()
-    //                       ->getId());
+    EXPECT_EQ(1,
+              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().front()->getId());
+    EXPECT_EQ(402,
+              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
+    timeStep = 39;
+    EXPECT_EQ(1,
+              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().front()->getId());
+    EXPECT_EQ(402,
+              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
     timeStep = 49;
     EXPECT_EQ(1,
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().front()->getId());
     EXPECT_EQ(402,
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
+}
+
+TEST_F(ObstacleTest, TestGetFirstTrajectoryTimeStep) {
+    EXPECT_EQ(obstacleOne->getFirstTrajectoryTimeStep(), 1);
+    EXPECT_THROW(obstacleTwo->getFirstTrajectoryTimeStep(), std::runtime_error);
+    EXPECT_EQ(obstacleThree->getFirstTrajectoryTimeStep(), 1);
+    EXPECT_EQ(obstacleFour->getFirstTrajectoryTimeStep(), 1);
+    EXPECT_EQ(obstacleFive->getFirstTrajectoryTimeStep(), 7);
+}
+
+TEST_F(ObstacleTest, testAppendSignalStateToHistory) {
+    obstacleOne->appendSignalStateToHistory(signalStateOne);
+    obstacleOne->appendSignalStateToHistory(signalStateTwo);
+    EXPECT_EQ(obstacleOne->getSignalSeriesHistory().size(), 2);
+}
+
+TEST_F(ObstacleTest, testAppendSignalStateToSeries) {
+    obstacleOne->appendSignalStateToSeries(signalStateOne);
+    obstacleOne->appendSignalStateToSeries(signalStateTwo);
+    EXPECT_EQ(obstacleOne->getSignalSeries().size(), 2);
+}
+
+TEST_F(ObstacleTest, testGetCurrentSignalState) {
+    obstacleOne->setCurrentSignalState(signalStateOne);
+    EXPECT_EQ(obstacleOne->getCurrentSignalState()->getTimeStep(), 0);
 }
