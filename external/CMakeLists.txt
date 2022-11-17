@@ -7,7 +7,7 @@ FetchContent_Declare(
   external_pugixml
 
   GIT_REPOSITORY https://github.com/zeux/pugixml.git
-  GIT_TAG        v1.11.4
+  GIT_TAG        v1.12.1
   GIT_PROGRESS   true
 )
 
@@ -98,7 +98,7 @@ message(STATUS "DrivabilityChecker - using bundled version")
 ExternalProject_Add(
         DrivabilityChecker_bundled
         GIT_REPOSITORY git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
-        GIT_TAG "master"
+        GIT_TAG "032550726bbef63e696b72258ee776b52e564b08"
         INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
         BUILD_BYPRODUCTS ${CMAKE_INSTALL_PREFIX}/lib/libcrccosy.a
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DADD_MODULE_COLLISION=OFF -DBUILD_LIBCCD=OFF -DBUILD_FCL=OFF -DBUILD_S11N=OFF -DBUILD_BOX2D=OFF -DADD_PYTHON_BINDINGS=OFF -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
