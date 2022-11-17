@@ -6,16 +6,6 @@ include(utils/FetchContentHelper)
 # GIT_PROGRESS   true
 # GIT_SHALLOW    true
 
-if(CMAKE_VERSION VERSION_LESS "3.24.0")
-    FetchContent_Declare(
-        spdlog
-
-        URL https://github.com/gabime/spdlog/archive/refs/tags/v1.10.0.tar.gz
-        URL_HASH SHA256=697f91700237dbae2326b90469be32b876b2b44888302afbc7aceb68bcfe8224
-        )
-else()
-endif()
-
 FetchContent_Declare_Fallback(
     spdlog
 

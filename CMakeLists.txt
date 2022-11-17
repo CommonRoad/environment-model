@@ -15,6 +15,24 @@ project(EnvironmentModel
     HOMEPAGE_URL "https://commonroad.in.tum.de/"
     DESCRIPTION "Classes and methods to represent the CommonRoad format in C++17")
 
+# CMP0077 (3.13) - option() honors normal variables.
+# Relevant for Eigen3
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+
+# CMP0063 - Honor visibility properties for all target types
+# TODO: Probably not required anymore - check all configurations and remove if possible
+# cmake_policy(SET CMP0063 NEW)
+
+# CMP0126 (3.21) - Removal of normal variables by set(CACHE)
+if(POLICY CMP0126)
+    cmake_policy(SET CMP0126 NEW)
+endif()
+
+# CMP0135 - URL download timestamp
+if(POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
+endif()
+
 # Adapted from Eigen3 - snippet to get a value for PROJECT_IS_TOP_LEVEL
 # on CMake versions before v3.21.0
 if(CMAKE_VERSION VERSION_LESS 3.21.0)
@@ -29,15 +47,18 @@ endif()
 
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 
+
+# IMPORTANT: DO NOT MOVE this section, in particular the calls to find_package(Python)
+# and find_package(pybind11), without careful consideration
 if(SKBUILD)
         # Scikit-Build does not add your site-packages to the search path
         # automatically, so we need to add it _or_ the pybind11 specific directory
         # here.
         execute_process(
-        COMMAND "${PYTHON_EXECUTABLE}" -c
-                "import pybind11; print(pybind11.get_cmake_dir())"
-        OUTPUT_VARIABLE _tmp_dir
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
+            COMMAND "${PYTHON_EXECUTABLE}" -c
+                    "import pybind11; print(pybind11.get_cmake_dir())"
+            OUTPUT_VARIABLE _tmp_dir
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
         list(APPEND CMAKE_PREFIX_PATH "${_tmp_dir}")
 
         # set(Python_FIND_VIRTUALENV ONLY)
@@ -72,10 +93,6 @@ if(SKBUILD)
         # Globally set visibility preset
         set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
         set(CMAKE_CXX_VISIBILITY_PRESET default)
-endif()
-
-if(POLICY CMP0135)
-    cmake_policy(SET CMP0135 NEW)
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
@@ -128,10 +145,8 @@ set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS ON)
 set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
 # Compile command database is required for Clang-assisted parsing in Doxygen
+# TODO: Set this conditionally
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
-
-option(BUILD_SHARED_LIBS "Build environment model as a shared library" ON)
-
 
 include(CMakeDependentOption)
 
@@ -156,6 +171,8 @@ cmake_dependent_option(ENV_MODEL_BUILD_TESTS
     ${ENV_MODEL_BUILD_EXTRAS_DEFAULT}
     "GTest_FOUND;NOT SKBUILD"
     OFF)
+
+option(BUILD_SHARED_LIBS "Build environment model as a shared library" ON)
 
 # TODO Eigen CMake has a nice approach to setting per-project BUILD_SHARED_LIBS
 option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ${BUILD_SHARED_LIBS})
@@ -187,7 +204,7 @@ else()
         "process a bit.\n"
         "In case you have all required dependencies installed, you can try "
         "enabling the option\n"
-        "\tENV_MODEL_SYSTEM_PACKAGES_FORCE\n\n"
+        "\tENV_MODEL_SYSTEM_PACKAGES_FORCE\n"
         "which will force using find_package for all dependencies.")
 endif()
 
@@ -198,17 +215,6 @@ cmake_dependent_option(ENV_MODEL_SYSTEM_PACKAGES_FORCE
     "NOT CMAKE_SUPPORTS_TRY_FIND_PACKAGE"
     OFF
     )
-
-# TODO: Move these
-set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-cmake_policy(SET CMP0077 NEW)
-
-if(POLICY CMP0126)
-    cmake_policy(SET CMP0126 NEW)
-endif()
-
-# CMP0063 - Honor visibility properties for all target types
-cmake_policy(SET CMP0063 NEW)
 
 # Provides configure_package_config_file
 include(CMakePackageConfigHelpers)
