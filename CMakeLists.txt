@@ -1,4 +1,13 @@
-cmake_minimum_required(VERSION 3.20..3.24)
+# NOTE: The upper CMake version bound specified here does not prevent using newer
+# CMake versions - rather, it simply tells CMake that we are aware of versions
+# in this range, allowing CMake to adapt its behaviour accordingly.
+#
+# Citing the documentation:
+# The cmake_minimum_required(VERSION) command implicitly invokes the cmake_policy(VERSION)
+# command to specify that the current project code is written for the given range of CMake versions.
+# Source: https://cmake.org/cmake/help/v3.25/command/cmake_minimum_required.html
+cmake_minimum_required(VERSION 3.20..3.25)
+
 project(EnvironmentModel
     LANGUAGES C CXX
     # TODO: Find an automatic way to sync the version with setuptools_scm/Git tags
