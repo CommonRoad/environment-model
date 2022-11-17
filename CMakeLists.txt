@@ -375,21 +375,31 @@ install(
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
 )
 
-
-# TODO: Re-enable this and check whether things break
 include(utils/EnsureStatic)
 
 # Sanity check: Ensure we are building all dependencies as static libraries
 if(SKBUILD)
-    # ensure_all_static(env_model)
+    if(SKBUILD_SELF_CONTAINED)
+        # If we are building all dependencies ourselves, then they should
+        # all be static.
 
-    # ensure_static(env_model)
-    # ensure_static(crccosy)
-    # ensure_static(yaml-cpp)
-    # ensure_static(spdlog::spdlog)
-    # ensure_static(pugixml-static)
-    # ensure_static(protobuf::libprotobuf)
+        ensure_all_static(env_model)
 
+        # ensure_static(env_model)
+        # ensure_static(crccosy)
+        # ensure_static(yaml-cpp)
+        # ensure_static(spdlog::spdlog)
+        # ensure_static(pugixml-static)
+        # ensure_static(protobuf::libprotobuf)
+    else()
+        # If we are partially using system libraries, then only the env_model library
+        # itself has to be static.
+
+        ensure_static(env_model)
+    endif()
+endif()
+
+if(SKBUILD)
     set_target_properties(s11n PROPERTIES
         VISIBILITY_INLINES_HIDDEN ON
         CXX_VISIBILITY_PRESET hidden
