@@ -336,17 +336,27 @@ if(ENV_MODEL_BUILD_TESTS)
 endif(ENV_MODEL_BUILD_TESTS)
 
 
-install(TARGETS commonroad_protobuf
-    EXPORT ${PROJECT_NAME}_Targets
-    FILE_SET commonroad_protobuf_headers)
-
-install(TARGETS env_model env_model_core env_model_predicates
+# Citing CMake documentation:
+# For regular executables, static libraries and shared libraries,
+# the DESTINATION argument is not required.
+# https://cmake.org/cmake/help/v3.25/command/install.html#targets
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
+    install(TARGETS commonroad_protobuf
         EXPORT ${PROJECT_NAME}_Targets
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        )
+        FILE_SET commonroad_protobuf_headers)
+    install(TARGETS env_model env_model_core env_model_predicates
+            EXPORT ${PROJECT_NAME}_Targets
+            FILE_SET env_model_core_headers
+            FILE_SET env_model_predicates_headers
+            LIBRARY ARCHIVE RUNTIME)
+else()
+    install(TARGETS env_model env_model_core env_model_predicates
+            EXPORT ${PROJECT_NAME}_Targets
+            LIBRARY ARCHIVE RUNTIME)
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
+endif()
 
 configure_package_config_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"

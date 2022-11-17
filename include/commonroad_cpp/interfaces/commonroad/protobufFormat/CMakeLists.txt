@@ -1,7 +1,3 @@
-#set(Protobuf_USE_STATIC_LIBS ON)
-#find_package(Protobuf)
-# protobuf_generate
-
 set(COMMONROAD_PROTOS
         commonroad.proto
         dynamic_obstacle.proto
@@ -19,11 +15,23 @@ set(COMMONROAD_PROTOS
         util.proto
         )
 
+# CMP0116 (3.20) - Ninja generators transform DEPFILEs from add_custom_command().
 if(POLICY CMP0116)
         cmake_policy(SET CMP0116 NEW)
 endif()
 
 add_library(commonroad_protobuf OBJECT)
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
+    # Set up header file set
+    target_sources(commonroad_protobuf
+            INTERFACE
+            FILE_SET commonroad_protobuf_headers
+            TYPE HEADERS
+            BASE_DIRS ${PROJECT_BINARY_DIR}/include
+    )
+endif()
+
 foreach(proto ${COMMONROAD_PROTOS})
         set(proto_orig "${proto}")
         set(proto "${CMAKE_CURRENT_SOURCE_DIR}/${proto}")
@@ -32,6 +40,10 @@ foreach(proto ${COMMONROAD_PROTOS})
         set(proto_cpp_file "${proto_stem}.pb.cc")
         set(proto_hdr_file "${proto_stem}.pb.h")
         set(proto_dep_file "${proto_stem}.d")
+
+        set(proto_cpp_file_path "${CMAKE_CURRENT_BINARY_DIR}/${proto_cpp_file}")
+        set(proto_hdr_file_path "${CMAKE_CURRENT_BINARY_DIR}/${proto_hdr_file}")
+        set(proto_dep_file_path "${CMAKE_CURRENT_BINARY_DIR}/${proto_dep_file}")
 
         add_custom_command(
                 OUTPUT ${proto_cpp_file} ${proto_hdr_file}
@@ -42,39 +54,25 @@ foreach(proto ${COMMONROAD_PROTOS})
                         --dependency_out=${proto_dep_file}
                         ${proto}
                 DEPENDS
-                        ${proto} # protobuf::protoc
+                        ${proto} protobuf::protoc
                 DEPFILE
                         ${proto_dep_file}
-                # USES_TERMINAL
                 VERBATIM
                 COMMENT "Running CXX protocol buffer compiler on ${proto_orig}"
-
                 )
-        #list(APPEND PROTO_CPP ${proto_cpp_file} ${proto_hdr_file})
 
-        target_sources(commonroad_protobuf PRIVATE ${proto_cpp_file})
-        target_sources(commonroad_protobuf
-            INTERFACE
-            FILE_SET commonroad_protobuf_headers
-            TYPE HEADERS
-            FILES ${proto_hdr_file}
-            )
-        # target_sources(commonroad_protobuf INTERFACE ${proto_hdr_file})
+        target_sources(commonroad_protobuf PRIVATE ${proto_cpp_file_path} ${proto_hdr_file_path})
+
+        if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
+                target_sources(commonroad_protobuf
+                INTERFACE
+                FILE_SET commonroad_protobuf_headers
+                TYPE HEADERS
+                FILES ${proto_hdr_file_path}
+                )
+        endif()
 endforeach()
 
-
-# protobuf_generate_cpp(
-#         COMMONROAD_PB_SRCS
-#         COMMONROAD_PB_HDRS
-#         ${COMMONROAD_PROTOS})
-
-#add_library(commonroad_protobuf OBJECT
-#    ${COMMONROAD_PB_SRCS}
-#    ${COMMONROAD_PB_HDRS}
-#    ${PROTO_CPP}
-#    # ${COMMONROAD_PROTOS}
-#    )
-#protobuf_generate(TARGET commonroad_protobuf)
 
 target_include_directories(commonroad_protobuf
         SYSTEM INTERFACE

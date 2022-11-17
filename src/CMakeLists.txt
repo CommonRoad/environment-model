@@ -29,6 +29,43 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp
         commonroad_cpp/interfaces/commonroad/protobuf_reader.cpp)
 
+set(ENV_MODEL_HDR_FILES
+        commonroad_cpp/auxiliaryDefs/regulatory_elements.h
+        commonroad_cpp/auxiliaryDefs/structs.h
+        commonroad_cpp/auxiliaryDefs/timer.h
+        commonroad_cpp/auxiliaryDefs/types_and_definitions.h
+        commonroad_cpp/commonroad_container.h
+        commonroad_cpp/geometry/circle.h
+        commonroad_cpp/geometry/geometric_operations.h
+        commonroad_cpp/geometry/rectangle.h
+        commonroad_cpp/geometry/shape.h
+        commonroad_cpp/geometry/types.h
+        commonroad_cpp/interfaces/commonroad/input_utils.h
+        commonroad_cpp/interfaces/commonroad/xml_reader.h
+        commonroad_cpp/obstacle/actuator_parameters.h
+        commonroad_cpp/obstacle/obstacle.h
+        commonroad_cpp/obstacle/obstacle_operations.h
+        commonroad_cpp/obstacle/sensor_parameters.h
+        commonroad_cpp/obstacle/state.h
+        commonroad_cpp/roadNetwork/intersection/incoming.h
+        commonroad_cpp/roadNetwork/intersection/intersection.h
+        commonroad_cpp/roadNetwork/intersection/intersection_operations.h
+        commonroad_cpp/roadNetwork/lanelet/dijkstra.h
+        commonroad_cpp/roadNetwork/lanelet/graph.h
+        commonroad_cpp/roadNetwork/lanelet/lane.h
+        commonroad_cpp/roadNetwork/lanelet/lanelet.h
+        commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h
+        commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h
+        commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h
+        commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h
+        commonroad_cpp/roadNetwork/road_network.h
+        commonroad_cpp/roadNetwork/types.h
+        commonroad_cpp/world.h
+)
+
 set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
@@ -81,7 +118,78 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
         commonroad_cpp/predicates/predicate_config.cpp)
 
+set(ENV_MODEL_PREDICATES_HDR_FILES
+        commonroad_cpp/predicates/braking/brakes_stronger_predicate.h
+        commonroad_cpp/predicates/braking/braking_with_acceleration_possible_at_intersection_predicate.h
+        commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h
+        commonroad_cpp/predicates/braking/safe_distance_predicate.h
+        commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h
+        commonroad_cpp/predicates/commonroad_predicate.h
+        commonroad_cpp/predicates/general/in_congestion_predicate.h
+        commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.h
+        commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.h
+        commonroad_cpp/predicates/general/interstate_broad_enough_predicate.h
+        commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h
+        commonroad_cpp/predicates/general/makes_u_turn_predicate.h
+        commonroad_cpp/predicates/general/orientation_towards_predicate.h
+        commonroad_cpp/predicates/position/drives_leftmost_predicate.h
+        commonroad_cpp/predicates/position/drives_rightmost_predicate.h
+        commonroad_cpp/predicates/position/in_front_of_predicate.h
+        commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.h
+        commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h
+        commonroad_cpp/predicates/position/in_rightmost_lane_predicate.h
+        commonroad_cpp/predicates/position/in_same_lane_predicate.h
+        commonroad_cpp/predicates/position/in_single_lane_predicate.h
+        commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h
+        commonroad_cpp/predicates/position/left_of_predicate.h
+        commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.h
+        commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h
+        commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h
+        commonroad_cpp/predicates/position/on_oncoming_of_predicate.h
+        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.h
+        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.h
+        commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h
+        commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.h
+        commonroad_cpp/predicates/predicate_config.h
+        commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h
+        commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h
+        commonroad_cpp/predicates/regulatory/has_priority_predicate.h
+        commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h
+        commonroad_cpp/predicates/regulatory/same_priority_predicate.h
+        commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h
+        commonroad_cpp/predicates/velocity/drives_faster_predicate.h
+        commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h
+        commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.h
+        commonroad_cpp/predicates/velocity/in_standstill_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h
+        commonroad_cpp/predicates/velocity/required_speed_predicate.h
+        commonroad_cpp/predicates/velocity/reverses_predicate.h
+        commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.h
+)
+
 add_library(env_model_core OBJECT ${ENV_MODEL_SRC_FILES})
+
+# TODO: Currently specifying the headers is a little weird as they're in a parent directory.
+# It might be easier if src/include are in a common subdirectory,
+# e.g. commonroad_cpp/src and commonroad_cpp/include.
+
+list(TRANSFORM ENV_MODEL_HDR_FILES PREPEND ${PROJECT_SOURCE_DIR}/include/)
+list(TRANSFORM ENV_MODEL_PREDICATES_HDR_FILES PREPEND ${PROJECT_SOURCE_DIR}/include/)
+
+target_sources(env_model_core PRIVATE ${ENV_MODEL_HDR_FILES})
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
+    target_sources(env_model_core
+            INTERFACE
+            FILE_SET env_model_core_headers
+            TYPE HEADERS
+            BASE_DIRS ${PROJECT_SOURCE_DIR}/include
+            FILES ${ENV_MODEL_HDR_FILES})
+endif()
 
 target_compile_features(env_model_core
         PUBLIC cxx_lambdas cxx_auto_type
@@ -114,6 +222,17 @@ target_link_libraries(env_model_core
 
 
 add_library(env_model_predicates OBJECT ${ENV_MODEL_PREDICATES_SRC_FILES})
+
+target_sources(env_model_core PRIVATE ${ENV_MODEL_PREDICATES_HDR_FILES})
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
+    target_sources(env_model_predicates
+            INTERFACE
+            FILE_SET env_model_predicates_headers
+            TYPE HEADERS
+            BASE_DIRS ${PROJECT_SOURCE_DIR}/include
+            FILES ${ENV_MODEL_PREDICATES_HDR_FILES})
+endif()
 
 target_include_directories(env_model_predicates
         PUBLIC
@@ -149,7 +268,6 @@ add_library(EnvironmentModel::env_model ALIAS env_model)
 if(SKBUILD)
     message(STATUS "The project is built using scikit-build")
 endif()
-#if(ENV_MODEL_BUILD_PYBIND)
 if(SKBUILD)
     add_library(env_model_python OBJECT
             commonroad_cpp/interfaces/pybind/python_interface.cpp
@@ -176,10 +294,8 @@ if(SKBUILD)
         DEPENDS ${python_module_name}
         )
 
-
     # include(utils/CheckRuntimeDependencies)
     # check_python_runtime_dependencies(${python_module_name})
-
 endif(SKBUILD)
 
 # this adds many warnings to the build. They usually help to find some bugs
