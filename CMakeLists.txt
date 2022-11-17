@@ -157,7 +157,6 @@ endif()
 
 # TODO Move below dependency discovery
 find_package(Doxygen QUIET COMPONENTS dot)
-find_package(GTest QUIET)
 
 cmake_dependent_option(ENV_MODEL_BUILD_DOXYGEN
     "Build doxygen"
@@ -169,7 +168,7 @@ cmake_dependent_option(ENV_MODEL_BUILD_DOXYGEN
 cmake_dependent_option(ENV_MODEL_BUILD_TESTS
     "Build tests"
     ${ENV_MODEL_BUILD_EXTRAS_DEFAULT}
-    "GTest_FOUND;NOT SKBUILD"
+    "NOT SKBUILD"
     OFF)
 
 option(BUILD_SHARED_LIBS "Build environment model as a shared library" ON)
