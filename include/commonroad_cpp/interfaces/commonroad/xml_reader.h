@@ -1,15 +1,18 @@
 //
-// Created by Sebastian Maierhofer on 30.10.20.
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
 //
 
-#ifndef ENV_MODEL_XML_READER_H
-#define ENV_MODEL_XML_READER_H
+#pragma once
 
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include "commonroad_cpp/obstacle/signal_state.h"
 
 class Intersection;
 class Obstacle;
@@ -101,6 +104,14 @@ createIntersectionFromXML(const std::string &xmlFile, const std::vector<std::sha
 std::shared_ptr<State> extractInitialState(const pugi::xml_node &child);
 
 /**
+ * Extracts an signal state from a XML node element.
+ *
+ * @param child XML node element.
+ * @return Pointer to signal state.
+ */
+std::shared_ptr<SignalState> extractSignalState(const pugi::xml_node &child);
+
+/**
  * Extracts an state from a XML node element.
  *
  * @param child XML node element.
@@ -168,5 +179,3 @@ void extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLa
                              const pugi::xml_node &child, const char *type);
 
 } // namespace XMLReader
-
-#endif // ENV_MODEL_XML_READER_H

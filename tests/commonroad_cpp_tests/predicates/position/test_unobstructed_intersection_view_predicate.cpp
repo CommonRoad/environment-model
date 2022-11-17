@@ -22,8 +22,8 @@ void UnobstructedIntersectionViewPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle)};
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
-                                                     0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
     setUpIncoming();
     setUpIntersection();

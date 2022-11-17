@@ -28,8 +28,8 @@ void InLRightmostLanePredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle),
     };
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3, -10,
-                                                     0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
     world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));

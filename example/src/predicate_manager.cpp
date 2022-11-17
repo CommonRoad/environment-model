@@ -30,7 +30,7 @@ void PredicateManager::extractPredicateSatisfaction() {
         const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(scen);
         // evaluate all obstacles
         for (const auto &ego : obstacles) {
-            if (ego->getIsStatic())
+            if (ego->isStatic())
                 continue;
             size_t minTimeStep{ego->getCurrentState()->getTimeStep()};
             size_t maxTimeStep{ego->getLastTrajectoryTimeStep()};

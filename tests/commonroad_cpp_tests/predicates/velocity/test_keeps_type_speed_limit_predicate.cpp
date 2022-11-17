@@ -25,10 +25,11 @@ void KeepsTypeSpeedLimitPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo)};
 
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, false, stateZeroObstacleOne, ObstacleType::truck, 30, 10, 3,
-                                                      -10, 0.3, trajectoryPredictionObstacleOne, 10, 2));
-    obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, false, stateZeroObstacleTwo, ObstacleType::car, 50, 10, 3, -10,
-                                                      0.3, trajectoryPredictionObstacleTwo, 5, 2));
+    obstacleOne =
+        std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::truck, 30, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleOne, 10, 2));
+    obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 

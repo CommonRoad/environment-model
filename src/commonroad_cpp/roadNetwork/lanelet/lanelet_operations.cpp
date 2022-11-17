@@ -14,6 +14,7 @@
 LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type) {
     std::string str{type};
     std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    str.erase(std::remove_if(str.begin(), str.end(), [](char elem) { return elem == '_'; }), str.end());
     if (LaneletTypeNames.count(str) == 1)
         return LaneletTypeNames.at(str);
     else
