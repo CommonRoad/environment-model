@@ -15,21 +15,11 @@ set(EIGEN_BUILD_DOC OFF)
 set(EIGEN_BUILD_PKGCONFIG OFF)
 set(EIGEN_BUILD_CMAKE_PACKAGE OFF CACHE INTERNAL "" FORCE)
 set(EIGEN_BUILD_TESTING OFF CACHE INTERNAL "" FORCE)
-#set(EIGEN_BUILD_CMAKE_PACKAGE OFF)
 
 FetchContent_MakeAvailable(Eigen3)
-
-# set(Eigen3_FOUND ON CACHE BOOL "" FORCE)
-# set(EIGEN3_INCLUDE_DIR "${eigen3_SOURCE_DIR}" CACHE PATH "" FORCE)
 
 if(TARGET eigen)
     install(TARGETS eigen
             EXPORT EnvironmentModel_Targets
-            )
-    install(TARGETS eigen
-            EXPORT fcl-targets
-            )
-    install(TARGETS eigen
-            EXPORT DrivabilityChecker_Targets
             )
 endif()
