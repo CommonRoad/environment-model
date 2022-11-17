@@ -362,12 +362,12 @@ install(FILES
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
         )
 
-# Export target configuration (for local building)
-# FIXME: Does not work for now
-# export(EXPORT ${PROJECT_NAME}_Targets
-#         FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
-#         NAMESPACE ${PROJECT_NAME}::
-#         )
+# Export target configuration (allows find_package to find local build tree without
+# first installing it)
+export(EXPORT ${PROJECT_NAME}_Targets
+        FILE "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
+        NAMESPACE ${PROJECT_NAME}::
+        )
 
 install(
         DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
