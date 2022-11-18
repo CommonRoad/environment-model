@@ -26,12 +26,15 @@ if(COMMONROAD_SYSTEM_PROTOBUF AND Protobuf_FOUND)
             "${Protobuf_PROTOC_EXECUTABLE} reveals version ${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
     endif()
 
+    # NOTE: Protobuf_VERSION is the one found by find_package(Protobuf) above
     if(NOT "${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}" VERSION_EQUAL "${Protobuf_VERSION}")
+        message(STATUS "Found protoc version:        ${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
+        message(STATUS "Found libprotobuf version:   ${Protobuf_VERSION}")
         message(FATAL_ERROR "Unfortunately, the system protobuf installation is unusable "
             "due to a detected mismatch between the Protobuf compiler and the Protobuf libraries. "
             "We can't proceed at this point since CMake already added the corresponding targets, "
             "and there is no way to remove those targets now. "
-            "Please rerun the configuration, adding the -DCOMMONROAD_SYSTEM_PROTOBUF=OFF to the "
+            "Please rerun the configuration, adding -DCOMMONROAD_SYSTEM_PROTOBUF=OFF to the "
             "CMake command line.")
     endif()
 
@@ -58,8 +61,7 @@ set(protobuf_INSTALL ON CACHE BOOL "" FORCE)
 
 # set(protobuf_MODULE_COMPATIBLE ON CACHE BOOL "")
 
-#find_package(Protobuf REQUIRED)
-set(Protobuf_VERSION "3.21.5")
+set(Protobuf_VERSION "3.21.9")
 
 # Protobuf_VERSION:              3.21.5
 # PROTOBUF_TAG:                 v3.21.5
@@ -78,8 +80,6 @@ else()
 endif()
 
 message(VERBOSE "Protobuf alt version=${PROTOBUF_ALT_VERSION}")
-
-set(PROTOBUF_BASE_URL "https://github.com/protocolbuffers/protobuf/releases/download")
 
 set(USE_BINARY_PROTOC TRUE)
 
@@ -111,6 +111,25 @@ if(NOT USE_BINARY_PROTOC)
     message(FATAL_ERROR "External protoc download is not yet supported for your OS/architecture")
 endif()
 
+set(protobuf_base_url "https://github.com/protocolbuffers/protobuf/releases/download")
+set(protobuf_url ${protobuf_base_url}/${PROTOBUF_ALT_VERSION}/protobuf-cpp-${Protobuf_VERSION}.tar.gz)
+
+function(declare_arch arch hash)
+    set(protoc_url ${protobuf_base_url}/v${PROTOBUF_ALT_NUMERIC_VERSION}/protoc-${PROTOBUF_ALT_NUMERIC_VERSION}-${arch}.zip)
+    FetchContent_Declare(
+        protoc_bin_${arch}
+        URL ${protoc_url}
+        URL_HASH ${hash}
+    )
+endfunction()
+
+# set(PROTOC_ARCH "win64")
+
+declare_arch("linux-x86_64" SHA256=3cd951aff8ce713b94cde55e12378f505f2b89d47bf080508cf77e3934f680b6)
+declare_arch("linux-x86_32" SHA256=2cd017cf7d0a75bd95e65c0b70ff27603fafa87a39230e0f5bee5f8cc79a436d)
+declare_arch("win32" SHA256=0f9197cdda89c92dcab414540afe4afa01dc6be41495f83bec6042d45d0b7eb6)
+declare_arch("win64" SHA256=784d100b65c8eeb841bffdb885332391321740064865ead1ebc29561ed66cee1)
+
 if(USE_BINARY_PROTOC)
     set(protobuf_BUILD_LIBPROTOC OFF CACHE BOOL "" FORCE)
     set(protobuf_BUILD_PROTOBUF_BINARIES OFF CACHE BOOL "" FORCE)
@@ -118,23 +137,20 @@ if(USE_BINARY_PROTOC)
 
     message(STATUS "Trying to use binary protoc")
     message(VERBOSE "Protoc system/architecture: ${PROTOC_ARCH}")
-    message(VERBOSE "Protoc download URL: ${PROTOBUF_BASE_URL}/v${PROTOBUF_ALT_NUMERIC_VERSION}/protoc-${PROTOBUF_ALT_NUMERIC_VERSION}-${PROTOC_ARCH}.zip")
+    message(VERBOSE "Protoc download URL: ${protoc_url}")
 
-    FetchContent_Declare(
-    external_protobuf_protoc
-        URL  ${PROTOBUF_BASE_URL}/v${PROTOBUF_ALT_NUMERIC_VERSION}/protoc-${PROTOBUF_ALT_NUMERIC_VERSION}-${PROTOC_ARCH}.zip
-    )
-    FetchContent_MakeAvailable(external_protobuf_protoc)
+    FetchContent_MakeAvailable(protoc_bin_${PROTOC_ARCH})
 
     find_program(PROTOC
             NAMES protoc
-            HINTS ${external_protobuf_protoc_SOURCE_DIR}/bin
+            HINTS ${protoc_bin_${PROTOC_ARCH}_SOURCE_DIR}/bin
             DOC "protobuf compiler"
             REQUIRED
             NO_DEFAULT_PATH
             )
 
     execute_process(COMMAND ${PROTOC} --version
+        OUTPUT_QUIET
         RESULT_VARIABLE _PROTOBUF_PROTOC_RESULT)
 
     if(_PROTOBUF_PROTOC_RESULT EQUAL "0")
@@ -161,10 +177,8 @@ endif()
 FetchContent_Declare(
         external_protobuf
 
-        URL ${PROTOBUF_BASE_URL}/${PROTOBUF_ALT_VERSION}/protobuf-cpp-${Protobuf_VERSION}.tar.gz
-        URL_HASH SHA256=58c8a18b4ec22655535c493155c5465a8903e8249094ceead87e00763bdbc44f
-        # needs 3.24
-        # DOWNLOAD_EXTRACT_TIMESTAMP false
+        URL ${protobuf_url}
+        URL_HASH SHA256=bddc5dd16da45c89a510704683e02ba08c30af78fe092d255cf25b9b01259405
         )
 
 
@@ -179,3 +193,4 @@ set_property(DIRECTORY ${external_protobuf_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL
 if(NOT TARGET protobuf::libprotobuf)
     add_library(protobuf::libprotobuf ALIAS libprotobuf)
 endif()
+#Protobuf
