@@ -20,7 +20,7 @@ if(POLICY CMP0116)
         cmake_policy(SET CMP0116 NEW)
 endif()
 
-add_library(commonroad_protobuf OBJECT)
+add_library(commonroad_protobuf)
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
     # Set up header file set

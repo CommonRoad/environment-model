@@ -176,7 +176,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.h
 )
 
-add_library(env_model_core OBJECT ${ENV_MODEL_SRC_FILES})
+add_library(env_model_core ${ENV_MODEL_SRC_FILES})
 
 # TODO: Currently specifying the headers is a little weird as they're in a parent directory.
 # It might be easier if src/include are in a common subdirectory,
@@ -226,7 +226,7 @@ target_link_libraries(env_model_core
         )
 
 
-add_library(env_model_predicates OBJECT ${ENV_MODEL_PREDICATES_SRC_FILES})
+add_library(env_model_predicates ${ENV_MODEL_PREDICATES_SRC_FILES})
 
 target_sources(env_model_core PRIVATE ${ENV_MODEL_PREDICATES_HDR_FILES})
 
@@ -256,10 +256,10 @@ set_property(TARGET env_model_predicates PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 
 # Create environment model library
-add_library(env_model)
+add_library(env_model INTERFACE)
 
 target_link_libraries(env_model
-        PUBLIC
+        INTERFACE
         env_model_core
         env_model_predicates
         commonroad_protobuf
