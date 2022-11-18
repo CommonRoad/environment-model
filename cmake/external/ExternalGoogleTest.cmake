@@ -4,9 +4,15 @@ include(utils/FetchContentHelper)
 FetchContent_Declare_Fallback(
     googletest
 
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        release-1.12.1
-    GIT_PROGRESS   true
+    # NOTE - URL download should be preferred:
+    # HTTP downloads are faster than Git clones and therefore reduce configuration time
+
+    # Git version for reference
+    #GIT_REPOSITORY https://github.com/google/googletest.git
+    #GIT_TAG        release-1.12.1
+
+    URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.tar.gz
+    URL_HASH SHA256=81964fe578e9bd7c94dfdb09c8e4d6e6759e19967e397dbea48d1c10e45d0df2
 
     SYSTEM
     FIND_PACKAGE_ARGS NAMES GTest
