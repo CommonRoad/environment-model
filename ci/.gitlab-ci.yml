@@ -56,8 +56,16 @@ build-clang:
     CC: clang
     CXX: clang++
   script:
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_config "CMake Configuration"
     - cmake -G "Ninja Multi-Config" -S . -B build
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_config
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_build "CMake Build"
     - cmake --build build --config Release --target env_model
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_build
   needs: []
 
 build-gcc:
@@ -66,22 +74,46 @@ build-gcc:
     CC: gcc
     CXX: g++
   script:
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_config "CMake Configuration"
     - cmake -G "Ninja Multi-Config" -S . -B build
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_config
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_build "CMake Build"
     - cmake --build build --config Release --target env_model
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_build
   needs: []
 
 build-standalone:
   stage: compile
   script:
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_config "CMake Configuration"
     - cmake -G "Ninja Multi-Config" -S . -B build
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_config
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_build "CMake Build"
     - cmake --build build --config Release --target env_model_example_node
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_build
   needs: []
 
 build-test:
   stage: compile
   script:
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_config "CMake Configuration"
     - cmake -G "Ninja Multi-Config" -S . -B build
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_config
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_build "CMake Build"
     - cmake --build build --config Debug --target env_model_test
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_build
   needs: []
   artifacts:
     paths:
@@ -91,8 +123,16 @@ build-test:
 build-coverage:
   stage: compile
   script:
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_config "CMake Configuration"
     - cmake -G "Ninja Multi-Config" -S . -B build -DENV_MODEL_BUILD_CODE_COVERAGE=ON
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_config
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_build "CMake Build"
     - cmake --build build --config Debug --target env_model_test
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_build
   needs: []
   artifacts:
     paths:
@@ -253,13 +293,18 @@ run-coverage:
     # Therefore, we first extract the test dependencies to a temporary requirements
     # file and then instruct pip to install them from that file.
     # Finally, we install the built wheel from the wheelhouse directory.
+    - printf "\e[0Ksection_start:%s:%s[collapsed=true]\r\e[0K%s\n" "$(date +%s)"
+      section_python_prep "Installation of test dependencies"
+    - python -m pip config set global.disable-pip-version-check true
     - python -m venv test-venv
     - source test-venv/bin/activate
     - python -m pip install pip-tools
     - SETUPTOOLS_SCM_PRETEND_VERSION_FOR_COMMONROAD_CPP=1
-      python -m piptools compile --extra=test -v -o test_requirements.txt pyproject.toml
+      python -m piptools compile --extra=test -o test_requirements.txt pyproject.toml
     - python -m pip install -r test_requirements.txt
     - python -m pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_python_prep
   script:
     - python -m pytest --junit-xml=pytest-report.xml tests/python
   needs:
@@ -311,8 +356,16 @@ test-python-musllinux:
 docs:
   stage: docs
   script:
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_config "CMake Configuration"
     - cmake -G "Ninja Multi-Config" -S . -B build -DENV_MODEL_BUILD_DOXYGEN=ON
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_config
+    - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
+      section_build "CMake Build"
     - cmake --build build --config Debug --target doc_doxygen
+    - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
+      section_build
   needs: []
   artifacts:
     paths:
