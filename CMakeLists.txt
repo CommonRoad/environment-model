@@ -149,6 +149,9 @@ set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 # TODO: Set this conditionally
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
+# Ensure executables are in the top level directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 include(CMakeDependentOption)
 
 set(ENV_MODEL_BUILD_EXTRAS_DEFAULT ON)
@@ -215,11 +218,6 @@ cmake_dependent_option(ENV_MODEL_SYSTEM_PACKAGES_FORCE
     "NOT CMAKE_SUPPORTS_TRY_FIND_PACKAGE"
     OFF
     )
-
-# Provides configure_package_config_file
-include(CMakePackageConfigHelpers)
-# Includes sane defaults for installation paths (CMAKE_INSTALL_LIBDIR, CMAKE_INSTALL_BINDIR etc.)
-include(GNUInstallDirs)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -304,10 +302,6 @@ else()
 endif()
 
 include(ExternalRange)
-
-# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 
