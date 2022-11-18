@@ -1,3 +1,8 @@
+# Provides configure_package_config_file
+include(CMakePackageConfigHelpers)
+# Includes sane defaults for installation paths (CMAKE_INSTALL_LIBDIR, CMAKE_INSTALL_BINDIR etc.)
+include(GNUInstallDirs)
+
 set(export_name ${PROJECT_NAME}_Targets)
 
 # Citing CMake documentation:
