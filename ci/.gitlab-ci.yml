@@ -36,6 +36,22 @@ cppcheck:
     - job: build-compile-commands
       artifacts: true
 
+.cache-build-dir:
+  cache: &cache_dependency_archives
+    key: cache-dependency-archives
+    paths:
+      - build/_deps/*-subbuild/*-populate-prefix/src/*.{tar*,zip}
+    policy: pull
+
+generate-cache:
+  stage: compile
+  cache:
+    <<: *cache_dependency_archives
+    policy: push
+  script:
+    - cmake -G "Ninja Multi-Config" -S . -B build -DFETCHCONTENT_QUIET:BOOL=OFF
+  needs: []
+
 ### build project ###
 build-compile-commands:
   stage: compile
@@ -52,6 +68,8 @@ build-compile-commands:
 
 build-clang:
   stage: compile
+  cache:
+    <<: *cache_dependency_archives
   variables:
     CC: clang
     CXX: clang++
@@ -70,6 +88,8 @@ build-clang:
 
 build-gcc:
   stage: compile
+  cache:
+    <<: *cache_dependency_archives
   variables:
     CC: gcc
     CXX: g++
@@ -88,6 +108,8 @@ build-gcc:
 
 build-standalone:
   stage: compile
+  cache:
+    <<: *cache_dependency_archives
   script:
     - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
       section_config "CMake Configuration"
@@ -103,6 +125,8 @@ build-standalone:
 
 build-test:
   stage: compile
+  cache:
+    <<: *cache_dependency_archives
   script:
     - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
       section_config "CMake Configuration"
@@ -122,6 +146,8 @@ build-test:
 
 build-coverage:
   stage: compile
+  cache:
+    <<: *cache_dependency_archives
   script:
     - printf "\e[0Ksection_start:%s:%s\r\e[0K%s\n" "$(date +%s)"
       section_config "CMake Configuration"
