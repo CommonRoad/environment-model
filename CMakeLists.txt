@@ -322,14 +322,15 @@ endif()
 ## Doxygen
 if(ENV_MODEL_BUILD_DOXYGEN)
     include(extras/Doxygen)
-endif(ENV_MODEL_BUILD_DOXYGEN)
+endif()
 
 # add unit testing
-if(ENV_MODEL_BUILD_TESTS)
+if(ENV_MODEL_BUILD_TESTS AND TARGET Boost::filesystem)
     enable_testing()
     add_subdirectory(tests)
-endif(ENV_MODEL_BUILD_TESTS)
-
+elseif(NOT TARGET Boost::filesystem)
+    message(WARNING "disabling tests because Boost::program_options was not found")
+endif()
 
 # Citing CMake documentation:
 # For regular executables, static libraries and shared libraries,
