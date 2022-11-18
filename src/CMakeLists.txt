@@ -220,6 +220,7 @@ target_link_libraries(env_model_core
 
 target_link_libraries(env_model_core
         PUBLIC
+        Boost::headers
         range-v3::range-v3
         commonroad_protobuf
         )
