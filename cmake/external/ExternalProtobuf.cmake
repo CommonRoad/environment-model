@@ -51,7 +51,10 @@ set(protobuf_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(protobuf_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(protobuf_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 
-set(protobuf_INSTALL OFF CACHE BOOL "" FORCE)
+# IMPORTANT: Needs to be enabled because of a Protobuf bug:
+# cmake/libprotobuf.cmake incorrectly includes a source-local path
+# in INTERFACE_INCLUDE_DIRECTORIES.
+set(protobuf_INSTALL ON CACHE BOOL "" FORCE)
 
 # set(protobuf_MODULE_COMPATIBLE ON CACHE BOOL "")
 
