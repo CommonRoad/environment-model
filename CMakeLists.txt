@@ -332,75 +332,7 @@ elseif(NOT TARGET Boost::filesystem)
     message(WARNING "disabling tests because Boost::program_options was not found")
 endif()
 
-# Citing CMake documentation:
-# For regular executables, static libraries and shared libraries,
-# the DESTINATION argument is not required.
-# https://cmake.org/cmake/help/v3.25/command/install.html#targets
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
-    install(TARGETS commonroad_protobuf
-        EXPORT ${PROJECT_NAME}_Targets
-        FILE_SET commonroad_protobuf_headers)
-    install(TARGETS env_model env_model_core env_model_predicates
-            EXPORT ${PROJECT_NAME}_Targets
-            FILE_SET env_model_core_headers
-            FILE_SET env_model_predicates_headers
-            LIBRARY ARCHIVE RUNTIME)
-else()
-    install(TARGETS env_model env_model_core env_model_predicates
-            EXPORT ${PROJECT_NAME}_Targets
-            LIBRARY ARCHIVE RUNTIME)
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-            FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
-endif()
-
-configure_package_config_file(
-        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-        INSTALL_DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-)
-
-# Export target configuration (for installation)
-install(EXPORT ${PROJECT_NAME}_Targets
-        FILE ${PROJECT_NAME}Targets.cmake
-        NAMESPACE ${PROJECT_NAME}::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-        )
-
-install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-        )
-
-# Export target configuration (allows find_package to find local build tree without
-# first installing it)
-export(EXPORT ${PROJECT_NAME}_Targets
-        FILE "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
-        NAMESPACE ${PROJECT_NAME}::
-        )
-
-# Required for export()
-foreach(foreign_target spdlog::spdlog yaml-cpp::yaml-cpp protobuf::libprotobuf)
-    get_target_property(aliased_target ${foreign_target} ALIASED_TARGET)
-    if(aliased_target)
-        set(foreign_target ${aliased_target})
-    endif()
-
-    get_target_property(target_imported ${foreign_target} IMPORTED)
-    if(NOT target_imported)
-        message(VERBOSE "Exporting ${foreign_target} because it is built locally")
-        install(TARGETS ${foreign_target}
-            EXPORT ${PROJECT_NAME}_Targets
-            LIBRARY ARCHIVE RUNTIME)
-    endif()
-endforeach()
-
-install(
-        DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
-)
+include(cmake/install.cmake)
 
 include(utils/EnsureStatic)
 
