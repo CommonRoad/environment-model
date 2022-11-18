@@ -135,7 +135,7 @@ if (ENV_MODEL_BUILD_CODE_COVERAGE)
 
     set_property(SOURCE allTests.cpp PROPERTY COMPILE_DEFINITIONS CODE_COVERAGE)
 
-    foreach(target env_model env_model_core env_model_predicates env_model_test)
+    foreach(target env_model_core env_model_predicates env_model_test)
         # append_coverage_compiler_flags_to_target(${target})
         target_compile_options(${target} PRIVATE ${COVERAGE_FLAGS})
         target_link_libraries(${target} PRIVATE toolchain::gcov)
