@@ -1,12 +1,15 @@
 include(FetchContent)
 include(utils/FetchContentHelper)
 
-# GIT_REPOSITORY https://github.com/zeux/pugixml.git
-# GIT_TAG        v1.12.1
-# GIT_SHALLOW    true
-
 FetchContent_Declare_Fallback(
     pugixml
+
+    # NOTE - URL download should be preferred:
+    # HTTP downloads are faster than Git clones and therefore reduce configuration time
+
+    # Git version for reference
+    # GIT_REPOSITORY https://github.com/zeux/pugixml.git
+    # GIT_TAG        v1.12.1
 
     URL http://github.com/zeux/pugixml/releases/download/v1.12/pugixml-1.12.tar.gz
     URL_HASH SHA256=fd6922a4448ec2f3eb9db415d10a49660e5d84ce20ce66b8a07e72ffc84270a7
