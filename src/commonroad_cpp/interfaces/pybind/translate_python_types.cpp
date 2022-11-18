@@ -386,8 +386,7 @@ std::shared_ptr<Obstacle> createCommonObstaclePart(py::handle py_singleObstacle)
     if (commonroadShape == "Rectangle") { // TODO: add other shape types
         auto length{py_obstacleShape.attr("length").cast<double>()};
         auto width{py_obstacleShape.attr("width").cast<double>()};
-        tempObstacle->getGeoShape().setLength(length);
-        tempObstacle->getGeoShape().setWidth(width);
+        tempObstacle->setGeoShape(std::make_unique<Rectangle>(length, width));
     } else {
         std::cout << "Unknown obstacle shape (only circles, polygons and rectangles supported) \n";
     }
@@ -436,14 +435,17 @@ std::shared_ptr<Obstacle> createDynamicObstacle(py::handle py_singleObstacle) {
          py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list").cast<py::list>()) {
         tempObstacle->appendStateToTrajectoryPrediction(extractState(py_state));
     }
-    if (py::hasattr(py_singleObstacle, "initial_signal_state"))
-        tempObstacle->setCurrentSignalState(extractSignalState(py_singleObstacle.attr(
-            "initial_signal_state"))) if (py::hasattr(py_singleObstacle,
-                                                      "signal_series")) for (const auto &py_state :
-                                                                             py_singleObstacle.attr("signal_series")
-                                                                                 .cast<py::list>()) {
+
+    if (py::hasattr(py_singleObstacle, "initial_signal_state") and
+        !py_singleObstacle.attr("initial_signal_state").is_none())
+        tempObstacle->setCurrentSignalState(extractSignalState(py_singleObstacle.attr("initial_signal_state")));
+
+    if (py::hasattr(py_singleObstacle, "signal_series") and !py_singleObstacle.attr("signal_series").is_none())
+        for (const auto &py_state : py_singleObstacle.attr("signal_series").cast<py::list>())
             tempObstacle->appendSignalStateToSeries(extractSignalState(py_state));
-        }
+
+    tempObstacle->setSensorParameters(
+        SensorParameters{250.0, 250.0, 0.3}); // TODO replace with proper setting of sensor parameters
     return tempObstacle;
 }
 
