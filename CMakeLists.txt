@@ -291,8 +291,6 @@ if(ENV_MODEL_SYSTEM_PACKAGES_FORCE)
     if(NOT TARGET yaml-cpp::yaml-cpp)
         add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
     endif()
-
-    include(ExternalDrivabilityChecker)
 else()
     # Normal path: We try to use find_package via FetchContent, otherwise we fall
     # back to normal FetchContent
@@ -301,9 +299,6 @@ else()
     include(ExternalPugixml)
     include(ExternalSpdlog)
     include(ExternalGoogleTest)
-
-    # IMPORTANT: crdc needs to be installed *before* yaml-cpp because yaml-cpp will generate a duplicate uninstall target otherwise
-    include(ExternalDrivabilityChecker)
     include(ExternalYamlCpp)
 endif()
 
@@ -417,7 +412,6 @@ if(SKBUILD)
         ensure_all_static(env_model)
 
         # ensure_static(env_model)
-        # ensure_static(crccosy)
         # ensure_static(yaml-cpp)
         # ensure_static(spdlog::spdlog)
         # ensure_static(pugixml-static)
@@ -428,11 +422,4 @@ if(SKBUILD)
 
         ensure_static(env_model)
     endif()
-endif()
-
-if(SKBUILD)
-    set_target_properties(s11n PROPERTIES
-        VISIBILITY_INLINES_HIDDEN ON
-        CXX_VISIBILITY_PRESET hidden
-        )
 endif()

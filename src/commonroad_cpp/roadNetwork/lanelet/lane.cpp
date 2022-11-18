@@ -8,7 +8,7 @@
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 
-#include <geometry/curvilinear_coordinate_system.h>
+#include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
 #include <utility>
 
 /* NOTE: The Lane destructor is explicitly instantiated here so that the deallocation calls are hopefully
