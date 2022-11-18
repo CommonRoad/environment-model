@@ -17,8 +17,11 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/obstacle/state.cpp
         commonroad_cpp/obstacle/signal_state.cpp
         commonroad_cpp/geometry/circle.cpp
+        commonroad_cpp/geometry/curvilinear_coordinate_system.cpp
         commonroad_cpp/geometry/geometric_operations.cpp
         commonroad_cpp/geometry/rectangle.cpp
+        commonroad_cpp/geometry/segment.cpp
+        commonroad_cpp/geometry/util.cpp
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2018b.cpp
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2020a.cpp
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
@@ -36,10 +39,12 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/auxiliaryDefs/types_and_definitions.h
         commonroad_cpp/commonroad_container.h
         commonroad_cpp/geometry/circle.h
-        commonroad_cpp/geometry/geometric_operations.h
+        commonroad_cpp/geometry/curvilinear_coordinate_system.h
         commonroad_cpp/geometry/rectangle.h
+        commonroad_cpp/geometry/segment.h
         commonroad_cpp/geometry/shape.h
         commonroad_cpp/geometry/types.h
+        commonroad_cpp/geometry/util.h
         commonroad_cpp/interfaces/commonroad/input_utils.h
         commonroad_cpp/interfaces/commonroad/xml_reader.h
         commonroad_cpp/obstacle/actuator_parameters.h
@@ -215,7 +220,6 @@ target_link_libraries(env_model_core
 
 target_link_libraries(env_model_core
         PUBLIC
-        crccosy
         range-v3::range-v3
         commonroad_protobuf
         )
@@ -243,8 +247,6 @@ target_include_directories(env_model_predicates
 target_link_libraries(env_model_predicates
         PUBLIC
         Eigen3::Eigen
-        crccosy
-        #DrivabilityChecker::crccosy
         range-v3
         env_model_core
         )
