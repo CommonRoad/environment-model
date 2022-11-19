@@ -285,6 +285,7 @@ if(ENV_MODEL_SYSTEM_PACKAGES_FORCE)
     find_package(spdlog 1.8.0 REQUIRED)
     find_package(GTest)
     find_package(yaml-cpp 0.6.0 REQUIRED)
+    find_package(range-v3 0.12.0 REQUIRED)
 
     # yaml-cpp::yaml-cpp is not present in installed config file as of version 0.7.0
     if(NOT TARGET yaml-cpp::yaml-cpp)
@@ -299,9 +300,8 @@ else()
     include(ExternalSpdlog)
     include(ExternalGoogleTest)
     include(ExternalYamlCpp)
+    include(ExternalRange)
 endif()
-
-include(ExternalRange)
 
 add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 
