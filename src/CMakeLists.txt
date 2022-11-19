@@ -211,10 +211,10 @@ target_include_directories(env_model_core
 target_link_libraries(env_model_core
         PRIVATE
         # Not used in any headers
-        $<BUILD_INTERFACE:yaml-cpp::yaml-cpp>
+        yaml-cpp::yaml-cpp
         OpenMP::OpenMP_CXX
         pugixml::pugixml
-        $<BUILD_INTERFACE:spdlog::spdlog>
+        spdlog::spdlog
 )
 
 target_link_libraries(env_model_core
