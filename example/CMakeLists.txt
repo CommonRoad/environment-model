@@ -5,6 +5,9 @@ add_executable(env_model_example_node
     src/main.cpp
     )
 
+# Add definition for toolchain::dl
+include(toolchain/ToolchainLibraries)
+
 target_link_libraries(env_model_example_node
     PRIVATE
         OpenMP::OpenMP_CXX
@@ -12,9 +15,9 @@ target_link_libraries(env_model_example_node
         Boost::program_options
         Boost::filesystem
         spdlog::spdlog
-        yaml-cpp
+        yaml-cpp::yaml-cpp
         Threads::Threads
-        ${CMAKE_DL_LIBS}
+        toolchain::dl
     )
 
 # this adds many warnings to the build. They usually help to find some bugs
