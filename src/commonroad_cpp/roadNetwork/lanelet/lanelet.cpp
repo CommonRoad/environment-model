@@ -182,8 +182,8 @@ double Lanelet::getOrientationAtPosition(double positionX, double positionY) con
     return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
 }
 
-unsigned long Lanelet::findClosestIndex(double positionX,
-                                        double positionY) const { // find the closest vertex to the given position
+size_t Lanelet::findClosestIndex(double positionX,
+                                 double positionY) const { // find the closest vertex to the given position
     assert(!centerVertices.empty());
 
     double minimum_diff = std::numeric_limits<double>::infinity();
