@@ -63,6 +63,8 @@ foreach(proto ${COMMONROAD_PROTOS})
 
         target_sources(commonroad_protobuf PRIVATE ${proto_cpp_file_path} ${proto_hdr_file_path})
 
+        set_property(SOURCE ${proto_cpp_file} PROPERTY SKIP_UNITY_BUILD_INCLUSION ON)
+
         if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
                 target_sources(commonroad_protobuf
                 INTERFACE

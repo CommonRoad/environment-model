@@ -29,14 +29,39 @@ else()
             FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 endif()
 
+# Define INSTALL_..._FROM_SYSTEM for each dependency depending on whether we're using
+# our own version (via FetchContent) or a system version (via find_package)
+# This information is used in the installed config file.
+include(FetchContent)
+foreach(fc_target Eigen3 spdlog yaml-cpp protobuf boost_src pugixml range-v3)
+    FetchContent_GetProperties(${fc_target})
+
+    message(DEBUG "check ${fc_target} (variable name: ${fc_target}_SOURCE_DIR)")
+    if(DEFINED ${fc_target}_SOURCE_DIR)
+        message(DEBUG "defined: ${${fc_target}_SOURCE_DIR}")
+        set(INSTALL_${fc_target}_FROM_SYSTEM OFF)
+    else()
+        message(DEBUG "not defined")
+        set(INSTALL_${fc_target}_FROM_SYSTEM ON)
+    endif()
+endforeach()
+
 set(env_model_install_cmakedir ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 set(env_model_config_file ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake)
+set(env_model_version_file ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake)
 
 configure_package_config_file(
         ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
         ${env_model_config_file}
         INSTALL_DESTINATION ${env_model_install_cmakedir})
+
+write_basic_package_version_file(${env_model_version_file}
+        COMPATIBILITY AnyNewerVersion)
+
+install(FILES ${env_model_config_file}
+              ${env_model_version_file}
+        DESTINATION  ${env_model_install_cmakedir})
 
 # Export target configuration (for installation)
 install(EXPORT ${export_name}
