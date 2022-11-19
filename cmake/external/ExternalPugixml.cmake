@@ -9,10 +9,10 @@ FetchContent_Declare_Fallback(
 
     # Git version for reference
     # GIT_REPOSITORY https://github.com/zeux/pugixml.git
-    # GIT_TAG        v1.12.1
+    # GIT_TAG        v1.13
 
-    URL http://github.com/zeux/pugixml/releases/download/v1.12/pugixml-1.12.tar.gz
-    URL_HASH SHA256=fd6922a4448ec2f3eb9db415d10a49660e5d84ce20ce66b8a07e72ffc84270a7
+    URL http://github.com/zeux/pugixml/releases/download/v1.13/pugixml-1.13.tar.gz
+    URL_HASH SHA256=40c0b3914ec131485640fa57e55bf1136446026b41db91c1bef678186a12abbe
 
     SYSTEM
     FIND_PACKAGE_ARGS 1.11
