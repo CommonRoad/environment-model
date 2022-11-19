@@ -210,7 +210,6 @@ target_include_directories(env_model_core
 
 target_link_libraries(env_model_core
         PRIVATE
-        Eigen3::Eigen
         # Not used in any headers
         $<BUILD_INTERFACE:yaml-cpp::yaml-cpp>
         OpenMP::OpenMP_CXX
@@ -220,6 +219,7 @@ target_link_libraries(env_model_core
 
 target_link_libraries(env_model_core
         PUBLIC
+        Eigen3::Eigen
         Boost::headers
         range-v3::range-v3
         commonroad_protobuf
