@@ -177,7 +177,6 @@ cmake_dependent_option(ENV_MODEL_BUILD_TESTS
 
 option(BUILD_SHARED_LIBS "Build environment model as a shared library" ON)
 
-# TODO Eigen CMake has a nice approach to setting per-project BUILD_SHARED_LIBS
 option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ${BUILD_SHARED_LIBS})
 
 cmake_dependent_option(ENV_MODEL_BUILD_CODE_COVERAGE
