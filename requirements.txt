@@ -1,2 +1,0 @@
-commonroad-io>= 2021.3
-scikit-build>= 0.12.0

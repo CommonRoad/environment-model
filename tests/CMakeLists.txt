@@ -88,7 +88,7 @@ if (ENV_MODEL_BUILD_TESTS)
     target_link_libraries(env_model_test
             PRIVATE
             env_model
-            gtest
+            GTest::gtest
             Boost::filesystem
             OpenMP::OpenMP_CXX
             spdlog::spdlog
@@ -102,43 +102,48 @@ if (ENV_MODEL_BUILD_TESTS)
     # queries the compiled executable for tests, this requires the executable to be runnable. if you are
     # cross compiling, make sure to properly set CMAKE_CROSSCOMPILING_EMULATOR.
     gtest_discover_tests(
-            env_model_test TEST_PREFIX "./"
+            env_model_test
+            # TEST_PREFIX "./"
             # increase the discovery timeout for `env_model_test --gtest_list_tests`
             DISCOVERY_TIMEOUT 60
+            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+            XML_OUTPUT_DIR ${PROJECT_BINARY_DIR}/test-reports
     )
 endif ()
 
 
 # Code coverage
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-    if (ENV_MODEL_BUILD_CODE_COVERAGE)
-        add_executable(env_model_test_coverage ${ENV_MODEL_SRC_FILES} ${ENV_MODEL_TEST_SRC_FILES})
-        target_include_directories(env_model_test_coverage PUBLIC "./../src/" ${LIB_CRCCOSY_INCLUDE})
-        target_link_libraries(env_model_test_coverage PUBLIC
-                env_model
-                DrivabilityChecker::crccosy
-                gtest
-                Boost::filesystem
-                Boost::program_options
-                OpenMP::OpenMP_CXX
-                Eigen3::Eigen
-                spdlog::spdlog
-                )
+# NOTE: The CodeCoverage module will already warn if the build type is not Debug
+if (ENV_MODEL_BUILD_CODE_COVERAGE)
+    include(FetchContent)
+    FetchContent_Declare(
+        bilke_cmake_modules
 
-        include(CodeCoverage)
-        append_coverage_compiler_flags()
-        setup_target_for_coverage_gcovr_html(
-                NAME env_model_coverage                                          # New target name
-                EXECUTABLE env_model_test_coverage                               # Executable in PROJECT_BINARY_DIR
-                DEPENDENCIES env_model_test_coverage                             # Dependencies to build first
-                BASE_DIRECTORY "../"                                             # Base directory for report
-                #  (defaults to PROJECT_SOURCE_DIR)
-                EXCLUDE                                                          # Patterns to exclude (can be relative
-                "src/interfaces/commonroad/pugi_xml/pugixml.hpp"             #  to BASE_DIRECTORY, with CMake 3.4+)
-                "src/interfaces/commonroad/pugi_xml/pugixml.cpp"
-                "ci/"
-                "docs/"
-                "external/"
-        )
-    endif()
+        GIT_REPOSITORY https://github.com/bilke/cmake-modules.git
+        GIT_TAG        1b68d17d3e3321c08092f994a40e0b6a13dff817
+    )
+    FetchContent_MakeAvailable(bilke_cmake_modules)
+    include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage.cmake)
+
+    # Add definition for toolchain::gcov
+    include(toolchain/ToolchainLibraries)
+
+    # Unfortunately, append_coverage_compiler_flags_to_target is currently broken,
+    # so we simply add the required flags ourselves
+
+    set(COVERAGE_FLAGS -g -fprofile-arcs -ftest-coverage -fprofile-abs-path)
+
+    set_property(SOURCE allTests.cpp PROPERTY COMPILE_DEFINITIONS CODE_COVERAGE)
+
+    foreach(target env_model_core env_model_predicates env_model_test)
+        # append_coverage_compiler_flags_to_target(${target})
+        target_compile_options(${target} PRIVATE ${COVERAGE_FLAGS})
+        target_link_libraries(${target} PRIVATE toolchain::gcov)
+    endforeach()
+
+    setup_target_for_coverage_gcovr_html(
+            NAME env_model_coverage
+            EXECUTABLE env_model_test
+            EXCLUDES ${FETCHCONTENT_BASE_DIR}
+    )
 endif()
