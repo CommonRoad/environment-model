@@ -8,10 +8,10 @@
 #include "test_road_network.h"
 #include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
-#include <geometry/curvilinear_coordinate_system.h>
 
 void RoadNetworkTestInitialization::setUpRoadNetwork() {
     std::vector<std::shared_ptr<Lanelet>> lanelets{laneletOne,  laneletTwo, laneletThree, laneletFour,

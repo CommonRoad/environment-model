@@ -7,13 +7,13 @@
 
 #include <Eigen/Dense>
 
+#include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
 #include <commonroad_cpp/world.h>
-#include <geometry/curvilinear_coordinate_system.h>
 
 #include <commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h>
 

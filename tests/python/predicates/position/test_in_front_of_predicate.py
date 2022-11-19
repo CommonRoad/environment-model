@@ -3,8 +3,9 @@ import numpy as np
 
 import crcpp
 
+from commonroad.scenario.state import CustomState
 from commonroad.geometry.shape import Rectangle
-from commonroad.scenario.obstacle import State, ObstacleType, DynamicObstacle
+from commonroad.scenario.obstacle import ObstacleType, DynamicObstacle
 from commonroad.prediction.prediction import TrajectoryPrediction, Trajectory
 from ..predicate_test_utils import create_lanelet_network
 
@@ -27,34 +28,34 @@ class TestInFrontOfPredicate(unittest.TestCase):
         exp_sol_robustness_mode_5 = 14.0
 
         obstacle_1 = DynamicObstacle(1, ObstacleType.CAR, Rectangle(5, 2),
-                                     State(time_step=0, position=np.array([8, 0]), velocity=2,
+                                     CustomState(time_step=0, position=np.array([8, 0]), velocity=2,
                                            acceleration=0, orientation=0),
                                      TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
-                                         State(time_step=1, position=np.array([10, 0]), velocity=2, acceleration=0,
+                                         CustomState(time_step=1, position=np.array([10, 0]), velocity=2, acceleration=0,
                                                orientation=0),
-                                         State(time_step=2, position=np.array([12, 0]), velocity=2, acceleration=0,
+                                         CustomState(time_step=2, position=np.array([12, 0]), velocity=2, acceleration=0,
                                                orientation=0),
-                                         State(time_step=3, position=np.array([14, 0]), velocity=2, acceleration=0,
+                                         CustomState(time_step=3, position=np.array([14, 0]), velocity=2, acceleration=0,
                                                orientation=0),
-                                         State(time_step=4, position=np.array([10, 0]), velocity=10, acceleration=0,
+                                         CustomState(time_step=4, position=np.array([10, 0]), velocity=10, acceleration=0,
                                                orientation=0)]), Rectangle(5, 2)))
 
         obstacle_2 = DynamicObstacle(2, ObstacleType.CAR, Rectangle(5, 2),
-                                     State(time_step=0, position=np.array([0, 0]), velocity=10, acceleration=0,
+                                     CustomState(time_step=0, position=np.array([0, 0]), velocity=10, acceleration=0,
                                            orientation=0),
                                      TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
-                                         State(time_step=1, position=np.array([10, 0]), velocity=4,
+                                         CustomState(time_step=1, position=np.array([10, 0]), velocity=4,
                                                acceleration=-6, orientation=0),
-                                         State(time_step=2, position=np.array([14, 0]), velocity=10,
+                                         CustomState(time_step=2, position=np.array([14, 0]), velocity=10,
                                                acceleration=6, orientation=0),
-                                         State(time_step=3, position=np.array([24, 0]), velocity=5,
+                                         CustomState(time_step=3, position=np.array([24, 0]), velocity=5,
                                                acceleration=-5, orientation=0)]), Rectangle(5, 2)))
 
         obstacle_3 = DynamicObstacle(3, ObstacleType.CAR, Rectangle(5, 2),
-                                     State(time_step=3, position=np.array([0, 0]), velocity=10,
+                                     CustomState(time_step=3, position=np.array([0, 0]), velocity=10,
                                            acceleration=0, orientation=0),
                                      TrajectoryPrediction(Trajectory(initial_time_step=4, state_list=[
-                                         State(time_step=4, position=np.array([29, 0]), velocity=5,
+                                         CustomState(time_step=4, position=np.array([29, 0]), velocity=5,
                                                acceleration=0, orientation=0)]), Rectangle(5, 2)))
 
         crcpp.register_scenario(123, 0, 0.1, "DEU", self.lanelet_network, [obstacle_1], [obstacle_2, obstacle_3])
