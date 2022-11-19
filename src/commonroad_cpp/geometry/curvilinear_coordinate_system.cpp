@@ -1244,28 +1244,4 @@ CurvilinearCoordinateSystem::convertToCurvilinearCoords(const std::vector<EigenP
     return groups_of_curvil_points;
 }
 
-#if ENABLE_SERIALIZER
-
-int CurvilinearCoordinateSystem::serialize(std::ostream &output_stream) const {
-    return serialize::serialize(std::static_pointer_cast<const CurvilinearCoordinateSystem>(this->shared_from_this()),
-                                output_stream);
-}
-
-CurvilinearCoordinateSystemConstPtr CurvilinearCoordinateSystem::deserialize(std::istream &input_stream) {
-    CurvilinearCoordinateSystemConstPtr ret;
-    if (!serialize::deserialize(ret, input_stream)) {
-        return ret;
-    } else
-        return CurvilinearCoordinateSystemConstPtr(0);
-}
-
-namespace serialize {
-ICurvilinearCoordinateSystemExport *exportObject(const geometry::CurvilinearCoordinateSystem &);
-}
-
-serialize::ICurvilinearCoordinateSystemExport *CurvilinearCoordinateSystem::exportThis(void) const {
-    return serialize::exportObject(*this);
-}
-#endif
-
 } // namespace geometry
