@@ -228,7 +228,7 @@ target_link_libraries(env_model_core
 
 add_library(env_model_predicates ${ENV_MODEL_PREDICATES_SRC_FILES})
 
-target_sources(env_model_core PRIVATE ${ENV_MODEL_PREDICATES_HDR_FILES})
+target_sources(env_model_predicates PRIVATE ${ENV_MODEL_PREDICATES_HDR_FILES})
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
     target_sources(env_model_predicates
