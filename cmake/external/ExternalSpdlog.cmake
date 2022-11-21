@@ -4,6 +4,8 @@ include(utils/FetchContentHelper)
 FetchContent_Declare_Fallback(
     spdlog
 
+    SYSTEM
+
     # NOTE - URL download should be preferred:
     # HTTP downloads are faster than Git clones and therefore reduce configuration time
 
@@ -14,7 +16,6 @@ FetchContent_Declare_Fallback(
     URL https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.tar.gz
     URL_HASH SHA256=ca5cae8d6cac15dae0ec63b21d6ad3530070650f68076f3a4a862ca293a858bb
 
-    # SYSTEM
     FIND_PACKAGE_ARGS 1.8.0
     )
 
