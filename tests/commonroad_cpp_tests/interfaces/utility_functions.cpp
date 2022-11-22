@@ -15,10 +15,10 @@
 std::string TestUtils::getTestScenarioDirectory() {
     std::string curDir{get_current_dir_name()};
     std::string srcDir{curDir + "/tests/scenarios"};
-    if (!existsDirectory(srcDir)) {
+    if (!existsDirectory(srcDir) && existsDirectory(curDir + "/../tests/scenarios"))
         srcDir = curDir + "/../tests/scenarios";
-        existsDirectory(srcDir);
-    }
+    else if (!existsDirectory(srcDir) && existsDirectory(curDir + "/../../tests/scenarios"))
+        srcDir = curDir + "/../../tests/scenarios";
     return srcDir;
 }
 
