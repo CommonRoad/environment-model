@@ -11,8 +11,6 @@
 
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
-enum FileFormat { XML, PROTOBUF };
-
 class RoadNetwork;
 
 using Scenario = std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>;
@@ -25,7 +23,7 @@ namespace InputUtils {
  * @param filePath Path to CommonRoad file
  * @return Tuple of obstacles, roadNetwork, and time step size
  */
-Scenario getDataFromCommonRoad(const std::string &filePath, FileFormat fileFormat = XML);
+Scenario getDataFromCommonRoad(const std::string &filePath);
 
 
 } // namespace InputUtils
