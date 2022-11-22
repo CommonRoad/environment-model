@@ -144,15 +144,15 @@ TEST_F(InterfacesTest, SameObstacles) {
 TEST_F(InterfacesTest, ReadingAll) {
     std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/" + "test_reading_all.xml";
     std::string pathToTestPbFile = TestUtils::getTestScenarioDirectory() + "/protobuf/test_reading_all.pb";
-    EXPECT_NO_THROW(InputUtils::getDataFromCommonRoad(pathToTestXmlFile, FileFormat::XML));
-    EXPECT_NO_THROW(InputUtils::getDataFromCommonRoad(pathToTestPbFile, FileFormat::PROTOBUF));
+    EXPECT_NO_THROW(InputUtils::getDataFromCommonRoad(pathToTestXmlFile));
+    EXPECT_NO_THROW(InputUtils::getDataFromCommonRoad(pathToTestPbFile));
 }
 
 std::tuple<Scenario, Scenario> InterfacesTest::loadXmlAndPbScenarios(const std::string &name) {
     std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/" + name + ".xml";
     std::string pathToTestPbFile = TestUtils::getTestScenarioDirectory() + "/protobuf/" + name + ".pb";
-    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile, FileFormat::XML);
-    const auto &scenarioPb = InputUtils::getDataFromCommonRoad(pathToTestPbFile, FileFormat::PROTOBUF);
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+    const auto &scenarioPb = InputUtils::getDataFromCommonRoad(pathToTestPbFile);
 
     return std::make_tuple(scenarioXml, scenarioPb);
 }
