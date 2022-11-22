@@ -546,11 +546,11 @@ ProtobufReader::createTrajectoryFromMessage(const commonroad::Trajectory &trajec
 std::shared_ptr<State> ProtobufReader::createStateFromMessage(const commonroad::State &stateMsg) {
     std::shared_ptr<State> state = std::make_shared<State>();
 
-    if (stateMsg.has_time_step()) {
-        IntegerExactOrInterval timeStep = ProtobufReader::createIntegerExactOrInterval(stateMsg.time_step());
-        if (timeStep.index() == 0)
-            state->setTimeStep((size_t)std::get<int>(timeStep));
-    }
+    IntegerExactOrInterval timeStep = ProtobufReader::createIntegerExactOrInterval(stateMsg.time_step());
+    if (timeStep.index() == 0)
+        state->setTimeStep((size_t)std::get<int>(timeStep));
+    else
+        throw std::logic_error("Type of time step is not supported.");
 
     if (stateMsg.has_point()) {
         vertex vertex = ProtobufReader::createPointFromMessage(stateMsg.point());
