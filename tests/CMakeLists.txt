@@ -93,10 +93,10 @@ if (ENV_MODEL_BUILD_TESTS)
             OpenMP::OpenMP_CXX
             spdlog::spdlog
             )
-    target_include_directories(env_model_test
-                PRIVATE
-                ${PROJECT_SOURCE_DIR}/src
-                )
+
+    target_precompile_headers(env_model_test
+            PRIVATE
+            <gtest/gtest.h>)
 
     include(GoogleTest)
     # queries the compiled executable for tests, this requires the executable to be runnable. if you are

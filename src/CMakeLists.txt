@@ -210,8 +210,6 @@ target_include_directories(env_model_core
 
 target_link_libraries(env_model_core
         PRIVATE
-        # Not used in any headers
-        yaml-cpp::yaml-cpp
         OpenMP::OpenMP_CXX
         pugixml::pugixml
         spdlog::spdlog
@@ -225,6 +223,19 @@ target_link_libraries(env_model_core
         commonroad_protobuf
         )
 
+target_precompile_headers(env_model_core
+        PUBLIC
+        $<BUILD_INTERFACE:<Eigen/Dense>>
+        $<BUILD_INTERFACE:<boost/geometry/geometry.hpp>>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/geometry/curvilinear_coordinate_system.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lane.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/road_network.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_operations.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/world.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
+        )
 
 add_library(env_model_predicates ${ENV_MODEL_PREDICATES_SRC_FILES})
 
@@ -254,6 +265,11 @@ target_link_libraries(env_model_predicates
 
 set_property(TARGET env_model_predicates PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+target_precompile_headers(env_model_predicates
+        PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/predicates/commonroad_predicate.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/predicates/predicate_config.h>
+        )
 
 # Create environment model library
 add_library(env_model INTERFACE)
@@ -262,7 +278,6 @@ target_link_libraries(env_model
         INTERFACE
         env_model_core
         env_model_predicates
-        commonroad_protobuf
         )
 
 add_library(EnvironmentModel::env_model ALIAS env_model)
