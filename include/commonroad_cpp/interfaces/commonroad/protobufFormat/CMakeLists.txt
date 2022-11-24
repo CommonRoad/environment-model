@@ -73,6 +73,10 @@ foreach(proto ${COMMONROAD_PROTOS})
                 FILES ${proto_hdr_file_path}
                 )
         endif()
+        target_precompile_headers(commonroad_protobuf
+                PRIVATE
+                ${proto_hdr_file_path}
+                )
 endforeach()
 
 
