@@ -493,7 +493,7 @@ double Obstacle::getCurvilinearOrientation(size_t timeStep, const std::shared_pt
     return convertedPositions[timeStep][refLane->getContainedLaneletIDs()][2];
 }
 
-size_t Obstacle::getFirstTrajectoryTimeStep() {
+size_t Obstacle::getFirstTrajectoryTimeStep() const {
     // NOTE: trajectoryPrediction is an unordered_map, so the first element (.begin()) is not
     // necessarily the minimum element!
     if (!trajectoryPrediction.empty())
@@ -748,3 +748,17 @@ const Obstacle::signal_state_map_t &Obstacle::getSignalSeriesHistory() const { r
 const std::shared_ptr<SignalState> &Obstacle::getCurrentSignalState() const { return currentSignalState; }
 
 bool Obstacle::isStatic() const { return obstacleRole == ObstacleRole::STATIC; }
+
+double Obstacle::drivenTrajectoryDistance() const {
+    std::vector<vertex> polyline{{currentState->getXPosition(), currentState->getYPosition()}};
+    for (const auto &state : trajectoryAsVector())
+        polyline.push_back({state->getXPosition(), state->getYPosition()});
+    return geometric_operations::computePathLengthFromPolyline(polyline).back();
+}
+std::vector<std::shared_ptr<State>> Obstacle::trajectoryAsVector() const {
+    std::vector<std::shared_ptr<State>> trajectory;
+    for (size_t timeStep{getFirstTrajectoryTimeStep()}; timeStep <= getLastTrajectoryTimeStep(); ++timeStep)
+        if (trajectoryPrediction.find(timeStep) != trajectoryPrediction.end())
+            trajectory.push_back(trajectoryPrediction.at(timeStep));
+    return trajectory;
+}

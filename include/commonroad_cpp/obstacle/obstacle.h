@@ -471,7 +471,7 @@ class Obstacle {
      *
      * @return first time step of trajectory
      */
-    [[nodiscard]] size_t getFirstTrajectoryTimeStep(); // TODO create test case
+    [[nodiscard]] size_t getFirstTrajectoryTimeStep() const; // TODO create test case
 
     /**
      * Extracts last time step of trajectory
@@ -602,6 +602,10 @@ class Obstacle {
      * @return Boolean indicating whether obstacle is static.
      */
     bool isStatic() const;
+
+    double drivenTrajectoryDistance() const;
+
+    std::vector<std::shared_ptr<State>> trajectoryAsVector() const;
 
 
   private:
