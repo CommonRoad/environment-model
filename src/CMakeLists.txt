@@ -87,6 +87,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/position/left_of_predicate.cpp
         commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.cpp
         commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.cpp
+        commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.cpp
         commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.cpp
         commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.cpp
         commonroad_cpp/predicates/position/in_leftmost_lane_predicate.cpp
@@ -97,13 +98,17 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/position/on_incoming_left_of_predicate.cpp
         commonroad_cpp/predicates/position/on_oncoming_of_predicate.cpp
         commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.cpp
+        commonroad_cpp/predicates/position/close_to_intersection_predicate.cpp
         commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
+        commonroad_cpp/predicates/general/left_signal_set_predicate.cpp
+        commonroad_cpp/predicates/general/right_signal_set_predicate.cpp
         commonroad_cpp/predicates/general/in_congestion_predicate.cpp
         commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.cpp
         commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.cpp
         commonroad_cpp/predicates/general/makes_u_turn_predicate.cpp
         commonroad_cpp/predicates/general/interstate_broad_enough_predicate.cpp
+        commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.cpp
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
         commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp

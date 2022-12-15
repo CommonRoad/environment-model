@@ -15,4 +15,14 @@ create_road_network(const std::set<LaneletType> &laneletTypeLaneletOne = {Lanele
                     const std::set<LaneletType> &laneletTypeLaneletTwo = {LaneletType::interstate});
 std::shared_ptr<RoadNetwork> create_road_network_2();
 std::shared_ptr<RoadNetwork> create_road_network_3();
+std::shared_ptr<RoadNetwork> create_road_network_with_2_successors(
+    const std::set<LaneletType> &laneletTypeRight = {LaneletType::intersection},
+    const std::set<LaneletType> &laneletTypeLeft = {LaneletType::intersection},
+    const std::set<LaneletType> &laneletTypeSuccessorRight = {LaneletType::intersection},
+    const std::set<LaneletType> &laneletTypeSuccessorLeft = {LaneletType::intersection});
+std::shared_ptr<RoadNetwork>
+create_road_network_with_circle(const std::set<LaneletType> &laneletTypeBottom = {LaneletType::urban},
+                                const std::set<LaneletType> &laneletTypeLeft = {LaneletType::urban},
+                                const std::set<LaneletType> &laneletTypeRight = {LaneletType::urban},
+                                const std::set<LaneletType> &laneletTypeTop = {LaneletType::urban});
 } // namespace utils_predicate_test

@@ -436,3 +436,23 @@ TEST_F(ObstacleTest, testGetCurrentSignalState) {
     obstacleOne->setCurrentSignalState(signalStateOne);
     EXPECT_EQ(obstacleOne->getCurrentSignalState()->getTimeStep(), 0);
 }
+
+TEST_F(ObstacleTest, testGetSignalStateByTimeStep) {
+    obstacleOne->appendSignalStateToHistory(signalStateOne);
+    obstacleOne->appendSignalStateToSeries(signalStateTwo);
+    EXPECT_TRUE(obstacleOne->getSignalStateByTimeStep(0)->isHorn());
+    EXPECT_FALSE(obstacleOne->getSignalStateByTimeStep(1)->isHorn());
+    EXPECT_THROW(obstacleOne->getSignalStateByTimeStep(2), std::logic_error);
+}
+
+TEST_F(ObstacleTest, testGetFieldOfViewRearDistance) {
+    obstacleOne->setFieldOfViewRearDistance(77.5);
+    EXPECT_EQ(obstacleOne->getFieldOfViewRearDistance(), 77.5);
+    EXPECT_NE(obstacleOne->getFieldOfViewFrontDistance(), 77.5);
+}
+
+TEST_F(ObstacleTest, testGetFieldOfViewFrontDistance) {
+    obstacleOne->setFieldOfViewFrontDistance(99.5);
+    EXPECT_EQ(obstacleOne->getFieldOfViewFrontDistance(), 99.5);
+    EXPECT_NE(obstacleOne->getFieldOfViewRearDistance(), 99.5);
+}
