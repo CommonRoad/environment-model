@@ -30,6 +30,18 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/braking/test_brakes_stronger_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_braking_with_acceleration_possible_at_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_causes_braking_intersection_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_orientation_towards_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_lane_based_orientation_similar_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_in_congestion_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_in_slow_moving_traffic_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_in_queue_of_vehicles_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_is_special_vehicle_purpose.cpp
+        commonroad_cpp_tests/predicates/general/test_makes_u_turn_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_interstate_broad_enough.cpp
+        commonroad_cpp_tests/predicates/general/test_left_signal_set_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_right_signal_set_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_on_lanelet_with_type_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_close_to_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_front_of_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_same_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_single_lane_predicate.cpp
@@ -37,15 +49,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/position/test_on_oncoming_of_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_unobstructed_intersection_view_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_intersection_conflict_area_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_orientation_towards_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_lane_based_orientation_similar_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_in_congestion_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_in_slow_moving_traffic_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_in_queue_of_vehicles_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_makes_u_turn_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_interstate_broad_enough.cpp
-        commonroad_cpp_tests/predicates/regulatory/test_stop_line_in_front_predicate.cpp
-        commonroad_cpp_tests/predicates/position/test_on_lanelet_with_type_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_on_lanelet_with_successor_type_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_on_similar_oriented_lanelet_with_type_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_on_similar_oriented_lanelet_without_type_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_leftmost_lane_predicate.cpp
@@ -55,6 +59,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/position/test_main_carriageway_right_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_right_of_broad_lane_marking_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_left_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp_tests/predicates/regulatory/test_stop_line_in_front_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_at_traffic_light_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_at_traffic_sign_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_same_priority_predicate.cpp

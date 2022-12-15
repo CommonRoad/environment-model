@@ -349,4 +349,175 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
         RoadNetwork({laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive, laneletSix},
                     SupportedTrafficSignCountry::GERMANY, {trafficSignOne, trafficSignTwo}));
 }
+
+/**
+ * Creates a roadnetwork as follows (u = unknown, sr = successor right, sl = successor left):
+ *          l l l l l l l l l l sl sl sl sl sl sl sl sl sl sl
+ *          r r r r r r r r r r sr sr sr sr sr sr sr sr sr sr
+ * @param laneletTypeRight : r
+ * @param laneletTypeLeft : l
+ * @param laneletTypeSuccessorRight : sr
+ * @param laneletTypeSuccessorLeft : sl
+ * @return a roadnetwork as shown above to test different successor types
+ */
+std::shared_ptr<RoadNetwork> create_road_network_with_2_successors(
+    const std::set<LaneletType> &laneletTypeRight, const std::set<LaneletType> &laneletTypeLeft,
+    const std::set<LaneletType> &laneletTypeSuccessorRight, const std::set<LaneletType> &laneletTypeSuccessorLeft) {
+    // right lanelet
+    size_t idLaneletRight = 100;
+    auto userOneWayLaneletRight = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto userBidirectionalLaneletRight = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletRight =
+        std::vector<vertex>{vertex{0, 4},  vertex{10, 4}, vertex{20, 4}, vertex{30, 4}, vertex{40, 4}, vertex{50, 4},
+                            vertex{60, 4}, vertex{70, 4}, vertex{80, 4}, vertex{90, 4}, vertex{100, 4}};
+    auto rightBorderLaneletRight =
+        std::vector<vertex>{vertex{0, 0},  vertex{10, 0}, vertex{20, 0}, vertex{30, 0}, vertex{40, 0}, vertex{50, 0},
+                            vertex{60, 0}, vertex{70, 0}, vertex{80, 0}, vertex{90, 0}, vertex{100, 0}};
+    auto laneletRight =
+        std::make_shared<Lanelet>(Lanelet(idLaneletRight, leftBorderLaneletRight, rightBorderLaneletRight,
+                                          laneletTypeRight, userOneWayLaneletRight, userBidirectionalLaneletRight));
+
+    // right successor
+    size_t idLaneletSuccessorRight = 200;
+    auto userOneWayLaneletSuccessorRight = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto userBidirectionalLaneletSuccessorRight = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletSuccessorRight = std::vector<vertex>{
+        vertex{100, 4}, vertex{110, 4}, vertex{120, 4}, vertex{130, 4}, vertex{140, 4}, vertex{150, 4},
+        vertex{160, 4}, vertex{170, 4}, vertex{180, 4}, vertex{190, 4}, vertex{200, 4}};
+    auto rightBorderLaneletSuccessorRight = std::vector<vertex>{
+        vertex{100, 0}, vertex{110, 0}, vertex{120, 0}, vertex{130, 0}, vertex{140, 0}, vertex{150, 0},
+        vertex{160, 0}, vertex{170, 0}, vertex{180, 0}, vertex{190, 0}, vertex{200, 0}};
+    auto laneletSuccessorRight = std::make_shared<Lanelet>(
+        Lanelet(idLaneletSuccessorRight, leftBorderLaneletSuccessorRight, rightBorderLaneletSuccessorRight,
+                laneletTypeSuccessorRight, userOneWayLaneletSuccessorRight, userBidirectionalLaneletSuccessorRight));
+
+    // left lanelet
+    size_t idLaneletLeft = 101;
+    auto userOneWayLaneletLeft = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto userBidirectionalLaneletLeft = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletLeft =
+        std::vector<vertex>{vertex{0, 8},  vertex{10, 8}, vertex{20, 8}, vertex{30, 8}, vertex{40, 8}, vertex{50, 8},
+                            vertex{60, 8}, vertex{70, 8}, vertex{80, 8}, vertex{90, 8}, vertex{100, 8}};
+    auto rightBorderLaneletLeft =
+        std::vector<vertex>{vertex{0, 4},  vertex{10, 4}, vertex{20, 4}, vertex{30, 4}, vertex{40, 4}, vertex{50, 4},
+                            vertex{60, 4}, vertex{70, 4}, vertex{80, 4}, vertex{90, 4}, vertex{100, 4}};
+    auto laneletLeft =
+        std::make_shared<Lanelet>(Lanelet(idLaneletLeft, leftBorderLaneletLeft, rightBorderLaneletLeft, laneletTypeLeft,
+                                          userOneWayLaneletLeft, userBidirectionalLaneletLeft));
+
+    // left successor
+    size_t idLaneletSuccessorLeft = 201;
+    auto userOneWayLaneletSuccessorLeft = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto userBidirectionalLaneletSuccessorLeft = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletSuccessorLeft = std::vector<vertex>{
+        vertex{100, 8}, vertex{110, 8}, vertex{120, 8}, vertex{130, 8}, vertex{140, 8}, vertex{150, 8},
+        vertex{160, 8}, vertex{170, 8}, vertex{180, 8}, vertex{190, 8}, vertex{200, 8}};
+    auto rightBorderLaneletSuccessorLeft = std::vector<vertex>{
+        vertex{100, 4}, vertex{110, 4}, vertex{120, 4}, vertex{130, 4}, vertex{140, 4}, vertex{150, 4},
+        vertex{160, 4}, vertex{170, 4}, vertex{180, 4}, vertex{190, 4}, vertex{200, 4}};
+    auto laneletSuccessorLeft = std::make_shared<Lanelet>(
+        Lanelet(idLaneletSuccessorLeft, leftBorderLaneletSuccessorLeft, rightBorderLaneletSuccessorLeft,
+                laneletTypeSuccessorLeft, userOneWayLaneletSuccessorLeft, userBidirectionalLaneletSuccessorLeft));
+
+    // Dependencies between the Lanelets
+    laneletLeft->setRightAdjacent(laneletRight, DrivingDirection::same);
+    laneletLeft->addSuccessor(laneletSuccessorLeft);
+    laneletRight->setLeftAdjacent(laneletLeft, DrivingDirection::same);
+    laneletRight->addSuccessor(laneletSuccessorRight);
+
+    return std::make_shared<RoadNetwork>(
+        RoadNetwork({laneletLeft, laneletRight, laneletSuccessorLeft, laneletSuccessorRight}));
+}
+
+/**
+ * Creates a roadnetwork as follows (u = unknown, sr = successor right, sl = successor left):
+ *          t t t t t t
+ *        l             r
+ *        l             r
+ *        l             r
+ *        l             r
+ *        l             r
+ *        l             r
+ *          b b b b b b
+ * @param laneletTypeRight : r
+ * @param laneletTypeLeft : l
+ * @param laneletTypeBottom : b
+ * @param laneletTypeTop : t
+ * @return a roadnetwork as shown above to test different successor types
+ */
+std::shared_ptr<RoadNetwork> create_road_network_with_circle(const std::set<LaneletType> &laneletTypeBottom,
+                                                             const std::set<LaneletType> &laneletTypeLeft,
+                                                             const std::set<LaneletType> &laneletTypeRight,
+                                                             const std::set<LaneletType> &laneletTypeTop) {
+    // bottom lanelet
+    size_t idLaneletBottom = 100;
+    auto userOneWayLaneletBottom = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto userBidirectionalLaneletBottom = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletBottom =
+        std::vector<vertex>{vertex{4, 4}, vertex{10, 4}, vertex{20, 4}, vertex{30, 4}, vertex{40, 4}, vertex{46, 4}};
+    auto rightBorderLaneletBottom =
+        std::vector<vertex>{vertex{0, 0}, vertex{10, 0}, vertex{20, 0}, vertex{30, 0}, vertex{40, 0}, vertex{50, 0}};
+    auto laneletBottom =
+        std::make_shared<Lanelet>(Lanelet(idLaneletBottom, leftBorderLaneletBottom, rightBorderLaneletBottom,
+                                          laneletTypeBottom, userOneWayLaneletBottom, userBidirectionalLaneletBottom));
+
+    // right lanelet
+    size_t idLaneletRight = 101;
+    auto userOneWayLaneletRight = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto userBidirectionalLaneletRight = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletRight = std::vector<vertex>{vertex{46, 4},  vertex{46, 10}, vertex{46, 20},
+                                                      vertex{46, 30}, vertex{46, 40}, vertex{46, 46}};
+    auto rightBorderLaneletRight = std::vector<vertex>{vertex{50, 0},  vertex{50, 10}, vertex{50, 20},
+                                                       vertex{50, 30}, vertex{50, 40}, vertex{50, 50}};
+    auto laneletRight =
+        std::make_shared<Lanelet>(Lanelet(idLaneletRight, leftBorderLaneletRight, rightBorderLaneletRight,
+                                          laneletTypeRight, userOneWayLaneletRight, userBidirectionalLaneletRight));
+
+    // left lanelet
+    size_t idLaneletLeft = 102;
+    auto userOneWayLaneletLeft = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto userBidirectionalLaneletLeft = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletLeft =
+        std::vector<vertex>{vertex{0, 50}, vertex{0, 40}, vertex{0, 30}, vertex{0, 20}, vertex{0, 10}, vertex{0, 0}};
+    auto rightBorderLaneletLeft =
+        std::vector<vertex>{vertex{4, 46}, vertex{4, 40}, vertex{4, 30}, vertex{4, 20}, vertex{4, 10}, vertex{4, 4}};
+    auto laneletLeft =
+        std::make_shared<Lanelet>(Lanelet(idLaneletLeft, leftBorderLaneletLeft, rightBorderLaneletLeft, laneletTypeLeft,
+                                          userOneWayLaneletLeft, userBidirectionalLaneletLeft));
+
+    // top lanelet
+    size_t idLaneletTop = 103;
+    auto userOneWayLaneletTop = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto userBidirectionalLaneletTop = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletTop = std::vector<vertex>{vertex{46, 46}, vertex{40, 46}, vertex{30, 46},
+                                                    vertex{20, 46}, vertex{10, 46}, vertex{4, 46}};
+    auto rightBorderLaneletTop = std::vector<vertex>{vertex{50, 50}, vertex{40, 50}, vertex{30, 50},
+                                                     vertex{20, 50}, vertex{10, 50}, vertex{0, 50}};
+    auto laneletTop =
+        std::make_shared<Lanelet>(Lanelet(idLaneletTop, leftBorderLaneletTop, rightBorderLaneletTop, laneletTypeTop,
+                                          userOneWayLaneletTop, userBidirectionalLaneletTop));
+
+    // lanelet ongoing
+    size_t idLaneletOngoing = 200;
+    auto userOneWayLaneletOngoing = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto userBidirectionalLaneletOngoing = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletOngoing = std::vector<vertex>{vertex{46, 46}, vertex{40, 46}, vertex{30, 46},
+                                                        vertex{20, 46}, vertex{10, 46}, vertex{4, 46}};
+    auto rightBorderLaneletOngoing = std::vector<vertex>{vertex{50, 50}, vertex{40, 50}, vertex{30, 50},
+                                                         vertex{20, 50}, vertex{10, 50}, vertex{0, 50}};
+    auto laneletOngoing = std::make_shared<Lanelet>(Lanelet(idLaneletOngoing, leftBorderLaneletTop,
+                                                            rightBorderLaneletTop, {LaneletType::incoming},
+                                                            userOneWayLaneletOngoing, userBidirectionalLaneletTop));
+
+    // Dependencies between the Lanelets (circle)
+    laneletLeft->addSuccessor(laneletBottom);
+    laneletBottom->addSuccessor(laneletRight);
+    laneletBottom->addSuccessor(laneletOngoing);
+    laneletRight->addSuccessor(laneletTop);
+    laneletTop->addSuccessor(laneletLeft);
+
+    return std::make_shared<RoadNetwork>(
+        RoadNetwork({laneletLeft, laneletRight, laneletTop, laneletBottom, laneletOngoing}));
+}
+
 } // namespace utils_predicate_test
