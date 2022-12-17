@@ -68,6 +68,7 @@ TurningDirection TrafficLight::matchTurningDirections(const std::string &dir) {
 TrafficLightState TrafficLight::matchTrafficLightState(const std::string &trafficLightState) {
     std::string str{trafficLightState};
     std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    str.erase(remove(str.begin(), str.end(), '_'), str.end());
     if (TrafficLightStateNames.count(str) == 1)
         return TrafficLightStateNames.at(str);
     else
