@@ -17,6 +17,10 @@
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 
+#include <boost/geometry/index/rtree.hpp>
+
+#include <commonroad_cpp/geometry/types.h>
+
 #include "segment.h"
 #include "util.h"
 
@@ -30,6 +34,13 @@ typedef std::shared_ptr<const CurvilinearCoordinateSystem>
 }  // namespace geometry
 
 namespace geometry {
+
+struct quad {
+    Eigen::Vector2d p1;
+    Eigen::Vector2d p2;
+    Eigen::Vector2d p3;
+    Eigen::Vector2d p4;
+};
 
 typedef boost::geometry::model::d2::point_xy<double> point_type;
 typedef boost::geometry::model::polygon<point_type> polygon_type;
@@ -622,6 +633,12 @@ class CurvilinearCoordinateSystem
   std::vector<double> segment_longitudinal_coord_;
   polygon_type projection_domain_;
   polygon_type curvilinear_projection_domain_;
+
+  // R*-tree is better here: slow insertion, but fast lookup
+  using index_params = boost::geometry::index::rstar<8>;
+  using quadtree_value_type = std::pair<box_type, quad>;
+  using quadtree_type = boost::geometry::index::rtree<quadtree_value_type, index_params>;
+  quadtree_type projection_domain_quads_;
 
   EigenPolyline upper_projection_domain_border_;
   EigenPolyline lower_projection_domain_border_;
