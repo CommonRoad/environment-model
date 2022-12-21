@@ -11,6 +11,8 @@
 #include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
 #include <utility>
 
+#include <spdlog/spdlog.h>
+
 /* NOTE: The Lane destructor is explicitly instantiated here so that the deallocation calls are hopefully
  * compiled with the same settings as the allocation calls.
  * This is critical since the CCS uses Eigen internally which uses a custom allocator to ensure appropriate
@@ -49,8 +51,19 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
         for (auto vert : centerVertices)
             temp_path.push_back(Eigen::Vector2d(vert.x, vert.y));
 
-        geometry::util::chaikins_corner_cutting(temp_path, 10, reference_path); // TODO parameter
-        geometry::util::resample_polyline(temp_path, 2, reference_path);        // todo parameter
+        const auto refinements = 3;
+        const auto polyline_step_size = 2;
+        SPDLOG_DEBUG("Reference Path - initial size: {}", temp_path.size());
+        geometry::util::chaikins_corner_cutting(temp_path, refinements, reference_path); // TODO parameter
+        SPDLOG_DEBUG("Reference Path - after chaikins_corner_cutting: {} (refinements: {})", reference_path.size(),
+                     refinements);
+
+        geometry::util::resample_polyline(reference_path, polyline_step_size, temp_path); // todo parameter
+
+        SPDLOG_DEBUG("Reference Path - after resampling: {} (step size: {})", temp_path.size(), polyline_step_size);
+
+        reference_path = temp_path;
+
         curvilinearCoordinateSystem =
             std::make_shared<CurvilinearCoordinateSystem>(reference_path, 20.0, 0.1, 1); // TODO parameter
     }
