@@ -342,8 +342,10 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
                 }
                 if ((strcmp(intersectionChildElement.name(), "crossing")) == 0) {
                     for (pugi::xml_node crossingElement = intersectionChildElement.first_child();
-                         crossingElement != nullptr; crossingElement = crossingElement.next_sibling()) {
-                    }
+                         crossingElement != nullptr; crossingElement = crossingElement.next_sibling())
+                        for (const auto &let : lanelets)
+                            if (crossingElement.attribute("ref").as_ullong() == let->getId())
+                                tempIntersection->addCrossing(let);
                 }
             }
             // iterate over all incoming lefts and assign correct reference

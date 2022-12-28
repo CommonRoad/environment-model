@@ -313,6 +313,14 @@ class Obstacle {
     [[nodiscard]] std::shared_ptr<State> getStateByTimeStep(time_step_t timeStep) const;
 
     /**
+     * Provides signalState given a time step. The time step can belong to the current state, history, or prediction.
+     *
+     * @param timeStep Time step of interest.
+     * @return Pointer to signalState object.
+     */
+    [[nodiscard]] std::shared_ptr<SignalState> getSignalStateByTimeStep(time_step_t timeStep) const;
+
+    /**
      * Returns the length of the trajectory prediction.
      *
      * @return Length of trajectory prediction.
@@ -607,6 +615,33 @@ class Obstacle {
 
     std::vector<std::shared_ptr<State>> trajectoryAsVector() const;
 
+    /**
+     * Getter for FieldOfViewRear.
+     *
+     * @return Distance of FieldOfViewRear.
+     */
+    double getFieldOfViewRearDistance() const;
+
+    /**
+     * Getter for FieldOfViewFront
+     *
+     * @return Distance of FieldOfViewFront.
+     */
+    double getFieldOfViewFrontDistance() const;
+
+    /**
+     * Setter for fieldOfViewRear.
+     *
+     * @param distance fieldOfViewRear Distance.
+     */
+    void setFieldOfViewRearDistance(double distance);
+
+    /**
+     * Setter for fieldOfViewFront.
+     *
+     * @param distance fieldOfViewFront Distance.
+     */
+    void setFieldOfViewFrontDistance(double distance);
 
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
