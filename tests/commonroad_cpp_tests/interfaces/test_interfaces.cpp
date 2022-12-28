@@ -156,3 +156,16 @@ std::tuple<Scenario, Scenario> InterfacesTest::loadXmlAndPbScenarios(const std::
 
     return std::make_tuple(scenarioXml, scenarioPb);
 }
+
+TEST_F(InterfacesTest, SameCrossings) {
+    std::string scenarioName = "test_reading_intersection_traffic_sign";
+    const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
+
+    auto roadNetworkXml = std::get<1>(scenarioXml);
+    auto roadNetworkPB = std::get<1>(scenarioPb);
+
+    EXPECT_EQ(roadNetworkXml->getIntersections().at(0)->getCrossings().size(),
+              roadNetworkPB->getIntersections().at(0)->getCrossings().size());
+    EXPECT_EQ(roadNetworkXml->getIntersections().at(0)->getCrossings().at(0)->getId(),
+              roadNetworkPB->getIntersections().at(0)->getCrossings().at(0)->getId());
+}

@@ -6,8 +6,12 @@
 //
 
 #include "test_obstacle_operations.h"
+#include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/geometry/geometric_operations.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/obstacle/state.h"
+
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void ObstacleOperationsTest::SetUp() {
     setUpLanelets();
@@ -192,4 +196,38 @@ TEST_F(ObstacleOperationsTest, LaneletsLeftOfObstacle) {
     EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(1, roadNetwork, obstacleThree).size(), 0);
     EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(7, roadNetwork, obstacleThree).size(), 0);
     EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(7, roadNetwork, obstacleFour).size(), 1);
+}
+
+TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint) {
+    std::string pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_corner_with_180_degree.xml";
+    const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+
+    std::shared_ptr<State> stateZeroObstacleEgo = std::make_shared<State>(0, 0, 0, 15, 0, 0);
+    std::shared_ptr<State> stateOneObstacleEgo = std::make_shared<State>(1, 7, 3, 15, 0, M_PI / 4);
+    std::shared_ptr<State> stateTwoObstacleEgo = std::make_shared<State>(2, 10, 10, 15, 0, M_PI / 2);
+    std::shared_ptr<State> stateThreeObstacleEgo = std::make_shared<State>(3, 7, 17, 15, 0, M_PI * (3 / 4));
+    std::shared_ptr<State> stateFourObstacleEgo = std::make_shared<State>(4, 0, 20, 15, 0, M_PI);
+
+    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleEgo),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleEgo),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleEgo),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleEgo),
+        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleEgo)};
+
+    std::shared_ptr<Obstacle> obstacleEgo =
+        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleEgo, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+
+    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleEgo}, {}, 0.1));
+
+    // Test-Corner with 180 degrees & radius of 10m TODO check why frontS in drivingDistanceToCoordinatePoint() has no
+    // impact obstacleEgo at start of the corner
+    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleEgo, 0), M_PI * 10,
+                0.5);
+    // obstacleEgo at middle of the corner
+    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleEgo, 2),
+                M_PI * 10 / 2, 0.5);
+    // obstacleEgo at end of the corner
+    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleEgo, 4), 0, 0.5);
 }

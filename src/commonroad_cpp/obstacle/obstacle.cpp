@@ -159,6 +159,20 @@ std::shared_ptr<State> Obstacle::getStateByTimeStep(size_t timeStep) const {
                                " - Time step: " + std::to_string(timeStep));
 }
 
+std::shared_ptr<SignalState> Obstacle::getSignalStateByTimeStep(size_t timeStep) const {
+    if (isStatic())
+        return currentSignalState;
+    else if (signalSeries.count(timeStep) == 1)
+        return signalSeries.at(timeStep);
+    else if (currentSignalState && currentSignalState->getTimeStep() == timeStep)
+        return currentSignalState;
+    else if (signalSeriesHistory.count(timeStep) == 1)
+        return signalSeriesHistory.at(timeStep);
+    else
+        throw std::logic_error("SignalState for time step does not exist. Obstacle ID: " +
+                               std::to_string(this->getId()) + " - Time step: " + std::to_string(timeStep));
+}
+
 ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
 
 ObstacleRole Obstacle::getObstacleRole() const { return obstacleRole; }
@@ -762,3 +776,11 @@ std::vector<std::shared_ptr<State>> Obstacle::trajectoryAsVector() const {
             trajectory.push_back(trajectoryPrediction.at(timeStep));
     return trajectory;
 }
+
+double Obstacle::getFieldOfViewRearDistance() const { return fieldOfViewRear; }
+
+double Obstacle::getFieldOfViewFrontDistance() const { return fieldOfViewFront; }
+
+void Obstacle::setFieldOfViewRearDistance(double distance) { fieldOfViewRear = distance; }
+
+void Obstacle::setFieldOfViewFrontDistance(double distance) { fieldOfViewFront = distance; }

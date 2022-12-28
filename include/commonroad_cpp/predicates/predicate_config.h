@@ -60,6 +60,8 @@ struct PredicateParameters {
     double laneletOccupancySimilarity{0.25};
 
     double intersectionBrakingPossible{-4.0};
+
+    double close_to_intersection_max_distance{30};
 };
 
 extern std::map<std::string, std::array<double, 2>> predicateSatisfaction;

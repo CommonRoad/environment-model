@@ -53,7 +53,7 @@ if [[ -z $notcorrectlist ]]; then
     echo
     echo "$format_call"
     echo
-    echo "to solve the issue."
+    echo "to solve the issue. Maybe you have to install clang-format first."
 
     # cleanup changes in git
     git reset HEAD --hard

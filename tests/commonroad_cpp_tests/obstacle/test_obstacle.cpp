@@ -286,12 +286,12 @@ TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
     stateOne->setXPosition(25.0);
     stateOne->setYPosition(1.5);
     obstacleOne->convertPointToCurvilinear(roadNetwork, 0);
-    EXPECT_NEAR(stateOne->getLonPosition(), 65.05921, 0.0005);
+    EXPECT_NEAR(stateOne->getLonPosition(), 65.04164, 0.0005);
     EXPECT_EQ(stateOne->getLatPosition(), 0.0);
     stateOne->setXPosition(25.0);
     stateOne->setYPosition(-2.75);
     obstacleOne->convertPointToCurvilinear(roadNetwork, 0);
-    EXPECT_NEAR(stateOne->getLonPosition(), 65.05921, 0.0005);
+    EXPECT_NEAR(stateOne->getLonPosition(), 65.04164, 0.0005);
     EXPECT_EQ(stateOne->getLatPosition(), -4.25);
 }
 
@@ -308,13 +308,13 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario1) {
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     roadNetworkScenario->setIdCounterRef(globalIdRef);
     auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 1219)};
-    std::unordered_set<size_t> expRefLaneletsObsOneScenario{3570, 3632, 3652, 3616, 3456, 3462, 3470};
+    lanelet_id_set expRefLaneletsObsOneScenario{3570, 3632, 3652, 3616, 3456, 3462, 3470};
     EXPECT_EQ(expRefLaneletsObsOneScenario,
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLaneletIDs());
 
     const auto obsTwoScenario{obstacle_operations::getObstacleById(obstaclesScenario, 1214)};
     obsTwoScenario->computeLanes(roadNetworkScenario);
-    std::unordered_set<size_t> expRefLaneletsObsTwoScenario{3570, 3632, 3652, 3616, 3456, 3462, 3470};
+    lanelet_id_set expRefLaneletsObsTwoScenario{3570, 3632, 3652, 3616, 3456, 3462, 3470};
     EXPECT_EQ(expRefLaneletsObsTwoScenario,
               obsTwoScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLaneletIDs());
 }
@@ -435,4 +435,24 @@ TEST_F(ObstacleTest, testAppendSignalStateToSeries) {
 TEST_F(ObstacleTest, testGetCurrentSignalState) {
     obstacleOne->setCurrentSignalState(signalStateOne);
     EXPECT_EQ(obstacleOne->getCurrentSignalState()->getTimeStep(), 0);
+}
+
+TEST_F(ObstacleTest, testGetSignalStateByTimeStep) {
+    obstacleOne->appendSignalStateToHistory(signalStateOne);
+    obstacleOne->appendSignalStateToSeries(signalStateTwo);
+    EXPECT_TRUE(obstacleOne->getSignalStateByTimeStep(0)->isHorn());
+    EXPECT_FALSE(obstacleOne->getSignalStateByTimeStep(1)->isHorn());
+    EXPECT_THROW(obstacleOne->getSignalStateByTimeStep(2), std::logic_error);
+}
+
+TEST_F(ObstacleTest, testGetFieldOfViewRearDistance) {
+    obstacleOne->setFieldOfViewRearDistance(77.5);
+    EXPECT_EQ(obstacleOne->getFieldOfViewRearDistance(), 77.5);
+    EXPECT_NE(obstacleOne->getFieldOfViewFrontDistance(), 77.5);
+}
+
+TEST_F(ObstacleTest, testGetFieldOfViewFrontDistance) {
+    obstacleOne->setFieldOfViewFrontDistance(99.5);
+    EXPECT_EQ(obstacleOne->getFieldOfViewFrontDistance(), 99.5);
+    EXPECT_NE(obstacleOne->getFieldOfViewRearDistance(), 99.5);
 }

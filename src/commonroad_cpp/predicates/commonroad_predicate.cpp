@@ -16,9 +16,13 @@
 #include <commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.h>
 #include <commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.h>
 #include <commonroad_cpp/predicates/general/interstate_broad_enough_predicate.h>
+#include <commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.h>
 #include <commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h>
+#include <commonroad_cpp/predicates/general/left_signal_set_predicate.h>
 #include <commonroad_cpp/predicates/general/makes_u_turn_predicate.h>
 #include <commonroad_cpp/predicates/general/orientation_towards_predicate.h>
+#include <commonroad_cpp/predicates/general/right_signal_set_predicate.h>
+#include <commonroad_cpp/predicates/position/close_to_intersection_predicate.h>
 #include <commonroad_cpp/predicates/position/drives_leftmost_predicate.h>
 #include <commonroad_cpp/predicates/position/drives_rightmost_predicate.h>
 #include <commonroad_cpp/predicates/position/in_front_of_predicate.h>
@@ -31,6 +35,7 @@
 #include <commonroad_cpp/predicates/position/left_of_predicate.h>
 #include <commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.h>
 #include <commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h>
+#include <commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.h>
 #include <commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h>
 #include <commonroad_cpp/predicates/position/on_oncoming_of_predicate.h>
 #include <commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.h>
@@ -154,7 +159,11 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"in_intersection_conflict_area", std::make_shared<InIntersectionConflictAreaPredicate>()},
     {"on_oncoming_of", std::make_shared<OnOncomingOfPredicate>()},
     {"braking_at_intersection_possible", std::make_shared<BrakingWithAccelerationPossibleAtIntersection>()},
-};
+    {"is_special_vehicle_purpose", std::make_shared<isSpecialVehiclePurposePredicate>()},
+    {"left_signal_set", std::make_shared<LeftSignalSetPredicate>()},
+    {"right_signal_set", std::make_shared<RightSignalSetPredicate>()},
+    {"on_lanelet_with_successor_type", std::make_shared<OnLaneletWithSuccessorTypePredicate>()},
+    {"close_to_intersection", std::make_shared<CloseToIntersectionPredicate>()}};
 
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType)
     : signType(std::move(signType)) {}

@@ -237,3 +237,13 @@ obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<Roa
             }
     return relevantIntersections;
 }
+
+double obstacle_operations::drivingDistanceToCoordinatePoint(double x, double y,
+                                                             const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                             const std::shared_ptr<Obstacle> &obs, size_t timeStep) {
+    double car_front = obs->frontS(roadNetwork, timeStep);
+    double lane_s = obs->getReferenceLane(roadNetwork, timeStep)
+                        ->getCurvilinearCoordinateSystem()
+                        ->convertToCurvilinearCoords(x, y)[0];
+    return lane_s - car_front;
+}
