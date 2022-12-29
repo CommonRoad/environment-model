@@ -19,6 +19,7 @@
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
 #include <commonroad_cpp/roadNetwork/types.h>
+#include <commonroad_cpp/roadNetwork/road_network_config.h>
 
 #include <boost/container_hash/hash.hpp>
 

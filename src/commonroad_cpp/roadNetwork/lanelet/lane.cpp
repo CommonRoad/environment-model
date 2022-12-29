@@ -49,23 +49,23 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
         const auto &centerVertices = getCenterVertices();
         temp_path.reserve(centerVertices.size());
         for (auto vert : centerVertices)
-            temp_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+            temp_path.emplace_back(vert.x, vert.y);
 
-        const auto refinements = 3;
-        const auto polyline_step_size = 2;
         SPDLOG_DEBUG("Reference Path - initial size: {}", temp_path.size());
-        geometry::util::chaikins_corner_cutting(temp_path, refinements, reference_path); // TODO parameter
+        geometry::util::chaikins_corner_cutting(temp_path, RoadNetworkParameters::cornerCuttingRefinements,
+                                                reference_path);
         SPDLOG_DEBUG("Reference Path - after chaikins_corner_cutting: {} (refinements: {})", reference_path.size(),
                      refinements);
 
-        geometry::util::resample_polyline(reference_path, polyline_step_size, temp_path); // todo parameter
+        geometry::util::resample_polyline(reference_path, RoadNetworkParameters::stepsToResamplePolyline, temp_path);
 
         SPDLOG_DEBUG("Reference Path - after resampling: {} (step size: {})", temp_path.size(), polyline_step_size);
 
         reference_path = temp_path;
 
         curvilinearCoordinateSystem =
-            std::make_shared<CurvilinearCoordinateSystem>(reference_path, 20.0, 0.1, 1); // TODO parameter
+            std::make_shared<CurvilinearCoordinateSystem>(reference_path, RoadNetworkParameters::projectionDomainLimit,
+                                                          RoadNetworkParameters::eps1, RoadNetworkParameters::eps2);
     }
 
     omp_unset_lock(&ccs_lock);
