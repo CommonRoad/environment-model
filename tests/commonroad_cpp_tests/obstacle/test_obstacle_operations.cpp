@@ -198,36 +198,94 @@ TEST_F(ObstacleOperationsTest, LaneletsLeftOfObstacle) {
     EXPECT_EQ(obstacle_operations::laneletsLeftOfObstacle(7, roadNetwork, obstacleFour).size(), 1);
 }
 
-TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint) {
+TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
+    std::string pathToTestFile =
+        TestUtils::getTestScenarioDirectory() + "/DEU_two_lanes_with_different_orientation.xml";
+    const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 10, 0, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 10, 0, 10, 0, 0);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 0, 10, 0, 0);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 0, 10, 0, 0);
+    std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 40, 0, 10, 0, 0);
+
+    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 10, 10, 10, 0, M_PI / 2);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 10, 20, 10, 0, M_PI / 2);
+    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 10, 30, 10, 0, M_PI / 2);
+    std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 10, 40, 10, 0, M_PI / 2);
+    std::shared_ptr<State> stateFourObstacleTwo = std::make_shared<State>(4, 10, 50, 10, 0, M_PI / 2);
+
+    Obstacle::state_map_t trajectoryPredictionOneVehicle{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
+
+    Obstacle::state_map_t trajectoryPredictionTwoVehicle{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo),
+        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleTwo)};
+
+    std::shared_ptr<Obstacle> obstacleOne =
+        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionOneVehicle, 5, 2));
+
+    std::shared_ptr<Obstacle> obstacleTwo =
+        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::bus, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionTwoVehicle, 10, 2));
+
+    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
+
+    // obstacle one drive horizontally
+    ASSERT_EQ(obstacle_operations::drivingDistanceToCoordinatePoint(30, 0, roadNetwork, obstacleOne, 0),
+              30 - (5.0 / 2));
+    ASSERT_EQ(obstacle_operations::drivingDistanceToCoordinatePoint(30, 0, roadNetwork, obstacleOne, 1),
+              20 - (5.0 / 2));
+    ASSERT_EQ(obstacle_operations::drivingDistanceToCoordinatePoint(30, 0, roadNetwork, obstacleOne, 2),
+              10 - (5.0 / 2));
+
+    // obstacle two drives vertically
+    ASSERT_EQ(obstacle_operations::drivingDistanceToCoordinatePoint(10, 50, roadNetwork, obstacleTwo, 0),
+              40 - (10.0 / 2));
+    ASSERT_EQ(obstacle_operations::drivingDistanceToCoordinatePoint(10, 50, roadNetwork, obstacleTwo, 1),
+              30 - (10.0 / 2));
+    ASSERT_EQ(obstacle_operations::drivingDistanceToCoordinatePoint(10, 50, roadNetwork, obstacleTwo, 2),
+              20 - (10.0 / 2));
+}
+
+TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
     std::string pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_corner_with_180_degree.xml";
     const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
-    std::shared_ptr<State> stateZeroObstacleEgo = std::make_shared<State>(0, 0, 0, 15, 0, 0);
-    std::shared_ptr<State> stateOneObstacleEgo = std::make_shared<State>(1, 7, 3, 15, 0, M_PI / 4);
-    std::shared_ptr<State> stateTwoObstacleEgo = std::make_shared<State>(2, 10, 10, 15, 0, M_PI / 2);
-    std::shared_ptr<State> stateThreeObstacleEgo = std::make_shared<State>(3, 7, 17, 15, 0, M_PI * (3 / 4));
-    std::shared_ptr<State> stateFourObstacleEgo = std::make_shared<State>(4, 0, 20, 15, 0, M_PI);
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 10, 0, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 7, 3, 10, 0, M_PI / 4);
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 10, 10, 10, 0, M_PI / 2);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 7, 17, 10, 0, M_PI * 3 / 4);
+    std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 0, 20, 10, 0, M_PI);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleEgo),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleEgo),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleEgo),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleEgo),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleEgo)};
+    Obstacle::state_map_t trajectoryPredictionOneVehicle{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
 
-    std::shared_ptr<Obstacle> obstacleEgo =
-        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleEgo, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    std::shared_ptr<Obstacle> obstacleOne =
+        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionOneVehicle, 5, 2));
 
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleEgo}, {}, 0.1));
+    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
 
-    // Test-Corner with 180 degrees & radius of 10m TODO check why frontS in drivingDistanceToCoordinatePoint() has no
-    // impact obstacleEgo at start of the corner
-    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleEgo, 0), M_PI * 10,
-                0.5);
-    // obstacleEgo at middle of the corner
-    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleEgo, 2),
-                M_PI * 10 / 2, 0.5);
-    // obstacleEgo at end of the corner
-    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleEgo, 4), 0, 0.5);
+    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleOne, 0),
+                M_PI * 10 - (5.0 / 2), 0.25);
+    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleOne, 2),
+                M_PI * 5 - (5.0 / 2), 0.25);
+    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleOne, 4),
+                0 - (5.0 / 2), 0.25);
+    // not in projection domain
+    ASSERT_THROW(obstacle_operations::drivingDistanceToCoordinatePoint(-20, 20, roadNetwork, obstacleOne, 4),
+                 std::invalid_argument);
 }

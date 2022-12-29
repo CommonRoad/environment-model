@@ -307,8 +307,9 @@ void Obstacle::convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<
         getStateByTimeStep(timeStep)->getGlobalOrientation(),
         refLane->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
                                           getStateByTimeStep(timeStep)->getYPosition()));
-    convertedPositions[timeStep][refLane->getContainedLaneletIDs()] = {convertedPoint.x() - 3, convertedPoint.y(),
-                                                                       theta}; // TODO parameter
+    convertedPositions[timeStep][refLane->getContainedLaneletIDs()] = {
+        convertedPoint.x() - RoadNetworkParameters::numAdditionalSegmentsCCS * RoadNetworkParameters::eps2,
+        convertedPoint.y(), theta};
 }
 
 double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
