@@ -30,17 +30,6 @@ class CloseToIntersectionPredicate : public CommonRoadPredicate {
                       const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
-     * Finds incomings if car is on an incoming or all successor incomings of the occupied lanelets within a distance
-     * set in the config params.
-     * It searches recursively for incomings until a circle is detected or max distance of 250 m is reached.
-     *
-     * @param occupiedLanelets Lanelets occupied by obstacleK.
-     * @return Vector of pointers to Lanelets.
-     */
-    std::vector<std::shared_ptr<Lanelet>>
-    findUpcomingIncomings(const std::vector<std::shared_ptr<Lanelet>> &occupiedLanelets) const;
-
-    /**
      * Constraint evaluation of predicate using objects. (Currently not supported for this predicate)
      *
      * @param timeStep Time step of interest.
