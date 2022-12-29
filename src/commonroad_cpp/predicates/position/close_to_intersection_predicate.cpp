@@ -12,15 +12,15 @@ bool CloseToIntersectionPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets =
-        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+        obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
 
-    std::map<size_t, double> result_ids_with_distance;
+    std::map<size_t, double> resultIdsWithDistance;
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for (const std::shared_ptr<Lanelet> &lanelet : occupiedLanelets) {
-        auto left_end_of_lane = lanelet->getLeftBorderVertices().back();
-        result_ids_with_distance.insert({lanelet->getId(), obstacle_operations::drivingDistanceToCoordinatePoint(
-                                                               left_end_of_lane.x, left_end_of_lane.y,
-                                                               world->getRoadNetwork(), obstacleK, timeStep)});
+        auto centerEndOfLane = lanelet->getCenterVertices().back();
+        double distToEnd = obstacle_operations::drivingDistanceToCoordinatePoint(
+            centerEndOfLane.x, centerEndOfLane.y, world->getRoadNetwork(), obstacleK, timeStep);
+        resultIdsWithDistance.insert({lanelet->getId(), distToEnd});
         lanelets.push_back(lanelet);
     }
     while (!lanelets.empty()) {
@@ -29,18 +29,17 @@ bool CloseToIntersectionPredicate::booleanEvaluation(
         // true if it is smaller than the max distance to intersections
         for (const std::shared_ptr<Lanelet> &lane : lanelets) {
             if (lane->hasLaneletType(LaneletType::incoming)) {
-                if (result_ids_with_distance.find(lane->getId())->second <
-                    parameters.close_to_intersection_max_distance)
+                if (resultIdsWithDistance.find(lane->getId())->second < parameters.close_to_intersection_max_distance)
                     return true;
             } else {
                 if (!lane->getSuccessors().empty()) {
                     for (const std::shared_ptr<Lanelet> &successor : lane->getSuccessors()) {
                         double distance =
-                            result_ids_with_distance.find(lane->getId())->second + successor->getPathLength().back();
-                        if (result_ids_with_distance.find(successor->getId()) == result_ids_with_distance.end() and
+                            resultIdsWithDistance.find(lane->getId())->second + successor->getPathLength().back();
+                        if (resultIdsWithDistance.find(successor->getId()) == resultIdsWithDistance.end() and
                             distance < parameters.close_to_intersection_max_distance) {
                             tmp_succs.push_back(successor);
-                            result_ids_with_distance.insert({successor->getId(), distance});
+                            resultIdsWithDistance.insert({successor->getId(), distance});
                         }
                     }
                 }

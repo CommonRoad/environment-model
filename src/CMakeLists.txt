@@ -12,6 +12,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/intersection/incoming.cpp
         commonroad_cpp/roadNetwork/intersection/intersection.cpp
         commonroad_cpp/roadNetwork/intersection/intersection_operations.cpp
+        commonroad_cpp/roadNetwork/road_network_config.cpp
         commonroad_cpp/obstacle/obstacle.cpp
         commonroad_cpp/obstacle/obstacle_operations.cpp
         commonroad_cpp/obstacle/state.cpp
@@ -68,6 +69,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h
         commonroad_cpp/roadNetwork/road_network.h
         commonroad_cpp/roadNetwork/types.h
+        commonroad_cpp/roadNetwork/road_network_config.h
         commonroad_cpp/world.h
 )
 
