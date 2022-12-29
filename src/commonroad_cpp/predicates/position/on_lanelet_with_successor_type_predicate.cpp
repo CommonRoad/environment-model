@@ -17,13 +17,13 @@ bool OnLaneletWithSuccessorTypePredicate::booleanEvaluation(
     for (auto &lanelet : occupiedLanelets) {
         if (lanelet->hasLaneletType(additionalFunctionParameters->laneletType.at(0)))
             return true;
-        auto left_end_of_lane = lanelet->getLeftBorderVertices().back();
-        double dist_to_end_of_lane = obstacle_operations::drivingDistanceToCoordinatePoint(
-            left_end_of_lane.x, left_end_of_lane.y, world->getRoadNetwork(), obstacleK, timeStep);
-        // Reduce fov by dist_to_end_of_lane because the distance of the initial lane will be neglected
+        auto centerEndOfLane = lanelet->getCenterVertices().back();
+        double distToEnd = obstacle_operations::drivingDistanceToCoordinatePoint(
+            centerEndOfLane.x, centerEndOfLane.y, world->getRoadNetwork(), obstacleK, timeStep);
+        // Reduce fov by distToEnd because the distance of the initial lane will be neglected
         std::vector<std::vector<std::shared_ptr<Lanelet>>> successors =
-            lanelet_operations::combineLaneletAndSuccessorsToLane(lanelet, obstacleK->getFieldOfViewFrontDistance() -
-                                                                               dist_to_end_of_lane);
+            lanelet_operations::combineLaneletAndSuccessorsToLane(lanelet,
+                                                                  obstacleK->getFieldOfViewFrontDistance() - distToEnd);
         for (auto &vec : successors) {
             for (auto &lane : vec) {
                 if (lane->hasLaneletType(additionalFunctionParameters->laneletType.at(0)))
