@@ -8,6 +8,7 @@
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/road_network_config.h>
 
 std::shared_ptr<Obstacle>
 obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t obstacleId) {
@@ -238,12 +239,13 @@ obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<Roa
     return relevantIntersections;
 }
 
-double obstacle_operations::drivingDistanceToCoordinatePoint(double x, double y,
+double obstacle_operations::drivingDistanceToCoordinatePoint(double xPosition, double yPosition,
                                                              const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                              const std::shared_ptr<Obstacle> &obs, size_t timeStep) {
     double car_front = obs->frontS(roadNetwork, timeStep);
     double lane_s = obs->getReferenceLane(roadNetwork, timeStep)
                         ->getCurvilinearCoordinateSystem()
-                        ->convertToCurvilinearCoords(x, y)[0];
+                        ->convertToCurvilinearCoords(xPosition, yPosition)[0] -
+                    RoadNetworkParameters::numAdditionalSegmentsCCS * RoadNetworkParameters::eps2;
     return lane_s - car_front;
 }

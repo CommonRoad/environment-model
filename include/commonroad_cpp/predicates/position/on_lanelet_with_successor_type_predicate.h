@@ -3,7 +3,7 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- * Evaluates whether a vehicle is on a lanelet of a given type or is a successor of that type.
+ * Evaluates whether a vehicle is on a lanelet of a given type or any successor lanelet of the currently occupied lanes is of that type.
  * Determination within a distance specified in the config parameters.
  */
 class OnLaneletWithSuccessorTypePredicate : public CommonRoadPredicate {
