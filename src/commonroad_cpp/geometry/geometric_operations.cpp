@@ -16,8 +16,8 @@
 using CurvilinearCoordinateSystem = geometry::CurvilinearCoordinateSystem;
 using boost::geometry::get;
 
-std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex> qVertex, double length,
-                                                              double width) {
+std::vector<vertex> geometric_operations::addObjectDimensionsRectangle(std::vector<vertex> qVertex, double length,
+                                                                       double width) {
     std::vector<vertex> pVertex;
 
     // check for special cases
@@ -137,6 +137,27 @@ std::vector<vertex> geometric_operations::addObjectDimensions(std::vector<vertex
         throw std::runtime_error("Input vector is not a 2D row of vertices.");
     }
     return pVertex;
+}
+
+std::vector<vertex> geometric_operations::discretizeEllipse(double xPos, double yPos, double aParam, double bParam,
+                                                            size_t resolution) {
+    // adapted from https://www.geeksforgeeks.org/how-to-discretize-an-ellipse-or-circle-to-a-polygon-using-c-graphics/
+    int segments{std::max((int)floor(sqrt(((aParam + bParam) / 2) * resolution)),
+                          8)}; // at least eight vertices in circle polygon
+    constexpr double twoPi{2 * 3.14159265358979323846};
+
+    double angleShift{twoPi / segments};
+    double phi{0};
+    std::vector<vertex> vertices;
+    for (int i = 0; i < segments; ++i) {
+        phi += angleShift;
+        vertices.emplace_back(xPos + aParam * cos(phi), yPos + bParam * sin(phi));
+    }
+    return vertices;
+}
+
+std::vector<vertex> geometric_operations::addObjectDimensionsCircle(vertex qVertex, double radius) {
+    return discretizeEllipse(qVertex.x, qVertex.y, radius, radius);
 }
 
 std::vector<vertex> geometric_operations::rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
