@@ -230,39 +230,37 @@ polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) { return setOcc
 polygon_type Obstacle::setOccupancyPolygonShape(size_t timeStep) {
     if (shapeAtTimeStep.count(timeStep) == 1)
         return shapeAtTimeStep[timeStep];
-    std::vector<vertex> boundingRectangleVertices;
+    std::vector<vertex> boundingVertices;
     polygon_type polygonShape;
     std::shared_ptr<State> state{this->getStateByTimeStep(timeStep)};
 
     if (this->getGeoShape().getType() == ShapeType::rectangle) {
-        // p are vertices of the bounding rectangle
-        // vertices p represent the occupancy with vehicle dimensions (Theorem 1 in SPOT paper)
-        boundingRectangleVertices = geometric_operations::addObjectDimensions(
+        boundingVertices = geometric_operations::addObjectDimensionsRectangle(
             std::vector<vertex>{vertex{0.0, 0.0}}, this->getGeoShape().getLength(), this->getGeoShape().getWidth());
-
-        /*
-         * rotate and translate the vertices of the occupancy set in local
-         * coordinates to the object's reference position and rotation
-         */
-        std::vector<vertex> adjustedBoundingRectangleVertices = geometric_operations::rotateAndTranslateVertices(
-            boundingRectangleVertices, vertex{state->getXPosition(), state->getYPosition()},
-            state->getGlobalOrientation());
-
-        polygonShape.outer().resize(adjustedBoundingRectangleVertices.size() + 1);
-
-        // make polygon shape from previously created vertices
-        for (size_t i{0}; i < adjustedBoundingRectangleVertices.size(); i++) {
-            polygonShape.outer()[i] =
-                point_type{adjustedBoundingRectangleVertices[i].x, adjustedBoundingRectangleVertices[i].y};
-        }
-
-        // add first point once again at the end
-        if (!adjustedBoundingRectangleVertices.empty()) {
-            polygonShape.outer().back() =
-                point_type{adjustedBoundingRectangleVertices[0].x, adjustedBoundingRectangleVertices[0].y};
-        }
+    } else if (this->getGeoShape().getType() == ShapeType::circle) {
+        boundingVertices =
+            geometric_operations::addObjectDimensionsCircle(vertex{0.0, 0.0}, this->getGeoShape().getRadius());
     } else {
         throw std::runtime_error{"obstacle shapes other than rectangle not supported by setOccupancyPolygonShape"};
+    }
+
+    /*
+     * rotate and translate the vertices of the occupancy set in local
+     * coordinates to the object's reference position and rotation
+     */
+    std::vector<vertex> adjustedBoundingVertices = geometric_operations::rotateAndTranslateVertices(
+        boundingVertices, vertex{state->getXPosition(), state->getYPosition()}, state->getGlobalOrientation());
+
+    polygonShape.outer().resize(adjustedBoundingVertices.size() + 1);
+
+    // make polygon shape from previously created vertices
+    for (size_t i{0}; i < adjustedBoundingVertices.size(); i++) {
+        polygonShape.outer()[i] = point_type{adjustedBoundingVertices[i].x, adjustedBoundingVertices[i].y};
+    }
+
+    // add first point once again at the end
+    if (!adjustedBoundingVertices.empty()) {
+        polygonShape.outer().back() = point_type{adjustedBoundingVertices[0].x, adjustedBoundingVertices[0].y};
     }
     shapeAtTimeStep[timeStep] = polygonShape;
     return polygonShape;

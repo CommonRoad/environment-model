@@ -20,7 +20,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVertice) {
     qVertices.push_back(temp);
     double length = 2;
     double width = 3;
-    pVertices = geometric_operations::addObjectDimensions(qVertices, length, width);
+    pVertices = geometric_operations::addObjectDimensionsRectangle(qVertices, length, width);
     bool rightResults{false};
     if (pVertices[0].x == 0 && pVertices[0].y == 2.5 && pVertices[1].x == 2 && pVertices[1].y == 2.5 &&
         pVertices[2].x == 2 && pVertices[2].y == -0.5 && pVertices[3].x == 0 && pVertices[3].y == -0.5) {
@@ -37,7 +37,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsOneVerticeDetailed) {
     qVertices.push_back(temp);
     double length = 5.4864;
     double width = 1.6459;
-    pVertices = geometric_operations::addObjectDimensions(qVertices, length, width);
+    pVertices = geometric_operations::addObjectDimensionsRectangle(qVertices, length, width);
     bool rightResults{false};
     if (pVertices[0].x == -2.7432 && pVertices[0].y == 0.82295 && pVertices[1].x == 2.7432 &&
         pVertices[1].y == 0.82295 && pVertices[2].x == 2.7432 && pVertices[2].y == -0.82295 &&
@@ -63,7 +63,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVertices) {
     qVertices.push_back(temp);
     double length = 2;
     double width = 3;
-    pVertices = geometric_operations::addObjectDimensions(qVertices, length, width);
+    pVertices = geometric_operations::addObjectDimensionsRectangle(qVertices, length, width);
     EXPECT_EQ(pVertices[0].x, 0);
     EXPECT_EQ(pVertices[0].y, 3.5);
     EXPECT_EQ(pVertices[1].x, 3);
@@ -93,7 +93,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsFourVertices) {
     qVertices.push_back(temp);
     double length = 2;
     double width = 3;
-    pVertices = geometric_operations::addObjectDimensions(qVertices, length, width);
+    pVertices = geometric_operations::addObjectDimensionsRectangle(qVertices, length, width);
     EXPECT_EQ(pVertices[0].x, 0);
     EXPECT_EQ(pVertices[0].y, -0.5);
     EXPECT_EQ(pVertices[1].x, 0);
@@ -120,7 +120,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsArbitraryVerticesDetailed) {
     qVertices.push_back(temp);
     double length = 5.334;
     double width = 1.7983;
-    pVertices = geometric_operations::addObjectDimensions(qVertices, length, width);
+    pVertices = geometric_operations::addObjectDimensionsRectangle(qVertices, length, width);
     EXPECT_EQ(pVertices[0].x, qVertices[0].x - 0.5 * length);
     EXPECT_EQ(pVertices[0].y, qVertices[0].y + 0.5 * width);
     EXPECT_EQ(pVertices[1].x, qVertices[1].x + 0.5 * length);
@@ -154,7 +154,7 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsSixVertices) {
     qVertices.push_back(temp);
     double length = 5.4864;
     double width = 1.6459;
-    pVertices = geometric_operations::addObjectDimensions(qVertices, length, width);
+    pVertices = geometric_operations::addObjectDimensionsRectangle(qVertices, length, width);
     EXPECT_NEAR(pVertices[0].x, -2.7432, epsilon);
     EXPECT_NEAR(pVertices[0].y, 0.82295, epsilon);
     EXPECT_NEAR(pVertices[0].y, 0.82295, epsilon);
@@ -168,6 +168,30 @@ TEST_F(GeometricOperationsTest, AddObjectDimensionsSixVertices) {
     EXPECT_NEAR(pVertices[4].y, -0.86295, epsilon);
     EXPECT_NEAR(pVertices[5].x, -2.7432, epsilon);
     EXPECT_NEAR(pVertices[5].y, -0.82295, epsilon);
+}
+
+TEST_F(GeometricOperationsTest, AddObjectDimensionsCircle) {
+    std::vector<vertex> pVertices;
+    vertex center{0, 0};
+    double radius = 1;
+    pVertices = geometric_operations::addObjectDimensionsCircle(center, radius);
+    bool rightResults{false};
+    EXPECT_NEAR(pVertices[0].x, 0.707, 1e-2);
+    EXPECT_NEAR(pVertices[0].y, 0.707, 1e-2);
+    EXPECT_NEAR(pVertices[1].x, 0.0, 1e-2);
+    EXPECT_NEAR(pVertices[1].y, 1.0, 1e-2);
+    EXPECT_NEAR(pVertices[2].x, -0.707, 1e-2);
+    EXPECT_NEAR(pVertices[2].y, 0.707, 1e-2);
+    EXPECT_NEAR(pVertices[3].x, -1.0, 1e-2);
+    EXPECT_NEAR(pVertices[3].y, 0.0, 1e-2);
+    EXPECT_NEAR(pVertices[4].x, -0.707, 1e-2);
+    EXPECT_NEAR(pVertices[4].y, -0.707, 1e-2);
+    EXPECT_NEAR(pVertices[5].x, 0.0, 1e-2);
+    EXPECT_NEAR(pVertices[5].y, -1.0, 1e-2);
+    EXPECT_NEAR(pVertices[6].x, 0.707, 1e-2);
+    EXPECT_NEAR(pVertices[6].y, -0.707, 1e-2);
+    EXPECT_NEAR(pVertices[7].x, 1.0, 1e-2);
+    EXPECT_NEAR(pVertices[7].y, 0.0, 1e-2);
 }
 
 TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesRotate90Degree) {

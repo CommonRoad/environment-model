@@ -24,6 +24,7 @@ struct vertex {
     double x{0};
     double y{0};
     vertex() = default;
+    vertex(double xPos, double yPos) : x(xPos), y(yPos) {};
     vertex operator+(const vertex &vert) const { return {this->x + vert.x, this->y + vert.y}; }
     vertex operator-(const vertex &vert) const { return {this->x - vert.x, this->y - vert.y}; }
     vertex operator*(const vertex &vert) const { return {this->x * vert.x, this->y * vert.y}; }
