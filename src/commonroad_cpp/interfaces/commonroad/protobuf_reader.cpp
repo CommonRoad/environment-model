@@ -248,6 +248,7 @@ std::shared_ptr<Lanelet> ProtobufReader::createLaneletFromMessage(const commonro
             lanelet->addTrafficLight(containerTrafficLight);
     }
 
+    lanelet->constructOuterPolygon();
     return lanelet;
 }
 
