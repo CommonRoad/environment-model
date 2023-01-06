@@ -147,6 +147,16 @@ std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
     return std::make_shared<State>(sta);
 }
 
+void XMLReader::extractShape(const std::shared_ptr<Obstacle> &obstacle, pugi::xml_node child) {
+    if ((strcmp(child.first_child().name(), "rectangle")) == 0) { // TODO: other shape types
+        obstacle->setRectangleShape(child.first_child().child("length").text().as_double(),
+                                    child.first_child().child("width").text().as_double());
+    } else if ((strcmp(child.first_child().name(), "circle")) == 0)
+        obstacle->setCircleShape(child.first_child().child("radius").text().as_double(),
+                                 {child.first_child().child("center").child("x").text().as_double(),
+                                  child.first_child().child("center").child("y").text().as_double()});
+}
+
 void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
                                       const pugi::xml_node &roadElements) {
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
@@ -160,11 +170,8 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     tempObstacle->setObstacleType(
         obstacle_operations::matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
-        if ((strcmp(child.name(), "shape")) == 0) { // TODO: other shape types
-            if ((strcmp(child.first_child().name(), "rectangle")) == 0) {
-                tempObstacle->setRectangleShape(child.first_child().child("length").text().as_double(),
-                                                child.first_child().child("width").text().as_double());
-            }
+        if ((strcmp(child.name(), "shape")) == 0) {
+            extractShape(tempObstacle, child);
             continue;
         }
         if ((strcmp(child.name(), "initialState")) == 0) {
@@ -199,10 +206,7 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
         obstacle_operations::matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
         if ((strcmp(child.name(), "shape")) == 0) {
-            if ((strcmp(child.first_child().name(), "rectangle")) == 0) { // TODO: other shape types
-                tempObstacle->setRectangleShape(child.first_child().child("length").text().as_double(),
-                                                child.first_child().child("width").text().as_double());
-            }
+            extractShape(tempObstacle, child);
             continue;
         } else if ((strcmp(child.name(), "initialState")) == 0) {
             std::shared_ptr<State> initialState{XMLReader::extractInitialState(child)};
