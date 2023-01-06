@@ -149,8 +149,10 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleFive =
         std::make_shared<Obstacle>(Obstacle(5, ObstacleRole::DYNAMIC, stateFourObstacleFive, ObstacleType::truck, 50,
                                             10, 3, -10, 0.3, trajectoryPredictionObstacleFive, 8, 2));
-    obstacleSix = std::make_shared<Obstacle>(
-        Obstacle(6, ObstacleRole::DYNAMIC, stateSevenObstacleSix, ObstacleType::car, 50, 10, 3, -10, 0.3, {}, 5, 2));
+    obstacleSix = std::make_shared<Obstacle>(Obstacle(6, ObstacleRole::DYNAMIC, stateSevenObstacleSix,
+                                                      ObstacleType::pedestrian, ActuatorParameters{50, 10, 3, -10, -10},
+                                                      SensorParameters{250.0, 250.0, 0.3}, {},
+                                                      std::make_unique<Circle>(Circle(1)), {}));
 
     obstacleList.push_back(obstacleOne);
     obstacleList.push_back(obstacleTwo);
@@ -240,6 +242,8 @@ TEST_F(ObstacleTest, GetOccupancyPolygonShape) {
     EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(0).outer().at(0).y(), 2);
     EXPECT_DOUBLE_EQ(obstacleOne->getOccupancyPolygonShape(1).outer().at(0).x(), 2);
     EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(1).outer().at(0).y(), 0.0);
+    EXPECT_EQ(obstacleSix->getOccupancyPolygonShape(7).outer().at(3).x(), 69.0);
+    EXPECT_EQ(obstacleSix->getOccupancyPolygonShape(7).outer().at(1).y(), -4.0);
 }
 
 TEST_F(ObstacleTest, GetOccupiedLanelets) {
