@@ -26,10 +26,20 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/predicate_manager_test.cpp
         commonroad_cpp_tests/predicates/utils_predicate_test.cpp
         commonroad_cpp_tests/predicates/braking/test_safe_distance_predicate.cpp
+        commonroad_cpp_tests/predicates/braking/test_safe_distance_gap_right_violated_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_unnecessary_braking_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_brakes_stronger_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_braking_with_acceleration_possible_at_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_causes_braking_intersection_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_front_of_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_same_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_single_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_left_of_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_on_oncoming_of_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_unobstructed_intersection_view_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_intersection_conflict_area_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_neighboring_left_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_neighboring_right_lane_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_orientation_towards_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_lane_based_orientation_similar_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_in_congestion_predicate.cpp

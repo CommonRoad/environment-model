@@ -62,7 +62,7 @@ class Obstacle {
      * @param trajectoryPrediction Map matching time step to state.
      * @param length Length of the obstacle [m].
      * @param width Width of the obstacle [m].
-     * @param fov
+     * @param fov Field of view.
      */
     Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState, ObstacleType obstacleType,
              double vMax, double aMax, double aMaxLong, double aMinLong, std::optional<double> reactionTime,
@@ -79,7 +79,7 @@ class Obstacle {
      * @param actuatorParameters Kinematic parameters of the obstacle.
      * @param trajectoryPrediction Map matching time step to state.
      * @param shape Obstacle shape. (only rectangles are currently supported!)
-     * @param fov
+     * @param fov Field of view.
      */
     Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState, ObstacleType obstacleType,
              ActuatorParameters actuatorParameters, SensorParameters sensorParameters, state_map_t trajectoryPrediction,
@@ -149,12 +149,20 @@ class Obstacle {
     void setTrajectoryPrediction(const state_map_t &trajPrediction);
 
     /**
-     * Setter for obstacle shape.
+     * Setter for obstacle shape of type rectangle.
      *
      * @param length Length of the obstacle [m].
      * @param width Width of the obstacle [m].
      */
     void setRectangleShape(double length, double width);
+
+    /**
+     * Setter for obstacle of shape type circle.
+     *
+     * @param radius Radius of obstacle [m].
+     * @param center Center of circle as vertex.
+     */
+    void setCircleShape(double radius, vertex center = {});
 
     /**
      * Setter for obstacle shape

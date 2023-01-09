@@ -126,6 +126,8 @@ void Obstacle::setTrajectoryPrediction(const Obstacle::state_map_t &trajPredicti
 
 void Obstacle::setRectangleShape(double length, double width) { geoShape = std::make_unique<Rectangle>(length, width); }
 
+void Obstacle::setCircleShape(double radius, vertex center) { geoShape = std::make_unique<Circle>(radius, center); }
+
 void Obstacle::setGeoShape(std::unique_ptr<Shape> shape) { geoShape = std::move(shape); }
 
 void Obstacle::appendStateToTrajectoryPrediction(const std::shared_ptr<State> &state) {
