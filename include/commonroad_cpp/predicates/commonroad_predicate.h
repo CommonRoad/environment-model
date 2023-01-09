@@ -27,10 +27,12 @@ struct OptionalPredicateParameters {
     OptionalPredicateParameters(std::vector<LaneletType> laneletType);
     OptionalPredicateParameters(std::vector<TurningDirection> turningDirection);
     OptionalPredicateParameters(std::vector<TrafficLightState> trafficLightState);
+    OptionalPredicateParameters(double minSafetyDistance);
     std::vector<TrafficSignTypes> signType;
     std::vector<LaneletType> laneletType;
     std::vector<TurningDirection> turningDirection;
     std::vector<TrafficLightState> trafficLightState;
+    double minSafetyDistance;
 };
 
 /**
