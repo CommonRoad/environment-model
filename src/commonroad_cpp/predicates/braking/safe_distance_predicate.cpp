@@ -25,7 +25,7 @@ bool SafeDistancePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
+    return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters) > 0;
 }
 
 bool SafeDistancePredicate::booleanEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP,
@@ -91,6 +91,8 @@ double SafeDistancePredicate::robustEvaluation(
     // robustness
     if (deltaS < 0)
         return std::abs(deltaS);
+    else if (additionalFunctionParameters != nullptr && (deltaS - additionalFunctionParameters->minSafetyDistance) < 0)
+        return std::min(deltaS - additionalFunctionParameters->minSafetyDistance, deltaS - dSafe);
     else
         return (deltaS - dSafe);
 }
