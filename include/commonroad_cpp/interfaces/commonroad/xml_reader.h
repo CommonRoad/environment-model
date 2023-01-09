@@ -120,6 +120,14 @@ std::shared_ptr<SignalState> extractSignalState(const pugi::xml_node &child);
 std::shared_ptr<State> extractState(const pugi::xml_node &states);
 
 /**
+ * Extracts shape from a XML node and assigns it to obstacle.
+ *
+ * @param obstacle Obstacle for which state should be set.
+ * @param child XML node element
+ */
+void extractShape(const std::shared_ptr<Obstacle>& obstacle, pugi::xml_node child);
+
+/**
  * Creates a dynamic obstacle from a XML node element and adds the obstacle to provided vector.
  *
  * @param obstacleList Vector in which new dynamic obstacle are stored.
