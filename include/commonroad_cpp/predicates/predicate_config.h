@@ -42,7 +42,7 @@ struct PredicateParameters {
     double epsilon{1e-6};                       // small value close to zero for different purposes
     double stopLineDistance{1.0};               // maximum distance vehicle waiting in front of stop line has to wait
     double laneMatchingOrientation{0.35};       // orientation threshold for following a lane
-
+    double minSafetyDistance{5.0};              // minimum safety distance between two vehicles
     void checkParameterValidity() const;
 
     double maxPositiveDouble{

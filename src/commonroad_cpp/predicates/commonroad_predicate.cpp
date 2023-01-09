@@ -7,6 +7,9 @@
 
 #include <commonroad_cpp/predicates/commonroad_predicate.h>
 
+#include "commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.h"
+#include "commonroad_cpp/predicates/position/in_neighboring_left_lane_predicate.h"
+#include "commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.h"
 #include <commonroad_cpp/predicates/braking/brakes_stronger_predicate.h>
 #include <commonroad_cpp/predicates/braking/braking_with_acceleration_possible_at_intersection_predicate.h>
 #include <commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h>
@@ -159,6 +162,9 @@ std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
     {"in_intersection_conflict_area", std::make_shared<InIntersectionConflictAreaPredicate>()},
     {"on_oncoming_of", std::make_shared<OnOncomingOfPredicate>()},
     {"braking_at_intersection_possible", std::make_shared<BrakingWithAccelerationPossibleAtIntersection>()},
+    {"in_neighboring_left_lane", std::make_shared<InNeighboringLeftLanePredicate>()},
+    {"in_neighboring_right_lane", std::make_shared<InNeighboringRightLanePredicate>()},
+    {"safe_distance_gap_right_violated", std::make_shared<SafeDistanceGapRightViolatedPredicate>()},
     {"is_special_vehicle_purpose", std::make_shared<isSpecialVehiclePurposePredicate>()},
     {"left_signal_set", std::make_shared<LeftSignalSetPredicate>()},
     {"right_signal_set", std::make_shared<RightSignalSetPredicate>()},
@@ -179,3 +185,5 @@ OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSign
       trafficLightState(std::move(trafficLightState)) {}
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficLightState> trafficLightState)
     : trafficLightState(std::move(trafficLightState)) {}
+OptionalPredicateParameters::OptionalPredicateParameters(double minSafetyDistance)
+    : minSafetyDistance(minSafetyDistance) {}
