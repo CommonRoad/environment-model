@@ -16,7 +16,7 @@ namespace lanelet_operations {
 /**
  * Matches a string to a lanelet type
  *
- * @param string for which lanelet type should be extracted
+ * @param type for which lanelet type should be extracted
  * @return lanelet type which corresponds to string or unknown type if string does not match
  */
 LaneletType matchStringToLaneletType(const std::string &type);
@@ -32,7 +32,7 @@ DrivingDirection matchStringToDrivingDirection(const std::string &type);
 /**
  * Matches a string to a line marking
  *
- * @param string for which line marking should be extracted
+ * @param type for which line marking should be extracted
  * @return line marking which corresponds to string or unknown type if string does not match
  */
 LineMarking matchStringToLineMarking(const std::string &type);

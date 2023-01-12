@@ -16,6 +16,11 @@ bool AtTrafficSignPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    if (!additionalFunctionParameters) {
+        throw std::runtime_error{"missing additionalFunctionParameters"};
+    }
+    assert(additionalFunctionParameters);
+
     const auto signId{TrafficSignLookupTableByCountry.at(world->getRoadNetwork()->getCountry())
                           ->at(additionalFunctionParameters->signType.at(0))};
     for (const auto &lanelet : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep))

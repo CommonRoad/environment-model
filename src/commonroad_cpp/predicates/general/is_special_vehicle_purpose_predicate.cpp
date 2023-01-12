@@ -3,9 +3,9 @@
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 
-isSpecialVehiclePurposePredicate::isSpecialVehiclePurposePredicate() : CommonRoadPredicate(false) {}
+IsSpecialVehiclePurposePredicate::IsSpecialVehiclePurposePredicate() : CommonRoadPredicate(false) {}
 
-bool isSpecialVehiclePurposePredicate::booleanEvaluation(
+bool IsSpecialVehiclePurposePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
@@ -13,14 +13,14 @@ bool isSpecialVehiclePurposePredicate::booleanEvaluation(
            obstacleK->getObstacleType() == ObstacleType::bicycle;
 }
 
-double isSpecialVehiclePurposePredicate::robustEvaluation(
+double IsSpecialVehiclePurposePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("Is special vehicle purpose Predicate does not support robust evaluation!");
 }
 
-Constraint isSpecialVehiclePurposePredicate::constraintEvaluation(
+Constraint IsSpecialVehiclePurposePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {

@@ -19,6 +19,11 @@ bool OnSimilarOrientedLaneletWithoutTypePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    if (!additionalFunctionParameters) {
+        throw std::runtime_error{"missing additionalFunctionParameters"};
+    }
+    assert(additionalFunctionParameters);
+
     auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
     return std::all_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
