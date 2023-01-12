@@ -43,6 +43,9 @@ struct PredicateParameters {
     double stopLineDistance{1.0};               // maximum distance vehicle waiting in front of stop line has to wait
     double laneMatchingOrientation{0.35};       // orientation threshold for following a lane
     double minSafetyDistance{5.0};              // minimum safety distance between two vehicles
+    double closeToBicycle{6.0};                 // indicator if vehicle is close to a bicycle
+    double narrowRoad{5.5};                     // maximum width of road to be called narrow
+
     void checkParameterValidity() const;
 
     double maxPositiveDouble{
