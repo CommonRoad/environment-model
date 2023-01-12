@@ -56,7 +56,7 @@ class BrakesStrongerPredicate : public CommonRoadPredicate {
      * @param world World object.
      * @param obstacleK The kth obstacle.
      * @param obstacleP The pth obstacle. This is an optional parameter.
-     * @param obstacles Pointers to all obstacles. This is an optional parameter.
+     * @param additionalFunctionParameters Additional parameters.
      * @return Real value indicating robustness of the predicate.
      */
     double

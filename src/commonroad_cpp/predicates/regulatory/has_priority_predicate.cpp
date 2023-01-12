@@ -21,6 +21,10 @@ bool HasPriorityPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    if (!additionalFunctionParameters) {
+        throw std::runtime_error{"missing additionalFunctionParameters"};
+    }
+    assert(additionalFunctionParameters);
     int prioK{regulatory_elements_utils::getPriority(timeStep, world->getRoadNetwork(), obstacleK,
                                                      additionalFunctionParameters->turningDirection.at(0))};
     int prioP{regulatory_elements_utils::getPriority(timeStep, world->getRoadNetwork(), obstacleP,
