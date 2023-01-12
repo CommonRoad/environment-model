@@ -234,6 +234,20 @@ class Obstacle {
     [[nodiscard]] ObstacleType getObstacleType() const;
 
     /**
+     * Getter for actuator parameters.
+     *
+     * @param actuatorParameters Actuator parameters
+     */
+    ActuatorParameters getActuatorParameters() const;
+
+    /**
+     * Getter for sensor parameters.
+     *
+     * @param sensorParameters Sensor parameters
+     */
+    SensorParameters getSensorParameters() const;
+
+    /**
      * Getter for maximum velocity the vehicle can drive.
      *
      * @return Maximum velocity [m/s].

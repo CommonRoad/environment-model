@@ -19,7 +19,7 @@ class BrakingWithAccelerationPossibleAtIntersectionPredicateTest : public testin
     std::shared_ptr<Obstacle> obstacleTwo;
     std::shared_ptr<World> world1;
     std::shared_ptr<World> world2;
-    BrakingWithAccelerationPossibleAtIntersection pred;
+    BrakingWithAccelerationPossibleAtIntersectionPredicate pred;
 
   private:
     void SetUp() override;

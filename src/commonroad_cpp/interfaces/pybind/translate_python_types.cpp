@@ -238,7 +238,7 @@ TranslatePythonTypes::convertLanelets(const py::handle &py_laneletNetwork,
                 }
         }
         py::handle py_stopLine = py_singleLanelet.attr("stop_line");
-        if (py_stopLine != Py_None)
+        if (!py_stopLine.is_none())
             tempLaneletContainer[arrayIndex]->setStopLine(convertStopLine(py_stopLine, trafficSigns, trafficLights));
         tempLaneletContainer[arrayIndex]->createCenterVertices();
         tempLaneletContainer[arrayIndex]->constructOuterPolygon();

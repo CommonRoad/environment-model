@@ -5,12 +5,12 @@
 /**
  * Predicate for evaluating if a vehicle is a bus, taxi or bicycle.
  */
-class isSpecialVehiclePurposePredicate : public CommonRoadPredicate {
+class IsSpecialVehiclePurposePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for isSpecialVehiclePurposePredicate
+     * Constructor for IsSpecialVehiclePurposePredicate
      */
-    isSpecialVehiclePurposePredicate();
+    IsSpecialVehiclePurposePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

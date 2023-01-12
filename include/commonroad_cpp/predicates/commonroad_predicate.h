@@ -59,13 +59,28 @@ class CommonRoadPredicate {
      * @param world Contains road network, ego vehicle, and obstacle list.
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
-     * @param obstacles Pointers to all obstacles. This is an optional parameter.
+     * @param additionalFunctionParameters Additional parameters.
      * @return Boolean indicating satisfaction of the predicate.
      */
     virtual bool
     booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                       const std::shared_ptr<Obstacle> &obstacleP,
                       const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) = 0;
+
+    // FIXME: Make this internal if possible (friend function?)
+    /**
+     * Variant of booleanEvaluation without optional parameter.
+     * FOR INTERNAL USE ONLY
+     *
+     * @param timeStep Time step of interest.
+     * @param world Contains road network, ego vehicle, and obstacle list.
+     * @param obstacleK Pointer to the kth obstacle.
+     * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
+     * @return Boolean indicating satisfaction of the predicate.
+     */
+    bool
+    simpleBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+                      const std::shared_ptr<Obstacle> &obstacleP);
 
     /**
      * Virtual function for the robustness evaluation of a predicate.
@@ -74,6 +89,7 @@ class CommonRoadPredicate {
      * @param world Contains road network, ego vehicle, and obstacle list.
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
+     * @param additionalFunctionParameters Additional parameters.
      * @return Real value indicating robustness of the predicate.
      */
     virtual double

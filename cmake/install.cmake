@@ -21,7 +21,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
     install(TARGETS env_model
             EXPORT ${export_name})
 else()
-    install(TARGETS env_model env_model_core env_model_predicates
+    install(TARGETS env_model env_model_core env_model_predicates commonroad_protobuf
             EXPORT ${export_name}
             LIBRARY ARCHIVE RUNTIME)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/

@@ -122,7 +122,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/required_speed_predicate.cpp
         commonroad_cpp/predicates/velocity/in_standstill_predicate.cpp
-        commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle.cpp
+        commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.cpp
         commonroad_cpp/predicates/velocity/drives_faster_predicate.cpp
         commonroad_cpp/predicates/velocity/reverses_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.cpp
@@ -149,8 +149,11 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.h
         commonroad_cpp/predicates/general/interstate_broad_enough_predicate.h
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h
+        commonroad_cpp/predicates/general/left_signal_set_predicate.h
+        commonroad_cpp/predicates/general/right_signal_set_predicate.h
         commonroad_cpp/predicates/general/makes_u_turn_predicate.h
         commonroad_cpp/predicates/general/orientation_towards_predicate.h
+        commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.h
         commonroad_cpp/predicates/general/narrow_road_predicate.h
         commonroad_cpp/predicates/position/drives_leftmost_predicate.h
         commonroad_cpp/predicates/position/drives_rightmost_predicate.h
@@ -165,11 +168,13 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.h
         commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h
         commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h
+        commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.h
         commonroad_cpp/predicates/position/on_oncoming_of_predicate.h
         commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.h
         commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.h
         commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h
         commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.h
+        commonroad_cpp/predicates/position/close_to_intersection_predicate.h
         commonroad_cpp/predicates/position/in_neighboring_left_lane_predicate.h
         commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.h
         commonroad_cpp/predicates/position/oncoming_vehicle_predicate.h
@@ -201,10 +206,13 @@ add_library(env_model_core ${ENV_MODEL_SRC_FILES})
 # It might be easier if src/include are in a common subdirectory,
 # e.g. commonroad_cpp/src and commonroad_cpp/include.
 
-list(TRANSFORM ENV_MODEL_HDR_FILES PREPEND ${PROJECT_SOURCE_DIR}/include/)
-list(TRANSFORM ENV_MODEL_PREDICATES_HDR_FILES PREPEND ${PROJECT_SOURCE_DIR}/include/)
+set(ENV_MODEL_HDR_FILES_ABS ${ENV_MODEL_HDR_FILES})
+set(ENV_MODEL_PREDICATES_HDR_FILES_ABS ${ENV_MODEL_PREDICATES_HDR_FILES})
 
-target_sources(env_model_core PRIVATE ${ENV_MODEL_HDR_FILES})
+list(TRANSFORM ENV_MODEL_HDR_FILES_ABS PREPEND ${PROJECT_SOURCE_DIR}/include/)
+list(TRANSFORM ENV_MODEL_PREDICATES_HDR_FILES_ABS PREPEND ${PROJECT_SOURCE_DIR}/include/)
+
+target_sources(env_model_core PRIVATE ${ENV_MODEL_HDR_FILES_ABS})
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
     target_sources(env_model_core
@@ -212,7 +220,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
             FILE_SET env_model_core_headers
             TYPE HEADERS
             BASE_DIRS ${PROJECT_SOURCE_DIR}/include
-            FILES ${ENV_MODEL_HDR_FILES})
+            FILES ${ENV_MODEL_HDR_FILES_ABS})
 endif()
 
 target_compile_features(env_model_core
@@ -258,7 +266,8 @@ target_precompile_headers(env_model_core
 
 add_library(env_model_predicates ${ENV_MODEL_PREDICATES_SRC_FILES})
 
-target_sources(env_model_predicates PRIVATE ${ENV_MODEL_PREDICATES_HDR_FILES})
+
+target_sources(env_model_predicates PRIVATE ${ENV_MODEL_PREDICATES_HDR_FILES_ABS})
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
     target_sources(env_model_predicates
@@ -266,7 +275,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
             FILE_SET env_model_predicates_headers
             TYPE HEADERS
             BASE_DIRS ${PROJECT_SOURCE_DIR}/include
-            FILES ${ENV_MODEL_PREDICATES_HDR_FILES})
+            FILES ${ENV_MODEL_PREDICATES_HDR_FILES_ABS})
 endif()
 
 target_include_directories(env_model_predicates
@@ -301,19 +310,37 @@ target_link_libraries(env_model
 
 add_library(EnvironmentModel::env_model ALIAS env_model)
 
+find_package(pybind11 2.7.0 QUIET)
+
 # add pybind module
 if(SKBUILD)
     message(STATUS "The project is built using scikit-build")
 endif()
-if(SKBUILD)
+if(pybind11_FOUND AND NOT SKBUILD)
+    message(STATUS "Adding Python interface for compilation only")
+endif()
+if(pybind11_FOUND)
     add_library(env_model_python OBJECT
             commonroad_cpp/interfaces/pybind/python_interface.cpp
-            commonroad_cpp/interfaces/pybind/python_interface.h
+            commonroad_cpp/interfaces/pybind/python_interface_core.cpp
+            commonroad_cpp/interfaces/pybind/python_interface_core.h
+            commonroad_cpp/interfaces/pybind/python_interface_legacy.cpp
+            commonroad_cpp/interfaces/pybind/python_interface_legacy.h
+            commonroad_cpp/interfaces/pybind/python_interface_predicates.cpp
+            commonroad_cpp/interfaces/pybind/python_interface_predicates.h
             commonroad_cpp/interfaces/pybind/translate_python_types.cpp
             commonroad_cpp/interfaces/pybind/translate_python_types.h)
     target_link_libraries(env_model_python PRIVATE env_model pybind11::module)
     set_property(TARGET env_model_python PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+    # For predicate_instantiation.cpp.inc (see predicates.cmake)
+    target_include_directories(env_model_python
+        PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}
+        )
+endif()
+
+if(SKBUILD)
     set(python_module_name crcpp)
     pybind11_add_module(${python_module_name} MODULE $<TARGET_OBJECTS:env_model_python>)
 
@@ -334,6 +361,9 @@ if(SKBUILD)
     # include(utils/CheckRuntimeDependencies)
     # check_python_runtime_dependencies(${python_module_name})
 endif(SKBUILD)
+
+include(predicates.cmake)
+
 
 # this adds many warnings to the build. They usually help to find some bugs
 # TODO: Check whether each warning flag is actually supported by the compiler before adding it
