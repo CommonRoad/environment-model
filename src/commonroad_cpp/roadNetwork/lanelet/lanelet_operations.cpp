@@ -231,7 +231,12 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const
     auto rightLanelets{laneletsRightOfLanelet(lanelet, sameDirection)};
     std::initializer_list<std::shared_ptr<Lanelet>> initial_lanelet{lanelet};
 
-    return ranges::concat_view(initial_lanelet, leftLanelets, rightLanelets) | ranges::to<std::vector>;
+    // remove duplicates
+    std::vector<std::shared_ptr<Lanelet>> adjLanelets =
+        ranges::concat_view(initial_lanelet, leftLanelets, rightLanelets) | ranges::to<std::vector>;
+    sort(adjLanelets.begin(), adjLanelets.end());
+    adjLanelets.erase(unique(adjLanelets.begin(), adjLanelets.end()), adjLanelets.end());
+    return adjLanelets;
 }
 
 bool lanelet_operations::areLaneletsInDirectlyAdjacentLanes(

@@ -96,13 +96,13 @@ void TestInNeighboringLeftLanePredicate::SetUp() {
         std::make_shared<Obstacle>(Obstacle(4, ObstacleRole::DYNAMIC, stateZeroObstacleFour, ObstacleType::car, 50, 10,
                                             3, -10, 0.3, trajectoryPredictionObstacleFour, 5, 2));
 
-    std::shared_ptr<State> stateZeroObstacleFive = std::make_shared<State>(0, 135, 5, 15, 0, 0, 0, 135, 0);
-    std::shared_ptr<State> stateOneObstacleFive = std::make_shared<State>(1, 120, 5, 15, 0, 0, 0, 120, 0);
-    std::shared_ptr<State> stateTwoObstacleFive = std::make_shared<State>(2, 105, 5, 15, 0, 0, 0, 105, 0);
-    std::shared_ptr<State> stateThreeObstacleFive = std::make_shared<State>(3, 90, 5, 15, 0, 0, 0, 90, 0);
-    std::shared_ptr<State> stateFourObstacleFive = std::make_shared<State>(4, 75, 5, 15, 0, 0, 0, 75, 0);
-    std::shared_ptr<State> stateFiveObstacleFive = std::make_shared<State>(5, 60, 5, 15, 0, 0, 0, 60, 0);
-    Obstacle::state_map_t trajectoryPredictionObstacleSix{
+    std::shared_ptr<State> stateZeroObstacleFive = std::make_shared<State>(0, 85, 3, 5, 0, 0);
+    std::shared_ptr<State> stateOneObstacleFive = std::make_shared<State>(1, 80, 3, 5, 0, 0);
+    std::shared_ptr<State> stateTwoObstacleFive = std::make_shared<State>(2, 75, 3, 5, 0, 0);
+    std::shared_ptr<State> stateThreeObstacleFive = std::make_shared<State>(3, 70, 3, 5, 0, 0);
+    std::shared_ptr<State> stateFourObstacleFive = std::make_shared<State>(4, 65, 3, 5, 0, 0);
+    std::shared_ptr<State> stateFiveObstacleFive = std::make_shared<State>(5, 60, 3, 5, 0, 0);
+    Obstacle::state_map_t trajectoryPredictionObstacleFive{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleFive),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleFive),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleFive),
@@ -111,29 +111,45 @@ void TestInNeighboringLeftLanePredicate::SetUp() {
         std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFive)};
     obstacleFive =
         std::make_shared<Obstacle>(Obstacle(5, ObstacleRole::DYNAMIC, stateZeroObstacleFive, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleSix, 5, 2));
+                                            3, -10, 0.3, trajectoryPredictionObstacleFive, 5, 2));
+
+    std::shared_ptr<State> stateZeroObstacleSix = std::make_shared<State>(0, 10, 0, 2, 0, 0);
+    std::shared_ptr<State> stateOneObstacleSix = std::make_shared<State>(1, 12, 0, 2, 0, 0);
+    std::shared_ptr<State> stateTwoObstacleSix = std::make_shared<State>(2, 14, 0, 2, 0, 0);
+    std::shared_ptr<State> stateThreeObstacleSix = std::make_shared<State>(3, 16, 0, 2, 0, 0);
+    std::shared_ptr<State> stateFourObstacleSix = std::make_shared<State>(4, 18, 0, 2, 0, 0);
+    std::shared_ptr<State> stateFiveObstacleSix = std::make_shared<State>(5, 20, 0, 2, 0, 0);
+    Obstacle::state_map_t trajectoryPredictionObstacleSix{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleSix),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleSix),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleSix),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleSix),
+        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleSix),
+        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleSix)};
+    obstacleSix = std::make_shared<Obstacle>(Obstacle(6, ObstacleRole::DYNAMIC, stateZeroObstacleSix, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleSix, 5, 2));
 
     world = std::make_shared<World>(
         World(0, roadNetwork, {obstacleEgo}, {obstacleOne, obstacleTwo, obstacleThree, obstacleFour}, 0.1));
 
-    worldOncoming =
-        std::make_shared<World>(World(0, roadNetworkOncoming, {obstacleEgo}, {obstacleOne, obstacleFive}, 0.1));
+    worldOncoming = std::make_shared<World>(World(0, roadNetworkOncoming, {obstacleSix}, {obstacleFive}, 0.1));
 }
 
 TEST_F(TestInNeighboringLeftLanePredicate, BooleanEvaluationObjectsOncoming) {
-    // neighboring lanes with oncoming traffic
-    // obstacleEgo on right lane
-    // obstacleOne on right lane in front of obstacleEgo
-    // obstacleFive on oncoming lane
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldOncoming, obstacleEgo, obstacleFive));
-    EXPECT_TRUE(pred.booleanEvaluation(1, worldOncoming, obstacleEgo, obstacleFive));
-    EXPECT_TRUE(pred.booleanEvaluation(2, worldOncoming, obstacleEgo, obstacleFive));
-    EXPECT_TRUE(pred.booleanEvaluation(3, worldOncoming, obstacleEgo, obstacleFive));
-    EXPECT_TRUE(pred.booleanEvaluation(4, worldOncoming, obstacleEgo, obstacleFive));
-    EXPECT_TRUE(pred.booleanEvaluation(5, worldOncoming, obstacleEgo, obstacleFive));
+    // obstacleFive on oncoming lane of obstacleSix
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldOncoming, obstacleSix, obstacleFive));
+    EXPECT_TRUE(pred.booleanEvaluation(1, worldOncoming, obstacleSix, obstacleFive));
+    EXPECT_TRUE(pred.booleanEvaluation(2, worldOncoming, obstacleSix, obstacleFive));
+    EXPECT_TRUE(pred.booleanEvaluation(3, worldOncoming, obstacleSix, obstacleFive));
+    EXPECT_TRUE(pred.booleanEvaluation(4, worldOncoming, obstacleSix, obstacleFive));
+    EXPECT_TRUE(pred.booleanEvaluation(5, worldOncoming, obstacleSix, obstacleFive));
 
-    EXPECT_TRUE(pred.booleanEvaluation(5, worldOncoming, obstacleFive, obstacleOne));
-    EXPECT_TRUE(pred.booleanEvaluation(5, worldOncoming, obstacleFive, obstacleEgo));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldOncoming, obstacleFive, obstacleSix));
+    EXPECT_TRUE(pred.booleanEvaluation(1, worldOncoming, obstacleFive, obstacleSix));
+    EXPECT_TRUE(pred.booleanEvaluation(2, worldOncoming, obstacleFive, obstacleSix));
+    EXPECT_TRUE(pred.booleanEvaluation(3, worldOncoming, obstacleFive, obstacleSix));
+    EXPECT_TRUE(pred.booleanEvaluation(4, worldOncoming, obstacleFive, obstacleSix));
+    EXPECT_TRUE(pred.booleanEvaluation(5, worldOncoming, obstacleFive, obstacleSix));
 }
 
 TEST_F(TestInNeighboringLeftLanePredicate, BooleanEvaluationObjectsMultilane) {
