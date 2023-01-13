@@ -179,6 +179,10 @@ ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
 
 ObstacleRole Obstacle::getObstacleRole() const { return obstacleRole; }
 
+ActuatorParameters Obstacle::getActuatorParameters() const { return *actuatorParameters; };
+
+SensorParameters Obstacle::getSensorParameters() const { return *sensorParameters; };
+
 double Obstacle::getVmax() const {
     assert(actuatorParameters);
     return actuatorParameters->getVmax();
@@ -519,6 +523,9 @@ size_t Obstacle::getFirstTrajectoryTimeStep() const {
 }
 
 size_t Obstacle::getLastTrajectoryTimeStep() const {
+    if (trajectoryPrediction.empty()) {
+        throw std::runtime_error{"trajectoryPrediction is empty"};
+    }
     return std::max_element(trajectoryPrediction.begin(), trajectoryPrediction.end())->first;
 }
 

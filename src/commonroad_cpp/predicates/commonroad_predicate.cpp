@@ -7,62 +7,6 @@
 
 #include <commonroad_cpp/predicates/commonroad_predicate.h>
 
-#include "commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.h"
-#include "commonroad_cpp/predicates/position/in_neighboring_left_lane_predicate.h"
-#include "commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.h"
-#include <commonroad_cpp/predicates/braking/brakes_stronger_predicate.h>
-#include <commonroad_cpp/predicates/braking/braking_with_acceleration_possible_at_intersection_predicate.h>
-#include <commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h>
-#include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
-#include <commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h>
-#include <commonroad_cpp/predicates/general/in_congestion_predicate.h>
-#include <commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.h>
-#include <commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.h>
-#include <commonroad_cpp/predicates/general/interstate_broad_enough_predicate.h>
-#include <commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.h>
-#include <commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h>
-#include <commonroad_cpp/predicates/general/left_signal_set_predicate.h>
-#include <commonroad_cpp/predicates/general/makes_u_turn_predicate.h>
-#include <commonroad_cpp/predicates/general/orientation_towards_predicate.h>
-#include <commonroad_cpp/predicates/general/right_signal_set_predicate.h>
-#include <commonroad_cpp/predicates/position/close_to_intersection_predicate.h>
-#include <commonroad_cpp/predicates/position/drives_leftmost_predicate.h>
-#include <commonroad_cpp/predicates/position/drives_rightmost_predicate.h>
-#include <commonroad_cpp/predicates/position/in_front_of_predicate.h>
-#include <commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.h>
-#include <commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h>
-#include <commonroad_cpp/predicates/position/in_rightmost_lane_predicate.h>
-#include <commonroad_cpp/predicates/position/in_same_lane_predicate.h>
-#include <commonroad_cpp/predicates/position/in_single_lane_predicate.h>
-#include <commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h>
-#include <commonroad_cpp/predicates/position/left_of_predicate.h>
-#include <commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.h>
-#include <commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h>
-#include <commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.h>
-#include <commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h>
-#include <commonroad_cpp/predicates/position/on_oncoming_of_predicate.h>
-#include <commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.h>
-#include <commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.h>
-#include <commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h>
-#include <commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.h>
-#include <commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h>
-#include <commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h>
-#include <commonroad_cpp/predicates/regulatory/has_priority_predicate.h>
-#include <commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h>
-#include <commonroad_cpp/predicates/regulatory/same_priority_predicate.h>
-#include <commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h>
-#include <commonroad_cpp/predicates/velocity/drives_faster_predicate.h>
-#include <commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h>
-#include <commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.h>
-#include <commonroad_cpp/predicates/velocity/in_standstill_predicate.h>
-#include <commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.h>
-#include <commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.h>
-#include <commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.h>
-#include <commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.h>
-#include <commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h>
-#include <commonroad_cpp/predicates/velocity/required_speed_predicate.h>
-#include <commonroad_cpp/predicates/velocity/reverses_predicate.h>
-#include <commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.h>
 #include <utility>
 
 bool CommonRoadPredicate::statisticBooleanEvaluation(
@@ -109,67 +53,15 @@ CommonRoadPredicate::CommonRoadPredicate(bool vehicleDependent) : vehicleDepende
     omp_init_lock(&writelock);
 }
 
+bool CommonRoadPredicate::simpleBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                  const std::shared_ptr<Obstacle> &obstacleK,
+                                                  const std::shared_ptr<Obstacle> &obstacleP) {
+    return this->booleanEvaluation(timeStep, world, obstacleK, obstacleP);
+}
+
 CommonRoadPredicate::~CommonRoadPredicate() { omp_destroy_lock(&writelock); }
 
 bool CommonRoadPredicate::isVehicleDependent() const { return vehicleDependent; }
-
-std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates{
-    {"brakes_stronger", std::make_shared<BrakesStrongerPredicate>()},
-    {"keeps_safe_distance_prec", std::make_shared<SafeDistancePredicate>()},
-    {"unnecessary_braking", std::make_shared<UnnecessaryBrakingPredicate>()},
-    {"in_congestion", std::make_shared<InCongestionPredicate>()},
-    {"in_queue_of_vehicles", std::make_shared<InQueueOfVehiclesPredicate>()},
-    {"in_slow_moving_traffic", std::make_shared<InSlowMovingTrafficPredicate>()},
-    {"interstate_broad_enough", std::make_shared<InterstateBroadEnoughPredicate>()},
-    {"lane_based_orientation_similar", std::make_shared<LaneBasedOrientationSimilarPredicate>()},
-    {"makes_u_turn", std::make_shared<MakesUTurnPredicate>()},
-    {"orientation_towards", std::make_shared<OrientationTowardsPredicate>()},
-    {"drives_leftmost", std::make_shared<DrivesLeftmostPredicate>()},
-    {"drives_rightmost", std::make_shared<DrivesRightmostPredicate>()},
-    {"in_front_of", std::make_shared<InFrontOfPredicate>()},
-    {"in_leftmost_lane", std::make_shared<InLeftmostLanePredicate>()},
-    {"in_rightmost_lane", std::make_shared<InRightmostLanePredicate>()},
-    {"in_same_lane", std::make_shared<InSameLanePredicate>()},
-    {"in_single_lane", std::make_shared<InSingleLanePredicate>()},
-    {"left_of_broad_lane_marking", std::make_shared<LeftOfBroadLaneMarkingPredicate>()},
-    {"left_of", std::make_shared<LeftOfPredicate>()},
-    {"main_carriageway_right_lane", std::make_shared<MainCarriagewayRightLanePredicate>()},
-    {"on_lanelet_with_type", std::make_shared<OnLaneletWithTypePredicate>()},
-    {"right_of_broad_lane_marking", std::make_shared<RightOfBroadLaneMarkingPredicate>()},
-    {"stop_line_in_front", std::make_shared<StopLineInFrontPredicate>()},
-    {"at_traffic_light", std::make_shared<AtTrafficLightPredicate>()},
-    {"drives_faster", std::make_shared<DrivesFasterPredicate>()},
-    {"drives_with_slightly_higher_speed", std::make_shared<DrivesWithSlightlyHigherSpeedPredicate>()},
-    {"exist_standing_leading_vehicle", std::make_shared<ExistStandingLeadingVehiclePredicate>()},
-    {"in_standstill", std::make_shared<InStandstillPredicate>()},
-    {"keeps_braking_speed_limit", std::make_shared<KeepsBrakingSpeedLimitPredicate>()},
-    {"keeps_fov_speed_limit", std::make_shared<KeepsFOVSpeedLimitPredicate>()},
-    {"keeps_lane_speed_limit", std::make_shared<KeepsLaneSpeedLimitPredicate>()},
-    {"keeps_type_speed_limit", std::make_shared<KeepsTypeSpeedLimitPredicate>()},
-    {"preserves_traffic_flow", std::make_shared<PreservesTrafficFlowPredicate>()},
-    {"keeps_sign_min_speed_limit", std::make_shared<RequiredSpeedPredicate>()},
-    {"reverses", std::make_shared<ReversesPredicate>()},
-    {"slow_leading_vehicle", std::make_shared<SlowLeadingVehiclePredicate>()},
-    {"unobstructed_intersection_view", std::make_shared<UnobstructedIntersectionViewPredicate>()},
-    {"at_traffic_sign", std::make_shared<AtTrafficSignPredicate>()},
-    {"on_similar_oriented_lanelet_with_type", std::make_shared<OnSimilarOrientedLaneletWithTypePredicate>()},
-    {"on_similar_oriented_lanelet_without_type", std::make_shared<OnSimilarOrientedLaneletWithoutTypePredicate>()},
-    {"same_priority", std::make_shared<SamePriorityPredicate>()},
-    {"has_priority", std::make_shared<HasPriorityPredicate>()},
-    {"on_incoming_left_of", std::make_shared<OnIncomingLeftOfPredicate>()},
-    {"relevant_traffic_light", std::make_shared<RelevantTrafficLightPredicate>()},
-    {"causes_braking_intersection", std::make_shared<CausesBrakingIntersectionPredicate>()},
-    {"in_intersection_conflict_area", std::make_shared<InIntersectionConflictAreaPredicate>()},
-    {"on_oncoming_of", std::make_shared<OnOncomingOfPredicate>()},
-    {"braking_at_intersection_possible", std::make_shared<BrakingWithAccelerationPossibleAtIntersection>()},
-    {"in_neighboring_left_lane", std::make_shared<InNeighboringLeftLanePredicate>()},
-    {"in_neighboring_right_lane", std::make_shared<InNeighboringRightLanePredicate>()},
-    {"safe_distance_gap_right_violated", std::make_shared<SafeDistanceGapRightViolatedPredicate>()},
-    {"is_special_vehicle_purpose", std::make_shared<isSpecialVehiclePurposePredicate>()},
-    {"left_signal_set", std::make_shared<LeftSignalSetPredicate>()},
-    {"right_signal_set", std::make_shared<RightSignalSetPredicate>()},
-    {"on_lanelet_with_successor_type", std::make_shared<OnLaneletWithSuccessorTypePredicate>()},
-    {"close_to_intersection", std::make_shared<CloseToIntersectionPredicate>()}};
 
 OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType)
     : signType(std::move(signType)) {}

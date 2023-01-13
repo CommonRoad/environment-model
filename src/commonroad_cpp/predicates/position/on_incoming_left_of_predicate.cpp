@@ -31,10 +31,19 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(
         if (!letK->hasLaneletType(LaneletType::incoming))
             continue;
         auto incomingK{world->getRoadNetwork()->findIncomingByLanelet(letK)};
+        if (!incomingK) {
+            throw std::runtime_error{"missing incoming"};
+        }
         for (const auto &letP : laneP->getContainedLanelets()) {
             if (!letP->hasLaneletType(LaneletType::incoming))
                 continue;
             auto incomingP{world->getRoadNetwork()->findIncomingByLanelet(letP)};
+            if (!incomingP) {
+                throw std::runtime_error{"missing incoming"};
+            }
+            if (!incomingP->getIsLeftOf()) {
+                throw std::runtime_error{"missing incoming"};
+            }
             if (incomingK->getIsLeftOf()->getId() == incomingP->getId())
                 return true;
         };

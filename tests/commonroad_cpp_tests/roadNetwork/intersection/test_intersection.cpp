@@ -56,9 +56,9 @@ TEST_F(IntersectionTest, ComputeMemberLanelets) {
     EXPECT_EQ(intersection2->getMemberLanelets(roadNetwork).size(), 5);
 
     auto laneletTypeIncoming{std::set<LaneletType>{LaneletType::incoming}};
-    auto laneletTypeStraight{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionStraight}};
-    auto laneletTypeLeft{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionLeftTurn}};
-    auto laneletTypeRight{std::set<LaneletType>{LaneletType::intersection, LaneletType::intersectionRightTurn}};
+    auto laneletTypeStraight{std::set<LaneletType>{LaneletType::intersection, LaneletType::straight}};
+    auto laneletTypeLeft{std::set<LaneletType>{LaneletType::intersection, LaneletType::left}};
+    auto laneletTypeRight{std::set<LaneletType>{LaneletType::intersection, LaneletType::right}};
 
     EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(1)->getLaneletTypes(), laneletTypeStraight);
     EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(5)->getLaneletTypes(), laneletTypeIncoming);

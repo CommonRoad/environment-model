@@ -37,8 +37,7 @@ void OnLaneletWithSuccessorTypePredicateTest::initializeTestData(LaneletType lan
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionRightGoingLaneNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::intersectionRightTurn,
-                       LaneletType::intersection);
+    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::right, LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -47,8 +46,7 @@ TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionR
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionLeftGoingLaneNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::intersectionLeftTurn,
-                       LaneletType::intersection);
+    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::left, LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -57,8 +55,7 @@ TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionL
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionStraightGoingLaneNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::intersectionStraight,
-                       LaneletType::intersection);
+    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::straight, LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));

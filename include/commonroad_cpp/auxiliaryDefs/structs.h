@@ -24,7 +24,21 @@ struct vertex {
     double x{0};
     double y{0};
     vertex() = default;
-    vertex(double xPos, double yPos) : x(xPos), y(yPos) {};
+    vertex(std::initializer_list<double> list) {
+        const auto *iter = list.begin();
+        switch (list.size()) {
+        default:
+        case 2:
+            x = *iter++;
+            y = *iter++;
+            break;
+        case 1:
+            x = y = *iter;
+            break;
+        case 0:
+            break;
+        };
+    }
     vertex operator+(const vertex &vert) const { return {this->x + vert.x, this->y + vert.y}; }
     vertex operator-(const vertex &vert) const { return {this->x - vert.x, this->y - vert.y}; }
     vertex operator*(const vertex &vert) const { return {this->x * vert.x, this->y * vert.y}; }
