@@ -115,14 +115,13 @@ class Segment {
    * coordinate frame of the segment.
    *
    * @param[in] points in the global coordinate frame
-   * @param[out] p_local points in the local frame of the segment
+   * @return points in the local frame of the segment
    */
-  void rotatePointsToLocalFrame(const Eigen::Matrix2Xd points,
-                                Eigen::Matrix2Xd &p_local);
+  Eigen::Matrix2Xd rotatePointsToLocalFrame(const Eigen::Matrix2Xd &points) const;
 
-  void computeScaledLambdas(const Eigen::Matrix2Xd &p_local,
-                            Eigen::RowVectorXd &dividers,
-                            Eigen::RowVectorXd &scaled_lambdas);
+  Eigen::RowVectorXd computeScaledLambdas(const Eigen::Matrix2Xd &p_local) const;
+
+  Eigen::RowVectorXd computeDividers(const Eigen::Matrix2Xd &p_local) const;
 
   Eigen::RowVectorXd computePseudoDistance(const Eigen::RowVectorXd &lambdas,
                                            const Eigen::Matrix2Xd &points);
@@ -144,7 +143,7 @@ class Segment {
    * Computes the lambda for a given point in the local coordinate system of the
    * segment.
    *
-   * @param s_local longitudinal coordinate in local coordinate system of
+   * @param p_local longitudinal coordinate in local coordinate system of
    * segment
    * @return lambda
    */
@@ -154,10 +153,10 @@ class Segment {
    * Computes the lambda for a given longitudinal coordinate in the local
    * coordinate system of the segment.
    *
-   * @param p_local point in the local coordinate system of the segment
+   * @param s_local point in the local coordinate system of the segment
    * @return lambda
    */
-  double computeLambda(double s) const;
+  double computeLambda(double s_local) const;
 
   /**
    * Computes the base point for a given lambda.
