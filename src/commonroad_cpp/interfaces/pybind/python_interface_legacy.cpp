@@ -7,7 +7,7 @@
 
 #include <commonroad_cpp/commonroad_container.h>
 
-#include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
+#include "commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h"
 #include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
 #include "commonroad_cpp/predicates/general/in_congestion_predicate.h"
 #include "commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.h"
@@ -137,22 +137,23 @@ bool py_safe_distance_boolean_evaluation_with_parameters(double lonPosK, double 
                                                          double velocityP, double minAccelerationK,
                                                          double minAccelerationP, double tReact, double lengthK,
                                                          double lengthP) {
-    return SafeDistancePredicate::booleanEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK,
-                                                    minAccelerationP, tReact, lengthK, lengthP);
+    return KeepsSafeDistancePrecPredicate::booleanEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK,
+                                                             minAccelerationP, tReact, lengthK, lengthP);
 }
 
 double py_safe_distance_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double velocityK,
                                                           double velocityP, double minAccelerationK,
                                                           double minAccelerationP, double tReact, double lengthK,
                                                           double lengthP) {
-    return SafeDistancePredicate::robustEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK,
-                                                   minAccelerationP, tReact, lengthK, lengthP);
+    return KeepsSafeDistancePrecPredicate::robustEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK,
+                                                            minAccelerationP, tReact, lengthK, lengthP);
 }
 
 double py_safe_distance(double velocityK, double velocityP, double minAccelerationK, double minAccelerationP,
                         double tReact) {
-    SafeDistancePredicate pred;
-    return SafeDistancePredicate::computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact);
+    KeepsSafeDistancePrecPredicate pred;
+    return KeepsSafeDistancePrecPredicate::computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP,
+                                                               tReact);
 }
 
 bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP) {
@@ -172,7 +173,7 @@ void init_python_interface_legacy(py::module_ &m) {
 
     m.def("remove_scenario", &py_removeScenario, "Remove scenario to C++ environment model", py::arg("scenarioId"));
 
-    m.def("safe_distance_boolean_evaluation", &py_boolean_evaluation<SafeDistancePredicate>,
+    m.def("safe_distance_boolean_evaluation", &py_boolean_evaluation<KeepsSafeDistancePrecPredicate>,
           "Boolean evaluation of safe distance predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 
@@ -181,7 +182,7 @@ void init_python_interface_legacy(py::module_ &m) {
           py::arg("lonPosP"), py::arg("velocityK"), py::arg("velocityP"), py::arg("minAccelerationK"),
           py::arg("minAccelerationP"), py::arg("tReact"), py::arg("lengthK"), py::arg("lengthP"));
 
-    m.def("safe_distance_robust_evaluation", &py_robust_evaluation<SafeDistancePredicate>,
+    m.def("safe_distance_robust_evaluation", &py_robust_evaluation<KeepsSafeDistancePrecPredicate>,
           "Robust evaluation of safe distance predicate", py::arg("scenarioId"), py::arg("time_step"),
           py::arg("py_egoVehicleId"), py::arg("py_obstacleId"));
 

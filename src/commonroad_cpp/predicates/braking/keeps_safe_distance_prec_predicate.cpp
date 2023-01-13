@@ -9,33 +9,34 @@
 #include <stdexcept>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
+#include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
-double SafeDistancePredicate::computeSafeDistance(double velocityK, double velocityP, double minAccelerationK,
-                                                  double minAccelerationP, double tReact) {
+double KeepsSafeDistancePrecPredicate::computeSafeDistance(double velocityK, double velocityP, double minAccelerationK,
+                                                           double minAccelerationP, double tReact) {
     if (minAccelerationK >= 0 or minAccelerationP >= 0)
         throw std::logic_error("Acceleration is not negative!");
     return pow(velocityP, 2) / (-2 * std::abs(minAccelerationP)) -
            pow(velocityK, 2) / (-2 * std::abs(minAccelerationK)) + velocityK * tReact;
 }
 
-bool SafeDistancePredicate::booleanEvaluation(
+bool KeepsSafeDistancePrecPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters) > 0;
 }
 
-bool SafeDistancePredicate::booleanEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP,
-                                              double minAccelerationK, double minAccelerationP, double tReact,
-                                              double lengthK, double lengthP) {
+bool KeepsSafeDistancePrecPredicate::booleanEvaluation(double lonPosK, double lonPosP, double velocityK,
+                                                       double velocityP, double minAccelerationK,
+                                                       double minAccelerationP, double tReact, double lengthK,
+                                                       double lengthP) {
     return robustEvaluation(lonPosK, lonPosP, velocityK, velocityP, minAccelerationK, minAccelerationP, tReact, lengthK,
                             lengthP) > 0;
 }
 
-Constraint SafeDistancePredicate::constraintEvaluation(
+Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
@@ -45,8 +46,8 @@ Constraint SafeDistancePredicate::constraintEvaluation(
     try {
         tReact = obstacleK->getReactionTime().value();
     } catch (const std::bad_optional_access &e) {
-        throw std::logic_error{
-            "tried to evaluate SafeDistancePredicate on an obstacle which does not have a reaction time defined"};
+        throw std::logic_error{"tried to evaluate KeepsSafeDistancePrecPredicate on an obstacle which does not have a "
+                               "reaction time defined"};
     }
 
     return {obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
@@ -55,14 +56,14 @@ Constraint SafeDistancePredicate::constraintEvaluation(
                                 obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
 }
 
-Constraint SafeDistancePredicate::constraintEvaluation(double lonPosP, double velocityK, double velocityP,
-                                                       double minAccelerationK, double minAccelerationP, double tReact,
-                                                       double lengthK, double lengthP) {
+Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(double lonPosP, double velocityK, double velocityP,
+                                                                double minAccelerationK, double minAccelerationP,
+                                                                double tReact, double lengthK, double lengthP) {
     return {lonPosP - 0.5 * lengthP - 0.5 * lengthK -
             computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact)};
 }
 
-double SafeDistancePredicate::robustEvaluation(
+double KeepsSafeDistancePrecPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
@@ -72,8 +73,8 @@ double SafeDistancePredicate::robustEvaluation(
     try {
         tReact = obstacleK->getReactionTime().value();
     } catch (const std::bad_optional_access &e) {
-        throw std::logic_error{
-            "tried to evaluate SafeDistancePredicate on an obstacle which does not have a reaction time defined"};
+        throw std::logic_error{"tried to evaluate KeepsSafeDistancePrecPredicate on an obstacle which does not have a "
+                               "reaction time defined"};
     }
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
@@ -97,9 +98,10 @@ double SafeDistancePredicate::robustEvaluation(
         return (deltaS - dSafe);
 }
 
-double SafeDistancePredicate::robustEvaluation(double lonPosK, double lonPosP, double velocityK, double velocityP,
-                                               double minAccelerationK, double minAccelerationP, double tReact,
-                                               double lengthK, double lengthP) {
+double KeepsSafeDistancePrecPredicate::robustEvaluation(double lonPosK, double lonPosP, double velocityK,
+                                                        double velocityP, double minAccelerationK,
+                                                        double minAccelerationP, double tReact, double lengthK,
+                                                        double lengthP) {
     double dSafe{computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact)};
     double deltaS = (lonPosP - 0.5 * lengthP) - (lonPosK + 0.5 * lengthK);
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive robustness
@@ -109,4 +111,4 @@ double SafeDistancePredicate::robustEvaluation(double lonPosK, double lonPosP, d
         return (deltaS - dSafe);
 }
 
-SafeDistancePredicate::SafeDistancePredicate() : CommonRoadPredicate(true) {}
+KeepsSafeDistancePrecPredicate::KeepsSafeDistancePrecPredicate() : CommonRoadPredicate(true) {}
