@@ -304,6 +304,8 @@ else()
     include(ExternalRange)
 endif()
 
+include(ExternalTslRobinMap)
+
 add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 
 # Add Environment model node

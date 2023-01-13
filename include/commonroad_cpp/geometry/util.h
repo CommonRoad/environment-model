@@ -42,7 +42,7 @@ enum class Orientation { COLINEAR, CLOCKWISE, COUNTERCLOCKWISE };
  * @param[out] intersection_point computed intersection point if lines intersect
  * @return True, if lines intersect, otherwise False
  */
-static bool intersectionLineLine(const Eigen::Vector2d l1_pt1,
+static inline bool intersectionLineLine(const Eigen::Vector2d l1_pt1,
                                  const Eigen::Vector2d l1_pt2,
                                  const Eigen::Vector2d l2_pt1,
                                  const Eigen::Vector2d l2_pt2,
@@ -80,7 +80,7 @@ static bool intersectionLineLine(const Eigen::Vector2d l1_pt1,
  * @param r end point of the segment
  * @return True, if point q lies on line segment 'pr', otherwise false
  */
-static bool onSegmentGivenColinearPoints(Eigen::Vector2d p, Eigen::Vector2d q,
+static inline bool onSegmentGivenColinearPoints(Eigen::Vector2d p, Eigen::Vector2d q,
                                          Eigen::Vector2d r) {
   if (std::isgreaterequal(std::max(p[0], r[0]), q[0]) &&
       std::isgreaterequal(q[0], std::min(p[0], r[0])) &&
@@ -102,7 +102,7 @@ static bool onSegmentGivenColinearPoints(Eigen::Vector2d p, Eigen::Vector2d q,
  * @param r third point
  * @return orientation of points
  */
-static Orientation determineOrientation(Eigen::Vector2d p, Eigen::Vector2d q,
+static inline Orientation determineOrientation(Eigen::Vector2d p, Eigen::Vector2d q,
                                         Eigen::Vector2d r) {
   double val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
 
@@ -125,7 +125,7 @@ static Orientation determineOrientation(Eigen::Vector2d p, Eigen::Vector2d q,
  * @param q2 end point of second segment
  * @return True, if segments intersect, otherwise false
  */
-static bool segmentsIntersect(Eigen::Vector2d p1, Eigen::Vector2d q1,
+static inline bool segmentsIntersect(Eigen::Vector2d p1, Eigen::Vector2d q1,
                               Eigen::Vector2d p2, Eigen::Vector2d q2) {
   Orientation o1 = determineOrientation(p1, q1, p2);
   Orientation o2 = determineOrientation(p1, q1, q2);
@@ -170,7 +170,7 @@ static bool segmentsIntersect(Eigen::Vector2d p1, Eigen::Vector2d q1,
  * @param[out] intersection_point intersection point if segments intersect
  * @return True, if segments intersect, otherwise false
  */
-static bool intersectionSegmentSegment(Eigen::Vector2d l1_pt1,
+static inline bool intersectionSegmentSegment(Eigen::Vector2d l1_pt1,
                                        Eigen::Vector2d l1_pt2,
                                        Eigen::Vector2d l2_pt1,
                                        Eigen::Vector2d l2_pt2,
@@ -192,7 +192,7 @@ static bool intersectionSegmentSegment(Eigen::Vector2d l1_pt1,
  * @param r end point of the segment
  * @return True, if point lies on segment; otherwise false
  */
-static bool onSegment(Eigen::Vector2d p, Eigen::Vector2d q, Eigen::Vector2d r) {
+static inline bool onSegment(Eigen::Vector2d p, Eigen::Vector2d q, Eigen::Vector2d r) {
   Orientation orientation = determineOrientation(p, q, r);
   if (orientation != Orientation::COLINEAR) {
     return false;
@@ -207,7 +207,7 @@ static bool onSegment(Eigen::Vector2d p, Eigen::Vector2d q, Eigen::Vector2d r) {
  * @param point 2D point
  * @return projected point
  */
-static Eigen::Vector2d projectOntoAxes(const Eigen::Matrix2d& matr,
+static inline Eigen::Vector2d projectOntoAxes(const Eigen::Matrix2d& matr,
                                        const Eigen::Vector2d& point) {
   return matr * point;
 }

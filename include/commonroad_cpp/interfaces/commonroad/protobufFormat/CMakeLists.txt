@@ -32,32 +32,41 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
     )
 endif()
 
+set(gendir "${CMAKE_CURRENT_BINARY_DIR}/generated")
+set(depdir "${CMAKE_CURRENT_BINARY_DIR}/dep")
+
+file(MAKE_DIRECTORY ${gendir})
+file(MAKE_DIRECTORY ${depdir})
+
 foreach(proto ${COMMONROAD_PROTOS})
         set(proto_orig "${proto}")
         set(proto "${CMAKE_CURRENT_SOURCE_DIR}/${proto}")
         cmake_path(GET proto PARENT_PATH proto_dir)
         cmake_path(GET proto STEM proto_stem)
+
         set(proto_cpp_file "${proto_stem}.pb.cc")
         set(proto_hdr_file "${proto_stem}.pb.h")
         set(proto_dep_file "${proto_stem}.d")
 
-        set(proto_cpp_file_path "${CMAKE_CURRENT_BINARY_DIR}/${proto_cpp_file}")
-        set(proto_hdr_file_path "${CMAKE_CURRENT_BINARY_DIR}/${proto_hdr_file}")
-        set(proto_dep_file_path "${CMAKE_CURRENT_BINARY_DIR}/${proto_dep_file}")
+        set(proto_cpp_file_path "${gendir}/${proto_cpp_file}")
+        set(proto_hdr_file_path "${gendir}/${proto_hdr_file}")
+        set(proto_dep_file_path "${depdir}/${proto_dep_file}")
 
         add_custom_command(
-                OUTPUT ${proto_cpp_file} ${proto_hdr_file}
+                OUTPUT ${proto_cpp_file_path} ${proto_hdr_file_path}
                 COMMAND protobuf::protoc
                 ARGS
-                        --cpp_out=${CMAKE_CURRENT_BINARY_DIR}
+                        --cpp_out=${gendir}
                         --proto_path=${proto_dir}
-                        --dependency_out=${proto_dep_file}
+                        --dependency_out=${proto_dep_file_path}
                         ${proto}
                 DEPENDS
-                        ${proto} protobuf::protoc
+                        ${proto}
+                        # protobuf::protoc
                 DEPFILE
-                        ${proto_dep_file}
+                        ${proto_dep_file_path}
                 VERBATIM
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                 COMMENT "Running CXX protocol buffer compiler on ${proto_orig}"
                 )
 
