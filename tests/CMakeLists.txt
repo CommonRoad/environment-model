@@ -87,7 +87,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/regulatory/test_has_priority_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_relevant_traffic_light_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_lane_speed_limit_predicate.cpp
-        commonroad_cpp_tests/predicates/velocity/test_required_speed_predicate.cpp
+        commonroad_cpp_tests/predicates/velocity/test_keeps_min_speed_limit_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_slow_leading_vehicle_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_in_standstill_predicate.cpp

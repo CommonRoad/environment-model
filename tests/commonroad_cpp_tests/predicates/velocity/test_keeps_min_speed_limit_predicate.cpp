@@ -5,11 +5,11 @@
 // Credits: BMW Car@TUM
 //
 
-#include "test_required_speed_predicate.h"
+#include "test_keeps_min_speed_limit_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
 
-void RequiredSpeedPredicateTest::SetUp() {
+void KeepsMinSpeedLimitPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 5, 0, 0, 0, 0, 0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 5, 2, 10, 0, 0, 0, 5, 0);
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 15, 2, 15, 0, 0, 0, 15, 0);
@@ -30,14 +30,14 @@ void RequiredSpeedPredicateTest::SetUp() {
         std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
 }
 
-TEST_F(RequiredSpeedPredicateTest, BooleanEvaluationObjects) {
+TEST_F(KeepsMinSpeedLimitPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne)); // vehicle drives too slow
     EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));  // vehicle drives exactly with the min. required speed
     EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne));  // vehicle drives with higher velocity
     EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne));  // there exists not a min. required speed
 }
 
-TEST_F(RequiredSpeedPredicateTest, StatisticBooleanEvaluation) {
+TEST_F(KeepsMinSpeedLimitPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne)); // vehicle drives too slow
     EXPECT_EQ(pred.getStatistics().numExecutions, 1);
     EXPECT_TRUE(
@@ -49,10 +49,10 @@ TEST_F(RequiredSpeedPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_EQ(pred.getStatistics().numExecutions, 4);
 }
 
-TEST_F(RequiredSpeedPredicateTest, RobustEvaluation) {
+TEST_F(KeepsMinSpeedLimitPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
 }
 
-TEST_F(RequiredSpeedPredicateTest, ConstraintEvaluation) {
+TEST_F(KeepsMinSpeedLimitPredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
 }
