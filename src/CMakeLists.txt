@@ -75,7 +75,7 @@ set(ENV_MODEL_HDR_FILES
 
 set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/commonroad_predicate.cpp
-        commonroad_cpp/predicates/braking/safe_distance_predicate.cpp
+        commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.cpp
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
@@ -140,7 +140,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.h
         commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.h
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h
-        commonroad_cpp/predicates/braking/safe_distance_predicate.h
+        commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h
         commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.h
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h
         commonroad_cpp/predicates/commonroad_predicate.h

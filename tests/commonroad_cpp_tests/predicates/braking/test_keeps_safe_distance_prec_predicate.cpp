@@ -5,11 +5,11 @@
 // Credits: BMW Car@TUM
 //
 
-#include "test_safe_distance_predicate.h"
+#include "test_keeps_safe_distance_prec_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
 
-void SafeDistancePredicateTest::SetUp() {
+void KeepsSafeDistancePrecPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 20, 0, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 20, 0, 20, -1, 0);
     std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(0, 10, 0, 20, -5, 0);
@@ -37,41 +37,41 @@ void SafeDistancePredicateTest::SetUp() {
         0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo, obstacleThree}, {}, 0.1));
 }
 
-TEST_F(SafeDistancePredicateTest, BooleanEvaluationObjects) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, obstacleTwo));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo));
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleTwo, obstacleThree));
 }
 
-TEST_F(SafeDistancePredicateTest, BooleanEvaluationValues) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, BooleanEvaluationValues) {
     EXPECT_TRUE(pred.booleanEvaluation(0, 20, 20, 20, -10, -10, 0.3, 5, 5));
     EXPECT_FALSE(pred.booleanEvaluation(20, 30, 20, 0, -10, -10, 0.3, 5, 5));
     EXPECT_TRUE(pred.booleanEvaluation(20, 10, 20, 10, -10, -10, 0.3, 5, 5));
 }
 
-TEST_F(SafeDistancePredicateTest, ConstraintEvaluationObjects) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, ConstraintEvaluationObjects) {
     EXPECT_NEAR(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo).realValuedConstraint, 9.0, 0.001);
     EXPECT_NEAR(pred.constraintEvaluation(1, world, obstacleOne, obstacleTwo).realValuedConstraint, -1.0, 0.001);
 }
 
-TEST_F(SafeDistancePredicateTest, ConstraintEvaluationValues) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, ConstraintEvaluationValues) {
     EXPECT_NEAR(pred.constraintEvaluation(20, 20, 20, -10, -10, 0.3, 5, 5).realValuedConstraint, 9.0, 0.001);
     EXPECT_NEAR(pred.constraintEvaluation(30, 20, 0, -10, -10, 0.3, 5, 5).realValuedConstraint, -1.0, 0.001);
 }
 
-TEST_F(SafeDistancePredicateTest, RobustEvaluationObjects) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, RobustEvaluationObjects) {
     EXPECT_NEAR(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), 9, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(1, world, obstacleOne, obstacleTwo), -21, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(0, world, obstacleTwo, obstacleThree), 15, 0.001);
 }
 
-TEST_F(SafeDistancePredicateTest, RobustEvaluationValues) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, RobustEvaluationValues) {
     EXPECT_NEAR(pred.robustEvaluation(0, 20, 20, 20, -10, -10, 0.3, 5, 5), 9, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(20, 30, 20, 0, -10, -10, 0.3, 5, 5), -21, 0.001);
     EXPECT_NEAR(pred.robustEvaluation(20, 10, 20, 20, -10, -10, 0.3, 5, 5), 15, 0.001);
 }
 
-TEST_F(SafeDistancePredicateTest, StatisticBooleanEvaluation) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, StatisticBooleanEvaluation) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo));
     EXPECT_EQ(pred.getStatistics().numExecutions, 1);
     EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo));
@@ -80,28 +80,28 @@ TEST_F(SafeDistancePredicateTest, StatisticBooleanEvaluation) {
     EXPECT_EQ(pred.getStatistics().numExecutions, 3);
 }
 
-TEST_F(SafeDistancePredicateTest, ComputeSafeDistance) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, ComputeSafeDistance) {
     // both vehicles standing, no reaction time
-    EXPECT_NEAR(SafeDistancePredicate::computeSafeDistance(0, 0, -10, -10, 0.0), 0, 0.001);
+    EXPECT_NEAR(KeepsSafeDistancePrecPredicate::computeSafeDistance(0, 0, -10, -10, 0.0), 0, 0.001);
     // both vehicles same velocity, no reaction time
-    EXPECT_NEAR(SafeDistancePredicate::computeSafeDistance(5, 5, -10, -10, 0.0), 0, 0.001);
+    EXPECT_NEAR(KeepsSafeDistancePrecPredicate::computeSafeDistance(5, 5, -10, -10, 0.0), 0, 0.001);
     // both vehicles same velocity, with reaction time
-    EXPECT_NEAR(SafeDistancePredicate::computeSafeDistance(5, 5, -10, -10, 10.0), 50.0, 0.001);
+    EXPECT_NEAR(KeepsSafeDistancePrecPredicate::computeSafeDistance(5, 5, -10, -10, 10.0), 50.0, 0.001);
     // following vehicle higher velocity, no reaction time
-    EXPECT_NEAR(SafeDistancePredicate::computeSafeDistance(10, 0, -10, -10, 0.0), 5.0, 0.001);
+    EXPECT_NEAR(KeepsSafeDistancePrecPredicate::computeSafeDistance(10, 0, -10, -10, 0.0), 5.0, 0.001);
     // leading vehicle higher velocity, no reaction time
-    EXPECT_NEAR(SafeDistancePredicate::computeSafeDistance(0, 10, -10, -10, 0.0), -5.0, 0.001);
+    EXPECT_NEAR(KeepsSafeDistancePrecPredicate::computeSafeDistance(0, 10, -10, -10, 0.0), -5.0, 0.001);
     // invalid acceleration
-    EXPECT_THROW(SafeDistancePredicate::computeSafeDistance(0, 0, 1, 2, 0.0), std::logic_error);
+    EXPECT_THROW(KeepsSafeDistancePrecPredicate::computeSafeDistance(0, 0, 1, 2, 0.0), std::logic_error);
 }
 
 // Tests for CommonRoadPredicate Interface
-TEST_F(SafeDistancePredicateTest, GetParameters) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, GetParameters) {
     EXPECT_EQ(pred.getParameters().aAbrupt, -2);
     EXPECT_EQ(pred.getParameters().minInterstateWidth, 7.0);
 }
 
-TEST_F(SafeDistancePredicateTest, SetParameters) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, SetParameters) {
     PredicateParameters tmpParameters;
     tmpParameters.minInterstateWidth = 5;
     EXPECT_EQ(pred.getParameters().minInterstateWidth, 7.0);
@@ -109,7 +109,7 @@ TEST_F(SafeDistancePredicateTest, SetParameters) {
     EXPECT_EQ(pred.getParameters().minInterstateWidth, 5);
 }
 
-TEST_F(SafeDistancePredicateTest, ResetStatistics) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, ResetStatistics) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo));
     EXPECT_EQ(pred.getStatistics().numExecutions, 1);
     EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo));
@@ -126,10 +126,10 @@ TEST_F(SafeDistancePredicateTest, ResetStatistics) {
     EXPECT_EQ(pred.getStatistics().numExecutions, 0);
 }
 
-TEST_F(SafeDistancePredicateTest, GetEvaluationTimer) {
+TEST_F(KeepsSafeDistancePrecPredicateTest, GetEvaluationTimer) {
     EXPECT_EQ(pred.getEvaluationTimer().getTotalTime(), 0);
     EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo));
     EXPECT_GT(pred.getEvaluationTimer().getTotalTime(), 0);
 }
 
-TEST_F(SafeDistancePredicateTest, IsVehicleDependent) { EXPECT_TRUE(pred.isVehicleDependent()); }
+TEST_F(KeepsSafeDistancePrecPredicateTest, IsVehicleDependent) { EXPECT_TRUE(pred.isVehicleDependent()); }

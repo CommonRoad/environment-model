@@ -7,7 +7,7 @@
 
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
-#include <commonroad_cpp/predicates/braking/safe_distance_predicate.h>
+#include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
