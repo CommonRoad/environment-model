@@ -1178,12 +1178,11 @@ CurvilinearCoordinateSystem::convertToCurvilinearCoords(const std::vector<EigenP
 
             auto &segment = this->segment_list_[segment_index];
             // rotate points to local frame of segment
-            Eigen::Matrix2Xd candidate_points_in_segment_local;
-            segment->rotatePointsToLocalFrame(candidate_points_in_segment, candidate_points_in_segment_local);
+            Eigen::Matrix2Xd candidate_points_in_segment_local =
+                segment->rotatePointsToLocalFrame(candidate_points_in_segment);
             // compute scaled lambdas
-            Eigen::RowVectorXd scaled_lambdas;
-            Eigen::RowVectorXd dividers;
-            segment->computeScaledLambdas(candidate_points_in_segment_local, dividers, scaled_lambdas);
+            Eigen::RowVectorXd scaled_lambdas = segment->computeScaledLambdas(candidate_points_in_segment_local);
+            Eigen::RowVectorXd dividers = segment->computeDividers(candidate_points_in_segment_local);
             // check validity of lambdas
             Eigen::RowVectorXd valid_lambdas(candidates_indices.size());
             Eigen::RowVectorXd valid_candidates_y(candidates_indices.size());

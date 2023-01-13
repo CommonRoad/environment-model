@@ -47,6 +47,9 @@ class Lane : public Lanelet {
      */
     Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet);
 
+    Lane(const Lane&) = delete;
+    Lane(Lane&&) = default;
+
     ~Lane();
 
     /**
