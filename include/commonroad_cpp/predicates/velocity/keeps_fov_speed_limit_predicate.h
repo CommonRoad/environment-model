@@ -12,12 +12,12 @@
  * Evaluates whether a vehicle keeps its field of view based speed limit. This is necessary to ensure that a
  * vehicle is able to react to a standing vehicle at the border of the field of view.
  */
-class KeepsFOVSpeedLimitPredicate : public CommonRoadPredicate {
+class KeepsFovSpeedLimitPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for KeepsFOVSpeedLimitPredicate.
+     * Constructor for KeepsFovSpeedLimitPredicate.
      */
-    KeepsFOVSpeedLimitPredicate();
+    KeepsFovSpeedLimitPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

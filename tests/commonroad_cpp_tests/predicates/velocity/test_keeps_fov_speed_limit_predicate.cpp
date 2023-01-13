@@ -9,7 +9,7 @@
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 
-void KeepsFOVSpeedLimitPredicateTest::SetUp() {
+void KeepsFovSpeedLimitPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 0, 0, 0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 25, 2, 25, 0, 0);
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 50, 2, 50, 0, 0);
@@ -30,7 +30,7 @@ void KeepsFOVSpeedLimitPredicateTest::SetUp() {
         std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
 }
 
-TEST_F(KeepsFOVSpeedLimitPredicateTest, BooleanEvaluationObjects) {
+TEST_F(KeepsFovSpeedLimitPredicateTest, BooleanEvaluationObjects) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne)); // obstacle stands
     EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne)); // obstacle drives below speed limit
     EXPECT_TRUE(pred.booleanEvaluation(2, world,
@@ -39,10 +39,10 @@ TEST_F(KeepsFOVSpeedLimitPredicateTest, BooleanEvaluationObjects) {
                                         obstacleOne)); // obstacle drives above speed limit
 }
 
-TEST_F(KeepsFOVSpeedLimitPredicateTest, RobustEvaluation) {
+TEST_F(KeepsFovSpeedLimitPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
 }
 
-TEST_F(KeepsFOVSpeedLimitPredicateTest, ConstraintEvaluation) {
+TEST_F(KeepsFovSpeedLimitPredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
 }
