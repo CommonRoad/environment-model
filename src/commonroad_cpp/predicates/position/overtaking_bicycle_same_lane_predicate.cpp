@@ -3,7 +3,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/world.h>
 
-#include "commonroad_cpp/predicates/braking/safe_distance_predicate.h"
+#include "commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h"
 #include "commonroad_cpp/predicates/position/drives_rightmost_predicate.h"
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_same_lane_predicate.h"
@@ -16,7 +16,7 @@ bool OvertakingBicycleSameLanePredicate::booleanEvaluation(
     InSameLanePredicate inSameLanePredicate;
     InFrontOfPredicate inFrontOfPredicate;
     DrivesRightmostPredicate drivesRightmostPredicate;
-    SafeDistancePredicate safeDistancePredicate;
+    KeepsSafeDistancePrecPredicate KeepsSafeDistancePrecPredicate;
     bool overtakingBicycle = false;
     std::shared_ptr<OptionalPredicateParameters> predicateParameters =
         std::make_shared<OptionalPredicateParameters>(OptionalPredicateParameters(parameters.minSafetyDistance));
@@ -31,7 +31,8 @@ bool OvertakingBicycleSameLanePredicate::booleanEvaluation(
             ((((inFrontOfPredicate.robustEvaluation(timeStep, world, obstacleK, obs) > 0.0 &&
                 inFrontOfPredicate.robustEvaluation(timeStep, world, obstacleK, obs) < parameters.closeToBicycle) ||
                (inFrontOfPredicate.booleanEvaluation(timeStep, world, obs, obstacleK) &&
-                !safeDistancePredicate.booleanEvaluation(timeStep, world, obs, obstacleK, predicateParameters))) &&
+                !KeepsSafeDistancePrecPredicate.booleanEvaluation(timeStep, world, obs, obstacleK,
+                                                                  predicateParameters))) &&
               !drivesRightmostPredicate.booleanEvaluation(timeStep, world, obstacleK)) ||
              rightObstacle == obs)) {
             overtakingBicycle = true;

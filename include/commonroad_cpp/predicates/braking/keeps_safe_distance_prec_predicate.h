@@ -12,12 +12,12 @@
 /**
  * Predicate for the safe distance between two vehicles.
  */
-class SafeDistancePredicate : public CommonRoadPredicate {
+class KeepsSafeDistancePrecPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for SafeDistancePredicate.
+     * Constructor for KeepsSafeDistancePrecPredicate.
      */
-    SafeDistancePredicate();
+    KeepsSafeDistancePrecPredicate();
 
     /**
      * Safe distance between the kth and the pth obstacle using objects.
