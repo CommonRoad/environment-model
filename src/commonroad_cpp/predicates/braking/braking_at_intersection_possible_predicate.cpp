@@ -9,9 +9,9 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/world.h>
 
-#include <commonroad_cpp/predicates/braking/braking_with_acceleration_possible_at_intersection_predicate.h>
+#include <commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.h>
 
-bool BrakingWithAccelerationPossibleAtIntersectionPredicate::booleanEvaluation(
+bool BrakingAtIntersectionPossiblePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
@@ -39,19 +39,18 @@ bool BrakingWithAccelerationPossibleAtIntersectionPredicate::booleanEvaluation(
     return brakingDistance < distanceIntersection;
 }
 
-Constraint BrakingWithAccelerationPossibleAtIntersectionPredicate::constraintEvaluation(
+Constraint BrakingAtIntersectionPossiblePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("BrakingWithAccelerationPossible does not support robust evaluation!");
 }
 
-double BrakingWithAccelerationPossibleAtIntersectionPredicate::robustEvaluation(
+double BrakingAtIntersectionPossiblePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("BrakingWithAccelerationPossible does not support robust evaluation!");
 }
 
-BrakingWithAccelerationPossibleAtIntersectionPredicate::BrakingWithAccelerationPossibleAtIntersectionPredicate()
-    : CommonRoadPredicate(false) {}
+BrakingAtIntersectionPossiblePredicate::BrakingAtIntersectionPossiblePredicate() : CommonRoadPredicate(false) {}
