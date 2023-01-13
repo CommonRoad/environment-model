@@ -12,7 +12,7 @@
 class IsSpecialVehiclePurposeTest : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> egoVehicle;
-    isSpecialVehiclePurposePredicate pred;
+    IsSpecialVehiclePurposePredicate pred;
     std::shared_ptr<World> world;
 
   private:

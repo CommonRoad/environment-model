@@ -15,6 +15,10 @@ bool AtTrafficLightPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    if (!additionalFunctionParameters) {
+        throw std::runtime_error{"missing additionalFunctionParameters"};
+    }
+    assert(additionalFunctionParameters);
     return regulatory_elements_utils::atTrafficLightDirState(timeStep, obstacleK, world->getRoadNetwork(),
                                                              additionalFunctionParameters->turningDirection.at(0),
                                                              additionalFunctionParameters->trafficLightState.at(0));

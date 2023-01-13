@@ -31,8 +31,7 @@ void CloseToIntersectionPredicateTest::initializeTestData(LaneletType laneletTyp
 }
 
 TEST_F(CloseToIntersectionPredicateTest, OnIncoming) {
-    initializeTestData(LaneletType::incoming, LaneletType::urban, LaneletType::intersectionRightTurn,
-                       LaneletType::intersection);
+    initializeTestData(LaneletType::incoming, LaneletType::urban, LaneletType::right, LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}));
     EXPECT_FALSE(pred.booleanEvaluation(2, world, egoVehicle, {}));

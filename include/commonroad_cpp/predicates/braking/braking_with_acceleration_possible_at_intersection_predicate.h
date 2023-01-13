@@ -12,12 +12,12 @@
 /**
  * Braking with given acceleration possible at an intersection incoming.
  */
-class BrakingWithAccelerationPossibleAtIntersection : public CommonRoadPredicate {
+class BrakingWithAccelerationPossibleAtIntersectionPredicate : public CommonRoadPredicate {
   public:
     /**
      * Constructor for BrakingWithAccelerationPossible.
      */
-    BrakingWithAccelerationPossibleAtIntersection();
+    BrakingWithAccelerationPossibleAtIntersectionPredicate();
 
     /**
      * Boolean evaluation of predicate.
@@ -54,7 +54,7 @@ class BrakingWithAccelerationPossibleAtIntersection : public CommonRoadPredicate
      * @param world World object.
      * @param obstacleK The kth obstacle.
      * @param obstacleP The pth obstacle. This is an optional parameter.
-     * @param obstacles Pointers to all obstacles. This is an optional parameter.
+     * @param additionalFunctionParameters Additional parameters.
      * @return Real value indicating robustness of the predicate.
      */
     double

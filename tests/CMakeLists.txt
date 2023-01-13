@@ -50,6 +50,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/general/test_interstate_broad_enough.cpp
         commonroad_cpp_tests/predicates/general/test_left_signal_set_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_right_signal_set_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_narrow_road_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_on_lanelet_with_type_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_close_to_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_front_of_predicate.cpp
@@ -69,6 +70,16 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/position/test_main_carriageway_right_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_right_of_broad_lane_marking_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_left_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_front_of_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_same_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_single_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_left_of_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_on_oncoming_of_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_unobstructed_intersection_view_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_in_intersection_conflict_area_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_oncoming_vehicle_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_overtaking_bicycle_same_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/regulatory/test_stop_line_in_front_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_stop_line_in_front_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_at_traffic_light_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_at_traffic_sign_predicate.cpp
@@ -86,8 +97,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/velocity/test_reverses_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_type_speed_limit_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_fov_speed_limit_predicate.cpp
-        commonroad_cpp_tests/predicates/velocity/test_keeps_braking_speed_limit_predicate.cpp
-        )
+        commonroad_cpp_tests/predicates/velocity/test_keeps_braking_speed_limit_predicate.cpp)
 
 
 # Create executable for test

@@ -14,6 +14,7 @@ class TestInNeighboringRightLanePredicate : public testing::Test {
     std::shared_ptr<Obstacle> obstacleThree;
     std::shared_ptr<Obstacle> obstacleFour;
     std::shared_ptr<Obstacle> obstacleFive;
+    std::shared_ptr<Obstacle> obstacleSix;
     InNeighboringRightLanePredicate pred;
     std::shared_ptr<World> world;
     std::shared_ptr<World> worldOncoming;

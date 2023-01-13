@@ -23,21 +23,21 @@ class Shape {
      *
      * @param l Length of shape [m].
      */
-    virtual void setLength(const double){};
+    virtual void setLength(const double l){};
 
     /**
      * Virtual setter for shape width. Function can only be used for rectangles.
      *
      * @param w Width of shape [m].
      */
-    virtual void setWidth(const double){};
+    virtual void setWidth(const double w){};
 
     /**
      * Virtual setter for shape radius. Function can only be used for circles.
      *
      * @param rad Radius of shape [m].
      */
-    virtual void setRadius(const double){};
+    virtual void setRadius(const double rad){};
 
     /**
      * Virtual setter for shape center. Function can only be used for circles.
@@ -45,7 +45,7 @@ class Shape {
      * @param x x-coordinate of center [m].
      * @param y y-coordinate of center [m].
      */
-    virtual void setCenter(const double, const double){};
+    virtual void setCenter(const double x, const double y){};
 
     /**
      * Virtual getter for shape length. Function cannot be used for circles.
