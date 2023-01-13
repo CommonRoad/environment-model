@@ -12,10 +12,10 @@
 #include "commonroad_cpp/world.h"
 #include <gtest/gtest.h>
 
-class KeepsFOVSpeedLimitPredicateTest : public testing::Test {
+class KeepsFovSpeedLimitPredicateTest : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> obstacleOne;
-    KeepsFOVSpeedLimitPredicate pred;
+    KeepsFovSpeedLimitPredicate pred;
     std::shared_ptr<World> world;
 
   private:

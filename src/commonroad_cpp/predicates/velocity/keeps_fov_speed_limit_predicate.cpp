@@ -9,25 +9,25 @@
 #include <commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 
-bool KeepsFOVSpeedLimitPredicate::booleanEvaluation(
+bool KeepsFovSpeedLimitPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     return obstacleK->getStateByTimeStep(timeStep)->getVelocity() <= parameters.fovSpeedLimit;
 }
 
-double KeepsFOVSpeedLimitPredicate::robustEvaluation(
+double KeepsFovSpeedLimitPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("KeepsTypeSpeedLimitPredicate does not support robust evaluation!");
 }
 
-Constraint KeepsFOVSpeedLimitPredicate::constraintEvaluation(
+Constraint KeepsFovSpeedLimitPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    throw std::runtime_error("KeepsFOVSpeedLimitPredicate does not support constraint evaluation!");
+    throw std::runtime_error("KeepsFovSpeedLimitPredicate does not support constraint evaluation!");
 }
 
-KeepsFOVSpeedLimitPredicate::KeepsFOVSpeedLimitPredicate() : CommonRoadPredicate(false) {}
+KeepsFovSpeedLimitPredicate::KeepsFovSpeedLimitPredicate() : CommonRoadPredicate(false) {}
