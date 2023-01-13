@@ -12,12 +12,12 @@
 /**
  * Braking with given acceleration possible at an intersection incoming.
  */
-class BrakingWithAccelerationPossibleAtIntersectionPredicate : public CommonRoadPredicate {
+class BrakingAtIntersectionPossiblePredicate : public CommonRoadPredicate {
   public:
     /**
      * Constructor for BrakingWithAccelerationPossible.
      */
-    BrakingWithAccelerationPossibleAtIntersectionPredicate();
+    BrakingAtIntersectionPossiblePredicate();
 
     /**
      * Boolean evaluation of predicate.
