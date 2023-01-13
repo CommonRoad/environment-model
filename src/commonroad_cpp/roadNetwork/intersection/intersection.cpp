@@ -58,7 +58,7 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
                             [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
                         memberLanelets.push_back(let);
                         let->addLaneletType(LaneletType::intersection);
-                        let->addLaneletType(LaneletType::intersectionLeftTurn);
+                        let->addLaneletType(LaneletType::left);
                     }
                 }
             }
@@ -73,7 +73,7 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
                             [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
                         memberLanelets.push_back(let);
                         let->addLaneletType(LaneletType::intersection);
-                        let->addLaneletType(LaneletType::intersectionStraight);
+                        let->addLaneletType(LaneletType::straight);
                     }
                 }
             }
@@ -88,7 +88,7 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
                             [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
                         memberLanelets.push_back(let);
                         let->addLaneletType(LaneletType::intersection);
-                        let->addLaneletType(LaneletType::intersectionRightTurn);
+                        let->addLaneletType(LaneletType::right);
                     }
                 }
             }

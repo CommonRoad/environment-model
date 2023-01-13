@@ -24,7 +24,6 @@ struct vertex {
     double x{0};
     double y{0};
     vertex() = default;
-    vertex(double xPos, double yPos) : x(xPos), y(yPos) {};
     vertex(std::initializer_list<double> list) {
         const auto *iter = list.begin();
         switch (list.size()) {

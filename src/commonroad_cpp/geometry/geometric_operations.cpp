@@ -151,7 +151,7 @@ std::vector<vertex> geometric_operations::discretizeEllipse(double xPos, double 
     std::vector<vertex> vertices;
     for (int i = 0; i < segments; ++i) {
         phi += angleShift;
-        vertices.emplace_back(xPos + aParam * cos(phi), yPos + bParam * sin(phi));
+        vertices.push_back({xPos + aParam * cos(phi), yPos + bParam * sin(phi)});
     }
     return vertices;
 }
