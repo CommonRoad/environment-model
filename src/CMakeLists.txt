@@ -248,6 +248,7 @@ target_link_libraries(env_model_core
         Boost::headers
         range-v3::range-v3
         commonroad_protobuf
+        tsl::robin_map
         )
 
 target_precompile_headers(env_model_core
