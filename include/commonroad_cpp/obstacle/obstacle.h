@@ -27,6 +27,8 @@
 #include "sensor_parameters.h"
 #include "signal_state.h"
 
+#include <tsl/robin_map.h>
+
 class Lanelet;
 class Lane;
 class RoadNetwork;
@@ -36,10 +38,12 @@ class RoadNetwork;
  */
 class Obstacle {
   public:
+    template <typename Value>
+    using time_step_map_t = tsl::robin_map<time_step_t, Value>;
     //** type of history/trajectory prediction maps for physical states */
-    using state_map_t = std::unordered_map<time_step_t, std::shared_ptr<State>>;
+    using state_map_t = time_step_map_t<std::shared_ptr<State>>;
     //** type of history/trajectory prediction maps for signal states*/
-    using signal_state_map_t = std::unordered_map<time_step_t, std::shared_ptr<SignalState>>;
+    using signal_state_map_t = time_step_map_t<std::shared_ptr<SignalState>>;
 
     /**
      * Default constructor without parameters for an obstacle.
@@ -687,23 +691,27 @@ class Obstacle {
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
         occupiedLanelets; //**< map of time steps to lanelets occupied by the obstacle */
 
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
+    mutable time_step_map_t<std::vector<std::shared_ptr<Lane>>>
+        occupiedLanesDrivingDir; //**< map of time steps to lanelets occupied by the obstacle */
+
+    mutable time_step_map_t<std::vector<std::shared_ptr<Lanelet>>>
         occupiedLaneletsDrivingDir; //**< map of time steps to lanelets in driving direction occupied by the obstacle */
 
-    std::unordered_map<time_step_t, std::shared_ptr<Lane>>
+    mutable time_step_map_t<std::shared_ptr<Lane>>
         referenceLane; //**< lane which is used as reference for curvilinear projection */
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lane>>>
+
+    mutable time_step_map_t<std::vector<std::shared_ptr<Lane>>>
         occupiedLanes; //**< map of time steps to lanes occupied by the obstacle */
 
     using curvilinear_position_t = std::array<double, 3>; //**< curvilinear position of an obstacle */
     using curvilinear_position_map_t =
-        std::unordered_map<lanelet_id_set, curvilinear_position_t,
-                           boost::hash<lanelet_id_set>>; //**< map from lanelet ID set to curvilinear positions */
-
-    std::unordered_map<time_step_t, curvilinear_position_map_t>
+        tsl::robin_pg_map<std::shared_ptr<Lane>, curvilinear_position_t>; //**< map from lanelet ID set to curvilinear positions */
+    mutable time_step_map_t<curvilinear_position_map_t>
         convertedPositions; //**< map of time steps to lanelet ID set to curvilinear positions */
 
-    std::unordered_map<time_step_t, polygon_type> shapeAtTimeStep; //**< occupied polygon shape at time steps */
+    curvilinear_position_map_t::const_iterator find_or_convert(size_t timeStep, const std::shared_ptr<Lane> &refLane) const;
+
+    mutable time_step_map_t<polygon_type> shapeAtTimeStep; //**< occupied polygon shape at time steps */
 
     double fieldOfViewRear{250.0};  //**< length of field of view provided by front sensors */
     double fieldOfViewFront{250.0}; //**< length of field of view provided by rear sensors */

@@ -198,6 +198,7 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
                                       const pugi::xml_node &roadElements) {
     std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
     tempObstacle->setObstacleRole(ObstacleRole::STATIC);
+    tempObstacle->setSensorParameters(SensorParameters::staticDefaults());
 
     // extract ID, type, shape, and initial state
     tempObstacle->setId(roadElements.first_attribute().as_ullong());

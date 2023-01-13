@@ -49,7 +49,7 @@ void PredicateManager::extractPredicateSatisfaction() {
                  ++timeStep) {
                 std::shuffle(std::begin(relevantPredicates), std::end(relevantPredicates), rng);
                 for (const auto &predName : relevantPredicates) {
-                    auto pred{predicates[predName]};
+                    auto &pred{predicates[predName]};
                     const std::shared_ptr<OptionalPredicateParameters> opt{
                         std::make_shared<OptionalPredicateParameters>(
                             std::vector<TrafficSignTypes>{TrafficSignTypes::MIN_SPEED},
@@ -137,10 +137,10 @@ void PredicateManager::writeFile() {
             "Min. Comp. Time,Avg. Comp. Time,Weight Max. Comp. Time,Weight Avg. Comp. Time \n";
     std::map<std::string, std::tuple<size_t, size_t, double, double, double, double>> predicateStatistics;
     for (const auto &predName : relevantPredicates) {
-        auto pred{predicates[predName]};
-        auto minExecutionTime{static_cast<double>(predicates[predName]->getStatistics().minComputationTime) / 1e6};
-        auto maxExecutionTime{static_cast<double>(predicates[predName]->getStatistics().maxComputationTime) / 1e6};
-        auto avgExecutionTime{(static_cast<double>(predicates[predName]->getStatistics().totalComputationTime) / 1e6) /
+        auto& pred{predicates[predName]};
+        auto minExecutionTime{static_cast<double>(pred->getStatistics().minComputationTime) / 1e6};
+        auto maxExecutionTime{static_cast<double>(pred->getStatistics().maxComputationTime) / 1e6};
+        auto avgExecutionTime{(static_cast<double>(pred->getStatistics().totalComputationTime) / 1e6) /
                               static_cast<double>(pred->getStatistics().numExecutions)};
         if (minExecutionTime < globalMinExecutionTime)
             globalMinExecutionTime = minExecutionTime;

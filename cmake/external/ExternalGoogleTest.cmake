@@ -21,7 +21,7 @@ FetchContent_Declare_Fallback(
 set(INSTALL_GTEST OFF)
 FetchContent_MakeAvailable(googletest)
 
-if(NOT GTest_FOUND)
+if(NOT googletest_FOUND AND NOT GTest_FOUND)
     # Add google-test
     mark_as_advanced(
             BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS

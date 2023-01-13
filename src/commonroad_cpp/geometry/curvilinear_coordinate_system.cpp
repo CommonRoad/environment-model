@@ -2,6 +2,10 @@
 
 #include <commonroad_cpp/geometry/util.h>
 
+#include <spdlog/spdlog.h>
+
+#include <range/v3/all.hpp>
+
 namespace geometry {
 
 CurvilinearCoordinateSystem::CurvilinearCoordinateSystem(const EigenPolyline &reference_path,
@@ -630,8 +634,64 @@ void CurvilinearCoordinateSystem::rasterizeTransformedPolygonInProjectionDomain(
     }
 }
 
+// Test based on half planes (see https://stackoverflow.com/a/2049593)
+static inline double sign(const Eigen::Vector2d &p1, const Eigen::Vector2d &p2, const Eigen::Vector2d &p3) {
+    return (p1.x() - p3.x()) * (p2.y() - p3.y()) - (p2.x() - p3.x()) * (p1.y() - p3.y());
+}
+
+static inline bool check_point_in_triangle(const Eigen::Vector2d &pt, const Eigen::Vector2d &v1,
+                                           const Eigen::Vector2d &v2, const Eigen::Vector2d &v3) {
+    double d1 = sign(pt, v1, v2);
+    double d2 = sign(pt, v2, v3);
+    double d3 = sign(pt, v3, v1);
+
+    bool has_neg = (d1 < 0.0) || (d2 < 0.0) || (d3 < 0.0);
+    bool has_pos = (d1 > 0.0) || (d2 > 0.0) || (d3 > 0.0);
+
+    return !(has_neg && has_pos);
+}
+
+static inline bool check_point_in_quad(const Eigen::Vector2d &pt, const quad &q) {
+    return check_point_in_triangle(pt, q.p1, q.p2, q.p3) || check_point_in_triangle(pt, q.p3, q.p4, q.p1);
+}
+
 bool CurvilinearCoordinateSystem::cartesianPointInProjectionDomain(double x, double y) const {
-    return boost::geometry::covered_by(point_type(x, y), this->projection_domain_);
+    point_type pt(x, y);
+
+    Eigen::Vector2d ept(x, y);
+    auto pred = boost::geometry::index::intersects(pt);
+
+    std::vector<quadtree_value_type> result_list;
+    this->projection_domain_quads_.query(pred, std::back_inserter(result_list));
+
+    bool quad_res = false;
+    for (const auto &[bbox, quad] : result_list) {
+        if (check_point_in_quad(ept, quad)) {
+            quad_res = true;
+            break;
+        }
+    }
+
+    // FIXME: should be faster, theoretically...
+    if (false) {
+        for (quadtree_type::const_query_iterator it = this->projection_domain_quads_.qbegin(pred);
+             it != this->projection_domain_quads_.qend(); it++) {
+            if (check_point_in_quad(ept, it->second)) {
+                return true;
+            }
+        }
+    }
+
+    // Correctness check
+    // FIXME: Remove this if convinced that approach above is correct
+#ifndef NDEBUG
+    bool orig_res = boost::geometry::covered_by(pt, this->projection_domain_);
+    if (quad_res != orig_res) {
+        SPDLOG_ERROR("mismatch: quad={} orig={}", quad_res, orig_res);
+    }
+#endif
+
+    return quad_res;
 }
 
 bool CurvilinearCoordinateSystem::curvilinearPointInProjectionDomain(double s, double l) const {
@@ -910,6 +970,27 @@ EigenPolyline CurvilinearCoordinateSystem::computeProjectionDomainBorder(double 
         this->lower_projection_domain_border_.push_back(segment->pt_2() + min_radius * segment->normalSegmentEnd());
     }
 
+    // std::vector<std::pair<box_type, quad>> quads
+    auto quad_view = ranges::views::zip(ranges::views::ref(this->upper_projection_domain_border_),
+                                        ranges::views::ref(this->lower_projection_domain_border_)) |
+                     ranges::views::sliding(2) | ranges::views::transform([](auto window) {
+                         auto it = window.begin();
+                         const auto &[u1, l1] = *it++;
+                         const auto &[u2, l2] = *it++;
+
+                         return quad{u1, u2, l2, l1};
+                     });
+
+    for (const quad &q : quad_view) {
+        polygon_type temp_poly;
+        for (const auto &p : {q.p1, q.p2, q.p3, q.p4, q.p1})
+            boost::geometry::append(temp_poly, point_type(p.x(), p.y()));
+
+        box_type bbox = boost::geometry::return_envelope<box_type>(temp_poly);
+
+        this->projection_domain_quads_.insert(std::make_pair(bbox, q));
+    }
+
     // concatenate projection domain border
     projection_domain_border.insert(projection_domain_border.end(), this->upper_projection_domain_border_.begin(),
                                     this->upper_projection_domain_border_.end());
@@ -1178,12 +1259,11 @@ CurvilinearCoordinateSystem::convertToCurvilinearCoords(const std::vector<EigenP
 
             auto &segment = this->segment_list_[segment_index];
             // rotate points to local frame of segment
-            Eigen::Matrix2Xd candidate_points_in_segment_local;
-            segment->rotatePointsToLocalFrame(candidate_points_in_segment, candidate_points_in_segment_local);
+            Eigen::Matrix2Xd candidate_points_in_segment_local =
+                segment->rotatePointsToLocalFrame(candidate_points_in_segment);
             // compute scaled lambdas
-            Eigen::RowVectorXd scaled_lambdas;
-            Eigen::RowVectorXd dividers;
-            segment->computeScaledLambdas(candidate_points_in_segment_local, dividers, scaled_lambdas);
+            Eigen::RowVectorXd scaled_lambdas = segment->computeScaledLambdas(candidate_points_in_segment_local);
+            Eigen::RowVectorXd dividers = segment->computeDividers(candidate_points_in_segment_local);
             // check validity of lambdas
             Eigen::RowVectorXd valid_lambdas(candidates_indices.size());
             Eigen::RowVectorXd valid_candidates_y(candidates_indices.size());

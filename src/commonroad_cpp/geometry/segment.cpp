@@ -87,7 +87,7 @@ Eigen::Vector2d Segment::tangent(double s_local) const {
     return pseudo_tangent;
 }
 
-void Segment::rotatePointsToLocalFrame(const Eigen::Matrix2Xd points, Eigen::Matrix2Xd &p_local) {
+Eigen::Matrix2Xd Segment::rotatePointsToLocalFrame(const Eigen::Matrix2Xd &points) const {
     Eigen::Matrix2d R;
     R << this->tangent_[0], this->tangent_[1], this->normal_[0], this->normal_[1];
 
@@ -97,14 +97,16 @@ void Segment::rotatePointsToLocalFrame(const Eigen::Matrix2Xd points, Eigen::Mat
     Eigen::Matrix2Xd pt_1_matr_tmp(2, points.cols());
     pt_1_matr_tmp = points - pt_1_matr;
 
-    p_local = R * (pt_1_matr_tmp);
+    return R * (pt_1_matr_tmp);
 }
 
-void Segment::computeScaledLambdas(const Eigen::Matrix2Xd &p_local, Eigen::RowVectorXd &dividers,
-                                   Eigen::RowVectorXd &scaled_lambdas) {
+Eigen::RowVectorXd Segment::computeScaledLambdas(const Eigen::Matrix2Xd &p_local) const {
+    return p_local.row(0) + p_local.row(1) * this->m_1_;
+}
+
+Eigen::RowVectorXd Segment::computeDividers(const Eigen::Matrix2Xd &p_local) const {
     Eigen::RowVectorXd length_vec = Eigen::RowVectorXd::Constant(p_local.cols(), this->length_);
-    dividers = length_vec - ((this->m_2_ - this->m_1_) * p_local.middleRows(1, 1));
-    scaled_lambdas = (p_local.middleRows(0, 1) + p_local.middleRows(1, 1) * this->m_1_);
+    return length_vec - ((this->m_2_ - this->m_1_) * p_local.row(1));
 }
 
 Eigen::RowVectorXd Segment::computePseudoDistance(const Eigen::RowVectorXd &lambdas, const Eigen::Matrix2Xd &points) {
@@ -114,11 +116,7 @@ Eigen::RowVectorXd Segment::computePseudoDistance(const Eigen::RowVectorXd &lamb
     Eigen::Matrix2Xd tmp2 = this->pt_1_.replicate(1, lambdas.cols());
     Eigen::Matrix2Xd p_lambdas = tmp1 + tmp2;
     Eigen::Matrix2Xd pseudo_normals = points - p_lambdas;
-    Eigen::RowVectorXd pseudonorm_x = pseudo_normals.middleRows(0, 1);
-    Eigen::RowVectorXd pseudonorm_y = pseudo_normals.middleRows(1, 1);
-    Eigen::RowVectorXd distance =
-        (pseudonorm_x.cwiseProduct(pseudonorm_x) + pseudonorm_y.cwiseProduct(pseudonorm_y)).cwiseSqrt();
-    return distance;
+    return pseudo_normals.colwise().hypotNorm();
 }
 
 double Segment::computeLambda(double s) const { return s / this->length_; }
