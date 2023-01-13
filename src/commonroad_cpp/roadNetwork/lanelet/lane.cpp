@@ -19,7 +19,7 @@
  * alignment of certain structures. If different allocators are used for the allocation and deallocation,
  * silent memory corruption will occur resulting in hard to find bugs.
  */
-Lane::~Lane() {}
+Lane::~Lane() { omp_destroy_lock(&ccs_lock); }
 
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
            std::shared_ptr<CurvilinearCoordinateSystem> ccs)
