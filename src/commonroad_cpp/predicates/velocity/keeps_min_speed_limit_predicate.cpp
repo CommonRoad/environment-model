@@ -6,11 +6,11 @@
 //
 
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/predicates/velocity/required_speed_predicate.h>
+#include <commonroad_cpp/predicates/velocity/keeps_min_speed_limit_predicate.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 #include <commonroad_cpp/world.h>
 
-bool RequiredSpeedPredicate::booleanEvaluation(
+bool KeepsMinSpeedLimitPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
@@ -20,17 +20,17 @@ bool RequiredSpeedPredicate::booleanEvaluation(
     return vReqLane <= obstacleK->getStateByTimeStep(timeStep)->getVelocity();
 }
 
-double RequiredSpeedPredicate::robustEvaluation(
+double KeepsMinSpeedLimitPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    throw std::runtime_error("RequiredSpeedPredicate does not support robust evaluation!");
+    throw std::runtime_error("KeepsMinSpeedLimitPredicate does not support robust evaluation!");
 }
 
-Constraint RequiredSpeedPredicate::constraintEvaluation(
+Constraint KeepsMinSpeedLimitPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    throw std::runtime_error("RequiredSpeedPredicate does not support constraint evaluation!");
+    throw std::runtime_error("KeepsMinSpeedLimitPredicate does not support constraint evaluation!");
 }
-RequiredSpeedPredicate::RequiredSpeedPredicate() : CommonRoadPredicate(false) {}
+KeepsMinSpeedLimitPredicate::KeepsMinSpeedLimitPredicate() : CommonRoadPredicate(false) {}

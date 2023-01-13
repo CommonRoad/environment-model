@@ -11,12 +11,12 @@
 /**
  * Predicate for evaluating traffic flow
  */
-class RequiredSpeedPredicate : public CommonRoadPredicate {
+class KeepsMinSpeedLimitPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for RequiredSpeedPredicate.
+     * Constructor for KeepsMinSpeedLimitPredicate.
      */
-    RequiredSpeedPredicate();
+    KeepsMinSpeedLimitPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
