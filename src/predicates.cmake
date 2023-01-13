@@ -111,13 +111,6 @@ foreach(predicate_file ${ENV_MODEL_PREDICATES_SRC_FILES})
         continue()
     endif()
 
-    # Special exception because KeepsFOVSpeedLimitPredicate does not conform
-    # to naming convention
-    if(${predicate_snake_case} MATCHES "keeps_fov_speed_limit_predicate")
-        list(APPEND predicates "KeepsFOVSpeedLimitPredicate")
-        continue()
-    endif()
-
     get_parts(${predicate_snake_case} fn_parts)
     check_ends_with_predicate("${fn_parts}" ends_with_predicate)
     message(DEBUG "predicate file: parts=${fn_parts} ends_with_predicate=${ends_with_predicate}")
