@@ -21,7 +21,9 @@ bool ExistStandingLeadingVehiclePredicate::booleanEvaluation(
     InStandstillPredicate inStandstillPredicate;
 
     for (const auto &obs : world->getObstacles()) {
-        if (!obs->timeStepExists(timeStep) or !inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) or
+        if (!obs->timeStepExists(timeStep))
+            continue;
+        if (!inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) or
             !inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             continue;
         if (inStandstillPredicate.booleanEvaluation(timeStep, world, obs))
