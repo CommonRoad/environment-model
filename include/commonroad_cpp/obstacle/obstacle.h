@@ -509,13 +509,6 @@ class Obstacle {
     [[nodiscard]] size_t getFirstTrajectoryTimeStep() const; // TODO create test case
 
     /**
-     * Extracts last time step of trajectory
-     *
-     * @return last time step of trajectory
-     */
-    [[nodiscard]] size_t getLastTrajectoryTimeStep() const; // TODO create test case
-
-    /**
      * Getter for occupied lanes at a time step. Computes occupied lanes if not happened already.
      *
      * @param roadNetwork Pointer to road network.
@@ -549,7 +542,7 @@ class Obstacle {
      * @param timeStep Time step of interest.
      * @return Boolean indicating whether time step exists.
      */
-    bool timeStepExists(time_step_t timeStep);
+    bool timeStepExists(time_step_t timeStep) const;
 
     /**
      * Interpolates acceleration based on velocity.
@@ -670,12 +663,28 @@ class Obstacle {
      */
     void setFieldOfViewFrontDistance(double distance);
 
+    /**
+     * Getter for first time step of obstacle.
+     *
+     * @return First time step.
+     */
+    size_t getFirstTimeStep() const;
+
+    /**
+     * Getter for last time step of obstacle.
+     *
+     * @return Final time step.
+     */
+    size_t getFinalTimeStep() const;
+
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     ObstacleRole obstacleRole{ObstacleRole::DYNAMIC}; //**< CommonRoad obstacle role */
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
     std::shared_ptr<SignalState> currentSignalState;  //**< pointer to current signal state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
+    size_t firstTimeStep; //**< first time step (current state or in history */
+    size_t finalTimeStep; //**< final time step (current state or in prediction */
 
     std::optional<ActuatorParameters> actuatorParameters;
     std::optional<SensorParameters> sensorParameters;
@@ -708,8 +717,6 @@ class Obstacle {
         tsl::robin_pg_map<std::shared_ptr<Lane>, curvilinear_position_t>; //**< map from lanelet ID set to curvilinear positions */
     mutable time_step_map_t<curvilinear_position_map_t>
         convertedPositions; //**< map of time steps to lanelet ID set to curvilinear positions */
-
-    curvilinear_position_map_t::const_iterator find_or_convert(size_t timeStep, const std::shared_ptr<Lane> &refLane) const;
 
     mutable time_step_map_t<polygon_type> shapeAtTimeStep; //**< occupied polygon shape at time steps */
 

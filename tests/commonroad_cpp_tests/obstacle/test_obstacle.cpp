@@ -47,6 +47,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     occupiedLaneletsObstacleOne.insert(
         std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(0, std::vector<std::shared_ptr<Lanelet>>{laneletFive}));
     obstacleOne->setId(idObstacleOne);
+    obstacleOne->setCurrentState(stateOne);
     obstacleOne->setCurrentState(stateTwo);
     obstacleOne->setObstacleRole(roleObstacleOne);
     obstacleOne->setObstacleType(obstacleTypeObstacleOne);
@@ -92,13 +93,16 @@ void ObstacleTestInitialization::setUpObstacles() {
     std::shared_ptr<State> stateThreeObstacleFour = std::make_shared<State>(3, 29, 6, 8, 0, 0);
     /* State 4 */
     std::shared_ptr<State> stateFourObstacleThree = std::make_shared<State>(4, 40, 2, 10, 0, 0);
+    std::shared_ptr<State> stateFourObstacleFour = std::make_shared<State>(4, 1000, 2000, 10, 0, 0);
     std::shared_ptr<State> stateFourObstacleFive = std::make_shared<State>(4, 40, 6, 10, 0, 0);
     /* State 5 */
     std::shared_ptr<State> stateFiveObstacleThree = std::make_shared<State>(5, 50, 2, 10, 0, 0);
     std::shared_ptr<State> stateFiveObstacleFour = std::make_shared<State>(5, 55, 6, 10, 0, 0);
+    std::shared_ptr<State> stateFiveObstacleFive = std::make_shared<State>(5, 1000, 1000, 10, 0, 0);
     /* State 6 */
     std::shared_ptr<State> stateSixObstacleThree = std::make_shared<State>(6, 60, 2, 10, 0, 0);
     std::shared_ptr<State> stateSixObstacleFour = std::make_shared<State>(6, 65, -2, 5, 0, 0);
+    std::shared_ptr<State> stateSixObstacleFive = std::make_shared<State>(6, 1000, 1000, 10, 0, 0);
     /* State 7 */
     std::shared_ptr<State> stateSevenObstacleThree = std::make_shared<State>(7, 70, 2, 10, 0, 0);
     std::shared_ptr<State> stateSevenObstacleFour = std::make_shared<State>(7, 70, -2, 11, 0, 0);
@@ -107,9 +111,11 @@ void ObstacleTestInitialization::setUpObstacles() {
     /* State 8 */
     std::shared_ptr<State> stateEightObstacleThree = std::make_shared<State>(8, 80, 2, 10, 0, 0);
     std::shared_ptr<State> stateEightObstacleFour = std::make_shared<State>(8, 81, -2, 8, 0, 0);
+    std::shared_ptr<State> stateEightObstacleFive = std::make_shared<State>(8, 1000, 1000, 10, 0, 0);
     /* State 9 */
     std::shared_ptr<State> stateNineObstacleThree = std::make_shared<State>(9, 90, 2, 10, 0, 0);
     std::shared_ptr<State> stateNineObstacleFour = std::make_shared<State>(9, 89, -2, 10, 0, 0);
+    std::shared_ptr<State> stateNineObstacleFive = std::make_shared<State>(9, 1000, 1000, 10, 0, 0);
     /* State 10 */
     std::shared_ptr<State> stateTenObstacleThree = std::make_shared<State>(10, 100, 2, 10, 0, 0);
     std::shared_ptr<State> stateTenObstacleFive = std::make_shared<State>(10, 100, -2, 10, 0, 0);
@@ -130,6 +136,7 @@ void ObstacleTestInitialization::setUpObstacles() {
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleFour),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleFour),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleFour),
+        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleFour),
         std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFour),
         std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleFour),
         std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFour),
@@ -137,7 +144,11 @@ void ObstacleTestInitialization::setUpObstacles() {
         std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleFour)};
 
     Obstacle::state_map_t trajectoryPredictionObstacleFive{
+        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFive),
+        std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleFive),
         std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFive),
+        std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleFive),
+        std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleFive),
         std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleFive)};
 
     obstacleThree =
@@ -421,7 +432,7 @@ TEST_F(ObstacleTest, TestGetFirstTrajectoryTimeStep) {
     EXPECT_THROW(obstacleTwo->getFirstTrajectoryTimeStep(), std::runtime_error);
     EXPECT_EQ(obstacleThree->getFirstTrajectoryTimeStep(), 1);
     EXPECT_EQ(obstacleFour->getFirstTrajectoryTimeStep(), 1);
-    EXPECT_EQ(obstacleFive->getFirstTrajectoryTimeStep(), 7);
+    EXPECT_EQ(obstacleFive->getFirstTrajectoryTimeStep(), 5);
 }
 
 TEST_F(ObstacleTest, testAppendSignalStateToHistory) {
