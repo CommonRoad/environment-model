@@ -19,7 +19,7 @@ bool RightOfBroadLaneMarkingPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> lanelets_occ =
-        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+        obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
 
     for (const auto &lanelet : lanelets_occ) {
         const LineMarking lanelet_right_marking = lanelet->getLineMarkingRight();
