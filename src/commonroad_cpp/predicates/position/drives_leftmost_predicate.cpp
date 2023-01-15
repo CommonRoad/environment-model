@@ -20,7 +20,7 @@ bool DrivesLeftmostPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets =
-        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+        obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
     std::shared_ptr<Obstacle> vehicle_directly_left =
         obstacle_operations::obstacleDirectlyLeft(timeStep, world->getObstacles(), obstacleK, world->getRoadNetwork());
 

@@ -18,7 +18,7 @@ bool PreservesTrafficFlowPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
-                              obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
+                              obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
                               world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED)),
                           regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
                           parameters.brakingSpeedLimit, parameters.fovSpeedLimit, parameters.roadConditionSpeedLimit})};

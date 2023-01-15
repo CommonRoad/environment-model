@@ -687,7 +687,7 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
 
 void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, bool considerHistory) {
     const size_t timeStamp{currentState->getTimeStep()};
-    auto lanelets{getOccupiedLaneletsByShape(roadNetwork, timeStamp)};
+    auto lanelets{getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStamp)};
     auto lanes{lanelet_operations::createLanesBySingleLanelets(
         lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront())};
     setOccupiedLanes(lanes, timeStamp);

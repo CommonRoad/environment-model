@@ -17,7 +17,7 @@ bool MakesUTurnPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lane>> lanes = world->getRoadNetwork()->findLanesByContainedLanelet(
-        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]->getId());
+        obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)[0]->getId());
     return std::any_of(lanes.begin(), lanes.end(),
                        [this, timeStep, obstacleK, world](const std::shared_ptr<Lane> &lane) {
                            auto orientationCcs{obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep)};
