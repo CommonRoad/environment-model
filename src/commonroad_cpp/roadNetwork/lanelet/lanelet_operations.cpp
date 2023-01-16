@@ -45,10 +45,9 @@ LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type
         return LineMarking::unknown;
 }
 
-std::vector<std::vector<std::shared_ptr<Lanelet>>>
-lanelet_operations::combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov,
-                                                      int numIntersections,
-                                                      const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, double offset) {
+std::vector<std::vector<std::shared_ptr<Lanelet>>> lanelet_operations::combineLaneletAndSuccessorsToLane(
+    const std::shared_ptr<Lanelet> &curLanelet, double fov, int numIntersections,
+    const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, double offset) {
     std::vector<std::vector<std::shared_ptr<Lanelet>>> lanes;
     std::vector<std::shared_ptr<Lanelet>> laneletList{containedLanelets};
     laneletList.push_back(curLanelet);
@@ -74,10 +73,9 @@ lanelet_operations::combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lane
     return lanes;
 }
 
-std::vector<std::vector<std::shared_ptr<Lanelet>>>
-lanelet_operations::combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov,
-                                                        int numIntersections,
-                                                        std::vector<std::shared_ptr<Lanelet>> containedLanelets, double offset) {
+std::vector<std::vector<std::shared_ptr<Lanelet>>> lanelet_operations::combineLaneletAndPredecessorsToLane(
+    const std::shared_ptr<Lanelet> &curLanelet, double fov, int numIntersections,
+    std::vector<std::shared_ptr<Lanelet>> containedLanelets, double offset) {
 
     std::vector<std::vector<std::shared_ptr<Lanelet>>> lanes;
     std::vector<std::shared_ptr<Lanelet>> laneletList{containedLanelets};
@@ -119,17 +117,25 @@ lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_pt
                 auto idx{newLane->findClosestIndex(position.x, position.y)};
                 auto lengthFront{newLane->getPathLength().back() - newLane->getPathLength().at(idx)};
                 auto lengthRear{newLane->getPathLength().at(idx)};
-                if (!std::any_of(lanes.begin(), lanes.end(), [newLane](const std::shared_ptr<Lane> &lane) {
-                        return newLane->getContainedLaneletIDs() == lane->getContainedLaneletIDs();
-                    }) and ((newLane->getPathLength().back() - newLane->getPathLength().at(idx)) > fovFront or newLane->getContainedLanelets().at(0)->getPredecessors().empty()) and (newLane->getPathLength().at(idx) > fovRear or newLane->getContainedLanelets().back()->getSuccessors().empty()))
+                if (!std::any_of(lanes.begin(), lanes.end(),
+                                 [newLane](const std::shared_ptr<Lane> &lane) {
+                                     return newLane->getContainedLaneletIDs() == lane->getContainedLaneletIDs();
+                                 }) and
+                    ((newLane->getPathLength().back() - newLane->getPathLength().at(idx)) > fovFront or
+                     newLane->getContainedLanelets().at(0)->getPredecessors().empty()) and
+                    (newLane->getPathLength().at(idx) > fovRear or
+                     newLane->getContainedLanelets().back()->getSuccessors().empty()))
                     lanes.push_back(newLane);
             }
             continue;
         }
 
         auto idx{lanelet->findClosestIndex(position.x, position.y)};
-        auto newLaneSuccessorParts{combineLaneletAndSuccessorsToLane(lanelet, fovFront, numIntersections, {}, lanelet->getPathLength().back() - lanelet->getPathLength().at(idx))};
-        auto newLanePredecessorParts{combineLaneletAndPredecessorsToLane(lanelet, fovRear, numIntersections, {}, lanelet->getPathLength().at(idx))};
+        auto newLaneSuccessorParts{
+            combineLaneletAndSuccessorsToLane(lanelet, fovFront, numIntersections, {},
+                                              lanelet->getPathLength().back() - lanelet->getPathLength().at(idx))};
+        auto newLanePredecessorParts{combineLaneletAndPredecessorsToLane(lanelet, fovRear, numIntersections, {},
+                                                                         lanelet->getPathLength().at(idx))};
         if (!newLaneSuccessorParts.empty() and !newLanePredecessorParts.empty())
             for (const auto &laneSuc : newLaneSuccessorParts)
                 for (const auto &lanePre : newLanePredecessorParts) {
