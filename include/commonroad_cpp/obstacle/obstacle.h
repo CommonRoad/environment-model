@@ -685,6 +685,7 @@ class Obstacle {
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
     size_t firstTimeStep; //**< first time step (current state or in history */
     size_t finalTimeStep; //**< final time step (current state or in prediction */
+    size_t relevantTimeIntervalSize{100};  //**< relevant interval size around current time step to extract occupied lanelets in driving direction  */
 
     std::optional<ActuatorParameters> actuatorParameters;
     std::optional<SensorParameters> sensorParameters;

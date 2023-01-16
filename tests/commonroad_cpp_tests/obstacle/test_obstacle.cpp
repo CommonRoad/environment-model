@@ -387,7 +387,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario4) {
 }
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
-    size_t timeStep{200};
+    size_t timeStep{192};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/DEU_Frankfurt-70_12_I-1.xml"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -396,7 +396,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
     roadNetworkScenario->setIdCounterRef(globalIdRef);
     auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 30503)};
     obsOneScenario->computeLanes(roadNetworkScenario);
-    EXPECT_EQ(1472,
+    EXPECT_EQ(879,
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().front()->getId());
     EXPECT_EQ(876,
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
