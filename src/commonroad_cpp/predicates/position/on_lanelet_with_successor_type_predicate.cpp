@@ -21,7 +21,7 @@ bool OnLaneletWithSuccessorTypePredicate::booleanEvaluation(
                                            obstacleK->getStateByTimeStep(timeStep)->getYPosition())};
         std::vector<std::vector<std::shared_ptr<Lanelet>>> successors =
             lanelet_operations::combineLaneletAndSuccessorsToLane(lanelet, obstacleK->getFieldOfViewFrontDistance(), 2,
-                                                                  {}, lanelet->getPathLength().at(idx));
+                                                                  {}, -lanelet->getPathLength().at(idx));
         for (auto &vec : successors) {
             for (auto &lane : vec) {
                 if (lane->hasLaneletType(additionalFunctionParameters->laneletType.at(0)))
