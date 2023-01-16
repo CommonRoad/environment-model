@@ -732,10 +732,16 @@ Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
     if (occupiedLaneletsDrivingDir.find(timeStep) != occupiedLaneletsDrivingDir.end())
         return occupiedLaneletsDrivingDir[timeStep];
 
+    size_t startTime{0};
+    if(timeStep < relevantTimeIntervalSize)
+        startTime = firstTimeStep;
+    else
+        startTime = std::max(firstTimeStep, timeStep - relevantTimeIntervalSize);
+
     // find all paths for all occupied initial lanelets to all occupied final lanelets
     std::set<size_t> relevantLanelets;
-    for (const auto &initialLet : setOccupiedLaneletsByShape(roadNetwork, currentState->getTimeStep()))
-        for (const auto &finalLet : setOccupiedLaneletsByShape(roadNetwork, finalTimeStep)) {
+    for (const auto &initialLet : setOccupiedLaneletsByShape(roadNetwork, startTime))
+        for (const auto &finalLet : setOccupiedLaneletsByShape(roadNetwork, std::min(finalTimeStep, timeStep + relevantTimeIntervalSize))) {
             auto path{roadNetwork->getTopologicalMap()->findPaths(initialLet->getId(), finalLet->getId(), true)};
             relevantLanelets.insert(path.begin(), path.end());
         }

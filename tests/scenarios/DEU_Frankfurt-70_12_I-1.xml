@@ -21661,7 +21661,7 @@
     <virtual>false</virtual>
   </trafficSign>
   <intersection id="1817">
-    <incoming id="0">
+    <incoming id="1235671">
       <incomingLanelet ref="864"/>
       <incomingLanelet ref="865"/>
       <incomingLanelet ref="863"/>
@@ -21669,7 +21669,7 @@
       <successorsStraight ref="869"/>
       <successorsStraight ref="870"/>
     </incoming>
-    <incoming id="1">
+    <incoming id="12356712">
       <incomingLanelet ref="866"/>
       <incomingLanelet ref="867"/>
       <successorsRight ref="873"/>
@@ -21678,17 +21678,17 @@
     </incoming>
   </intersection>
   <intersection id="1807">
-    <incoming id="0">
+    <incoming id="1235673">
       <incomingLanelet ref="1471"/>
       <successorsStraight ref="1472"/>
     </incoming>
-    <incoming id="1">
+    <incoming id="1235675">
       <incomingLanelet ref="1596"/>
       <successorsStraight ref="1597"/>
     </incoming>
   </intersection>
   <intersection id="1819">
-    <incoming id="0">
+    <incoming id="1235674">
       <incomingLanelet ref="864"/>
       <incomingLanelet ref="865"/>
       <incomingLanelet ref="863"/>
@@ -21696,11 +21696,11 @@
       <successorsStraight ref="869"/>
       <successorsStraight ref="870"/>
     </incoming>
-    <incoming id="1">
+    <incoming id="1235676">
       <incomingLanelet ref="878"/>
       <successorsStraight ref="877"/>
     </incoming>
-    <incoming id="2">
+    <incoming id="1235677">
       <incomingLanelet ref="879"/>
       <successorsStraight ref="877"/>
     </incoming>
