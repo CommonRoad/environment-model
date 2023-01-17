@@ -115,14 +115,14 @@ lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_pt
         if (!newLanes.empty()) {
             for (const auto &newLane : newLanes) {
                 auto idx{newLane->findClosestIndex(position.x, position.y)};
+                double rearLength{newLane->getPathLength().at(idx)};
+                double frontLength{newLane->getPathLength().back() - newLane->getPathLength().at(idx)};
                 if (!std::any_of(lanes.begin(), lanes.end(),
                                  [newLane](const std::shared_ptr<Lane> &lane) {
                                      return newLane->getContainedLaneletIDs() == lane->getContainedLaneletIDs();
                                  }) and
-                    ((newLane->getPathLength().back() - newLane->getPathLength().at(idx)) > fovFront or
-                     newLane->getContainedLanelets().at(0)->getPredecessors().empty()) and
-                    (newLane->getPathLength().at(idx) > fovRear or
-                     newLane->getContainedLanelets().back()->getSuccessors().empty()))
+                    (frontLength > fovFront or newLane->getContainedLanelets().back()->getSuccessors().empty()) and
+                    (rearLength > fovRear or newLane->getContainedLanelets().at(0)->getPredecessors().empty()))
                     lanes.push_back(newLane);
             }
             continue;
