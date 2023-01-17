@@ -412,13 +412,14 @@ class Lanelet {
     double getWidth(double xPos, double yPos) const;
 
     /**
-     * Finds closest index on center line given 2D vertex.
+     * Finds closest index on center line given 2D vertex. By default, function does not consider last index.
      *
      * @param positionX X-position of point of interest.
      * @param positionY Y-position of point of interest.
+     * @param considerLastIndex Function also considers last index of lanelet.
      * @return Index of center line.
      */
-    size_t findClosestIndex(double positionX, double positionY) const;
+    size_t findClosestIndex(double positionX, double positionY, bool considerLastIndex = false) const;
 
   private:
     lanelet_id_t laneletId{};                                  //**< unique ID of lanelet */

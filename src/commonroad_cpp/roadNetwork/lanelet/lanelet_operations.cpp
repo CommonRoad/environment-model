@@ -114,7 +114,7 @@ lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_pt
         auto newLanes{roadNetwork->findLanesByBaseLanelet(lanelet->getId())};
         if (!newLanes.empty()) {
             for (const auto &newLane : newLanes) {
-                auto idx{newLane->findClosestIndex(position.x, position.y)};
+                auto idx{newLane->findClosestIndex(position.x, position.y, true)};
                 double rearLength{newLane->getPathLength().at(idx)};
                 double frontLength{newLane->getPathLength().back() - newLane->getPathLength().at(idx)};
                 if (!std::any_of(lanes.begin(), lanes.end(),
@@ -125,10 +125,11 @@ lanelet_operations::createLanesBySingleLanelets(const std::vector<std::shared_pt
                     (rearLength > fovRear or newLane->getContainedLanelets().at(0)->getPredecessors().empty()))
                     lanes.push_back(newLane);
             }
-            continue;
+            if (!lanes.empty())
+                continue;
         }
 
-        auto idx{lanelet->findClosestIndex(position.x, position.y)};
+        auto idx{lanelet->findClosestIndex(position.x, position.y, true)};
         auto newLaneSuccessorParts{combineLaneletAndSuccessorsToLane(lanelet, fovFront, numIntersections, {},
                                                                      -lanelet->getPathLength().at(idx))};
         auto newLanePredecessorParts{
