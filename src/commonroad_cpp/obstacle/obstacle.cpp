@@ -653,7 +653,7 @@ void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
     auto lanelets{getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep)};
     assert(sensorParameters);
     std::vector<std::shared_ptr<Lane>> occLanes{lanelet_operations::createLanesBySingleLanelets(
-        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront(), {},
+        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront(), 2,
         {getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition()})};
     occupiedLanes[timeStep] = occLanes;
 }

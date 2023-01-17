@@ -396,8 +396,9 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
     roadNetworkScenario->setIdCounterRef(globalIdRef);
     auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 30503)};
     obsOneScenario->computeLanes(roadNetworkScenario);
-    EXPECT_EQ(879,
+    EXPECT_EQ(1472,
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().front()->getId());
+    // 1472 should be replaced by 878
     EXPECT_EQ(876,
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
 }

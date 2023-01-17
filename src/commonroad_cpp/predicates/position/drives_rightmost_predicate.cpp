@@ -30,14 +30,7 @@ bool DrivesRightmostPredicate::booleanEvaluation(
             parameters.closeToOtherVehicle) {
         return true;
     } else {
-        std::vector<std::shared_ptr<Lane>> lanes;
-        for (auto &occLa : occupiedLanelets) {
-            std::vector<std::shared_ptr<Lane>> lanesOfLanelet =
-                world->getRoadNetwork()->findLanesByContainedLanelet(occLa->getId());
-            for (auto &lane : lanesOfLanelet) {
-                lanes.push_back(lane);
-            }
-        }
+        std::vector<std::shared_ptr<Lane>> lanes{obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)};
         return std::all_of(lanes.begin(), lanes.end(), [obstacleK, this, timeStep](const std::shared_ptr<Lane> &lane) {
             return 0.5 * lane->getWidth(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                         obstacleK->getStateByTimeStep(timeStep)->getYPosition()) +
