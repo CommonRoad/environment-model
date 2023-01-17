@@ -124,6 +124,8 @@ double regulatory_elements_utils::requiredVelocity(const std::vector<std::shared
     for (const auto &lanelet : lanelets) {
         speedLimits.push_back(requiredVelocity(lanelet, signId));
     }
+    if (speedLimits.empty())
+        speedLimits.push_back(std::numeric_limits<double>::lowest()); // prevent error if no lanelet is provided
     return *std::max_element(speedLimits.begin(), speedLimits.end());
 }
 
