@@ -314,8 +314,8 @@ std::shared_ptr<TrafficSign> ProtobufReader::createTrafficSignFromMessage(const 
     return trafficSign;
 }
 
-std::string mapGermanTrafficSignID(const std::string& signName) {
-    if(signName == "MAX_SPEED")
+std::string mapGermanTrafficSignID(const std::string &signName) {
+    if (signName == "MAX_SPEED")
         return "274";
 }
 
@@ -335,7 +335,8 @@ ProtobufReader::createTrafficSignElementFromMessage(const commonroad::TrafficSig
     else if (trafficSignElementMsg.has_spain_element_id())
         trafficSignId =
             commonroad::TrafficSignIDSpainEnum_TrafficSignIDSpain_Name(trafficSignElementMsg.spain_element_id());
-    trafficSignElement->setId(mapGermanTrafficSignID(trafficSignId)); // TODO remove mapGermanTrafficSignID with new CommonRoad format
+    trafficSignElement->setId(
+        mapGermanTrafficSignID(trafficSignId)); // TODO remove mapGermanTrafficSignID with new CommonRoad format
 
     std::vector<std::string> additionalValues(trafficSignElementMsg.additional_values().begin(),
                                               trafficSignElementMsg.additional_values().end());
