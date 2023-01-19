@@ -64,9 +64,12 @@ TEST_F(RegulatoryElementsUtilsTest, SpeedLimitVector) {
 
 TEST_F(RegulatoryElementsUtilsTest, RequiredVelocitySingle) {
     EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(111), "275"), 10.0);
-    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(222), "275"), 0);
-    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(333), "275"), 0);
-    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(444), "275"), 0);
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(222), "275"),
+              std::numeric_limits<double>::lowest());
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(333), "275"),
+              std::numeric_limits<double>::lowest());
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(444), "275"),
+              std::numeric_limits<double>::lowest());
 }
 
 TEST_F(RegulatoryElementsUtilsTest, RequiredVelocityVector) {
@@ -77,11 +80,11 @@ TEST_F(RegulatoryElementsUtilsTest, RequiredVelocityVector) {
     EXPECT_EQ(
         regulatory_elements_utils::requiredVelocity(
             {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)}, "275"),
-        0);
+        std::numeric_limits<double>::lowest());
     EXPECT_EQ(
         regulatory_elements_utils::requiredVelocity(
             {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)}, "275"),
-        0);
+        std::numeric_limits<double>::lowest());
     EXPECT_EQ(regulatory_elements_utils::requiredVelocity({world->getRoadNetwork()->findLaneletById(111)}, "275"),
               10.0);
 }

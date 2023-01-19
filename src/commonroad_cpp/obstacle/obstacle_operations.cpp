@@ -104,7 +104,6 @@ obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::s
                                        const std::shared_ptr<Obstacle> &obstacleK,
                                        const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::vector<std::shared_ptr<Obstacle>> vehiclesAdj;
-    auto refLaneObstacleK{obstacleK->getReferenceLane(roadNetwork, timeStep)};
     // use cross product between a line and a point to evaluate whether obstacle is adjacent
 
     const auto &obstacleKShape{obstacleK->getOccupancyPolygonShape(timeStep)};

@@ -15,7 +15,7 @@ bool MainCarriagewayRightLanePredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> lanelets =
-        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+        obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
         return (lanelet->getAdjacentRight().adj == nullptr or
                 ((lanelet->getAdjacentRight().adj != nullptr) and
