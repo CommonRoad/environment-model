@@ -26,11 +26,12 @@ bool SlowLeadingVehiclePredicate::booleanEvaluation(
         if (!inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs) or
             !inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             continue;
-        double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
-                                  obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep),
-                                  world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED)),
-                              regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
-                              parameters.roadConditionSpeedLimit})};
+        double vMax{
+            std::min({regulatory_elements_utils::speedLimitSuggested(
+                          obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
+                          world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED)),
+                      regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
+                      parameters.roadConditionSpeedLimit})};
         if (vMax - obs->getStateByTimeStep(timeStep)->getVelocity() >= parameters.minVelocityDif)
             return true;
     }

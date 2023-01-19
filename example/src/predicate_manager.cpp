@@ -32,20 +32,20 @@ void PredicateManager::extractPredicateSatisfaction() {
         for (const auto &ego : obstacles) {
             if (ego->isStatic())
                 continue;
-            size_t minTimeStep{ego->getCurrentState()->getTimeStep()};
-            size_t maxTimeStep{ego->getLastTrajectoryTimeStep()};
+            size_t minTimeStep{ego->getFirstTimeStep()};
+            size_t maxTimeStep{ego->getFinalTimeStep()};
             std::vector<std::shared_ptr<Obstacle>> others;
             others.reserve(obstacles.size() - 1);
             for (const auto &obs : obstacles) {
-                if (obs->getId() == ego->getId() or (obs->getLastTrajectoryTimeStep() < minTimeStep and
-                                                     maxTimeStep < obs->getCurrentState()->getTimeStep()))
+                if (obs->getId() == ego->getId() or (obs->getFinalTimeStep() < minTimeStep and
+                                                     maxTimeStep < obs->getFirstTimeStep()))
                     continue;
                 others.push_back(obs);
             }
             // setObstacleProperties(ego, others); // todo
             const auto egoVehicles{std::vector<std::shared_ptr<Obstacle>>{ego}};
             const auto world{std::make_shared<World>(0, roadNetwork, egoVehicles, others, timeStepSize)};
-            for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getLastTrajectoryTimeStep();
+            for (size_t timeStep = ego->getCurrentState()->getTimeStep(); timeStep <= ego->getFinalTimeStep();
                  ++timeStep) {
                 std::shuffle(std::begin(relevantPredicates), std::end(relevantPredicates), rng);
                 for (const auto &predName : relevantPredicates) {

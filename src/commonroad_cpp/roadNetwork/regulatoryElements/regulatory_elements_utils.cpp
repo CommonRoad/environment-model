@@ -104,7 +104,7 @@ double regulatory_elements_utils::speedLimitSuggested(const std::vector<std::sha
 }
 
 double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet> &lanelet, const std::string &signId) {
-    double limit = 0;
+    double limit = std::numeric_limits<double>::lowest();
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
     for (const std::shared_ptr<TrafficSign> &signPtr : trafficSigns) {
         for (const std::shared_ptr<TrafficSignElement> &elemPtr : signPtr->getTrafficSignElements()) {
@@ -120,10 +120,12 @@ double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet
 
 double regulatory_elements_utils::requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
                                                    const std::string &signId) {
-    std::vector<double> speedLimits{0.0};
+    std::vector<double> speedLimits{};
     for (const auto &lanelet : lanelets) {
         speedLimits.push_back(requiredVelocity(lanelet, signId));
     }
+    if (speedLimits.empty())
+        speedLimits.push_back(std::numeric_limits<double>::lowest()); // prevent error if no lanelet is provided
     return *std::max_element(speedLimits.begin(), speedLimits.end());
 }
 
