@@ -631,8 +631,18 @@ class Obstacle {
      */
     bool isStatic() const;
 
+    /**
+     * Computes driven distance of obstacle starting at current state.
+     *
+     * @return Driven distance [m].
+     */
     double drivenTrajectoryDistance() const;
 
+    /**
+     * Returns trajectory as vector (by default it is a map).
+     *
+     * @return List of time steps.
+     */
     std::vector<std::shared_ptr<State>> trajectoryAsVector() const;
 
     /**
