@@ -786,4 +786,14 @@ class Obstacle {
      */
     std::vector<std::shared_ptr<Lane>> computeMainRef(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
                                                       const std::vector<std::shared_ptr<Lane>> &lane);
+
+    /**
+     * Creates logging message in case of ccs conversion errors.
+     *
+     * @param timeStep Time step at which error occurred.
+     * @param refLane Reference lane.
+     * @param func Function where error occured.
+     * @return Error message.
+     */
+    std::string ccsErrorMsg(size_t timeStep, const std::shared_ptr<Lane>& refLane, const std::string& func);
 };
