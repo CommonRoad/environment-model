@@ -40,6 +40,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/position/test_in_intersection_conflict_area_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_neighboring_left_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_neighboring_right_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_change_lane_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_orientation_towards_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_lane_based_orientation_similar_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_in_congestion_predicate.cpp
@@ -97,7 +98,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/velocity/test_reverses_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_type_speed_limit_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_fov_speed_limit_predicate.cpp
-        commonroad_cpp_tests/predicates/velocity/test_keeps_braking_speed_limit_predicate.cpp)
+        commonroad_cpp_tests/predicates/velocity/test_keeps_braking_speed_limit_predicate.cpp commonroad_cpp_tests/predicates/general/test_change_lane_predicate.cpp)
 
 
 # Create executable for test

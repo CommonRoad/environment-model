@@ -309,6 +309,26 @@ Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNet
 }
 
 std::vector<std::shared_ptr<Lanelet>>
+Obstacle::getOccupiedLaneletsByFront(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+    if (occupiedLaneletsFront.find(timeStep) != occupiedLaneletsFront.end())
+        return occupiedLaneletsFront.at(timeStep);
+    std::vector<double> front = getFrontXYCoordinates(timeStep);
+    std::vector<std::shared_ptr<Lanelet>> occ{roadNetwork->findLaneletsByPosition(front[0], front[1])};
+    occupiedLaneletsFront.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occ));
+    return occ;
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+Obstacle::getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+    if (occupiedLaneletsBack.find(timeStep) != occupiedLaneletsBack.end())
+        return occupiedLaneletsBack.at(timeStep);
+    std::vector<double> back = getBackXYCoordinates(timeStep);
+    std::vector<std::shared_ptr<Lanelet>> occ{roadNetwork->findLaneletsByPosition(back[0], back[1])};
+    occupiedLaneletsBack.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occ));
+    return occ;
+}
+
+std::vector<std::shared_ptr<Lanelet>>
 Obstacle::getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     return setOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep);
 }
@@ -772,3 +792,27 @@ void Obstacle::setFieldOfViewFrontDistance(double distance) { fieldOfViewFront =
 size_t Obstacle::getFirstTimeStep() const { return firstTimeStep; }
 
 size_t Obstacle::getFinalTimeStep() const { return finalTimeStep; }
+
+std::vector<double> Obstacle::getFrontXYCoordinates(time_step_t timeStep) {
+    if (frontXYPositions.find(timeStep) != frontXYPositions.end())
+        return frontXYPositions[timeStep];
+
+    std::shared_ptr<State> state = getStateByTimeStep(timeStep);
+    double frontX = getGeoShape().getLength() / 2 * cos(state->getGlobalOrientation()) + state->getXPosition();
+    double frontY = getGeoShape().getLength() / 2 * sin(state->getGlobalOrientation()) + state->getYPosition();
+    std::vector<double> result{frontX, frontY};
+    frontXYPositions[timeStep] = result;
+    return frontXYPositions[timeStep];
+}
+
+std::vector<double> Obstacle::getBackXYCoordinates(time_step_t timeStep) {
+    if (backXYPositions.find(timeStep) != backXYPositions.end())
+        return backXYPositions[timeStep];
+
+    std::shared_ptr<State> state = getStateByTimeStep(timeStep);
+    double backX = getGeoShape().getLength() / 2 * cos(state->getGlobalOrientation() + M_PI) + state->getXPosition();
+    double backY = getGeoShape().getLength() / 2 * sin(state->getGlobalOrientation() + M_PI) + state->getYPosition();
+    std::vector<double> result{backX, backY};
+    backXYPositions[timeStep] = result;
+    return backXYPositions[timeStep];
+}
