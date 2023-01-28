@@ -332,6 +332,26 @@ class Obstacle {
     getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
     /**
+     * Getter for occupied lanelets by the front of the car at a time steps within a road network.
+     *
+     * @param roadNetwork Road network object.
+     * @param timeStep Time step of interest
+     * @return List of pointers to occupied lanelets by front of the car.
+     */
+    std::vector<std::shared_ptr<Lanelet>>
+    getOccupiedLaneletsByFront(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+
+    /**
+     * Getter for occupied lanelets by the back of the car at a time steps within a road network.
+     *
+     * @param roadNetwork Road network object.
+     * @param timeStep Time step of interest
+     * @return List of pointers to occupied lanelets by back of the car.
+     */
+    std::vector<std::shared_ptr<Lanelet>>
+    getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+
+    /**
      * Provides state given a time step. The time step can belong to the current state, history, or prediction.
      *
      * @param timeStep Time step of interest.
@@ -353,6 +373,22 @@ class Obstacle {
      * @return Length of trajectory prediction.
      */
     [[nodiscard]] size_t getTrajectoryLength() const;
+
+    /**
+     * Computes the global coordinates of the front of the car.
+     *
+     * @param timeStep Time step of interest.
+     * @return Vector of double with X- and Y-Coordinate-Point.
+     */
+    std::vector<double> getFrontXYCoordinates(time_step_t timeStep);
+
+    /**
+     * Computes the global coordinates of the back of the car.
+     *
+     * @param timeStep Time step of interest.
+     * @return Vector of double with X- and Y-Coordinate-Point.
+     */
+    std::vector<double> getBackXYCoordinates(time_step_t timeStep);
 
     /**
      * Computes the maximum longitudinal front position of obstacle (for rectangle shapes)
@@ -711,6 +747,12 @@ class Obstacle {
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
         occupiedLanelets; //**< map of time steps to lanelets occupied by the obstacle */
 
+    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
+        occupiedLaneletsFront; //**< map of time steps to lanelets in driving direction occupied by the obstacles front */
+
+    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
+        occupiedLaneletsBack; //**< map of time steps to lanelets in driving direction occupied by the obstacles back */
+
     mutable time_step_map_t<std::vector<std::shared_ptr<Lane>>>
         occupiedLanesDrivingDir; //**< map of time steps to lanelets occupied by the obstacle */
 
@@ -722,6 +764,12 @@ class Obstacle {
 
     mutable time_step_map_t<std::vector<std::shared_ptr<Lane>>>
         occupiedLanes; //**< map of time steps to lanes occupied by the obstacle */
+
+    mutable time_step_map_t<std::vector<double>>
+        frontXYPositions; //**< map of time steps to frontXY position of the obstacle */
+
+    mutable time_step_map_t<std::vector<double>>
+        backXYPositions; //**< map of time steps to backXY position of the obstacle */
 
     using curvilinear_position_t = std::array<double, 3>; //**< curvilinear position of an obstacle */
     using curvilinear_position_map_t =
