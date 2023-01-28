@@ -9,7 +9,6 @@
 
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>

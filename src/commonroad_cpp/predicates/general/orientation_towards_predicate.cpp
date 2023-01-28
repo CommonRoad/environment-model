@@ -15,13 +15,13 @@ bool OrientationTowardsPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    auto referenceLaneK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
-    return (obstacleK->getLatPosition(world->getRoadNetwork(), timeStep) < // k on right side
-                obstacleP->getLatPosition(timeStep, referenceLaneK) and
-            obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep) > 0) or
-           (obstacleK->getLatPosition(world->getRoadNetwork(), timeStep) > // k on left side
-                obstacleP->getLatPosition(timeStep, referenceLaneK) and
-            obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep) < 0);
+    auto referenceLaneP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
+    return (obstacleK->getLatPosition(timeStep, referenceLaneP) > // k on left side
+                obstacleP->getLatPosition(world->getRoadNetwork(), timeStep) and
+            obstacleK->getCurvilinearOrientation(timeStep, referenceLaneP) > 0) or
+           (obstacleK->getLatPosition(timeStep, referenceLaneP) < // k on right side
+                obstacleP->getLatPosition(world->getRoadNetwork(), timeStep) and
+            obstacleK->getCurvilinearOrientation(timeStep, referenceLaneP) < 0);
 }
 
 double OrientationTowardsPredicate::robustEvaluation(
