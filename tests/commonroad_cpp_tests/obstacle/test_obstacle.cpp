@@ -82,15 +82,19 @@ void ObstacleTestInitialization::setUpObstacles() {
     /* State 0 */
     std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(0, 0, 2, 10, 0, 0);
     std::shared_ptr<State> stateZeroObstacleFour = std::make_shared<State>(0, 5, 6, 5, 0, 0);
+    std::shared_ptr<State> stateZeroObstacleSeven = std::make_shared<State>(0, 10, 10, 0, 0, 0);
     /* State 1 */
     std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 10, 2, 10, 0, 0);
     std::shared_ptr<State> stateOneObstacleFour = std::make_shared<State>(1, 10, 6, 11, 0, 0);
+    std::shared_ptr<State> stateOneObstacleSeven = std::make_shared<State>(0, -10, 10, 0, 0, M_PI / 2);
     /* State 2 */
     std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 20, 2, 10, 0, 0);
     std::shared_ptr<State> stateTwoObstacleFour = std::make_shared<State>(2, 21, 6, 8, 0, 0);
+    std::shared_ptr<State> stateTwoObstacleSeven = std::make_shared<State>(0, 10, -10, 0, 0, M_PI);
     /* State 3 */
     std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 30, 2, 10, 0, 0);
     std::shared_ptr<State> stateThreeObstacleFour = std::make_shared<State>(3, 29, 6, 8, 0, 0);
+    std::shared_ptr<State> stateThreeObstacleSeven = std::make_shared<State>(0, -10, -10, 0, 0, M_PI * 1.5);
     /* State 4 */
     std::shared_ptr<State> stateFourObstacleThree = std::make_shared<State>(4, 40, 2, 10, 0, 0);
     std::shared_ptr<State> stateFourObstacleFour = std::make_shared<State>(4, 1000, 2000, 10, 0, 0);
@@ -151,6 +155,12 @@ void ObstacleTestInitialization::setUpObstacles() {
         std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleFive),
         std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleFive)};
 
+    Obstacle::state_map_t trajectoryPredictionObstacleSeven{
+        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleSeven),
+        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleSeven),
+        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleSeven),
+        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleSeven)};
+
     obstacleThree =
         std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50, 10,
                                             3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
@@ -164,6 +174,9 @@ void ObstacleTestInitialization::setUpObstacles() {
                                                       ObstacleType::pedestrian, ActuatorParameters{50, 10, 3, -10, -10},
                                                       SensorParameters{250.0, 250.0, 0.3}, {},
                                                       std::make_unique<Circle>(Circle(1)), {}));
+    obstacleSeven =
+        std::make_shared<Obstacle>(Obstacle(7, ObstacleRole::DYNAMIC, stateZeroObstacleSeven, ObstacleType::car, 50, 10,
+                                            3, -10, 0.3, trajectoryPredictionObstacleSeven, 5, 2));
 
     obstacleList.push_back(obstacleOne);
     obstacleList.push_back(obstacleTwo);
@@ -471,4 +484,26 @@ TEST_F(ObstacleTest, testGetFieldOfViewFrontDistance) {
     obstacleOne->setFieldOfViewFrontDistance(99.5);
     EXPECT_EQ(obstacleOne->getFieldOfViewFrontDistance(), 99.5);
     EXPECT_NE(obstacleOne->getFieldOfViewRearDistance(), 99.5);
+}
+
+TEST_F(ObstacleTest, testGetFrontXYCoordinate) {
+    EXPECT_EQ(obstacleSeven->getFrontXYCoordinates(0).at(0), 12.5);
+    EXPECT_EQ(obstacleSeven->getFrontXYCoordinates(0).at(1), 10);
+    EXPECT_EQ(obstacleSeven->getFrontXYCoordinates(1).at(0), -10.0);
+    EXPECT_EQ(obstacleSeven->getFrontXYCoordinates(1).at(1), 12.5);
+    EXPECT_EQ(obstacleSeven->getFrontXYCoordinates(2).at(0), 7.5);
+    EXPECT_EQ(obstacleSeven->getFrontXYCoordinates(2).at(1), -10.0);
+    EXPECT_EQ(obstacleSeven->getFrontXYCoordinates(3).at(0), -10.0);
+    EXPECT_EQ(obstacleSeven->getFrontXYCoordinates(3).at(1), -12.5);
+}
+
+TEST_F(ObstacleTest, testGetBackXYCoordinate) {
+    EXPECT_EQ(obstacleSeven->getBackXYCoordinates(0).at(0), 7.5);
+    EXPECT_EQ(obstacleSeven->getBackXYCoordinates(0).at(1), 10);
+    EXPECT_EQ(obstacleSeven->getBackXYCoordinates(1).at(0), -10.0);
+    EXPECT_EQ(obstacleSeven->getBackXYCoordinates(1).at(1), 7.5);
+    EXPECT_EQ(obstacleSeven->getBackXYCoordinates(2).at(0), 12.5);
+    EXPECT_EQ(obstacleSeven->getBackXYCoordinates(2).at(1), -10.0);
+    EXPECT_EQ(obstacleSeven->getBackXYCoordinates(3).at(0), -10.0);
+    EXPECT_EQ(obstacleSeven->getBackXYCoordinates(3).at(1), -7.5);
 }

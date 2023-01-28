@@ -106,6 +106,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.cpp
         commonroad_cpp/predicates/position/oncoming_vehicle_predicate.cpp
         commonroad_cpp/predicates/position/overtaking_bicycle_same_lane_predicate.cpp
+        commonroad_cpp/predicates/general/change_lane_predicate.cpp
         commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
         commonroad_cpp/predicates/general/left_signal_set_predicate.cpp
@@ -144,6 +145,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.h
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h
         commonroad_cpp/predicates/commonroad_predicate.h
+        commonroad_cpp/predicates/general/change_lane_predicate.h
         commonroad_cpp/predicates/general/in_congestion_predicate.h
         commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.h
         commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.h
