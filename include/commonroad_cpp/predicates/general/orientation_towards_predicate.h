@@ -9,7 +9,8 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate which checks if the kth vehicle drives towards the pth vehicle.
+ * Predicate which checks if the kth vehicle drives towards the pth vehicle,
+ * where the lane of the pth vehicle is used as reference.
  */
 class OrientationTowardsPredicate : public CommonRoadPredicate {
   public:

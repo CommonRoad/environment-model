@@ -586,7 +586,7 @@ class Obstacle {
      * @param timeStep Time step for which acceleration should be interpolated.
      * @param timeStepSize Time step size [s].
      */
-    void interpolateAcceleration(time_step_t timeStep, double timeStepSize);
+    void interpolateAcceleration(time_step_t timeStep, double timeStepSize) const;
 
     /**
      * Getter for all prediction time steps.
@@ -840,7 +840,7 @@ class Obstacle {
      *
      * @param timeStep Time step at which error occurred.
      * @param refLane Reference lane.
-     * @param func Function where error occured.
+     * @param func Function where error occurred.
      * @return Error message.
      */
     std::string ccsErrorMsg(size_t timeStep, const std::shared_ptr<Lane>& refLane, const std::string& func);
