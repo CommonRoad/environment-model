@@ -81,10 +81,10 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.cpp
         commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.cpp
+        commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_single_lane_predicate.cpp
-        commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.cpp
         commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_predicate.cpp
@@ -132,6 +132,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.cpp
+        commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.cpp
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/same_priority_predicate.cpp
         commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
@@ -157,6 +158,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/general/orientation_towards_predicate.h
         commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.h
         commonroad_cpp/predicates/general/narrow_road_predicate.h
+        commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h
         commonroad_cpp/predicates/position/drives_leftmost_predicate.h
         commonroad_cpp/predicates/position/drives_rightmost_predicate.h
         commonroad_cpp/predicates/position/in_front_of_predicate.h
