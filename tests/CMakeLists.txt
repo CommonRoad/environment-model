@@ -52,6 +52,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/general/test_left_signal_set_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_right_signal_set_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_narrow_road_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_completely_on_lanelet_type_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_on_lanelet_with_type_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_close_to_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_front_of_predicate.cpp
