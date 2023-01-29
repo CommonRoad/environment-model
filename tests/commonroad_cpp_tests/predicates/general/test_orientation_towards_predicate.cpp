@@ -6,6 +6,7 @@
 //
 #include "test_orientation_towards_predicate.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/state.h"
 #include <cmath>
 
@@ -14,7 +15,7 @@ void OrientationTowardsPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 0, 2, 10, 0, 0);
     std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(0, 0, 12, 10, 0, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 20, 4, 10, 0, (1.0 / 5.0) * M_PI);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 20, 4, 10, 0, -(1.0 / 5.0) * M_PI);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 10, 2, 10, 0, 0);
     std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 10, 12, 10, 0, 0);
 
@@ -22,7 +23,7 @@ void OrientationTowardsPredicateTest::SetUp() {
     std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 20, 2, 10, 0, 0);
     std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 20, 12, 10, 0, 0);
 
-    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 40, 2, 10, 0, -(1.0 / 5.0) * M_PI);
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 40, 2, 10, 0, (1.0 / 5.0) * M_PI);
     std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 30, 4, 10, -0, 0);
     std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 30, 12, 10, 0, 0);
 
@@ -64,6 +65,21 @@ TEST_F(OrientationTowardsPredicateTest, BooleanEvaluation) {
     EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo));  // obs1 vehicle drives to other from right
     EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne,
                                        obstacleThree)); // obs1 drives to other from right
+}
+
+TEST_F(OrientationTowardsPredicateTest, BooleanEvaluationScenarioTest) {
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_safe_distance.xml"};
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
+    auto obs1{obstacle_operations::getObstacleById(obstaclesScenario, 1008)};
+    auto obs2{obstacle_operations::getObstacleById(obstaclesScenario, 1009)};
+    auto obs3{obstacle_operations::getObstacleById(obstaclesScenario, 1010)};
+    auto worldScenario{std::make_shared<World>(
+        World(0, roadNetworkScenario, {obstacle_operations::getObstacleById(obstaclesScenario, 1008)}, {}, 0.1))};
+    EXPECT_FALSE(pred.booleanEvaluation(18, worldScenario, obs1, obs2)); // obs1 drives straight
+    EXPECT_FALSE(pred.booleanEvaluation(18, worldScenario, obs2, obs1)); // obs2 leaves lane of obs1
+    EXPECT_TRUE(pred.booleanEvaluation(18, worldScenario, obs3, obs1));  // obs2 performs cut-in towards obs1
+    EXPECT_FALSE(pred.booleanEvaluation(18, worldScenario, obs1, obs3)); // obs1 drives straight
 }
 
 TEST_F(OrientationTowardsPredicateTest, StatisticBooleanEvaluation) {

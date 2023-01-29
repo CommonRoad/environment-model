@@ -18,10 +18,10 @@ bool OrientationTowardsPredicate::booleanEvaluation(
     auto referenceLaneP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
     return (obstacleK->getLatPosition(timeStep, referenceLaneP) > // k on left side
                 obstacleP->getLatPosition(world->getRoadNetwork(), timeStep) and
-            obstacleK->getCurvilinearOrientation(timeStep, referenceLaneP) > 0) or
+            obstacleK->getCurvilinearOrientation(timeStep, referenceLaneP) < 0) or
            (obstacleK->getLatPosition(timeStep, referenceLaneP) < // k on right side
                 obstacleP->getLatPosition(world->getRoadNetwork(), timeStep) and
-            obstacleK->getCurvilinearOrientation(timeStep, referenceLaneP) < 0);
+            obstacleK->getCurvilinearOrientation(timeStep, referenceLaneP) > 0);
 }
 
 double OrientationTowardsPredicate::robustEvaluation(
