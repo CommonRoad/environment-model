@@ -177,9 +177,23 @@ cmake_dependent_option(ENV_MODEL_BUILD_TESTS
     "NOT SKBUILD"
     OFF)
 
-option(BUILD_SHARED_LIBS "Build environment model as a shared library" ON)
+# add_library (without STATIC or SHARED) will respect BUILD_SHARED_LIBS when determining the library type
+# The following definitions allow setting BUILD_SHARED_LIBS globally or only for this project
+# (useful when including it into another project).
+#
+# If ${PROJECT_NAME}_BUILD_SHARED_LIBS is set to a specific value by another project or the user,
+# then we will use that value (by setting BUILD_SHARED_LIBS to the value of ${PROJECT_NAME}_BUILD_SHARED_LIBS).
+# Otherwise, the default for ${PROJECT_NAME}_BUILD_SHARED_LIBS is taken from BUILD_SHARED_LIBS if it exists.
 
-option(ENV_MODEL_BUILD_SHARED_LIBS "Build using shared libraries" ${BUILD_SHARED_LIBS})
+if(DEFINED BUILD_SHARED_LIBS)
+    set(_BUILD_SHARED_LIBS_DEFAULT ${BUILD_SHARED_LIBS})
+else()
+    set(_BUILD_SHARED_LIBS_DEFAULT ON)
+endif()
+
+option(${PROJECT_NAME}_BUILD_SHARED_LIBS "Build ${PROJECT_NAME} as a shared library" ${_BUILD_SHARED_LIBS_DEFAULT})
+
+set(BUILD_SHARED_LIBS ${${PROJECT_NAME}_BUILD_SHARED_LIBS})
 
 cmake_dependent_option(ENV_MODEL_BUILD_CODE_COVERAGE
     "Build code coverage"
