@@ -31,6 +31,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/braking/test_brakes_stronger_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_braking_with_acceleration_possible_at_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_causes_braking_intersection_predicate.cpp
+        commonroad_cpp_tests/predicates/braking/test_decelerates_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_front_of_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_same_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_single_lane_predicate.cpp
