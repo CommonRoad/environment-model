@@ -81,6 +81,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.cpp
         commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.cpp
+        commonroad_cpp/predicates/braking/decelerates_predicate.cpp
         commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
@@ -145,6 +146,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h
         commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.h
         commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h
+        commonroad_cpp/predicates/braking/decelerates_predicate.h
         commonroad_cpp/predicates/commonroad_predicate.h
         commonroad_cpp/predicates/general/change_lane_predicate.h
         commonroad_cpp/predicates/general/in_congestion_predicate.h
