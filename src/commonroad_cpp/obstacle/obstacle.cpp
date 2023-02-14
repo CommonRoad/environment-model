@@ -355,7 +355,8 @@ void Obstacle::convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<
                                              convertedPoint.y(), theta};
 }
 
-std::string Obstacle::ccsErrorMsg(size_t timeStep, const std::shared_ptr<Lane> &refLane, const std::string &func) const {
+std::string Obstacle::ccsErrorMsg(size_t timeStep, const std::shared_ptr<Lane> &refLane,
+                                  const std::string &func) const {
     std::string refInfo;
     for (const auto &ref : refLane->getCurvilinearCoordinateSystem()->referencePath())
         refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}; ";
