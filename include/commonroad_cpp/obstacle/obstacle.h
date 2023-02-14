@@ -843,5 +843,5 @@ class Obstacle {
      * @param func Function where error occurred.
      * @return Error message.
      */
-    std::string ccsErrorMsg(size_t timeStep, const std::shared_ptr<Lane>& refLane, const std::string& func);
+    std::string ccsErrorMsg(size_t timeStep, const std::shared_ptr<Lane>& refLane, const std::string& func) const;
 };

@@ -355,15 +355,15 @@ void Obstacle::convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<
                                              convertedPoint.y(), theta};
 }
 
-std::string Obstacle::ccsErrorMsg(size_t timeStep, const std::shared_ptr<Lane> &refLane, const std::string &func) {
+std::string Obstacle::ccsErrorMsg(size_t timeStep, const std::shared_ptr<Lane> &refLane, const std::string &func) const {
     std::string refInfo;
     for (const auto &ref : refLane->getCurvilinearCoordinateSystem()->referencePath())
         refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}; ";
     return "Obstacle::" + func +
            "Custom CCS - Curvilinear Projection Error - Obstacle ID: " + std::to_string(obstacleId) +
            " - Time Step: " + std::to_string(timeStep) + " - Reference Lane: " + refInfo +
-           " - x-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getXPosition()) +
-           " - y-position: " + std::to_string(trajectoryPrediction.at(timeStep)->getYPosition());
+           " - x-position: " + std::to_string(getStateByTimeStep(timeStep)->getXPosition()) +
+           " - y-position: " + std::to_string(getStateByTimeStep(timeStep)->getYPosition());
 }
 
 double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
