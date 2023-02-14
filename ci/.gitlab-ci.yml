@@ -368,15 +368,6 @@ test-python-manylinux-single:
 test-python-manylinux:
   <<: [ *test-python-common, *test-python-matrix ]
 
-test-python-musllinux:
-  <<: [ *test-python-common, *test-python-matrix ]
-  allow_failure: true
-  image: python:${JOB_PYTHON_VERSION}-alpine
-  before_script:
-    # No wheels available for NumPy on Alpine, so use the system version and only install pytest
-    - apk --update --no-cache add python3-dev build-base gfortran openblas openblas-dev py3-wheel py3-pillow jpeg-dev freetype-dev
-    - printf "[libs]\nsystem_freetype = true\n" > mplsetup.cfg
-    - pip install numpy>=1.20.0 pytest~=7.2.0 commonroad-io>=2021.4
 
 ### create documentation ###
 docs:

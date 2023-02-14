@@ -1,4 +1,3 @@
-# PEP 621 metadata
 [project]
 name = "commonroad_cpp"
 dynamic = ["version"]
@@ -10,7 +9,6 @@ authors = [
   {name = "Sebastian Maierhofer"}
 ]
 description = "CommonRoad C++ Environment Model"
-
 dependencies = [ ]
 
 [project.optional-dependencies]
@@ -25,7 +23,6 @@ docs = [
 ]
 
 [build-system]
-# NOTE: Update README.md if you change "requires" here
 requires = [
     "setuptools>=61.0",
     "wheel",
@@ -35,7 +32,6 @@ requires = [
     "pybind11~=2.10.0",
      "setuptools_scm[toml]>=6.2"
     ]
-
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
@@ -44,21 +40,12 @@ build-backend = "setuptools.build_meta"
 language = "en"
 
 [tool.cibuildwheel]
-# build = "cp*"
 skip = "pp*"
-
 archs = ["auto"]
-# archs = ["x86_64"]
-
-# Disable pip warning about newer versions being available - they're just noise in CI
 environment = { PIP_DISABLE_PIP_VERSION_CHECK="1" }
-
-# Increase pip debugging output
 #build-verbosity = 1
 
 # Skip tests on musllinux due to missing wheels
 test-skip = "*i686 *-musllinux*"
-
 test-extras = ["test"]
-
 test-command = "python -m pytest {package}/tests/python"
