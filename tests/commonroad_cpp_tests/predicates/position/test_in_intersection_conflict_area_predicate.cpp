@@ -68,11 +68,11 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario1) {
         EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
         EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0))); //
+        EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0))); //
         //   depends on selected reference since it is not clear whether vehicle turns
 
         EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(
+        EXPECT_FALSE(pred.booleanEvaluation(
             44, world, obstaclesScenarioOne.at(1),
             obstaclesScenarioOne.at(0))); // depends on selected reference since it is not clear whether
         //        vehicle turns

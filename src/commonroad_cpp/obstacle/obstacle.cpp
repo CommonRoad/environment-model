@@ -564,10 +564,12 @@ std::vector<std::shared_ptr<Lane>> Obstacle::computeMainRef(const std::shared_pt
                     numOccupancies[lane->getId()]++;
 
         if (!numOccupancies.empty()) { // find lane with most occupancies
-            relevantOccupiedLanes = {*std::find_if(relevantOccupiedLanes.begin(), relevantOccupiedLanes.end(),
-                                                   [numOccupancies](const std::shared_ptr<Lane> &lane) {
-                                                       return lane->getId() == numOccupancies.rbegin()->first;
-                                                   })};
+            auto mostOcc{
+                std::max_element(numOccupancies.begin(), numOccupancies.end(),
+                                 [](const auto &val1, const auto &val2) { return val1.second < val2.second; })};
+            relevantOccupiedLanes = {*std::find_if(
+                relevantOccupiedLanes.begin(), relevantOccupiedLanes.end(),
+                [mostOcc](const std::shared_ptr<Lane> &lane) { return lane->getId() == mostOcc->first; })};
         }
     }
     return relevantOccupiedLanes;

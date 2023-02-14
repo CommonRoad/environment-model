@@ -235,13 +235,10 @@ TEST_F(ObstacleTest, InitializationComplete) {
     EXPECT_EQ(obstacleTwo->getAminLong(), 0.0);
     EXPECT_EQ(obstacleOne->getReactionTime(), reactionTimeObstacleOne);
     EXPECT_EQ(obstacleTwo->getReactionTime(), reactionTimeObstacleTwo);
-    compareVerticesVector({obstacleOne->getReferenceLane(roadNetwork, obstacleOne->getCurrentState()->getTimeStep())
-                               ->getCenterVertices()
-                               .front(),
-                           obstacleOne->getReferenceLane(roadNetwork, obstacleOne->getCurrentState()->getTimeStep())
-                               ->getCenterVertices()
-                               .back()},
-                          {laneletSeven->getCenterVertices().front(), laneletSix->getCenterVertices().back()});
+    auto ref{obstacleOne->getReferenceLane(roadNetwork, obstacleOne->getCurrentState()->getTimeStep())};
+    // also option: laneletSeven, laneletSix
+    compareVerticesVector({ref->getCenterVertices().front(), ref->getCenterVertices().back()},
+                          {laneletThree->getCenterVertices().front(), laneletTwo->getCenterVertices().back()});
     for (size_t i = 2; i <= 3; ++i)
         compareStates(trajectoryPredictionObstacleOne.at(i), obstacleOne->getTrajectoryPrediction().at(i));
     EXPECT_EQ(obstacleOne->getTrajectoryLength(), 3);
@@ -314,12 +311,12 @@ TEST_F(ObstacleTest, ConvertPointToCurvilinear) {
     stateOne->setXPosition(25.0);
     stateOne->setYPosition(1.5);
     obstacleOne->convertPointToCurvilinear(roadNetwork, 0);
-    EXPECT_NEAR(stateOne->getLonPosition(), 65.04164, 0.0005);
+    EXPECT_NEAR(stateOne->getLonPosition(), 75.0, 0.0005); // lane starts at x==-50
     EXPECT_EQ(stateOne->getLatPosition(), 0.0);
     stateOne->setXPosition(25.0);
     stateOne->setYPosition(-2.75);
     obstacleOne->convertPointToCurvilinear(roadNetwork, 0);
-    EXPECT_NEAR(stateOne->getLonPosition(), 65.04164, 0.0005);
+    EXPECT_NEAR(stateOne->getLonPosition(), 75.0, 0.0005);
     EXPECT_EQ(stateOne->getLatPosition(), -4.25);
 }
 
@@ -356,10 +353,8 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario2) {
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     roadNetworkScenario->setIdCounterRef(globalIdRef);
     auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 325)};
-    EXPECT_EQ(77695, obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)
-                         ->getContainedLanelets()
-                         .front()
-                         ->getId()); // 77695 and 77062 are possible
+    auto ref{obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)};
+    EXPECT_EQ(77062, ref->getContainedLanelets().front()->getId()); // 77695 and 77062 are possible
 }
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario3) {
@@ -373,7 +368,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario3) {
     auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 500)};
     EXPECT_EQ(53758,
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().front()->getId());
-    EXPECT_EQ(53788, obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)
+    EXPECT_EQ(53786, obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)
                          ->getContainedLanelets()
                          .back()
                          ->getId()); // 53786 and 53788 are possible
