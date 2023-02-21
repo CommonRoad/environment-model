@@ -27,10 +27,8 @@ bool intersection_operations::onIncoming(size_t timeStep, const std::shared_ptr<
 bool intersection_operations::checkSameIncoming(const std::shared_ptr<Lanelet> &letK,
                                                 const std::shared_ptr<Lanelet> &letP,
                                                 const std::shared_ptr<RoadNetwork> &roadNetwork) {
-    auto simLaneletsK{
-        lanelet_operations::combineLaneLanelets(lanelet_operations::combineLaneletAndPredecessorsToLane(letK))};
-    auto simLaneletsP{
-        lanelet_operations::combineLaneLanelets(lanelet_operations::combineLaneletAndPredecessorsToLane(letP))};
+    auto simLaneletsK{lane_operations::combineLaneLanelets(lane_operations::combineLaneletAndPredecessorsToLane(letK))};
+    auto simLaneletsP{lane_operations::combineLaneLanelets(lane_operations::combineLaneletAndPredecessorsToLane(letP))};
     for (const auto &laK : simLaneletsK) {
         if (!laK->hasLaneletType(LaneletType::incoming))
             continue;

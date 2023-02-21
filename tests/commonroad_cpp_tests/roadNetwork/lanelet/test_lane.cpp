@@ -13,9 +13,9 @@
 
 void LaneTestInitialization::setUpLane() {
     setUpLanelets();
-    laneOne = lanelet_operations::createLaneByContainedLanelets({laneletThree, laneletOne, laneletTwo}, 1000);
-    laneTwo = lanelet_operations::createLaneByContainedLanelets({laneletFour}, 1001);
-    laneThree = lanelet_operations::createLaneByContainedLanelets({laneletFive}, 1002);
+    laneOne = lane_operations::createLaneByContainedLanelets({laneletThree, laneletOne, laneletTwo}, 1000);
+    laneTwo = lane_operations::createLaneByContainedLanelets({laneletFour}, 1001);
+    laneThree = lane_operations::createLaneByContainedLanelets({laneletFive}, 1002);
 }
 
 void LaneTest::SetUp() { setUpLane(); }

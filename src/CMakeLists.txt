@@ -3,6 +3,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/road_network.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet.cpp
         commonroad_cpp/roadNetwork/lanelet/lane.cpp
+        commonroad_cpp/roadNetwork/lanelet/lane_operations.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet_operations.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/stop_line.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.cpp
@@ -15,6 +16,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/road_network_config.cpp
         commonroad_cpp/obstacle/obstacle.cpp
         commonroad_cpp/obstacle/obstacle_operations.cpp
+        commonroad_cpp/obstacle/obstacle_reference.cpp
         commonroad_cpp/obstacle/state.cpp
         commonroad_cpp/obstacle/signal_state.cpp
         commonroad_cpp/geometry/circle.cpp
@@ -50,6 +52,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/interfaces/commonroad/xml_reader.h
         commonroad_cpp/obstacle/actuator_parameters.h
         commonroad_cpp/obstacle/obstacle.h
+        commonroad_cpp/obstacle/obstacle_reference.h
         commonroad_cpp/obstacle/obstacle_operations.h
         commonroad_cpp/obstacle/sensor_parameters.h
         commonroad_cpp/obstacle/state.h
@@ -62,6 +65,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/roadNetwork/lanelet/lanelet.h
         commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h
         commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h
+        commonroad_cpp/roadNetwork/lanelet/lane_operations.h
         commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h
         commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h
@@ -264,9 +268,11 @@ target_precompile_headers(env_model_core
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/geometry/curvilinear_coordinate_system.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lane.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/road_network.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_operations.h>
+    #    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_reference.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/world.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
         )

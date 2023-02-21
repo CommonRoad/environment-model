@@ -26,11 +26,8 @@
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
+#include <commonroad_cpp/obstacle/obstacle_reference.h>
 #include <commonroad_cpp/obstacle/state.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
-#include <commonroad_cpp/roadNetwork/road_network.h>
 
 static std::array<double, 4> rotatedCornerLatitudes(const Rectangle &rect, const double theta) {
     const double width = rect.getWidth();
@@ -525,78 +522,11 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwo
     return setReferenceLane(roadNetwork, timeStep);
 }
 
-std::vector<std::shared_ptr<Lane>> Obstacle::computeMainRef(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                            size_t timeStep,
-                                                            const std::vector<std::shared_ptr<Lane>> &lanes) {
-    std::vector<std::shared_ptr<Lane>> relevantOccupiedLanes;
-    // use currently occupied lanelets in driving direction as lane candidates, already return if lane contains lanelet
-    // of initial and final time step
-    bool startEnd{false};
-    bool startOrEnd{false};
-    for (const auto &lane : lanes)
-        if (lane->contains(getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, firstTimeStep)) and
-            lane->contains(getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, finalTimeStep))) {
-            if (startEnd)
-                relevantOccupiedLanes.push_back(lane);
-            else {
-                startEnd = true;
-                relevantOccupiedLanes = {lane};
-            }
-            continue;
-        } else if (!startEnd and
-                   lane->contains(getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, finalTimeStep))) {
-            if (startOrEnd)
-                relevantOccupiedLanes.push_back(lane);
-            else {
-                startOrEnd = true;
-                relevantOccupiedLanes = {lane};
-            }
-            continue;
-        } else if (!startEnd and !startOrEnd)
-            relevantOccupiedLanes.push_back(lane);
-
-    if (relevantOccupiedLanes.size() > 1) { // iterate over all time steps starting from current time step and count
-                                            // occupied lanelets in driving direction which are part of lanes
-        std::map<size_t, size_t> numOccupancies;
-        for (size_t newTimeStep{timeStep}; newTimeStep <= finalTimeStep; ++newTimeStep)
-            for (const auto &lane : relevantOccupiedLanes)
-                if (lane->contains(getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, newTimeStep)))
-                    numOccupancies[lane->getId()]++;
-
-        if (!numOccupancies.empty()) { // find lane with most occupancies
-            auto mostOcc{
-                std::max_element(numOccupancies.begin(), numOccupancies.end(),
-                                 [](const auto &val1, const auto &val2) { return val1.second < val2.second; })};
-            relevantOccupiedLanes = {*std::find_if(
-                relevantOccupiedLanes.begin(), relevantOccupiedLanes.end(),
-                [mostOcc](const std::shared_ptr<Lane> &lane) { return lane->getId() == mostOcc->first; })};
-        }
-    }
-    return relevantOccupiedLanes;
-}
-
 std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     if (referenceLane.count(timeStep) == 1 and referenceLane.at(timeStep) != nullptr)
         return referenceLane.at(timeStep);
 
-    auto refLaneTmp{computeMainRef(roadNetwork, timeStep, getOccupiedLanes(roadNetwork, timeStep))};
-
-    if (refLaneTmp.empty()) {
-        // try adjacent lanes
-        std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
-        for (const auto &letBase : getOccupiedLaneletsByShape(roadNetwork, timeStep))
-            for (const auto &adj : lanelet_operations::adjacentLanelets(letBase, false))
-                relevantLanelets.push_back(adj);
-        auto lanes{lanelet_operations::createLanesBySingleLanelets(relevantLanelets, roadNetwork, fieldOfViewRear,
-                                                                   fieldOfViewFront)};
-        refLaneTmp = computeMainRef(roadNetwork, timeStep, lanes);
-    }
-    if (refLaneTmp.empty() and timeStepExists(timeStep - 1)) // use previous lanes
-        for (size_t prevTime{timeStep - 1}; timeStep >= firstTimeStep; --timeStep)
-            refLaneTmp = computeMainRef(roadNetwork, prevTime, getOccupiedLanes(roadNetwork, prevTime));
-    if (refLaneTmp.empty() and timeStepExists(timeStep + 1)) // use previous lanes
-        for (size_t prevTime{timeStep + 1}; timeStep <= finalTimeStep; ++timeStep)
-            refLaneTmp = computeMainRef(roadNetwork, prevTime, getOccupiedLanes(roadNetwork, prevTime));
+    auto refLaneTmp{obstacle_reference::computeRef(*this, roadNetwork, timeStep)};
 
     if (!refLaneTmp.empty())
         referenceLane[timeStep] = refLaneTmp.at(0);
@@ -641,7 +571,7 @@ void Obstacle::setObstacleRole(ObstacleRole type) { obstacleRole = type; }
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     auto lanelets{getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep)};
     assert(sensorParameters);
-    std::vector<std::shared_ptr<Lane>> occLanes{lanelet_operations::createLanesBySingleLanelets(
+    std::vector<std::shared_ptr<Lane>> occLanes{lane_operations::createLanesBySingleLanelets(
         lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront(), 2,
         {getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition()})};
     occupiedLanes[timeStep] = occLanes;
@@ -678,7 +608,7 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
 void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, bool considerHistory) {
     const size_t timeStamp{currentState->getTimeStep()};
     auto lanelets{getOccupiedLaneletsByShape(roadNetwork, timeStamp)};
-    auto lanes{lanelet_operations::createLanesBySingleLanelets(
+    auto lanes{lane_operations::createLanesBySingleLanelets(
         lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront())};
     setOccupiedLanes(lanes, timeStamp);
     if (!isStatic()) {
