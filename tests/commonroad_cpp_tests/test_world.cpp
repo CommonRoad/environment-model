@@ -29,19 +29,6 @@ TEST_F(WorldTest, TestScenariosValid) {
     }
 }
 
-// TEST_F(WorldTest, TestScenariosInValid) {
-//    std::string scenario{"ARG_Carcarana-6_5_T-1.xml"};
-//    size_t obstacleId{31};
-//    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
-//    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-//    InputUtils::getDataFromCommonRoad(pathToTestFileOne); auto world =
-//        World(0, roadNetworkScenarioOne, {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)},
-//        {}, timeStepSizeOne);
-//    auto obs{world.findObstacle(obstacleId)};
-//    for (const auto &t : obs->getTimeSteps())
-//        EXPECT_THROW(auto ref{obs->getReferenceLane(t)}, std::runtime_error);
-//}
-
 TEST_F(WorldTest, TestSingleScenarioObstacle) {
     std::string scenario{"BEL_Zwevegem-1_5_T-1.xml"};
     size_t obstacleId{325};
@@ -66,37 +53,6 @@ TEST_F(WorldTest, TestSingleScenario) {
         for (const auto &time : obs->getTimeSteps())
             EXPECT_NO_THROW(obs->getReferenceLane(roadNetworkScenarioOne, time));
 }
-
-// TEST_F(WorldTest, TestAllScenarios) {
-//    int numThreads{6};
-//    // std::string path{"/media/sebastian/TUM/06_code/cps/scenarios"};
-//    std::string path{"/media/sebastian/TUM/06_code/cps/scenarios"};
-//    // std::array<std::string, 1> scenarios{"/cr-scenarios/scenarios/scenario-factory"};
-//    std::array<std::string, 1> scenarios{"/Frankfurt"};
-//    for (size_t i{0}; i < scenarios.size(); ++i)
-//        scenarios[i] = path + scenarios[i];
-//
-//    for (auto const &dir : scenarios) {
-//        std::vector<std::string> fileNames;
-//        for (directory_iterator itr(dir); itr != directory_iterator(); ++itr)
-//            if (boost::algorithm::ends_with(itr->path().string(), ".xml"))
-//                fileNames.push_back(itr->path().string());
-//        //        omp_set_num_threads(numThreads);
-//        //#pragma omp parallel for schedule(guided) shared(fileNames) default(none)
-//        for (auto &fileName : fileNames) {
-//            const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-//            InputUtils::getDataFromCommonRoad(fileName); auto world{World(0, roadNetworkScenarioOne,
-//            obstaclesScenarioOne, {}, timeStepSizeOne)}; for (const auto &obs : obstaclesScenarioOne)
-//                for (const auto &t : obs->getTimeSteps())
-//                    try {
-//                        obs->getReferenceLane(t);
-//                    } catch (const std::runtime_error &re) {
-//                        std::cerr << "Runtime error: " << re.what() << std::endl;
-//                        std::cerr << "Scenario: " << fileName << std::endl;
-//                    }
-//        }
-//    }
-//}
 
 TEST_F(WorldTest, FindObstacle) {
     std::string scenario{"USA_Peach-2_1_T-1.xml"};

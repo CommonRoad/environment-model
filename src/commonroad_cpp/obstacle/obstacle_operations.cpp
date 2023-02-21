@@ -226,7 +226,7 @@ std::vector<std::shared_ptr<Intersection>>
 obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
                                       const std::shared_ptr<Obstacle> &obs) {
     std::vector<std::shared_ptr<Intersection>> relevantIntersections;
-    auto relevantLanelets{lanelet_operations::extractLaneletsFromLanes(obs->getOccupiedLanes(roadNetwork, timeStep))};
+    auto relevantLanelets{lane_operations::extractLaneletsFromLanes(obs->getOccupiedLanes(roadNetwork, timeStep))};
     for (const auto &inter : roadNetwork->getIntersections())
         for (const auto &interLet : inter->getMemberLanelets(roadNetwork))
             if (std::any_of(
