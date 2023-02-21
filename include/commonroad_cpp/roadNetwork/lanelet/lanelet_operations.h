@@ -38,64 +38,6 @@ DrivingDirection matchStringToDrivingDirection(const std::string &type);
 LineMarking matchStringToLineMarking(const std::string &type);
 
 /**
- * Combines a lanelet and all its successors to lanes. For each successor lanelet a new lane is created. The algorithm
- * stops when the lane reaches a length given by the parameter fov.
- *
- * @param curLanelet Lanelet which is currently at the end of list and for which successors should be added.
- * @param fov Field of view defining length of lane.
- * @param numIntersections Number of intersection which still can be considered for lane creation.
- * @param containedLanelets List of contained lanelets in lane. Required for recursive call.
- * @param offset Offset from the beginning of the reference lanelet.
- * @return List containing a list of lanelets contained in lane.
- */
-std::vector<std::vector<std::shared_ptr<Lanelet>>>
-combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov = 250,
-                                  int numIntersections = 2,
-                                  const std::vector<std::shared_ptr<Lanelet>> &containedLanelets = {}, double offset = 0.0);
-
-/**
- * Combines a lanelet and all its predecessors to lanes. For each predecessor lanelet a new lane is created. The
- * algorithm stops when the lane reaches a length given by the parameter fov.
- *
- * @param curLanelet Lanelet which is currently at the end of list and for which predecessors should be added.
- * @param fov Field of view defining length of lane.
- * @param containedLanelets List of contained lanelets in lane. Required for recursive call.
- * @param numIntersections Number of intersection which still can be considered for lane creation.
- * @param offset Offset from the end of the reference lanelet.
- * @return List containing a list of lanelets contained in lane.
- */
-std::vector<std::vector<std::shared_ptr<Lanelet>>>
-combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov = 250,
-                                    int numIntersections = 2,
-                                    std::vector<std::shared_ptr<Lanelet>> containedLanelets = {}, double offset = 0.0);
-
-/**
- * Creates lanes which are originating from given set of lanelets.
- *
- * @param initialLanelets Initial lanelets based on which lanes should be created.
- * @param roadNetwork Pointer to road network.
- * @param fovRear Field of view behind obstacle which defines length of lanes.
- * @param fovFront Field of view in front of obstacle which defines length of lanes.
- * @param numIntersections Number of intersection which still can be considered for lane creation.
- * @param position Position which should be used as offset.
- * @return List of pointers to lanes originating from given lanelets.
- */
-std::vector<std::shared_ptr<Lane>>
-createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets,
-                            const std::shared_ptr<RoadNetwork> &roadNetwork, double fovRear = 250,
-                            double fovFront = 250, int numIntersections = 2, vertex position = {});
-
-/**
- * Creates lane objects given set of lanelets which form lane.
- *
- * @param containedLanelets List of pointers to lanelets.
- * @param newId ID of new lane.
- * @return Pointer to new lane.
- */
-std::shared_ptr<Lane> createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets,
-                                                    size_t newId);
-
-/**
  * Extracts all lanelets right of a given lanelet in the same direction.
  *
  * @param lanelet Pointer to reference lanelet.
@@ -148,25 +90,10 @@ bool areLaneletsInDirectlyAdjacentLanes(const std::shared_ptr<Lane> &laneOne, co
 double roadWidth(const std::shared_ptr<Lanelet> &lanelet, double xPosition, double yPosition);
 
 /**
+ * Extracts all active traffic lights from lanelet.
  *
- * @param lanelet
- * @return
+ * @param lanelet Lanelet of interest.
+ * @return List of traffic lights.
  */
 std::vector<std::shared_ptr<TrafficLight>> activeTlsByLanelet(size_t timeStep, const std::shared_ptr<Lanelet> &lanelet);
-
-/**
- *
- * @param lanes
- * @return
- */
-std::vector<std::shared_ptr<Lanelet>> extractLaneletsFromLanes(const std::vector<std::shared_ptr<Lane>> &lanes);
-
-/**
- *
- * @param lanes
- * @return
- */
-std::vector<std::shared_ptr<Lanelet>>
-combineLaneLanelets(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &lanes);
-
 } // namespace lanelet_operations
