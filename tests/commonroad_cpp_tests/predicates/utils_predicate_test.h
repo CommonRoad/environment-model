@@ -26,4 +26,6 @@ create_road_network_with_circle(const std::set<LaneletType> &laneletTypeBottom =
                                 const std::set<LaneletType> &laneletTypeRight = {LaneletType::urban},
                                 const std::set<LaneletType> &laneletTypeTop = {LaneletType::urban});
 std::shared_ptr<RoadNetwork> create_narrow_road_network(double width);
+std::shared_ptr<RoadNetwork> create_road_network_users(const std::set<ObstacleType> &userOneWayLanelet,
+                                                       const std::set<ObstacleType> &userBidirectionalLanelet);
 } // namespace utils_predicate_test
