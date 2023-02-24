@@ -544,4 +544,23 @@ std::shared_ptr<RoadNetwork> create_narrow_road_network(double width) {
     return std::make_shared<RoadNetwork>(RoadNetwork({laneletOne}, SupportedTrafficSignCountry::GERMANY));
 }
 
+std::shared_ptr<RoadNetwork> create_road_network_users(const std::set<ObstacleType> &userOneWayLanelet,
+                                                       const std::set<ObstacleType> &userBidirectionalLanelet) {
+    size_t idLanelet = 100;
+    auto leftBorderLanelet = std::vector<vertex>{
+        vertex{0, 3.5},   vertex{10, 3.5},  vertex{20, 3.5},  vertex{30, 3.5},  vertex{40, 3.5},  vertex{50, 3.5},
+        vertex{60, 3.5},  vertex{70, 3.5},  vertex{80, 3.5},  vertex{90, 3.5},  vertex{100, 3.5}, vertex{110, 3.5},
+        vertex{120, 3.5}, vertex{130, 3.5}, vertex{140, 3.5}, vertex{150, 3.5}, vertex{160, 3.5}, vertex{170, 3.5}};
+    auto rightBorderLanelet = std::vector<vertex>{
+        vertex{0, 0},   vertex{10, 0},  vertex{20, 0},  vertex{30, 0},  vertex{40, 0},  vertex{50, 0},
+        vertex{60, 0},  vertex{70, 0},  vertex{80, 0},  vertex{90, 0},  vertex{100, 0}, vertex{110, 0},
+        vertex{120, 0}, vertex{130, 0}, vertex{140, 0}, vertex{150, 0}, vertex{160, 0}, vertex{170, 0}};
+
+    auto lanelet =
+        std::make_shared<Lanelet>(Lanelet(idLanelet, leftBorderLanelet, rightBorderLanelet,
+                                          {LaneletType::mainCarriageWay}, userOneWayLanelet, userBidirectionalLanelet));
+
+    return std::make_shared<RoadNetwork>(RoadNetwork({lanelet}, SupportedTrafficSignCountry::GERMANY));
+}
+
 } // namespace utils_predicate_test
