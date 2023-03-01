@@ -9,7 +9,7 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate for evaluating traffic flow
+ * Evaluates whether a vehicle drives faster than the minimum required speed.
  */
 class KeepsMinSpeedLimitPredicate : public CommonRoadPredicate {
   public:
