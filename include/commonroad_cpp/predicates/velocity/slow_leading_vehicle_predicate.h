@@ -9,7 +9,7 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate for evaluating traffic flow
+ * Evaluates whether a vehicle has a slow leading vehicle.
  */
 class SlowLeadingVehiclePredicate : public CommonRoadPredicate {
   public:

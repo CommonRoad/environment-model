@@ -10,7 +10,7 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *  Evaluates if a vehicle drives leftmost within its occupied lanes
+ *  Evaluates if a vehicle has an unobstructed view over the intersection.
  */
 class UnobstructedIntersectionViewPredicate : public CommonRoadPredicate {
   public:

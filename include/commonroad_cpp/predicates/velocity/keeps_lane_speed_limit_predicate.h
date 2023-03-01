@@ -14,7 +14,7 @@
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate for evaluating traffic flow
+ * Evaluates whether a vehicle keeps its lane speed limit
  */
 class KeepsLaneSpeedLimitPredicate : public CommonRoadPredicate {
   public:
