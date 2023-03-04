@@ -315,8 +315,22 @@ std::shared_ptr<TrafficSign> ProtobufReader::createTrafficSignFromMessage(const 
 }
 
 std::string mapGermanTrafficSignID(const std::string &signName) {
+    // temporary quick-fix for mismatch in xml and protobuf names
     if (signName == "MAX_SPEED")
         return "274";
+    else if (signName == "TOWN_SIGN")
+        return "310";
+    else if (signName == "PRIORITY")
+        return "306";
+    else if (signName == "GREEN_ARROW")
+        return "720";
+    else if (signName == "YIELD")
+        return "205";
+    else if (signName == "U_TURN")
+        return "272";
+    else if (signName.empty())
+        return "274";
+    throw std::runtime_error{"ProtobufReader::mapGermanTrafficSignID: incomplete, called for " + signName};
 }
 
 std::shared_ptr<TrafficSignElement>
