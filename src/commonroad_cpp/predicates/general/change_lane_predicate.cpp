@@ -32,6 +32,7 @@ bool ChangeLanePredicate::booleanEvaluation(
                             [front, additionalFunctionParameters](const std::shared_ptr<Lanelet> &back) {
                                 if (back->getAdjacentLeft().adj)
                                     return back->getAdjacentLeft().adj->getId() == front->getId();
+                                return false;
                             }))
                 return true;
         }
@@ -42,6 +43,7 @@ bool ChangeLanePredicate::booleanEvaluation(
                             [front, additionalFunctionParameters](const std::shared_ptr<Lanelet> &back) {
                                 if (back->getAdjacentRight().adj)
                                     return back->getAdjacentRight().adj->getId() == front->getId();
+                                return false;
                             }))
                 return true;
         }
