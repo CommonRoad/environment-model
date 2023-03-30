@@ -79,3 +79,5 @@ void World::setCurvilinearStates() {
         if (!obs->isStatic())
             obs->setCurvilinearStates(roadNetwork);
 }
+
+void World::setEgoVehicles(std::vector<std::shared_ptr<Obstacle>> &egos) { egoVehicles = egos; }

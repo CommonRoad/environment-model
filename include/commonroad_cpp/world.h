@@ -49,6 +49,13 @@ class World {
     [[nodiscard]] const std::vector<std::shared_ptr<Obstacle>> &getEgoVehicles() const;
 
     /**
+     * Setter for ego vehicles of world
+     *
+     * @param egos vector of pointer to obstacles
+     */
+    void setEgoVehicles(std::vector<std::shared_ptr<Obstacle>> &egos);
+
+    /**
      * Getter for pointer to vector of ego vehicle objects.
      *
      * @return Vector with pointers to obstacle objects.
