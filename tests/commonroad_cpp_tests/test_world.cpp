@@ -136,6 +136,28 @@ TEST_F(WorldTest, GetEgoVehicles) {
     EXPECT_EQ(world2.getEgoVehicles().size(), 0);
 }
 
+TEST_F(WorldTest, SetEgoVehicles) {
+    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+
+    // world 1 (remove ego vehicles)
+    auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
+    EXPECT_EQ(world1.getEgoVehicles().size(), 16);
+    std::vector<std::shared_ptr<Obstacle>> egos{};
+    world1.setEgoVehicles(egos);
+    EXPECT_EQ(world1.getEgoVehicles().size(), 0);
+
+    // world 2 (add ego vehicles)
+    auto world2{World(0, roadNetworkScenarioOne, {}, obstaclesScenarioOne, timeStepSizeOne)};
+    EXPECT_EQ(world2.getEgoVehicles().size(), 0);
+    egos = {obstaclesScenarioOne.front()};
+    world2.setEgoVehicles(egos);
+    EXPECT_EQ(world2.getEgoVehicles().size(), 1);
+    EXPECT_EQ(world2.getEgoVehicles()[0]->getId(), obstaclesScenarioOne.front()->getId());
+}
+
 TEST_F(WorldTest, IdCounterRef) {
     std::string scenario{"USA_Peach-2_1_T-1.xml"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
