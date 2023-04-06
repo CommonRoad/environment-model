@@ -749,3 +749,22 @@ std::vector<double> Obstacle::getBackXYCoordinates(time_step_t timeStep) {
     backXYPositions[timeStep] = result;
     return backXYPositions[timeStep];
 }
+
+double Obstacle::getLateralDistanceToObstacle(time_step_t timeStep, const std::shared_ptr<Obstacle> &obs,
+                                              const std::shared_ptr<RoadNetwork> &roadnetwork) {
+    if (lateralDistanceToObjects.find(timeStep) != lateralDistanceToObjects.end() &&
+        lateralDistanceToObjects[timeStep].find(obs->getId()) != lateralDistanceToObjects[timeStep].end())
+        return lateralDistanceToObjects[timeStep][obs->getId()];
+
+    double leftThis = leftD(timeStep, getReferenceLane(roadnetwork, timeStep));
+    double rightThis = rightD(timeStep, getReferenceLane(roadnetwork, timeStep));
+
+    double leftOther = obs->leftD(timeStep, getReferenceLane(roadnetwork, timeStep));
+    double rightOther = obs->rightD(timeStep, getReferenceLane(roadnetwork, timeStep));
+
+    double min = std::min(abs(rightThis - leftOther), abs(leftThis - rightOther));
+
+    lateralDistanceToObjects[timeStep][obs->getId()] = min;
+
+    return min;
+}

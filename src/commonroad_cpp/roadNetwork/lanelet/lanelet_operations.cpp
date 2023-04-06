@@ -129,3 +129,26 @@ lanelet_operations::activeTlsByLanelet(size_t timeStep, const std::shared_ptr<La
            }) |
            ranges::to<std::vector>;
 }
+
+bool lanelet_operations::bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &lanelet) {
+    auto is_road = [](const std::shared_ptr<Lanelet> &lanelet) {
+        return !lanelet->hasLaneletType(LaneletType::bikeLane) and !lanelet->hasLaneletType(LaneletType::sidewalk);
+    };
+
+    if (!lanelet->hasLaneletType(LaneletType::bikeLane))
+        return false;
+
+    std::shared_ptr<Lanelet> left = lanelet->getAdjacentLeft().adj;
+    while (left) {
+        if (is_road(left))
+            return true;
+        left = left->getAdjacentLeft().adj;
+    }
+    std::shared_ptr<Lanelet> right = lanelet->getAdjacentRight().adj;
+    while (right) {
+        if (is_road(right))
+            return true;
+        right = right->getAdjacentRight().adj;
+    }
+    return false;
+}

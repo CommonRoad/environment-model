@@ -86,15 +86,15 @@ void ObstacleTestInitialization::setUpObstacles() {
     /* State 1 */
     std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 10, 2, 10, 0, 0);
     std::shared_ptr<State> stateOneObstacleFour = std::make_shared<State>(1, 10, 6, 11, 0, 0);
-    std::shared_ptr<State> stateOneObstacleSeven = std::make_shared<State>(0, -10, 10, 0, 0, M_PI / 2);
+    std::shared_ptr<State> stateOneObstacleSeven = std::make_shared<State>(1, -10, 10, 0, 0, M_PI / 2);
     /* State 2 */
     std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 20, 2, 10, 0, 0);
     std::shared_ptr<State> stateTwoObstacleFour = std::make_shared<State>(2, 21, 6, 8, 0, 0);
-    std::shared_ptr<State> stateTwoObstacleSeven = std::make_shared<State>(0, 10, -10, 0, 0, M_PI);
+    std::shared_ptr<State> stateTwoObstacleSeven = std::make_shared<State>(2, 10, -10, 0, 0, M_PI);
     /* State 3 */
     std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 30, 2, 10, 0, 0);
     std::shared_ptr<State> stateThreeObstacleFour = std::make_shared<State>(3, 29, 6, 8, 0, 0);
-    std::shared_ptr<State> stateThreeObstacleSeven = std::make_shared<State>(0, -10, -10, 0, 0, M_PI * 1.5);
+    std::shared_ptr<State> stateThreeObstacleSeven = std::make_shared<State>(3, -10, -10, 0, 0, M_PI * 1.5);
     /* State 4 */
     std::shared_ptr<State> stateFourObstacleThree = std::make_shared<State>(4, 40, 2, 10, 0, 0);
     std::shared_ptr<State> stateFourObstacleFour = std::make_shared<State>(4, 1000, 2000, 10, 0, 0);
@@ -501,4 +501,15 @@ TEST_F(ObstacleTest, testGetBackXYCoordinate) {
     EXPECT_EQ(obstacleSeven->getBackXYCoordinates(2).at(1), -10.0);
     EXPECT_EQ(obstacleSeven->getBackXYCoordinates(3).at(0), -10.0);
     EXPECT_EQ(obstacleSeven->getBackXYCoordinates(3).at(1), -7.5);
+}
+
+TEST_F(ObstacleTest, testGetLateralDistanceToObstacle) {
+    EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(0, obstacleFour, roadNetwork), 2.0);
+    EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(1, obstacleFour, roadNetwork), 2.0);
+    EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(2, obstacleFour, roadNetwork), 2.0);
+    EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(3, obstacleFour, roadNetwork), 2.0);
+    EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(0, obstacleSeven, roadNetwork), 6);
+    EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(1, obstacleSeven, roadNetwork), 4.5);
+    EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(2, obstacleSeven, roadNetwork), 10);
+    EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(3, obstacleSeven, roadNetwork), 8.5);
 }
