@@ -675,6 +675,15 @@ class Obstacle {
     double drivenTrajectoryDistance() const;
 
     /**
+     * Returns distance to obstacle
+     * @param timeStep time step of interest
+     * @param obs Obstacle of interest
+     * @return Distance [m]
+     */
+    double getLateralDistanceToObstacle(time_step_t timeStep, const std::shared_ptr<Obstacle> &obs,
+                                 const std::shared_ptr<RoadNetwork> &roadnetwork);
+
+    /**
      * Returns trajectory as vector (by default it is a map).
      *
      * @return List of time steps.
@@ -770,6 +779,9 @@ class Obstacle {
 
     mutable time_step_map_t<std::vector<double>>
         backXYPositions; //**< map of time steps to backXY position of the obstacle */
+
+    mutable time_step_map_t<std::map<size_t , double>>
+        lateralDistanceToObjects; //**< map of time steps to map of other obstacles and the regarding distance to the obstacle */
 
     using curvilinear_position_t = std::array<double, 3>; //**< curvilinear position of an obstacle */
     using curvilinear_position_map_t =

@@ -1,23 +1,13 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
-/**
- * Predicate to evaluate if the k-th vehicle is left of the p-th vehicle
- * Attention: If ego vehicle is k-th vehicle use 'right_of' instead
- */
-class LeftOfPredicate : public CommonRoadPredicate {
+class IsVruPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for LeftOfPredicate
+     * Constructor for SafeDistanceToVRUsPredicate
      */
-    LeftOfPredicate();
+    IsVruPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

@@ -1,23 +1,19 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
+#include "commonroad_cpp/predicates/general/is_vru_predicate.h"
+#include "commonroad_cpp/predicates/position/right_of_predicate.h"
 
 /**
- * Predicate to evaluate if the k-th vehicle is left of the p-th vehicle
- * Attention: If ego vehicle is k-th vehicle use 'right_of' instead
+ * Evaluates if the k-th vehicle has a safe distance to the p-th vehicle if the p-th vehicle is right of the k-th
+ * vehicle and a vru (vulnerable road user)
  */
-class LeftOfPredicate : public CommonRoadPredicate {
+class SafeLateralDistanceToVrusPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for LeftOfPredicate
+     * Constructor for SafeDistanceToVrusPredicate
      */
-    LeftOfPredicate();
+    SafeLateralDistanceToVrusPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
@@ -60,4 +56,8 @@ class LeftOfPredicate : public CommonRoadPredicate {
         size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
         const std::shared_ptr<Obstacle> &obstacleP = {},
         const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
+
+  private:
+    IsVruPredicate isVRU;
+    RightOfPredicate isRightOf;
 };

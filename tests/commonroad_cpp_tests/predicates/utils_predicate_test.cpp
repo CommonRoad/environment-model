@@ -426,7 +426,7 @@ std::shared_ptr<RoadNetwork> create_road_network_with_2_successors(
     laneletRight->addSuccessor(laneletSuccessorRight);
     laneletSuccessorLeft->setRightAdjacent(laneletSuccessorRight, DrivingDirection::same);
     laneletSuccessorLeft->addPredecessor(laneletLeft);
-    laneletSuccessorRight->setRightAdjacent(laneletSuccessorLeft, DrivingDirection::same);
+    laneletSuccessorRight->setLeftAdjacent(laneletSuccessorLeft, DrivingDirection::same);
     laneletSuccessorRight->addPredecessor(laneletRight);
 
     return std::make_shared<RoadNetwork>(
