@@ -96,4 +96,11 @@ double roadWidth(const std::shared_ptr<Lanelet> &lanelet, double xPosition, doub
  * @return List of traffic lights.
  */
 std::vector<std::shared_ptr<TrafficLight>> activeTlsByLanelet(size_t timeStep, const std::shared_ptr<Lanelet> &lanelet);
+
+/**
+ * Checks whether a bicycleLane is next to a road without a gap inbetween.
+ * @param lanlet Lanelet of interest
+ * @return bool
+ */
+bool bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &lanelet);
 } // namespace lanelet_operations
