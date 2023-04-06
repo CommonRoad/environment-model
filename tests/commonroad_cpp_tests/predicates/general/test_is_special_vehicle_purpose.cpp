@@ -1,7 +1,3 @@
-//
-// Created by valentin on 02.11.22.
-//
-
 #include "test_is_special_vehicle_purpose.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"

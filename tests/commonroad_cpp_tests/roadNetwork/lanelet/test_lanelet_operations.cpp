@@ -354,3 +354,35 @@ TEST_F(LaneletOperationsTest, RoadWidth) {
     EXPECT_EQ(lanelet_operations::roadWidth(laneletSix, 70, 1.5), 3);
     EXPECT_NEAR(lanelet_operations::roadWidth(laneletSeven, -10, 4), 4.99998, 0.0005);
 }
+
+TEST_F(LaneletOperationsTest, bicycleLaneNextToRoad) {
+    EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletSix));
+
+    laneletFive->setLaneletTypes({LaneletType::urban});
+    laneletOne->setLaneletTypes({LaneletType::bikeLane});
+    laneletFour->setLaneletTypes({LaneletType::bikeLane});
+    EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFive));
+    EXPECT_TRUE(lanelet_operations::bicycleLaneNextToRoad(laneletOne));
+    EXPECT_TRUE(lanelet_operations::bicycleLaneNextToRoad(laneletFour));
+
+    laneletFive->setLaneletTypes({LaneletType::bikeLane});
+    laneletOne->setLaneletTypes({LaneletType::bikeLane});
+    laneletFour->setLaneletTypes({LaneletType::urban});
+    EXPECT_TRUE(lanelet_operations::bicycleLaneNextToRoad(laneletFive));
+    EXPECT_TRUE(lanelet_operations::bicycleLaneNextToRoad(laneletOne));
+    EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFour));
+
+    laneletFive->setLaneletTypes({LaneletType::bikeLane});
+    laneletOne->setLaneletTypes({LaneletType::bikeLane});
+    laneletFour->setLaneletTypes({LaneletType::bikeLane});
+    EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFive));
+    EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletOne));
+    EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFour));
+
+    laneletFive->setLaneletTypes({LaneletType::bikeLane});
+    laneletOne->setLaneletTypes({LaneletType::bikeLane});
+    laneletFour->setLaneletTypes({LaneletType::sidewalk});
+    EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFive));
+    EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletOne));
+    EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFour));
+}

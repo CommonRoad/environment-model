@@ -60,6 +60,9 @@ struct PredicateParameters {
     double dBrakingIntersection{15.0};
     double aBrakingIntersection{-1.0};
 
+    double dMinUrban{1.5};
+    double dMinNonUrban{2.0};
+
     double laneletOccupancySimilarity{0.25};
 
     double intersectionBrakingPossible{-4.0};
