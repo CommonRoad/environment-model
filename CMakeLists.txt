@@ -225,7 +225,7 @@ FetchContent_Declare(
     commonroad_cmake
 
     GIT_REPOSITORY https://gitlab.lrz.de/tum-cps/commonroad-cmake.git
-    GIT_TAG        feature/python
+    GIT_TAG        main
 )
 FetchContent_MakeAvailable(commonroad_cmake)
 
