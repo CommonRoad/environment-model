@@ -16,6 +16,12 @@ enum class EvaluationMode { directory, singleScenario, singleVehicle, directory_
 
 enum class OperatingMode { boolean, constraint, robustness };
 
+enum class TimeOfDay{ NIGHT, SUNSET, AFTERNOON, NOON, MORNING, UNKNOWN };
+
+enum class Weather { CLEAR, LIGHT_RAIN, MID_RAIN, HEAVY_RAIN, FOG, SNOW, HAIL, CLOUDY, UNKNOWN }
+
+enum class Underground { WET, CLEAN, DIRTY, DAMAGED, SNOW, ICE, UNKNOWN }
+
 enum class ObstacleType {
     car,
     truck,
