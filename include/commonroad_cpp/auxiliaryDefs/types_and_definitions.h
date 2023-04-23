@@ -23,17 +23,23 @@ enum class Weather { CLEAR, LIGHT_RAIN, MID_RAIN, HEAVY_RAIN, FOG, SNOW, HAIL, C
 enum class Underground { WET, CLEAN, DIRTY, DAMAGED, SNOW, ICE, UNKNOWN }
 
 enum class ObstacleType {
-    car,
-    truck,
-    pedestrian,
-    bus,
-    unknown,
-    vehicle,
     bicycle,
-    priority_vehicle,
-    train,
+    building,
+    bus,
+    car,
+    construction_zone,
+    median_strip,
     motorcycle,
-    taxi
+    parked_vehicle,
+    pedestrian,
+    pillar,
+    priority_vehicle,
+    road_boundary,
+    taxi,
+    train,
+    truck,
+    vehicle,
+    unknown,
 };
 
 enum class ObstacleRole { STATIC, DYNAMIC, ENVIRONMENT, PHANTOM };
