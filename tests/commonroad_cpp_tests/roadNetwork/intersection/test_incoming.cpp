@@ -166,23 +166,23 @@ void IncomingTestInitialization::setUpIncoming() {
 
     size_t incomingId1{13};
     std::vector<std::shared_ptr<Lanelet>> incoming1IncomingLanelets{lanelet2};
-    std::shared_ptr<Incoming> isLeftOfIncoming1{nullptr};
+    std::shared_ptr<IncomingGroup> isLeftOfIncoming1{nullptr};
     std::vector<std::shared_ptr<Lanelet>> straightOutgoingsIncoming1{lanelet81};
     std::vector<std::shared_ptr<Lanelet>> leftOutgoingsIncoming1{};
     std::vector<std::shared_ptr<Lanelet>> rightOutgoingsIncoming1{lanelet111};
     std::vector<std::shared_ptr<Lanelet>> oncomingsIncoming1{lanelet71};
-    incomingOne = std::make_shared<Incoming>(incomingId1, incoming1IncomingLanelets, isLeftOfIncoming1,
-                                             straightOutgoingsIncoming1, leftOutgoingsIncoming1,
-                                             rightOutgoingsIncoming1, oncomingsIncoming1);
+    incomingOne = std::make_shared<IncomingGroup>(incomingId1, incoming1IncomingLanelets, isLeftOfIncoming1,
+                                                  straightOutgoingsIncoming1, leftOutgoingsIncoming1,
+                                                  rightOutgoingsIncoming1, oncomingsIncoming1);
 
     size_t incomingId2{14};
     std::vector<std::shared_ptr<Lanelet>> incoming2IncomingLanelets{lanelet3};
-    std::shared_ptr<Incoming> isLeftOfIncoming2{nullptr};
+    std::shared_ptr<IncomingGroup> isLeftOfIncoming2{nullptr};
     std::vector<std::shared_ptr<Lanelet>> straightOutgoingsIncoming2{lanelet71};
     std::vector<std::shared_ptr<Lanelet>> leftOutgoingsIncoming2{lanelet101};
     std::vector<std::shared_ptr<Lanelet>> rightOutgoingsIncoming2{};
     std::vector<std::shared_ptr<Lanelet>> oncomingsIncoming2{lanelet81};
-    incomingTwo = std::make_shared<Incoming>();
+    incomingTwo = std::make_shared<IncomingGroup>();
     incomingTwo->setId(incomingId2);
     incomingTwo->setIsLeftOf(isLeftOfIncoming2);
     incomingTwo->setIncomingLanelets(incoming2IncomingLanelets);
@@ -193,14 +193,14 @@ void IncomingTestInitialization::setUpIncoming() {
 
     size_t incomingId3{15};
     std::vector<std::shared_ptr<Lanelet>> incoming3IncomingLanelets{lanelet6};
-    std::shared_ptr<Incoming> isLeftOfIncoming3{incomingOne};
+    std::shared_ptr<IncomingGroup> isLeftOfIncoming3{incomingOne};
     std::vector<std::shared_ptr<Lanelet>> straightOutgoingsIncoming3{};
     std::vector<std::shared_ptr<Lanelet>> leftOutgoingsIncoming3{lanelet121};
     std::vector<std::shared_ptr<Lanelet>> rightOutgoingsIncoming3{lanelet91};
     std::vector<std::shared_ptr<Lanelet>> oncomingsIncoming3{};
-    incomingThree = std::make_shared<Incoming>(incomingId3, incoming3IncomingLanelets, isLeftOfIncoming3,
-                                               straightOutgoingsIncoming3, leftOutgoingsIncoming3,
-                                               rightOutgoingsIncoming3, oncomingsIncoming3);
+    incomingThree = std::make_shared<IncomingGroup>(incomingId3, incoming3IncomingLanelets, isLeftOfIncoming3,
+                                                    straightOutgoingsIncoming3, leftOutgoingsIncoming3,
+                                                    rightOutgoingsIncoming3, oncomingsIncoming3);
     incomingTwo->setIsLeftOf(incomingThree);
     lanelets = {lanelet1,   lanelet2,   lanelet3,   lanelet4,   lanelet5,   lanelet6,
                 lanelet70,  lanelet71,  lanelet80,  lanelet81,  lanelet90,  lanelet91,

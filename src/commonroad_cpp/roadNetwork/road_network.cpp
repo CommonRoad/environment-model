@@ -167,9 +167,9 @@ void RoadNetwork::setIdCounterRef(const std::shared_ptr<size_t> &idCounter) {
 
 std::shared_ptr<size_t> RoadNetwork::getIdCounterRef() const { return idCounterRef; }
 
-std::shared_ptr<Incoming> RoadNetwork::findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet) {
+std::shared_ptr<IncomingGroup> RoadNetwork::findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet) {
     for (const auto &inter : intersections)
-        for (const auto &incom : inter->getIncomings())
+        for (const auto &incom : inter->getIncomingGroups())
             for (const auto &let : incom->getIncomingLanelets())
                 if (let->getId() == lanelet->getId())
                     return incom;

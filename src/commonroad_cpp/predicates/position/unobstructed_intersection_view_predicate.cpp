@@ -18,7 +18,7 @@ bool UnobstructedIntersectionViewPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     for (const auto &inter : obstacle_operations::getIntersections(timeStep, world->getRoadNetwork(), obstacleK)) {
-        for (const auto &incom : inter->getIncomings()) {
+        for (const auto &incom : inter->getIncomingGroups()) {
             for (const auto &let : incom->getIncomingLanelets()) {
                 auto newLanes{lane_operations::combineLaneletAndPredecessorsToLane(let, 50, 0, {})};
                 for (const auto &laneLanelets : newLanes) {

@@ -47,7 +47,7 @@ void ProtobufReader::initTrafficLightContainer(ProtobufReader::TrafficLightConta
 void ProtobufReader::initIncomingContainer(IncomingContainer &incomingContainer,
                                            const commonroad::Intersection &intersectionMsg) {
     for (const auto &incomingMsg : intersectionMsg.incomings())
-        incomingContainer.emplace(incomingMsg.incoming_id(), std::make_shared<Incoming>());
+        incomingContainer.emplace(incomingMsg.incoming_id(), std::make_shared<IncomingGroup>());
 }
 
 std::shared_ptr<Lanelet> ProtobufReader::getLaneletFromContainer(size_t laneletId,
@@ -76,7 +76,7 @@ ProtobufReader::getTrafficLightFromContainer(size_t trafficLightId,
     return nullptr;
 }
 
-std::shared_ptr<Incoming>
+std::shared_ptr<IncomingGroup>
 ProtobufReader::getIncomingFromContainer(size_t incomingId, ProtobufReader::IncomingContainer &incomingContainer) {
     if (incomingContainer.find(incomingId) != incomingContainer.end())
         return incomingContainer[incomingId];
@@ -413,22 +413,22 @@ ProtobufReader::createIntersectionFromMessage(const commonroad::Intersection &in
     initIncomingContainer(incomingContainer, intersectionMsg);
 
     for (const auto &incomingMsg : intersectionMsg.incomings())
-        intersection->addIncoming(
+        intersection->addIncomingGroup(
             ProtobufReader::createIncomingFromMessage(incomingMsg, laneletContainer, incomingContainer));
 
     for (size_t laneletId : intersectionMsg.crossing_lanelets()) {
         auto containerLanelet = getLaneletFromContainer(laneletId, laneletContainer);
         if (containerLanelet != nullptr)
-            intersection->addCrossing(containerLanelet);
+            ;//intersection->addCrossing(containerLanelet); TODO add crossings to incomingGroups
     }
 
     return intersection;
 }
 
-std::shared_ptr<Incoming> ProtobufReader::createIncomingFromMessage(const commonroad::Incoming &incomingMsg,
-                                                                    LaneletContainer &laneletContainer,
-                                                                    IncomingContainer &incomingContainer) {
-    std::shared_ptr<Incoming> incoming = incomingContainer[incomingMsg.incoming_id()];
+std::shared_ptr<IncomingGroup> ProtobufReader::createIncomingFromMessage(const commonroad::Incoming &incomingMsg,
+                                                                         LaneletContainer &laneletContainer,
+                                                                         IncomingContainer &incomingContainer) {
+    std::shared_ptr<IncomingGroup> incoming = incomingContainer[incomingMsg.incoming_id()];
 
     incoming->setId(incomingMsg.incoming_id());
 

@@ -32,7 +32,7 @@ using FloatExactOrInterval = std::variant<double, FloatInterval>;
 using LaneletContainer = std::unordered_map<size_t, std::shared_ptr<Lanelet>>;
 using TrafficSignContainer = std::unordered_map<size_t, std::shared_ptr<TrafficSign>>;
 using TrafficLightContainer = std::unordered_map<size_t, std::shared_ptr<TrafficLight>>;
-using IncomingContainer = std::unordered_map<size_t, std::shared_ptr<Incoming>>;
+using IncomingContainer = std::unordered_map<size_t, std::shared_ptr<IncomingGroup>>;
 
 /**
  * Loads a CommonRoad message from protobuf file.
@@ -108,7 +108,7 @@ std::shared_ptr<TrafficLight> getTrafficLightFromContainer(size_t trafficLightId
  * @param incomingContainer Incoming container
  * @return Incoming
  */
-std::shared_ptr<Incoming> getIncomingFromContainer(size_t incomingId, IncomingContainer& incomingContainer);
+std::shared_ptr<IncomingGroup> getIncomingFromContainer(size_t incomingId, IncomingContainer& incomingContainer);
 
 /**
  * Creates CR scenario from protobuf message "CommonRoad".
@@ -206,7 +206,7 @@ std::shared_ptr<Intersection> createIntersectionFromMessage(const commonroad::In
  * @param incomingContainer Incoming container
  * @return Incoming
  */
-std::shared_ptr<Incoming> createIncomingFromMessage(const commonroad::Incoming& incomingMsg, LaneletContainer& laneletContainer, IncomingContainer& incomingContainer);
+std::shared_ptr<IncomingGroup> createIncomingFromMessage(const commonroad::Incoming& incomingMsg, LaneletContainer& laneletContainer, IncomingContainer& incomingContainer);
 
 /**
  * Creates obstacle from protobuf message "StaticObstacle".

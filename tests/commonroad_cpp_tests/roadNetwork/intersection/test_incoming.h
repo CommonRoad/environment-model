@@ -6,14 +6,14 @@
 //
 #pragma once
 
-#include "commonroad_cpp/roadNetwork/intersection/incoming.h"
+#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
 #include <gtest/gtest.h>
 
 class IncomingTestInitialization {
   protected:
-    std::shared_ptr<Incoming> incomingOne;
-    std::shared_ptr<Incoming> incomingTwo;
-    std::shared_ptr<Incoming> incomingThree;
+    std::shared_ptr<IncomingGroup> incomingOne;
+    std::shared_ptr<IncomingGroup> incomingTwo;
+    std::shared_ptr<IncomingGroup> incomingThree;
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     void setUpIncoming();
 };

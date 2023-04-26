@@ -11,28 +11,24 @@
 #include <deque>
 #include <utility>
 
+Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
+                           std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups)
+    : id(intersectionId), incomings(std::move(incomingGroups)), outgoings(std::move(outgoingGroups)) {}
+
 size_t Intersection::getId() const { return id; }
 
 void Intersection::setId(size_t num) { Intersection::id = num; }
 
-const std::vector<std::shared_ptr<Incoming>> &Intersection::getIncomings() const { return incomings; }
+const std::vector<std::shared_ptr<IncomingGroup>> &Intersection::getIncomingGroups() const { return incomings; }
 
-void Intersection::addIncoming(const std::shared_ptr<Incoming> &inc) {
-    incomings.push_back(inc);
+void Intersection::addIncomingGroup(const std::shared_ptr<IncomingGroup> &incoming) {
+    incomings.push_back(incoming);
     memberLanelets.clear();
 }
 
-const std::vector<std::shared_ptr<Lanelet>> &Intersection::getCrossings() const { return crossings; }
+const std::vector<std::shared_ptr<OutgoingGroup>> &Intersection::getOutgoingGroups() const { return outgoings; }
 
-void Intersection::setIncomings(const std::vector<std::shared_ptr<Incoming>> &incs) { incomings = incs; }
-
-void Intersection::setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cross) { crossings = cross; }
-
-void Intersection::addCrossing(const std::shared_ptr<Lanelet> &cross) { crossings.push_back(cross); }
-
-Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<Incoming>> incomings,
-                           std::vector<std::shared_ptr<Lanelet>> crossings)
-    : id(intersectionId), incomings(std::move(incomings)), crossings(std::move(crossings)) {}
+void Intersection::setIncomingGroups(const std::vector<std::shared_ptr<IncomingGroup>> &incs) { incomings = incs; }
 
 const std::vector<std::shared_ptr<Lanelet>> &
 Intersection::getMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork) {

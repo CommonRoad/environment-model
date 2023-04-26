@@ -9,7 +9,7 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h>
 #include <commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h>
-#include <commonroad_cpp/roadNetwork/intersection/incoming.h>
+#include <commonroad_cpp/roadNetwork/intersection/incoming_group.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 

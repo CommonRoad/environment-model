@@ -11,7 +11,7 @@
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/position/on_oncoming_of_predicate.h>
-#include <commonroad_cpp/roadNetwork/intersection/incoming.h>
+#include <commonroad_cpp/roadNetwork/intersection/incoming_group.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
@@ -21,9 +21,9 @@ bool OnOncomingOfPredicate::booleanEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
 
     auto intersections{obstacle_operations::getIntersections(timeStep, world->getRoadNetwork(), obstacleP)};
-    std::vector<std::shared_ptr<Incoming>> incomings;
+    std::vector<std::shared_ptr<IncomingGroup>> incomings;
     for (const auto &inter : intersections)
-        for (const auto &incom : inter->getIncomings()) {
+        for (const auto &incom : inter->getIncomingGroups()) {
             auto angle{incom->getIncomingLanelets().at(0)->getOrientation().back()};
             auto angleDif{M_PI - std::abs(geometric_operations::subtractOrientations(
                                      angle, obstacleP->getStateByTimeStep(timeStep)->getGlobalOrientation()))};
