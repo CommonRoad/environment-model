@@ -10,15 +10,17 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.cpp
-        commonroad_cpp/roadNetwork/intersection/incoming.cpp
+        commonroad_cpp/roadNetwork/intersection/incoming_group.cpp
         commonroad_cpp/roadNetwork/intersection/intersection.cpp
         commonroad_cpp/roadNetwork/intersection/intersection_operations.cpp
+        commonroad_cpp/roadNetwork/intersection/outgoing_group.cpp
         commonroad_cpp/roadNetwork/road_network_config.cpp
         commonroad_cpp/obstacle/obstacle.cpp
         commonroad_cpp/obstacle/obstacle_operations.cpp
         commonroad_cpp/obstacle/obstacle_reference.cpp
-        commonroad_cpp/obstacle/state.cpp
         commonroad_cpp/obstacle/signal_state.cpp
+        commonroad_cpp/obstacle/state.cpp
+        commonroad_cpp/obstacle/state_meta_info.cpp
         commonroad_cpp/geometry/circle.cpp
         commonroad_cpp/geometry/curvilinear_coordinate_system.cpp
         commonroad_cpp/geometry/geometric_operations.cpp
@@ -33,6 +35,9 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp
+        commonroad_cpp/roadNetwork/environment/environment.cpp
+        commonroad_cpp/roadNetwork/environment/area.cpp
+        commonroad_cpp/roadNetwork/environment/area_border.cpp
         commonroad_cpp/interfaces/commonroad/protobuf_reader.cpp)
 
 set(ENV_MODEL_HDR_FILES
@@ -56,9 +61,11 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/obstacle/obstacle_operations.h
         commonroad_cpp/obstacle/sensor_parameters.h
         commonroad_cpp/obstacle/state.h
-        commonroad_cpp/roadNetwork/intersection/incoming.h
+        commonroad_cpp/obstacle/state_meta_info.h
+        commonroad_cpp/roadNetwork/intersection/incoming_group.h
         commonroad_cpp/roadNetwork/intersection/intersection.h
         commonroad_cpp/roadNetwork/intersection/intersection_operations.h
+        commonroad_cpp/roadNetwork/intersection/outgoing_group.h
         commonroad_cpp/roadNetwork/lanelet/dijkstra.h
         commonroad_cpp/roadNetwork/lanelet/graph.h
         commonroad_cpp/roadNetwork/lanelet/lane.h
@@ -71,6 +78,9 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h
+        commonroad_cpp/roadNetwork/environment/environment.h
+        commonroad_cpp/roadNetwork/environment/area.h
+        commonroad_cpp/roadNetwork/environment/area_border.h
         commonroad_cpp/roadNetwork/road_network.h
         commonroad_cpp/roadNetwork/types.h
         commonroad_cpp/roadNetwork/road_network_config.h

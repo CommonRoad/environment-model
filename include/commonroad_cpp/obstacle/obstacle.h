@@ -26,6 +26,7 @@
 #include "actuator_parameters.h"
 #include "sensor_parameters.h"
 #include "signal_state.h"
+#include "state_meta_info.h"
 
 #include <tsl/robin_map.h>
 
@@ -749,6 +750,7 @@ class Obstacle {
     signal_state_map_t signalSeries{};         //**< signal series of the obstacle */
     state_map_t trajectoryHistory{};              //**< previous states of the obstacle */
     signal_state_map_t signalSeriesHistory{};         //**< previous signal states of the obstacle */
+    StateMetaInfo stateMetaInfo{};
 
     std::unique_ptr<Shape>
         geoShape; // TODO make general                                          //**< shape of the obstacle */

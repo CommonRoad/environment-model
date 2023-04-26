@@ -30,7 +30,7 @@ using value = std::pair<box, unsigned>;
 
 class Lanelet;
 class Lane;
-class Incoming;
+class IncomingGroup;
 class TrafficLight;
 class TrafficSign;
 class Intersection;
@@ -212,7 +212,7 @@ class RoadNetwork {
      * @param lanelet Lanelet of interest.
      * @return Incoming object
      */
-    std::shared_ptr<Incoming> findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet);
+    std::shared_ptr<IncomingGroup> findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet);
 
     /**
      * Getter for topological map of road network.

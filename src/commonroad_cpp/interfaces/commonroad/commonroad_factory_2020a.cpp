@@ -295,7 +295,7 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
                  intersectionChildElement = intersectionChildElement.next_sibling()) {
                 // get incoming
                 if ((strcmp(intersectionChildElement.name(), "incoming")) == 0) {
-                    std::shared_ptr<Incoming> inc = std::make_shared<Incoming>();
+                    std::shared_ptr<IncomingGroup> inc = std::make_shared<IncomingGroup>();
                     inc->setId(intersectionChildElement.first_attribute().as_ullong());
                     std::vector<std::shared_ptr<Lanelet>> incomingLanelet;
                     std::vector<std::shared_ptr<Lanelet>> outgoingsRight;
@@ -338,21 +338,21 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
                             tmpLeftOf.insert_or_assign(inc->getId(),
                                                        incomingChildElementChild.attribute("ref").as_ullong());
                     }
-                    tempIntersectionContainer[arrayIndex]->addIncoming(inc);
+                    tempIntersectionContainer[arrayIndex]->addIncomingGroup(inc);
                 }
                 if ((strcmp(intersectionChildElement.name(), "crossing")) == 0) {
                     for (pugi::xml_node crossingElement = intersectionChildElement.first_child();
                          crossingElement != nullptr; crossingElement = crossingElement.next_sibling())
                         for (const auto &let : lanelets)
                             if (crossingElement.attribute("ref").as_ullong() == let->getId())
-                                tempIntersection->addCrossing(let);
+                                ;//tempIntersection->addCrossing(let); TODO add to incomingGroups
                 }
             }
             // iterate over all incoming lefts and assign correct reference
             for (auto const &[key, val] : tmpLeftOf) {
-                for (const auto &inc1 : tempIntersectionContainer[arrayIndex]->getIncomings()) {
+                for (const auto &inc1 : tempIntersectionContainer[arrayIndex]->getIncomingGroups()) {
                     if (inc1->getId() == key)
-                        for (const auto &inc2 : tempIntersectionContainer[arrayIndex]->getIncomings()) {
+                        for (const auto &inc2 : tempIntersectionContainer[arrayIndex]->getIncomingGroups()) {
                             if (inc2->getId() == val)
                                 inc1->setIsLeftOf(inc2);
                         }

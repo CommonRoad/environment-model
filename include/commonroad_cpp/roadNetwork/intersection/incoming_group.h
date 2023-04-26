@@ -13,12 +13,12 @@
 /**
  * Class representing an incoming of an intersection.
  */
-class Incoming {
+class IncomingGroup {
   public:
     /**
      * Default constructor.
      */
-    Incoming() = default;
+    IncomingGroup() = default;
 
     /**
      * Constructor of incoming.
@@ -31,8 +31,8 @@ class Incoming {
      * @param rightOutgoings Reference to right outgoing lanelets.
      * @param oncomings Reference to oncoming lanelets.
      */
-    Incoming(size_t incomingId, std::vector<std::shared_ptr<Lanelet>> incomingLanelets,
-             std::shared_ptr<Incoming> isLeftOf, std::vector<std::shared_ptr<Lanelet>> straightOutgoings,
+    IncomingGroup(size_t incomingId, std::vector<std::shared_ptr<Lanelet>> incomingLanelets,
+             std::shared_ptr<IncomingGroup> isLeftOf, std::vector<std::shared_ptr<Lanelet>> straightOutgoings,
              std::vector<std::shared_ptr<Lanelet>> leftOutgoings, std::vector<std::shared_ptr<Lanelet>> rightOutgoings,
              std::vector<std::shared_ptr<Lanelet>> oncomings);
 
@@ -55,7 +55,7 @@ class Incoming {
      *
      * @return Pointer to incoming.
      */
-    [[nodiscard]] const std::shared_ptr<Incoming> &getIsLeftOf() const;
+    [[nodiscard]] const std::shared_ptr<IncomingGroup> &getIsLeftOf() const;
 
     /**
      * Setter of incoming ID.
@@ -76,7 +76,7 @@ class Incoming {
      *
      * @param isLeftOf Pointer to incoming.
      */
-    void setIsLeftOf(const std::shared_ptr<Incoming> &isLeftOf);
+    void setIsLeftOf(const std::shared_ptr<IncomingGroup> &isLeftOf);
 
     /**
      * Getter for straight outgoing lanelets of incoming.
@@ -177,9 +177,10 @@ class Incoming {
     std::vector<std::shared_ptr<Lanelet>> getAllStraightGoingLanelets();
 
   private:
-    size_t id;
-    std::vector<std::shared_ptr<Lanelet>> incomingLanelets; //**< set of pointers to lanelets belonging to incoming */
-    std::shared_ptr<Incoming> isLeftOf;                     //**< pointer to incoming which is left */
+    size_t groupID;
+    std::optional<size_t> outgoingGroupID;
+    std::vector<std::shared_ptr<Lanelet>> incomingLanelets; //**< set of pointers to lanelets belonging to incoming group */
+    std::shared_ptr<IncomingGroup> isLeftOf;                     //**< pointer to incoming which is left */
     std::vector<std::shared_ptr<Lanelet>>
         straightOutgoings; //**< set of pointers to straight outgoing lanelets of this incoming */
     std::vector<std::shared_ptr<Lanelet>>
@@ -187,6 +188,7 @@ class Incoming {
     std::vector<std::shared_ptr<Lanelet>>
         rightOutgoings; //**< set of pointers to right outgoing lanelets of this incoming */
     std::vector<std::shared_ptr<Lanelet>> oncomings; //**< set of pointers to oncoming lanelets of this incoming */
+    std::vector<std::shared_ptr<Lanelet>> crossings; //**< set of crossings of this incoming */
 
     std::vector<std::shared_ptr<Lanelet>> collectIncomingSuccessors(std::deque<std::shared_ptr<Lanelet>> &candidates,
                                                                     bool considerIncomings);

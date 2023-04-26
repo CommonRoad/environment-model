@@ -12,15 +12,17 @@
 
 using time_step_t = size_t; //**< type of history/trajectory prediction time steps */
 
+enum class AreaType { bus_stop, border, parking, restricted, unknown };
+
 enum class EvaluationMode { directory, singleScenario, singleVehicle, directory_single_vehicle };
 
 enum class OperatingMode { boolean, constraint, robustness };
 
-enum class TimeOfDay{ NIGHT, SUNSET, AFTERNOON, NOON, MORNING, UNKNOWN };
+enum class TimeOfDay{ afternoon, morning, night, noon, sunset, unknown };
 
-enum class Weather { CLEAR, LIGHT_RAIN, MID_RAIN, HEAVY_RAIN, FOG, SNOW, HAIL, CLOUDY, UNKNOWN }
+enum class Weather { clear, cloudy, fog, hail, heavy_rain, light_rain, mid_rain, snow, unknown };
 
-enum class Underground { WET, CLEAN, DIRTY, DAMAGED, SNOW, ICE, UNKNOWN }
+enum class Underground { clean, damaged, dirty, ice, snow, wet, unknown };
 
 enum class ObstacleType {
     bicycle,
@@ -45,29 +47,32 @@ enum class ObstacleType {
 enum class ObstacleRole { STATIC, DYNAMIC, ENVIRONMENT, PHANTOM };
 
 enum class LaneletType {
-    interstate,
-    urban,
-    crosswalk,
+    accessRamp,
+    bicycleLane,
+    border,
+    busLane,
     busStop,
     country,
-    highway,
+    crosswalk,
     driveWay,
-    mainCarriageWay,
-    accessRamp,
     exitRamp,
-    shoulder,
-    busLane,
-    bikeLane,
-    sidewalk,
-    unknown,
+    highway,
+    incoming,
     intersection,
-    left,
-    right,
-    straight,
     intersectionLeftOutgoing,
     intersectionRightOutgoing,
     intersectionStraightOutgoing,
-    incoming
+    interstate,
+    left,
+    mainCarriageWay,
+    parking,
+    restricted,
+    right,
+    shoulder,
+    sidewalk,
+    straight,
+    urban,
+    unknown
 };
 
 enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };

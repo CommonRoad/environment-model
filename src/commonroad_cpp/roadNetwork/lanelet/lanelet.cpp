@@ -276,7 +276,7 @@ const std::unordered_map<std::string, LaneletType> LaneletTypeNames = {
     {"EXITRAMP", LaneletType::exitRamp},
     {"SHOULDER", LaneletType::shoulder},
     {"BUSLANE", LaneletType::busLane},
-    {"BIKELANE", LaneletType::bikeLane},
+    {"BICYCLELANE", LaneletType::bicycleLane},
     {"SIDEWALK", LaneletType::sidewalk},
     {"UNKNOWN", LaneletType::unknown},
     {"INTERSECTION", LaneletType::intersection},

@@ -29,7 +29,7 @@ TEST_F(LaneletOperationsTest, MatchStringToLaneletType) {
     EXPECT_EQ(lanelet_operations::matchStringToLaneletType("accessRamp"), LaneletType::accessRamp);
     EXPECT_EQ(lanelet_operations::matchStringToLaneletType("exitRamp"), LaneletType::exitRamp);
     EXPECT_EQ(lanelet_operations::matchStringToLaneletType("shoulder"), LaneletType::shoulder);
-    EXPECT_EQ(lanelet_operations::matchStringToLaneletType("bikeLane"), LaneletType::bikeLane);
+    EXPECT_EQ(lanelet_operations::matchStringToLaneletType("bicycleLane"), LaneletType::bicycleLane);
     EXPECT_EQ(lanelet_operations::matchStringToLaneletType("sidewalk"), LaneletType::sidewalk);
     EXPECT_EQ(lanelet_operations::matchStringToLaneletType("busLane"), LaneletType::busLane);
     EXPECT_THROW(lanelet_operations::matchStringToLaneletType("test"), std::logic_error);
@@ -359,28 +359,28 @@ TEST_F(LaneletOperationsTest, bicycleLaneNextToRoad) {
     EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletSix));
 
     laneletFive->setLaneletTypes({LaneletType::urban});
-    laneletOne->setLaneletTypes({LaneletType::bikeLane});
-    laneletFour->setLaneletTypes({LaneletType::bikeLane});
+    laneletOne->setLaneletTypes({LaneletType::bicycleLane});
+    laneletFour->setLaneletTypes({LaneletType::bicycleLane});
     EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFive));
     EXPECT_TRUE(lanelet_operations::bicycleLaneNextToRoad(laneletOne));
     EXPECT_TRUE(lanelet_operations::bicycleLaneNextToRoad(laneletFour));
 
-    laneletFive->setLaneletTypes({LaneletType::bikeLane});
-    laneletOne->setLaneletTypes({LaneletType::bikeLane});
+    laneletFive->setLaneletTypes({LaneletType::bicycleLane});
+    laneletOne->setLaneletTypes({LaneletType::bicycleLane});
     laneletFour->setLaneletTypes({LaneletType::urban});
     EXPECT_TRUE(lanelet_operations::bicycleLaneNextToRoad(laneletFive));
     EXPECT_TRUE(lanelet_operations::bicycleLaneNextToRoad(laneletOne));
     EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFour));
 
-    laneletFive->setLaneletTypes({LaneletType::bikeLane});
-    laneletOne->setLaneletTypes({LaneletType::bikeLane});
-    laneletFour->setLaneletTypes({LaneletType::bikeLane});
+    laneletFive->setLaneletTypes({LaneletType::bicycleLane});
+    laneletOne->setLaneletTypes({LaneletType::bicycleLane});
+    laneletFour->setLaneletTypes({LaneletType::bicycleLane});
     EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFive));
     EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletOne));
     EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFour));
 
-    laneletFive->setLaneletTypes({LaneletType::bikeLane});
-    laneletOne->setLaneletTypes({LaneletType::bikeLane});
+    laneletFive->setLaneletTypes({LaneletType::bicycleLane});
+    laneletOne->setLaneletTypes({LaneletType::bicycleLane});
     laneletFour->setLaneletTypes({LaneletType::sidewalk});
     EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletFive));
     EXPECT_FALSE(lanelet_operations::bicycleLaneNextToRoad(laneletOne));

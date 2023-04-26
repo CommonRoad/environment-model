@@ -23,6 +23,7 @@
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
+#include "commonroad_cpp/roadNetwork/environment/area.h"
 #include <commonroad_cpp/roadNetwork/types.h>
 
 /**
@@ -436,6 +437,7 @@ class Lanelet {
         trafficLights; //**< list of pointers to traffic lights assigned to lanelet*/
     std::vector<std::shared_ptr<TrafficSign>>
         trafficSigns;                          //**< list of pointers to traffic signs assigned to lanelet*/
+    std::vector<std::shared_ptr<Area>> adjacent_areas; //**< list of pointers to adjacent areas*/
     std::set<LaneletType> laneletTypes;        //**< list of relevant lanelet types*/
     std::set<ObstacleType> usersOneWay;        //**< list of relevant allowed users one way*/
     std::set<ObstacleType> usersBidirectional; //**< list of relevant allowed users bidirectional*/
