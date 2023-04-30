@@ -26,7 +26,6 @@ void RoadNetworkTestInitialization::setUpRoadNetwork() {
 void RoadNetworkTest::SetUp() {
     setUpLane();
     setUpIncoming();
-    setUpIntersection();
     setUpRoadNetwork();
 }
 

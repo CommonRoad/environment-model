@@ -61,21 +61,21 @@ TEST_F(OnRoadPredicateTest, HalfOnCrosswalk) {
 }
 
 TEST_F(OnRoadPredicateTest, OnBikelaneSeperatedFromRoadLeft) {
-    initializeTestData(LaneletType::sidewalk, LaneletType::bikeLane, LaneletType::sidewalk, LaneletType::bikeLane);
+    initializeTestData(LaneletType::sidewalk, LaneletType::bicycleLane, LaneletType::sidewalk, LaneletType::bicycleLane);
     EXPECT_FALSE(pred.booleanEvaluation(5, world, egoVehicle));
 }
 
 TEST_F(OnRoadPredicateTest, OnBikelaneNotSeperatedFromRoadLeft) {
-    initializeTestData(LaneletType::urban, LaneletType::bikeLane, LaneletType::urban, LaneletType::bikeLane);
+    initializeTestData(LaneletType::urban, LaneletType::bicycleLane, LaneletType::urban, LaneletType::bicycleLane);
     EXPECT_TRUE(pred.booleanEvaluation(5, world, egoVehicle));
 }
 
 TEST_F(OnRoadPredicateTest, OnBikelaneSeperatedFromRoadRight) {
-    initializeTestData(LaneletType::bikeLane, LaneletType::sidewalk, LaneletType::bikeLane, LaneletType::sidewalk);
+    initializeTestData(LaneletType::bicycleLane, LaneletType::sidewalk, LaneletType::bicycleLane, LaneletType::sidewalk);
     EXPECT_FALSE(pred.booleanEvaluation(2, world, egoVehicle));
 }
 
 TEST_F(OnRoadPredicateTest, OnBikelaneNotSeperatedFromRoadRight) {
-    initializeTestData(LaneletType::bikeLane, LaneletType::urban, LaneletType::bikeLane, LaneletType::urban);
+    initializeTestData(LaneletType::bicycleLane, LaneletType::urban, LaneletType::bicycleLane, LaneletType::urban);
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle));
 }

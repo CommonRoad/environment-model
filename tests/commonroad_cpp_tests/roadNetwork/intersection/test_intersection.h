@@ -10,14 +10,6 @@
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "test_incoming.h"
 
-class IntersectionTestInitialization : public IncomingTestInitialization {
-  protected:
-    void setUpIntersection();
-    std::shared_ptr<Intersection> intersection1;
-    std::shared_ptr<Intersection> intersection2;
-    std::shared_ptr<RoadNetwork> roadNetwork;
-};
-
 class IntersectionTest : public IntersectionTestInitialization, public testing::Test {
   private:
     void SetUp() override;

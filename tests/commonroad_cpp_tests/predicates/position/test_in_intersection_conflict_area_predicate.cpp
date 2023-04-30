@@ -34,7 +34,6 @@ void InIntersectionConflictAreaPredicateTest::SetUp() {
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
 
     setUpIncoming();
-    setUpIntersection();
 
     auto roadNetwork = std::make_shared<RoadNetwork>(
         RoadNetwork(lanelets, SupportedTrafficSignCountry::GERMANY, {}, {}, {intersection1}));
