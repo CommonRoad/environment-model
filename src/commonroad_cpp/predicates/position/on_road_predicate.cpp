@@ -8,7 +8,8 @@ bool OnRoadPredicate::booleanEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     auto occ = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(occ.begin(), occ.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
-        return (!lanelet->hasLaneletType(LaneletType::sidewalk) and !lanelet->hasLaneletType(LaneletType::bicycleLane)) or
+        return (!lanelet->hasLaneletType(LaneletType::sidewalk) and
+                !lanelet->hasLaneletType(LaneletType::bicycleLane)) or
                (lanelet_operations::bicycleLaneNextToRoad(lanelet));
     });
 }

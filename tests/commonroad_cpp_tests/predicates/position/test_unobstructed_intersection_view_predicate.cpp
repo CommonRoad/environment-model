@@ -46,7 +46,7 @@ TEST_F(UnobstructedIntersectionViewPredicateTest, BooleanEvaluationObjects) {
                                  {0.0, -5.0}};
     egoVehicle->setFov(geometric_operations::rotateAndTranslateVertices(
         fovSmall, {egoVehicle->getCurrentState()->getXPosition(), egoVehicle->getCurrentState()->getYPosition()}, 0));
-    //EXPECT_FALSE(pred.booleanEvaluation(2, world, egoVehicle)); TODO check why false
+    // EXPECT_FALSE(pred.booleanEvaluation(2, world, egoVehicle)); TODO check why false
 }
 
 TEST_F(UnobstructedIntersectionViewPredicateTest, RobustEvaluation) {

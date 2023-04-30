@@ -419,7 +419,7 @@ ProtobufReader::createIntersectionFromMessage(const commonroad::Intersection &in
     for (size_t laneletId : intersectionMsg.crossing_lanelets()) {
         auto containerLanelet = getLaneletFromContainer(laneletId, laneletContainer);
         if (containerLanelet != nullptr)
-            ;//intersection->addCrossing(containerLanelet); TODO add crossings to incomingGroups
+            ; // intersection->addCrossing(containerLanelet); TODO add crossings to incomingGroups
     }
 
     return intersection;
