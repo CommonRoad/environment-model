@@ -345,7 +345,7 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
                          crossingElement != nullptr; crossingElement = crossingElement.next_sibling())
                         for (const auto &let : lanelets)
                             if (crossingElement.attribute("ref").as_ullong() == let->getId())
-                                ;//tempIntersection->addCrossing(let); TODO add to incomingGroups
+                                ; // tempIntersection->addCrossing(let); TODO add to incomingGroups
                 }
             }
             // iterate over all incoming lefts and assign correct reference
