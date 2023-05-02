@@ -4,6 +4,7 @@
 #include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h>
 #include <commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
