@@ -50,6 +50,10 @@ endif()
 
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 
+if(CMAKE_EXPORT_COMPILE_COMMANDS)
+  set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+endif()
+
 
 # IMPORTANT: DO NOT MOVE this section, in particular the calls to find_package(Python)
 # and find_package(pybind11), without careful consideration

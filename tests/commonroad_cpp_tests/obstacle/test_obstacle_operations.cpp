@@ -10,6 +10,7 @@
 #include "commonroad_cpp/geometry/geometric_operations.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/obstacle/state.h"
+#include "commonroad_cpp/world.h"
 
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 

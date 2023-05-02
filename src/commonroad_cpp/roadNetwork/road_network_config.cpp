@@ -1,5 +1,7 @@
 #include "commonroad_cpp/roadNetwork/road_network_config.h"
 
+#include <cassert>
+
 void RoadNetworkParameters::checkParameterValidity() const {
     assert(eps1 > 0.0);
     assert(eps2 > 0.0);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 struct RoadNetworkParameters {
     RoadNetworkParameters() { checkParameterValidity(); }
     void checkParameterValidity() const;
