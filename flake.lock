@@ -1,0 +1,60 @@
+{
+  "nodes": {
+    "commonroad-cmake": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1681888974,
+        "narHash": "sha256-XE5po9mnuZJhJ2mEfpTP3Ij4mF8YXiNpx8u5ardAMcI=",
+        "ref": "main",
+        "rev": "b6ec634c8299a98746def2960b3cb6544c6845e4",
+        "revCount": 14,
+        "type": "git",
+        "url": "https://gitlab.lrz.de/tum-cps/commonroad-cmake.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://gitlab.lrz.de/tum-cps/commonroad-cmake.git"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1676569297,
+        "narHash": "sha256-2n4C4H3/U+3YbDrQB6xIw7AaLdFISCCFwOkcETAigqU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "ac1f5b72a9e95873d1de0233fddcb56f99884b37",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "commonroad-cmake": "commonroad-cmake",
+        "nixpkgs": "nixpkgs",
+        "utils": "utils"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1676283394,
+        "narHash": "sha256-XX2f9c3iySLCw54rJ/CZs+ZK6IQy7GXNY4nSOyu2QG4=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "3db36a8b464d0c4532ba1c7dda728f4576d6d073",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

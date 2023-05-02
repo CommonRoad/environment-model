@@ -165,6 +165,12 @@ build-coverage:
       - build
     expire_in: 30 minutes
 
+build-nix:
+  stage: compile
+  image: nixos/nix:latest
+  script:
+    - nix --extra-experimental-features "nix-command flakes" --print-build-logs build
+
 build-sdist:
   stage: python
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0

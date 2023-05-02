@@ -6,23 +6,27 @@ include(CMakeFindDependencyMacro)
 find_dependency(OpenMP)
 
 if(@INSTALL_boost_src_FROM_SYSTEM@)
-    find_dependency(Boost 1.70.0)
+    find_dependency(Boost @Boost_VERSION@)
 endif()
 
 if(@INSTALL_Eigen3_FROM_SYSTEM@)
-    find_dependency(Eigen3 3.3.7)
+    find_dependency(Eigen3 @Eigen3_VERSION@)
 endif()
 
 if(@INSTALL_spdlog_FROM_SYSTEM@)
-    find_dependency(spdlog 1.8.0)
+    find_dependency(spdlog @spdlog_VERSION@)
 endif()
 
 if(@INSTALL_range-v3_FROM_SYSTEM@)
-    find_dependency(range-v3 0.6.0)
+    find_dependency(range-v3 @range-v3_VERSION@)
 endif()
 
 if(@INSTALL_yaml-cpp_FROM_SYSTEM@)
-    find_dependency(yaml-cpp 0.6.0)
+    find_dependency(yaml-cpp @yaml-cpp_VERSION@)
+endif()
+
+if(@INSTALL_tsl-robin-map_FROM_SYSTEM@)
+    find_dependency(tsl-robin-map @tsl-robin-map_VERSION@)
 endif()
 
 # Add targets

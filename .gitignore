@@ -27,3 +27,6 @@ __pycache__/
 
 # config files
 /src/commonroad_cpp/custom_config.yaml
+
+# From direnv
+.direnv
