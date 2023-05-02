@@ -43,6 +43,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/commonroad_container.h
         commonroad_cpp/geometry/circle.h
         commonroad_cpp/geometry/curvilinear_coordinate_system.h
+        commonroad_cpp/geometry/geometric_operations.h
         commonroad_cpp/geometry/rectangle.h
         commonroad_cpp/geometry/segment.h
         commonroad_cpp/geometry/shape.h
@@ -56,6 +57,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/obstacle/obstacle_operations.h
         commonroad_cpp/obstacle/sensor_parameters.h
         commonroad_cpp/obstacle/state.h
+        commonroad_cpp/obstacle/signal_state.h
         commonroad_cpp/roadNetwork/intersection/incoming.h
         commonroad_cpp/roadNetwork/intersection/intersection.h
         commonroad_cpp/roadNetwork/intersection/intersection_operations.h
@@ -229,8 +231,8 @@ add_library(env_model_core ${ENV_MODEL_SRC_FILES})
 set(ENV_MODEL_HDR_FILES_ABS ${ENV_MODEL_HDR_FILES})
 set(ENV_MODEL_PREDICATES_HDR_FILES_ABS ${ENV_MODEL_PREDICATES_HDR_FILES})
 
-list(TRANSFORM ENV_MODEL_HDR_FILES_ABS PREPEND ${PROJECT_SOURCE_DIR}/include/)
-list(TRANSFORM ENV_MODEL_PREDICATES_HDR_FILES_ABS PREPEND ${PROJECT_SOURCE_DIR}/include/)
+list(TRANSFORM ENV_MODEL_HDR_FILES_ABS PREPEND ../include/)
+list(TRANSFORM ENV_MODEL_PREDICATES_HDR_FILES_ABS PREPEND ../include/)
 
 target_sources(env_model_core PRIVATE ${ENV_MODEL_HDR_FILES_ABS})
 
@@ -239,7 +241,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
             INTERFACE
             FILE_SET env_model_core_headers
             TYPE HEADERS
-            BASE_DIRS ${PROJECT_SOURCE_DIR}/include
+            BASE_DIRS ../include
             FILES ${ENV_MODEL_HDR_FILES_ABS})
 endif()
 
@@ -273,8 +275,8 @@ target_link_libraries(env_model_core
 
 target_precompile_headers(env_model_core
         PUBLIC
-        $<BUILD_INTERFACE:<Eigen/Dense>>
-        $<BUILD_INTERFACE:<boost/geometry/geometry.hpp>>
+        $<BUILD_INTERFACE:<Eigen/Dense$<ANGLE-R>>
+        $<BUILD_INTERFACE:<boost/geometry/geometry.hpp$<ANGLE-R>>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/geometry/curvilinear_coordinate_system.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lane.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
@@ -297,7 +299,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
             INTERFACE
             FILE_SET env_model_predicates_headers
             TYPE HEADERS
-            BASE_DIRS ${PROJECT_SOURCE_DIR}/include
+            BASE_DIRS ../include
             FILES ${ENV_MODEL_PREDICATES_HDR_FILES_ABS})
 endif()
 
@@ -305,6 +307,12 @@ target_include_directories(env_model_predicates
         PUBLIC
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        )
+
+target_link_libraries(env_model_predicates
+        PRIVATE
+        OpenMP::OpenMP_CXX
+        spdlog::spdlog
         )
 
 target_link_libraries(env_model_predicates
