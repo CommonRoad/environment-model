@@ -11,7 +11,9 @@
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
-#include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad.pb.h>
+#include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_dynamic.pb.h>
+#include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_map.pb.h>
+#include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_scenario.pb.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <fstream>
