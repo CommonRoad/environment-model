@@ -31,12 +31,28 @@ using IncomingGroupContainer = std::unordered_map<size_t, std::shared_ptr<Incomi
 using OutgoingGroupContainer = std::unordered_map<size_t, std::shared_ptr<OutgoingGroup>>;
 
 /**
- * Loads a CommonRoad message from protobuf file.
+ * Loads a CommonRoadDynamic message from protobuf file.
  *
  * @param filePath File path
  * @return Message
  */
-commonroad::CommonRoad loadProtobufMessage(const std::string &filePath);
+commonroad_dynamic::CommonRoad loadDynamicProtobufMessage(const std::string &filePath);
+
+/**
+ * Loads a CommonRoadMap message from protobuf file.
+ *
+ * @param filePath File path
+ * @return Message
+ */
+commonroad_map::CommonRoadMap loadMapProtobufMessage(const std::string &filePath);
+
+/**
+ * Loads a CommonRoadScenario message from protobuf file.
+ *
+ * @param filePath File path
+ * @return Message
+ */
+commonroad_scenario::CommonRoad loadScenarioProtobufMessage(const std::string &filePath);
 
 /**
  * Initializes container of lanelets.
@@ -44,7 +60,7 @@ commonroad::CommonRoad loadProtobufMessage(const std::string &filePath);
  * @param laneletContainer Lanelet container
  * @param commonRoadMsg CommonRoad message
  */
-void initLaneletContainer(LaneletContainer& laneletContainer, const commonroad::CommonRoad& commonRoadMsg);
+void initLaneletContainer(LaneletContainer& laneletContainer, const commonroad_map::CommonRoadMap& commonRoadMsg);
 
 /**
  * Initializes container of traffic signs.
