@@ -38,7 +38,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/environment/environment.cpp
         commonroad_cpp/roadNetwork/environment/area.cpp
         commonroad_cpp/roadNetwork/environment/area_border.cpp
-        commonroad_cpp/interfaces/commonroad/protobuf_reader_2023a.cpp)
+        commonroad_cpp/interfaces/commonroad/protobuf_reader.cpp)
 
 set(ENV_MODEL_HDR_FILES
         commonroad_cpp/auxiliaryDefs/regulatory_elements.h
@@ -294,7 +294,7 @@ target_precompile_headers(env_model_core
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_operations.h>
     #    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_reference.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/world.h>
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/protobuf_reader_2023a.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
         )
 
 add_library(env_model_predicates ${ENV_MODEL_PREDICATES_SRC_FILES})
