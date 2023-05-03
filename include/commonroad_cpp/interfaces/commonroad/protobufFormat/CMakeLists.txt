@@ -1,19 +1,27 @@
 set(COMMONROAD_PROTOS
-        commonroad.proto
-        dynamic_obstacle.proto
-        environment_obstacle.proto
-        intersection.proto
-        lanelet.proto
-        location.proto
-        obstacle.proto
-        phantom_obstacle.proto
-        planning_problem.proto
-        scenario_tags.proto
-        static_obstacle.proto
-        traffic_light.proto
-        traffic_sign.proto
         util.proto
-        )
+        state.proto
+        traffic_light_state.proto
+        traffic_sign_element.proto
+        scenario/commonroad_scenario.proto
+        scenario/scenario_tags.proto
+        scenario/planning_problem.proto
+        map/commonroad_map.proto
+        map/area.proto
+        map/intersection.proto
+        map/lanelet.proto
+        map/location.proto
+        map/traffic_light.proto
+        map/traffic_sign.proto
+        dynamic/commonroad_dynamic.proto
+        dynamic/dynamic_obstacle.proto
+        dynamic/environment.proto
+        dynamic/obstacle.proto
+        dynamic/phantom_obstacle.proto
+        dynamic/environment_obstacle.proto
+        dynamic/static_obstacle.proto
+        dynamic/traffic_light_cycle.proto
+        dynamic/traffic_sign_value.proto)
 
 # CMP0116 (3.20) - Ninja generators transform DEPFILEs from add_custom_command().
 if(POLICY CMP0116)
@@ -31,6 +39,8 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
             BASE_DIRS ${PROJECT_BINARY_DIR}/include
     )
 endif()
+
+protobuf_generate_cpp(LIB_SOURCES LIB_HEADERS ${COMMONROAD_PROTOS} )
 
 set(gendir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 set(depdir "${CMAKE_CURRENT_BINARY_DIR}/dep")
@@ -58,6 +68,7 @@ foreach(proto ${COMMONROAD_PROTOS})
                 ARGS
                         --cpp_out=${gendir}
                         --proto_path=${proto_dir}
+                        --proto_path=${proto_dir}/..
                         --dependency_out=${proto_dep_file_path}
                         ${proto}
                 DEPENDS
@@ -94,9 +105,9 @@ target_include_directories(commonroad_protobuf
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         )
 
-target_link_libraries(commonroad_protobuf
-        PUBLIC
-        $<BUILD_INTERFACE:protobuf::libprotobuf>
-        )
+#target_link_libraries(commonroad_protobuf
+#        PUBLIC
+#        $<BUILD_INTERFACE:protobuf::libprotobuf>
+#        )
 
 set_property(TARGET commonroad_protobuf PROPERTY POSITION_INDEPENDENT_CODE ON)

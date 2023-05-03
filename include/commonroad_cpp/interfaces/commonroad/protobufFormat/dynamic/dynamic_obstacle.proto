@@ -1,8 +1,9 @@
 syntax = "proto2";
 
-package commonroad;
+package commonroad_dynamic;
 
 import "obstacle.proto";
+import "state.proto";
 import "util.proto";
 
 message DynamicObstacle {
@@ -16,4 +17,7 @@ message DynamicObstacle {
     }
     optional SignalState initial_signal_state = 7;
     repeated SignalState signal_series = 8;
+    optional MetaInformationState initial_meta_information_state = 9;
+    repeated MetaInformationState meta_information_series = 10;
+    optional uint32 external_dataset_id = 11;
 }
