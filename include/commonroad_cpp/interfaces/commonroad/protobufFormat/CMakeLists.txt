@@ -1,8 +1,8 @@
 set(COMMONROAD_PROTOS
-        util.proto
-        state.proto
-        traffic_light_state.proto
-        traffic_sign_element.proto
+        common/util.proto
+        common/state.proto
+        common/traffic_light_state.proto
+        common/traffic_sign_element.proto
         scenario/commonroad_scenario.proto
         scenario/scenario_tags.proto
         scenario/planning_problem.proto
@@ -68,7 +68,7 @@ foreach(proto ${COMMONROAD_PROTOS})
                 ARGS
                         --cpp_out=${gendir}
                         --proto_path=${proto_dir}
-                        --proto_path=${proto_dir}/..
+                        --proto_path=${proto_dir}/../common
                         --dependency_out=${proto_dep_file_path}
                         ${proto}
                 DEPENDS
