@@ -1,29 +1,6 @@
 syntax = "proto2";
 
-package commonroad;
-
 import "util.proto";
-
-message ObstacleTypeEnum {
-    enum ObstacleType {
-        UNKNOWN = 0;
-        CAR = 1;
-        TRUCK = 2;
-        BUS = 3;
-        BICYCLE = 4;
-        PEDESTRIAN = 5;
-        PRIORITY_VEHICLE = 6;
-        PARKED_VEHICLE = 7;
-        CONSTRUCTION_ZONE = 8;
-        TRAIN = 9;
-        ROAD_BOUNDARY = 10;
-        MOTORCYCLE = 11;
-        TAXI = 12;
-        BUILDING = 13;
-        PILLAR = 14;
-        MEDIAN_STRIP = 15;
-    }
-}
 
 message State {
     oneof position {
@@ -77,28 +54,4 @@ message SignalState {
     optional bool braking_lights = 5;
     optional bool hazard_warning_lights = 6;
     optional bool flashing_blue_lights = 7;
-}
-
-message Occupancy {
-    required IntegerExactOrInterval time_step = 1;
-    required Shape shape = 2;
-}
-
-message OccupancySet {
-    repeated Occupancy occupancies = 1;
-}
-
-message Trajectory {
-    required uint32 initial_time_step = 1;
-    repeated State states = 2;
-}
-
-message TrajectoryPrediction {
-    required Trajectory trajectory = 1;
-    required Shape shape = 2;
-}
-
-message SetBasedPrediction {
-    required uint32 initial_time_step = 1;
-    required OccupancySet occupancy_set = 2;
 }
