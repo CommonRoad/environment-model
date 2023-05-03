@@ -40,8 +40,6 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
     )
 endif()
 
-protobuf_generate_cpp(LIB_SOURCES LIB_HEADERS ${COMMONROAD_PROTOS} )
-
 set(gendir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 set(depdir "${CMAKE_CURRENT_BINARY_DIR}/dep")
 
@@ -105,9 +103,9 @@ target_include_directories(commonroad_protobuf
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         )
 
-#target_link_libraries(commonroad_protobuf
-#        PUBLIC
-#        $<BUILD_INTERFACE:protobuf::libprotobuf>
-#        )
+target_link_libraries(commonroad_protobuf
+        PUBLIC
+        $<BUILD_INTERFACE:protobuf::libprotobuf>
+        )
 
 set_property(TARGET commonroad_protobuf PROPERTY POSITION_INDEPENDENT_CODE ON)
