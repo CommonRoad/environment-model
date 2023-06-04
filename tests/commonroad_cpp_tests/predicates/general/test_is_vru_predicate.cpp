@@ -21,13 +21,13 @@ TEST_F(TestIsVruPredicate, VRU) {
 
 TEST_F(TestIsVruPredicate, NotVRU) {
     egoVehicle->setObstacleType(ObstacleType::bus);
-    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle));
     egoVehicle->setObstacleType(ObstacleType::car);
-    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle));
     egoVehicle->setObstacleType(ObstacleType::taxi);
-    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle));
     egoVehicle->setObstacleType(ObstacleType::train);
-    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle));
     egoVehicle->setObstacleType(ObstacleType::truck);
-    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle));
 }
