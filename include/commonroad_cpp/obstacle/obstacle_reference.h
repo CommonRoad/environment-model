@@ -1,6 +1,11 @@
 #pragma once
 
+#include <memory>
+#include <vector>
 
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
 
 namespace obstacle_reference {
 

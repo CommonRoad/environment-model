@@ -1,4 +1,6 @@
 #include <commonroad_cpp/obstacle/obstacle_reference.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 
 std::vector<std::shared_ptr<Lane>>
 obstacle_reference::computeRef(Obstacle &obstacle, const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {

@@ -1,4 +1,7 @@
-#include "commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/world.h>
 
 SafeLateralDistanceToVrusPredicate::SafeLateralDistanceToVrusPredicate() : CommonRoadPredicate(true) {}
 

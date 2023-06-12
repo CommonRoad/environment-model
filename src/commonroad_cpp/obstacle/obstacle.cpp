@@ -28,6 +28,9 @@
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/obstacle/obstacle_reference.h>
 #include <commonroad_cpp/obstacle/state.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 
 static std::array<double, 4> rotatedCornerLatitudes(const Rectangle &rect, const double theta) {
     const double width = rect.getWidth();

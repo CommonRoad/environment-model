@@ -10,6 +10,7 @@
 #include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
 void RoadNetworkTestInitialization::setUpRoadNetwork() {

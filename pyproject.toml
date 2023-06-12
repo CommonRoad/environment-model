@@ -26,11 +26,11 @@ docs = [
 requires = [
     "setuptools>=61.0",
     "wheel",
-    "scikit-build~=0.16.2",
-    "cmake~=3.25.0",
+    "scikit-build~=0.17.6",
+    "cmake~=3.26.0",
     "ninja",
-    "pybind11~=2.10.0",
-     "setuptools_scm[toml]>=6.2"
+    "pybind11~=2.10.4",
+    "setuptools_scm[toml]~=7.1.0"
     ]
 build-backend = "setuptools.build_meta"
 
@@ -40,7 +40,8 @@ build-backend = "setuptools.build_meta"
 language = "en"
 
 [tool.cibuildwheel]
-skip = "pp*"
+# Skip PyPy and older CPython versions
+skip = "pp* cp37-* cp38-*"
 archs = ["auto"]
 environment = { PIP_DISABLE_PIP_VERSION_CHECK="1" }
 #build-verbosity = 1
@@ -49,3 +50,9 @@ environment = { PIP_DISABLE_PIP_VERSION_CHECK="1" }
 test-skip = "*i686 *-musllinux*"
 test-extras = ["test"]
 test-command = "python -m pytest {package}/tests/python"
+
+[tool.cibuildwheel.macos]
+archs = ["x86_64", "arm64"]
+
+# macOS 10.14 is required for full C++17 support
+environment = {MACOSX_DEPLOYMENT_TARGET=10.14}
