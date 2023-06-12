@@ -1,6 +1,13 @@
 #include "test_safe_distance_to_vrus_predicate.h"
 #include "../utils_predicate_test.h"
 
+#include <commonroad_cpp/world.h>
+
+#include <gtest/gtest.h>
+
+#include <set>
+#include <stdexcept>
+
 void TestSafeDistanceToVrusPredicate::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 50, 1, 20, 0, 0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 50, 1, 20, 0, 0);

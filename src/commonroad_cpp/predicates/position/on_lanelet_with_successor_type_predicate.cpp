@@ -1,8 +1,9 @@
-#include "commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.h"
-#include "commonroad_cpp/obstacle/obstacle_operations.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/obstacle/obstacle_operations.h>
+#include <commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/world.h>
 
 OnLaneletWithSuccessorTypePredicate::OnLaneletWithSuccessorTypePredicate() : CommonRoadPredicate(false) {}

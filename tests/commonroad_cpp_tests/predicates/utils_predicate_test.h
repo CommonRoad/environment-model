@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include <memory>
+#include <set>
+
 class RoadNetwork;
 
 namespace utils_predicate_test {

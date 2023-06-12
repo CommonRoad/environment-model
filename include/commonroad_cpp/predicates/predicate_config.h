@@ -7,11 +7,18 @@
 
 #pragma once
 
+// Note: This include needs to come first in order to have M_PI defined
+// See https://stackoverflow.com/questions/6563810/m-pi-works-with-math-h-but-not-with-cmath-in-visual-studio
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
+#include <math.h>
+
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
 
+#include <cstdint>
 #include <array>
 #include <cassert>
-#include <cmath>
 #include <limits>
 #include <map>
 #include <string>

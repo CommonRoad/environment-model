@@ -401,11 +401,6 @@ void CurvilinearCoordinateSystem::convertListOfPolygonsToCurvilinearCoordsAndRas
     const std::vector<EigenPolyline> &polygons, const std::vector<int> groups_of_polygons, int num_polygon_groups,
     int num_omp_threads, std::vector<std::vector<EigenPolyline>> &transformed_polygons,
     std::vector<std::vector<EigenPolyline>> &transformed_polygons_rasterized) const {
-    omp_set_dynamic(0);
-    omp_set_num_threads(num_omp_threads);
-    omp_lock_t writelock;
-    omp_init_lock(&writelock);
-
     transformed_polygons.resize(num_polygon_groups);
     transformed_polygons_rasterized.resize(num_polygon_groups);
 
@@ -418,6 +413,12 @@ void CurvilinearCoordinateSystem::convertListOfPolygonsToCurvilinearCoordsAndRas
     // transform all polygons to curvilinear coordinates
     std::vector<std::vector<std::tuple<int, double, double>>> poly_curvil_coordinates;
     poly_curvil_coordinates = this->convertToCurvilinearCoords(clipped_polygon_all, num_omp_threads);
+
+#ifndef _MSC_VER
+    omp_set_dynamic(0);
+    omp_set_num_threads(num_omp_threads);
+    omp_lock_t writelock;
+    omp_init_lock(&writelock);
 
 #pragma omp parallel
     {
@@ -479,6 +480,62 @@ void CurvilinearCoordinateSystem::convertListOfPolygonsToCurvilinearCoordsAndRas
     }
 
     omp_destroy_lock(&writelock);
+#else
+    {
+        std::vector<std::vector<EigenPolyline>> transformed_polygon_thread_all(num_polygon_groups);
+        std::vector<std::vector<EigenPolyline>> transformed_polygon_rasterized_thread_all(num_polygon_groups);
+
+        for (std::vector<EigenPolyline>::const_iterator polygon_it = clipped_polygon_all.begin();
+             polygon_it < clipped_polygon_all.end(); ++polygon_it) {
+            std::vector<EigenPolyline> transformed_polygon_thread;
+            std::vector<EigenPolyline> transformed_polygon_rasterized_thread;
+            std::set<int> segment_indices_thread;
+
+            int cur_poly_index = polygon_it - clipped_polygon_all.begin();
+
+            // add further points for each transition to a new segment
+            EigenPolyline transformed_polygon;
+            std::set<int> indices;
+            poly_curvil_coordinates[cur_poly_index].push_back(poly_curvil_coordinates[cur_poly_index].front());
+            bool success = this->addPointsAtSegmentTransition(*polygon_it, poly_curvil_coordinates[cur_poly_index],
+                                                              transformed_polygon, indices);
+
+            if (success) {
+                success = transformed_polygon.size() > 0;
+                transformed_polygon_thread.push_back(transformed_polygon);
+                segment_indices_thread.insert(indices.begin(), indices.end());
+            }
+
+            // approximate transformed polygons with axis-aligned rectangles
+            int cur_poly_group = clipped_polygon_groups_all[cur_poly_index];
+            if (success && transformed_polygon_thread.size() > 0) {
+                this->rasterizeListOfTransformedPolygonsInProjectionDomain(
+                    transformed_polygon_thread, segment_indices_thread, transformed_polygon_rasterized_thread);
+
+                transformed_polygon_thread_all[cur_poly_group].insert(
+                    transformed_polygon_thread_all[cur_poly_group].end(),
+                    std::make_move_iterator(transformed_polygon_thread.begin()),
+                    std::make_move_iterator(transformed_polygon_thread.end()));
+
+                transformed_polygon_rasterized_thread_all[cur_poly_group].insert(
+                    transformed_polygon_rasterized_thread_all[cur_poly_group].end(),
+                    std::make_move_iterator(transformed_polygon_rasterized_thread.begin()),
+                    std::make_move_iterator(transformed_polygon_rasterized_thread.end()));
+            }
+        }
+
+        for (int i = 0; i < num_polygon_groups; i++) {
+            transformed_polygons[i].insert(transformed_polygons[i].end(),
+                                           std::make_move_iterator(transformed_polygon_thread_all[i].begin()),
+                                           std::make_move_iterator(transformed_polygon_thread_all[i].end()));
+
+            transformed_polygons_rasterized[i].insert(
+                transformed_polygons_rasterized[i].end(),
+                std::make_move_iterator(transformed_polygon_rasterized_thread_all[i].begin()),
+                std::make_move_iterator(transformed_polygon_rasterized_thread_all[i].end()));
+        }
+    }
+#endif
 }
 
 bool CurvilinearCoordinateSystem::addPointsAtSegmentTransition(
@@ -712,6 +769,7 @@ void CurvilinearCoordinateSystem::determineSubsetsOfMultiPolygonsWithinProjectio
     const std::vector<EigenPolyline> &polygons, const std::vector<int> groups_of_polygons, const int num_omp_threads,
     std::vector<EigenPolyline> &polygons_in_projection_domain,
     std::vector<int> &groups_of_polygons_in_projection_domain) const {
+#ifndef _MSC_VER
     omp_set_dynamic(0);
     omp_set_num_threads(num_omp_threads);
 
@@ -751,6 +809,36 @@ void CurvilinearCoordinateSystem::determineSubsetsOfMultiPolygonsWithinProjectio
         omp_unset_lock(&writelock);
     }
     omp_destroy_lock(&writelock);
+#else
+    {
+        std::vector<EigenPolyline> polygons_in_projection_domain_thread;
+        std::vector<int> groups_of_polygons_in_projection_domain_thread;
+        for (std::vector<EigenPolyline>::const_iterator polygon_it = polygons.begin(); polygon_it < polygons.end();
+             ++polygon_it) {
+            std::vector<EigenPolyline> polygon_in_proj_domain =
+                this->determineSubsetOfPolygonWithinProjectionDomain(*polygon_it);
+            std::vector<int> polygon_groups;
+            for (int i = 0; i < polygon_in_proj_domain.size(); i++) {
+                polygon_groups.push_back(groups_of_polygons[polygon_it - polygons.begin()]);
+            }
+
+            polygons_in_projection_domain_thread.insert(polygons_in_projection_domain_thread.end(),
+                                                        std::make_move_iterator(polygon_in_proj_domain.begin()),
+                                                        std::make_move_iterator(polygon_in_proj_domain.end()));
+
+            groups_of_polygons_in_projection_domain_thread.insert(groups_of_polygons_in_projection_domain_thread.end(),
+                                                                  std::make_move_iterator(polygon_groups.begin()),
+                                                                  std::make_move_iterator(polygon_groups.end()));
+        }
+        polygons_in_projection_domain.insert(polygons_in_projection_domain.end(),
+                                             std::make_move_iterator(polygons_in_projection_domain_thread.begin()),
+                                             std::make_move_iterator(polygons_in_projection_domain_thread.end()));
+        groups_of_polygons_in_projection_domain.insert(
+            groups_of_polygons_in_projection_domain.end(),
+            std::make_move_iterator(groups_of_polygons_in_projection_domain_thread.begin()),
+            std::make_move_iterator(groups_of_polygons_in_projection_domain_thread.end()));
+    }
+#endif
 }
 
 std::vector<EigenPolyline>

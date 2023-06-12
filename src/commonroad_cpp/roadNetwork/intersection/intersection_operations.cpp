@@ -7,10 +7,10 @@
 
 #include <algorithm>
 
-#include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 
 bool intersection_operations::onIncoming(size_t timeStep, const std::shared_ptr<Obstacle> &obs,

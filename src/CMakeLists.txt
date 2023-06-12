@@ -259,13 +259,13 @@ target_include_directories(env_model_core
 
 target_link_libraries(env_model_core
         PRIVATE
-        OpenMP::OpenMP_CXX
         pugixml::pugixml
         spdlog::spdlog
 )
 
 target_link_libraries(env_model_core
         PUBLIC
+        OpenMP::OpenMP_CXX
         Eigen3::Eigen
         Boost::headers
         range-v3::range-v3
@@ -311,12 +311,12 @@ target_include_directories(env_model_predicates
 
 target_link_libraries(env_model_predicates
         PRIVATE
-        OpenMP::OpenMP_CXX
         spdlog::spdlog
         )
 
 target_link_libraries(env_model_predicates
         PUBLIC
+        OpenMP::OpenMP_CXX
         Eigen3::Eigen
         range-v3
         env_model_core
@@ -395,19 +395,21 @@ endif(SKBUILD)
 
 include(predicates.cmake)
 
+foreach(target IN ITEMS env_model_core env_model_predicates)
+    # _USE_MATH_DEFINES is required for M_PI
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        target_compile_definitions(${target} PRIVATE _USE_MATH_DEFINES)
+    endif()
 
-# this adds many warnings to the build. They usually help to find some bugs
-# TODO: Check whether each warning flag is actually supported by the compiler before adding it
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    foreach(target IN ITEMS env_model env_model_core env_model_predicates)
-        target_compile_options(env_model_core PRIVATE -Wall -Wextra -Wconversion
-                -pedantic -Wfatal-errors -Wno-unused-parameter)
-    endforeach()
-endif()
-if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    foreach(target IN ITEMS env_model env_model_core env_model_predicates)
-        target_compile_options(env_model_core PRIVATE /W3 /WX)
-    endforeach()
-endif()
+    # this adds many warnings to the build. They usually help to find some bugs
+    # TODO: Check whether each warning flag is actually supported by the compiler before adding it
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wconversion
+            -pedantic -Wfatal-errors -Wno-unused-parameter)
+    endif()
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        target_compile_options(${target} PRIVATE /W3)
+    endif()
+endforeach()
 
 
