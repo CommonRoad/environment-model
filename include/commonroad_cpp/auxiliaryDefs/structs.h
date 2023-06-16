@@ -90,11 +90,12 @@ struct SimulationParameters {
           evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement),
           outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)){};
     SimulationParameters() = default;
-    std::vector<std::string> directoryPaths; //**< List of directories in which all scenarios should be evaluated */
+
+    EvaluationMode evaluationMode{EvaluationMode::directory}; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
     size_t egoVehicleId{0};                  //**< ID of ego vehicle */
-    std::string benchmarkId;                 //**< CommonRoad benchmark ID */
-    EvaluationMode evaluationMode; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
-    bool performanceMeasurement;   //**< Flag indicating whether performance should me measured. */
-    std::string outputDirectory;   //**< Path to output directory of file to generate. */
-    std::string outputFileName;    //**< name and file type for to generate. */
+    std::string benchmarkId{"DEU_test_max_speed_limit"};                 //**< CommonRoad benchmark ID */
+    std::vector<std::string> directoryPaths{}; //**< List of directories in which all scenarios should be evaluated */
+    bool performanceMeasurement{true};   //**< Flag indicating whether performance should me measured. */
+    std::string outputDirectory{"path/to/output/directory"};   //**< Path to output directory of file to generate. */
+    std::string outputFileName {"traffic_rule_evaluation.txt"};    //**< name and file type for to generate. */
 };
