@@ -120,7 +120,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                         if ((strcmp(elem.name(), "lineMarking")) == 0)
                             stopL->setLineMarking(
                                 lanelet_operations::matchStringToLineMarking(elem.first_child().value()));
-                        if ((strcmp(elem.name(), "trafficSignRef")) == 0) {
+                        /*if ((strcmp(elem.name(), "trafficSignRef")) == 0) {
                             for (const auto &sign : trafficSigns) {
                                 if (child.attribute("ref").as_ullong() == sign->getId()) {
                                     stopL->addTrafficSign(sign);
@@ -133,7 +133,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                                     stopL->addTrafficLight(light);
                                 }
                             }
-                        }
+                        }*/
                     }
                     stopL->setPoints(points);
                     tempLaneletContainer[arrayIndex]->setStopLine(stopL);
