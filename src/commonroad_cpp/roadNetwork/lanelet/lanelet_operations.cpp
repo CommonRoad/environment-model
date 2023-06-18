@@ -21,15 +21,6 @@ LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type
         throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type!");
 }
 
-DrivingDirection lanelet_operations::matchStringToDrivingDirection(const std::string &type) {
-    std::string str{type};
-    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
-    if (DrivingDirectionNames.count(str) == 1)
-        return DrivingDirectionNames.at(str);
-    else
-        return DrivingDirection::invalid;
-}
-
 LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type) {
     if (type == "solid")
         return LineMarking::solid;
@@ -55,7 +46,7 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet
                         [curLanelet](const std::shared_ptr<Lanelet> &let) {
                             return let->getId() == curLanelet->getAdjacentRight().adj->getId();
                         }) and
-           (!sameDirection or curLanelet->getAdjacentRight().dir == DrivingDirection::same)) {
+           (!sameDirection or !curLanelet->getAdjacentRight().oppositeDir)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentRight().adj);
         curLanelet = curLanelet->getAdjacentRight().adj;
     }
@@ -72,7 +63,7 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(
                         [curLanelet](const std::shared_ptr<Lanelet> &let) {
                             return let->getId() == curLanelet->getAdjacentLeft().adj->getId();
                         }) and
-           (!sameDirection or curLanelet->getAdjacentLeft().dir == DrivingDirection::same)) {
+           (!sameDirection or !curLanelet->getAdjacentLeft().oppositeDir)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentLeft().adj);
         curLanelet = curLanelet->getAdjacentLeft().adj;
     }

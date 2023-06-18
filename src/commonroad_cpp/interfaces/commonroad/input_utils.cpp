@@ -52,9 +52,12 @@ Scenario readFromXMLFile(const std::string &xmlFilePath) {
  * @return Scenario
  */
 Scenario readFromProtobufFile(const std::string &pbFilePath) {
-    commonroad::CommonRoad commonRoadMsg = ProtobufReader::loadProtobufMessage(pbFilePath);
+    commonroad_dynamic::CommonRoadDynamic commonRoadDynamicMsg = ProtobufReader::loadDynamicProtobufMessage(pbFilePath);
+    commonroad_map::CommonRoadMap commonRoadMapMsg = ProtobufReader::loadMapProtobufMessage(pbFilePath);
+    commonroad_scenario::CommonRoadScenario commonRoadScenarioMsg =
+        ProtobufReader::loadScenarioProtobufMessage(pbFilePath);
 
-    return ProtobufReader::createCommonRoadFromMessage(commonRoadMsg);
+    return ProtobufReader::createCommonRoadFromMessage(commonRoadDynamicMsg, commonRoadMapMsg, commonRoadScenarioMsg);
 }
 
 } // namespace

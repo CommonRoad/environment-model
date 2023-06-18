@@ -19,7 +19,7 @@ bool MainCarriagewayRightLanePredicate::booleanEvaluation(
     return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
         return (lanelet->getAdjacentRight().adj == nullptr or
                 ((lanelet->getAdjacentRight().adj != nullptr) and
-                 (lanelet->getAdjacentRight().dir == DrivingDirection::same) and
+                 (lanelet->getAdjacentRight().oppositeDir == DrivingDirection::same) and
                  !lanelet->getAdjacentRight().adj->hasLaneletType(LaneletType::mainCarriageWay))) and
                lanelet->hasLaneletType(LaneletType::mainCarriageWay);
     });

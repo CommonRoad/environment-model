@@ -45,14 +45,14 @@ Lanelet::Lanelet(size_t laneletId, std::vector<vertex> leftBorder, std::vector<v
 
 void Lanelet::setId(const size_t lid) { laneletId = lid; }
 
-void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet> &left, DrivingDirection dir) {
+void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet> &left, bool oppositeDir) {
     adjacentLeft.adj = left;
-    adjacentLeft.dir = dir;
+    adjacentLeft.oppositeDir = oppositeDir;
 }
 
-void Lanelet::setRightAdjacent(const std::shared_ptr<Lanelet> &right, DrivingDirection dir) {
+void Lanelet::setRightAdjacent(const std::shared_ptr<Lanelet> &right, bool oppositeDir) {
     adjacentRight.adj = right;
-    adjacentRight.dir = dir;
+    adjacentRight.oppositeDir = oppositeDir;
 }
 
 void Lanelet::setLeftBorderVertices(const std::vector<vertex> &leftBorderVertices) { leftBorder = leftBorderVertices; }
@@ -288,6 +288,3 @@ const std::unordered_map<std::string, LaneletType> LaneletTypeNames = {
     {"INTERSECTIONSTRAIGHTOUTGOING", LaneletType::intersectionStraightOutgoing},
     {"INCOMING", LaneletType::incoming},
 };
-
-const std::unordered_map<std::string, DrivingDirection> DrivingDirectionNames = {
-    {"SAME", DrivingDirection::same}, {"OPPOSITE", DrivingDirection::opposite}, {"INVALID", DrivingDirection::invalid}};

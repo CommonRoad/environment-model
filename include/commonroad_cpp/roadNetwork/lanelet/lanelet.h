@@ -72,7 +72,7 @@ class Lanelet {
      */
     struct adjacent {
         std::shared_ptr<Lanelet> adj;
-        DrivingDirection dir{DrivingDirection::invalid};
+        bool oppositeDir{false};
     };
 
     /**
@@ -88,7 +88,7 @@ class Lanelet {
      * @param left pointer to left lanelet.
      * @param dir driving direction of adjacent left lanelet.
      */
-    void setLeftAdjacent(const std::shared_ptr<Lanelet> &left, DrivingDirection dir);
+    void setLeftAdjacent(const std::shared_ptr<Lanelet> &left, bool oppositeDir);
 
     /**
      * Setter for adjacent right lanelet.
@@ -96,7 +96,7 @@ class Lanelet {
      * @param right pointer to right lanelet.
      * @param dir driving direction of adjacent right lanelet.
      */
-    void setRightAdjacent(const std::shared_ptr<Lanelet> &right, DrivingDirection dir);
+    void setRightAdjacent(const std::shared_ptr<Lanelet> &right, bool oppositeDir);
 
     /**
      * Setter for left lanelet border vertices.
@@ -451,4 +451,4 @@ class Lanelet {
 
 extern const std::unordered_map<std::string, LaneletType> LaneletTypeNames;
 
-extern const std::unordered_map<std::string, DrivingDirection> DrivingDirectionNames;
+extern const std::unordered_map<std::string, bool> DrivingDirectionNames;
