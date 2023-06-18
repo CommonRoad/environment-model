@@ -136,3 +136,7 @@ void IncomingGroup::addRightOutgoing(const std::shared_ptr<Lanelet> &rightOutgoi
 }
 
 void IncomingGroup::addOncoming(const std::shared_ptr<Lanelet> &oncoming) { oncomings.push_back(oncoming); }
+
+void IncomingGroup::setOutgoingGroupID(size_t outId) { outgoingGroupID = outId; }
+
+void IncomingGroup::addCrossing(const std::shared_ptr<Lanelet>& crossing) { crossings.push_back(crossing); }

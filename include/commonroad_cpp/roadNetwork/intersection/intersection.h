@@ -67,11 +67,25 @@ class Intersection {
     void setIncomingGroups(const std::vector<std::shared_ptr<IncomingGroup>> &incs);
 
     /**
+     * Setter for outgoingGroups.
+     *
+     * @param incs List of pointers to OutgoingGroup.
+     */
+    void setOutgoingGroups(const std::vector<std::shared_ptr<OutgoingGroup>> &outs);
+
+    /**
      * Adds an incomingGroup to the intersection.
      *
      * @param incoming Pointer to IncomingGroup.
      */
     void addIncomingGroup(const std::shared_ptr<IncomingGroup> &incoming);
+
+    /**
+     * Adds an outgoingGroup to the intersection.
+     *
+     * @param incoming Pointer to OutgoingGroup.
+     */
+    void addOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoing);
 
     /**
      * Getter for all member lanelets of the intersection

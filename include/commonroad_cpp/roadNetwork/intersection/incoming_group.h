@@ -169,6 +169,18 @@ class IncomingGroup {
      */
     void addOncoming(const std::shared_ptr<Lanelet> &oncoming);
 
+    /**
+     * Setter for OutgoingGroup
+     * @param outId size_t
+     */
+    void setOutgoingGroupID(size_t outId);
+
+    /**
+     * Add Crossing
+     * @param crossing pointer to crossing
+     */
+    void addCrossing(const std::shared_ptr<Lanelet>& crossing);
+
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorLeft();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorRight();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorStraight();

@@ -24,9 +24,8 @@ bool OncomingVehiclePredicate::booleanEvaluation(
             !inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) &&
             (obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]
                      ->getAdjacentLeft()
-                     .oppositeDir == DrivingDirection::opposite &&
-             obs->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]->getAdjacentLeft().oppositeDir ==
-                 DrivingDirection::opposite)) {
+                     .oppositeDir &&
+             obs->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]->getAdjacentLeft().oppositeDir)) {
             oncomingTraffic = true;
             break;
         }
