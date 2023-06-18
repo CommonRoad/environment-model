@@ -1,5 +1,7 @@
 #pragma once
 
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+
 class OutgoingGroup {
   public:
     /**
@@ -8,11 +10,38 @@ class OutgoingGroup {
     OutgoingGroup() = default;
 
     /**
-     * TODO
-     * @param groupID
-     * @param outgoingLanelets
+     * Constructor
+     *
+     * @param groupID if of OutgoingGroup
+     * @param outgoingLanelets vector of pointers to Lanelets of outgoingGroup
      */
     OutgoingGroup(size_t groupID, std::vector<std::shared_ptr<Lanelet>> &outgoingLanelets);
+
+    /**
+     * Setter for the ID
+     *
+     * @param groupId size_t
+     */
+    void setId(size_t outId);
+
+    /**
+     * Getter for the ID
+     */
+    size_t getId() const;
+
+    /**
+     * Add pointer to Lanelet to outgoingLanelets of OutgoingGroup
+     *
+     * @param lanelet poiter to Lanelet
+     */
+    void addOutgoingLanelet(std::shared_ptr<Lanelet> &lanelet);
+
+    /**
+     * Getter for outgoingLanelets of OutgoingGroup
+     *
+     * @return vector of pointer to Lanelets
+     */
+    std::vector<std::shared_ptr<Lanelet>> getOutgoingLanelets();
 
   private:
     size_t groupID{0};

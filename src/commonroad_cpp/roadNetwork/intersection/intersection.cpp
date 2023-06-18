@@ -26,9 +26,16 @@ void Intersection::addIncomingGroup(const std::shared_ptr<IncomingGroup> &incomi
     memberLanelets.clear();
 }
 
+void Intersection::addOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoing) {
+    outgoings.push_back(outgoing);
+    memberLanelets.clear();
+}
+
 const std::vector<std::shared_ptr<OutgoingGroup>> &Intersection::getOutgoingGroups() const { return outgoings; }
 
 void Intersection::setIncomingGroups(const std::vector<std::shared_ptr<IncomingGroup>> &incs) { incomings = incs; }
+
+void Intersection::setOutgoingGroups(const std::vector<std::shared_ptr<OutgoingGroup>> &outs) { outgoings = outs; }
 
 const std::vector<std::shared_ptr<Lanelet>> &
 Intersection::getMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork) {

@@ -85,15 +85,17 @@ void initTrafficSignContainer(TrafficSignContainer& trafficSignContainer, const 
  * @param trafficLightContainer Traffic light container
  * @param commonRoadMapMsg CommonRoad message
  */
-void initTrafficLightContainer(TrafficLightContainer& trafficLightContainer, const commonroad_map::CommonRoadMap& commonRoadMapMsg);
+void initTrafficLightContainer(TrafficLightContainer& trafficLightContainer,
+                               const commonroad_map::CommonRoadMap& commonRoadMapMsg);
 
 /**
  * Initializes container of incomingGroups.
  *
- * @param incomingGroupContainer Incoming container
+ * @param incomingGroupContainer IncomingGroup container
  * @param intersectionMsg CommonRoad message
  */
-void initIncomingGroupContainer(IncomingGroupContainer& incomingGroupContainer, const commonroad_map::Intersection& intersectionMsg);
+void initIncomingGroupContainer(IncomingGroupContainer& incomingGroupContainer,
+                                const commonroad_map::Intersection& intersectionMsg);
 
 /**
  * Initializes container of outgoingGroups.
@@ -101,7 +103,8 @@ void initIncomingGroupContainer(IncomingGroupContainer& incomingGroupContainer, 
  * @param outgoingGroupContainer OutgoingGroup container
  * @param intersectionMsg CommonRoad message
  */
-void initOutgoingGroupContainer(OutgoingGroupContainer& outgoingGroupContainer, const commonroad_map::Intersection& intersectionMsg);
+void initOutgoingGroupContainer(OutgoingGroupContainer &outgoingGroupContainer,
+                                const commonroad_map::Intersection &intersectionMsg);
 
 /**
  * Returns lanelet from container of lanelets.
@@ -219,7 +222,9 @@ std::shared_ptr<TrafficSignElement> createTrafficSignElementFromMessage(const co
  * @param trafficLightContainer Traffic light container
  * @return Traffic light
  */
-std::shared_ptr<TrafficLight> createTrafficLightFromMessage(const commonroad_map::TrafficLight& trafficLightMsg, TrafficLightContainer& trafficLightContainer);
+std::shared_ptr<TrafficLight> createTrafficLightFromMessage(const commonroad_map::TrafficLight& trafficLightMsg,
+                                                            const commonroad_dynamic::TrafficLightCycle& trafficLightCycleMsg,
+                                                            TrafficLightContainer& trafficLightContainer);
 
 /**
  * Creates traffic light cycle element from protobuf message "CycleElement".
@@ -313,7 +318,7 @@ std::vector<std::shared_ptr<State>> createTrajectoryFromMessage(const commonroad
  * @param stateMsg Protobuf message
  * @return State
  */
-std::shared_ptr<State> createStateFromMessage(const State& stateMsg);
+std::shared_ptr<State> createStateFromMessage(const commonroad_common::State& stateMsg);
 
 /**
  * Creates signal state from protobuf message "SignalState".

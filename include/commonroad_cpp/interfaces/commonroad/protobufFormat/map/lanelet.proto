@@ -82,8 +82,8 @@ message Lanelet {
     optional bool adjacent_right_opposite_dir = 13;
     optional uint32 stop_line = 14;
     repeated LaneletTypeEnum.LaneletType lanelet_types = 15;
-    repeated RoadUserEnum.RoadUser user_one_way = 16;
-    repeated RoadUserEnum.RoadUser user_bidirectional = 17;
+    repeated RoadUserEnum.RoadUser users_one_way = 16;
+    repeated RoadUserEnum.RoadUser users_bidirectional = 17;
     repeated uint32 traffic_sign_refs = 18;
     repeated uint32 traffic_light_refs = 19;
     repeated uint32 adjacent_areas = 20;

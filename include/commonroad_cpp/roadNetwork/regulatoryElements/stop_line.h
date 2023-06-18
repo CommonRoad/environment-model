@@ -19,13 +19,10 @@ class StopLine {
     /**
      * Constructor.
      *
-     * @param startPoint start vertex of stop line.
-     * @param endPoint end vertex of stop line.
-     * @param traffic_sign List of pointers to associated traffic signs.
-     * @param traffic_light List of pointers to associated traffic lights.
+     * @param points start and end vertex of stop line.
      * @param line_marking Line marking type of stop line.
      */
-    StopLine(vertex startPoint, vertex endPoint, LineMarking line_marking);
+    StopLine(std::pair<vertex, vertex> points, LineMarking line_marking);
 
     /**
      * Default constructor.
@@ -35,9 +32,9 @@ class StopLine {
     /**
      * Getter for start and end point of stop line.
      *
-     * @return Start and end vertex.
+     * @return pair of start and end vertex.
      */
-    std::vector<vertex> getPoints();
+    std::pair<vertex, vertex> getPoints();
 
     /**
      * Getter for line marking type of stop line.
@@ -51,7 +48,7 @@ class StopLine {
      *
      * @param points Start and end vertex.
      */
-    void setPoints(const std::vector<vertex> &points);
+    void setPoints(const std::pair<vertex,vertex> &position);
 
     /**
      * Setter for line marking of stop line.
@@ -61,7 +58,6 @@ class StopLine {
     void setLineMarking(LineMarking lineMarking);
 
   private:
-    vertex startPoint;                                        //**< start vertex of stop line */
-    vertex endPoint;                                          //**< end vertex of stop line */
+    std::pair<vertex, vertex> points;                         //**< start and end vertex of stop line */
     LineMarking lineMarking;                                  //**< type of line marking */
 };
