@@ -358,7 +358,7 @@ run-coverage:
 .test-python-matrix: &test-python-matrix
   parallel:
     matrix:
-      - JOB_PYTHON_VERSION: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+      - JOB_PYTHON_VERSION: ["3.9", "3.10", "3.11"]
   rules:
     - *skip_merge_request_pipeline
     - if: *full_wheel_build_condition
