@@ -2,7 +2,7 @@
 name = "commonroad_cpp"
 dynamic = ["version"]
 readme = "README.md"
-requires-python = ">=3.7,<3.12"
+requires-python = ">=3.9,<3.12"
 license = {file = "LICENSE"}
 authors = [
   {email = "sebastian.maierhofer@tum.de"},
@@ -40,8 +40,8 @@ build-backend = "setuptools.build_meta"
 language = "en"
 
 [tool.cibuildwheel]
-# Skip PyPy and older CPython versions
-skip = "pp* cp37-* cp38-*"
+# Skip PyPy
+skip = "pp*"
 archs = ["auto"]
 environment = { PIP_DISABLE_PIP_VERSION_CHECK="1" }
 #build-verbosity = 1
