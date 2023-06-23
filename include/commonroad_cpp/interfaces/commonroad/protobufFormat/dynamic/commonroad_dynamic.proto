@@ -26,8 +26,8 @@ message ScenarioInformation {
 message CommonRoadDynamic {
     required ScenarioInformation information = 1;
     required Environment environment = 2;
-    repeated TrafficLightCycle traffic_light_cycles = 3;
-    repeated TrafficSignValue traffic_sign_values = 4;
+    repeated TrafficLightCycle traffic_light_cycle = 3;
+    repeated TrafficSignValue traffic_sign_value = 4;
     repeated StaticObstacle static_obstacles = 5;
     repeated DynamicObstacle dynamic_obstacles = 6;
     repeated EnvironmentObstacle environment_obstacles = 7;

@@ -25,6 +25,6 @@ message AreaBorder {
 
 message Area {
     required uint32 area_id = 1;
-    repeated AreaBorder borders = 2;
+    repeated AreaBorder border = 2;
     repeated AreaTypeEnum.AreaType area_types = 3;
 }

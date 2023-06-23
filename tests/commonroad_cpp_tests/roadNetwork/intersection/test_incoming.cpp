@@ -10,7 +10,7 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void IntersectionTestInitialization::setUpIncoming() {
-    auto pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_incoming_test.xml";
+    auto pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_incomingTest-1";
     const auto &[obstacles, roadnetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
     intersection1 = roadnetwork->getIntersections()[0];
     intersection2 = roadnetwork->getIntersections()[1];
@@ -35,7 +35,7 @@ TEST_F(IncomingTest, InitializationComplete) {
     EXPECT_EQ(incomingThree->getIncomingLanelets().at(0)->getId(), 6);
 
     EXPECT_EQ(incomingOne->getLeftOutgoings().size(), 0);
-    EXPECT_EQ(incomingTwo->getLeftOutgoings().size(), 1);
+    EXPECT_EQ(incomingTwo->getLeftOutgoings().size(), 1);  // TODO 0 and 2 straight
     EXPECT_EQ(incomingThree->getLeftOutgoings().size(), 1);
     EXPECT_EQ(incomingTwo->getLeftOutgoings().at(0)->getId(), 101);
     EXPECT_EQ(incomingThree->getLeftOutgoings().at(0)->getId(), 121);

@@ -20,10 +20,10 @@ namespace InputUtils {
 /**
  * Loads and sets up CR scenario. The file can be encoded in xml or protobuf format.
  *
- * @param filePath Path to CommonRoad file
+ * @param dirPath Path to CommonRoad file
  * @return Tuple of obstacles, roadNetwork, and time step size
  */
-Scenario getDataFromCommonRoad(const std::string &filePath);
+Scenario getDataFromCommonRoad(const std::string &dirPath);
 
 
 } // namespace InputUtils

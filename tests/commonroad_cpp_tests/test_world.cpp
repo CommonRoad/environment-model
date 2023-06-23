@@ -18,10 +18,9 @@
 using namespace boost::filesystem;
 
 TEST_F(WorldTest, TestScenariosValid) {
-    std::array<std::string, 6> scenarios{"ZAM_Urban-2_1.xml",      "USA_Peach-4_1_T-1.xml",
-                                         "USA_Peach-2_1_T-1.xml",  "ESP_Almansa-2_2_T-1.xml",
-                                         "ITA_Foggia-7_2_T-1.xml", "ARG_Carcarana-6_5_T-1.xml"};
-    for (const auto &scen : scenarios) {
+    std::array<std::string, 5> scenarioDirs{"ZAM_Urban-2", "USA_Peach-4", "USA_Peach-2",  "ESP_Almansa-2",
+                                            "ARG_Carcarana-6"};
+    for (const auto &scen : scenarioDirs) {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scen};
         const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
             InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -30,7 +29,7 @@ TEST_F(WorldTest, TestScenariosValid) {
 }
 
 TEST_F(WorldTest, TestSingleScenarioObstacle) {
-    std::string scenario{"BEL_Zwevegem-1_5_T-1.xml"};
+    std::string scenario{"BEL_Zwevegem-1"};
     size_t obstacleId{325};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
@@ -44,7 +43,7 @@ TEST_F(WorldTest, TestSingleScenarioObstacle) {
 }
 
 TEST_F(WorldTest, TestSingleScenario) {
-    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -55,7 +54,7 @@ TEST_F(WorldTest, TestSingleScenario) {
 }
 
 TEST_F(WorldTest, FindObstacle) {
-    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -69,7 +68,7 @@ TEST_F(WorldTest, FindObstacle) {
 }
 
 TEST_F(WorldTest, GetTimeStep) {
-    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -80,7 +79,7 @@ TEST_F(WorldTest, GetTimeStep) {
 }
 
 TEST_F(WorldTest, GetTimeStepSize) {
-    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -91,7 +90,7 @@ TEST_F(WorldTest, GetTimeStepSize) {
 }
 
 TEST_F(WorldTest, FindObstacles) {
-    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -115,7 +114,7 @@ TEST_F(WorldTest, FindObstacles) {
 }
 
 TEST_F(WorldTest, SetCurvilinearStates) {
-    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -125,7 +124,7 @@ TEST_F(WorldTest, SetCurvilinearStates) {
 }
 
 TEST_F(WorldTest, GetEgoVehicles) {
-    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -137,7 +136,7 @@ TEST_F(WorldTest, GetEgoVehicles) {
 }
 
 TEST_F(WorldTest, SetEgoVehicles) {
-    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
@@ -159,7 +158,7 @@ TEST_F(WorldTest, SetEgoVehicles) {
 }
 
 TEST_F(WorldTest, IdCounterRef) {
-    std::string scenario{"USA_Peach-2_1_T-1.xml"};
+    std::string scenario{"USA_Peach-2"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);

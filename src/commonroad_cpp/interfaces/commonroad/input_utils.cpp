@@ -14,6 +14,7 @@
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
 #include <iostream>
+#include <filesystem>
 
 #include <spdlog/spdlog.h>
 
@@ -52,31 +53,43 @@ Scenario readFromXMLFile(const std::string &xmlFilePath) {
  * @return Scenario
  */
 Scenario readFromProtobufFile(const std::string &pbFilePath) {
-    commonroad_dynamic::CommonRoadDynamic commonRoadDynamicMsg = ProtobufReader::loadDynamicProtobufMessage(pbFilePath);
-    commonroad_map::CommonRoadMap commonRoadMapMsg = ProtobufReader::loadMapProtobufMessage(pbFilePath);
-    commonroad_scenario::CommonRoadScenario commonRoadScenarioMsg =
-        ProtobufReader::loadScenarioProtobufMessage(pbFilePath);
+    commonroad_dynamic::CommonRoadDynamic commonRoadDynamicMsg;
+    commonroad_map::CommonRoadMap commonRoadMapMsg;
+    commonroad_scenario::CommonRoadScenario commonRoadScenarioMsg;
+    for (const auto & entry : std::filesystem::directory_iterator(pbFilePath)) {
+        std::vector<std::string> pathSplit;
+        boost::split(pathSplit, entry.path().string(), boost::is_any_of("/"));
+        if (std::count(pathSplit.back().begin(), pathSplit.back().end(), '_') == 1)
+            commonRoadMapMsg = ProtobufReader::loadMapProtobufMessage(entry.path().string());
+        else if (pathSplit.back().find("SC") != std::string::npos)
+            commonRoadScenarioMsg = ProtobufReader::loadScenarioProtobufMessage(entry.path().string());
+        else
+            commonRoadDynamicMsg = ProtobufReader::loadDynamicProtobufMessage(entry.path().string());
+    }
 
     return ProtobufReader::createCommonRoadFromMessage(commonRoadDynamicMsg, commonRoadMapMsg, commonRoadScenarioMsg);
 }
 
 } // namespace
 
-Scenario InputUtils::getDataFromCommonRoad(const std::string &filePath)
+Scenario InputUtils::getDataFromCommonRoad(const std::string &dirPath)
 // Loads and sets up CR scenario
 {
-    spdlog::info("Read file: {}", filePath);
+    spdlog::info("Read file: {}", dirPath);
     std::vector<std::string> pathSplit;
-    auto fileEnding{boost::split(pathSplit, filePath, boost::is_any_of("."))};
+    for (const auto & entry : std::filesystem::directory_iterator(dirPath)) {
+        boost::split(pathSplit, entry.path().string(), boost::is_any_of("."));
+        break;
+    }
 
     Scenario scenario;
     if (pathSplit.back() == "xml")
-        scenario = readFromXMLFile(filePath);
+        scenario = readFromXMLFile(dirPath);
     else if (pathSplit.back() == "pb")
-        scenario = readFromProtobufFile(filePath);
+        scenario = readFromProtobufFile(dirPath);
     else
-        throw std::runtime_error("Invalid file name " + filePath + ": .xml or .pb ending missing!");
+        throw std::runtime_error("Invalid file name " + dirPath + ": .xml or .pb ending missing!");
 
-    spdlog::info("File successfully read: {}", filePath);
+    spdlog::info("File successfully read: {}", dirPath);
     return scenario;
 }

@@ -200,7 +200,7 @@ TEST_F(ObstacleOperationsTest, LaneletsLeftOfObstacle) {
 
 TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
     std::string pathToTestFile =
-        TestUtils::getTestScenarioDirectory() + "/DEU_two_lanes_with_different_orientation.xml";
+        TestUtils::getTestScenarioDirectory() + "/DEU_twoLanesWithDifferentOrientation-1";
     const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 10, 0, 0);
@@ -257,7 +257,7 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
 }
 
 TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
-    std::string pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_corner_with_180_degree.xml";
+    std::string pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_cornerWith180Degree-1";
     const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 10, 0, 0);
