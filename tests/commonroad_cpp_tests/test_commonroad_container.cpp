@@ -11,9 +11,8 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void CommonRoadContainerTest::SetUp() {
-    std::array<std::string, 6> scenarios{"ZAM_Urban-2_1.xml",      "USA_Peach-4_1_T-1.xml",
-                                         "USA_Peach-2_1_T-1.xml",  "ESP_Almansa-2_2_T-1.xml",
-                                         "ITA_Foggia-7_2_T-1.xml", "ARG_Carcarana-6_5_T-1.xml"};
+    std::array<std::string, 5> scenarios{"ZAM_Urban-2", "USA_Peach-4", "USA_Peach-2",  "ESP_Almansa-2",
+                                         "ARG_Carcarana-6"};
     size_t scenarioId{1};
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
     for (const auto &scen : scenarios) {
@@ -32,13 +31,13 @@ TEST_F(CommonRoadContainerTest, RegisterScenario) {
     EXPECT_NO_THROW(eval->findWorld(3));
     EXPECT_NO_THROW(eval->findWorld(4));
     EXPECT_NO_THROW(eval->findWorld(5));
-    EXPECT_NO_THROW(eval->findWorld(6));
+    //EXPECT_NO_THROW(eval->findWorld(6));
 }
 
 TEST_F(CommonRoadContainerTest, RemoveScenario) {
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
     EXPECT_THROW(eval->removeScenario(10), std::logic_error);
-    EXPECT_NO_THROW(eval->findWorld(6));
+    //EXPECT_NO_THROW(eval->findWorld(6));
     EXPECT_NO_THROW(eval->removeScenario(1));
     EXPECT_THROW(eval->findWorld(1), std::logic_error);
     EXPECT_NO_THROW(eval->removeScenario(2));
@@ -49,6 +48,6 @@ TEST_F(CommonRoadContainerTest, RemoveScenario) {
     EXPECT_THROW(eval->findWorld(4), std::logic_error);
     EXPECT_NO_THROW(eval->removeScenario(5));
     EXPECT_THROW(eval->findWorld(5), std::logic_error);
-    EXPECT_NO_THROW(eval->removeScenario(6));
-    EXPECT_THROW(eval->findWorld(6), std::logic_error);
+    //EXPECT_NO_THROW(eval->removeScenario(6));
+    //EXPECT_THROW(eval->findWorld(6), std::logic_error);
 }

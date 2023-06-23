@@ -76,13 +76,13 @@ void ProtobufReader::initTrafficLightContainer(ProtobufReader::TrafficLightConta
 
 void ProtobufReader::initIncomingGroupContainer(IncomingGroupContainer &incomingGroupContainer,
                                                 const commonroad_map::Intersection &intersectionMsg) {
-    for (const auto &incomingGroupMsg : intersectionMsg.incoming_groups())
+    for (const auto &incomingGroupMsg : intersectionMsg.incomings())
         incomingGroupContainer.emplace(incomingGroupMsg.incoming_group_id(), std::make_shared<IncomingGroup>());
 }
 
 void ProtobufReader::initOutgoingGroupContainer(OutgoingGroupContainer &outgoingGroupContainer,
                                                 const commonroad_map::Intersection &intersectionMsg) {
-    for (const auto &outgoingGroupMsg : intersectionMsg.outgoing_groups())
+    for (const auto &outgoingGroupMsg : intersectionMsg.outgoings())
         outgoingGroupContainer.emplace(outgoingGroupMsg.outgoing_group_id(), std::make_shared<OutgoingGroup>());
 }
 
@@ -152,7 +152,7 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
 
     std::vector<std::shared_ptr<TrafficLight>> trafficLights;
     for (const auto &trafficLightMsg : commonRoadMapMsg.traffic_lights())
-        for (const auto &trafficLightCycleMsg : commonRoadDynamicMsg.traffic_light_cycles()) {
+        for (const auto &trafficLightCycleMsg : commonRoadDynamicMsg.traffic_light_cycle()) {
             if (trafficLightMsg.traffic_light_id() == trafficLightCycleMsg.traffic_light_id())
                 trafficLights.push_back(ProtobufReader::createTrafficLightFromMessage(trafficLightMsg, trafficLightCycleMsg, trafficLightContainer));
         }
@@ -254,7 +254,7 @@ ProtobufReader::createLaneletFromMessage(const commonroad_map::Lanelet &laneletM
     lanelet->setLaneletTypes(laneletTypes);
 
     std::set<ObstacleType> userOneWays;
-    for (const auto &userOneWay : laneletMsg.users_one_way()) {
+    for (const auto &userOneWay : laneletMsg.user_one_way()) {
         std::string userOneWayName = commonroad_dynamic::ObstacleTypeEnum_ObstacleType_Name(
             (commonroad_dynamic::ObstacleTypeEnum_ObstacleType)userOneWay);
         userOneWays.emplace(obstacle_operations::matchStringToObstacleType(userOneWayName));
@@ -262,7 +262,7 @@ ProtobufReader::createLaneletFromMessage(const commonroad_map::Lanelet &laneletM
     lanelet->setUsersOneWay(userOneWays);
 
     std::set<ObstacleType> usersBidirectionals;
-    for (const auto &usersBidirectional : laneletMsg.users_bidirectional()) {
+    for (const auto &usersBidirectional : laneletMsg.user_bidirectional()) {
         std::string userBidirectionalName = commonroad_dynamic::ObstacleTypeEnum_ObstacleType_Name(
             (commonroad_dynamic::ObstacleTypeEnum_ObstacleType)usersBidirectional);
         usersBidirectionals.emplace(obstacle_operations::matchStringToObstacleType(userBidirectionalName));
@@ -435,11 +435,11 @@ ProtobufReader::createIntersectionFromMessage(const commonroad_map::Intersection
     initIncomingGroupContainer(incomingGroupContainer, intersectionMsg);
     initOutgoingGroupContainer(outgoingGroupContainer, intersectionMsg);
 
-    for (const auto &incomingGroupMsg : intersectionMsg.incoming_groups())
+    for (const auto &incomingGroupMsg : intersectionMsg.incomings())
         intersection->addIncomingGroup(
             ProtobufReader::createIncomingGroupFromMessage(incomingGroupMsg, laneletContainer, incomingGroupContainer));
 
-    for (const auto &outgoingGroupMsg : intersectionMsg.outgoing_groups())
+    for (const auto &outgoingGroupMsg : intersectionMsg.outgoings())
         intersection->addOutgoingGroup(
             ProtobufReader::createOutgoingGroupFromMessage(outgoingGroupMsg, laneletContainer, outgoingGroupContainer));
 
@@ -463,19 +463,19 @@ std::shared_ptr<IncomingGroup> ProtobufReader::createIncomingGroupFromMessage(co
     if (incomingGroupMsg.has_outgoing_group_id())
         incoming->setOutgoingGroupID(incomingGroupMsg.outgoing_group_id());
 
-    for (size_t laneletId : incomingGroupMsg.outgoings_straight()) {
+    for (size_t laneletId : incomingGroupMsg.outgoing_straight()) {
         auto containerLanelet = getLaneletFromContainer(laneletId, laneletContainer);
         if (containerLanelet != nullptr)
             incoming->addStraightOutgoing(containerLanelet);
     }
 
-    for (size_t laneletId : incomingGroupMsg.outgoings_left()) {
+    for (size_t laneletId : incomingGroupMsg.outgoing_left()) {
         auto containerLanelet = getLaneletFromContainer(laneletId, laneletContainer);
         if (containerLanelet != nullptr)
             incoming->addLeftOutgoing(containerLanelet);
     }
 
-    for (size_t laneletId : incomingGroupMsg.outgoings_right()) {
+    for (size_t laneletId : incomingGroupMsg.outgoing_right()) {
         auto containerLanelet = getLaneletFromContainer(laneletId, laneletContainer);
         if (containerLanelet != nullptr)
             incoming->addRightOutgoing(containerLanelet);

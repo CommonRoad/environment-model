@@ -52,7 +52,7 @@ TEST_F(InterfacesTest, Read2020aFileSingleThread) {
 }
 
 TEST_F(InterfacesTest, SamePredecessors) {
-    std::string scenarioName = "ARG_Carcarana-6_5_T-1";
+    std::string scenarioName = "ARG_Carcarana-6";
     const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
 
     const std::vector<std::shared_ptr<Lanelet>> laneletNetworkXml = std::get<1>(scenarioXml)->getLaneletNetwork();

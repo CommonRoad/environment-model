@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<commonRoad timeStepSize="0.1" commonRoadVersion="2020a" author="Valentin Merle" affiliation="Technical University of Munich" source="CommonRoad Scenario Designer" benchmarkID="ZAM_Test-1_1_T-1" date="2023-03-28">
+<commonRoad timeStepSize="0.1" commonRoadVersion="2020a" author="Valentin Merle" affiliation="Technical University of Munich" source="CommonRoad Scenario Designer" benchmarkID="DEU_incomingTest-1_1" date="2023-03-28">
     <location>
         <geoNameId>-999</geoNameId>
         <gpsLatitude>999.0</gpsLatitude>
@@ -1962,7 +1962,7 @@
         </crossing>
     </intersection>
     <intersection id="1001">
-        <incoming id="14">
+        <incoming id="16">
             <incomingLanelet ref="3"/>
             <outgoingStraight ref="71"/>
             <outgoingLeft ref="101"/>

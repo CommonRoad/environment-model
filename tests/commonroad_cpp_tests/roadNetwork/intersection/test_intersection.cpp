@@ -16,7 +16,7 @@ TEST_F(IntersectionTest, InitializationComplete) {
     EXPECT_EQ(intersection1->getIncomingGroups().size(), 3);
     EXPECT_EQ(intersection1->getIncomingGroups().at(0)->getId(), 13);
     EXPECT_EQ(intersection2->getIncomingGroups().size(), 1);
-    EXPECT_EQ(intersection2->getIncomingGroups().at(0)->getId(), 14);
+    EXPECT_EQ(intersection2->getIncomingGroups().at(0)->getId(), 16);
 }
 
 TEST_F(IntersectionTest, ComputeMemberLanelets) {
