@@ -49,6 +49,7 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
     // collect outgoings
     for (const auto &incom : incomings) {
         for (const auto &letInc : incom->getIncomingLanelets()) {
+            letInc->addLaneletType(LaneletType::incoming);
             memberLanelets.push_back(letInc);
             for (const auto &letOut : incom->getLeftOutgoings()) {
                 letOut->addLaneletType(LaneletType::intersectionLeftOutgoing);

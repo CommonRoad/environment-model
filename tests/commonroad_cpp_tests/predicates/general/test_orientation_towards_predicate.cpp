@@ -68,7 +68,7 @@ TEST_F(OrientationTowardsPredicateTest, BooleanEvaluation) {
 }
 
 TEST_F(OrientationTowardsPredicateTest, BooleanEvaluationScenarioTest) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_safe_distance.xml"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_testSafeDistance-1"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFile);
     auto obs1{obstacle_operations::getObstacleById(obstaclesScenario, 1008)};

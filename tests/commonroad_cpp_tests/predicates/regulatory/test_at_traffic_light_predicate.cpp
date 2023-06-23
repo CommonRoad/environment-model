@@ -7,10 +7,15 @@
 #include "test_at_traffic_light_predicate.h"
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
-TEST_F(AtRedTrafficLightPredicateTest, BooleanEvaluationDirectionAll) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+void AtRedTrafficLightPredicateTest::SetUp() {
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLight-1"};
+    const auto &[obs, rn, ts] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    obstacles = obs;
+    roadNetwork = rn;
+    timeStepSize = ts;
+}
 
+TEST_F(AtRedTrafficLightPredicateTest, BooleanEvaluationDirectionAll) {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 23.5, 15.0, 0, 0, -M_PI / 2, 0, 11.5, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 40.0, 3.5, 0, 0, -M_PI, 0, 10, 0);
 
@@ -57,7 +62,7 @@ TEST_F(AtRedTrafficLightPredicateTest, BooleanEvaluationDirectionAll) {
 }
 
 TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionAll) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLight-1"};
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 23.5, 15.0, 0, 0, -M_PI / 2, 0, 11.5, 0);
@@ -106,7 +111,7 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionAll) {
 }
 
 TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionRight) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLight-1"};
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 15.0, 0.0, 0, 0, 0, 0, 15.0, 0);
@@ -155,7 +160,7 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionRight)
 }
 
 TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionLeft) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLight-1"};
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -15.0, 0, 0, M_PI / 2, 0, 15.0, 0);
@@ -204,7 +209,7 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionLeft) 
 }
 
 TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionStraight) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLight-1"};
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 40.0, 3.0, 0, 0, M_PI, 0, 10.0, 0);

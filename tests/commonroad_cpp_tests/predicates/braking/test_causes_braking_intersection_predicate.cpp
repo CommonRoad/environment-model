@@ -10,7 +10,9 @@
 
 void CausesBrakingIntersectionPredicateTest::SetUp() {}
 
-TEST_F(CausesBrakingIntersectionPredicateTest, BooleanEvaluation) {}
+TEST_F(CausesBrakingIntersectionPredicateTest, BooleanEvaluation) {
+    // TODO
+}
 
 TEST_F(CausesBrakingIntersectionPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world1, obstacleOne), std::runtime_error);
