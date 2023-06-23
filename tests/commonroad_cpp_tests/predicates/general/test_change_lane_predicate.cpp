@@ -65,13 +65,13 @@ void ChangeLanePredicateTest::SetUp() {
 
     // Worlds with access- and exit-ramps on interstate
     pathToTestFileAccessRamp =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_consider_entering_vehicles_for_lane_change.xml";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_testConsiderEnteringVehiclesForLaneChange-1";
     pathToTestFileExitRamp =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOvertakingExitRamp-1_1_T-1.xml";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOvertakingExitRamp-1";
     pathToTestFileTwoFollowingLaneletsAndAccessRampFalse =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_on_following_lanelets_and_access_ramp_false.xml";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_testOnFollowingLaneletsAndAccessRampFalse-1";
     pathToTestFileTwoFollowingLaneletsAndAccessRampTrue =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_on_following_lanelets_and_access_ramp_true.xml";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_testOnFollowingLaneletsAndAccessRampTrue-1";
 
     optLeft = std::make_shared<OptionalPredicateParameters>();
     optLeft->turningDirection = {TurningDirection::left};

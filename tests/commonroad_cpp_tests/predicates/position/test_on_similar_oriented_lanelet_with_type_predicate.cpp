@@ -84,7 +84,7 @@ void OnSimilarOrientedLaneletWithTypePredicateTest::initializeTestData(LaneletTy
 
 TEST_F(OnSimilarOrientedLaneletWithTypePredicateTest, BooleanEvaluationIntersection) {
     initializeTestData(LaneletType::intersection, LaneletType::urban);
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLight-1"};
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -7.5, 0, 0, M_PI / 2, 0, 15, 0);

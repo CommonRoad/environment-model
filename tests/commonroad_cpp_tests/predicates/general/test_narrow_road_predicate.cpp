@@ -30,13 +30,13 @@ void NarrowRoadPredicateTest::SetUp() {
     world4 = std::make_shared<World>(World(0, roadNetwork4, {egoVehicle}, {}, 0.1));
 
     std::string pathToTestFileOncoming =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_two_lanes_with_opposite_directions.xml";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_twoLanesWithOppositeDirections-1";
     const auto &[obstaclesOncoming, roadNetworkOncoming, timeStepSizeOncoming] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOncoming);
     worldOncoming = std::make_shared<World>(World(0, roadNetworkOncoming, {egoVehicle}, {}, 0.1));
 
     std::string pathToTestFileOncomingNarrow =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_two_lanes_with_opposite_directions_narrow.xml";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_twoLanesWithOppositeDirectionsNarrow-1";
     const auto &[obstaclesOncomingNarrow, roadNetworkOncomingNarrow, timeStepSizeOncomingNarrow] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOncomingNarrow);
     worldOncomingNarrow = std::make_shared<World>(World(0, roadNetworkOncomingNarrow, {egoVehicle}, {}, 0.1));

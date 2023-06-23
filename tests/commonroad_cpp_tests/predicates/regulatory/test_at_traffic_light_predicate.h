@@ -19,4 +19,10 @@ class AtRedTrafficLightPredicateTest : public testing::Test {
     std::shared_ptr<Obstacle> obstacleTwo;
     std::shared_ptr<World> world;
     AtTrafficLightPredicate pred;
+    std::vector<std::shared_ptr<Obstacle>> obstacles;
+    std::shared_ptr<RoadNetwork> roadNetwork;
+    double timeStepSize;
+
+  private:
+    void SetUp() override;
 };

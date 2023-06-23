@@ -183,6 +183,10 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
     std::shared_ptr<RoadNetwork> roadNetwork =
         std::make_shared<RoadNetwork>(lanelets, countryId, trafficSigns, trafficLights, intersections);
 
+    for (const auto &intersection : roadNetwork->getIntersections()) {
+        intersection->computeMemberLanelets(roadNetwork);
+    }
+
     return std::make_tuple(obstacles, roadNetwork, timeStepSize);
 }
 
@@ -442,7 +446,6 @@ ProtobufReader::createIntersectionFromMessage(const commonroad_map::Intersection
     for (const auto &outgoingGroupMsg : intersectionMsg.outgoings())
         intersection->addOutgoingGroup(
             ProtobufReader::createOutgoingGroupFromMessage(outgoingGroupMsg, laneletContainer, outgoingGroupContainer));
-
 
     return intersection;
 }

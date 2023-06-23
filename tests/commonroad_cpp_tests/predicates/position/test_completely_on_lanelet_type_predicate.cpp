@@ -45,7 +45,7 @@ void CompletelyOnLaneletTypePredicateTest::SetUp() {
 
     // world 2
     auto pathToTestFileAccessRamp =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_on_following_lanelets_and_access_ramp_false.xml";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_testOnFollowingLaneletsAndAccessRampFalse-1";
     const auto &[obstacles, roadNetwork2, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFileAccessRamp);
     world2 = std::make_shared<World>(World(0, roadNetwork2, {}, {}, 0.1));
 }
