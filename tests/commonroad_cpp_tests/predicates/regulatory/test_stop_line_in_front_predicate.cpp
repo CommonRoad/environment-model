@@ -59,7 +59,7 @@ TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
 }
 
 TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
-    std::array<std::string, 1> scenarios{"DEU_test_stop_line.xml"};
+    std::array<std::string, 1> scenarios{"DEU_testStopLine-1"};
     for (const auto &scen : scenarios) {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" + scen};
         const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
