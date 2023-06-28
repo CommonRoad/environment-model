@@ -199,8 +199,7 @@ TEST_F(ObstacleOperationsTest, LaneletsLeftOfObstacle) {
 }
 
 TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
-    std::string pathToTestFile =
-        TestUtils::getTestScenarioDirectory() + "/DEU_twoLanesWithDifferentOrientation-1";
+    std::string pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_twoLanesWithDifferentOrientation-1";
     const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 10, 0, 0);

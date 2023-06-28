@@ -66,8 +66,7 @@ void ChangeLanePredicateTest::SetUp() {
     // Worlds with access- and exit-ramps on interstate
     pathToTestFileAccessRamp =
         TestUtils::getTestScenarioDirectory() + "/predicates/DEU_testConsiderEnteringVehiclesForLaneChange-1";
-    pathToTestFileExitRamp =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOvertakingExitRamp-1";
+    pathToTestFileExitRamp = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOvertakingExitRamp-1";
     pathToTestFileTwoFollowingLaneletsAndAccessRampFalse =
         TestUtils::getTestScenarioDirectory() + "/predicates/DEU_testOnFollowingLaneletsAndAccessRampFalse-1";
     pathToTestFileTwoFollowingLaneletsAndAccessRampTrue =

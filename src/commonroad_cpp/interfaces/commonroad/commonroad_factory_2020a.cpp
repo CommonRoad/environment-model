@@ -115,7 +115,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                             vertex newVertice{};
                             newVertice.x = elem.child("x").text().as_double();
                             newVertice.y = elem.child("y").text().as_double();
-                            //points.push_back(newVertice); TODO not working with V3
+                            // points.push_back(newVertice); TODO not working with V3
                         }
                         if ((strcmp(elem.name(), "lineMarking")) == 0)
                             stopL->setLineMarking(
@@ -135,7 +135,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                             }
                         }*/
                     }
-                    //stopL->setPoints(points); TODO not working with V3
+                    // stopL->setPoints(points); TODO not working with V3
                     tempLaneletContainer[arrayIndex]->setStopLine(stopL);
                 }
             }

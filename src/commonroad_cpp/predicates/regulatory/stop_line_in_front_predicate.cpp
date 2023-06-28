@@ -50,7 +50,8 @@ double minDistance(const std::pair<vertex, vertex> &line, polygon_type shape) {
     auto pointC{(line.first.x - line.second.x) * line.first.y + (line.second.y - line.first.y) * line.first.x};
     std::vector<double> distances;
     for (const auto &point : shape.outer()) {
-        distances.push_back(std::fabs((pointA * point.x() + pointB * point.y() + pointC)) / (sqrt(pointA * pointA + pointB * pointB)));
+        distances.push_back(std::fabs((pointA * point.x() + pointB * point.y() + pointC)) /
+                            (sqrt(pointA * pointA + pointB * pointB)));
     }
     return *std::min_element(distances.begin(), distances.end());
 }

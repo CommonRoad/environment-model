@@ -41,10 +41,8 @@ std::shared_ptr<RoadNetwork> create_road_network(const std::set<LaneletType> &la
     // stop line
     std::pair<vertex, vertex> slPositionOne{{20.0, 0.0}, {20.0, 4.0}};
     std::pair<vertex, vertex> slPositionTwo{{20.0, 4.0}, {21.0, 8.0}};
-    auto stopLineOne{std::make_shared<StopLine>(
-        slPositionOne, LineMarking::broad_solid)};
-    auto stopLineTwo{std::make_shared<StopLine>(
-        slPositionTwo,  LineMarking::broad_solid)};
+    auto stopLineOne{std::make_shared<StopLine>(slPositionOne, LineMarking::broad_solid)};
+    auto stopLineTwo{std::make_shared<StopLine>(slPositionTwo, LineMarking::broad_solid)};
     // right lanelet
     size_t idLaneletOne = 100;
     auto userOneWayLaneletOne = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
@@ -114,10 +112,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
     // stop line
     std::pair<vertex, vertex> slPositionOne{{20.0, 0.0}, {20.0, 3.0}};
     std::pair<vertex, vertex> slPositionTwo{{20.0, 3.0}, {21.0, 6.0}};
-    auto stopLineOne{std::make_shared<StopLine>(
-        slPositionOne, LineMarking::broad_solid)};
-    auto stopLineTwo{std::make_shared<StopLine>(
-        slPositionTwo, LineMarking::broad_solid)};
+    auto stopLineOne{std::make_shared<StopLine>(slPositionOne, LineMarking::broad_solid)};
+    auto stopLineTwo{std::make_shared<StopLine>(slPositionTwo, LineMarking::broad_solid)};
 
     // right lanelet
     size_t idLaneletOne = 111;
@@ -223,10 +219,8 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
     // stop line
     std::pair<vertex, vertex> slPositionOne{{20.0, 0.0}, {20.0, 3.0}};
     std::pair<vertex, vertex> slPositionTwo{{20.0, 3.0}, {21.0, 6.0}};
-    auto stopLineOne{std::make_shared<StopLine>(
-        slPositionOne, LineMarking::broad_solid)};
-    auto stopLineTwo{std::make_shared<StopLine>(
-        slPositionTwo, LineMarking::broad_solid)};
+    auto stopLineOne{std::make_shared<StopLine>(slPositionOne, LineMarking::broad_solid)};
+    auto stopLineTwo{std::make_shared<StopLine>(slPositionTwo, LineMarking::broad_solid)};
 
     // lanelet 1
     size_t idLaneletOne = 100;

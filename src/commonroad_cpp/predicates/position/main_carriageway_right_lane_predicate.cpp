@@ -18,8 +18,7 @@ bool MainCarriagewayRightLanePredicate::booleanEvaluation(
         obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
         return (lanelet->getAdjacentRight().adj == nullptr or
-                ((lanelet->getAdjacentRight().adj != nullptr) and
-                 (!lanelet->getAdjacentRight().oppositeDir) and
+                ((lanelet->getAdjacentRight().adj != nullptr) and (!lanelet->getAdjacentRight().oppositeDir) and
                  !lanelet->getAdjacentRight().adj->hasLaneletType(LaneletType::mainCarriageWay))) and
                lanelet->hasLaneletType(LaneletType::mainCarriageWay);
     });

@@ -154,7 +154,8 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
     for (const auto &trafficLightMsg : commonRoadMapMsg.traffic_lights())
         for (const auto &trafficLightCycleMsg : commonRoadDynamicMsg.traffic_light_cycle()) {
             if (trafficLightMsg.traffic_light_id() == trafficLightCycleMsg.traffic_light_id())
-                trafficLights.push_back(ProtobufReader::createTrafficLightFromMessage(trafficLightMsg, trafficLightCycleMsg, trafficLightContainer));
+                trafficLights.push_back(ProtobufReader::createTrafficLightFromMessage(
+                    trafficLightMsg, trafficLightCycleMsg, trafficLightContainer));
         }
 
     std::vector<std::shared_ptr<Intersection>> intersections;
@@ -372,9 +373,9 @@ std::string mapGermanTrafficSignID(const std::string &signName) {
 
 std::shared_ptr<TrafficSignElement> ProtobufReader::createTrafficSignElementFromMessage(
     const commonroad_common::TrafficSignElement &trafficSignElementMsg) {
-    std::shared_ptr<TrafficSignElement> trafficSignElement = std::make_shared<TrafficSignElement>(
-        commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())
-        );
+    std::shared_ptr<TrafficSignElement> trafficSignElement =
+        std::make_shared<TrafficSignElement>(mapGermanTrafficSignID(
+            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
 
     std::vector<std::string> additionalValues(trafficSignElementMsg.additional_values().begin(),
                                               trafficSignElementMsg.additional_values().end());
@@ -384,9 +385,9 @@ std::shared_ptr<TrafficSignElement> ProtobufReader::createTrafficSignElementFrom
 }
 
 std::shared_ptr<TrafficLight>
-ProtobufReader::createTrafficLightFromMessage(const commonroad_map::TrafficLight& trafficLightMsg,
-                                              const commonroad_dynamic::TrafficLightCycle& trafficLightCycleMsg,
-                                              TrafficLightContainer& trafficLightContainer) {
+ProtobufReader::createTrafficLightFromMessage(const commonroad_map::TrafficLight &trafficLightMsg,
+                                              const commonroad_dynamic::TrafficLightCycle &trafficLightCycleMsg,
+                                              TrafficLightContainer &trafficLightContainer) {
     std::shared_ptr<TrafficLight> trafficLight = trafficLightContainer[trafficLightMsg.traffic_light_id()];
 
     trafficLight->setId(trafficLightMsg.traffic_light_id());
@@ -450,9 +451,10 @@ ProtobufReader::createIntersectionFromMessage(const commonroad_map::Intersection
     return intersection;
 }
 
-std::shared_ptr<IncomingGroup> ProtobufReader::createIncomingGroupFromMessage(const commonroad_map::IncomingGroup &incomingGroupMsg,
-                                                                         LaneletContainer &laneletContainer,
-                                                                         IncomingGroupContainer &incomingGroupContainer) {
+std::shared_ptr<IncomingGroup>
+ProtobufReader::createIncomingGroupFromMessage(const commonroad_map::IncomingGroup &incomingGroupMsg,
+                                               LaneletContainer &laneletContainer,
+                                               IncomingGroupContainer &incomingGroupContainer) {
     std::shared_ptr<IncomingGroup> incoming = incomingGroupContainer[incomingGroupMsg.incoming_group_id()];
 
     incoming->setId(incomingGroupMsg.incoming_group_id());
@@ -494,9 +496,9 @@ std::shared_ptr<IncomingGroup> ProtobufReader::createIncomingGroupFromMessage(co
 }
 
 std::shared_ptr<OutgoingGroup>
-    ProtobufReader::createOutgoingGroupFromMessage(const commonroad_map::OutgoingGroup& outgoingGroupMsg,
-                                               LaneletContainer& laneletContainer,
-                                               OutgoingGroupContainer& outgoingGroupContainer) {
+ProtobufReader::createOutgoingGroupFromMessage(const commonroad_map::OutgoingGroup &outgoingGroupMsg,
+                                               LaneletContainer &laneletContainer,
+                                               OutgoingGroupContainer &outgoingGroupContainer) {
     std::shared_ptr<OutgoingGroup> outgoing = outgoingGroupContainer[outgoingGroupMsg.outgoing_group_id()];
     outgoing->setId(outgoingGroupMsg.outgoing_group_id());
     for (size_t laneletId : outgoingGroupMsg.outgoing_lanelets()) {
@@ -506,7 +508,6 @@ std::shared_ptr<OutgoingGroup>
     }
     return outgoing;
 }
-
 
 std::shared_ptr<Obstacle>
 ProtobufReader::createStaticObstacleFromMessage(const commonroad_dynamic::StaticObstacle &staticObstacleMsg) {
@@ -520,7 +521,8 @@ ProtobufReader::createStaticObstacleFromMessage(const commonroad_dynamic::Static
 
     staticObstacle->setCurrentState(ProtobufReader::createStateFromMessage(staticObstacleMsg.initial_state()));
 
-    std::string obstacleTypeName = commonroad_dynamic::ObstacleTypeEnum_ObstacleType_Name(staticObstacleMsg.obstacle_type());
+    std::string obstacleTypeName =
+        commonroad_dynamic::ObstacleTypeEnum_ObstacleType_Name(staticObstacleMsg.obstacle_type());
     staticObstacle->setObstacleType(obstacle_operations::matchStringToObstacleType(obstacleTypeName));
 
     staticObstacle->setGeoShape(ProtobufReader::createShapeFromMessage(staticObstacleMsg.shape()));
@@ -541,7 +543,8 @@ ProtobufReader::createDynamicObstacleFromMessage(const commonroad_dynamic::Dynam
 
     dynamicObstacle->setIsStatic(false);
 
-    std::string obstacleTypeName = commonroad_dynamic::ObstacleTypeEnum_ObstacleType_Name(dynamicObstacleMsg.obstacle_type());
+    std::string obstacleTypeName =
+        commonroad_dynamic::ObstacleTypeEnum_ObstacleType_Name(dynamicObstacleMsg.obstacle_type());
     dynamicObstacle->setObstacleType(obstacle_operations::matchStringToObstacleType(obstacleTypeName));
 
     dynamicObstacle->setGeoShape(ProtobufReader::createShapeFromMessage(dynamicObstacleMsg.shape()));
@@ -562,8 +565,8 @@ ProtobufReader::createDynamicObstacleFromMessage(const commonroad_dynamic::Dynam
     return dynamicObstacle;
 }
 
-std::shared_ptr<Obstacle>
-ProtobufReader::createEnvironmentObstacleFromMessage(const commonroad_dynamic::EnvironmentObstacle &environmentObstacleMsg) {
+std::shared_ptr<Obstacle> ProtobufReader::createEnvironmentObstacleFromMessage(
+    const commonroad_dynamic::EnvironmentObstacle &environmentObstacleMsg) {
     std::shared_ptr<Obstacle> environmentObstacle = std::make_shared<Obstacle>();
 
     environmentObstacle->setId(environmentObstacleMsg.environment_obstacle_id());
@@ -592,8 +595,8 @@ ProtobufReader::createPhantomObstacleFromMessage(const commonroad_dynamic::Phant
     return phantomObstacle;
 }
 
-std::vector<std::shared_ptr<State>>
-ProtobufReader::createTrajectoryPredictionFromMessage(const commonroad_dynamic::TrajectoryPrediction &trajectoryPredictionMsg) {
+std::vector<std::shared_ptr<State>> ProtobufReader::createTrajectoryPredictionFromMessage(
+    const commonroad_dynamic::TrajectoryPrediction &trajectoryPredictionMsg) {
     return ProtobufReader::createTrajectoryFromMessage(trajectoryPredictionMsg.trajectory());
 }
 
@@ -643,7 +646,8 @@ std::shared_ptr<State> ProtobufReader::createStateFromMessage(const commonroad_c
     return state;
 }
 
-std::shared_ptr<SignalState> ProtobufReader::createSignalStateFromMessage(const commonroad_common::SignalState &stateMsg) {
+std::shared_ptr<SignalState>
+ProtobufReader::createSignalStateFromMessage(const commonroad_common::SignalState &stateMsg) {
     std::shared_ptr<SignalState> state = std::make_shared<SignalState>();
 
     if (stateMsg.has_time_step()) {
@@ -688,7 +692,8 @@ std::unique_ptr<Shape> ProtobufReader::createShapeFromMessage(const commonroad_c
     return shape;
 }
 
-std::unique_ptr<Rectangle> ProtobufReader::createRectangleFromMessage(const commonroad_common::Rectangle &rectangleMsg) {
+std::unique_ptr<Rectangle>
+ProtobufReader::createRectangleFromMessage(const commonroad_common::Rectangle &rectangleMsg) {
     std::unique_ptr<Rectangle> rectangle = std::make_unique<Rectangle>();
 
     rectangle->setLength(rectangleMsg.length());
@@ -726,8 +731,8 @@ ProtobufReader::createFloatIntervalFromMessage(const commonroad_common::FloatInt
     return std::make_pair(floatIntervalMsg.start(), floatIntervalMsg.end());
 }
 
-ProtobufReader::IntegerExactOrInterval
-ProtobufReader::createIntegerExactOrInterval(const commonroad_common::IntegerExactOrInterval &integerExactOrIntervalMsg) {
+ProtobufReader::IntegerExactOrInterval ProtobufReader::createIntegerExactOrInterval(
+    const commonroad_common::IntegerExactOrInterval &integerExactOrIntervalMsg) {
     IntegerExactOrInterval integerExactOrInterval;
 
     if (integerExactOrIntervalMsg.has_exact())
