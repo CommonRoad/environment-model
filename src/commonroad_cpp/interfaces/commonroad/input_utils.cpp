@@ -13,8 +13,8 @@
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 
 #include <spdlog/spdlog.h>
 
@@ -56,7 +56,7 @@ Scenario readFromProtobufFile(const std::string &pbFilePath) {
     commonroad_dynamic::CommonRoadDynamic commonRoadDynamicMsg;
     commonroad_map::CommonRoadMap commonRoadMapMsg;
     commonroad_scenario::CommonRoadScenario commonRoadScenarioMsg;
-    for (const auto & entry : std::filesystem::directory_iterator(pbFilePath)) {
+    for (const auto &entry : std::filesystem::directory_iterator(pbFilePath)) {
         std::vector<std::string> pathSplit;
         boost::split(pathSplit, entry.path().string(), boost::is_any_of("/"));
         if (std::count(pathSplit.back().begin(), pathSplit.back().end(), '_') == 1)
@@ -77,7 +77,7 @@ Scenario InputUtils::getDataFromCommonRoad(const std::string &dirPath)
 {
     spdlog::info("Read file: {}", dirPath);
     std::vector<std::string> pathSplit;
-    for (const auto & entry : std::filesystem::directory_iterator(dirPath)) {
+    for (const auto &entry : std::filesystem::directory_iterator(dirPath)) {
         boost::split(pathSplit, entry.path().string(), boost::is_any_of("."));
         break;
     }

@@ -45,8 +45,7 @@ TEST_F(LaneletOperationsTest, MatchStringToLineMarking) {
 }
 
 TEST_F(LaneletOperationsTest, CreateInterstateLanes) {
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
-                                  "/predicates/DEU_TestOvertakingExitRamp-1"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOvertakingExitRamp-1"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
