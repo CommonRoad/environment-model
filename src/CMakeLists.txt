@@ -377,7 +377,7 @@ if(SKBUILD)
 
     target_link_libraries(${python_module_name} PRIVATE env_model)
 
-    install(TARGETS ${python_module_name} env_model
+    install(TARGETS ${python_module_name}
             LIBRARY DESTINATION .
             COMPONENT PythonModules
             )
