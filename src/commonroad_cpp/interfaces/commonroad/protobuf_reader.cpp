@@ -177,7 +177,7 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
         obstacles.push_back(ProtobufReader::createPhantomObstacleFromMessage(phantomObstacleMsg));
 
     auto [benchmarkId, timeStepSize] =
-        ProtobufReader::createScenarioInformationFromMessage(commonRoadScenarioMsg.information());
+        ProtobufReader::createScenarioMetaInformationFromMessage(commonRoadScenarioMsg.scenario_meta_information());
 
     std::string countryIdName = benchmarkId.substr(0, benchmarkId.find('_'));
     SupportedTrafficSignCountry countryId = RoadNetwork::matchStringToCountry(countryIdName);
@@ -192,11 +192,12 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
     return std::make_tuple(obstacles, roadNetwork, timeStepSize);
 }
 
-std::tuple<std::string, double> ProtobufReader::createScenarioInformationFromMessage(
-    const commonroad_scenario::ScenarioMetaInformation &scenarioInfoMsg) {
-    std::string benchmarkId = scenarioInfoMsg.benchmark_id();
+std::tuple<std::string, double> ProtobufReader::createScenarioMetaInformationFromMessage(
+    const commonroad_common::ScenarioMetaInformation &scenarioInfoMsg) {
+    // TODO use correct values and also add mapID, ... messages
+    std::string benchmarkId = "scenarioInfoMsg.benchmark_id()";
 
-    double timeStepSize = scenarioInfoMsg.time_step_size();
+    double timeStepSize = 0.0;
 
     return std::make_tuple(benchmarkId, timeStepSize);
 }

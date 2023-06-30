@@ -2,7 +2,6 @@ syntax = "proto2";
 
 package commonroad_dynamic;
 
-import "util.proto";
 import "environment.proto";
 import "traffic_sign_value.proto";
 import "traffic_light_cycle.proto";
@@ -10,21 +9,11 @@ import "static_obstacle.proto";
 import "dynamic_obstacle.proto";
 import "environment_obstacle.proto";
 import "phantom_obstacle.proto";
+import "scenario_meta_information.proto";
 
-message ScenarioInformation {
-    required string common_road_version = 1;
-    required string benchmark_id = 2;
-    required commonroad_common.TimeStamp date = 3;
-    required string author = 4;
-    required string affiliation = 5;
-    required string source = 6;
-    required double time_step_size = 7;
-    required string license_name = 8;
-    optional string license_text = 9;
-}
 
 message CommonRoadDynamic {
-    required ScenarioInformation information = 1;
+    required commonroad_common.ScenarioMetaInformation dynamic_meta_information = 1;
     required Environment environment = 2;
     repeated TrafficLightCycle traffic_light_cycle = 3;
     repeated TrafficSignValue traffic_sign_value = 4;
