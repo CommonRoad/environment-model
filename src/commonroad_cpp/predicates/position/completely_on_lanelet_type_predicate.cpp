@@ -1,5 +1,8 @@
 #include "commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h"
+#include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
+#include "commonroad_cpp/world.h"
 #include <algorithm>
 
 CompletelyOnLaneletTypePredicate::CompletelyOnLaneletTypePredicate() : CommonRoadPredicate(false) {}

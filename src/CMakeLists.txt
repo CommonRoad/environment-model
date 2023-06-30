@@ -48,6 +48,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/commonroad_container.h
         commonroad_cpp/geometry/circle.h
         commonroad_cpp/geometry/curvilinear_coordinate_system.h
+        commonroad_cpp/geometry/geometric_operations.h
         commonroad_cpp/geometry/rectangle.h
         commonroad_cpp/geometry/segment.h
         commonroad_cpp/geometry/shape.h
@@ -61,6 +62,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/obstacle/obstacle_operations.h
         commonroad_cpp/obstacle/sensor_parameters.h
         commonroad_cpp/obstacle/state.h
+        commonroad_cpp/obstacle/signal_state.h
         commonroad_cpp/obstacle/state_meta_info.h
         commonroad_cpp/roadNetwork/intersection/incoming_group.h
         commonroad_cpp/roadNetwork/intersection/intersection.h
@@ -239,8 +241,8 @@ add_library(env_model_core ${ENV_MODEL_SRC_FILES})
 set(ENV_MODEL_HDR_FILES_ABS ${ENV_MODEL_HDR_FILES})
 set(ENV_MODEL_PREDICATES_HDR_FILES_ABS ${ENV_MODEL_PREDICATES_HDR_FILES})
 
-list(TRANSFORM ENV_MODEL_HDR_FILES_ABS PREPEND ${PROJECT_SOURCE_DIR}/include/)
-list(TRANSFORM ENV_MODEL_PREDICATES_HDR_FILES_ABS PREPEND ${PROJECT_SOURCE_DIR}/include/)
+list(TRANSFORM ENV_MODEL_HDR_FILES_ABS PREPEND ../include/)
+list(TRANSFORM ENV_MODEL_PREDICATES_HDR_FILES_ABS PREPEND ../include/)
 
 target_sources(env_model_core PRIVATE ${ENV_MODEL_HDR_FILES_ABS})
 
@@ -249,7 +251,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
             INTERFACE
             FILE_SET env_model_core_headers
             TYPE HEADERS
-            BASE_DIRS ${PROJECT_SOURCE_DIR}/include
+            BASE_DIRS ../include
             FILES ${ENV_MODEL_HDR_FILES_ABS})
 endif()
 
@@ -267,13 +269,13 @@ target_include_directories(env_model_core
 
 target_link_libraries(env_model_core
         PRIVATE
-        OpenMP::OpenMP_CXX
         pugixml::pugixml
         spdlog::spdlog
 )
 
 target_link_libraries(env_model_core
         PUBLIC
+        OpenMP::OpenMP_CXX
         Eigen3::Eigen
         Boost::headers
         range-v3::range-v3
@@ -283,8 +285,8 @@ target_link_libraries(env_model_core
 
 target_precompile_headers(env_model_core
         PUBLIC
-        $<BUILD_INTERFACE:<Eigen/Dense>>
-        $<BUILD_INTERFACE:<boost/geometry/geometry.hpp>>
+        $<BUILD_INTERFACE:<Eigen/Dense$<ANGLE-R>>
+        $<BUILD_INTERFACE:<boost/geometry/geometry.hpp$<ANGLE-R>>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/geometry/curvilinear_coordinate_system.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lane.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
@@ -307,7 +309,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
             INTERFACE
             FILE_SET env_model_predicates_headers
             TYPE HEADERS
-            BASE_DIRS ${PROJECT_SOURCE_DIR}/include
+            BASE_DIRS ../include
             FILES ${ENV_MODEL_PREDICATES_HDR_FILES_ABS})
 endif()
 
@@ -318,7 +320,13 @@ target_include_directories(env_model_predicates
         )
 
 target_link_libraries(env_model_predicates
+        PRIVATE
+        spdlog::spdlog
+        )
+
+target_link_libraries(env_model_predicates
         PUBLIC
+        OpenMP::OpenMP_CXX
         Eigen3::Eigen
         range-v3
         env_model_core
@@ -397,19 +405,21 @@ endif(SKBUILD)
 
 include(predicates.cmake)
 
+foreach(target IN ITEMS env_model_core env_model_predicates)
+    # _USE_MATH_DEFINES is required for M_PI
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        target_compile_definitions(${target} PRIVATE _USE_MATH_DEFINES)
+    endif()
 
-# this adds many warnings to the build. They usually help to find some bugs
-# TODO: Check whether each warning flag is actually supported by the compiler before adding it
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    foreach(target IN ITEMS env_model env_model_core env_model_predicates)
-        target_compile_options(env_model_core PRIVATE -Wall -Wextra -Wconversion
-                -pedantic -Wfatal-errors -Wno-unused-parameter)
-    endforeach()
-endif()
-if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    foreach(target IN ITEMS env_model env_model_core env_model_predicates)
-        target_compile_options(env_model_core PRIVATE /W3 /WX)
-    endforeach()
-endif()
+    # this adds many warnings to the build. They usually help to find some bugs
+    # TODO: Check whether each warning flag is actually supported by the compiler before adding it
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wconversion
+            -pedantic -Wfatal-errors -Wno-unused-parameter)
+    endif()
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        target_compile_options(${target} PRIVATE /W3)
+    endif()
+endforeach()
 
 

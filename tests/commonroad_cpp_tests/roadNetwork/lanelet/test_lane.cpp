@@ -7,6 +7,7 @@
 
 #include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 
 #include "test_lane.h"

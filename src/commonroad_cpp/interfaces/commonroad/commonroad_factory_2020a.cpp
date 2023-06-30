@@ -12,6 +12,12 @@
 #include "commonroad_factory_2020a.h"
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 
+// MSVC compatibility
+#ifdef _MSC_VER
+#define strncasecmp _strnicmp
+#define strcasecmp _stricmp
+#endif
+
 double CommonRoadFactory2020a::getTimeStepSize() {
     return doc->child("commonRoad").attribute("timeStepSize").as_double();
 }

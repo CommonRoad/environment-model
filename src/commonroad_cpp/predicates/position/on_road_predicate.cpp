@@ -1,4 +1,8 @@
-#include "commonroad_cpp/predicates/position/on_road_predicate.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/position/on_road_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/world.h>
 
 OnRoadPredicate::OnRoadPredicate() : CommonRoadPredicate(false) {}
 
