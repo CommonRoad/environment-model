@@ -6,6 +6,7 @@
 //
 
 #include "commonroad_cpp/interfaces/commonroad/protobuf_reader.h"
+#include <stdexcept>
 #include <utility>
 
 commonroad_dynamic::CommonRoadDynamic ProtobufReader::loadDynamicProtobufMessage(const std::string &filePath) {

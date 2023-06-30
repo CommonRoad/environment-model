@@ -12,11 +12,12 @@ set(export_name ${PROJECT_NAME}_Targets)
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
     install(TARGETS commonroad_protobuf
         EXPORT ${export_name}
-        FILE_SET commonroad_protobuf_headers)
+        FILE_SET commonroad_protobuf_headers DESTINATION include
+        )
     install(TARGETS env_model_core env_model_predicates
             EXPORT ${export_name}
-            FILE_SET env_model_core_headers
-            FILE_SET env_model_predicates_headers
+            FILE_SET env_model_core_headers DESTINATION include
+            FILE_SET env_model_predicates_headers DESTINATION include
             LIBRARY ARCHIVE RUNTIME)
     install(TARGETS env_model
             EXPORT ${export_name})
@@ -33,7 +34,7 @@ endif()
 # our own version (via FetchContent) or a system version (via find_package)
 # This information is used in the installed config file.
 include(FetchContent)
-foreach(fc_target Eigen3 spdlog yaml-cpp protobuf boost_src pugixml range-v3)
+foreach(fc_target Eigen3 spdlog yaml-cpp protobuf boost_src pugixml range-v3 tsl-robin-map)
     FetchContent_GetProperties(${fc_target})
 
     message(DEBUG "check ${fc_target} (variable name: ${fc_target}_SOURCE_DIR)")

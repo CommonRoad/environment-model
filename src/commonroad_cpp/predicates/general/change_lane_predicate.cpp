@@ -1,4 +1,9 @@
 #include "commonroad_cpp/predicates/general/change_lane_predicate.h"
+#include "commonroad_cpp/obstacle/obstacle.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include "commonroad_cpp/world.h"
+
+#include <stdexcept>
 
 bool ChangeLanePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

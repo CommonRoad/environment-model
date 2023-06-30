@@ -48,7 +48,30 @@ if(NOT SKBUILD)
     set(CMAKE_VERIFY_INTERFACE_HEADER_SETS ON)
 endif()
 
+# Ugly hack to make CMake discover libomp from Homebrew on Github Actions
+if(APPLE AND DEFINED ENV{CIBUILDWHEEL})
+    list(APPEND CMAKE_PREFIX_PATH /usr/local/opt/libomp)
+
+    foreach(_lang IN ITEMS C CXX)
+        if(CMAKE_${_lang}_COMPILER_ID MATCHES "AppleClang")
+            set(OpenMP_${_lang}_LIB_NAMES "omp")
+            set(OpenMP_${_lang}_INCLUDE_DIR /usr/local/opt/libomp/include)
+        endif()
+    endforeach()
+
+    find_library(OpenMP_omp_LIBRARY
+        NAMES omp
+        PATHS /usr/local/opt/libomp/lib
+      )
+
+    set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
+endif()
+
 set(CMAKE_COLOR_DIAGNOSTICS ON)
+
+if(CMAKE_EXPORT_COMPILE_COMMANDS)
+  set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+endif()
 
 
 # IMPORTANT: DO NOT MOVE this section, in particular the calls to find_package(Python)
