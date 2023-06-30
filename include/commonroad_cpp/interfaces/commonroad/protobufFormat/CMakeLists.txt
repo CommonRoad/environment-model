@@ -3,6 +3,7 @@ set(COMMONROAD_PROTOS
         common/state.proto
         common/traffic_light_state.proto
         common/traffic_sign_element.proto
+        common/scenario_meta_information.proto
         scenario/commonroad_scenario.proto
         scenario/scenario_tags.proto
         scenario/planning_problem.proto
@@ -67,11 +68,13 @@ foreach(proto ${COMMONROAD_PROTOS})
                         --cpp_out=${gendir}
                         --proto_path=${proto_dir}
                         --proto_path=${proto_dir}/../common
+                        --proto_path=${proto_dir}/../dynamic
+                        --proto_path=${proto_dir}/../map
+                        --proto_path=${proto_dir}/../scenario
                         --dependency_out=${proto_dep_file_path}
                         ${proto}
                 DEPENDS
                         ${proto}
-                        # protobuf::protoc
                 DEPFILE
                         ${proto_dep_file_path}
                 VERBATIM

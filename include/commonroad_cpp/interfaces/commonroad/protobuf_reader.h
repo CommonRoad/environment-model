@@ -167,7 +167,7 @@ std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>,
  * @param scenarioInformationMsg Protobuf message
  * @return Benchmark id and step size
  */
-std::tuple<std::string, double> createScenarioInformationFromMessage(const commonroad_scenario::ScenarioMetaInformation& scenarioInfoMsg);
+std::tuple<std::string, double> createScenarioMetaInformationFromMessage(const commonroad_common::ScenarioMetaInformation& scenarioInfoMsg);
 
 /**
  * Creates lanelet from protobuf message "Lanelet".
@@ -311,6 +311,14 @@ std::vector<std::shared_ptr<State>> createTrajectoryPredictionFromMessage(const 
  * @return States
  */
 std::vector<std::shared_ptr<State>> createTrajectoryFromMessage(const commonroad_dynamic::Trajectory& trajectoryMsg);
+
+/**
+ * Creates scenario ID from protobuf message "ScenarioID".
+ *
+ * @param scenarioIDMsg Protobuf message
+ * @return Benchmark id and step size
+ */
+std::tuple<std::string, double> createScenarioIDFromMessage(const commonroad_common::ScenarioID& scenarioIdMsg);
 
 /**
  * Creates state from protobuf message "State".
