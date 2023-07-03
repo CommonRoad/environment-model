@@ -30,3 +30,6 @@ __pycache__/
 
 # From direnv
 .direnv
+
+# For setuptools-scm
+/src/python/crcpp/_version.py
