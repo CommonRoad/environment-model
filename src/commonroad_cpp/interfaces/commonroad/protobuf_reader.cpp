@@ -193,13 +193,23 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
 }
 
 std::tuple<std::string, double> ProtobufReader::createScenarioMetaInformationFromMessage(
-    const commonroad_common::ScenarioMetaInformation &scenarioInfoMsg) {
-    // TODO use correct values and also add mapID, ... messages
-    std::string benchmarkId = "scenarioInfoMsg.benchmark_id()";
-
-    double timeStepSize = 0.0;
+    const commonroad_common::ScenarioMetaInformation &scenarioMetaInformationMsg) {
+    std::string benchmarkId = createScenarioIDFromMessage(scenarioMetaInformationMsg.benchmark_id());
+    double timeStepSize = scenarioMetaInformationMsg.time_step_size();
 
     return std::make_tuple(benchmarkId, timeStepSize);
+}
+
+std::string ProtobufReader::createScenarioIDFromMessage(const commonroad_common::ScenarioID &scenarioIDMsg) {
+    std::string mapID{createMapIDFromMessage(scenarioIDMsg.map_id())};
+    if(scenarioIDMsg.cooperative())
+        return "C-" + mapID + "_" + std::to_string(scenarioIDMsg.configuration_id()) +  "_" + scenarioIDMsg.obstacle_behavior() + "-" + std::to_string(scenarioIDMsg.prediction_id());
+    else
+        return mapID;
+}
+
+std::string ProtobufReader::createMapIDFromMessage(const commonroad_common::MapID &mapIDMsg) {
+    return mapIDMsg.country_id() + "_" + mapIDMsg.map_name() + "-" + std::to_string(mapIDMsg.map_id());
 }
 
 std::shared_ptr<Lanelet>
