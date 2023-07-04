@@ -162,12 +162,12 @@ std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>,
                                                                                                                      const commonroad_scenario::CommonRoadScenario& commonRoadScenarioMsg);
 
 /**
- * Creates scenario information from protobuf message "ScenarioInformation".
+ * Creates scenario information from protobuf message "ScenarioMetaInformation".
  *
- * @param scenarioInformationMsg Protobuf message
+ * @param scenarioMetaInformationMsg Protobuf message
  * @return Benchmark id and step size
  */
-std::tuple<std::string, double> createScenarioMetaInformationFromMessage(const commonroad_common::ScenarioMetaInformation& scenarioInfoMsg);
+std::tuple<std::string, double> createScenarioMetaInformationFromMessage(const commonroad_common::ScenarioMetaInformation& scenarioMetaInformationMsg);
 
 /**
  * Creates lanelet from protobuf message "Lanelet".
@@ -316,9 +316,17 @@ std::vector<std::shared_ptr<State>> createTrajectoryFromMessage(const commonroad
  * Creates scenario ID from protobuf message "ScenarioID".
  *
  * @param scenarioIDMsg Protobuf message
- * @return Benchmark id and step size
+ * @return Benchmark id as string
  */
-std::tuple<std::string, double> createScenarioIDFromMessage(const commonroad_common::ScenarioID& scenarioIdMsg);
+std::string createScenarioIDFromMessage(const commonroad_common::ScenarioID& scenarioIdMsg);
+
+/**
+ * Creates scenario ID from protobuf message "MapID".
+ *
+ * @param mapIdMsg Protobuf message
+ * @return Map id as string
+ */
+std::string createMapIDFromMessage(const commonroad_common::MapID& mapIdMsg);
 
 /**
  * Creates state from protobuf message "State".
