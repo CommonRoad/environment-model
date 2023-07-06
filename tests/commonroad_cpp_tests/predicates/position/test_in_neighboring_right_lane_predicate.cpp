@@ -6,11 +6,11 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void TestInNeighboringRightLanePredicate::SetUp() {
-    std::string pathToTestFile = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_threeLanes-1";
+    std::string pathToTestFile = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_ThreeLanes-1/DEU_ThreeLanes-1_1_T-1.pb";
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::string pathToTestFileOncoming =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_twoLanesWithOppositeDirections-1";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TwoLanesWithOppositeDirections-1/DEU_TwoLanesWithOppositeDirections-1_1_T-1.pb";
     const auto &[obstaclesOncoming, roadNetworkOncoming, timeStepSizeOncoming] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOncoming);
 

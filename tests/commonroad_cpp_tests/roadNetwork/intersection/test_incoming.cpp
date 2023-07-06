@@ -1,16 +1,9 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_incoming.h"
 #include "../../interfaces/utility_functions.h"
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void IntersectionTestInitialization::setUpIncoming() {
-    auto pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_incomingTest-1";
+    auto pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_IncomingTest-1/DEU_IncomingTest-1_1_T-1.pb";
     const auto &[obstacles, roadnetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
     intersection1 = roadnetwork->getIntersections()[0];
     intersection2 = roadnetwork->getIntersections()[1];

@@ -56,14 +56,24 @@ Scenario readFromProtobufFile(const std::string &pbFilePath) {
     commonroad_dynamic::CommonRoadDynamic commonRoadDynamicMsg;
     commonroad_map::CommonRoadMap commonRoadMapMsg;
     commonroad_scenario::CommonRoadScenario commonRoadScenarioMsg;
-    for (const auto &entry : std::filesystem::directory_iterator(pbFilePath)) {
+    std::vector<std::string> dirSplit;
+    boost::split(dirSplit, pbFilePath, boost::is_any_of("/"));
+    std::string dir;
+    for (size_t idx{0}; idx < dirSplit.size() - 1; ++idx)
+        dir += dirSplit[idx] + "/";
+    std::string name;
+    if(dirSplit.back().find("SC") != std::string::npos)
+        name = dirSplit.back().substr(0, dirSplit.back().size() - 6);
+    else
+        name = dirSplit.back().substr(0, dirSplit.back().size() - 3);
+    for (const auto &entry : std::filesystem::directory_iterator(dir)) {
         std::vector<std::string> pathSplit;
         boost::split(pathSplit, entry.path().string(), boost::is_any_of("/"));
         if (std::count(pathSplit.back().begin(), pathSplit.back().end(), '_') == 1)
             commonRoadMapMsg = ProtobufReader::loadMapProtobufMessage(entry.path().string());
-        else if (pathSplit.back().find("SC") != std::string::npos)
+        else if (pathSplit.back().find("SC") != std::string::npos and pathSplit.back().find(name)  != std::string::npos)
             commonRoadScenarioMsg = ProtobufReader::loadScenarioProtobufMessage(entry.path().string());
-        else
+        else if(pathSplit.back().find(name)  != std::string::npos)
             commonRoadDynamicMsg = ProtobufReader::loadDynamicProtobufMessage(entry.path().string());
     }
 
@@ -72,20 +82,14 @@ Scenario readFromProtobufFile(const std::string &pbFilePath) {
 
 } // namespace
 
-Scenario InputUtils::getDataFromCommonRoad(const std::string &dirPath)
-// Loads and sets up CR scenario
-{
+Scenario InputUtils::getDataFromCommonRoad(const std::string &dirPath){
     spdlog::info("Read file: {}", dirPath);
-    std::vector<std::string> pathSplit;
-    for (const auto &entry : std::filesystem::directory_iterator(dirPath)) {
-        boost::split(pathSplit, entry.path().string(), boost::is_any_of("."));
-        break;
-    }
-
+    std::vector<std::string> fileEndingSplit;
+    boost::split(fileEndingSplit, dirPath, boost::is_any_of("."));
     Scenario scenario;
-    if (pathSplit.back() == "xml")
+    if (fileEndingSplit.back() == "xml")
         scenario = readFromXMLFile(dirPath);
-    else if (pathSplit.back() == "pb")
+    else if (fileEndingSplit.back() == "pb")
         scenario = readFromProtobufFile(dirPath);
     else
         throw std::runtime_error("Invalid file name " + dirPath + ": .xml or .pb ending missing!");

@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include "test_stop_line_in_front_predicate.h"
 #include "../utils_predicate_test.h"
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
@@ -60,53 +54,52 @@ TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
 
 TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
     std::array<std::string, 1> scenarios{"DEU_testStopLine-1"};
-    for (const auto &scen : scenarios) {
-        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" + scen};
-        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-            InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-        auto world{
-            std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestStopLine-1/DEU_TestStopLine-1_1_T-1.pb"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto world{
+        std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0)));
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(2)));
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(3)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(2)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(3)));
 
-        EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(0)));
-        EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(2)));
-        EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(3)));
+    EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(2)));
+    EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(3)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(0)));
-        EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(2)));
-        EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(3)));
+    EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(2)));
+    EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(3)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(0)));
-        EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(2)));
-        EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(3)));
+    EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(2)));
+    EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(3)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0)));
-        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(2)));
-        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(3)));
+    EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(2)));
+    EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(3)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(0)));
-        EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(2)));
-        EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(3)));
+    EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(0)));
+    EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(2)));
+    EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(3)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(0)));
-        EXPECT_TRUE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(2)));
-        EXPECT_TRUE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(3)));
+    EXPECT_FALSE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(0)));
+    EXPECT_TRUE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(2)));
+    EXPECT_TRUE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(3)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(0)));
-        EXPECT_TRUE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(2)));
-        EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(3)));
-    }
+    EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(0)));
+    EXPECT_TRUE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(2)));
+    EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(3)));
+
 }
 
 TEST_F(StopLineInFrontPredicateTest, RobustEvaluation) {

@@ -203,17 +203,19 @@ std::shared_ptr<StopLine> createStopLineFromMessage(const commonroad_map::StopLi
  *
  * @param trafficSignMsg Protobuf message
  * @param trafficSignContainer Traffic sign container
+ * @param country Country ID of map
  * @return Traffic sign
  */
-std::shared_ptr<TrafficSign> createTrafficSignFromMessage(const commonroad_map::TrafficSign& trafficSignMsg, TrafficSignContainer& trafficSignContainer);
+std::shared_ptr<TrafficSign> createTrafficSignFromMessage(const commonroad_map::TrafficSign& trafficSignMsg, TrafficSignContainer& trafficSignContainer, const std::string &country);
 
 /**
  * Creates traffic sign element from protobuf message "TrafficSignElement".
  *
  * @param trafficSignElementMsg Protobuf message
+ * @param country Country ID of map.
  * @return Traffic sign element
  */
-std::shared_ptr<TrafficSignElement> createTrafficSignElementFromMessage(const commonroad_common::TrafficSignElement& trafficSignElementMsg);
+std::shared_ptr<TrafficSignElement> createTrafficSignElementFromMessage(const commonroad_common::TrafficSignElement& trafficSignElementMsg, const std::string &country);
 
 /**
  * Creates traffic light from protobuf message "TrafficLight".
