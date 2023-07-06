@@ -12,7 +12,7 @@
 using namespace boost::filesystem;
 
 TEST_F(WorldTest, TestScenariosValid) {
-    std::array<std::string, 5> scenarioDirs{"ZAM_Urban-2", "USA_Peach-4_1_T-1", "USA_Peach-2_1_T-1", "ESP_Almansa-2_2_T-1",
+    std::array<std::string, 5> scenarioDirs{"ZAM_Urban-2_1_T-1", "USA_Peach-4_1_T-1", "USA_Peach-2_1_T-1", "ESP_Almansa-2_2_T-1",
                                             "ARG_Carcarana-6_5_T-1"};
     for (const auto &scen : scenarioDirs) {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scen.substr(0, scen.size() - 6) + "/" + scen + ".pb"};
