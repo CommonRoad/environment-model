@@ -1,18 +1,11 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_commonroad_container.h"
 #include "commonroad_cpp/commonroad_container.h"
 #include "interfaces/utility_functions.h"
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void CommonRoadContainerTest::SetUp() {
-    std::array<std::string, 5> scenarios{"ZAM_Urban-2", "USA_Peach-4", "USA_Peach-2", "ESP_Almansa-2",
-                                         "ARG_Carcarana-6"};
+     std::array<std::string, 5> scenarios{"ZAM_Urban-2", "USA_Peach-4_1_T-1", "USA_Peach-2_1_T-1", "ESP_Almansa-2_2_T-1",
+                                         "ARG_Carcarana-6_5_T-1"};
     size_t scenarioId{1};
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
     for (const auto &scen : scenarios) {

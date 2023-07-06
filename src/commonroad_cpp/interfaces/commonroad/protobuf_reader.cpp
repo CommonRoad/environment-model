@@ -6,6 +6,7 @@
 //
 
 #include "commonroad_cpp/interfaces/commonroad/protobuf_reader.h"
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include <stdexcept>
 #include <utility>
 
@@ -65,8 +66,9 @@ void ProtobufReader::initLaneletContainer(ProtobufReader::LaneletContainer &lane
 
 void ProtobufReader::initTrafficSignContainer(ProtobufReader::TrafficSignContainer &trafficSignContainer,
                                               const commonroad_map::CommonRoadMap &commonRoadMapMsg) {
-    for (const auto &trafficSignMsg : commonRoadMapMsg.traffic_signs())
+    for (const auto &trafficSignMsg : commonRoadMapMsg.traffic_signs()) {
         trafficSignContainer.emplace(trafficSignMsg.traffic_sign_id(), std::make_shared<TrafficSign>());
+    }
 }
 
 void ProtobufReader::initTrafficLightContainer(ProtobufReader::TrafficLightContainer &trafficLightContainer,
@@ -133,6 +135,12 @@ std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>,
 ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoadDynamic &commonRoadDynamicMsg,
                                             const commonroad_map::CommonRoadMap &commonRoadMapMsg,
                                             const commonroad_scenario::CommonRoadScenario &commonRoadScenarioMsg) {
+    auto [benchmarkId, timeStepSize] =
+        ProtobufReader::createScenarioMetaInformationFromMessage(commonRoadScenarioMsg.scenario_meta_information());
+
+    std::string countryIdName = benchmarkId.substr(0, benchmarkId.find('_'));
+    SupportedTrafficSignCountry countryId = RoadNetwork::matchStringToCountry(countryIdName);
+
     LaneletContainer laneletContainer;
     initLaneletContainer(laneletContainer, commonRoadMapMsg);
 
@@ -149,7 +157,7 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
 
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;
     for (const auto &trafficSignMsg : commonRoadMapMsg.traffic_signs())
-        trafficSigns.push_back(ProtobufReader::createTrafficSignFromMessage(trafficSignMsg, trafficSignContainer));
+        trafficSigns.push_back(ProtobufReader::createTrafficSignFromMessage(trafficSignMsg, trafficSignContainer, countryIdName));
 
     std::vector<std::shared_ptr<TrafficLight>> trafficLights;
     for (const auto &trafficLightMsg : commonRoadMapMsg.traffic_lights())
@@ -175,12 +183,6 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
 
     for (const auto &phantomObstacleMsg : commonRoadDynamicMsg.phantom_obstacles())
         obstacles.push_back(ProtobufReader::createPhantomObstacleFromMessage(phantomObstacleMsg));
-
-    auto [benchmarkId, timeStepSize] =
-        ProtobufReader::createScenarioMetaInformationFromMessage(commonRoadScenarioMsg.scenario_meta_information());
-
-    std::string countryIdName = benchmarkId.substr(0, benchmarkId.find('_'));
-    SupportedTrafficSignCountry countryId = RoadNetwork::matchStringToCountry(countryIdName);
 
     std::shared_ptr<RoadNetwork> roadNetwork =
         std::make_shared<RoadNetwork>(lanelets, countryId, trafficSigns, trafficLights, intersections);
@@ -345,14 +347,14 @@ std::shared_ptr<StopLine> ProtobufReader::createStopLineFromMessage(const common
 
 std::shared_ptr<TrafficSign>
 ProtobufReader::createTrafficSignFromMessage(const commonroad_map::TrafficSign &trafficSignMsg,
-                                             TrafficSignContainer &trafficSignContainer) {
+                                             TrafficSignContainer &trafficSignContainer, const std::string &country) {
     std::shared_ptr<TrafficSign> trafficSign = trafficSignContainer[trafficSignMsg.traffic_sign_id()];
 
     trafficSign->setId((size_t)trafficSignMsg.traffic_sign_id());
 
     std::vector<std::shared_ptr<TrafficSignElement>> trafficSignElements;
     for (const auto &trafficSignElementMsg : trafficSignMsg.traffic_sign_elements())
-        trafficSignElements.push_back(ProtobufReader::createTrafficSignElementFromMessage(trafficSignElementMsg));
+        trafficSignElements.push_back(ProtobufReader::createTrafficSignElementFromMessage(trafficSignElementMsg, country));
     trafficSign->setTrafficSignElement(trafficSignElements);
 
     if (trafficSignMsg.has_position())
@@ -364,30 +366,22 @@ ProtobufReader::createTrafficSignFromMessage(const commonroad_map::TrafficSign &
     return trafficSign;
 }
 
-std::string mapGermanTrafficSignID(const std::string &signName) {
-    // temporary quick-fix for mismatch in xml and protobuf names
-    if (signName == "MAX_SPEED")
-        return "274";
-    else if (signName == "TOWN_SIGN")
-        return "310";
-    else if (signName == "PRIORITY")
-        return "306";
-    else if (signName == "GREEN_ARROW")
-        return "720";
-    else if (signName == "YIELD")
-        return "205";
-    else if (signName == "U_TURN")
-        return "272";
-    else if (signName.empty())
-        return "274";
-    throw std::runtime_error{"ProtobufReader::mapGermanTrafficSignID: incomplete, called for " + signName};
-}
 
 std::shared_ptr<TrafficSignElement> ProtobufReader::createTrafficSignElementFromMessage(
-    const commonroad_common::TrafficSignElement &trafficSignElementMsg) {
+    const commonroad_common::TrafficSignElement &trafficSignElementMsg, const std::string &country) {
+    std::string elID;
+    if(country == "DEU" or country == "ZAM")
+        elID = TrafficSignIDGermany.at(TrafficSignNames.at(commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+    else if(country == "USA")
+        elID = TrafficSignIDUSA.at(TrafficSignNames.at(commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+    else if(country == "ESP")
+        elID = TrafficSignIDSpain.at(TrafficSignNames.at(commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+    else if(country == "ARG")
+        elID = TrafficSignIDArgentina.at(TrafficSignNames.at(commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+    else
+        throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown country ID " + country);
     std::shared_ptr<TrafficSignElement> trafficSignElement =
-        std::make_shared<TrafficSignElement>(mapGermanTrafficSignID(
-            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+        std::make_shared<TrafficSignElement>(elID);
 
     std::vector<std::string> additionalValues(trafficSignElementMsg.additional_values().begin(),
                                               trafficSignElementMsg.additional_values().end());

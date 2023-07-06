@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_road_network.h"
 #include "../interfaces/utility_functions.h"
 #include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
@@ -52,7 +45,7 @@ TEST_F(RoadNetworkTest, FindLaneletById) {
 }
 
 TEST_F(RoadNetworkTest, AddLanes) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLight-1"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLight-1/DEU_TrafficLightTest-1_1_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};

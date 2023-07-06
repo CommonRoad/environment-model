@@ -68,9 +68,6 @@ foreach(proto ${COMMONROAD_PROTOS})
                         --cpp_out=${gendir}
                         --proto_path=${proto_dir}
                         --proto_path=${proto_dir}/../common
-                        --proto_path=${proto_dir}/../dynamic
-                        --proto_path=${proto_dir}/../map
-                        --proto_path=${proto_dir}/../scenario
                         --dependency_out=${proto_dep_file_path}
                         ${proto}
                 DEPENDS

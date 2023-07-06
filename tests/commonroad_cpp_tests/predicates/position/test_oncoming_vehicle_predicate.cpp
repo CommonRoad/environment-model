@@ -5,8 +5,8 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void TestOncomingVehiclePredicate::SetUp() {
-    pathToTestFileOncoming = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_twoLanesWithOppositeDirections-1";
-    pathToTestFile = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_threeLanes-1";
+    pathToTestFileOncoming = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TwoLanesWithOppositeDirections-1/DEU_TwoLanesWithOppositeDirections-1_1_T-1.pb";
+    pathToTestFile = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_ThreeLanes-1/DEU_ThreeLanes-1_1_T-1.pb";
 
     // obstacleEgo on right lane
     // obstacleOne on right lane in front of obstacleEgo

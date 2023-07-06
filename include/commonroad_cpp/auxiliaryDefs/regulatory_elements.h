@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include <memory>
@@ -19,6 +12,7 @@ using TrafficSignTable = const std::unordered_map<TrafficSignTypes, std::string>
 extern TrafficSignTable TrafficSignIDGermany;
 extern TrafficSignTable TrafficSignIDUSA;
 extern TrafficSignTable TrafficSignIDSpain;
+extern TrafficSignTable TrafficSignIDArgentina;
 
 extern const std::unordered_map<std::string, TrafficSignTypes> TrafficSignNames;
 
