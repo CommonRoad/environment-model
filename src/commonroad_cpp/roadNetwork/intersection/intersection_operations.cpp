@@ -12,6 +12,8 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
+#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
 
 bool intersection_operations::onIncoming(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
                                          const std::shared_ptr<RoadNetwork> &roadNetwork) {
@@ -40,4 +42,11 @@ bool intersection_operations::checkSameIncoming(const std::shared_ptr<Lanelet> &
         }
     }
     return false;
+}
+
+void intersection_operations::findLeftOf(const std::shared_ptr<IncomingGroup> &origin, const std::shared_ptr<RoadNetwork> &roadNetwork) {
+    if (!origin->getRightOutgoings().empty()) {
+        auto out = roadNetwork->findOutgoingGroupByLanelet(origin->getRightOutgoings()[0]);
+        return origin->setIsLeftOf(roadNetwork->findIncomingGroupByOutgoingGroup(out));
+    }
 }

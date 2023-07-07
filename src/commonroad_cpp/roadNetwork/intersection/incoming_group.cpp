@@ -11,6 +11,8 @@
 #include <deque>
 #include <utility>
 
+#include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
+
 size_t IncomingGroup::getId() const { return groupID; }
 
 void IncomingGroup::setId(size_t index) { groupID = index; }
@@ -140,3 +142,5 @@ void IncomingGroup::addOncoming(const std::shared_ptr<Lanelet> &oncoming) { onco
 void IncomingGroup::setOutgoingGroupID(size_t outId) { outgoingGroupID = outId; }
 
 void IncomingGroup::addCrossing(const std::shared_ptr<Lanelet> &crossing) { crossings.push_back(crossing); }
+
+std::optional<size_t> IncomingGroup::getOutgoingGroupID() { return outgoingGroupID; }

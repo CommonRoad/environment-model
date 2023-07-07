@@ -11,6 +11,8 @@
 #include <deque>
 #include <utility>
 
+#include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
+
 Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
                            std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups)
     : id(intersectionId), incomings(std::move(incomingGroups)), outgoings(std::move(outgoingGroups)) {}
@@ -97,5 +99,6 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
                 }
             }
         }
+        intersection_operations::findLeftOf(incom, roadNetwork);
     }
 }

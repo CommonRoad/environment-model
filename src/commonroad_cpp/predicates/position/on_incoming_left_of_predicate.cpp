@@ -30,14 +30,14 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(
     for (const auto &letK : laneK->getContainedLanelets()) {
         if (!letK->hasLaneletType(LaneletType::incoming))
             continue;
-        auto incomingK{world->getRoadNetwork()->findIncomingByLanelet(letK)};
+        auto incomingK{world->getRoadNetwork()->findIncomingGroupByLanelet(letK)};
         if (!incomingK) {
             throw std::runtime_error{"missing incoming"};
         }
         for (const auto &letP : laneP->getContainedLanelets()) {
             if (!letP->hasLaneletType(LaneletType::incoming))
                 continue;
-            auto incomingP{world->getRoadNetwork()->findIncomingByLanelet(letP)};
+            auto incomingP{world->getRoadNetwork()->findIncomingGroupByLanelet(letP)};
             if (!incomingP) {
                 throw std::runtime_error{"missing incoming"};
             }
