@@ -5,8 +5,9 @@
 
 void TestSafeDistanceGapRightViolatedPredicate::SetUp() {
     pathToTestFile = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_ThreeLanes-1/DEU_ThreeLanes-1_1_T-1.pb";
-    pathToTestFileOvertaking =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestSafeDistanceToRightVehicleViolated-1/DEU_TestSafeDistanceToRightVehicleViolated-1_1_T-1.pb";
+    pathToTestFileOvertaking = TestUtils::getTestScenarioDirectory() +
+                               "/predicates/DEU_TestSafeDistanceToRightVehicleViolated-1/"
+                               "DEU_TestSafeDistanceToRightVehicleViolated-1_1_T-1.pb";
 
     std::shared_ptr<State> stateZeroObstacleEgo = std::make_shared<State>(0, 110, 2, 2, 0, 0, 0, 110, 0);
     std::shared_ptr<State> stateOneObstacleEgo = std::make_shared<State>(1, 112, 2, 2, 0, 0, 0, 112, 0);

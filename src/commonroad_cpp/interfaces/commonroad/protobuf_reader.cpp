@@ -157,7 +157,8 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
 
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;
     for (const auto &trafficSignMsg : commonRoadMapMsg.traffic_signs())
-        trafficSigns.push_back(ProtobufReader::createTrafficSignFromMessage(trafficSignMsg, trafficSignContainer, countryIdName));
+        trafficSigns.push_back(
+            ProtobufReader::createTrafficSignFromMessage(trafficSignMsg, trafficSignContainer, countryIdName));
 
     std::vector<std::shared_ptr<TrafficLight>> trafficLights;
     for (const auto &trafficLightMsg : commonRoadMapMsg.traffic_lights())
@@ -204,8 +205,9 @@ std::tuple<std::string, double> ProtobufReader::createScenarioMetaInformationFro
 
 std::string ProtobufReader::createScenarioIDFromMessage(const commonroad_common::ScenarioID &scenarioIDMsg) {
     std::string mapID{createMapIDFromMessage(scenarioIDMsg.map_id())};
-    if(scenarioIDMsg.cooperative())
-        return "C-" + mapID + "_" + std::to_string(scenarioIDMsg.configuration_id()) +  "_" + scenarioIDMsg.obstacle_behavior() + "-" + std::to_string(scenarioIDMsg.prediction_id());
+    if (scenarioIDMsg.cooperative())
+        return "C-" + mapID + "_" + std::to_string(scenarioIDMsg.configuration_id()) + "_" +
+               scenarioIDMsg.obstacle_behavior() + "-" + std::to_string(scenarioIDMsg.prediction_id());
     else
         return mapID;
 }
@@ -354,7 +356,8 @@ ProtobufReader::createTrafficSignFromMessage(const commonroad_map::TrafficSign &
 
     std::vector<std::shared_ptr<TrafficSignElement>> trafficSignElements;
     for (const auto &trafficSignElementMsg : trafficSignMsg.traffic_sign_elements())
-        trafficSignElements.push_back(ProtobufReader::createTrafficSignElementFromMessage(trafficSignElementMsg, country));
+        trafficSignElements.push_back(
+            ProtobufReader::createTrafficSignElementFromMessage(trafficSignElementMsg, country));
     trafficSign->setTrafficSignElement(trafficSignElements);
 
     if (trafficSignMsg.has_position())
@@ -366,22 +369,25 @@ ProtobufReader::createTrafficSignFromMessage(const commonroad_map::TrafficSign &
     return trafficSign;
 }
 
-
-std::shared_ptr<TrafficSignElement> ProtobufReader::createTrafficSignElementFromMessage(
-    const commonroad_common::TrafficSignElement &trafficSignElementMsg, const std::string &country) {
+std::shared_ptr<TrafficSignElement>
+ProtobufReader::createTrafficSignElementFromMessage(const commonroad_common::TrafficSignElement &trafficSignElementMsg,
+                                                    const std::string &country) {
     std::string elID;
-    if(country == "DEU" or country == "ZAM")
-        elID = TrafficSignIDGermany.at(TrafficSignNames.at(commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
-    else if(country == "USA")
-        elID = TrafficSignIDUSA.at(TrafficSignNames.at(commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
-    else if(country == "ESP")
-        elID = TrafficSignIDSpain.at(TrafficSignNames.at(commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
-    else if(country == "ARG")
-        elID = TrafficSignIDArgentina.at(TrafficSignNames.at(commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+    if (country == "DEU" or country == "ZAM")
+        elID = TrafficSignIDGermany.at(TrafficSignNames.at(
+            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+    else if (country == "USA")
+        elID = TrafficSignIDUSA.at(TrafficSignNames.at(
+            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+    else if (country == "ESP")
+        elID = TrafficSignIDSpain.at(TrafficSignNames.at(
+            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+    else if (country == "ARG")
+        elID = TrafficSignIDArgentina.at(TrafficSignNames.at(
+            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
     else
         throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown country ID " + country);
-    std::shared_ptr<TrafficSignElement> trafficSignElement =
-        std::make_shared<TrafficSignElement>(elID);
+    std::shared_ptr<TrafficSignElement> trafficSignElement = std::make_shared<TrafficSignElement>(elID);
 
     std::vector<std::string> additionalValues(trafficSignElementMsg.additional_values().begin(),
                                               trafficSignElementMsg.additional_values().end());

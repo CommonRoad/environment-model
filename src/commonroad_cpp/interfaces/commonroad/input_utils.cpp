@@ -62,7 +62,7 @@ Scenario readFromProtobufFile(const std::string &pbFilePath) {
     for (size_t idx{0}; idx < dirSplit.size() - 1; ++idx)
         dir += dirSplit[idx] + "/";
     std::string name;
-    if(dirSplit.back().find("SC") != std::string::npos)
+    if (dirSplit.back().find("SC") != std::string::npos)
         name = dirSplit.back().substr(0, dirSplit.back().size() - 6);
     else
         name = dirSplit.back().substr(0, dirSplit.back().size() - 3);
@@ -71,9 +71,9 @@ Scenario readFromProtobufFile(const std::string &pbFilePath) {
         boost::split(pathSplit, entry.path().string(), boost::is_any_of("/"));
         if (std::count(pathSplit.back().begin(), pathSplit.back().end(), '_') == 1)
             commonRoadMapMsg = ProtobufReader::loadMapProtobufMessage(entry.path().string());
-        else if (pathSplit.back().find("SC") != std::string::npos and pathSplit.back().find(name)  != std::string::npos)
+        else if (pathSplit.back().find("SC") != std::string::npos and pathSplit.back().find(name) != std::string::npos)
             commonRoadScenarioMsg = ProtobufReader::loadScenarioProtobufMessage(entry.path().string());
-        else if(pathSplit.back().find(name)  != std::string::npos)
+        else if (pathSplit.back().find(name) != std::string::npos)
             commonRoadDynamicMsg = ProtobufReader::loadDynamicProtobufMessage(entry.path().string());
     }
 
@@ -82,7 +82,7 @@ Scenario readFromProtobufFile(const std::string &pbFilePath) {
 
 } // namespace
 
-Scenario InputUtils::getDataFromCommonRoad(const std::string &dirPath){
+Scenario InputUtils::getDataFromCommonRoad(const std::string &dirPath) {
     spdlog::info("Read file: {}", dirPath);
     std::vector<std::string> fileEndingSplit;
     boost::split(fileEndingSplit, dirPath, boost::is_any_of("."));

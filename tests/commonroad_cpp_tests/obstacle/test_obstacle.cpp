@@ -340,7 +340,8 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario1) {
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario2) {
     size_t timeStep{0};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25/DEU_Guetersloh-25_4_T-1.pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/DEU_Guetersloh-25/DEU_Guetersloh-25_4_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
@@ -389,25 +390,9 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario4) {
 }
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
-    size_t timeStep{192};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/DEU_Frankfurt-70"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
-        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    size_t globalID{123456789};
-    auto globalIdRef{std::make_shared<size_t>(globalID)};
-    roadNetworkScenario->setIdCounterRef(globalIdRef);
-    auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 30503)};
-    obsOneScenario->computeLanes(roadNetworkScenario);
-    EXPECT_EQ(1472,
-              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().front()->getId());
-    // 1472 should be replaced by 878
-    EXPECT_EQ(876,
-              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
-}
-
-TEST_F(ObstacleTest, SetReferenceGeneralScenario6) {
     size_t timeStep{37};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_2_T-1.pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_2_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};

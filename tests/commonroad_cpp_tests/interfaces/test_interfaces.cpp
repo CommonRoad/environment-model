@@ -112,8 +112,7 @@ TEST_F(InterfacesTest, SameRoadNetwork) {
 
 TEST_F(InterfacesTest, SameStepSize) {
     std::string scenarioName = "DEU_Guetersloh-25_4_T-1";
-    const auto &[scenarioXml, scenarioPb] =
-        InterfacesTest::loadXmlAndPbScenarios(scenarioName);
+    const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
 
     const double stepSizeXml = std::get<2>(scenarioXml);
     const double stepSizePb = std::get<2>(scenarioPb);
@@ -140,7 +139,8 @@ TEST_F(InterfacesTest, SameObstacles) {
 
 TEST_F(InterfacesTest, ReadingAll) {
     std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/" + "ZAM_TestReadingAll-1_1_T-1.xml";
-    std::string pathToTestPbFile = TestUtils::getTestScenarioDirectory() + "/ZAM_TestReadingAll-1/ZAM_TestReadingAll-1_1_T-1.pb";
+    std::string pathToTestPbFile =
+        TestUtils::getTestScenarioDirectory() + "/ZAM_TestReadingAll-1/ZAM_TestReadingAll-1_1_T-1.pb";
     EXPECT_NO_THROW(InputUtils::getDataFromCommonRoad(pathToTestXmlFile));
     EXPECT_NO_THROW(InputUtils::getDataFromCommonRoad(pathToTestPbFile));
 }
@@ -149,15 +149,15 @@ std::tuple<Scenario, Scenario> InterfacesTest::loadXmlAndPbScenarios(const std::
     std::vector<std::string> pathSplit;
     boost::split(pathSplit, name, boost::is_any_of("_"));
     auto dirName{pathSplit[0] + "_" + pathSplit[1]};
-    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/"+ name + ".xml";
-    std::string pathToTestPbFile = TestUtils::getTestScenarioDirectory() + "/" + dirName + "/"+ name + ".pb";
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/" + name + ".xml";
+    std::string pathToTestPbFile = TestUtils::getTestScenarioDirectory() + "/" + dirName + "/" + name + ".pb";
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
     const auto &scenarioPb = InputUtils::getDataFromCommonRoad(pathToTestPbFile);
 
     return std::make_tuple(scenarioXml, scenarioPb);
 }
 
-//TEST_F(InterfacesTest, SameCrossings) {
+// TEST_F(InterfacesTest, SameCrossings) {
 //    std::string scenarioName = "test_reading_intersection_traffic_sign";
 //    const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
 //
