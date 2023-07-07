@@ -64,13 +64,17 @@ void ChangeLanePredicateTest::SetUp() {
     world2 = std::make_shared<World>(World(0, roadNetwork2, {obstacleOne}, {obstacleTwo, obstacleThree}, 0.1));
 
     // Worlds with access- and exit-ramps on interstate
-    pathToTestFileAccessRamp =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestConsiderEnteringVehiclesForLaneChange-1/DEU_TestConsiderEnteringVehiclesForLaneChange-1_1_T-1.pb";
-    pathToTestFileExitRamp = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOvertakingExitRamp-1/DEU_TestOvertakingExitRamp-1_1_T-1.pb";
+    pathToTestFileAccessRamp = TestUtils::getTestScenarioDirectory() +
+                               "/predicates/DEU_TestConsiderEnteringVehiclesForLaneChange-1/"
+                               "DEU_TestConsiderEnteringVehiclesForLaneChange-1_1_T-1.pb";
+    pathToTestFileExitRamp = TestUtils::getTestScenarioDirectory() +
+                             "/predicates/DEU_TestOvertakingExitRamp-1/DEU_TestOvertakingExitRamp-1_1_T-1.pb";
     pathToTestFileTwoFollowingLaneletsAndAccessRampFalse =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOnFollowingLaneletsAndAccessRampFalse-1/DEU_TestOnFollowingLaneletsAndAccessRampFalse-1_1_T-1.pb";
-    pathToTestFileTwoFollowingLaneletsAndAccessRampTrue =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOnFollowingLaneletsAndAccessRampTrue-1/DEU_TestOnFollowingLaneletsAndAccessRampTrue-1_1_T-1.pb";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOnFollowingLaneletsAndAccessRampFalse-1/"
+                                                "DEU_TestOnFollowingLaneletsAndAccessRampFalse-1_1_T-1.pb";
+    pathToTestFileTwoFollowingLaneletsAndAccessRampTrue = TestUtils::getTestScenarioDirectory() +
+                                                          "/predicates/DEU_TestOnFollowingLaneletsAndAccessRampTrue-1/"
+                                                          "DEU_TestOnFollowingLaneletsAndAccessRampTrue-1_1_T-1.pb";
 
     optLeft = std::make_shared<OptionalPredicateParameters>();
     optLeft->turningDirection = {TurningDirection::left};

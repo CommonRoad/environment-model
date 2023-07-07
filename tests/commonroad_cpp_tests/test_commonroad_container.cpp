@@ -4,12 +4,13 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void CommonRoadContainerTest::SetUp() {
-     std::array<std::string, 5> scenarios{"ZAM_Urban-2", "USA_Peach-4_1_T-1", "USA_Peach-2_1_T-1", "ESP_Almansa-2_2_T-1",
-                                         "ARG_Carcarana-6_5_T-1"};
+    std::array<std::string, 5> scenarios{"ZAM_Urban-2_1_T-1", "USA_Peach-4_1_T-1", "USA_Peach-2_1_T-1",
+                                         "ESP_Almansa-2_2_T-1", "ARG_Carcarana-6_5_T-1"};
     size_t scenarioId{1};
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
     for (const auto &scen : scenarios) {
-        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scen};
+        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scen.substr(0, scen.size() - 6) +
+                                      "/" + scen + ".pb"};
         const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFileOne);
         eval->registerScenario(scenarioId, 0, timeStepSize, roadNetwork, obstacles, {});
         scenarioId++;

@@ -54,11 +54,11 @@ TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
 
 TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
     std::array<std::string, 1> scenarios{"DEU_testStopLine-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestStopLine-1/DEU_TestStopLine-1_1_T-1.pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/predicates/DEU_TestStopLine-1/DEU_TestStopLine-1_1_T-1.pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    auto world{
-        std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0)));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1)));
@@ -99,7 +99,6 @@ TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
     EXPECT_TRUE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(1)));
     EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(2)));
     EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(3)));
-
 }
 
 TEST_F(StopLineInFrontPredicateTest, RobustEvaluation) {

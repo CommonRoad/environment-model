@@ -46,11 +46,11 @@ TEST_F(InIntersectionConflictAreaPredicateTest, BooleanEvaluationObjects) {
 }
 
 TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario1) {
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_2_T-1.pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_2_T-1.pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    auto world{
-        std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
@@ -70,15 +70,14 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario1) {
 
     EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
     EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-
 }
 
 TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario2) {
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestRightBeforeLeft-1/DEU_TestRightBeforeLeft-1_2_T-1.pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/predicates/DEU_TestRightBeforeLeft-1/DEU_TestRightBeforeLeft-1_2_T-1.pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    auto world{
-        std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
     /*EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
@@ -100,15 +99,14 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario2) {
 
     EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
     EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-
 }
 
 TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario3) {
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_8_T-1.pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_8_T-1.pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    auto world{
-        std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
@@ -130,7 +128,6 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario3) {
 
     EXPECT_FALSE(pred.booleanEvaluation(49, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(49, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
-
 }
 
 TEST_F(InIntersectionConflictAreaPredicateTest, RobustEvaluation) {

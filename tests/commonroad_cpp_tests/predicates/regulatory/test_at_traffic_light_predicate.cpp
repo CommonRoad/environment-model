@@ -8,7 +8,8 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void AtRedTrafficLightPredicateTest::SetUp() {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1/DEU_TrafficLightTest-1_1_T-1.pb"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
+                               "/predicates/DEU_TrafficLightTest-1/DEU_TrafficLightTest-1_1_T-1.pb"};
     const auto &[obs, rn, ts] = InputUtils::getDataFromCommonRoad(pathToTestFile);
     obstacles = obs;
     roadNetwork = rn;

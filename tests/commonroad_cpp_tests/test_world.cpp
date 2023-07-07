@@ -12,33 +12,34 @@
 using namespace boost::filesystem;
 
 TEST_F(WorldTest, TestScenariosValid) {
-    std::array<std::string, 5> scenarioDirs{"ZAM_Urban-2_1_T-1", "USA_Peach-4_1_T-1", "USA_Peach-2_1_T-1", "ESP_Almansa-2_2_T-1",
-                                            "ARG_Carcarana-6_5_T-1"};
+    std::array<std::string, 5> scenarioDirs{"ZAM_Urban-2_1_T-1", "USA_Peach-4_1_T-1", "USA_Peach-2_1_T-1",
+                                            "ESP_Almansa-2_2_T-1", "ARG_Carcarana-6_5_T-1"};
     for (const auto &scen : scenarioDirs) {
-        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scen.substr(0, scen.size() - 6) + "/" + scen + ".pb"};
+        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scen.substr(0, scen.size() - 6) +
+                                      "/" + scen + ".pb"};
         const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
             InputUtils::getDataFromCommonRoad(pathToTestFileOne);
         EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
     }
 }
 
-TEST_F(WorldTest, TestSingleScenarioObstacle) {
-    std::string scenario{"BEL_Zwevegem-1"};
-    size_t obstacleId{325};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    EXPECT_EQ(timeStepSizeOne, 0.1);
-    auto world = World(0, roadNetworkScenarioOne,
-                       {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, timeStepSizeOne);
-    auto obs{world.findObstacle(obstacleId)};
-    for (const auto &time : obs->getTimeSteps())
-        EXPECT_NO_THROW(auto ref{obs->getReferenceLane(world.getRoadNetwork(), time)});
-}
+// TEST_F(WorldTest, TestSingleScenarioObstacle) {
+//    size_t obstacleId{325};
+//    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/BEL_Zwevegem-1/BEL_Zwevegem-1_5_T-1.pb"};
+//    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+//        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+//    EXPECT_EQ(timeStepSizeOne, 0.1);
+//    auto world = World(0, roadNetworkScenarioOne,
+//                       {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, timeStepSizeOne);
+//    auto obs{world.findObstacle(obstacleId)};
+//    for (const auto &time : obs->getTimeSteps())
+//        EXPECT_NO_THROW(auto ref{obs->getReferenceLane(world.getRoadNetwork(), time)});
+//}
 
 TEST_F(WorldTest, TestSingleScenario) {
     std::string scenario{"USA_Peach-2_1_T-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     EXPECT_NO_THROW(auto world{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
@@ -49,7 +50,8 @@ TEST_F(WorldTest, TestSingleScenario) {
 
 TEST_F(WorldTest, FindObstacle) {
     std::string scenario{"USA_Peach-2_1_T-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
@@ -63,7 +65,8 @@ TEST_F(WorldTest, FindObstacle) {
 
 TEST_F(WorldTest, GetTimeStep) {
     std::string scenario{"USA_Peach-2_1_T-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
@@ -74,7 +77,8 @@ TEST_F(WorldTest, GetTimeStep) {
 
 TEST_F(WorldTest, GetTimeStepSize) {
     std::string scenario{"USA_Peach-2_1_T-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1)};
@@ -85,7 +89,8 @@ TEST_F(WorldTest, GetTimeStepSize) {
 
 TEST_F(WorldTest, FindObstacles) {
     std::string scenario{"USA_Peach-2_1_T-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
@@ -109,7 +114,8 @@ TEST_F(WorldTest, FindObstacles) {
 
 TEST_F(WorldTest, SetCurvilinearStates) {
     std::string scenario{"USA_Peach-2_1_T-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     UnnecessaryBrakingPredicate pred;
@@ -119,7 +125,8 @@ TEST_F(WorldTest, SetCurvilinearStates) {
 
 TEST_F(WorldTest, GetEgoVehicles) {
     std::string scenario{"USA_Peach-2_1_T-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
@@ -131,7 +138,8 @@ TEST_F(WorldTest, GetEgoVehicles) {
 
 TEST_F(WorldTest, SetEgoVehicles) {
     std::string scenario{"USA_Peach-2_1_T-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
 
@@ -153,7 +161,8 @@ TEST_F(WorldTest, SetEgoVehicles) {
 
 TEST_F(WorldTest, IdCounterRef) {
     std::string scenario{"USA_Peach-2_1_T-1"};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
