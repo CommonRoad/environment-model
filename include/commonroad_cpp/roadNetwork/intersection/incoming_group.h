@@ -176,6 +176,12 @@ class IncomingGroup {
     void setOutgoingGroupID(size_t outId);
 
     /**
+     * Getter for OutgoingGroup
+     * @param outId size_t
+     */
+    std::optional<size_t> getOutgoingGroupID();
+
+    /**
      * Add Crossing
      * @param crossing pointer to crossing
      */

@@ -5,8 +5,10 @@
 void IntersectionTestInitialization::setUpIncoming() {
     auto pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_IncomingTest-1/DEU_IncomingTest-1_1_T-1.pb";
     const auto &[obstacles, roadnetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    auto pathToCrosswalkFile = TestUtils::getTestScenarioDirectory() + "/DEU_Crosswalk-1/DEU_Crosswalk-1_1_T-1.pb";
+        const auto &[obstacles2, roadnetwork2, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToCrosswalkFile);
     intersection1 = roadnetwork->getIntersections()[0];
-    intersection2 = roadnetwork->getIntersections()[1];
+    intersection2 = roadnetwork2->getIntersections()[1];
     incomingOne = roadnetwork->getIntersections()[0]->getIncomingGroups()[0];
     incomingTwo = roadnetwork->getIntersections()[0]->getIncomingGroups()[1];
     incomingThree = roadnetwork->getIntersections()[0]->getIncomingGroups()[2];
@@ -56,4 +58,10 @@ TEST_F(IncomingTest, InitializationComplete) {
 
     incomingOne->setOncomings({incomingTwo->getStraightOutgoings()});
     incomingTwo->setOncomings({incomingOne->getStraightOutgoings()});
+}
+
+TEST_F(IncomingTest, LeftOf) {
+    EXPECT_EQ(incomingOne->getIsLeftOf()->getId(), 15);
+    EXPECT_EQ(incomingTwo->getIsLeftOf(), nullptr);
+    EXPECT_EQ(incomingThree->getIsLeftOf()->getId(), 14);
 }

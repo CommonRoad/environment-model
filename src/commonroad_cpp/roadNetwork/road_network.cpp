@@ -167,12 +167,31 @@ void RoadNetwork::setIdCounterRef(const std::shared_ptr<size_t> &idCounter) {
 
 std::shared_ptr<size_t> RoadNetwork::getIdCounterRef() const { return idCounterRef; }
 
-std::shared_ptr<IncomingGroup> RoadNetwork::findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet) {
+std::shared_ptr<IncomingGroup> RoadNetwork::findIncomingGroupByLanelet(const std::shared_ptr<Lanelet> &lanelet) {
     for (const auto &inter : intersections)
         for (const auto &incom : inter->getIncomingGroups())
             for (const auto &let : incom->getIncomingLanelets())
                 if (let->getId() == lanelet->getId())
                     return incom;
+    return {};
+}
+
+std::shared_ptr<IncomingGroup>
+RoadNetwork::findIncomingGroupByOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoingGroup) {
+    for (const auto &inter : intersections)
+        for (const auto &incom : inter->getIncomingGroups())
+            if (incom->getOutgoingGroupID().has_value() and incom->getOutgoingGroupID().value() == outgoingGroup->getId())
+                return incom;
+    return {};
+}
+
+std::shared_ptr<OutgoingGroup> RoadNetwork::findOutgoingGroupByLanelet(const std::shared_ptr<Lanelet> &lanelet) {
+    for (const auto &inter : intersections)
+        for (const auto &out : inter->getOutgoingGroups())
+            for (const auto &let : out->getOutgoingLanelets()) {
+                if (let->getId() == lanelet->getId())
+                    return out;
+             }
     return {};
 }
 

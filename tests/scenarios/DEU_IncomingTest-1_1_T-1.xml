@@ -1950,6 +1950,7 @@
             <incomingLanelet ref="3"/>
             <outgoingStraight ref="71"/>
             <outgoingLeft ref="101"/>
+            <crossing ref="20"/>
         </incoming>
         <incoming id="15">
             <incomingLanelet ref="6"/>
@@ -1957,9 +1958,6 @@
             <outgoingLeft ref="121"/>
             <isLeftOf ref="14"/>
         </incoming>
-        <crossing>
-            <crossingLanelet ref="20"/>
-        </crossing>
     </intersection>
     <intersection id="1001">
         <incoming id="16">
