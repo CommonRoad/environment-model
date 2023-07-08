@@ -385,6 +385,9 @@ ProtobufReader::createTrafficSignElementFromMessage(const commonroad_common::Tra
     else if (country == "ARG")
         elID = TrafficSignIDArgentina.at(TrafficSignNames.at(
             commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
+    else if (country == "BEL")
+        elID = TrafficSignIDBelgium.at(TrafficSignNames.at(
+            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
     else
         throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown country ID " + country);
     std::shared_ptr<TrafficSignElement> trafficSignElement = std::make_shared<TrafficSignElement>(elID);

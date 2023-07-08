@@ -1959,14 +1959,4 @@
             <isLeftOf ref="14"/>
         </incoming>
     </intersection>
-    <intersection id="1001">
-        <incoming id="16">
-            <incomingLanelet ref="3"/>
-            <outgoingStraight ref="71"/>
-            <outgoingLeft ref="101"/>
-        </incoming>
-        <crossing>
-            <crossingLanelet ref="20"/>
-        </crossing>
-    </intersection>
 </commonRoad>

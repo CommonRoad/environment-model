@@ -8,13 +8,13 @@ TEST_F(IntersectionTest, InitializationComplete) {
 
     EXPECT_EQ(intersection1->getIncomingGroups().size(), 3);
     EXPECT_EQ(intersection1->getIncomingGroups().at(0)->getId(), 13);
-    EXPECT_EQ(intersection2->getIncomingGroups().size(), 1);
-    EXPECT_EQ(intersection2->getIncomingGroups().at(0)->getId(), 16);
+    EXPECT_EQ(intersection2->getIncomingGroups().size(), 2);
+    EXPECT_EQ(intersection2->getIncomingGroups().at(0)->getId(), 10);
 }
 
 TEST_F(IntersectionTest, ComputeMemberLanelets) {
     EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).size(), 15);
-    EXPECT_EQ(intersection2->getMemberLanelets(roadNetwork).size(), 5);
+    EXPECT_EQ(intersection2->getMemberLanelets(roadNetwork).size(), 4);
 
     auto laneletTypeIncoming{std::set<LaneletType>{LaneletType::urban, LaneletType::incoming}};
     auto laneletTypeStraight{

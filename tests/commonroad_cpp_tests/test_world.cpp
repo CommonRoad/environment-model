@@ -12,7 +12,7 @@
 using namespace boost::filesystem;
 
 TEST_F(WorldTest, TestScenariosValid) {
-    std::array<std::string, 4> scenarioDirs{"ZAM_Urban-2_1_T-1", "USA_Peach-4_1_T-1", // TODO "USA_Peach-2_1_T-1",
+    std::array<std::string, 5> scenarioDirs{"ZAM_Urban-2_1_T-1", "USA_Peach-4_1_T-1", "USA_Peach-2_1_T-1",
                                             "ESP_Almansa-2_2_T-1", "ARG_Carcarana-6_5_T-1"};
     for (const auto &scen : scenarioDirs) {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scen.substr(0, scen.size() - 6) +
@@ -23,21 +23,21 @@ TEST_F(WorldTest, TestScenariosValid) {
     }
 }
 
-// TEST_F(WorldTest, TestSingleScenarioObstacle) {
-//    size_t obstacleId{325};
-//    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/BEL_Zwevegem-1/BEL_Zwevegem-1_5_T-1.pb"};
-//    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-//        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-//    EXPECT_EQ(timeStepSizeOne, 0.1);
-//    auto world = World(0, roadNetworkScenarioOne,
-//                       {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, timeStepSizeOne);
-//    auto obs{world.findObstacle(obstacleId)};
-//    for (const auto &time : obs->getTimeSteps())
-//        EXPECT_NO_THROW(auto ref{obs->getReferenceLane(world.getRoadNetwork(), time)});
-//}
+TEST_F(WorldTest, TestSingleScenarioObstacle) {
+    size_t obstacleId{325};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/BEL_Zwevegem-1/BEL_Zwevegem-1_5_T-1.pb"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    EXPECT_EQ(timeStepSizeOne, 0.1);
+    auto world = World(0, roadNetworkScenarioOne,
+                       {obstacle_operations::getObstacleById(obstaclesScenarioOne, obstacleId)}, {}, timeStepSizeOne);
+    auto obs{world.findObstacle(obstacleId)};
+    for (const auto &time : obs->getTimeSteps())
+        EXPECT_NO_THROW(auto ref{obs->getReferenceLane(world.getRoadNetwork(), time)});
+}
 
-/*TEST_F(WorldTest, TestSingleScenario) {
-    std::string scenario{"USA_Peach-2_1_T-1"}; TODO
+TEST_F(WorldTest, TestSingleScenario) {
+    std::string scenario{"USA_Peach-2_1_T-1"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" +
                                   scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
@@ -167,4 +167,4 @@ TEST_F(WorldTest, IdCounterRef) {
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world1{World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
     EXPECT_EQ(*world1.getIdCounterRef().get(), 53904);
-}*/
+}

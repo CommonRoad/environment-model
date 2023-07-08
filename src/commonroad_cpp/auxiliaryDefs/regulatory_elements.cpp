@@ -569,11 +569,16 @@ TrafficSignTable TrafficSignIDArgentina = {
     {TrafficSignTypes::MAX_SPEED, "R15"},
 };
 
+TrafficSignTable TrafficSignIDBelgium = {
+    {TrafficSignTypes::WARNING_ANIMAL_CROSSING_RIGHT, "101"},
+};
+
 const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> TrafficSignLookupTableByCountry = {
     {SupportedTrafficSignCountry::GERMANY, &TrafficSignIDGermany},
     {SupportedTrafficSignCountry::ZAMUNDA, &TrafficSignIDGermany},
     {SupportedTrafficSignCountry::USA, &TrafficSignIDUSA},
     {SupportedTrafficSignCountry::SPAIN, &TrafficSignIDSpain},
+    {SupportedTrafficSignCountry::BELGIUM, &TrafficSignIDBelgium},
 };
 
 // left, straight right
