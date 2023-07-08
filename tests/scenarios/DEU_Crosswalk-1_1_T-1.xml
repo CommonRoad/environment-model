@@ -1193,7 +1193,7 @@
     <adjacentLeft ref="7" drivingDir="opposite"/>
     <laneletType>unknown</laneletType>
   </lanelet>
-  <intersection id="1000">
+  <intersection id="1001">
     <incoming id="10">
       <incomingLanelet ref="1"/>
       <outgoingStraight ref="2"/>

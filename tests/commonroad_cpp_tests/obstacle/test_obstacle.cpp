@@ -392,7 +392,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario4) {
 TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
     size_t timeStep{37};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
-                                  "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_2_T-1.pb"};
+                                  "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_8_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};

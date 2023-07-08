@@ -81,6 +81,6 @@ TEST_F(RoadNetworkTest, AddLanes) {
 
 TEST_F(RoadNetworkTest, GetIntersections) {
     EXPECT_EQ(roadNetwork->getIntersections().size(), 2);
-    EXPECT_EQ(roadNetwork->getIntersections().at(0)->getId(), 1000);
-    EXPECT_EQ(roadNetwork->getIntersections().at(1)->getId(), 1001);
+    EXPECT_EQ(roadNetwork->getIntersections()[0]->getId(), 1000);
+    EXPECT_EQ(roadNetwork->getIntersections()[1]->getId(), 1001);
 }
