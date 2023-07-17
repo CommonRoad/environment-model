@@ -47,6 +47,7 @@ bool intersection_operations::checkSameIncoming(const std::shared_ptr<Lanelet> &
 void intersection_operations::findLeftOf(const std::shared_ptr<IncomingGroup> &origin, const std::shared_ptr<RoadNetwork> &roadNetwork) {
     if (!origin->getRightOutgoings().empty()) {
         auto out = roadNetwork->findOutgoingGroupByLanelet(origin->getRightOutgoings()[0]);
-        return origin->setIsLeftOf(roadNetwork->findIncomingGroupByOutgoingGroup(out));
+        if (out) // TODO solve problem for outgoings without incomings like ru10 oneWayStreetIn
+            origin->setIsLeftOf(roadNetwork->findIncomingGroupByOutgoingGroup(out));
     }
 }
