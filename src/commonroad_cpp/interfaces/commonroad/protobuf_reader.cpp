@@ -558,9 +558,7 @@ ProtobufReader::createDynamicObstacleFromMessage(const commonroad_dynamic::Dynam
 
     dynamicObstacle->setIsStatic(false);
 
-    std::string obstacleTypeName =
-        commonroad_dynamic::ObstacleTypeEnum_ObstacleType_Name(dynamicObstacleMsg.obstacle_type());
-    dynamicObstacle->setObstacleType(obstacle_operations::matchStringToObstacleType(obstacleTypeName));
+    dynamicObstacle->setObstacleType(ObstacleType(dynamicObstacleMsg.obstacle_type()));
 
     dynamicObstacle->setGeoShape(ProtobufReader::createShapeFromMessage(dynamicObstacleMsg.shape()));
 
