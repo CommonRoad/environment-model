@@ -37,6 +37,13 @@ class OutgoingGroup {
     void addOutgoingLanelet(std::shared_ptr<Lanelet> &lanelet);
 
     /**
+     * Setter for lanelets belonging to outgoingGroup
+     *
+     * @param outgoingLanelets pointer to vector of lanelets
+     */
+    void setOutgoingLanelets(const std::vector<std::shared_ptr<Lanelet>> &outLanelets);
+
+    /**
      * Getter for outgoingLanelets of OutgoingGroup
      *
      * @return vector of pointer to Lanelets
