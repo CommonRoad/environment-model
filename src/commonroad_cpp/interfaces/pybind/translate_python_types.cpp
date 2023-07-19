@@ -267,7 +267,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
         std::vector<std::shared_ptr<IncomingGroup>> incomings;
         incomings.reserve(py_intersection.attr("incomings").cast<py::list>().size());
         for (const auto &py_incoming : py_intersection.attr("incomings").cast<py::list>()) {
-            std::shared_ptr<IncomingGroup> tempIncoming = std::make_shared<Incoming>();
+            std::shared_ptr<IncomingGroup> tempIncoming = std::make_shared<IncomingGroup>();
             tempIncoming->setId(py_incoming.attr("incoming_id").cast<int>());
             incomings.emplace_back(tempIncoming);
         }
