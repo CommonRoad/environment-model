@@ -318,6 +318,33 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
             incomingIndex++;
         }
         tempIntersectionContainer[intersectionIndex]->setIncomingGroups(incomings);
+
+        // outgoingGroups
+        std::vector<std::shared_ptr<OutgoingGroup>> outgoings;
+        outgoings.reserve(py_intersection.attr("outgoings").cast<py::list>().size());
+        for (const auto &py_outgoing : py_intersection.attr("outgoings").cast<py::list>()) {
+            std::shared_ptr<OutgoingGroup> tempOutgoing = std::make_shared<OutgoingGroup>();
+            tempOutgoing->setId(py_outgoing.attr("outgoing_id").cast<int>());
+            outgoings.emplace_back(tempOutgoing);
+        }
+        size_t outgoingIndex{0};
+        for (const auto &py_outgoing : py_intersection.attr("outgoings").cast<py::list>()) {
+            // Outgoing lanelets
+            auto py_outgoingLanelets = py_outgoing.attr("outgoing_lanelets").cast<py::list>();
+            std::vector<std::shared_ptr<Lanelet>> outgoingLanelets;
+            for (const auto &outgoingLaneletId : py_outgoingLanelets) {
+                size_t incId{outgoingLaneletId.cast<size_t>()};
+                for (const auto &la : lanelets) {
+                    if (la->getId() == incId) {
+                        outgoingLanelets.push_back(la);
+                        break;
+                    }
+                }
+            }
+            outgoings[outgoingIndex]->setOutgoingLanelets(outgoingLanelets);
+            outgoingIndex++;
+        }
+        tempIntersectionContainer[intersectionIndex]->setOutgoingGroups(outgoings);
     }
     return tempIntersectionContainer;
 }
