@@ -264,14 +264,14 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
     for (const auto &py_intersection : py_intersection_list) {
         std::shared_ptr<Intersection> tempIntersection = std::make_shared<Intersection>();
         tempIntersection->setId(py_intersection.attr("intersection_id").cast<int>());
-        std::vector<std::shared_ptr<Incoming>> incomings;
+        std::vector<std::shared_ptr<IncomingGroup>> incomings;
         incomings.reserve(py_intersection.attr("incomings").cast<py::list>().size());
         for (const auto &py_incoming : py_intersection.attr("incomings").cast<py::list>()) {
-            std::shared_ptr<Incoming> tempIncoming = std::make_shared<Incoming>();
+            std::shared_ptr<IncomingGroup> tempIncoming = std::make_shared<Incoming>();
             tempIncoming->setId(py_incoming.attr("incoming_id").cast<int>());
             incomings.emplace_back(tempIncoming);
         }
-        size_t incomignIndex{0};
+        size_t incomingIndex{0};
         for (const auto &py_incoming : py_intersection.attr("incomings").cast<py::list>()) {
             // incoming lanelets
             auto py_incomingLanelets = py_incoming.attr("incoming_lanelets").cast<py::list>();
@@ -285,9 +285,9 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
-            incomings[incomignIndex]->setIncomingLanelets(incomingLanelets);
+            incomings[incomingIndex]->setIncomingLanelets(incomingLanelets);
             // successor right lanelets
-            auto py_outgoingRight = py_incoming.attr("outgoings_right").cast<py::list>();
+            auto py_outgoingRight = py_incoming.attr("outgoing_right").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> outgoingRightLanelets;
             for (const auto &outgoingRightLaneletId : py_outgoingRight) {
                 size_t incId{outgoingRightLaneletId.cast<size_t>()};
@@ -298,9 +298,9 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
-            incomings[incomignIndex]->setRightOutgoings(outgoingRightLanelets);
+            incomings[incomingIndex]->setRightOutgoings(outgoingRightLanelets);
             // successor left lanelets
-            auto py_outgoingLeft = py_incoming.attr("outgoings_left").cast<py::list>();
+            auto py_outgoingLeft = py_incoming.attr("outgoing_left").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> outgoingLeftLanelets;
             for (const auto &outgoingLeftLaneletId : py_outgoingLeft) {
                 size_t incId{outgoingLeftLaneletId.cast<size_t>()};
@@ -311,9 +311,9 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
-            incomings[incomignIndex]->setLeftOutgoings(outgoingLeftLanelets);
+            incomings[incomingIndex]->setLeftOutgoings(outgoingLeftLanelets);
             // successor straight lanelets
-            auto py_outgoingsStraight = py_incoming.attr("outgoings_straight").cast<py::list>();
+            auto py_outgoingsStraight = py_incoming.attr("outgoing_straight").cast<py::list>();
             std::vector<std::shared_ptr<Lanelet>> outgoingsStraightLanelets;
             for (const auto &outgoingsStraightLaneletId : py_outgoingsStraight) {
                 size_t incId{outgoingsStraightLaneletId.cast<size_t>()};
@@ -324,33 +324,21 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
-            incomings[incomignIndex]->setStraightOutgoings(outgoingsStraightLanelets);
-            // left of
-            if (py_incoming.attr("left_of").get_type().attr("__name__").cast<std::string>() == "int") {
-                auto py_isLeftOf = py_incoming.attr("left_of").cast<size_t>();
-                for (auto &inc : incomings) {
-                    if (inc->getId() == py_isLeftOf) {
-                        incomings[incomignIndex]->setIsLeftOf(inc);
+            incomings[incomingIndex]->setStraightOutgoings(outgoingsStraightLanelets);
+            // crossings
+            auto py_crossings = py_incoming.attr("crossings").cast<py::list>();
+            for (const auto &crossingId : py_crossings) {
+                size_t incId{crossingId.cast<size_t>()};
+                for (const auto &la : lanelets) {
+                    if (la->getId() == incId) {
+                        incomings[incomingIndex]->addCrossing(la);
                         break;
                     }
                 }
             }
-            incomignIndex++;
+            incomingIndex++;
         }
-        tempIntersectionContainer[intersectionIndex]->setIncomings(incomings);
-        // add crossings
-        auto py_crossings = py_intersection.attr("crossings").cast<py::list>();
-        std::vector<std::shared_ptr<Lanelet>> crossings;
-        for (const auto &crossing : py_crossings) {
-            size_t crossingId{crossing.cast<size_t>()};
-            for (const auto &la : lanelets) {
-                if (la->getId() == crossingId) {
-                    crossings.push_back(la);
-                    break;
-                }
-            }
-        }
-        tempIntersectionContainer[intersectionIndex]->setCrossings(crossings);
+        tempIntersectionContainer[intersectionIndex]->setIncomingGroups(incomings);
     }
     return tempIntersectionContainer;
 }
@@ -364,8 +352,10 @@ std::shared_ptr<State> createInitialState(py::handle py_singleObstacle) {
     if (initialStateType == "ndarray") {
         auto xPos = py_singleObstacle.attr("initial_state").attr("position").cast<py::list>()[0].cast<double>();
         auto yPos = py_singleObstacle.attr("initial_state").attr("position").cast<py::list>()[1].cast<double>();
+        auto timeStep = py_singleObstacle.attr("initial_state").attr("time_step").cast<int>();
         initialState->setXPosition(xPos);
         initialState->setYPosition(yPos);
+        initialState->setTimeStep(timeStep);
         initialState->setGlobalOrientation(py_singleObstacle.attr("initial_state").attr("orientation").cast<double>());
         if (py::hasattr(py_singleObstacle.attr("initial_state"), "velocity"))
             initialState->setVelocity(py_singleObstacle.attr("initial_state").attr("velocity").cast<double>());
