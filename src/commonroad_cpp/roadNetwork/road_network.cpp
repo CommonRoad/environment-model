@@ -182,7 +182,8 @@ std::shared_ptr<IncomingGroup>
 RoadNetwork::findIncomingGroupByOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoingGroup) {
     for (const auto &inter : intersections)
         for (const auto &incom : inter->getIncomingGroups())
-            if (incom->getOutgoingGroupID().has_value() and incom->getOutgoingGroupID().value() == outgoingGroup->getId())
+            if (incom->getOutgoingGroupID().has_value() and
+                incom->getOutgoingGroupID().value() == outgoingGroup->getId())
                 return incom;
     return {};
 }
@@ -193,7 +194,7 @@ std::shared_ptr<OutgoingGroup> RoadNetwork::findOutgoingGroupByLanelet(const std
             for (const auto &let : out->getOutgoingLanelets()) {
                 if (let->getId() == lanelet->getId())
                     return out;
-             }
+            }
     return {};
 }
 
