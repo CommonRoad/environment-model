@@ -134,6 +134,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/general/in_congestion_predicate.cpp
         commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.cpp
         commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.cpp
+        commonroad_cpp/predicates/general/is_vehicle_predicate.cpp
         commonroad_cpp/predicates/general/makes_u_turn_predicate.cpp
         commonroad_cpp/predicates/general/interstate_broad_enough_predicate.cpp
         commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.cpp
@@ -181,6 +182,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/general/orientation_towards_predicate.h
         commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.h
         commonroad_cpp/predicates/general/is_vru_predicate.h
+        commonroad_cpp/predicates/general/is_vehicle_predicate.h
         commonroad_cpp/predicates/general/narrow_road_predicate.h
         commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h
         commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.h

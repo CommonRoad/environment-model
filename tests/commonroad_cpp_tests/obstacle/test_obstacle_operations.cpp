@@ -36,7 +36,6 @@ TEST_F(ObstacleOperationsTest, MatchObstacleTypeToString) {
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("pedestrian"), ObstacleType::pedestrian);
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("bus"), ObstacleType::bus);
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("unknown"), ObstacleType::unknown);
-    EXPECT_EQ(obstacle_operations::matchStringToObstacleType("vehicle"), ObstacleType::vehicle);
 }
 
 TEST_F(ObstacleOperationsTest, ObstacleDirectlyLeft) {

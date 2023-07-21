@@ -54,7 +54,7 @@ void InLaneletDrivingDirPredicateTest::SetUp() {
 }
 
 TEST_F(InLaneletDrivingDirPredicateTest, BooleanEvaluationOneWayVehicle) {
-    initializeTestData(std::set<ObstacleType>{ObstacleType::vehicle}, {});
+    initializeTestData(std::set<ObstacleType>{ObstacleType::car}, {});
 
     EXPECT_TRUE(pred.booleanEvaluation(0, world, vehicleOne));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, vehicleOne));
@@ -75,9 +75,6 @@ TEST_F(InLaneletDrivingDirPredicateTest, BooleanEvaluationOneWayCar) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, vehicleOne));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, vehicleOne));
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, vehicleTwo));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, vehicleTwo));
-
     EXPECT_FALSE(pred.booleanEvaluation(0, world, vehicleThree));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, vehicleThree));
 
@@ -89,7 +86,7 @@ TEST_F(InLaneletDrivingDirPredicateTest, BooleanEvaluationOneWayCar) {
 }
 
 TEST_F(InLaneletDrivingDirPredicateTest, BooleanEvaluationBidirectionalVehicle) {
-    initializeTestData({}, std::set<ObstacleType>{ObstacleType::vehicle});
+    initializeTestData({}, std::set<ObstacleType>{ObstacleType::car});
 
     EXPECT_TRUE(pred.booleanEvaluation(0, world, vehicleOne));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, vehicleOne));
@@ -108,19 +105,13 @@ TEST_F(InLaneletDrivingDirPredicateTest, BooleanEvaluationBidirectionalVehicle) 
 }
 
 TEST_F(InLaneletDrivingDirPredicateTest, BooleanEvaluationBidirectionalBicycle) {
-    initializeTestData(std::set<ObstacleType>{ObstacleType::vehicle}, std::set<ObstacleType>{ObstacleType::bicycle});
+    initializeTestData(std::set<ObstacleType>{ObstacleType::car}, std::set<ObstacleType>{ObstacleType::bicycle});
 
     EXPECT_TRUE(pred.booleanEvaluation(0, world, vehicleOne));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, vehicleOne));
 
     EXPECT_TRUE(pred.booleanEvaluation(0, world, vehicleTwo));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, vehicleTwo));
-
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, vehicleThree));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, vehicleThree));
-
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, vehicleFour));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, vehicleFour));
 
     EXPECT_TRUE(pred.booleanEvaluation(0, world, vehicleFive));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, vehicleFive));

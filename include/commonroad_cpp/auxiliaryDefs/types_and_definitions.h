@@ -41,7 +41,6 @@ enum class ObstacleType {
     building,
     pillar,
     median_strip,
-    vehicle,
 };
 
 enum class ObstacleRole { STATIC, DYNAMIC, ENVIRONMENT, PHANTOM };
