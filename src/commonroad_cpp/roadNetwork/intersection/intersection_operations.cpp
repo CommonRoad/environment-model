@@ -7,13 +7,12 @@
 
 #include <algorithm>
 
+#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
-#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
 
 bool intersection_operations::onIncoming(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
                                          const std::shared_ptr<RoadNetwork> &roadNetwork) {
@@ -44,7 +43,8 @@ bool intersection_operations::checkSameIncoming(const std::shared_ptr<Lanelet> &
     return false;
 }
 
-void intersection_operations::findLeftOf(const std::shared_ptr<IncomingGroup> &origin, const std::shared_ptr<RoadNetwork> &roadNetwork) {
+void intersection_operations::findLeftOf(const std::shared_ptr<IncomingGroup> &origin,
+                                         const std::shared_ptr<RoadNetwork> &roadNetwork) {
     if (!origin->getRightOutgoings().empty()) {
         auto out = roadNetwork->findOutgoingGroupByLanelet(origin->getRightOutgoings()[0]);
         if (out) // TODO solve problem for outgoings without incomings like ru10 oneWayStreetIn

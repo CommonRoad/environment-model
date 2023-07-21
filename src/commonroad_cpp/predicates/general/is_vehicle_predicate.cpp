@@ -6,12 +6,10 @@ bool IsVehiclePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return obstacleK->getObstacleType() == ObstacleType::car
-           or obstacleK->getObstacleType() == ObstacleType::bus
-           or obstacleK->getObstacleType() == ObstacleType::motorcycle
-           or obstacleK->getObstacleType() == ObstacleType::priority_vehicle
-           or obstacleK->getObstacleType() == ObstacleType::taxi
-           or obstacleK->getObstacleType() == ObstacleType::bicycle;
+    return obstacleK->getObstacleType() == ObstacleType::car or obstacleK->getObstacleType() == ObstacleType::bus or
+           obstacleK->getObstacleType() == ObstacleType::motorcycle or
+           obstacleK->getObstacleType() == ObstacleType::priority_vehicle or
+           obstacleK->getObstacleType() == ObstacleType::taxi or obstacleK->getObstacleType() == ObstacleType::bicycle;
 }
 
 double
