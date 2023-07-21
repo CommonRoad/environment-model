@@ -4,8 +4,8 @@
 #include <commonroad_cpp/world.h>
 
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include <commonroad_cpp/predicates/general/is_vehicle_predicate.h>
 #include <commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.h>
+#include <commonroad_cpp/predicates/general/is_vehicle_predicate.h>
 
 bool InLaneletDrivingDirPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
