@@ -520,7 +520,7 @@ std::shared_ptr<RoadNetwork> create_road_network_with_circle(const std::set<Lane
 
 std::shared_ptr<RoadNetwork> create_narrow_road_network(double width) {
     size_t idLaneletOne = 100;
-    auto userBidirectionalLaneletOne = std::set<ObstacleType>{ObstacleType::vehicle};
+    auto userBidirectionalLaneletOne = std::set<ObstacleType>{ObstacleType::car};
     auto leftBorderLaneletOne = std::vector<vertex>{
         vertex{0, width},   vertex{10, width},  vertex{20, width},  vertex{30, width},  vertex{40, width},
         vertex{50, width},  vertex{60, width},  vertex{70, width},  vertex{80, width},  vertex{90, width},
