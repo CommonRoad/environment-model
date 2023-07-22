@@ -225,6 +225,7 @@ build-wheel:
     # We only use the artifacts (sdist/wheels) from previous jobs, so skip all Git operations
     GIT_STRATEGY: none
   script:
+    - pip install git+ssh://git@gitlab.lrz.de/cps/commonroad-io@feature_new_format_v3
     - cibuildwheel dist/*.tar.gz
   needs:
     - job: build-sdist
