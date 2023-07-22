@@ -3,6 +3,8 @@
 /cmake-build-release/
 /cmake-build-debug-coverage/
 /cmake-build-release-coverage/
+.vscode/
+venv/
 /build*
 env_model_test
 env_model_test_coverage
