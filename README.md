@@ -122,17 +122,16 @@ print("Safe Distance satisfied: {}".format(cpp_env_model.in_same_lane_boolean_ev
 
 cpp_env_model.remove_scenario(123)
 ```
-Other predicates can be executed analgously.
-It is necessary to register and remove each scenario before and after using the predicates.
-You can also take a look at the Python test cases for further examples.
+Other predicates can be executed analgously.  
+It is necessary to register and remove each scenario before and after using the predicates.   
+You can also take a look at the Python test cases for further examples.     
 
-For debugging the Python interface you can use the methods described [here](https://www.jetbrains.com/help/clion/debugging-python-extensions.html#debug-custom-py).
-For example, edit Run/Debug configurations for crenvmodel_python as follows:
-- target: `cpp_env_model`
-- executable: `/your/python3/binary` (path to anaconda environment)
-- program arguments: `example.py` (Python file which should be executed)
-- working directory: `$ProjectFileDir$`
-- environment variables: `PYTHONPATH=$ROOT/cmake-build`
+For debugging the Python interface you can use the methods described [here](https://www.jetbrains.com/help/clion/debugging-python-extensions.html#debug-custom-py) (Option 2).   
+For example, here are two screenshots of a working configuration:    
+![img.png](./docs/clion_python_debug_config/img.png)   
+![img_1.png](./docs/clion_python_debug_config/img_1.png)   
+![img_2.png](./docs/clion_python_debug_config/img_2.png)   
+
 
 
 ## Working on the Environment Model itself

@@ -13,7 +13,7 @@ dependencies = [ ]
 
 [project.optional-dependencies]
 test = [
-   "commonroad-io>=2021.4",
+   "commonroad-io @ git+ssh://git@gitlab.lrz.de/cps/commonroad-io@feature_new_format_v3",
    "numpy>=1.20.0",
    "pytest>=5.3.2"
 ]

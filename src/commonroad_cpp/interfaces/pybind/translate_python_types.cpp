@@ -84,28 +84,6 @@ TranslatePythonTypes::convertStopLine(const py::handle &py_stopLine,
     sl->setLineMarking(lanelet_operations::matchStringToLineMarking(
         py::cast<std::string>(py_stopLine.attr("_line_marking").attr("value"))));
 
-    if (!py_stopLine.attr("_traffic_sign_ref").is_none()) {
-        py::set py_trafficSigns = py_stopLine.attr("_traffic_sign_ref");
-        for (const auto &sign : trafficSigns) {
-            for (py::handle py_ref : py_trafficSigns)
-                if (sign->getId() == py_ref.cast<int>()) {
-                    sl->addTrafficSign(sign);
-                    break;
-                }
-        }
-    }
-
-    if (!py_stopLine.attr("_traffic_light_ref").is_none()) {
-        py::set py_trafficLights = py_stopLine.attr("_traffic_light_ref");
-        for (const auto &light : trafficLights) {
-            for (py::handle py_ref : py_trafficLights)
-                if (light->getId() == py_ref.cast<int>()) {
-                    sl->addTrafficLight(light);
-                    break;
-                }
-        }
-    }
-
     py::array_t<double> py_stopLineStartPosition = py::getattr(py_stopLine, "_start");
     py::array_t<double> py_stopLineEndPosition = py::getattr(py_stopLine, "_end");
     sl->setPoints({{py_stopLineStartPosition.at(0), py_stopLineStartPosition.at(1)},
