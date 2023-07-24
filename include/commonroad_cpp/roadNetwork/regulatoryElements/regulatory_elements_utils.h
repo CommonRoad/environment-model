@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
 #include <set>
@@ -100,6 +94,14 @@ int extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lane
 int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<Obstacle> &obs,
                 TurningDirection dir);
 
-TrafficSignTypes extractTypeFromString(std::string trafficSignId, SupportedTrafficSignCountry country, std::string country_string);
+/**
+ * Matches national traffic sign ID to global CommonRoad ID.
+ * @param trafficSignId National traffic sign ID string.
+ * @param country Country.
+ * @param country_string String representation of country.
+ * @return CommonRoad traffic sign type object.
+ */
+TrafficSignTypes extractTypeFromString(const std::string &trafficSignId, SupportedTrafficSignCountry country,
+                                       const std::string &country_string);
 
 } // namespace regulatory_elements_utils
