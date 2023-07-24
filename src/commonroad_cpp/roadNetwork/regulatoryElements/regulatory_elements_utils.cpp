@@ -203,8 +203,8 @@ int regulatory_elements_utils::getPriority(size_t timeStep, const std::shared_pt
     return regulatory_elements_utils::extractPriorityTrafficSign(relevantIncomingLanelets, dir);
 }
 
-TrafficSignTypes extractTypeFromString(const std::string &trafficSignId, SupportedTrafficSignCountry country,
-                                       const std::string &country_string) {
+TrafficSignTypes regulatory_elements_utils::extractTypeFromString(const std::string &trafficSignId, SupportedTrafficSignCountry country,
+                                                                  const std::string &country_string) {
     if (country == SupportedTrafficSignCountry::GERMANY or country == SupportedTrafficSignCountry::ZAMUNDA) {
         for (const auto &countrySign : TrafficSignIDGermany)
             if (countrySign.second == trafficSignId)
