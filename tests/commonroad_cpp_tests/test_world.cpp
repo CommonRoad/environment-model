@@ -7,7 +7,6 @@
 #include <array>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/filesystem.hpp>
-#include <omp.h>
 
 using namespace boost::filesystem;
 
