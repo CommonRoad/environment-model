@@ -10,17 +10,16 @@
 #include "translate_python_types.h"
 #include <pybind11/numpy.h>
 
+#include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/geometry/circle.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
-#include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
-std::vector<std::shared_ptr<TrafficSign>> TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork,
-                                                                                    SupportedTrafficSignCountry country,
-                                                                                    std::string country_string) {
+std::vector<std::shared_ptr<TrafficSign>>
+TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {
     std::vector<std::shared_ptr<TrafficSign>> trafficSignContainer;
     const py::list &py_trafficSigns = py_laneletNetwork.attr("traffic_signs").cast<py::list>();
     trafficSignContainer.reserve(py_trafficSigns.size()); // Already know the size --> Faster memory allocation
@@ -32,8 +31,8 @@ std::vector<std::shared_ptr<TrafficSign>> TranslatePythonTypes::convertTrafficSi
         for (const py::handle &py_trafficSignElement : py_trafficSignElements) {
             std::string trafficSignElementId =
                 py_trafficSignElement.attr("traffic_sign_element_id").attr("name").cast<py::str>();
-            std::shared_ptr<TrafficSignElement> newTrafficSignElement{std::make_shared<TrafficSignElement>(
-                TrafficSignNames.at(trafficSignElementId))};
+            std::shared_ptr<TrafficSignElement> newTrafficSignElement{
+                std::make_shared<TrafficSignElement>(TrafficSignNames.at(trafficSignElementId))};
             const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
             std::vector<std::string> additionalValuesList{};
             for (const auto &py_additional_value : additionalValues)
