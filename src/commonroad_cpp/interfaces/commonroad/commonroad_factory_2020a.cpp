@@ -184,7 +184,7 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                 if ((strcmp(trafficSignChildElement.name(), "trafficSignElement")) == 0) {
                     std::string trafficSignId = trafficSignChildElement.first_child().first_child().value();
                     auto newTrafficSignElement{
-                        std::make_shared<TrafficSignElement>(regulatory_elements_utils::extractTypeFromString(
+                        std::make_shared<TrafficSignElement>(regulatory_elements_utils::extractTypeFromNationalID(
                             trafficSignId, country, benchmarkID.substr(0, 3)))};
 
                     for (pugi::xml_node trafficSignChildElementChild = trafficSignChildElement.first_child();
