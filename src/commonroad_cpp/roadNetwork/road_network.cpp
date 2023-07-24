@@ -118,6 +118,8 @@ SupportedTrafficSignCountry RoadNetwork::matchStringToCountry(const std::string 
         return SupportedTrafficSignCountry::USA;
     else if (name == "ESP")
         return SupportedTrafficSignCountry::SPAIN;
+    else if (name == "ARG")
+        return SupportedTrafficSignCountry::ARGENTINA;
     else if (name == "BEL")
         return SupportedTrafficSignCountry::BELGIUM;
     else

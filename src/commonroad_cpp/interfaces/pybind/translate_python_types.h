@@ -44,7 +44,9 @@ std::vector<std::shared_ptr<Obstacle>> convertObstacles(const py::list &py_obsta
  * @param py_laneletNetwork Python lanelet network object.
  * @return List of pointers to traffic sign objects.
  */
-std::vector<std::shared_ptr<TrafficSign>> convertTrafficSigns(const py::handle &py_laneletNetwork);
+std::vector<std::shared_ptr<TrafficSign>> convertTrafficSigns(const py::handle &py_laneletNetwork,
+                                                              SupportedTrafficSignCountry country,
+                                                              std::string country_string);
 
 /**
  * Converts Python traffic light objects to C++ representation.

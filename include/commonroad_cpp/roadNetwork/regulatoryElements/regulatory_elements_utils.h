@@ -100,4 +100,6 @@ int extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lane
 int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<Obstacle> &obs,
                 TurningDirection dir);
 
+TrafficSignTypes extractTypeFromString(std::string trafficSignId, SupportedTrafficSignCountry country, std::string country_string);
+
 } // namespace regulatory_elements_utils
