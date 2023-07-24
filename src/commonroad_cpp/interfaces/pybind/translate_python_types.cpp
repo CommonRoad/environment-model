@@ -29,7 +29,7 @@ TranslatePythonTypes::convertTrafficSigns(const py::handle &py_laneletNetwork) {
         const py::list &py_trafficSignElements = py_trafficSign.attr("traffic_sign_elements").cast<py::list>();
         for (const py::handle &py_trafficSignElement : py_trafficSignElements) {
             std::string trafficSignElementId =
-                py_trafficSignElement.attr("traffic_sign_element_id").attr("value").cast<py::str>();
+                py_trafficSignElement.attr("traffic_sign_element_id").attr("name").cast<py::str>();
             std::shared_ptr<TrafficSignElement> newTrafficSignElement =
                 std::make_shared<TrafficSignElement>(trafficSignElementId);
             const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();

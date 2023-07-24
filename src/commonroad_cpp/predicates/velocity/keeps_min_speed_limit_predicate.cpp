@@ -16,7 +16,7 @@ bool KeepsMinSpeedLimitPredicate::booleanEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double vReqLane{regulatory_elements_utils::requiredVelocity(
         obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
-        world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MIN_SPEED))};
+        TrafficSignTypes::MIN_SPEED)};
     return vReqLane <= obstacleK->getStateByTimeStep(timeStep)->getVelocity();
 }
 

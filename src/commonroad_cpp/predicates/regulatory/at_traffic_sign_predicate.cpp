@@ -21,8 +21,7 @@ bool AtTrafficSignPredicate::booleanEvaluation(
     }
     assert(additionalFunctionParameters);
 
-    const auto signId{TrafficSignLookupTableByCountry.at(world->getRoadNetwork()->getCountry())
-                          ->at(additionalFunctionParameters->signType.at(0))};
+    const auto signId{additionalFunctionParameters->signType.at(0)};
     for (const auto &lanelet : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep))
         for (const auto &sign : lanelet->getTrafficSigns())
             if (!sign->getTrafficSignElementsOfType(signId).empty())

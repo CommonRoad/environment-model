@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h>
@@ -15,26 +8,25 @@
 namespace utils_predicate_test {
 std::shared_ptr<RoadNetwork> create_road_network(const std::set<LaneletType> &laneletTypeLaneletOne,
                                                  const std::set<LaneletType> &laneletTypeLaneletTwo) {
-    const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);
     // max speed traffic sign
     size_t trafficSignIdOne = 200;
     std::vector<std::string> trafficSignElementOneValues{"50"};
-    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)}};
+    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MAX_SPEED, trafficSignElementOneValues)}};
     auto vertexOne{vertex{0, 0}};
     auto trafficSignOne{std::make_shared<TrafficSign>(trafficSignIdOne, trafficSignElementsOne, vertexOne, false)};
     // required speed traffic sign
     size_t trafficSignIdTwo = 201;
     std::vector<std::string> trafficSignElementTwoValues{"10"};
-    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED), trafficSignElementTwoValues)}};
+    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MIN_SPEED, trafficSignElementTwoValues)}};
     auto vertTwo{vertex{0, 0}};
     auto trafficSignTwo{std::make_shared<TrafficSign>(trafficSignIdTwo, trafficSignElementsTwo, vertTwo, false)};
     // stop sign
     size_t trafficSignIdThree = 201;
     std::vector<std::string> trafficSignElementThreeValues;
-    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::STOP), trafficSignElementThreeValues)}};
+    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::STOP, trafficSignElementThreeValues)}};
     auto vertThree{vertex{40, 0}};
     auto trafficSignThree{
         std::make_shared<TrafficSign>(trafficSignIdThree, trafficSignElementsThree, vertThree, false)};
@@ -86,26 +78,25 @@ std::shared_ptr<RoadNetwork> create_road_network(const std::set<LaneletType> &la
 }
 
 std::shared_ptr<RoadNetwork> create_road_network_2() {
-    const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);
     // max speed traffic sign
     size_t trafficSignIdOne = 200;
     std::vector<std::string> trafficSignElementOneValues{"35"};
-    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)}};
+    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MAX_SPEED, trafficSignElementOneValues)}};
     auto vertexOne{vertex{5, 0}};
     auto trafficSignOne{std::make_shared<TrafficSign>(trafficSignIdOne, trafficSignElementsOne, vertexOne, false)};
     // required speed traffic sign
     size_t trafficSignIdTwo = 201;
     std::vector<std::string> trafficSignElementTwoValues{"10"};
-    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED), trafficSignElementTwoValues)}};
+    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MIN_SPEED, trafficSignElementTwoValues)}};
     auto vertTwo{vertex{0, 0}};
     auto trafficSignTwo{std::make_shared<TrafficSign>(trafficSignIdTwo, trafficSignElementsTwo, vertTwo, false)};
     // stop sign
     size_t trafficSignIdThree = 201;
     std::vector<std::string> trafficSignElementThreeValues;
-    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::STOP), trafficSignElementThreeValues)}};
+    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::STOP, trafficSignElementThreeValues)}};
     auto vertThree{vertex{40, 0}};
     auto trafficSignThree{
         std::make_shared<TrafficSign>(trafficSignIdThree, trafficSignElementsThree, vertThree, false)};
@@ -193,26 +184,25 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
 }
 
 std::shared_ptr<RoadNetwork> create_road_network_3() {
-    const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);
     // max speed traffic sign
     size_t trafficSignIdOne = 200;
     std::vector<std::string> trafficSignElementOneValues{"50"};
-    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)}};
+    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MAX_SPEED, trafficSignElementOneValues)}};
     auto vertexOne{vertex{0, 0}};
     auto trafficSignOne{std::make_shared<TrafficSign>(trafficSignIdOne, trafficSignElementsOne, vertexOne, false)};
     // required speed traffic sign
     size_t trafficSignIdTwo = 201;
     std::vector<std::string> trafficSignElementTwoValues{"10"};
-    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED), trafficSignElementTwoValues)}};
+    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MIN_SPEED, trafficSignElementTwoValues)}};
     auto vertTwo{vertex{0, 0}};
     auto trafficSignTwo{std::make_shared<TrafficSign>(trafficSignIdTwo, trafficSignElementsTwo, vertTwo, false)};
     // stop sign
     size_t trafficSignIdThree = 201;
     std::vector<std::string> trafficSignElementThreeValues;
-    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::STOP), trafficSignElementThreeValues)}};
+    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::STOP, trafficSignElementThreeValues)}};
     auto vertThree{vertex{40, 0}};
     auto trafficSignThree{
         std::make_shared<TrafficSign>(trafficSignIdThree, trafficSignElementsThree, vertThree, false)};

@@ -114,7 +114,7 @@ void LaneletTestInitialization::setUpLanelets() {
     laneletSeven = std::make_shared<Lanelet>(Lanelet(idSeven, leftBorderSeven, rightBorderSeven, laneletTypeSeven));
 
     // traffic sign, traffic light, and stop line for middle lanelet
-    std::shared_ptr<TrafficSignElement> tsElem = std::make_shared<TrafficSignElement>("123");
+    std::shared_ptr<TrafficSignElement> tsElem = std::make_shared<TrafficSignElement>(TrafficSignTypes::STOP);
     std::shared_ptr<TrafficSign> sign = std::make_shared<TrafficSign>(TrafficSign());
     sign->addTrafficSignElement(tsElem);
     sign->setId(123);

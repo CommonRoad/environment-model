@@ -3,12 +3,12 @@
 
 #include <utility>
 
-TrafficSignElement::TrafficSignElement(std::string el_id, std::vector<std::string> values)
-    : id(std::move(el_id)), additionalValues(std::move(values)) {}
+TrafficSignElement::TrafficSignElement(TrafficSignTypes trafficSignType, std::vector<std::string> values)
+    : trafficSignType(trafficSignType), additionalValues(std::move(values)) {}
 
-std::string TrafficSignElement::getId() const { return id; }
+TrafficSignTypes TrafficSignElement::getTrafficSignType() const { return trafficSignType; }
 
-void TrafficSignElement::setId(std::string trafficSignId) { this->id = std::move(trafficSignId); }
+void TrafficSignElement::setTrafficSignType(TrafficSignTypes trafficSigntype) { trafficSignType = trafficSigntype; }
 
 std::vector<std::string> TrafficSignElement::getAdditionalValues() const { return additionalValues; }
 
@@ -16,6 +16,6 @@ void TrafficSignElement::addAdditionalValue(const std::string &value) { addition
 
 void TrafficSignElement::setAdditionalValues(const std::vector<std::string> &values) { additionalValues = values; }
 
-std::string TrafficSignElement::convertGermanTrafficSignIdToString(TrafficSignTypes signId) {
-    return TrafficSignIDGermany.at(signId);
+std::string TrafficSignElement::convertGermanTrafficSignIdToString(TrafficSignTypes signType) {
+    return TrafficSignIDGermany.at(signType);
 }

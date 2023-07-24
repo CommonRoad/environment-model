@@ -23,7 +23,7 @@ TEST_F(InterfacesTest, Read2018bFileSingleThread) {
     auto lanelet34782 =
         *std::find_if(lanelets.begin(), lanelets.end(), [](auto &lptr) { return lptr->getId() == 34782; });
     auto virtualSpeedLimitElem = lanelet34782->getTrafficSigns()[0]->getTrafficSignElements()[0];
-    EXPECT_EQ(virtualSpeedLimitElem->getId(), TrafficSignIDGermany.at(TrafficSignTypes::MAX_SPEED));
+    EXPECT_EQ(virtualSpeedLimitElem->getTrafficSignType(), TrafficSignTypes::MAX_SPEED);
     EXPECT_EQ(virtualSpeedLimitElem->getAdditionalValues()[0], "14");
 }
 
@@ -95,8 +95,8 @@ TEST_F(InterfacesTest, SameRoadNetwork) {
     const std::vector<std::shared_ptr<TrafficSign>> trafficSignsPb = roadNetworkPb->getTrafficSigns();
     EXPECT_EQ(trafficSignsXml.size(), trafficSignsPb.size());
     for (size_t trafficSignI = 0; trafficSignI < trafficSignsXml.size(); trafficSignI++)
-        EXPECT_EQ(trafficSignsXml[trafficSignI]->getTrafficSignElements().at(0)->getId(),
-                  trafficSignsPb[trafficSignI]->getTrafficSignElements().at(0)->getId());
+        EXPECT_EQ(trafficSignsXml[trafficSignI]->getTrafficSignElements().at(0)->getTrafficSignType(),
+                  trafficSignsPb[trafficSignI]->getTrafficSignElements().at(0)->getTrafficSignType());
 
     const std::vector<std::shared_ptr<TrafficLight>> trafficLightsXml = roadNetworkXml->getTrafficLights();
     const std::vector<std::shared_ptr<TrafficLight>> trafficLightsPb = roadNetworkPb->getTrafficLights();
