@@ -202,3 +202,30 @@ int regulatory_elements_utils::getPriority(size_t timeStep, const std::shared_pt
     }
     return regulatory_elements_utils::extractPriorityTrafficSign(relevantIncomingLanelets, dir);
 }
+
+TrafficSignTypes extractTypeFromString(const std::string &trafficSignId, SupportedTrafficSignCountry country,
+                                       const std::string &country_string) {
+    if (country == SupportedTrafficSignCountry::GERMANY or country == SupportedTrafficSignCountry::ZAMUNDA) {
+        for (const auto &countrySign : TrafficSignIDGermany)
+            if (countrySign.second == trafficSignId)
+                return countrySign.first;
+    } else if (country == SupportedTrafficSignCountry::USA) {
+        for (const auto &countrySign : TrafficSignIDUSA)
+            if (countrySign.second == trafficSignId)
+                return countrySign.first;
+    } else if (country == SupportedTrafficSignCountry::SPAIN) {
+        for (const auto &countrySign : TrafficSignIDSpain)
+            if (countrySign.second == trafficSignId)
+                return countrySign.first;
+    } else if (country == SupportedTrafficSignCountry::ARGENTINA) {
+        for (const auto &countrySign : TrafficSignIDArgentina)
+            if (countrySign.second == trafficSignId)
+                return countrySign.first;
+    } else if (country == SupportedTrafficSignCountry::BELGIUM) {
+        for (const auto &countrySign : TrafficSignIDBelgium)
+            if (countrySign.second == trafficSignId)
+                return countrySign.first;
+    } else
+        throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown country ID " +
+                                 country_string);
+}

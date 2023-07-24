@@ -183,33 +183,9 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                 // get traffic sign elements
                 if ((strcmp(trafficSignChildElement.name(), "trafficSignElement")) == 0) {
                     std::string trafficSignId = trafficSignChildElement.first_child().first_child().value();
-                    auto newTrafficSignElement{std::shared_ptr<TrafficSignElement>()};
-
-                    if (country == SupportedTrafficSignCountry::GERMANY or
-                        country == SupportedTrafficSignCountry::ZAMUNDA) {
-                        for (const auto &countrySign : TrafficSignIDGermany)
-                            if (countrySign.second == trafficSignId)
-                                newTrafficSignElement = std::make_shared<TrafficSignElement>(countrySign.first);
-                    } else if (country == SupportedTrafficSignCountry::USA) {
-                        for (const auto &countrySign : TrafficSignIDUSA)
-                            if (countrySign.second == trafficSignId)
-                                newTrafficSignElement = std::make_shared<TrafficSignElement>(countrySign.first);
-                    } else if (country == SupportedTrafficSignCountry::SPAIN) {
-                        for (const auto &countrySign : TrafficSignIDSpain)
-                            if (countrySign.second == trafficSignId)
-                                newTrafficSignElement = std::make_shared<TrafficSignElement>(countrySign.first);
-                    } else if (country == SupportedTrafficSignCountry::ARGENTINA) {
-                        for (const auto &countrySign : TrafficSignIDArgentina)
-                            if (countrySign.second == trafficSignId)
-                                newTrafficSignElement = std::make_shared<TrafficSignElement>(countrySign.first);
-                    } else if (country == SupportedTrafficSignCountry::BELGIUM) {
-                        for (const auto &countrySign : TrafficSignIDBelgium)
-                            if (countrySign.second == trafficSignId)
-                                newTrafficSignElement = std::make_shared<TrafficSignElement>(countrySign.first);
-                    } else
-                        throw std::runtime_error(
-                            "ProtobufReader::createTrafficSignElementFromMessage: Unknown country ID " +
-                            benchmarkID.substr(0, 3));
+                    auto newTrafficSignElement{
+                        std::make_shared<TrafficSignElement>(regulatory_elements_utils::extractTypeFromString(
+                            trafficSignId, country, benchmarkID.substr(0, 3)))};
 
                     for (pugi::xml_node trafficSignChildElementChild = trafficSignChildElement.first_child();
                          trafficSignChildElementChild != nullptr;
