@@ -373,24 +373,9 @@ std::shared_ptr<TrafficSignElement>
 ProtobufReader::createTrafficSignElementFromMessage(const commonroad_common::TrafficSignElement &trafficSignElementMsg,
                                                     const std::string &country) {
     std::string elID;
-    if (country == "DEU" or country == "ZAM")
-        elID = TrafficSignIDGermany.at(TrafficSignNames.at(
-            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
-    else if (country == "USA")
-        elID = TrafficSignIDUSA.at(TrafficSignNames.at(
-            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
-    else if (country == "ESP")
-        elID = TrafficSignIDSpain.at(TrafficSignNames.at(
-            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
-    else if (country == "ARG")
-        elID = TrafficSignIDArgentina.at(TrafficSignNames.at(
-            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
-    else if (country == "BEL")
-        elID = TrafficSignIDBelgium.at(TrafficSignNames.at(
-            commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id())));
-    else
-        throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown country ID " + country);
-    std::shared_ptr<TrafficSignElement> trafficSignElement = std::make_shared<TrafficSignElement>(elID);
+    auto elTyp{TrafficSignNames.at(
+        commonroad_common::TrafficSignIDEnum_TrafficSignID_Name(trafficSignElementMsg.element_id()))};
+    std::shared_ptr<TrafficSignElement> trafficSignElement = std::make_shared<TrafficSignElement>(elTyp);
 
     std::vector<std::string> additionalValues(trafficSignElementMsg.additional_values().begin(),
                                               trafficSignElementMsg.additional_values().end());

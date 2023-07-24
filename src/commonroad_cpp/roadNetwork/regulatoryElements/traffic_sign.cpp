@@ -39,10 +39,10 @@ TrafficSign::TrafficSign(size_t trafficSignId, std::vector<std::shared_ptr<Traff
       virtualElement(virtual_element) {}
 
 std::vector<std::shared_ptr<TrafficSignElement>>
-TrafficSign::getTrafficSignElementsOfType(const std::string &signId) const {
+TrafficSign::getTrafficSignElementsOfType(const TrafficSignTypes &signType) const {
     std::vector<std::shared_ptr<TrafficSignElement>> relevantTrafficSignElements;
     for (const auto &signElement : trafficSignElement) {
-        if (signElement->getId() == signId)
+        if (signElement->getTrafficSignType() == signType)
             relevantTrafficSignElements.push_back(signElement);
     }
     return relevantTrafficSignElements;

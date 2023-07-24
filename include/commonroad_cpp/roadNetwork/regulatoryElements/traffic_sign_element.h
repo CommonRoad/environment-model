@@ -24,7 +24,7 @@ class TrafficSignElement {
      * @param trafficSignId ID of traffic sign element. Note this ID corresponds to the official national traffic sign
      * ID of a country.
      */
-    explicit TrafficSignElement(std::string trafficSignId, std::vector<std::string> values = {});
+    explicit TrafficSignElement(TrafficSignTypes trafficSignType, std::vector<std::string> values = {});
 
     /**
      * Default Constructor without parameters for a traffic sign element.
@@ -43,13 +43,13 @@ class TrafficSignElement {
      *
      * @return ID of traffic sign element.
      */
-    [[nodiscard]] std::string getId() const;
+    [[nodiscard]] TrafficSignTypes getTrafficSignType() const;
 
     /**
      * Adds ID of traffic sign element.
      *
      */
-    void setId(std::string trafficSignId);
+    void setTrafficSignType(TrafficSignTypes trafficSignType);
 
     /**
      * Getter for additional values of traffic sign element.
@@ -81,7 +81,7 @@ class TrafficSignElement {
     static std::string convertGermanTrafficSignIdToString(TrafficSignTypes signId);
 
   private:
-    std::string id; //**< official national traffic sign ID of a country */
+    TrafficSignTypes trafficSignType; //**< Type of traffic sign, e.g., stop, yield. */
     std::vector<std::string>
         additionalValues; //**< list of additional values classifying traffic sign, e.g., velocity, weight, time */
 };

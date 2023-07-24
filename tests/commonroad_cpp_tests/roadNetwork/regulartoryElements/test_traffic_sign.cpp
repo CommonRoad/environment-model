@@ -1,23 +1,14 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_traffic_sign.h"
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 
 void TrafficSignTest::SetUp() {
-    const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);
-
     std::vector<std::string> trafficSignElementOneValues{"20"};
-    auto signElement1 = std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)};
+    auto signElement1 = std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MAX_SPEED, trafficSignElementOneValues)};
 
     std::vector<std::string> trafficSignElementTwoValues{"10"};
-    auto signElement2 = std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED), trafficSignElementTwoValues)};
+    auto signElement2 = std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MIN_SPEED, trafficSignElementTwoValues)};
 
     size_t signId1{1};
     vertex pos1{1, 2};
@@ -39,21 +30,21 @@ TEST_F(TrafficSignTest, InitializationComplete) {
     EXPECT_EQ(sign1->getPosition().y, 2);
     EXPECT_EQ(sign1->isVirtualElement(), false);
     EXPECT_EQ(sign1->getTrafficSignElements().size(), 1);
-    EXPECT_EQ(sign1->getTrafficSignElements().at(0)->getId(), "274");
+    EXPECT_EQ(sign1->getTrafficSignElements().at(0)->getTrafficSignType(), TrafficSignTypes::MAX_SPEED);
 
     EXPECT_EQ(sign2->getId(), 2);
     EXPECT_EQ(sign2->getPosition().x, 3);
     EXPECT_EQ(sign2->getPosition().y, 4);
     EXPECT_EQ(sign2->isVirtualElement(), true);
     EXPECT_EQ(sign2->getTrafficSignElements().size(), 2);
-    EXPECT_EQ(sign2->getTrafficSignElements().at(0)->getId(), "275");
-    EXPECT_EQ(sign2->getTrafficSignElements().at(1)->getId(), "274");
+    EXPECT_EQ(sign2->getTrafficSignElements().at(0)->getTrafficSignType(), TrafficSignTypes::MIN_SPEED);
+    EXPECT_EQ(sign2->getTrafficSignElements().at(1)->getTrafficSignType(), TrafficSignTypes::MAX_SPEED);
 }
 
 TEST_F(TrafficSignTest, GetTrafficSignElementsOfType) {
-    EXPECT_EQ(sign1->getTrafficSignElementsOfType("274").size(), 1);
-    EXPECT_EQ(sign1->getTrafficSignElementsOfType("123").size(), 0);
+    EXPECT_EQ(sign1->getTrafficSignElementsOfType(TrafficSignTypes::MAX_SPEED).size(), 1);
+    EXPECT_EQ(sign1->getTrafficSignElementsOfType(TrafficSignTypes::WARNING_CONSTRUCTION_SITE).size(), 0);
 
-    EXPECT_EQ(sign2->getTrafficSignElementsOfType("274").size(), 1);
-    EXPECT_EQ(sign2->getTrafficSignElementsOfType("275").size(), 1);
+    EXPECT_EQ(sign2->getTrafficSignElementsOfType(TrafficSignTypes::MAX_SPEED).size(), 1);
+    EXPECT_EQ(sign2->getTrafficSignElementsOfType(TrafficSignTypes::MIN_SPEED).size(), 1);
 }
