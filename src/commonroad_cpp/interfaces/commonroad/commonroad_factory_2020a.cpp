@@ -158,7 +158,7 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
 }
 
 std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficSigns() {
-    std::vector<std::shared_ptr<TrafficSign>> tempLaneletContainer{};
+    std::vector<std::shared_ptr<TrafficSign>> temptrafficSignContainer{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
     std::string benchmarkID{doc->child("commonRoad").attribute("benchmarkID").value()};
@@ -167,8 +167,8 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
     // get the number of traffic signs in scenario
     size_t numSigns{static_cast<size_t>(
         std::distance(commonRoad.children("trafficSign").begin(), commonRoad.children("trafficSign").end()))};
-    tempLaneletContainer.clear();
-    tempLaneletContainer.reserve(numSigns); // Size already known --> Faster memory allocation
+    temptrafficSignContainer.clear();
+    temptrafficSignContainer.reserve(numSigns); // Size already known --> Faster memory allocation
 
     size_t arrayIndex{0};
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;
@@ -176,8 +176,8 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
         // get traffic signs
         if ((strcmp(roadElements.name(), "trafficSign")) == 0) {
             std::shared_ptr<TrafficSign> tempTrafficSign = std::make_shared<TrafficSign>();
-            tempLaneletContainer.emplace_back(tempTrafficSign);
-            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_ullong());
+            temptrafficSignContainer.emplace_back(tempTrafficSign);
+            temptrafficSignContainer[arrayIndex]->setId(roadElements.first_attribute().as_ullong());
             for (pugi::xml_node trafficSignChildElement = roadElements.first_child();
                  trafficSignChildElement != nullptr; trafficSignChildElement = trafficSignChildElement.next_sibling()) {
                 // get traffic sign elements
@@ -195,10 +195,10 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                                 trafficSignChildElementChild.first_child().value());
                         }
                     }
-                    tempLaneletContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElement);
+                    temptrafficSignContainer[arrayIndex]->addTrafficSignElement(newTrafficSignElement);
                 }
                 if ((strcmp(trafficSignChildElement.name(), "virtual")) == 0) {
-                    tempLaneletContainer[arrayIndex]->setVirtualElement(
+                    temptrafficSignContainer[arrayIndex]->setVirtualElement(
                         trafficSignChildElement.first_attribute().as_bool());
                 }
                 if ((strcmp(trafficSignChildElement.name(), "position")) == 0) {
@@ -206,25 +206,25 @@ std::vector<std::shared_ptr<TrafficSign>> CommonRoadFactory2020a::createTrafficS
                         vertex newVertex{};
                         newVertex.x = trafficSignChildElement.first_child().child("x").text().as_double();
                         newVertex.y = trafficSignChildElement.first_child().child("y").text().as_double();
-                        tempLaneletContainer[arrayIndex]->setPosition(newVertex);
+                        temptrafficSignContainer[arrayIndex]->setPosition(newVertex);
                     }
                 }
             }
             ++arrayIndex;
         }
     }
-    return tempLaneletContainer;
+    return temptrafficSignContainer;
 }
 
 std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTrafficLights() {
-    std::vector<std::shared_ptr<TrafficLight>> tempLaneletContainer{};
+    std::vector<std::shared_ptr<TrafficLight>> tempLightContainer{};
     pugi::xml_node commonRoad = doc->child("commonRoad");
 
     // get the number of traffic lights
     size_t numTrafficLights{static_cast<size_t>(
         std::distance(commonRoad.children("trafficLight").begin(), commonRoad.children("trafficLight").end()))};
-    tempLaneletContainer.clear();
-    tempLaneletContainer.reserve(numTrafficLights); // Already know the size --> Faster memory allocation
+    tempLightContainer.clear();
+    tempLightContainer.reserve(numTrafficLights); // Already know the size --> Faster memory allocation
 
     size_t arrayIndex{0};
     for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;
@@ -233,8 +233,8 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
         if ((strcmp(roadElements.name(), "trafficLight")) == 0) {
             bool directionSet{false}; // if not direction is provided in -> direction::all
             std::shared_ptr<TrafficLight> tempTrafficLight = std::make_shared<TrafficLight>();
-            tempLaneletContainer.emplace_back(tempTrafficLight);
-            tempLaneletContainer[arrayIndex]->setId(roadElements.first_attribute().as_ullong());
+            tempLightContainer.emplace_back(tempTrafficLight);
+            tempLightContainer[arrayIndex]->setId(roadElements.first_attribute().as_ullong());
             for (pugi::xml_node trafficLightChildElement = roadElements.first_child();
                  trafficLightChildElement != nullptr;
                  trafficLightChildElement = trafficLightChildElement.next_sibling()) {
@@ -247,22 +247,22 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                             std::string duration = trafficLightCycleChildElement.first_child().first_child().value();
                             std::string color =
                                 trafficLightCycleChildElement.first_child().next_sibling().first_child().value();
-                            tempLaneletContainer[arrayIndex]->addCycleElement(
+                            tempLightContainer[arrayIndex]->addCycleElement(
                                 {TrafficLight::matchTrafficLightState(color), std::stoul(duration)});
                         }
                         if ((strcmp(trafficLightCycleChildElement.name(), "timeOffset")) == 0) {
-                            tempLaneletContainer[arrayIndex]->setOffset(
+                            tempLightContainer[arrayIndex]->setOffset(
                                 std::stoul(trafficLightCycleChildElement.first_child().value()));
                         }
                     }
                 }
                 if ((strcmp(trafficLightChildElement.name(), "direction")) == 0) {
-                    tempLaneletContainer[arrayIndex]->setDirection(
+                    tempLightContainer[arrayIndex]->setDirection(
                         TrafficLight::matchTurningDirections(trafficLightChildElement.first_child().value()));
                     directionSet = true;
                 }
                 if ((strcmp(trafficLightChildElement.name(), "active")) == 0) {
-                    tempLaneletContainer[arrayIndex]->setActive(
+                    tempLightContainer[arrayIndex]->setActive(
                         strcasecmp("true", trafficLightChildElement.first_child().value()) == 0);
                 }
                 if ((strcmp(trafficLightChildElement.name(), "position")) == 0) {
@@ -270,16 +270,16 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                         vertex newVertex{};
                         newVertex.x = trafficLightChildElement.first_child().child("x").text().as_double();
                         newVertex.y = trafficLightChildElement.first_child().child("y").text().as_double();
-                        tempLaneletContainer[arrayIndex]->setPosition(newVertex);
+                        tempLightContainer[arrayIndex]->setPosition(newVertex);
                     }
                 }
             }
             if (!directionSet)
-                tempLaneletContainer[arrayIndex]->setDirection(TurningDirection::all);
+                tempLightContainer[arrayIndex]->setDirection(TurningDirection::all);
             ++arrayIndex;
         }
     }
-    return tempLaneletContainer;
+    return tempLightContainer;
 }
 
 std::vector<std::shared_ptr<Intersection>>

@@ -115,7 +115,7 @@ TEST_F(RegulatoryElementsUtilsTest, SpeedLimitSuggested) {
 
 TEST_F(RegulatoryElementsUtilsTest, ExtractTypeFromString) {
     EXPECT_EQ(regulatory_elements_utils::extractTypeFromString("274", SupportedTrafficSignCountry::GERMANY, "DEU"),
-                  TrafficSignTypes::MAX_SPEED);
+              TrafficSignTypes::MAX_SPEED);
 }
 
 TEST_F(RegulatoryElementsUtilsTest, TrafficSignReferencesStopSign) {}

@@ -576,6 +576,7 @@ TrafficSignTable TrafficSignIDBelgium = {
 const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> TrafficSignLookupTableByCountry = {
     {SupportedTrafficSignCountry::GERMANY, &TrafficSignIDGermany},
     {SupportedTrafficSignCountry::ZAMUNDA, &TrafficSignIDGermany},
+    {SupportedTrafficSignCountry::ARGENTINA, &TrafficSignIDArgentina},
     {SupportedTrafficSignCountry::USA, &TrafficSignIDUSA},
     {SupportedTrafficSignCountry::SPAIN, &TrafficSignIDSpain},
     {SupportedTrafficSignCountry::BELGIUM, &TrafficSignIDBelgium},
