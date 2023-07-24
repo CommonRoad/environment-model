@@ -14,7 +14,7 @@
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
+#include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
@@ -33,7 +33,7 @@ std::vector<std::shared_ptr<TrafficSign>> TranslatePythonTypes::convertTrafficSi
             std::string trafficSignElementId =
                 py_trafficSignElement.attr("traffic_sign_element_id").attr("name").cast<py::str>();
             std::shared_ptr<TrafficSignElement> newTrafficSignElement{std::make_shared<TrafficSignElement>(
-                regulatory_elements_utils::extractTypeFromString(trafficSignElementId, country, country_string))};
+                TrafficSignNames.at(trafficSignElementId))};
             const py::list &additionalValues = py_trafficSignElement.attr("additional_values").cast<py::list>();
             std::vector<std::string> additionalValuesList{};
             for (const auto &py_additional_value : additionalValues)
