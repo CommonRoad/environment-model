@@ -229,4 +229,6 @@ TrafficSignTypes regulatory_elements_utils::extractTypeFromString(const std::str
     } else
         throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown country ID " +
                                  country_string);
+    throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown traffic sign ID " +
+                             trafficSignId + " in country " + country_string);
 }
