@@ -26,7 +26,8 @@ docs = [
 requires = [
     "scikit-build-core~=0.4.7",
     "pybind11~=2.10.4",
-    "setuptools_scm[toml]~=7.1.0"
+    "setuptools_scm[toml]~=7.1.0",
+    "poetry-core" # only for the cr-io feature branch installation
     ]
 build-backend = "scikit_build_core.build"
 
