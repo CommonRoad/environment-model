@@ -331,6 +331,7 @@ run-coverage:
     - printf "\e[0Ksection_start:%s:%s[collapsed=true]\r\e[0K%s\n" "$(date +%s)"
       section_python_prep "Installation of test dependencies"
     - python -m pip config set global.disable-pip-version-check true
+    - python -m pip install poetry # only needed for building cr-io feature branch
     - python -m venv test-venv
     - source test-venv/bin/activate
     - python -m pip install pip-tools
