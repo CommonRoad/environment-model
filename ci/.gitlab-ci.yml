@@ -10,6 +10,7 @@ image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci-lite:1.0
 
 before_script:
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
+  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de".insteadOf "ssh://git@gitlab.lrz.de"
 
 ### static test ###
 clang-format:
@@ -213,7 +214,7 @@ build-wheel:
     DOCKER_DRIVER: overlay2
     # See https://github.com/docker-library/docker/pull/166
     DOCKER_TLS_CERTDIR: ""
-    CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\""
+    CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de\".insteadOf \"git@gitlab.lrz.de:\"" "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"ssh://git@gitlab.lrz.de\""
     # NOTE: The following variables correspond to the default values.
     # They are specified here so that it is possible to override them using
     # Gitlab push options or in the UI when running a manual pipeline.
