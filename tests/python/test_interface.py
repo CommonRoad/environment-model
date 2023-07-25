@@ -2,7 +2,7 @@ import unittest
 import os
 
 import crcpp
-from commonroad_rp.utility.general import load_scenario_and_planning_problem
+from commonroad.common.file_reader import CommonRoadReadAll
 
 
 class TestPythonInterface(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestPythonInterface(unittest.TestCase):
         scenario_id = 123
         for scenario in self.filenames:
             full_path = self.path + scenario
-            scenario, planning_problem, planning_problem_set = load_scenario_and_planning_problem(full_path)
+            scenario, _, _ = CommonRoadReadAll(full_path).open()
             try:
                 print("Converting - " + full_path)
                 crcpp.register_scenario(scenario_id, 0, scenario.dt, "DEU", scenario.lanelet_network, scenario.obstacles, [])
@@ -24,6 +24,7 @@ class TestPythonInterface(unittest.TestCase):
                 print("Successful")
             except:
                 print("Failed")
+
 
 if __name__ == '__main__':
     unittest.main()
