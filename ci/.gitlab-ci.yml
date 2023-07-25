@@ -333,7 +333,7 @@ run-coverage:
     - python -m pip config set global.disable-pip-version-check true
     - python -m venv test-venv
     - source test-venv/bin/activate
-    - python -m pip install pip-tools poetry-core # poetry only needed temporary as long as cr-io feature branch is used
+    - python -m pip install pip-tools
     - SETUPTOOLS_SCM_PRETEND_VERSION_FOR_COMMONROAD_CPP=1
       python -m piptools compile --extra=test -o test_requirements.txt pyproject.toml
     - python -m pip install -r test_requirements.txt
