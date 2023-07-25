@@ -325,7 +325,7 @@ run-coverage:
     # Therefore, we first extract the test dependencies to a temporary requirements
     # file and then instruct pip to install them from that file.
     # Finally, we install the built wheel from the wheelhouse directory.
-    - apt-get update && apt-get install -y --no-install-recommends git
+    - apt-get update && apt-get install -y --no-install-recommends git py3-pip py3-virtualenv py3-build
     - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
     - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de".insteadOf "ssh://git@gitlab.lrz.de"
     - printf "\e[0Ksection_start:%s:%s[collapsed=true]\r\e[0K%s\n" "$(date +%s)"
