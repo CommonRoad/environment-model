@@ -337,7 +337,6 @@ run-coverage:
     - SETUPTOOLS_SCM_PRETEND_VERSION_FOR_COMMONROAD_CPP=1
       python -m piptools compile --extra=test -o test_requirements.txt pyproject.toml
     - python -m pip install -r test_requirements.txt
-    - python -m pip install poetry
     - python -m pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
     - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
       section_python_prep
