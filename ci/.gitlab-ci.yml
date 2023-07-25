@@ -326,6 +326,8 @@ run-coverage:
     # file and then instruct pip to install them from that file.
     # Finally, we install the built wheel from the wheelhouse directory.
     - apt-get update && apt-get install -y --no-install-recommends git
+    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
+    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de".insteadOf "ssh://git@gitlab.lrz.de"
     - printf "\e[0Ksection_start:%s:%s[collapsed=true]\r\e[0K%s\n" "$(date +%s)"
       section_python_prep "Installation of test dependencies"
     - python -m pip config set global.disable-pip-version-check true
