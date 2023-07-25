@@ -58,8 +58,8 @@ TranslatePythonTypes::convertTrafficLights(const py::handle &py_laneletNetwork) 
     for (const auto &py_trafficLight : py_trafficLights) {
         std::shared_ptr<TrafficLight> tempTrafficLight = std::make_shared<TrafficLight>();
         tempTrafficLight->setId(py_trafficLight.attr("traffic_light_id").cast<size_t>());
-        tempTrafficLight->setOffset(py_trafficLight.attr("time_offset").cast<size_t>());
-        const py::list &py_trafficLightCycle = py_trafficLight.attr("cycle").cast<py::list>();
+        tempTrafficLight->setOffset(py_trafficLight.attr("traffic_light_cycle").attr("time_offset").cast<size_t>());
+        const py::list &py_trafficLightCycle = py_trafficLight.attr("traffic_light_cycle").attr("cycle_elements").cast<py::list>();
         std::vector<TrafficLightCycleElement> cycle;
         for (const py::handle &py_cycleElement : py_trafficLightCycle) {
             cycle.push_back(
