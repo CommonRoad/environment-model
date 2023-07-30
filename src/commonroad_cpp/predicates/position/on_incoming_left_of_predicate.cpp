@@ -32,17 +32,17 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(
             continue;
         auto incomingK{world->getRoadNetwork()->findIncomingGroupByLanelet(letK)};
         if (!incomingK) {
-            throw std::runtime_error{"missing incoming"};
+            throw std::runtime_error{"missing incoming (obstacleK)"};
         }
         for (const auto &letP : laneP->getContainedLanelets()) {
             if (!letP->hasLaneletType(LaneletType::incoming))
                 continue;
             auto incomingP{world->getRoadNetwork()->findIncomingGroupByLanelet(letP)};
             if (!incomingP) {
-                throw std::runtime_error{"missing incoming"};
+                throw std::runtime_error{"missing incoming (obstacleP)"};
             }
             if (!incomingP->getIsLeftOf()) {
-                throw std::runtime_error{"missing incoming"};
+                throw std::runtime_error{"missing 'left of' incoming"};
             }
             if (incomingK->getIsLeftOf()->getId() == incomingP->getId())
                 return true;
