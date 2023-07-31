@@ -1,31 +1,3 @@
-# CommonRoad C++ Environment Model
-
-The CommonRoad C++ Environment Model provides classes and methods to represent the CommonRoad format in C++17.
-It contains an interface to Python and predicates for evaluating traffic rules.
-Note that the repository does not contain runtime verification algorithms and code for evaluating traffic rules.
-
-**Table of Contents**
-[[_TOC_]]
-
-### Overview
-
-The required steps to build or use the Environment Model differ a lot depending on
-how you want to use it:
-- You want to simply *install and use* the Python side of the Environment Model?
-  Then the recommended option is to use the pre-built binary packages (wheels)
-  provided by us.
-  Look at the section on [Installing the Binary Wheels](#installing-the-binary-wheels)
-- You want to integrate the Environment Model into another CMake project?
-  Look at the section on [Integrating the Environment Model](#integrating-the-environment-model-into-another-c-project)
-- You want to set up a development environment for the Environment Model itself?
-  Look at the section on [Working on the Environment Model](#working-on-the-environment-model-itself).
-  Specific instructions are provided for
-  [the Python module](#build-instructions-for-the-python-module) and
-  [the C++ library](#build-instructions-for-the-c-library).
-
-## Python Interface
-An introduction on how to build, install, and use the Python interface of the environment model can be found [here](./docs/python.md).
-
 ## Installing the Environment Model
 
 ### Integrating the Environment Model into Another C++ Project
@@ -139,10 +111,10 @@ but you might still want to install them to save some time:
 
 The following optional tools are required only for certain tasks:
 - For building the documentation
-  * Doxygen
-  * Graphviz
+    * Doxygen
+    * Graphviz
 - For code coverage
-  * gcovr
+    * gcovr
 
 [Specific installation instructions](#installing-dependencies-on-common-distributions) are provided for common distributions.
 
@@ -210,79 +182,4 @@ make
 make -j4
 # Build and run tests
 make test
-```
-
-### Setting up Git Hooks
-
-For development, please install the pre-commit formatting check hook
-by running
-```bash
-  ./setup_git_hooks.sh
-```
-in the root directory of this repository.
-We suggest using the git hook only when you plan to commit/push from command line.
-The git hook does not work together with the commit/push function of Clion.
-In case you want to use Clion or another IDE, we recommend using the built-in functionality of the IDE.
-
-### Building the Documentation
-Add the `-DBUILD_DOXYGEN=ON` to the cmake command above.
-Afterwards, the documentation can be generated with
-```bash
-cmake --build build --target doc_doxygen
-```
-
-## Installing Dependencies on Common Distributions
-
-### Debian/Ubuntu
-
-We recommend Ubuntu 20.04 or newer.
-#### Ubuntu 20.04
-You need to install the following packages:
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev`
-All other required packages should be part of the standard Ubuntu installation.
-
-#### Ubuntu 18.04
-- You need to install the following packages:
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev`
-- Install gcc-9 and g++-9: because [filesystem header](https://askubuntu.com/questions/1256440/how-to-get-libstdc-with-c17-filesystem-headers-on-ubuntu-18-bionic):
-```bash
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-sudo apt update
-sudo apt install gcc-9 g++-9
-```
-- Install [spdlog](https://github.com/gabime/spdlog)
-```bash
-git clone https://github.com/gabime/spdlog.git
-cd spdlog && mkdir build && cd build
-cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON .. && make -j
-sudo make install
-```
-- Install
-  Override default gcc and g++ in current shell:
-```bash
-export CC=/usr/bin/gcc-9
-export CXX=/usr/bin/g++-9
-```
-  Alternatively, specify the compiler paths in the CMake configuration command:
-```
-...
--DCMAKE_C_COMPILER=/usr/bin/gcc-9
--DCMAKE_CXX_COMPILER=/usr/bin/g++-9
-...
-```
-Keep in mind that you'll need to use a fresh CMake cache
-whenever you change the compiler. Either delete your build folder or
-add the `--fresh` flag to your CMake configuration command line.
-
-**IMPORTANT:** Make sure that `PATH` includes the folder where gcc-9 and g++-9 are located.
-
-### Arch Linux
-
-```bash
-sudo pacman -S base-devel boost boost-libs pugixml spdlog yaml-cpp protobuf eigen gtest
-```
-
-Optional dependencies:
-```bash
-sudo pacman -S doxygen graphviz gcovr
 ```
