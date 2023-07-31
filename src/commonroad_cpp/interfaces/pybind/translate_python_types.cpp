@@ -317,6 +317,7 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
+            incomings[incomingIndex]->setOutgoingGroupID(py_incoming.attr("outgoing_id").cast<int>());
             incomingIndex++;
         }
         tempIntersectionContainer[intersectionIndex]->setIncomingGroups(incomings);
