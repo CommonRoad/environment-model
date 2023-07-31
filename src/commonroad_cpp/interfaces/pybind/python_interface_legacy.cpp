@@ -86,6 +86,9 @@ void py_registerScenario(size_t scenarioId, size_t timeStep, double dt, const st
         TranslatePythonTypes::convertIntersections(py_laneletNetwork, tempLaneletContainer);
     auto roadNetwork = std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempTrafficSignContainer,
                                                      tempTrafficLightContainer, tempIntersectionContainer);
+    for (const auto &intesection : roadNetwork->getIntersections()) {
+        intesection->computeMemberLanelets(roadNetwork);
+    }
     auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
     auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles);
 
