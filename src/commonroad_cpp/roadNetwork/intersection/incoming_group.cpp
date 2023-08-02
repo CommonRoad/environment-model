@@ -144,3 +144,5 @@ void IncomingGroup::setOutgoingGroupID(size_t outId) { outgoingGroupID = outId; 
 void IncomingGroup::addCrossing(const std::shared_ptr<Lanelet> &crossing) { crossings.push_back(crossing); }
 
 std::optional<size_t> IncomingGroup::getOutgoingGroupID() { return outgoingGroupID; }
+
+std::vector<std::shared_ptr<Lanelet>> IncomingGroup::getCrossings() { return crossings; }

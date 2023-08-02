@@ -47,7 +47,7 @@ void intersection_operations::findLeftOf(const std::shared_ptr<IncomingGroup> &o
                                          const std::shared_ptr<RoadNetwork> &roadNetwork) {
     if (!origin->getRightOutgoings().empty()) {
         auto out = roadNetwork->findOutgoingGroupByLanelet(origin->getRightOutgoings()[0]);
-        if (out) // TODO solve problem for outgoings without incomings like ru10 oneWayStreetIn
+        if (out)
             origin->setIsLeftOf(roadNetwork->findIncomingGroupByOutgoingGroup(out));
     }
 }

@@ -134,24 +134,6 @@ std::shared_ptr<TrafficSign> getTrafficSignFromContainer(size_t trafficSignId, T
 std::shared_ptr<TrafficLight> getTrafficLightFromContainer(size_t trafficLightId, TrafficLightContainer& trafficLightContainer);
 
 /**
- * Returns incomingGroups from container of IncomingGroups.
- *
- * @param incomingGroupId IncomingGroup id
- * @param incomingGroupContainer IncomingGroup container
- * @return Incoming
- */
-std::shared_ptr<IncomingGroup> getIncomingGroupFromContainer(size_t incomingGroupId, IncomingGroupContainer& incomingGroupContainer);
-
-/**
- * Returns outgoingGroups from container of OutgoingGroups.
- *
- * @param outgoingGroupId OutgoingGroup id
- * @param outgoingGroupContainer OutgoingGroup container
- * @return Incoming
- */
-std::shared_ptr<OutgoingGroup> getIncomingGroupFromContainer(size_t outgoingGroupId, OutgoingGroupContainer& outgoingGroupContainer);
-
-/**
  * Creates CR scenario from protobuf message "CommonRoad".
  *
  * @param commonRoadMsg Protobuf message
