@@ -187,6 +187,12 @@ class IncomingGroup {
      */
     void addCrossing(const std::shared_ptr<Lanelet>& crossing);
 
+    /**
+     * Get Crossing
+     * @return vector of pointer to crossings(lanelets)
+     */
+    std::vector<std::shared_ptr<Lanelet>> getCrossings();
+
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorLeft();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorRight();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorStraight();

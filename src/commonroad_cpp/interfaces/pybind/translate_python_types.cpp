@@ -9,6 +9,7 @@
 
 #include "translate_python_types.h"
 #include <pybind11/numpy.h>
+#include <pybind11/stl.h>
 
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/geometry/circle.h>
@@ -317,7 +318,9 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
-            incomings[incomingIndex]->setOutgoingGroupID(py_incoming.attr("outgoing_id").cast<int>());
+            if (!pybind11::isinstance<pybind11::none>(py_incoming.attr("outgoing_id"))) {
+                incomings[incomingIndex]->setOutgoingGroupID(py_incoming.attr("outgoing_id").cast<int>());
+            }
             incomingIndex++;
         }
         tempIntersectionContainer[intersectionIndex]->setIncomingGroups(incomings);

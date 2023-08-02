@@ -115,22 +115,6 @@ ProtobufReader::getTrafficLightFromContainer(size_t trafficLightId,
     return nullptr;
 }
 
-std::shared_ptr<IncomingGroup>
-ProtobufReader::getIncomingGroupFromContainer(size_t incomingGroupId, IncomingGroupContainer &incomingGroupContainer) {
-    if (incomingGroupContainer.find(incomingGroupId) != incomingGroupContainer.end())
-        return incomingGroupContainer[incomingGroupId];
-
-    return nullptr;
-}
-
-std::shared_ptr<OutgoingGroup>
-ProtobufReader::getIncomingGroupFromContainer(size_t outgoingGroupId, OutgoingGroupContainer &outgoingGroupContainer) {
-    if (outgoingGroupContainer.find(outgoingGroupId) != outgoingGroupContainer.end())
-        return outgoingGroupContainer[outgoingGroupId];
-
-    return nullptr;
-}
-
 std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
 ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoadDynamic &commonRoadDynamicMsg,
                                             const commonroad_map::CommonRoadMap &commonRoadMapMsg,

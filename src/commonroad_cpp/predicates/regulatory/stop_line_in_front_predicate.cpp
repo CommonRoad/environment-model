@@ -20,7 +20,7 @@
 bool lineInFront(const std::pair<vertex, vertex> &line, const std::shared_ptr<Obstacle> &obs, size_t timeStep,
                  const std::shared_ptr<RoadNetwork> &roadNetwork) {
     auto ccs{obs->getReferenceLane(roadNetwork, timeStep)->getCurvilinearCoordinateSystem()};
-    if (!ccs->cartesianPointInProjectionDomain(line.first.x, line.second.y))
+    if (!ccs->cartesianPointInProjectionDomain(line.first.x, line.first.y))
         return false;
     auto pointA{ccs->convertToCurvilinearCoords(line.first.x, line.first.y)};
     if (!ccs->cartesianPointInProjectionDomain(line.second.x, line.second.y))
