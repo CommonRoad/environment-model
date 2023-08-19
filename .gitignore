@@ -33,3 +33,4 @@ __pycache__/
 
 # For setuptools-scm
 /src/python/crcpp/_version.py
+/venv/
