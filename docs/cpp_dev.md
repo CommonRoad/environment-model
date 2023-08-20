@@ -1,4 +1,4 @@
-## Working on the Environment Model itself
+## Working on the C++ Code itself
 
 ### Using nix
 For using nix, please visit [Nix Tutorial](./nix.md)
@@ -7,7 +7,7 @@ For using nix, please visit [Nix Tutorial](./nix.md)
 These requirements apply to both the Python module and the C++ library.
 
 #### CommonRoad Drivability Checker
-The Environment Model depends on the Curvilinear Coordinate System (`crccosy`)
+The code depends on the Curvilinear Coordinate System (`crccosy`)
 which is part of the [CommonRoad Drivability Checker](https://gitlab.lrz.de/cps/commonroad-drivability-checker).
 While the Drivability Checker is installed automatically,
 we currently use an internal Git repository so you need to ensure
@@ -88,7 +88,7 @@ ninja test
 ```
 
 #### Classical Build using the Makefile Generator
-You can also build the Environment Model using the Makefile generator.
+You can also perform a build using the Makefile generator.
 ```bash
 cmake -S . -B build
 # Or specify the build type:
@@ -121,7 +121,8 @@ We recommend Ubuntu 20.04 or newer.
 
 #### Ubuntu 20.04
 You need to install the following packages:
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev`
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev default-jdk`, 
+where  default-jdk is only needed for the CommonRoad Monitor or Runtime-Verification repository.
 All other required packages should be part of the standard Ubuntu installation.
 
 

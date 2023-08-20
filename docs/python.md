@@ -23,20 +23,14 @@ In any case, don't worry about selecting the right wheel type as pip will automa
 In case binary wheels are not (yet) available for your platform, pip will build the package from source which 
 might take a while.
 
-| Python version | manylinux-x86_64 | manylinux-i686 | musllinux-x86_64 | musllinux-i686 | windows x86 | macOS arm | macOS x86 |
-|----------------| :-----------: | :-----------: | :-----------: | :-----------: |:-----------:|:-----------:|:-----------:|
-| 3.7 or earlier | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| 3.8            | ✓ | ~ | ~ | ~ | ✗ | ✗ | ✗ |
-| 3.9            | ✓ | ~ | ~ | ~ | ✗ | ✗ | ✗ |heck
-| 3.10           | ✓ | ~ | ~ | ~ | ✗ | ✗ | ✗ |
-| 3.11           | ✓ | ~ | ~ | ~ | ✗ | ✗ | ✗ |
 
-Legend:
-| symbol | description |
-| :---: | ----- |
-| ✓ | built and tested |
-| ~  | built but not tested (known issues) |
-| ✗ | not supported |
+| Python version | manylinux-x86_64 | manylinux-arm | windows-x86_64 | macOS-arm | macOS-x86_64 |
+|----------------| :-----------: |:-------------:| :-----------: | :-----------: |:-----------:|
+| 3.7 or earlier | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| 3.8            | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| 3.9            | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| 3.10           | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| 3.11           | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
 
 #### Using the Python Module in Anaconda
 
