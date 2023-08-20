@@ -44,7 +44,7 @@ To install them, run the following:
 pip install "setuptools>=61.0" "wheel" "scikit-build~=0.15.0" "cmake~=3.24.0" "ninja" "pybind11~=2.10.0" "setuptools_scm[toml]>=6.2"
 ```
 
-### Debugging the environment-model in Python
+### Debugging the C++ interface codr from Python
 For debugging the Python interface you can use the methods described [here](https://www.jetbrains.com/help/clion/debugging-python-extensions.html#debug-custom-py) (Option 2).   
 For example, here are two screenshots of a working configuration:    
 ![img.png](./clion_python_debug_config/img.png)   
