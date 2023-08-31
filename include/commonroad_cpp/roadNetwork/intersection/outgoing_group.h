@@ -52,5 +52,6 @@ class OutgoingGroup {
 
   private:
     size_t groupID{0};
+    std::optional<size_t> incomingGroupID;
     std::vector<std::shared_ptr<Lanelet>> outgoingLanelets; /**< set of pointers to lanelets belonging to outgoing group */
 };

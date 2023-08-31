@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/roadNetwork/intersection/incoming_group.h>
 
 #include <algorithm>
@@ -141,8 +134,4 @@ void IncomingGroup::addOncoming(const std::shared_ptr<Lanelet> &oncoming) { onco
 
 void IncomingGroup::setOutgoingGroupID(size_t outId) { outgoingGroupID = outId; }
 
-void IncomingGroup::addCrossing(const std::shared_ptr<Lanelet> &crossing) { crossings.push_back(crossing); }
-
 std::optional<size_t> IncomingGroup::getOutgoingGroupID() { return outgoingGroupID; }
-
-std::vector<std::shared_ptr<Lanelet>> IncomingGroup::getCrossings() { return crossings; }

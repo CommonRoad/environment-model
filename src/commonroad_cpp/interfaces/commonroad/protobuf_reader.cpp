@@ -470,12 +470,6 @@ ProtobufReader::createIncomingGroupFromMessage(const commonroad_map::IncomingGro
             incoming->addRightOutgoing(containerLanelet);
     }
 
-    for (size_t laneletId : incomingGroupMsg.crossing_lanelets()) {
-        auto containerLanelet = getLaneletFromContainer(laneletId, laneletContainer);
-        if (containerLanelet != nullptr)
-            incoming->addCrossing(containerLanelet);
-    }
-
     return incoming;
 }
 
