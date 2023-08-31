@@ -14,6 +14,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/intersection/intersection.cpp
         commonroad_cpp/roadNetwork/intersection/intersection_operations.cpp
         commonroad_cpp/roadNetwork/intersection/outgoing_group.cpp
+        commonroad_cpp/roadNetwork/intersection/crossing_group.cpp
         commonroad_cpp/roadNetwork/road_network_config.cpp
         commonroad_cpp/obstacle/obstacle.cpp
         commonroad_cpp/obstacle/obstacle_operations.cpp
@@ -68,6 +69,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/roadNetwork/intersection/intersection.h
         commonroad_cpp/roadNetwork/intersection/intersection_operations.h
         commonroad_cpp/roadNetwork/intersection/outgoing_group.h
+        commonroad_cpp/roadNetwork/intersection/crossing_group.h
         commonroad_cpp/roadNetwork/lanelet/dijkstra.h
         commonroad_cpp/roadNetwork/lanelet/graph.h
         commonroad_cpp/roadNetwork/lanelet/lane.h

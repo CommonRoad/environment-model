@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
@@ -181,17 +174,6 @@ class IncomingGroup {
      */
     std::optional<size_t> getOutgoingGroupID();
 
-    /**
-     * Add Crossing
-     * @param crossing pointer to crossing
-     */
-    void addCrossing(const std::shared_ptr<Lanelet>& crossing);
-
-    /**
-     * Get Crossing
-     * @return vector of pointer to crossings(lanelets)
-     */
-    std::vector<std::shared_ptr<Lanelet>> getCrossings();
 
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorLeft();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorRight();
@@ -212,7 +194,6 @@ class IncomingGroup {
     std::vector<std::shared_ptr<Lanelet>>
         rightOutgoings; //**< set of pointers to right outgoing lanelets of this incoming */
     std::vector<std::shared_ptr<Lanelet>> oncomings; //**< set of pointers to oncoming lanelets of this incoming */
-    std::vector<std::shared_ptr<Lanelet>> crossings; //**< set of crossings of this incoming */
 
     std::vector<std::shared_ptr<Lanelet>> collectIncomingSuccessors(std::deque<std::shared_ptr<Lanelet>> &candidates,
                                                                     bool considerIncomings);
