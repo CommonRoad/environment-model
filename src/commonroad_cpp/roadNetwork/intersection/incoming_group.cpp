@@ -47,10 +47,11 @@ IncomingGroup::IncomingGroup(size_t incomingId, std::vector<std::shared_ptr<Lane
                              std::vector<std::shared_ptr<Lanelet>> straightOutgoings,
                              std::vector<std::shared_ptr<Lanelet>> leftOutgoings,
                              std::vector<std::shared_ptr<Lanelet>> rightOutgoings,
-                             std::vector<std::shared_ptr<Lanelet>> oncomings)
+                             std::vector<std::shared_ptr<Lanelet>> oncomings,
+                             std::optional<size_t> outgoingGroupID)
     : groupID(incomingId), incomingLanelets(std::move(incomingLanelets)), isLeftOf(std::move(isLeftOf)),
       straightOutgoings(std::move(straightOutgoings)), leftOutgoings(std::move(leftOutgoings)),
-      rightOutgoings(std::move(rightOutgoings)), oncomings(std::move(oncomings)) {}
+      rightOutgoings(std::move(rightOutgoings)), oncomings(std::move(oncomings)), outgoingGroupID(outgoingGroupID) {}
 
 std::vector<std::shared_ptr<Lanelet>> IncomingGroup::getAllSuccessorLeft() {
 

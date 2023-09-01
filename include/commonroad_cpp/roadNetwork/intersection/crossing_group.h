@@ -1,6 +1,7 @@
 #pragma once
 
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include <optional>
 
 /**
  * Class representing an incoming of an intersection.
@@ -20,7 +21,7 @@ class CrossingGroup {
      * @param incomingGroupId Reference incoming orientated left.
      * @param outgoingGroupId Reference to straight outgoing lanelets.
      */
-    CrossingGroup(size_t crossingId, std::vector<std::shared_ptr<Lanelet>> crossingLanelets, size_t incomingGroupId,
+    CrossingGroup(size_t crossingId, const std::vector<std::shared_ptr<Lanelet>>& crossingLanelets, size_t incomingGroupId,
                   size_t outgoingGroupId);
 
     /**
@@ -42,7 +43,7 @@ class CrossingGroup {
      *
      * @param crossingId Id of crossing group.
      */
-    void crossingGroupId(size_t crossingId);
+    void setCrossingGroupId(size_t crossingId);
 
     /**
      * Setter for lanelets belonging to crossing group.
@@ -83,8 +84,8 @@ class CrossingGroup {
     std::optional<size_t> getIncomingGroupID();
 
   private:
-    size_t groupID;
-    std::optional<size_t> outgoingGroupID;
-    std::optional<size_t> incomingGroupID;
-    std::vector<std::shared_ptr<Lanelet>> crossingGroupLanelets; //**< set of pointers to lanelets belonging to crossing group */
+    size_t crossingGroupID; //**< Unique ID of crossing group. */
+    std::vector<std::shared_ptr<Lanelet>> crossingGroupLanelets; //**< set of pointers to lanelets belonging to crossing group. */
+    std::optional<size_t> incomingGroupID; //**< ID of incoming group related to crossing group. */
+    std::optional<size_t> outgoingGroupID; //**< ID of outgoing group related to crossing group. */
 };

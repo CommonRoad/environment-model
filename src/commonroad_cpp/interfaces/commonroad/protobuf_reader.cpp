@@ -89,6 +89,12 @@ void ProtobufReader::initOutgoingGroupContainer(OutgoingGroupContainer &outgoing
         outgoingGroupContainer.emplace(outgoingGroupMsg.outgoing_group_id(), std::make_shared<OutgoingGroup>());
 }
 
+void ProtobufReader::initCrossingGroupContainer(CrossingGroupContainer &crossingGroupContainer,
+                                                const commonroad_map::Intersection &intersectionMsg) {
+    for (const auto &crossingGroupMsg : intersectionMsg.crossings())
+        crossingGroupContainer.emplace(crossingGroupMsg.crossing_group_id(), std::make_shared<CrossingGroup>());
+}
+
 std::shared_ptr<Lanelet> ProtobufReader::getLaneletFromContainer(size_t laneletId,
                                                                  ProtobufReader::LaneletContainer &laneletContainer) {
     if (laneletContainer.find(laneletId) != laneletContainer.end())
@@ -421,8 +427,10 @@ ProtobufReader::createIntersectionFromMessage(const commonroad_map::Intersection
 
     IncomingGroupContainer incomingGroupContainer;
     OutgoingGroupContainer outgoingGroupContainer;
+    CrossingGroupContainer crossingGroupContainer;
     initIncomingGroupContainer(incomingGroupContainer, intersectionMsg);
     initOutgoingGroupContainer(outgoingGroupContainer, intersectionMsg);
+    initCrossingGroupContainer(crossingGroupContainer, intersectionMsg);
 
     for (const auto &incomingGroupMsg : intersectionMsg.incomings())
         intersection->addIncomingGroup(
@@ -431,6 +439,10 @@ ProtobufReader::createIntersectionFromMessage(const commonroad_map::Intersection
     for (const auto &outgoingGroupMsg : intersectionMsg.outgoings())
         intersection->addOutgoingGroup(
             ProtobufReader::createOutgoingGroupFromMessage(outgoingGroupMsg, laneletContainer, outgoingGroupContainer));
+
+    for (const auto &crossingGroupMsg : intersectionMsg.crossings())
+        intersection->addCrossingGroup(
+            ProtobufReader::createCrossingGroupFromMessage(crossingGroupMsg, laneletContainer, crossingGroupContainer));
 
     return intersection;
 }
@@ -442,6 +454,9 @@ ProtobufReader::createIncomingGroupFromMessage(const commonroad_map::IncomingGro
     std::shared_ptr<IncomingGroup> incoming = incomingGroupContainer[incomingGroupMsg.incoming_group_id()];
 
     incoming->setId(incomingGroupMsg.incoming_group_id());
+
+    if (incomingGroupMsg.has_outgoing_group_id())
+        incoming->setOutgoingGroupID(incomingGroupMsg.outgoing_group_id());
 
     for (size_t laneletId : incomingGroupMsg.incoming_lanelets()) {
         auto containerLanelet = getLaneletFromContainer(laneletId, laneletContainer);
@@ -479,12 +494,32 @@ ProtobufReader::createOutgoingGroupFromMessage(const commonroad_map::OutgoingGro
                                                OutgoingGroupContainer &outgoingGroupContainer) {
     std::shared_ptr<OutgoingGroup> outgoing = outgoingGroupContainer[outgoingGroupMsg.outgoing_group_id()];
     outgoing->setId(outgoingGroupMsg.outgoing_group_id());
+    if (outgoingGroupMsg.has_incoming_group_id())
+        outgoing->setIncomingGroupID(outgoingGroupMsg.incoming_group_id());
     for (size_t laneletId : outgoingGroupMsg.outgoing_lanelets()) {
         auto containerLanelet = getLaneletFromContainer(laneletId, laneletContainer);
         if (containerLanelet != nullptr)
             outgoing->addOutgoingLanelet(containerLanelet);
     }
     return outgoing;
+}
+
+std::shared_ptr<CrossingGroup>
+ProtobufReader::createCrossingGroupFromMessage(const commonroad_map::CrossingGroup &crossingGroupMsg,
+                                               LaneletContainer &laneletContainer,
+                                               CrossingGroupContainer &crossingGroupContainer) {
+    std::shared_ptr<CrossingGroup> crossing = crossingGroupContainer[crossingGroupMsg.crossing_group_id()];
+    crossing->setCrossingGroupId(crossingGroupMsg.crossing_group_id());
+    if (crossingGroupMsg.has_incoming_group_id())
+        crossing->setIncomingGroupID(crossingGroupMsg.incoming_group_id());
+    if (crossingGroupMsg.has_outgoing_group_id())
+        crossing->setOutgoingGroupID(crossingGroupMsg.outgoing_group_id());
+    for (size_t laneletId : crossingGroupMsg.crossing_lanelets()) {
+        auto containerLanelet = getLaneletFromContainer(laneletId, laneletContainer);
+        if (containerLanelet != nullptr)
+            crossing->addCrossingLanelet(containerLanelet);
+    }
+    return crossing;
 }
 
 std::shared_ptr<Obstacle>
