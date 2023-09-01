@@ -157,17 +157,20 @@ std::tuple<Scenario, Scenario> InterfacesTest::loadXmlAndPbScenarios(const std::
     return std::make_tuple(scenarioXml, scenarioPb);
 }
 
-// TEST_F(InterfacesTest, SameCrossings) {
-//    std::string scenarioName = "test_reading_intersection_traffic_sign";
-//    const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
-//
-//    auto roadNetworkXml = std::get<1>(scenarioXml);
-//    auto roadNetworkPB = std::get<1>(scenarioPb);
-//
-//    /* TODO get crossings from incomingGroups
-//    EXPECT_EQ(roadNetworkXml->getIntersections().at(0)->getCrossings().size(),
-//              roadNetworkPB->getIntersections().at(0)->getCrossings().size());
-//    EXPECT_EQ(roadNetworkXml->getIntersections().at(0)->getCrossings().at(0)->getId(),
-//              roadNetworkPB->getIntersections().at(0)->getCrossings().at(0)->getId());
-//              */
-//}
+TEST_F(InterfacesTest, ReadingIntersectionWithCrossing) {
+    std::string pathToTestPbFile =
+        TestUtils::getTestScenarioDirectory() + "/DEU_bicycleBothRight-1/DEU_bicycleBothRight-1_1_T-1.pb";
+    std::shared_ptr<RoadNetwork> rn{get<1>(InputUtils::getDataFromCommonRoad(pathToTestPbFile))};
+    EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().size(), 4);
+    EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().at(0)->getCrossingGroupLanelets().size(), 1);
+    EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().at(1)->getIncomingGroupID(), 501);
+    EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().at(2)->getOutgoingGroupID(), 1076);
+
+    EXPECT_EQ(rn->getIntersections().at(0)->getIncomingGroups().size(), 4);
+    EXPECT_EQ(rn->getIntersections().at(0)->getIncomingGroups().at(0)->getIncomingLanelets().size(), 1);
+    EXPECT_EQ(rn->getIntersections().at(0)->getIncomingGroups().at(0)->getOutgoingGroupID(), 1074);
+
+    EXPECT_EQ(rn->getIntersections().at(0)->getOutgoingGroups().size(), 4);
+    EXPECT_EQ(rn->getIntersections().at(0)->getOutgoingGroups().at(0)->getOutgoingLanelets().size(), 3);
+    EXPECT_EQ(rn->getIntersections().at(0)->getOutgoingGroups().at(0)->getIncomingGroupID(), 500);
+}
