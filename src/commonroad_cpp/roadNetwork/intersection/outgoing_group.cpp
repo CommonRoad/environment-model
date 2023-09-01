@@ -1,6 +1,7 @@
 #include "commonroad_cpp/roadNetwork/intersection/outgoing_group.h"
 
-OutgoingGroup::OutgoingGroup(size_t groupID, std::vector<std::shared_ptr<Lanelet>> &outgoingLanelets, std::optional<size_t> incomingGroupID)
+OutgoingGroup::OutgoingGroup(size_t groupID, std::vector<std::shared_ptr<Lanelet>> &outgoingLanelets,
+                             std::optional<size_t> incomingGroupID)
     : groupID(groupID), outgoingLanelets(outgoingLanelets), incomingGroupID(incomingGroupID) {}
 
 void OutgoingGroup::setId(size_t outId) { groupID = outId; }

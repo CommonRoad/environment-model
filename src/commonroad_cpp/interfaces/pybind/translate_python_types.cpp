@@ -307,20 +307,10 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                 }
             }
             incomings[incomingIndex]->setStraightOutgoings(outgoingsStraightLanelets);
-            // crossings
-            auto py_crossings = py_incoming.attr("crossings").cast<py::list>();
-            for (const auto &crossingId : py_crossings) {
-                size_t incId{crossingId.cast<size_t>()};
-                for (const auto &la : lanelets) {
-                    if (la->getId() == incId) {
-                        incomings[incomingIndex]->addCrossing(la);
-                        break;
-                    }
-                }
-            }
-            if (!pybind11::isinstance<pybind11::none>(py_incoming.attr("outgoing_id"))) {
-                incomings[incomingIndex]->setOutgoingGroupID(py_incoming.attr("outgoing_id").cast<int>());
-            }
+
+            if (!pybind11::isinstance<pybind11::none>(py_incoming.attr("outgoing_group_id")))
+                incomings[incomingIndex]->setOutgoingGroupID(py_incoming.attr("outgoing_group_id").cast<int>());
+
             incomingIndex++;
         }
         tempIntersectionContainer[intersectionIndex]->setIncomingGroups(incomings);
@@ -347,10 +337,47 @@ TranslatePythonTypes::convertIntersections(const py::handle &py_laneletNetwork,
                     }
                 }
             }
+
+            if (!pybind11::isinstance<pybind11::none>(py_outgoing.attr("incoming_group_id")))
+                outgoings[outgoingIndex]->setIncomingGroupID(py_outgoing.attr("incoming_group_id").cast<int>());
+
             outgoings[outgoingIndex]->setOutgoingLanelets(outgoingLanelets);
             outgoingIndex++;
         }
         tempIntersectionContainer[intersectionIndex]->setOutgoingGroups(outgoings);
+
+        // crossingGroups
+        std::vector<std::shared_ptr<CrossingGroup>> crossings;
+        crossings.reserve(py_intersection.attr("crossings").cast<py::list>().size());
+        for (const auto &py_crossing : py_intersection.attr("crossings").cast<py::list>()) {
+            std::shared_ptr<CrossingGroup> tempCrossing = std::make_shared<CrossingGroup>();
+            tempCrossing->setCrossingGroupId(py_crossing.attr("crossing_id").cast<int>());
+            crossings.emplace_back(tempCrossing);
+        }
+        size_t crossingIndex{0};
+        for (const auto &py_crossing : py_intersection.attr("crossings").cast<py::list>()) {
+            // Crossing lanelets
+            auto py_crossingLanelets = py_crossing.attr("crossing_lanelets").cast<py::list>();
+            std::vector<std::shared_ptr<Lanelet>> crossingLanelets;
+            for (const auto &crossingLaneletId : py_crossingLanelets) {
+                size_t incId{crossingLaneletId.cast<size_t>()};
+                for (const auto &la : lanelets) {
+                    if (la->getId() == incId) {
+                        crossingLanelets.push_back(la);
+                        break;
+                    }
+                }
+            }
+
+            if (!pybind11::isinstance<pybind11::none>(py_crossing.attr("incoming_group_id")))
+                crossings[crossingIndex]->setIncomingGroupID(py_crossing.attr("incoming_group_id").cast<int>());
+            if (!pybind11::isinstance<pybind11::none>(py_crossing.attr("outgoing_group_id")))
+                crossings[crossingIndex]->setOutgoingGroupID(py_crossing.attr("outgoing_group_id").cast<int>());
+
+            crossings[crossingIndex]->setCrossingGroupLanelets(crossingLanelets);
+            crossingIndex++;
+        }
+        tempIntersectionContainer[intersectionIndex]->setCrossingGroups(crossings);
     }
     return tempIntersectionContainer;
 }

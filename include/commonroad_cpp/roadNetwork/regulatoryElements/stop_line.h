@@ -48,7 +48,7 @@ class StopLine {
      *
      * @param points Start and end vertex.
      */
-    void setPoints(const std::pair<vertex,vertex> &position);
+    void setPoints(const std::pair<vertex, vertex> &position);
 
     /**
      * Setter for line marking of stop line.
@@ -58,6 +58,6 @@ class StopLine {
     void setLineMarking(LineMarking lineMarking);
 
   private:
-    std::pair<vertex, vertex> points;                         //**< start and end vertex of stop line */
-    LineMarking lineMarking;                                  //**< type of line marking */
+    std::pair<vertex, vertex> points; //**< start and end vertex of stop line */
+    LineMarking lineMarking;          //**< type of line marking */
 };

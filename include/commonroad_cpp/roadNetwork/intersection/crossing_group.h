@@ -21,8 +21,8 @@ class CrossingGroup {
      * @param incomingGroupId Reference incoming orientated left.
      * @param outgoingGroupId Reference to straight outgoing lanelets.
      */
-    CrossingGroup(size_t crossingId, const std::vector<std::shared_ptr<Lanelet>>& crossingLanelets, size_t incomingGroupId,
-                  size_t outgoingGroupId);
+    CrossingGroup(size_t crossingId, const std::vector<std::shared_ptr<Lanelet>> &crossingLanelets,
+                  size_t incomingGroupId, size_t outgoingGroupId);
 
     /**
      * Getter for crossing group ID.
@@ -85,7 +85,8 @@ class CrossingGroup {
 
   private:
     size_t crossingGroupID; //**< Unique ID of crossing group. */
-    std::vector<std::shared_ptr<Lanelet>> crossingGroupLanelets; //**< set of pointers to lanelets belonging to crossing group. */
+    std::vector<std::shared_ptr<Lanelet>>
+        crossingGroupLanelets;             //**< set of pointers to lanelets belonging to crossing group. */
     std::optional<size_t> incomingGroupID; //**< ID of incoming group related to crossing group. */
     std::optional<size_t> outgoingGroupID; //**< ID of outgoing group related to crossing group. */
 };

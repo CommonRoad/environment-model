@@ -24,7 +24,8 @@ class Intersection {
      * @param crossingGroups List of references to crossing groups of intersection.
      */
     Intersection(size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
-                 std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups, std::vector<std::shared_ptr<CrossingGroup>> crossingGroups);
+                 std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups,
+                 std::vector<std::shared_ptr<CrossingGroup>> crossingGroups);
 
     /**
      * Getter for intersection ID.
@@ -116,10 +117,13 @@ class Intersection {
     void computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
   private:
-    size_t id;                                        //**< ID of intersection. */
-    std::vector<std::shared_ptr<IncomingGroup>> incomings; //**< List of pointers to incoming groups belonging to intersection. */
-    std::vector<std::shared_ptr<OutgoingGroup>> outgoings; //**< List of pointers to outgoing groups belonging to intersection. */
-    std::vector<std::shared_ptr<CrossingGroup>> crossings; //**< List of pointers to crossing groups belonging to intersection. */
+    size_t id; //**< ID of intersection. */
+    std::vector<std::shared_ptr<IncomingGroup>>
+        incomings; //**< List of pointers to incoming groups belonging to intersection. */
+    std::vector<std::shared_ptr<OutgoingGroup>>
+        outgoings; //**< List of pointers to outgoing groups belonging to intersection. */
+    std::vector<std::shared_ptr<CrossingGroup>>
+        crossings; //**< List of pointers to crossing groups belonging to intersection. */
     std::vector<std::shared_ptr<Lanelet>> memberLanelets; //**< List of lanelets belonging to intersection starting from
                                                           // incoming until outgoing. Crossings are not considered. */
 };

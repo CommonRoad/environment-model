@@ -1,7 +1,9 @@
 #include <commonroad_cpp/roadNetwork/intersection/crossing_group.h>
 
-CrossingGroup::CrossingGroup(size_t crossingId, const std::vector<std::shared_ptr<Lanelet>>& crossingLanelets,
-                             size_t incomingGroupId, size_t outgoingGroupId) : crossingGroupID(crossingId), crossingGroupLanelets(crossingLanelets), incomingGroupID(incomingGroupId), outgoingGroupID(outgoingGroupId) {}
+CrossingGroup::CrossingGroup(size_t crossingId, const std::vector<std::shared_ptr<Lanelet>> &crossingLanelets,
+                             size_t incomingGroupId, size_t outgoingGroupId)
+    : crossingGroupID(crossingId), crossingGroupLanelets(crossingLanelets), incomingGroupID(incomingGroupId),
+      outgoingGroupID(outgoingGroupId) {}
 
 size_t CrossingGroup::crossingId() const { return crossingGroupID; }
 

@@ -135,16 +135,17 @@ std::vector<std::shared_ptr<Intersection>> getIntersections(size_t timeStep,
                                                             const std::shared_ptr<Obstacle> &obs);
 
 /**
-     * Computes the distance of an obstacle to the end of the given lane.
-     *
-     * @param xPosition X-coordinate-point of interest.
-     * @param yPosition Y-coordinate-point of interest.
-     * @param roadNetwork Road network.
-     * @param obs Obstacle of Interest
-     * @param timeStep Time step of interest.
-     * @return Distance to the end of the given lane.
+ * Computes the distance of an obstacle to the end of the given lane.
+ *
+ * @param xPosition X-coordinate-point of interest.
+ * @param yPosition Y-coordinate-point of interest.
+ * @param roadNetwork Road network.
+ * @param obs Obstacle of Interest
+ * @param timeStep Time step of interest.
+ * @return Distance to the end of the given lane.
  */
-double drivingDistanceToCoordinatePoint(double xPosition, double yPosition, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                       const std::shared_ptr<Obstacle> &obs, size_t timeStep);
+double drivingDistanceToCoordinatePoint(double xPosition, double yPosition,
+                                        const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                        const std::shared_ptr<Obstacle> &obs, size_t timeStep);
 
 } // namespace obstacle_operations

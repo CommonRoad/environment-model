@@ -15,7 +15,8 @@
 namespace geometric_operations {
 
 /**
- * Add the dimensions of the object (rectangle with length and width) to the polygon vertices q in the object's coordinate frame.
+ * Add the dimensions of the object (rectangle with length and width) to the polygon vertices q in the object's
+ * coordinate frame.
  *
  * @param qVertex Vertices for which the dimension should be adapted.
  * @param length Length to add.
@@ -40,7 +41,8 @@ std::vector<vertex> addObjectDimensionsCircle(vertex qVertex, double radius);
  * @param yPos y-position of circle center.
  * @param aParam Parameter a specifying main primary axis of ellipse.
  * @param bParam Parameter b specifying secondary axis of ellipse.
- * @param resolution Resolution parameter for discretizing ellipse. Default value 64. Concrete discretization also depends on aParam and bParam.
+ * @param resolution Resolution parameter for discretizing ellipse. Default value 64. Concrete discretization also
+ * depends on aParam and bParam.
  * @return List of vertices representing circle.
  */
 std::vector<vertex> discretizeEllipse(double xPos, double yPos, double aParam, double bParam, size_t resolution = 64);

@@ -23,10 +23,9 @@ namespace lane_operations {
  * @param offset Offset from the beginning of the reference lanelet.
  * @return List containing a list of lanelets contained in lane.
  */
-std::vector<std::vector<std::shared_ptr<Lanelet>>>
-combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov = 250,
-                                  int numIntersections = 2,
-                                  const std::vector<std::shared_ptr<Lanelet>> &containedLanelets = {}, double offset = 0.0);
+std::vector<std::vector<std::shared_ptr<Lanelet>>> combineLaneletAndSuccessorsToLane(
+    const std::shared_ptr<Lanelet> &curLanelet, double fov = 250, int numIntersections = 2,
+    const std::vector<std::shared_ptr<Lanelet>> &containedLanelets = {}, double offset = 0.0);
 
 /**
  * Combines a lanelet and all its predecessors to lanes. For each predecessor lanelet a new lane is created. The
@@ -99,4 +98,4 @@ std::vector<std::shared_ptr<Lanelet>> extractLaneletsFromLanes(const std::vector
 std::vector<std::shared_ptr<Lanelet>>
 combineLaneLanelets(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &lanes);
 
-} // namespace lanelet_operations
+} // namespace lane_operations

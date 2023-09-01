@@ -25,5 +25,4 @@ namespace InputUtils {
  */
 Scenario getDataFromCommonRoad(const std::string &path);
 
-
 } // namespace InputUtils

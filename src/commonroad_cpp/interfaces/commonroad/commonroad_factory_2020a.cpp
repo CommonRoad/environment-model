@@ -1,15 +1,9 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <cstring>
 
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include "commonroad_factory_2020a.h"
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 

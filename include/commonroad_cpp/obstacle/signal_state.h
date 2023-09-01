@@ -31,7 +31,7 @@ class SignalState {
      * @param flashingBlueLights Boolean indicating activity of flashing blue lights (police, ambulance).
      */
     SignalState(size_t timeStep, bool horn, bool indicatorLeft, bool indicatorRight, bool brakingLights,
-          bool hazardWarningLights, bool flashingBlueLights);
+                bool hazardWarningLights, bool flashingBlueLights);
 
     /**
      * Getter for time step.
@@ -144,7 +144,7 @@ class SignalState {
     bool indicatorLeft{false};       //**< Boolean indicating activity of left indicator. */
     bool indicatorRight{false};      //**< Boolean indicating activity of right indicator. */
     bool brakingLights{false};       //**< Boolean indicating activity of braking lights. */
-    bool hazardWarningLights{false};   //**< Boolean indicating activity of hazard warning lights. */
-    bool flashingBlueLights{false};           //**< Boolean indicating activity of flashing blue lights (police, ambulance). */
-    size_t timeStep{0}; //**< time step of the state variables */
+    bool hazardWarningLights{false}; //**< Boolean indicating activity of hazard warning lights. */
+    bool flashingBlueLights{false};  //**< Boolean indicating activity of flashing blue lights (police, ambulance). */
+    size_t timeStep{0};              //**< time step of the state variables */
 };
