@@ -98,3 +98,5 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
 void Intersection::setCrossingGroups(const std::vector<std::shared_ptr<CrossingGroup>> &cros) { crossings = cros; }
 
 void Intersection::addCrossingGroup(const std::shared_ptr<CrossingGroup> &crossing) { crossings.push_back(crossing); }
+
+const std::vector<std::shared_ptr<CrossingGroup>> &Intersection::getCrossingGroups() const { return crossings; }

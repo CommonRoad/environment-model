@@ -52,7 +52,7 @@ class Intersection {
      *
      * @return List of pointers to crossing groups.
      */
-    [[nodiscard]] const std::vector<std::shared_ptr<OutgoingGroup>> &getCrossingGroups() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<CrossingGroup>> &getCrossingGroups() const;
 
     /**
      * Getter for intersection ID.
