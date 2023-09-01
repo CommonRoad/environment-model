@@ -1,10 +1,3 @@
-//
-// Created by Yannick Ballnath.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "commonroad_cpp/interfaces/commonroad/protobuf_reader.h"
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include <stdexcept>
@@ -440,7 +433,7 @@ ProtobufReader::createIntersectionFromMessage(const commonroad_map::Intersection
         intersection->addOutgoingGroup(
             ProtobufReader::createOutgoingGroupFromMessage(outgoingGroupMsg, laneletContainer, outgoingGroupContainer));
 
-    for (const auto &crossingGroupMsg : intersectionMsg.crossings())
+   for (const auto &crossingGroupMsg : intersectionMsg.crossings())
         intersection->addCrossingGroup(
             ProtobufReader::createCrossingGroupFromMessage(crossingGroupMsg, laneletContainer, crossingGroupContainer));
 

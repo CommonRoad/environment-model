@@ -16,7 +16,8 @@ class OutgoingGroup {
      * @param outgoingLanelets vector of pointers to Lanelets of outgoingGroup
      * @param incomingGroupID ID of corresponding incoming group
      */
-    OutgoingGroup(size_t groupID, std::vector<std::shared_ptr<Lanelet>> &outgoingLanelets, std::optional<size_t> incomingGroupID = {});
+    OutgoingGroup(size_t groupID, std::vector<std::shared_ptr<Lanelet>> &outgoingLanelets,
+                  std::optional<size_t> incomingGroupID = {});
 
     /**
      * Setter for the ID
@@ -67,6 +68,7 @@ class OutgoingGroup {
 
   private:
     size_t groupID{0};
-    std::vector<std::shared_ptr<Lanelet>> outgoingLanelets; /**< set of pointers to lanelets belonging to outgoing group */
+    std::vector<std::shared_ptr<Lanelet>>
+        outgoingLanelets;                  /**< set of pointers to lanelets belonging to outgoing group */
     std::optional<size_t> incomingGroupID; /**< corresponding incoming group ID */
 };

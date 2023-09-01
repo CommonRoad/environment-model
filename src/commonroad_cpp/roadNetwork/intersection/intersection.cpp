@@ -7,8 +7,10 @@
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 
 Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
-                           std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups, std::vector<std::shared_ptr<CrossingGroup>> crossingGroups)
-    : id(intersectionId), incomings(std::move(incomingGroups)), outgoings(std::move(outgoingGroups)), crossings(std::move(crossingGroups)) {}
+                           std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups,
+                           std::vector<std::shared_ptr<CrossingGroup>> crossingGroups)
+    : id(intersectionId), incomings(std::move(incomingGroups)), outgoings(std::move(outgoingGroups)),
+      crossings(std::move(crossingGroups)) {}
 
 size_t Intersection::getId() const { return id; }
 

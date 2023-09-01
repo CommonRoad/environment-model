@@ -57,6 +57,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/geometry/util.h
         commonroad_cpp/interfaces/commonroad/input_utils.h
         commonroad_cpp/interfaces/commonroad/xml_reader.h
+        commonroad_cpp/interfaces/commonroad/protobuf_reader.h
         commonroad_cpp/obstacle/actuator_parameters.h
         commonroad_cpp/obstacle/obstacle.h
         commonroad_cpp/obstacle/obstacle_reference.h

@@ -221,7 +221,8 @@ class RoadNetwork {
      * @param lanelet outgoingGroup of interest.
      * @return IncomingGroup object
      */
-    std::shared_ptr<IncomingGroup> findIncomingGroupByOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoingGroup);
+    std::shared_ptr<IncomingGroup>
+    findIncomingGroupByOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoingGroup);
 
     /**
      * Finds outgoingGroup to which lanelet belongs. Returns empty pointer if lanelet is part of outgoingGroup.
@@ -237,7 +238,6 @@ class RoadNetwork {
      * @return Lanelet graph.
      */
     const std::shared_ptr<LaneletGraph> &getTopologicalMap() const;
-
 
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */

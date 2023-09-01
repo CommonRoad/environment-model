@@ -18,7 +18,7 @@ enum class EvaluationMode { directory, singleScenario, singleVehicle, directory_
 
 enum class OperatingMode { boolean, constraint, robustness };
 
-enum class TimeOfDay{ afternoon, morning, night, noon, sunset, unknown };
+enum class TimeOfDay { afternoon, morning, night, noon, sunset, unknown };
 
 enum class Weather { clear, cloudy, fog, hail, heavy_rain, light_rain, mid_rain, snow, unknown };
 

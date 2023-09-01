@@ -176,8 +176,8 @@ template <class V, class E> class graph {
 
         for (const auto &e : m_edges) {
             if (m_freed_vertex_ids.find(e.groupID()) == m_freed_vertex_ids.end()) {
-                out << "\t" << e.source_vertex_id() << " -> " << e.target_vertex_id() << " [label=\"(" << e.groupID() << ") "
-                    << e.data() << "\"]\n";
+                out << "\t" << e.source_vertex_id() << " -> " << e.target_vertex_id() << " [label=\"(" << e.groupID()
+                    << ") " << e.data() << "\"]\n";
             }
         }
 

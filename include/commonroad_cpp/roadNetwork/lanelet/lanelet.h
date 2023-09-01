@@ -436,17 +436,17 @@ class Lanelet {
     std::vector<std::shared_ptr<TrafficLight>>
         trafficLights; //**< list of pointers to traffic lights assigned to lanelet*/
     std::vector<std::shared_ptr<TrafficSign>>
-        trafficSigns;                          //**< list of pointers to traffic signs assigned to lanelet*/
+        trafficSigns;                                  //**< list of pointers to traffic signs assigned to lanelet*/
     std::vector<std::shared_ptr<Area>> adjacent_areas; //**< list of pointers to adjacent areas*/
-    std::set<LaneletType> laneletTypes;        //**< list of relevant lanelet types*/
-    std::set<ObstacleType> usersOneWay;        //**< list of relevant allowed users one way*/
-    std::set<ObstacleType> usersBidirectional; //**< list of relevant allowed users bidirectional*/
-    std::shared_ptr<StopLine> stopLine;        //**< stopLine assigned to lanelet*/
-    LineMarking lineMarkingLeft;               //**< Line marking of left boundary*/
-    LineMarking lineMarkingRight;              //**< Line marking of right boundary*/
-    mutable std::vector<double> orientation;   //**< orientation along center line */
-    mutable std::vector<double> pathLength;    //**< path length along center line */
-    mutable std::vector<double> width;         //**< width along center line */
+    std::set<LaneletType> laneletTypes;                //**< list of relevant lanelet types*/
+    std::set<ObstacleType> usersOneWay;                //**< list of relevant allowed users one way*/
+    std::set<ObstacleType> usersBidirectional;         //**< list of relevant allowed users bidirectional*/
+    std::shared_ptr<StopLine> stopLine;                //**< stopLine assigned to lanelet*/
+    LineMarking lineMarkingLeft;                       //**< Line marking of left boundary*/
+    LineMarking lineMarkingRight;                      //**< Line marking of right boundary*/
+    mutable std::vector<double> orientation;           //**< orientation along center line */
+    mutable std::vector<double> pathLength;            //**< path length along center line */
+    mutable std::vector<double> width;                 //**< width along center line */
 };
 
 extern const std::unordered_map<std::string, LaneletType> LaneletTypeNames;

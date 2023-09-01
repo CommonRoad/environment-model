@@ -26,9 +26,10 @@ class IncomingGroup {
      * @param outgoingGroupID ID of corresponding outgoing group
      */
     IncomingGroup(size_t incomingId, std::vector<std::shared_ptr<Lanelet>> incomingLanelets,
-             std::shared_ptr<IncomingGroup> isLeftOf, std::vector<std::shared_ptr<Lanelet>> straightOutgoings,
-             std::vector<std::shared_ptr<Lanelet>> leftOutgoings, std::vector<std::shared_ptr<Lanelet>> rightOutgoings,
-             std::vector<std::shared_ptr<Lanelet>> oncomings, std::optional<size_t> outgoingGroupID = {});
+                  std::shared_ptr<IncomingGroup> isLeftOf, std::vector<std::shared_ptr<Lanelet>> straightOutgoings,
+                  std::vector<std::shared_ptr<Lanelet>> leftOutgoings,
+                  std::vector<std::shared_ptr<Lanelet>> rightOutgoings, std::vector<std::shared_ptr<Lanelet>> oncomings,
+                  std::optional<size_t> outgoingGroupID = {});
 
     /**
      * Getter for incoming ID.
@@ -175,7 +176,6 @@ class IncomingGroup {
      */
     std::optional<size_t> getOutgoingGroupID();
 
-
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorLeft();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorRight();
     std::vector<std::shared_ptr<Lanelet>> getAllSuccessorStraight();
@@ -185,8 +185,9 @@ class IncomingGroup {
 
   private:
     size_t groupID;
-    std::vector<std::shared_ptr<Lanelet>> incomingLanelets; //**< set of pointers to lanelets belonging to incoming group */
-    std::shared_ptr<IncomingGroup> isLeftOf;                     //**< pointer to incoming which is left */
+    std::vector<std::shared_ptr<Lanelet>>
+        incomingLanelets;                    //**< set of pointers to lanelets belonging to incoming group */
+    std::shared_ptr<IncomingGroup> isLeftOf; //**< pointer to incoming which is left */
     std::vector<std::shared_ptr<Lanelet>>
         straightOutgoings; //**< set of pointers to straight outgoing lanelets of this incoming */
     std::vector<std::shared_ptr<Lanelet>>
@@ -194,7 +195,7 @@ class IncomingGroup {
     std::vector<std::shared_ptr<Lanelet>>
         rightOutgoings; //**< set of pointers to right outgoing lanelets of this incoming */
     std::vector<std::shared_ptr<Lanelet>> oncomings; //**< set of pointers to oncoming lanelets of this incoming */
-    std::optional<size_t> outgoingGroupID; //**< ID of corresponding outgoing group*/
+    std::optional<size_t> outgoingGroupID;           //**< ID of corresponding outgoing group*/
 
     std::vector<std::shared_ptr<Lanelet>> collectIncomingSuccessors(std::deque<std::shared_ptr<Lanelet>> &candidates,
                                                                     bool considerIncomings);

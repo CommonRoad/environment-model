@@ -16,9 +16,9 @@
 
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
 
-#include <cstdint>
 #include <array>
 #include <cassert>
+#include <cstdint>
 #include <limits>
 #include <map>
 #include <string>

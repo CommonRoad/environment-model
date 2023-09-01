@@ -77,9 +77,9 @@ class CommonRoadPredicate {
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      * @return Boolean indicating satisfaction of the predicate.
      */
-    bool
-    simpleBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-                      const std::shared_ptr<Obstacle> &obstacleP);
+    bool simpleBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                 const std::shared_ptr<Obstacle> &obstacleK,
+                                 const std::shared_ptr<Obstacle> &obstacleP);
 
     /**
      * Virtual function for the robustness evaluation of a predicate.

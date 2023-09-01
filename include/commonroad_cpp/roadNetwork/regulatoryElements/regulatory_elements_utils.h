@@ -102,6 +102,6 @@ int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork
  * @return CommonRoad traffic sign type object.
  */
 TrafficSignTypes extractTypeFromNationalID(const std::string &trafficSignId, SupportedTrafficSignCountry country,
-                                       const std::string &country_string);
+                                           const std::string &country_string);
 
 } // namespace regulatory_elements_utils

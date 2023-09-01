@@ -1,6 +1,6 @@
 #pragma once
 
-class AreaBorder{
+class AreaBorder {
   public:
     /**
      * Default Constructor
@@ -14,7 +14,8 @@ class AreaBorder{
      * @param adjacentID
      * @param lineMarking
      */
-    AreaBorder(size_t areaBorderID, std::vector<vertex> &borderPoints, std::optional<int> &adjacentID, LineMarking lineMarking);
+    AreaBorder(size_t areaBorderID, std::vector<vertex> &borderPoints, std::optional<int> &adjacentID,
+               LineMarking lineMarking);
 
   private:
     size_t areaBorderID{0};
