@@ -433,7 +433,7 @@ ProtobufReader::createIntersectionFromMessage(const commonroad_map::Intersection
         intersection->addOutgoingGroup(
             ProtobufReader::createOutgoingGroupFromMessage(outgoingGroupMsg, laneletContainer, outgoingGroupContainer));
 
-   for (const auto &crossingGroupMsg : intersectionMsg.crossings())
+    for (const auto &crossingGroupMsg : intersectionMsg.crossings())
         intersection->addCrossingGroup(
             ProtobufReader::createCrossingGroupFromMessage(crossingGroupMsg, laneletContainer, crossingGroupContainer));
 
