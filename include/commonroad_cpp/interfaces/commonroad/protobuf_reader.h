@@ -37,6 +37,7 @@ using TrafficSignContainer = std::unordered_map<size_t, std::shared_ptr<TrafficS
 using TrafficLightContainer = std::unordered_map<size_t, std::shared_ptr<TrafficLight>>;
 using IncomingGroupContainer = std::unordered_map<size_t, std::shared_ptr<IncomingGroup>>;
 using OutgoingGroupContainer = std::unordered_map<size_t, std::shared_ptr<OutgoingGroup>>;
+using CrossingGroupContainer = std::unordered_map<size_t, std::shared_ptr<CrossingGroup>>;
 
 /**
  * Loads a CommonRoadDynamic message from protobuf file.
@@ -104,6 +105,15 @@ void initIncomingGroupContainer(IncomingGroupContainer& incomingGroupContainer,
  * @param intersectionMsg CommonRoad message
  */
 void initOutgoingGroupContainer(OutgoingGroupContainer &outgoingGroupContainer,
+                                const commonroad_map::Intersection &intersectionMsg);
+
+/**
+ * Initializes container of crossingGroups.
+ *
+ * @param crossingGroupContainer CrossingGroup container
+ * @param intersectionMsg CommonRoad message
+ */
+void initCrossingGroupContainer(CrossingGroupContainer &crossingGroupContainer,
                                 const commonroad_map::Intersection &intersectionMsg);
 
 /**
@@ -243,10 +253,22 @@ std::shared_ptr<IncomingGroup> createIncomingGroupFromMessage(const commonroad_m
  * @param outgoingGroupMsg Protobuf message
  * @param laneletContainer Lanelet container
  * @param outgoingGroupContainer IncomingGroup container
- * @return Incoming
+ * @return Outgoing
  */
 std::shared_ptr<OutgoingGroup> createOutgoingGroupFromMessage(const commonroad_map::OutgoingGroup& outgoingGroupMsg, LaneletContainer& laneletContainer, OutgoingGroupContainer& outgoingGroupContainer);
 
+/**
+ * Creates crossing group from protobuf message "crossingGroup".
+ *
+ * @param crossingGroupMsg Protobuf message
+ * @param laneletContainer Lanelet container
+ * @param crossingGroupContainer CrossingGroup container
+ * @return Crossing
+ */
+std::shared_ptr<CrossingGroup>
+createCrossingGroupFromMessage(const commonroad_map::CrossingGroup &crossingGroupMsg,
+                                               LaneletContainer &laneletContainer,
+                                               CrossingGroupContainer &crossingGroupContainer);
 
 /**
  * Creates obstacle from protobuf message "StaticObstacle".

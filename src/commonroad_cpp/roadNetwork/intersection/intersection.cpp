@@ -7,8 +7,8 @@
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 
 Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
-                           std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups)
-    : id(intersectionId), incomings(std::move(incomingGroups)), outgoings(std::move(outgoingGroups)) {}
+                           std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups, std::vector<std::shared_ptr<CrossingGroup>> crossingGroups)
+    : id(intersectionId), incomings(std::move(incomingGroups)), outgoings(std::move(outgoingGroups)), crossings(std::move(crossingGroups)) {}
 
 size_t Intersection::getId() const { return id; }
 
@@ -95,3 +95,6 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
         intersection_operations::findLeftOf(incom, roadNetwork);
     }
 }
+void Intersection::setCrossingGroups(const std::vector<std::shared_ptr<CrossingGroup>> &cros) { crossings = cros; }
+
+void Intersection::addCrossingGroup(const std::shared_ptr<CrossingGroup> &crossing) { crossings.push_back(crossing); }
