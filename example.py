@@ -1,7 +1,7 @@
 import crcpp
 from commonroad.geometry.shape import Rectangle
 from commonroad.scenario.lanelet import LaneletNetwork, Lanelet, LaneletType, LineMarking
-from commonroad.scenario.state import CustomState
+from commonroad.scenario.state import CustomState, InitialState
 from commonroad.scenario.obstacle import ObstacleType, DynamicObstacle
 from commonroad.prediction.prediction import TrajectoryPrediction, Trajectory
 import numpy as np
@@ -76,35 +76,37 @@ def create_lanelet_network() -> LaneletNetwork:
 lanelet_network = create_lanelet_network()
 
 obstacle_1 = DynamicObstacle(1, ObstacleType.CAR, Rectangle(5, 2),
-                             CustomState(time_step=0, position=np.array([10, 2]), velocity=10, acceleration=0,
-                                   orientation=0),
+                             InitialState(time_step=0, position=np.array([10, 2]), velocity=10, acceleration=0,
+                                          orientation=0),
                              TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
                                  CustomState(time_step=1, position=np.array([20, 4]), velocity=10,
-                                       acceleration=0, orientation=(1 / 4) * math.pi),
+                                             acceleration=0, orientation=(1 / 4) * math.pi),
                                  CustomState(time_step=2, position=np.array([30, 6]), velocity=10,
-                                       acceleration=0, orientation=0),
+                                             acceleration=0, orientation=0),
                                  CustomState(time_step=3, position=np.array([40, 4]), velocity=10,
-                                       acceleration=0, orientation=-(1 / 4) * math.pi)]), Rectangle(5, 2)))
+                                             acceleration=0, orientation=-(1 / 4) * math.pi)]),
+                                                  Rectangle(5, 2)))
 
 obstacle_2 = DynamicObstacle(2, ObstacleType.CAR, Rectangle(5, 2),
-                             CustomState(time_step=0, position=np.array([0, 6]), velocity=10,
-                                   acceleration=0, orientation=0),
+                             InitialState(time_step=0, position=np.array([0, 6]), velocity=10,
+                                         acceleration=0, orientation=0),
                              TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
                                  CustomState(time_step=1, position=np.array([10, 6]), velocity=10, acceleration=0,
-                                       orientation=0),
+                                             orientation=0),
                                  CustomState(time_step=2, position=np.array([20, 6]), velocity=10, acceleration=0,
-                                       orientation=0),
+                                             orientation=0),
                                  CustomState(time_step=3, position=np.array([30, 6]), velocity=10, acceleration=0,
-                                       orientation=0)]), Rectangle(5, 2)))
+                                             orientation=0)]), Rectangle(5, 2)))
 
 obstacle_3 = DynamicObstacle(3, ObstacleType.CAR, Rectangle(5, 2),
-                             CustomState(time_step=1, position=np.array([0, 12]), velocity=10,
-                                   acceleration=0, orientation=0),
+                             InitialState(time_step=1, position=np.array([0, 12]), velocity=10,
+                                          acceleration=0, orientation=0),
                              TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
                                  CustomState(time_step=1, position=np.array([0, 12]), velocity=10, acceleration=0,
-                                       orientation=0)]), Rectangle(5, 2)))
+                                             orientation=0)]), Rectangle(5, 2)))
 
-crcpp.register_scenario(123, 0, 0.1, "DEU", lanelet_network, [obstacle_1], [obstacle_2, obstacle_3])
+crcpp.register_scenario(123, 0, 0.1, "DEU", lanelet_network, [obstacle_1],
+                        [obstacle_2, obstacle_3])
 
 # Monitor-Mode
 sol_monitor_mode_1 = crcpp.safe_distance_boolean_evaluation(123, 0, 1, 2)
