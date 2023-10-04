@@ -13,7 +13,7 @@ dependencies = [ ]
 
 [project.optional-dependencies]
 test = [
-   "commonroad-io>=2021.4",
+   "commonroad-io==2023.3",
    "numpy>=1.20.0",
    "pytest>=5.3.2"
 ]

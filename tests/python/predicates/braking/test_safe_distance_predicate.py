@@ -3,7 +3,7 @@ import numpy as np
 
 import crcpp
 
-from commonroad.scenario.state import CustomState
+from commonroad.scenario.state import CustomState, InitialState
 from commonroad.geometry.shape import Rectangle
 from commonroad.scenario.lanelet import LaneletNetwork, Lanelet
 from commonroad.scenario.obstacle import ObstacleType, DynamicObstacle
@@ -27,17 +27,17 @@ class TestSafeDistancePredicate(unittest.TestCase):
         exp_sol_robustness_mode_2 = -21.0
 
         ego_obstacle = DynamicObstacle(1, ObstacleType.CAR, Rectangle(5, 2),
-                                       CustomState(time_step=0, position=np.array([0, 0]), velocity=20, acceleration=-1,
-                                             orientation=0),
+                                       InitialState(time_step=0, position=np.array([0, 0]), velocity=20,
+                                                    acceleration=-1, orientation=0),
                                        TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
                                            CustomState(time_step=1, position=np.array([20, 0]), velocity=20,
-                                                 acceleration=-1, orientation=0)]), Rectangle(5, 2)))
+                                                       acceleration=-1, orientation=0)]), Rectangle(5, 2)))
         other_obstacle = DynamicObstacle(2, ObstacleType.CAR, Rectangle(5, 2),
-                                         CustomState(time_step=0, position=np.array([20, 0]), velocity=20,
-                                               acceleration=-1, orientation=0),
+                                         InitialState(time_step=0, position=np.array([20, 0]), velocity=20,
+                                                      acceleration=-1, orientation=0),
                                          TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
-                                             CustomState(time_step=1, position=np.array([30, 0]), velocity=0, acceleration=0,
-                                                   orientation=0)]), Rectangle(5, 2)))
+                                             CustomState(time_step=1, position=np.array([30, 0]), velocity=0,
+                                                         acceleration=0, orientation=0)]), Rectangle(5, 2)))
 
         crcpp.register_scenario(123, 0, 0.1, "DEU", self.lanelet_network, [ego_obstacle], [other_obstacle])
 
