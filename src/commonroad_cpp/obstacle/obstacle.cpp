@@ -5,7 +5,7 @@
 // Credits: BMW Car@TUM
 //
 
-#include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 #include <algorithm> // for max, min
 #include <boost/range/adaptor/map.hpp>

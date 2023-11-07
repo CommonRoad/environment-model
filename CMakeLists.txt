@@ -67,6 +67,11 @@ if(APPLE AND DEFINED ENV{CIBUILDWHEEL})
     set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
 endif()
 
+# Disable PCH on platforms other than Clang on Linux (spotty support)
+if(NOT LINUX OR NOT (CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR DEFINED ENV{CIBUILDWHEEL})
+    set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
+endif()
+
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 if(CMAKE_EXPORT_COMPILE_COMMANDS)
@@ -328,6 +333,8 @@ else()
 endif()
 
 include(ExternalTslRobinMap)
+
+include(ExternalDrivabilityChecker)
 
 add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 

@@ -14,7 +14,7 @@
 
 #include <omp.h>
 
-#include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
+#include <geometry/curvilinear_coordinate_system.h>
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
 #include "lanelet.h"
 

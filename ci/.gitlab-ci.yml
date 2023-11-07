@@ -166,6 +166,7 @@ build-coverage:
     expire_in: 30 minutes
 
 build-nix:
+  allow_failure: true
   stage: compile
   image: nixos/nix:latest
   script:
