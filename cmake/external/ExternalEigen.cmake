@@ -25,3 +25,8 @@ if(TARGET eigen)
             EXPORT EnvironmentModel_Targets
             )
 endif()
+
+if(NOT TARGET Eigen3::Eigen)
+    # fcl (in crdc) does weird things if Eigen3::Eigen is not present
+    add_library(Eigen3::Eigen ALIAS eigen)
+endif()

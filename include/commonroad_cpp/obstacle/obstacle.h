@@ -15,7 +15,7 @@
 #include "state.h"
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
-#include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
+#include <geometry/curvilinear_coordinate_system.h>
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
