@@ -26,9 +26,16 @@ if(COMMONROAD_SYSTEM_PROTOBUF AND Protobuf_FOUND)
             "${Protobuf_PROTOC_EXECUTABLE} reveals version ${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
     endif()
 
+    # Fix mismatch between version systems in newer Protobuf versions
+    if(Protobuf_VERSION VERSION_GREATER_EQUAL "4.0.0" AND Protobuf_VERSION VERSION_LESS "5.0.0")
+        set(_protoc_version "4.${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
+    else()
+        set(_protoc_version ${_PROTOBUF_PROTOC_EXECUTABLE_VERSION})
+    endif()
+
     # NOTE: Protobuf_VERSION is the one found by find_package(Protobuf) above
-    if(NOT "${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}" VERSION_EQUAL "${Protobuf_VERSION}")
-        message(STATUS "Found protoc version:        ${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
+    if(NOT "${_protoc_version}" VERSION_EQUAL "${Protobuf_VERSION}")
+        message(STATUS "Found protoc version:        ${_protoc_version}")
         message(STATUS "Found libprotobuf version:   ${Protobuf_VERSION}")
         message(FATAL_ERROR "Unfortunately, the system protobuf installation is unusable "
             "due to a detected mismatch between the Protobuf compiler and the Protobuf libraries. "

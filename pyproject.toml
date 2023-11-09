@@ -9,10 +9,11 @@ authors = [
   {name = "Sebastian Maierhofer"}
 ]
 description = "CommonRoad C++ Environment Model"
-dependencies = [ "commonroad-io @ git+ssh://git@gitlab.lrz.de/cps/commonroad-io@feature_new_format_v3"]
+dependencies = [ "commonroad-io @ git+ssh://git@gitlab.lrz.de/cps/commonroad-io@release-2024-1"]
 
 [project.optional-dependencies]
 test = [
+   "numpy>=1.20.0",
    "pytest>=5.3.2"
 ]
 docs = [
@@ -22,8 +23,8 @@ docs = [
 
 [build-system]
 requires = [
-    "scikit-build-core~=0.4.7",
-    "pybind11~=2.10.4",
+    "scikit-build-core~=0.6.0",
+    "pybind11~=2.11.1",
     "setuptools_scm[toml]~=7.1.0"
     ]
 build-backend = "scikit_build_core.build"
