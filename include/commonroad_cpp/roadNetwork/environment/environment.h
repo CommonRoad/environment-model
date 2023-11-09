@@ -1,5 +1,7 @@
 #pragma once
 
+#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
+
 class Environment {
   public:
     Environment();
