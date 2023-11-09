@@ -1,4 +1,6 @@
 #include "commonroad_cpp/predicates/general/is_vehicle_predicate.h"
+#include "commonroad_cpp/obstacle/obstacle.h"
+#include <stdexcept>
 
 IsVehiclePredicate::IsVehiclePredicate() : CommonRoadPredicate(false) {}
 
