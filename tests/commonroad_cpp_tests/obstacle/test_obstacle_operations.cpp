@@ -261,6 +261,8 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
     std::string pathToTestFile =
         TestUtils::getTestScenarioDirectory() + "/DEU_CornerWith180Degree-1/DEU_CornerWith180Degree-1_1_T-1.pb";
     const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const double cornerRadius = 10.0;
+    const double distanceToCover = M_PI * cornerRadius;
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 10, 0, 0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 7, 3, 10, 0, M_PI / 4);
@@ -274,6 +276,7 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
         std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
+    const double obstacle_length = 5.0;
 
     std::shared_ptr<Obstacle> obstacleOne =
         std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
@@ -281,12 +284,18 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
 
     std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
 
+    // Larger tolerances for the edges of the lanelet, because then the result depends on how we extrapolate its center
+    // line
     ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleOne, 0),
-                M_PI * 10 - (5.0 / 2), 0.25);
+                distanceToCover * 1 - (obstacle_length / 2), 0.26);
+    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleOne, 1),
+                distanceToCover * 0.75 - (obstacle_length / 2), 0.15);
     ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleOne, 2),
-                M_PI * 5 - (5.0 / 2), 0.25);
+                distanceToCover * 0.5 - (obstacle_length / 2), 0.15);
+    ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleOne, 3),
+                distanceToCover * 0.25 - (obstacle_length / 2), 0.15);
     ASSERT_NEAR(obstacle_operations::drivingDistanceToCoordinatePoint(0, 20, roadNetwork, obstacleOne, 4),
-                0 - (5.0 / 2), 0.25);
+                distanceToCover * 0 - (obstacle_length / 2), 0.26);
     // not in projection domain
     ASSERT_THROW(obstacle_operations::drivingDistanceToCoordinatePoint(-20, 20, roadNetwork, obstacleOne, 4),
                  std::invalid_argument);

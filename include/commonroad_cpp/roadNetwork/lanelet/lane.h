@@ -14,9 +14,10 @@
 
 #include <omp.h>
 
-#include "lanelet.h"
-#include <commonroad_cpp/geometry/curvilinear_coordinate_system.h>
+#include <geometry/curvilinear_coordinate_system.h>
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
+#include "lanelet.h"
+
 
 namespace geometry {
 class CurvilinearCoordinateSystem;
@@ -47,8 +48,8 @@ class Lane : public Lanelet {
      */
     Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet);
 
-    Lane(const Lane &) = delete;
-    Lane(Lane &&) = default;
+    Lane(const Lane&) = delete;
+    Lane(Lane&&) = default;
 
     ~Lane();
 
