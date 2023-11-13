@@ -17,7 +17,7 @@ class ReversesPredicateTest : public testing::Test {
     std::shared_ptr<Obstacle> egoVehicle;
     ReversesPredicate pred;
     std::shared_ptr<World> world;
-    const PredicateParameters parameters;
+    PredicateParameters parameters;
 
   private:
     void SetUp() override;

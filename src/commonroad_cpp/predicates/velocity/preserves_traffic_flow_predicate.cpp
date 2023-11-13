@@ -21,8 +21,9 @@ bool PreservesTrafficFlowPredicate::booleanEvaluation(
                               obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
                               TrafficSignTypes::MAX_SPEED),
                           regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
-                          parameters.brakingSpeedLimit, parameters.fovSpeedLimit, parameters.roadConditionSpeedLimit})};
-    return (vMax - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.minVelocityDif;
+                          parameters.paramMap["brakingSpeedLimit"], parameters.paramMap["fovSpeedLimit"],
+                          parameters.paramMap["roadConditionSpeedLimit"]})};
+    return (vMax - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.paramMap["minVelocityDif"];
 }
 
 double PreservesTrafficFlowPredicate::robustEvaluation(
