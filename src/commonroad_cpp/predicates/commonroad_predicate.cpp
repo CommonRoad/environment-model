@@ -33,7 +33,7 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(
     return result;
 }
 
-const PredicateParameters &CommonRoadPredicate::getParameters() const { return parameters; }
+PredicateParameters &CommonRoadPredicate::getParameters() { return parameters; }
 
 void CommonRoadPredicate::setParameters(const PredicateParameters &params) { parameters = params; }
 
