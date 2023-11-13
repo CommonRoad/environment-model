@@ -30,8 +30,8 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(
         return false;
     auto distance{obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)) -
                   obstacleP->frontS(world->getRoadNetwork(), timeStep)};
-    return 0 <= distance and distance <= parameters.dBrakingIntersection and
-           obstacleP->getStateByTimeStep(timeStep)->getAcceleration() < parameters.aBrakingIntersection;
+    return 0 <= distance and distance <= parameters.paramMap["dBrakingIntersection"] and
+           obstacleP->getStateByTimeStep(timeStep)->getAcceleration() < parameters.paramMap["aBrakingIntersection"];
 }
 
 Constraint CausesBrakingIntersectionPredicate::constraintEvaluation(
