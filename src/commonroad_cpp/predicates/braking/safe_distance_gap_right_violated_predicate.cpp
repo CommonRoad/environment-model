@@ -16,8 +16,8 @@ bool SafeDistanceGapRightViolatedPredicate::booleanEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     InNeighboringRightLanePredicate inNeighboringRightLanePredicate;
     KeepsSafeDistancePrecPredicate KeepsSafeDistancePrecPredicate;
-    std::shared_ptr<OptionalPredicateParameters> predicateParameters =
-        std::make_shared<OptionalPredicateParameters>(OptionalPredicateParameters(parameters.minSafetyDistance));
+    std::shared_ptr<OptionalPredicateParameters> predicateParameters = std::make_shared<OptionalPredicateParameters>(
+        OptionalPredicateParameters(parameters.paramMap["minSafetyDistance"]));
     bool safeDistanceViolated = false;
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))

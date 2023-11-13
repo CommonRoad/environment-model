@@ -13,9 +13,9 @@ void ReversesPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 0, 0, 0, 0, 0, 0);
     std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 1, 0, 1, 0, 0, 0, 0, 0);
     std::shared_ptr<State> stateTwoEgoVehicle =
-        std::make_shared<State>(2, 1, 0, -parameters.standstillError, 0, 0, 0, 15, 0);
+        std::make_shared<State>(2, 1, 0, -parameters.paramMap["standstillError"], 0, 0, 0, 15, 0);
     std::shared_ptr<State> stateThreeEgoVehicle =
-        std::make_shared<State>(3, 1 - parameters.standstillError, 4, -2, 0, 0, 0, 30, 0);
+        std::make_shared<State>(3, 1 - parameters.paramMap["standstillError"], 4, -2, 0, 0, 0, 30, 0);
 
     Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),

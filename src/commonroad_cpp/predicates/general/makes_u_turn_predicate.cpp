@@ -17,7 +17,7 @@ bool MakesUTurnPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     auto orientationCcs{obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep)};
-    return parameters.uTurnLower <= orientationCcs and orientationCcs <= parameters.uTurnUpper;
+    return parameters.paramMap["uTurnLower"] <= orientationCcs and orientationCcs <= parameters.paramMap["uTurnUpper"];
 }
 
 Constraint MakesUTurnPredicate::constraintEvaluation(

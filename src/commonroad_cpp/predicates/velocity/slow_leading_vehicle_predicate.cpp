@@ -31,8 +31,8 @@ bool SlowLeadingVehiclePredicate::booleanEvaluation(
                           obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
                           TrafficSignTypes::MAX_SPEED),
                       regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
-                      parameters.roadConditionSpeedLimit})};
-        if (vMax - obs->getStateByTimeStep(timeStep)->getVelocity() >= parameters.minVelocityDif)
+                      parameters.paramMap["roadConditionSpeedLimit"]})};
+        if (vMax - obs->getStateByTimeStep(timeStep)->getVelocity() >= parameters.paramMap["minVelocityDif"])
             return true;
     }
     return false;

@@ -17,7 +17,7 @@ bool DrivesWithSlightlyHigherSpeedPredicate::booleanEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double diff =
         obstacleK->getStateByTimeStep(timeStep)->getVelocity() - obstacleP->getStateByTimeStep(timeStep)->getVelocity();
-    return 0 < diff and diff < parameters.slightlyHigherSpeedDifference;
+    return 0 < diff and diff < parameters.paramMap["slightlyHigherSpeedDifference"];
 }
 
 Constraint DrivesWithSlightlyHigherSpeedPredicate::constraintEvaluation(

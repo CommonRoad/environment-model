@@ -12,13 +12,13 @@ bool SafeLateralDistanceToVrusPredicate::booleanEvaluation(
 
     auto lanelets = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     double dist = obstacleK->getLateralDistanceToObstacle(timeStep, obstacleP, world->getRoadNetwork());
-    if (dist < parameters.dMinUrban)
+    if (dist < parameters.paramMap["dMinUrban"])
         return false;
     else if (!std::any_of(lanelets.begin(), lanelets.end(),
                           [](const std::shared_ptr<Lanelet> &lanelet) {
                               return lanelet->hasLaneletType(LaneletType::urban);
                           }) and
-             dist < parameters.dMinNonUrban)
+             dist < parameters.paramMap["dMinNonUrban"])
         return false;
     return true;
 }
