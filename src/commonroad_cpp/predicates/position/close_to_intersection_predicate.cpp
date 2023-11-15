@@ -29,7 +29,8 @@ bool CloseToIntersectionPredicate::booleanEvaluation(
         // true if it is smaller than the max distance to intersections
         for (const std::shared_ptr<Lanelet> &lane : lanelets) {
             if (lane->hasLaneletType(LaneletType::incoming)) {
-                if (resultIdsWithDistance.find(lane->getId())->second < parameters.close_to_intersection_max_distance)
+                if (resultIdsWithDistance.find(lane->getId())->second <
+                    parameters.paramMap["close_to_intersection_max_distance"])
                     return true;
             } else {
                 if (!lane->getSuccessors().empty()) {
@@ -37,7 +38,7 @@ bool CloseToIntersectionPredicate::booleanEvaluation(
                         double distance =
                             resultIdsWithDistance.find(lane->getId())->second + successor->getPathLength().back();
                         if (resultIdsWithDistance.find(successor->getId()) == resultIdsWithDistance.end() and
-                            distance < parameters.close_to_intersection_max_distance) {
+                            distance < parameters.paramMap["close_to_intersection_max_distance"]) {
                             tmp_succs.push_back(successor);
                             resultIdsWithDistance.insert({successor->getId(), distance});
                         }

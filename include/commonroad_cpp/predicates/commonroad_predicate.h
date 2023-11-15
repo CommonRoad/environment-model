@@ -129,7 +129,7 @@ class CommonRoadPredicate {
      *
      * @return Struct containing all parameters.
      */
-    [[nodiscard]] const PredicateParameters &getParameters() const;
+    [[nodiscard]] PredicateParameters &getParameters();
 
     /**
      * Setter for parameters.
