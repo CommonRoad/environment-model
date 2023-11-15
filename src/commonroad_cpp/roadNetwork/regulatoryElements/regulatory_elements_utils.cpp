@@ -72,7 +72,7 @@ bool regulatory_elements_utils::atTrafficLightDirState(size_t timeStep, const st
 
 double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lanelet,
                                              const TrafficSignTypes &signType) {
-    double limit = PredicateParameters().maxPositiveDouble;
+    double limit = PredicateParameters().paramMap["maxPositiveDouble"];
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
     for (const std::shared_ptr<TrafficSign> &signPtr : trafficSigns) {
         for (const std::shared_ptr<TrafficSignElement> &elemPtr : signPtr->getTrafficSignElements()) {
@@ -98,10 +98,10 @@ double regulatory_elements_utils::speedLimit(const std::vector<std::shared_ptr<L
 double regulatory_elements_utils::speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
                                                       const TrafficSignTypes &signType) {
     double vMaxLane{speedLimit(lanelets, signType)};
-    if (vMaxLane == PredicateParameters().maxPositiveDouble)
-        return PredicateParameters().desiredInterstateVelocity;
+    if (vMaxLane == PredicateParameters().paramMap["maxPositiveDouble"])
+        return PredicateParameters().paramMap["desiredInterstateVelocity"];
     else
-        return std::min(PredicateParameters().desiredInterstateVelocity, vMaxLane);
+        return std::min(PredicateParameters().paramMap["desiredInterstateVelocity"], vMaxLane);
 }
 
 double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet> &lanelet,

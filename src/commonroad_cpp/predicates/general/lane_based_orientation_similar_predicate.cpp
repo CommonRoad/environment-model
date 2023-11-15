@@ -19,7 +19,7 @@ bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
                obstacleK->getCurvilinearOrientation(timeStep,
                                                     obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)),
                obstacleP->getCurvilinearOrientation(world->getRoadNetwork(), timeStep))) <
-           parameters.laneMatchingOrientation;
+           parameters.paramMap["laneMatchingOrientation"];
 }
 
 Constraint LaneBasedOrientationSimilarPredicate::constraintEvaluation(

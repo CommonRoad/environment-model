@@ -6,27 +6,43 @@
 //
 
 #include <commonroad_cpp/predicates/predicate_config.h>
+#include <stdexcept>
 
-void PredicateParameters::checkParameterValidity() const {
-    assert(aAbrupt < 0);
-    assert(jAbrupt < 0);
-    assert(standstillError > 0);
-    assert(minVelocityDif > 0);
-    assert(numVehCongestion > 0);
-    assert(maxCongestionVelocity > 0);
-    assert(numVehSlowMovingTraffic > 0);
-    assert(maxSlowMovingTrafficVelocity > 0);
-    assert(numVehQueueOfVehicles > 0);
-    assert(maxQueueOfVehiclesVelocity > 0);
-    assert(maxVelocityLimitFreeDriving > 0);
-    assert(desiredInterstateVelocity > 0);
-    assert(minInterstateWidth > 0);
-    assert(closeToLaneBorder > 0);
-    assert(closeToOtherVehicle > 0);
-    assert(slightlyHigherSpeedDifference > 0);
-    assert(uTurnUpper > 0);
-    assert(uTurnLower > 0);
-    assert(aboveCenterlineTh > 0);
+void PredicateParameters::checkParameterValidity() {
+    assert(paramMap["aAbrupt"] < 0);
+    assert(paramMap["jAbrupt"] < 0);
+    assert(paramMap["standstillError"] > 0);
+    assert(paramMap["minVelocityDif"] > 0);
+    assert(paramMap["numVehCongestion"] > 0);
+    assert(paramMap["maxCongestionVelocity"] > 0);
+    assert(paramMap["numVehSlowMovingTraffic"] > 0);
+    assert(paramMap["maxSlowMovingTrafficVelocity"] > 0);
+    assert(paramMap["numVehQueueOfVehicles"] > 0);
+    assert(paramMap["maxQueueOfVehiclesVelocity"] > 0);
+    assert(paramMap["maxVelocityLimitFreeDriving"] > 0);
+    assert(paramMap["desiredInterstateVelocity"] > 0);
+    assert(paramMap["minInterstateWidth"] > 0);
+    assert(paramMap["closeToLaneBorder"] > 0);
+    assert(paramMap["closeToOtherVehicle"] > 0);
+    assert(paramMap["slightlyHigherSpeedDifference"] > 0);
+    assert(paramMap["uTurnUpper"] > 0);
+    assert(paramMap["uTurnLower"] > 0);
+    assert(paramMap["aboveCenterlineTh"] > 0);
+}
+
+void PredicateParameters::updateParam(const std::string &name, double value) {
+    if (paramMap.count(name) == 1) {
+        paramMap[name] = value;
+        checkParameterValidity();
+    } else
+        throw std::runtime_error("No predicate " + name + " found for update");
+}
+
+double PredicateParameters::getParam(const std::string &name) {
+    if (paramMap.count(name) == 1) {
+        return paramMap[name];
+    } else
+        throw std::runtime_error("No predicate " + name + " found");
 }
 
 std::map<std::string, std::array<double, 2>> predicateSatisfaction{
