@@ -41,7 +41,7 @@ Python build requirements (PEP 518 requirements) as specified in
 `pyproject.toml` are already installed.
 To install them, run the following:
 ```
-pip install "setuptools>=61.0" "wheel" "scikit-build~=0.15.0" "cmake~=3.24.0" "ninja" "pybind11~=2.10.0" "setuptools_scm[toml]>=6.2"
+pip install "setuptools>=61.0" "wheel" "scikit-build-core~=0.6.0" "pybind11~=2.11.1" "setuptools_scm[toml]>=7.1.0"
 ```
 
 ### Debugging the C++ interface codr from Python
