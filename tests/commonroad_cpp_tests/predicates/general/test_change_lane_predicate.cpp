@@ -184,6 +184,7 @@ TEST_F(ChangeLanePredicateTest, OnFollowingLaneletsAndAccessRampConnected) {
 }
 
 TEST_F(ChangeLanePredicateTest, OnFollowingLaneletsAndAccessRampNotConnected) {
+    // test case assumes invalid lanelet network (missing successor relationship)
     const auto &[obstacles, roadNetwork, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileTwoFollowingLaneletsAndAccessRampTrue);
     std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacles[0]}, {}, 0.1));

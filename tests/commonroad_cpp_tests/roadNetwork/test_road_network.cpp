@@ -3,7 +3,6 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
-#include <commonroad_cpp/roadNetwork/road_network.h>
 #include <geometry/curvilinear_coordinate_system.h>
 
 void RoadNetworkTestInitialization::setUpRoadNetwork() {
@@ -45,8 +44,7 @@ TEST_F(RoadNetworkTest, FindLaneletById) {
 }
 
 TEST_F(RoadNetworkTest, AddLanes) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
-                               "/predicates/DEU_TrafficLightTest-1/DEU_TrafficLightTest-1_1_T-1.pb"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/ZAM_Test-2/ZAM_Test-2_1_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
@@ -67,7 +65,7 @@ TEST_F(RoadNetworkTest, AddLanes) {
                 lanes.at(0)->getLaneletTypes()};
     geometry::EigenPolyline reference_path;
     for (auto vert : let.getCenterVertices())
-        reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+        reference_path.emplace_back(vert.x, vert.y);
     geometry::util::resample_polyline(reference_path, 2, reference_path);
     auto newLane{std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), let,
                                         std::make_shared<CurvilinearCoordinateSystem>(reference_path))};

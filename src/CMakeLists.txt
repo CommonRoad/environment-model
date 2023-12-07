@@ -2,6 +2,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/auxiliaryDefs/regulatory_elements.cpp
         commonroad_cpp/roadNetwork/road_network.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet.cpp
+        commonroad_cpp/roadNetwork/lanelet/bound.cpp
         commonroad_cpp/roadNetwork/lanelet/lane.cpp
         commonroad_cpp/roadNetwork/lanelet/lane_operations.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet_operations.cpp
@@ -69,6 +70,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/roadNetwork/lanelet/graph.h
         commonroad_cpp/roadNetwork/lanelet/lane.h
         commonroad_cpp/roadNetwork/lanelet/lanelet.h
+        commonroad_cpp/roadNetwork/lanelet/bound.h
         commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h
         commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h
         commonroad_cpp/roadNetwork/lanelet/lane_operations.h

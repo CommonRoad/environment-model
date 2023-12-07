@@ -65,10 +65,10 @@ TEST_F(LaneletOperationsTest, CreateInterstateLanes) {
     EXPECT_EQ(lanes.size(), 2);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().size(), 10);
     EXPECT_EQ(lanes.at(0)->getContainedLanelets().front()->getId(), 11);
-    EXPECT_EQ(lanes.at(0)->getContainedLanelets().back()->getId(), 9);
+    EXPECT_EQ(lanes.at(0)->getContainedLanelets().back()->getId(), 20);
     EXPECT_EQ(lanes.at(1)->getContainedLanelets().size(), 10);
     EXPECT_EQ(lanes.at(1)->getContainedLanelets().front()->getId(), 11);
-    EXPECT_EQ(lanes.at(1)->getContainedLanelets().back()->getId(), 20);
+    EXPECT_EQ(lanes.at(1)->getContainedLanelets().back()->getId(), 9);
 
     std::string pathToTestFileTwo{TestUtils::getTestScenarioDirectory() +
                                   "/predicates/DEU_TestSafeDistance-1/DEU_TestSafeDistance-1_1_T-1.pb"};
@@ -117,8 +117,7 @@ TEST_F(LaneletOperationsTest, CreateInterstateLanes) {
 }
 
 TEST_F(LaneletOperationsTest, CreateLanesByLaneletsSingleSimpleIntersection) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
-                               "/predicates/DEU_TrafficLightTest-1/DEU_TrafficLightTest-1_1_T-1.pb"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/ZAM_Test-2/ZAM_Test-2_1_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};

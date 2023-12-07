@@ -2,7 +2,6 @@
 #include "../../interfaces/utility_functions.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
-#include "commonroad_cpp/obstacle/state.h"
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void TestInNeighboringLeftLanePredicate::SetUp() {
