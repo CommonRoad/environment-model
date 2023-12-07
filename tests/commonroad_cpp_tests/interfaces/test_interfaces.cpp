@@ -159,7 +159,7 @@ std::tuple<Scenario, Scenario> InterfacesTest::loadXmlAndPbScenarios(const std::
 
 TEST_F(InterfacesTest, ReadingIntersectionWithCrossing) {
     std::string pathToTestPbFile =
-        TestUtils::getTestScenarioDirectory() + "/DEU_bicycleBothRight-1/DEU_bicycleBothRight-1_1_T-1.pb";
+        TestUtils::getTestScenarioDirectory() + "/DEU_BicycleBothRight-1/DEU_BicycleBothRight-1_1_T-1.pb";
     std::shared_ptr<RoadNetwork> rn{get<1>(InputUtils::getDataFromCommonRoad(pathToTestPbFile))};
     EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().size(), 4);
     EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().at(0)->getCrossingGroupLanelets().size(), 1);

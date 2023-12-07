@@ -4,7 +4,7 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void TestSafeDistanceGapRightViolatedPredicate::SetUp() {
-    pathToTestFile = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_ThreeLanes-1/DEU_ThreeLanes-1_1_T-1.pb";
+    pathToTestFile = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_ThreeLanes-1/DEU_ThreeLanes-1.pb";
     pathToTestFileOvertaking = TestUtils::getTestScenarioDirectory() +
                                "/predicates/DEU_TestSafeDistanceToRightVehicleViolated-1/"
                                "DEU_TestSafeDistanceToRightVehicleViolated-1_1_T-1.pb";
