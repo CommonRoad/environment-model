@@ -30,7 +30,7 @@ TEST_F(IncomingTest, InitializationComplete) {
     EXPECT_EQ(incomingThree->getIncomingLanelets().at(0)->getId(), 6);
 
     EXPECT_EQ(incomingOne->getLeftOutgoings().size(), 0);
-    EXPECT_EQ(incomingTwo->getLeftOutgoings().size(), 1); // TODO 0 and 2 straight
+    EXPECT_EQ(incomingTwo->getLeftOutgoings().size(), 1);
     EXPECT_EQ(incomingThree->getLeftOutgoings().size(), 1);
     EXPECT_EQ(incomingTwo->getLeftOutgoings().at(0)->getId(), 101);
     EXPECT_EQ(incomingThree->getLeftOutgoings().at(0)->getId(), 121);

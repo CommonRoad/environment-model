@@ -15,12 +15,12 @@
 #include "state.h"
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
-#include <geometry/curvilinear_coordinate_system.h>
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
 #include <commonroad_cpp/roadNetwork/types.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 #include <boost/container_hash/hash.hpp>
 
@@ -354,8 +354,8 @@ class Obstacle {
      * @param timeStep Time step of interest
      * @return List of pointers to occupied lanelets by front of the car.
      */
-    std::vector<std::shared_ptr<Lanelet>>
-    getOccupiedLaneletsByFront(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+    std::vector<std::shared_ptr<Lanelet>> getOccupiedLaneletsByFront(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                                     size_t timeStep);
 
     /**
      * Getter for occupied lanelets by the back of the car at a time steps within a road network.
@@ -364,8 +364,8 @@ class Obstacle {
      * @param timeStep Time step of interest
      * @return List of pointers to occupied lanelets by back of the car.
      */
-    std::vector<std::shared_ptr<Lanelet>>
-    getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+    std::vector<std::shared_ptr<Lanelet>> getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                                    size_t timeStep);
 
     /**
      * Provides state given a time step. The time step can belong to the current state, history, or prediction.

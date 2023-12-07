@@ -1,5 +1,6 @@
 #include "commonroad_cpp/interfaces/commonroad/protobuf_reader.h"
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
+#include "commonroad_cpp/roadNetwork/lanelet/bound.h"
 #include <stdexcept>
 #include <utility>
 
@@ -133,10 +134,14 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
     TrafficLightContainer trafficLightContainer;
     initTrafficLightContainer(trafficLightContainer, commonRoadMapMsg);
 
+    std::vector<std::shared_ptr<Bound>> boundaries;
+    for (const auto &boundMsg : commonRoadMapMsg.boundaries())
+        boundaries.push_back(ProtobufReader::createBoundFromMessage(boundMsg));
+
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for (const auto &laneletMsg : commonRoadMapMsg.lanelets())
-        lanelets.push_back(ProtobufReader::createLaneletFromMessage(laneletMsg, laneletContainer, trafficSignContainer,
-                                                                    trafficLightContainer, commonRoadMapMsg));
+        lanelets.push_back(ProtobufReader::createLaneletFromMessage(
+            laneletMsg, laneletContainer, trafficSignContainer, trafficLightContainer, boundaries, commonRoadMapMsg));
 
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns;
     for (const auto &trafficSignMsg : commonRoadMapMsg.traffic_signs())
@@ -199,40 +204,30 @@ std::string ProtobufReader::createMapIDFromMessage(const commonroad_common::MapI
     return mapIDMsg.country_id() + "_" + mapIDMsg.map_name() + "-" + std::to_string(mapIDMsg.map_id());
 }
 
-std::shared_ptr<Lanelet>
-ProtobufReader::createLaneletFromMessage(const commonroad_map::Lanelet &laneletMsg, LaneletContainer &laneletContainer,
-                                         TrafficSignContainer &trafficSignContainer,
-                                         TrafficLightContainer &trafficLightContainer,
-                                         const commonroad_map::CommonRoadMap &commonRoadMapMsg) {
+std::shared_ptr<Lanelet> ProtobufReader::createLaneletFromMessage(
+    const commonroad_map::Lanelet &laneletMsg, LaneletContainer &laneletContainer,
+    TrafficSignContainer &trafficSignContainer, TrafficLightContainer &trafficLightContainer,
+    const std::vector<std::shared_ptr<Bound>> &boundaries, const commonroad_map::CommonRoadMap &commonRoadMapMsg) {
     std::shared_ptr<Lanelet> lanelet = laneletContainer[laneletMsg.lanelet_id()];
 
     lanelet->setId(laneletMsg.lanelet_id());
 
     int bordersFound = 0;
-    std::vector<vertex> leftVertices{};
-    std::vector<vertex> rightVertices{};
-    for (const auto &bound : commonRoadMapMsg.boundaries()) {
-        if (bound.boundary_id() == laneletMsg.left_bound()) {
-            std::unique_ptr<LineMarking> leftLineMarking =
-                std::make_unique<LineMarking>(LineMarking(laneletMsg.left_bound_line_marking()));
-            leftVertices = ProtobufReader::createBoundFromMessage(bound);
-            lanelet->setLeftBorderVertices(leftVertices);
-            if (leftLineMarking != nullptr)
-                lanelet->setLineMarkingLeft(*leftLineMarking);
+    for (const auto &bound : boundaries) {
+        if (bound->getBoundaryId() == (size_t)laneletMsg.left_bound()) {
+            lanelet->setLeftBorderVertices(bound->getVertices());
+            lanelet->setLineMarkingLeft(bound->getLineMarking());
             bordersFound++;
         }
-        if (bound.boundary_id() == laneletMsg.right_bound()) {
-            std::unique_ptr<LineMarking> rightLineMarking =
-                std::make_unique<LineMarking>(LineMarking(laneletMsg.right_bound_line_marking()));
-            rightVertices = ProtobufReader::createBoundFromMessage(bound);
-            lanelet->setRightBorderVertices(rightVertices);
-            if (rightLineMarking != nullptr)
-                lanelet->setLineMarkingRight(*rightLineMarking);
+        if (bound->getBoundaryId() == (size_t)laneletMsg.right_bound()) {
+            lanelet->setRightBorderVertices(bound->getVertices());
+            lanelet->setLineMarkingRight(bound->getLineMarking());
             bordersFound++;
         }
         if (bordersFound == 2) {
-            for (size_t vertex_i = 0; vertex_i < leftVertices.size(); vertex_i++)
-                lanelet->addCenterVertex((leftVertices[vertex_i] + rightVertices[vertex_i]) / 2.);
+            for (size_t vertex_i = 0; vertex_i < lanelet->getLeftBorderVertices().size(); vertex_i++)
+                lanelet->addCenterVertex(
+                    (lanelet->getLeftBorderVertices()[vertex_i] + lanelet->getRightBorderVertices()[vertex_i]) / 2.);
             break;
         }
     }
@@ -310,11 +305,15 @@ ProtobufReader::createLaneletFromMessage(const commonroad_map::Lanelet &laneletM
     return lanelet;
 }
 
-std::vector<vertex> ProtobufReader::createBoundFromMessage(const commonroad_map::Bound &boundMsg) {
+std::shared_ptr<Bound> ProtobufReader::createBoundFromMessage(const commonroad_map::Bound &boundMsg) {
     std::vector<vertex> points;
     for (const auto &pointMsg : boundMsg.points())
         points.push_back(ProtobufReader::createPointFromMessage(pointMsg));
-    return points;
+
+    std::string lineMarkingName = commonroad_map::LineMarkingEnum_LineMarking_Name(boundMsg.line_marking());
+    LineMarking lineMarking = lanelet_operations::matchStringToLineMarking(lineMarkingName);
+
+    return std::make_shared<Bound>(boundMsg.boundary_id(), points, lineMarking);
 }
 
 std::shared_ptr<StopLine> ProtobufReader::createStopLineFromMessage(const commonroad_map::StopLine &stopLineMsg) {

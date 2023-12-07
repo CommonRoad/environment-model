@@ -2,6 +2,7 @@
 
 #include "commonroad_cpp/geometry/circle.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/roadNetwork/lanelet/bound.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_dynamic.pb.h>
@@ -25,6 +26,7 @@ using IntegerExactOrInterval = std::variant<int, IntegerInterval>;
 using FloatExactOrInterval = std::variant<double, FloatInterval>;
 
 using LaneletContainer = std::unordered_map<size_t, std::shared_ptr<Lanelet>>;
+using BoundaryContainer = std::unordered_map<size_t, std::shared_ptr<Bound>>;
 using TrafficSignContainer = std::unordered_map<size_t, std::shared_ptr<TrafficSign>>;
 using TrafficLightContainer = std::unordered_map<size_t, std::shared_ptr<TrafficLight>>;
 using IncomingGroupContainer = std::unordered_map<size_t, std::shared_ptr<IncomingGroup>>;
@@ -59,7 +61,7 @@ commonroad_scenario::CommonRoadScenario loadScenarioProtobufMessage(const std::s
  * Initializes container of lanelets.
  *
  * @param laneletContainer Lanelet container
- * @param commonRoadDnamicMsg CommonRoad message
+ * @param commonRoadMapMsg CommonRoad message
  */
 void initLaneletContainer(LaneletContainer &laneletContainer, const commonroad_map::CommonRoadMap &commonRoadMapMsg);
 
@@ -164,21 +166,23 @@ createScenarioMetaInformationFromMessage(const commonroad_common::ScenarioMetaIn
  * @param laneletContainer Lanelet container
  * @param trafficSignContainer Traffic sign container
  * @param trafficLightContainer Traffic light container
+ * @param boundaries Vector of boundaries.
  * @return Lanelet
  */
 std::shared_ptr<Lanelet> createLaneletFromMessage(const commonroad_map::Lanelet &laneletMsg,
                                                   LaneletContainer &laneletContainer,
                                                   TrafficSignContainer &trafficSignContainer,
                                                   TrafficLightContainer &trafficLightContainer,
+                                                  const std::vector<std::shared_ptr<Bound>> &boundaries,
                                                   const commonroad_map::CommonRoadMap &commonRoadMapMsg);
 
 /**
  * Creates boundary from protobuf message "Bound".
  *
  * @param boundMsg Protobuf message
- * @return Vertices and line marking
+ * @return Boundary
  */
-std::vector<vertex> createBoundFromMessage(const commonroad_map::Bound &boundMsg);
+std::shared_ptr<Bound> createBoundFromMessage(const commonroad_map::Bound &boundMsg);
 
 /**
  * Creates stop line from protobuf message "StopLine".
