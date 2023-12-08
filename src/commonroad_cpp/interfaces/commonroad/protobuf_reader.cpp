@@ -118,11 +118,38 @@ ProtobufReader::getTrafficLightFromContainer(size_t trafficLightId,
 std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
 ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoadDynamic &commonRoadDynamicMsg,
                                             const commonroad_map::CommonRoadMap &commonRoadMapMsg,
-                                            const commonroad_scenario::CommonRoadScenario &commonRoadScenarioMsg) {
-    auto [benchmarkId, timeStepSize] =
-        ProtobufReader::createScenarioMetaInformationFromMessage(commonRoadScenarioMsg.scenario_meta_information());
+                                            const commonroad_scenario::CommonRoadScenario &commonRoadScenarioMsg,
+                                            int fileGiven) {
+    std::string benchmarkId;
+    double timeStepSize;
+    std::tuple<std::string, double> relevantScenarioInformation;
+    std::string countryIdName;
+    switch (fileGiven) {
+    case 7: // scenario, map, dynamic given
+        relevantScenarioInformation =
+            ProtobufReader::createScenarioMetaInformationFromMessage(commonRoadScenarioMsg.scenario_meta_information());
+        benchmarkId = std::get<0>(relevantScenarioInformation);
+        timeStepSize = std::get<1>(relevantScenarioInformation);
+        countryIdName = benchmarkId.substr(0, benchmarkId.find('_'));
+        break;
+    case 3: // dynamic and map given
+        relevantScenarioInformation =
+            ProtobufReader::createScenarioMetaInformationFromMessage(commonRoadDynamicMsg.dynamic_meta_information());
+        benchmarkId = std::get<0>(relevantScenarioInformation);
+        timeStepSize = std::get<1>(relevantScenarioInformation);
+        countryIdName = benchmarkId.substr(0, benchmarkId.find('_'));
+        break;
+    case 1: // only map given
+        timeStepSize = 0;
+        benchmarkId = commonRoadMapMsg.map_meta_information().map_id().country_id() + "_" +
+                      commonRoadMapMsg.map_meta_information().map_id().map_name() + "-" +
+                      std::to_string(commonRoadMapMsg.map_meta_information().map_id().map_id());
+        countryIdName = benchmarkId;
+        break;
+    default:
+        throw std::runtime_error("ProtobufReader::createCommonRoadFromMessage: Unsupported file combination given.");
+    }
 
-    std::string countryIdName = benchmarkId.substr(0, benchmarkId.find('_'));
     SupportedTrafficSignCountry countryId = RoadNetwork::matchStringToCountry(countryIdName);
 
     LaneletContainer laneletContainer;

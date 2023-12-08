@@ -142,13 +142,15 @@ std::shared_ptr<TrafficLight> getTrafficLightFromContainer(size_t trafficLightId
 /**
  * Creates CR scenario from protobuf message "CommonRoad".
  *
- * @param commonRoadMsg Protobuf message
- * @return Scenario
+ * @param commonRoadDynamicMsg Protobuf message for dynamic information
+ * @param commonRoadMapMsg Protobuf message for static information
+ * @param commonRoadMapMsg Protobuf message for scenario information
+ * @return List of obstacles, road network, and time step
  */
 std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
 createCommonRoadFromMessage(const commonroad_dynamic::CommonRoadDynamic &commonRoadDynamicMsg,
                             const commonroad_map::CommonRoadMap &commonRoadMapMsg,
-                            const commonroad_scenario::CommonRoadScenario &commonRoadScenarioMsg);
+                            const commonroad_scenario::CommonRoadScenario &commonRoadScenarioMsg, int fileGiven);
 
 /**
  * Creates scenario information from protobuf message "ScenarioMetaInformation".
