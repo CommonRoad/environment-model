@@ -310,8 +310,9 @@ std::shared_ptr<Bound> ProtobufReader::createBoundFromMessage(const commonroad_m
     for (const auto &pointMsg : boundMsg.points())
         points.push_back(ProtobufReader::createPointFromMessage(pointMsg));
 
-    std::string lineMarkingName = commonroad_map::LineMarkingEnum_LineMarking_Name(boundMsg.line_marking());
-    LineMarking lineMarking = lanelet_operations::matchStringToLineMarking(lineMarkingName);
+    std::string lineMarkingName{
+        boost::algorithm::to_lower_copy(commonroad_map::LineMarkingEnum_LineMarking_Name(boundMsg.line_marking()))};
+    LineMarking lineMarking{lanelet_operations::matchStringToLineMarking(lineMarkingName)};
 
     return std::make_shared<Bound>(boundMsg.boundary_id(), points, lineMarking);
 }
@@ -322,8 +323,9 @@ std::shared_ptr<StopLine> ProtobufReader::createStopLineFromMessage(const common
     stopLine->setPoints({{stopLineMsg.start_point().x(), stopLineMsg.start_point().y()},
                          {stopLineMsg.end_point().x(), stopLineMsg.end_point().y()}});
 
-    std::string lineMarkingName = commonroad_map::LineMarkingEnum_LineMarking_Name(stopLineMsg.line_marking());
-    LineMarking lineMarking = lanelet_operations::matchStringToLineMarking(lineMarkingName);
+    std::string lineMarkingName{
+        boost::algorithm::to_lower_copy(commonroad_map::LineMarkingEnum_LineMarking_Name(stopLineMsg.line_marking()))};
+    LineMarking lineMarking{lanelet_operations::matchStringToLineMarking(lineMarkingName)};
     stopLine->setLineMarking(lineMarking);
 
     return stopLine;
