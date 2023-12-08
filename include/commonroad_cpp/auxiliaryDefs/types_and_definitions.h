@@ -74,7 +74,20 @@ enum class LaneletType {
     unknown
 };
 
-enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };
+enum class LineMarking {
+    solid,
+    dashed,
+    solid_solid,
+    dashed_dashed,
+    solid_dashed,
+    dashed_solid,
+    curb,
+    lowered_curb,
+    broad_dashed,
+    broad_solid,
+    unknown,
+    no_marking
+};
 
 enum class TrafficLightState { red, green, yellow, red_yellow, inactive };
 

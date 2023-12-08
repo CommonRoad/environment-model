@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include <algorithm>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
@@ -26,6 +20,18 @@ LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type
         return LineMarking::solid;
     else if (type == "dashed")
         return LineMarking::dashed;
+    else if (type == "solid_solid")
+        return LineMarking::solid_solid;
+    else if (type == "dashed_dashed")
+        return LineMarking::dashed_dashed;
+    else if (type == "solid_dashed")
+        return LineMarking::solid_dashed;
+    else if (type == "dashed_solid")
+        return LineMarking::dashed_solid;
+    else if (type == "curb")
+        return LineMarking::curb;
+    else if (type == "lowered_curb")
+        return LineMarking::lowered_curb;
     else if (type == "broad_solid")
         return LineMarking::broad_solid;
     else if (type == "broad_dashed")
