@@ -8,6 +8,7 @@ import "area.proto";
 import "traffic_sign.proto";
 import "traffic_light.proto";
 import "intersection.proto";
+import "environment_obstacle.proto";
 import "scenario_meta_information.proto";
 
 message MapInformation {
@@ -25,4 +26,5 @@ message CommonRoadMap {
     repeated TrafficSign traffic_signs = 7;
     repeated TrafficLight traffic_lights = 8;
     repeated Intersection intersections = 9;
+    repeated EnvironmentObstacle environment_obstacles = 10;
 }
