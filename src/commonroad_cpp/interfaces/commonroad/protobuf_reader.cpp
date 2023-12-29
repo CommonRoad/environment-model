@@ -194,7 +194,7 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
     for (const auto &staticObstacleMsg : commonRoadDynamicMsg.static_obstacles())
         obstacles.push_back(ProtobufReader::createStaticObstacleFromMessage(staticObstacleMsg));
 
-    for (const auto &environmentObstacleMsg : commonRoadDynamicMsg.environment_obstacles())
+    for (const auto &environmentObstacleMsg : commonRoadMapMsg.environment_obstacles())
         obstacles.push_back(ProtobufReader::createEnvironmentObstacleFromMessage(environmentObstacleMsg));
 
     for (const auto &phantomObstacleMsg : commonRoadDynamicMsg.phantom_obstacles())
@@ -598,15 +598,15 @@ ProtobufReader::createDynamicObstacleFromMessage(const commonroad_dynamic::Dynam
 }
 
 std::shared_ptr<Obstacle> ProtobufReader::createEnvironmentObstacleFromMessage(
-    const commonroad_dynamic::EnvironmentObstacle &environmentObstacleMsg) {
+    const commonroad_map::EnvironmentObstacle &environmentObstacleMsg) {
     std::shared_ptr<Obstacle> environmentObstacle = std::make_shared<Obstacle>();
 
     environmentObstacle->setId(environmentObstacleMsg.environment_obstacle_id());
 
     environmentObstacle->setObstacleRole(ObstacleRole::ENVIRONMENT);
 
-    std::string obstacleTypeName =
-        commonroad_dynamic::ObstacleTypeEnum_ObstacleType_Name(environmentObstacleMsg.obstacle_type());
+    std::string obstacleTypeName = commonroad_map::EnvironmentObstacleTypeEnum_EnvironmentObstacleType_Name(
+        environmentObstacleMsg.obstacle_type());
     environmentObstacle->setObstacleType(obstacle_operations::matchStringToObstacleType(obstacleTypeName));
 
     environmentObstacle->setGeoShape(ProtobufReader::createShapeFromMessage(environmentObstacleMsg.obstacle_shape()));

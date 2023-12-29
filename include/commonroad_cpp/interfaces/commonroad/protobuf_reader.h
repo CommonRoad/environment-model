@@ -309,7 +309,7 @@ createDynamicObstacleFromMessage(const commonroad_dynamic::DynamicObstacle &dyna
  * @return Environment obstacle
  */
 std::shared_ptr<Obstacle>
-createEnvironmentObstacleFromMessage(const commonroad_dynamic::EnvironmentObstacle &environmentObstacleMsg);
+createEnvironmentObstacleFromMessage(const commonroad_map::EnvironmentObstacle &environmentObstacleMsg);
 
 /**
  * Creates obstacle from protobuf message "PhantomObstacle".
