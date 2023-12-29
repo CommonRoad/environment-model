@@ -14,12 +14,12 @@ set(COMMONROAD_PROTOS
         map/location.proto
         map/traffic_light.proto
         map/traffic_sign.proto
+        map/environment_obstacle.proto
         dynamic/commonroad_dynamic.proto
         dynamic/dynamic_obstacle.proto
         dynamic/environment.proto
         dynamic/obstacle.proto
         dynamic/phantom_obstacle.proto
-        dynamic/environment_obstacle.proto
         dynamic/static_obstacle.proto
         dynamic/traffic_light_cycle.proto
         dynamic/traffic_sign_value.proto)
