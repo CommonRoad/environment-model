@@ -1,61 +1,15 @@
 # CommonRoad C++ Environment Model
 
-**Note: Still in development!!!**   
-Not all functionalities are finished and well tested.  
-When you add or change something always check whether a test case already exists. 
-If no test case exists, please create one.   
-Similarly, when you see a missing docstring for a class/function please add it.  
-Please create always merge requests and assign them to Sebastian Maierhofer.  
-For the coding style see [.clang-format](.clang-format). 
+The CommonRoad C++ Environment Model provides classes and methods to represent the CommonRoad format in C++17.
+It contains an interface to Python and predicates for evaluating traffic rules.
 
-The CommonRoad C++ Environment Model provides classes and methods to represent the CommonRoad format in C++17.  
-It contains an interface to Python and predicates for evaluating traffic rules (both not finished yet).  
-Note that the repository does not contain runtime verification algorithms and code for evaluating traffic rules.
+### Overview
+We extracted the relevant information in separate readmes depending on the way you want to use the environment-model:
 
+- You want to *install and use* the Python side of the Environment Model: [Python Usage](./../docs/python.md)
+- You want to *develop* the Python side of the Environment Model: [Python Development](./../docs/python_dev.md)
+- You want to integrate the Environment Model into another CMake project: [C++ Usage](./../docs/cpp.md)
+- You want to set up a development environment for the Environment Model itself: [C++ Development](./../docs/cpp_dev.md)
+- You want to generate the docu of the environment-model: [Documentation Generation](./../docs/docu.md)
+- You want to set up git hooks for the repository: [GitHooks](./../docs/git.md)
 
-## Dependencies:
-- [gtest](https://github.com/google/googletest) (should be automatically installed)
-- [commonroad-io](https://gitlab.lrz.de/cps/commonroad-io)
-- [CommonRoad Curvilinear Coordinate System](https://gitlab.lrz.de/cps/commonroad-curvilinear-coordinate-system)
-- cmake > 3.16
-
-## Build and Compile
-
-Tested with
-- CMake 3.17.5
-- GCC 7.5.0
-
-  
-## Build
-Make a build folder:
-```bash
-mkdir build
-```
-
-Go into build folder:
-```bash
-cd build
-```
-
-Build with `cmake` and specify paths to external dependencies:
-```bash
-cmake -DCRCCOSY_LIBRARY_DIR=absolutPathToCurvilinearCoordinateSystem/CurvilinearCoordinateSystem ..
-```
-
-To use the Python binding, run 
-```bash
-python setup.py install
-```
-or
-```bash
-pip install -e .
-```
-from the root directory.
-
-
-## Documentation
-The documentation can be generated with
-```bash
-cd build
-make doc_doxygen
-```

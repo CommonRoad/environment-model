@@ -1,0 +1,154 @@
+//
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
+//
+#include <algorithm>
+#include <commonroad_cpp/obstacle/state.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <utility>
+
+#include <range/v3/all.hpp>
+
+LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type) {
+    std::string str{type};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    str.erase(std::remove_if(str.begin(), str.end(), [](char elem) { return elem == '_'; }), str.end());
+    if (LaneletTypeNames.count(str) == 1)
+        return LaneletTypeNames.at(str);
+    else
+        throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type!");
+}
+
+DrivingDirection lanelet_operations::matchStringToDrivingDirection(const std::string &type) {
+    std::string str{type};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    if (DrivingDirectionNames.count(str) == 1)
+        return DrivingDirectionNames.at(str);
+    else
+        return DrivingDirection::invalid;
+}
+
+LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type) {
+    if (type == "solid")
+        return LineMarking::solid;
+    else if (type == "dashed")
+        return LineMarking::dashed;
+    else if (type == "broad_solid")
+        return LineMarking::broad_solid;
+    else if (type == "broad_dashed")
+        return LineMarking::broad_dashed;
+    else if (type == "no_marking")
+        return LineMarking::no_marking;
+    else
+        return LineMarking::unknown;
+}
+
+std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet,
+                                                                                 bool sameDirection) {
+    std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
+    auto curLanelet{std::move(lanelet)};
+
+    while (curLanelet->getAdjacentRight().adj != nullptr and
+           !std::any_of(adjacentLanelets.begin(), adjacentLanelets.end(),
+                        [curLanelet](const std::shared_ptr<Lanelet> &let) {
+                            return let->getId() == curLanelet->getAdjacentRight().adj->getId();
+                        }) and
+           (!sameDirection or curLanelet->getAdjacentRight().dir == DrivingDirection::same)) {
+        adjacentLanelets.push_back(curLanelet->getAdjacentRight().adj);
+        curLanelet = curLanelet->getAdjacentRight().adj;
+    }
+    return adjacentLanelets;
+}
+
+std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet,
+                                                                                bool sameDirection) {
+    std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
+    auto curLanelet{std::move(lanelet)};
+
+    while (curLanelet->getAdjacentLeft().adj != nullptr and
+           !std::any_of(adjacentLanelets.begin(), adjacentLanelets.end(),
+                        [curLanelet](const std::shared_ptr<Lanelet> &let) {
+                            return let->getId() == curLanelet->getAdjacentLeft().adj->getId();
+                        }) and
+           (!sameDirection or curLanelet->getAdjacentLeft().dir == DrivingDirection::same)) {
+        adjacentLanelets.push_back(curLanelet->getAdjacentLeft().adj);
+        curLanelet = curLanelet->getAdjacentLeft().adj;
+    }
+    return adjacentLanelets;
+}
+
+std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet,
+                                                                           bool sameDirection) {
+    auto leftLanelets{laneletsLeftOfLanelet(lanelet, sameDirection)};
+    auto rightLanelets{laneletsRightOfLanelet(lanelet, sameDirection)};
+    std::initializer_list<std::shared_ptr<Lanelet>> initial_lanelet{lanelet};
+
+    // remove duplicates
+    std::vector<std::shared_ptr<Lanelet>> adjLanelets =
+        ranges::concat_view(initial_lanelet, leftLanelets, rightLanelets) | ranges::to<std::vector>;
+    sort(adjLanelets.begin(), adjLanelets.end());
+    adjLanelets.erase(unique(adjLanelets.begin(), adjLanelets.end()), adjLanelets.end());
+    return adjLanelets;
+}
+
+bool lanelet_operations::areLaneletsInDirectlyAdjacentLanes(
+    const std::shared_ptr<Lane> &laneOne, const std::shared_ptr<Lane> &laneTwo,
+    const std::vector<std::shared_ptr<Lanelet>> &relevantLanelets) {
+    for (const auto &la1 : relevantLanelets) {
+        for (const auto &la2 : relevantLanelets) {
+            if (la1->getId() == la2->getId())
+                continue;
+            if ((la1->getAdjacentRight().adj != nullptr and la1->getAdjacentRight().adj->getId() == la2->getId()) or
+                (la1->getAdjacentLeft().adj != nullptr and la1->getAdjacentLeft().adj->getId() == la2->getId()))
+                if ((laneOne->getContainedLaneletIDs().find(la1->getId()) != laneOne->getContainedLaneletIDs().end() and
+                     laneTwo->getContainedLaneletIDs().find(la2->getId()) != laneTwo->getContainedLaneletIDs().end()) or
+                    (laneTwo->getContainedLaneletIDs().find(la1->getId()) != laneTwo->getContainedLaneletIDs().end() and
+                     laneOne->getContainedLaneletIDs().find(la2->getId()) != laneOne->getContainedLaneletIDs().end()))
+                    return true;
+        }
+    }
+    return false;
+}
+
+double lanelet_operations::roadWidth(const std::shared_ptr<Lanelet> &lanelet, double xPosition, double yPosition) {
+    std::vector<std::shared_ptr<Lanelet>> adj_lanelets = adjacentLanelets(lanelet, false);
+
+    auto lanelet_widths = adj_lanelets | ranges::views::transform([xPosition, yPosition](auto &adjLanelet) -> double {
+                              return adjLanelet->getWidth(xPosition, yPosition);
+                          });
+
+    return ranges::accumulate(lanelet_widths, 0.0);
+}
+
+std::vector<std::shared_ptr<TrafficLight>>
+lanelet_operations::activeTlsByLanelet(size_t timeStep, const std::shared_ptr<Lanelet> &lanelet) {
+    return lanelet->getTrafficLights() | ranges::views::filter([timeStep](const auto &light) {
+               return light->isActive() or light->getElementAtTime(timeStep).color != TrafficLightState::inactive;
+           }) |
+           ranges::to<std::vector>;
+}
+
+bool lanelet_operations::bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &lanelet) {
+    auto is_road = [](const std::shared_ptr<Lanelet> &lanelet) {
+        return !lanelet->hasLaneletType(LaneletType::bikeLane) and !lanelet->hasLaneletType(LaneletType::sidewalk);
+    };
+
+    if (!lanelet->hasLaneletType(LaneletType::bikeLane))
+        return false;
+
+    std::shared_ptr<Lanelet> left = lanelet->getAdjacentLeft().adj;
+    while (left) {
+        if (is_road(left))
+            return true;
+        left = left->getAdjacentLeft().adj;
+    }
+    std::shared_ptr<Lanelet> right = lanelet->getAdjacentRight().adj;
+    while (right) {
+        if (is_road(right))
+            return true;
+        right = right->getAdjacentRight().adj;
+    }
+    return false;
+}

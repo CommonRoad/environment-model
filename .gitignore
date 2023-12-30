@@ -1,4 +1,4 @@
-# Exclude buiild directories
+# Exclude build directories
 /cmake-build-debug/
 /cmake-build-release/
 /cmake-build-debug-coverage/
@@ -12,8 +12,25 @@ env_model_example_node
 *.a
 *.so
 
+# Log files
+*.log
+
 # Exclude Python directories
 .idea/
 .ipynb_checkpoints/
 dist
 *.egg-info
+__pycache__/
+
+/.pytest_cache/
+/_skbuild/
+
+# config files
+/src/commonroad_cpp/custom_config.yaml
+
+# From direnv
+.direnv
+
+# For setuptools-scm
+/src/python/crcpp/_version.py
+/venv/

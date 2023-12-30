@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+# preference list
+clang_format_tool_candiates=(clang-format-10 clang-format)
+
+for candidate in "${clang_format_tool_candiates[@]}"; do
+    if command -v "$candidate" >/dev/null; then
+        clang_format_tool=$candidate
+        break
+    fi
+done
+
+# Source: https://stackoverflow.com/questions/3417896/how-do-i-prompt-the-user-from-within-a-commit-msg-hook
+# Allows us to read user input below, assigns stdin to keyboard
+exec < /dev/tty
+
+# Redirect output to stderr.
+exec 1>&2
+
+# Override formatting checks
+ignoreformat=$(git config --type=bool hooks.ignoreformat)
+
+if [ "$ignoreformat" != "true" ] && [ "$IGNORE_FORMAT" != "1" ]; then
+	if ! find src/ tests/ \
+		-type f \
+		-regextype egrep \
+		-regex '.+\.(h|hpp|cpp|cu|cuh)$' \
+		-print0 | \
+		xargs -0 "${clang_format_tool}" -n --Werror -style=file;
+	then
+		echo "Error in pre-commit check!"
+		echo "clang-format detected formatting violations"
+		echo
+
+
+		read -r -p "Should we try to automatically fix these violations? [yN] " yn
+		case $yn in
+			[Yy]* )
+				echo "Running clang-format on all source files...";
+				set -e
+				find src/ tests/ \
+					-type f \
+					-regextype egrep \
+					-regex '.+\.(h|hpp|cpp|cu|cuh)$' \
+					-print0 | \
+					xargs -0 "${clang_format_tool}" -i -style=file
+
+				echo "Formatting violations have been fixed!"
+				echo "Please stage any files that were changed again (using git-add), then run git commit again"
+				exit 1
+				;;
+			* )
+				cat <<\EOF
+Aborting Commit
+
+Note:
+Set IGNORE_FORMAT=1 as an environment variable in order to override this check temporarily
+In order to permanently disable this check, run
+	git config hooks.ignoreformat true
+EOF
+				exit 1;;
+		esac
+	fi
+
+	echo "clang-format check: no formatting violations!"
+else
+	# Report warnings
+	find src/ tests/ \
+		-type f \
+		-regextype egrep \
+		-regex '.+\.(h|hpp|cpp|cu|cuh)$' \
+		-print0 | \
+		xargs -0 "${clang_format_tool}" -n -style=file;
+fi
