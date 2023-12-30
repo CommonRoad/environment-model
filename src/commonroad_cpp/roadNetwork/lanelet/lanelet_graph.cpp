@@ -44,13 +44,13 @@ LaneletGraph::LaneletGraph(const std::vector<std::shared_ptr<Lanelet>> &lanelets
     }
 
     for (const auto &let : lanelets) {
-        if (let->getAdjacentLeft().adj != nullptr and let->getAdjacentLeft().dir == DrivingDirection::same) {
+        if (let->getAdjacentLeft().adj != nullptr and !let->getAdjacentLeft().oppositeDir) {
             graphAdjSuc.add_edge(static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getId())),
                                  static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getAdjacentLeft().adj->getId())), 4);
             graphAdjSuc.add_edge(static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getAdjacentLeft().adj->getId())),
                                  static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getId())), 4);
         }
-        if (let->getAdjacentRight().adj != nullptr and let->getAdjacentRight().dir == DrivingDirection::same) {
+        if (let->getAdjacentRight().adj != nullptr and !let->getAdjacentRight().oppositeDir) {
             graphAdjSuc.add_edge(static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getId())),
                                  static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getAdjacentRight().adj->getId())), 4);
             graphAdjSuc.add_edge(static_cast<ptrdiff_t>(verticesAdjSuc.at(let->getAdjacentRight().adj->getId())),

@@ -18,12 +18,11 @@ using Scenario = std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_
 namespace InputUtils {
 
 /**
- * Loads and sets up CR scenario. The file can be encoded in xml or protobuf format.
+ * Loads and sets up CR scenario. The file/directory can be encoded in xml or protobuf format.
  *
- * @param filePath Path to CommonRoad file
+ * @param path Path to CommonRoad file/directory
  * @return Tuple of obstacles, roadNetwork, and time step size
  */
-Scenario getDataFromCommonRoad(const std::string &filePath);
-
+Scenario getDataFromCommonRoad(const std::string &path);
 
 } // namespace InputUtils

@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <cstring>
 #include <utility>
 
@@ -168,7 +161,7 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     // extract ID, type, shape, initial state, and trajectory
     tempObstacle->setId(roadElements.first_attribute().as_ullong());
     tempObstacle->setObstacleType(
-        obstacle_operations::matchStringToObstacleType(roadElements.first_child().text().as_string()));
+        obstacle_operations::matchStringToObstacleType(std::next(roadElements.begin())->text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
         if ((strcmp(child.name(), "shape")) == 0) {
             extractShape(tempObstacle, child);
@@ -283,17 +276,17 @@ void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>>
 void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                         size_t arrayIndex, const pugi::xml_node &child, const char *type) {
     size_t adjacentId{child.attribute("ref").as_ullong()};
-    DrivingDirection dir{DrivingDirection::invalid};
+    bool oppositeDir{false};
     if ((strcmp(child.attribute("drivingDir").as_string(), "same")) == 0)
-        dir = DrivingDirection::same;
+        oppositeDir = false;
     else if ((strcmp(child.attribute("drivingDir").as_string(), "opposite")) == 0)
-        dir = DrivingDirection::opposite;
+        oppositeDir = true;
     for (size_t i{0}; i < tempLaneletContainer.size(); i++) {
         if (tempLaneletContainer[i]->getId() == adjacentId) {
             if ((strcmp(type, "adjacentLeft")) == 0)
-                tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i], dir);
+                tempLaneletContainer[arrayIndex]->setLeftAdjacent(tempLaneletContainer[i], oppositeDir);
             else if ((strcmp(type, "adjacentRight")) == 0)
-                tempLaneletContainer[arrayIndex]->setRightAdjacent(tempLaneletContainer[i], dir);
+                tempLaneletContainer[arrayIndex]->setRightAdjacent(tempLaneletContainer[i], oppositeDir);
             break;
         }
     }

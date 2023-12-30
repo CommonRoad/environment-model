@@ -13,7 +13,7 @@ bool KeepsFovSpeedLimitPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return obstacleK->getStateByTimeStep(timeStep)->getVelocity() <= parameters.fovSpeedLimit;
+    return obstacleK->getStateByTimeStep(timeStep)->getVelocity() <= parameters.paramMap["fovSpeedLimit"];
 }
 
 double KeepsFovSpeedLimitPredicate::robustEvaluation(

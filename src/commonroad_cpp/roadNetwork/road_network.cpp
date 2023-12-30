@@ -103,7 +103,7 @@ std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t laneletId) {
     auto iter = std::find_if(std::begin(laneletNetwork), std::end(laneletNetwork),
                              [laneletId](auto val) { return val->getId() == laneletId; });
     if (iter == std::end(laneletNetwork))
-        throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID" + std::to_string(laneletId) +
+        throw std::domain_error("RoadNetwork::findLaneletById: Lanelet with ID " + std::to_string(laneletId) +
                                 " does not exist in road network!");
 
     return *iter;
@@ -118,6 +118,10 @@ SupportedTrafficSignCountry RoadNetwork::matchStringToCountry(const std::string 
         return SupportedTrafficSignCountry::USA;
     else if (name == "ESP")
         return SupportedTrafficSignCountry::SPAIN;
+    else if (name == "ARG")
+        return SupportedTrafficSignCountry::ARGENTINA;
+    else if (name == "BEL")
+        return SupportedTrafficSignCountry::BELGIUM;
     else
         return SupportedTrafficSignCountry::ZAMUNDA;
 }
@@ -167,12 +171,32 @@ void RoadNetwork::setIdCounterRef(const std::shared_ptr<size_t> &idCounter) {
 
 std::shared_ptr<size_t> RoadNetwork::getIdCounterRef() const { return idCounterRef; }
 
-std::shared_ptr<Incoming> RoadNetwork::findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet) {
+std::shared_ptr<IncomingGroup> RoadNetwork::findIncomingGroupByLanelet(const std::shared_ptr<Lanelet> &lanelet) {
     for (const auto &inter : intersections)
-        for (const auto &incom : inter->getIncomings())
+        for (const auto &incom : inter->getIncomingGroups())
             for (const auto &let : incom->getIncomingLanelets())
                 if (let->getId() == lanelet->getId())
                     return incom;
+    return {};
+}
+
+std::shared_ptr<IncomingGroup>
+RoadNetwork::findIncomingGroupByOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoingGroup) {
+    for (const auto &inter : intersections)
+        for (const auto &incom : inter->getIncomingGroups())
+            if (incom->getOutgoingGroupID().has_value() and
+                incom->getOutgoingGroupID().value() == outgoingGroup->getId())
+                return incom;
+    return {};
+}
+
+std::shared_ptr<OutgoingGroup> RoadNetwork::findOutgoingGroupByLanelet(const std::shared_ptr<Lanelet> &lanelet) {
+    for (const auto &inter : intersections)
+        for (const auto &out : inter->getOutgoingGroups())
+            for (const auto &let : out->getOutgoingLanelets()) {
+                if (let->getId() == lanelet->getId())
+                    return out;
+            }
     return {};
 }
 

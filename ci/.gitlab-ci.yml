@@ -10,6 +10,7 @@ image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci-lite:1.0
 
 before_script:
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
+  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de".insteadOf "ssh://git@gitlab.lrz.de"
 
 ### static test ###
 clang-format:
@@ -214,7 +215,7 @@ build-wheel:
     DOCKER_DRIVER: overlay2
     # See https://github.com/docker-library/docker/pull/166
     DOCKER_TLS_CERTDIR: ""
-    CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"git@gitlab.lrz.de:\""
+    CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de//\".insteadOf \"git@gitlab.lrz.de:\" && git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"ssh://git@gitlab.lrz.de\""
     # NOTE: The following variables correspond to the default values.
     # They are specified here so that it is possible to override them using
     # Gitlab push options or in the UI when running a manual pipeline.
@@ -325,6 +326,9 @@ run-coverage:
     # Therefore, we first extract the test dependencies to a temporary requirements
     # file and then instruct pip to install them from that file.
     # Finally, we install the built wheel from the wheelhouse directory.
+    - apt-get update && apt-get install -y --no-install-recommends git
+    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
+    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de".insteadOf "ssh://git@gitlab.lrz.de"
     - printf "\e[0Ksection_start:%s:%s[collapsed=true]\r\e[0K%s\n" "$(date +%s)"
       section_python_prep "Installation of test dependencies"
     - python -m pip config set global.disable-pip-version-check true
@@ -332,9 +336,10 @@ run-coverage:
     - source test-venv/bin/activate
     - python -m pip install pip-tools
     - SETUPTOOLS_SCM_PRETEND_VERSION_FOR_COMMONROAD_CPP=1
-      python -m piptools compile --extra=test -o test_requirements.txt pyproject.toml
-    - python -m pip install -r test_requirements.txt
-    - python -m pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
+#    - python -m piptools compile --extra=test -o test_requirements.txt pyproject.toml
+#    - python -m pip install -r test_requirements.txt
+#    - python -m pip install --no-index --find-links=wheelhouse/ commonroad_cpp[test]
+    - python -m pip install --find-links=wheelhouse/ commonroad_cpp[test]
     - printf "\e[0Ksection_end:%s:%s\r\e[0K\n" "$(date +%s)"
       section_python_prep
   script:

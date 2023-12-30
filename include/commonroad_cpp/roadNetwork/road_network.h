@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "commonroad_cpp/roadNetwork/intersection/outgoing_group.h"
 #include "lanelet/lanelet_graph.h"
 #include <boost/container_hash/hash.hpp>
 #include <cstddef>
@@ -30,7 +31,7 @@ using value = std::pair<box, unsigned>;
 
 class Lanelet;
 class Lane;
-class Incoming;
+class IncomingGroup;
 class TrafficLight;
 class TrafficSign;
 class Intersection;
@@ -212,7 +213,24 @@ class RoadNetwork {
      * @param lanelet Lanelet of interest.
      * @return Incoming object
      */
-    std::shared_ptr<Incoming> findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet);
+    std::shared_ptr<IncomingGroup> findIncomingGroupByLanelet(const std::shared_ptr<Lanelet> &lanelet);
+
+    /**
+     * Finds incoming object to which outgoingGroup belongs. Returns empty pointer if outgoingGroup is part of incoming.
+     *
+     * @param lanelet outgoingGroup of interest.
+     * @return IncomingGroup object
+     */
+    std::shared_ptr<IncomingGroup>
+    findIncomingGroupByOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoingGroup);
+
+    /**
+     * Finds outgoingGroup to which lanelet belongs. Returns empty pointer if lanelet is part of outgoingGroup.
+     *
+     * @param lanelet Lanelet of interest.
+     * @return OutgoingGroup object
+     */
+    std::shared_ptr<OutgoingGroup> findOutgoingGroupByLanelet(const std::shared_ptr<Lanelet> &lanelet);
 
     /**
      * Getter for topological map of road network.
@@ -220,7 +238,6 @@ class RoadNetwork {
      * @return Lanelet graph.
      */
     const std::shared_ptr<LaneletGraph> &getTopologicalMap() const;
-
 
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */

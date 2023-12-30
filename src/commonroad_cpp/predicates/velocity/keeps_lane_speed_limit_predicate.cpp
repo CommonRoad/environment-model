@@ -18,7 +18,7 @@ bool KeepsLaneSpeedLimitPredicate::booleanEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double vMaxLane{regulatory_elements_utils::speedLimit(
         obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
-        world->getRoadNetwork()->extractTrafficSignIDForCountry(TrafficSignTypes::MAX_SPEED))};
+        TrafficSignTypes::MAX_SPEED)};
     return vMaxLane >= obstacleK->getStateByTimeStep(timeStep)->getVelocity();
 }
 

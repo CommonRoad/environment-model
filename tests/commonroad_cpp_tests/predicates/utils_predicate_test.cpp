@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h>
@@ -15,36 +8,33 @@
 namespace utils_predicate_test {
 std::shared_ptr<RoadNetwork> create_road_network(const std::set<LaneletType> &laneletTypeLaneletOne,
                                                  const std::set<LaneletType> &laneletTypeLaneletTwo) {
-    const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);
     // max speed traffic sign
     size_t trafficSignIdOne = 200;
     std::vector<std::string> trafficSignElementOneValues{"50"};
-    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)}};
+    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MAX_SPEED, trafficSignElementOneValues)}};
     auto vertexOne{vertex{0, 0}};
     auto trafficSignOne{std::make_shared<TrafficSign>(trafficSignIdOne, trafficSignElementsOne, vertexOne, false)};
     // required speed traffic sign
     size_t trafficSignIdTwo = 201;
     std::vector<std::string> trafficSignElementTwoValues{"10"};
-    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED), trafficSignElementTwoValues)}};
+    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MIN_SPEED, trafficSignElementTwoValues)}};
     auto vertTwo{vertex{0, 0}};
     auto trafficSignTwo{std::make_shared<TrafficSign>(trafficSignIdTwo, trafficSignElementsTwo, vertTwo, false)};
     // stop sign
     size_t trafficSignIdThree = 201;
     std::vector<std::string> trafficSignElementThreeValues;
-    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::STOP), trafficSignElementThreeValues)}};
+    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::STOP, trafficSignElementThreeValues)}};
     auto vertThree{vertex{40, 0}};
     auto trafficSignThree{
         std::make_shared<TrafficSign>(trafficSignIdThree, trafficSignElementsThree, vertThree, false)};
     // stop line
-    std::vector<vertex> slPositionOne{vertex{20.0, 0.0}, vertex{20.0, 4.0}};
-    std::vector<vertex> slPositionTwo{vertex{20.0, 4.0}, vertex{21.0, 8.0}};
-    auto stopLineOne{std::make_shared<StopLine>(
-        slPositionOne, std::vector<std::shared_ptr<TrafficSign>>{trafficSignThree}, LineMarking::broad_solid)};
-    auto stopLineTwo{std::make_shared<StopLine>(
-        slPositionTwo, std::vector<std::shared_ptr<TrafficSign>>{trafficSignThree}, LineMarking::broad_solid)};
+    std::pair<vertex, vertex> slPositionOne{{20.0, 0.0}, {20.0, 4.0}};
+    std::pair<vertex, vertex> slPositionTwo{{20.0, 4.0}, {21.0, 8.0}};
+    auto stopLineOne{std::make_shared<StopLine>(slPositionOne, LineMarking::broad_solid)};
+    auto stopLineTwo{std::make_shared<StopLine>(slPositionTwo, LineMarking::broad_solid)};
     // right lanelet
     size_t idLaneletOne = 100;
     auto userOneWayLaneletOne = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
@@ -80,44 +70,41 @@ std::shared_ptr<RoadNetwork> create_road_network(const std::set<LaneletType> &la
                                           laneletTypeLaneletTwo, userOneWayLaneletTwo, userBidirectionalLaneletTwo));
     laneletTwo->setStopLine(stopLineTwo);
 
-    laneletOne->setLeftAdjacent(laneletTwo, DrivingDirection::same);
-    laneletTwo->setRightAdjacent(laneletOne, DrivingDirection::same);
+    laneletOne->setLeftAdjacent(laneletTwo, false);
+    laneletTwo->setRightAdjacent(laneletOne, false);
 
     return std::make_shared<RoadNetwork>(
         RoadNetwork({laneletOne, laneletTwo}, SupportedTrafficSignCountry::GERMANY, {trafficSignOne, trafficSignTwo}));
 }
 
 std::shared_ptr<RoadNetwork> create_road_network_2() {
-    const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);
     // max speed traffic sign
     size_t trafficSignIdOne = 200;
     std::vector<std::string> trafficSignElementOneValues{"35"};
-    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)}};
+    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MAX_SPEED, trafficSignElementOneValues)}};
     auto vertexOne{vertex{5, 0}};
     auto trafficSignOne{std::make_shared<TrafficSign>(trafficSignIdOne, trafficSignElementsOne, vertexOne, false)};
     // required speed traffic sign
     size_t trafficSignIdTwo = 201;
     std::vector<std::string> trafficSignElementTwoValues{"10"};
-    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED), trafficSignElementTwoValues)}};
+    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MIN_SPEED, trafficSignElementTwoValues)}};
     auto vertTwo{vertex{0, 0}};
     auto trafficSignTwo{std::make_shared<TrafficSign>(trafficSignIdTwo, trafficSignElementsTwo, vertTwo, false)};
     // stop sign
     size_t trafficSignIdThree = 201;
     std::vector<std::string> trafficSignElementThreeValues;
-    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::STOP), trafficSignElementThreeValues)}};
+    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::STOP, trafficSignElementThreeValues)}};
     auto vertThree{vertex{40, 0}};
     auto trafficSignThree{
         std::make_shared<TrafficSign>(trafficSignIdThree, trafficSignElementsThree, vertThree, false)};
     // stop line
-    std::vector<vertex> slPositionOne{vertex{20.0, 0.0}, vertex{20.0, 3.0}};
-    std::vector<vertex> slPositionTwo{vertex{20.0, 3.0}, vertex{21.0, 6.0}};
-    auto stopLineOne{std::make_shared<StopLine>(
-        slPositionOne, std::vector<std::shared_ptr<TrafficSign>>{trafficSignThree}, LineMarking::broad_solid)};
-    auto stopLineTwo{std::make_shared<StopLine>(
-        slPositionTwo, std::vector<std::shared_ptr<TrafficSign>>{trafficSignThree}, LineMarking::broad_solid)};
+    std::pair<vertex, vertex> slPositionOne{{20.0, 0.0}, {20.0, 3.0}};
+    std::pair<vertex, vertex> slPositionTwo{{20.0, 3.0}, {21.0, 6.0}};
+    auto stopLineOne{std::make_shared<StopLine>(slPositionOne, LineMarking::broad_solid)};
+    auto stopLineTwo{std::make_shared<StopLine>(slPositionTwo, LineMarking::broad_solid)};
 
     // right lanelet
     size_t idLaneletOne = 111;
@@ -158,8 +145,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
                                           laneletTypeLaneletTwo, userOneWayLaneletTwo, userBidirectionalLaneletTwo));
     laneletTwo2->setStopLine(stopLineTwo);
 
-    laneletOne2->setLeftAdjacent(laneletTwo2, DrivingDirection::same);
-    laneletTwo2->setRightAdjacent(laneletOne2, DrivingDirection::same);
+    laneletOne2->setLeftAdjacent(laneletTwo2, false);
+    laneletTwo2->setRightAdjacent(laneletOne2, false);
 
     // third lanelet
     size_t idLaneletThree = 333;
@@ -177,8 +164,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
                                                            rightBorderLaneletThree, laneletTypeLaneletThree,
                                                            userOneWayLaneletThree, userBidirectionalLaneletThree));
 
-    laneletThree2->setRightAdjacent(laneletTwo2, DrivingDirection::same);
-    laneletTwo2->setLeftAdjacent(laneletThree2, DrivingDirection::same);
+    laneletThree2->setRightAdjacent(laneletTwo2, false);
+    laneletTwo2->setLeftAdjacent(laneletThree2, false);
 
     // fourth lanelet
     size_t idLaneletFour = 444;
@@ -197,36 +184,33 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
 }
 
 std::shared_ptr<RoadNetwork> create_road_network_3() {
-    const auto *trafficSignIDLookupTable = TrafficSignLookupTableByCountry.at(SupportedTrafficSignCountry::GERMANY);
     // max speed traffic sign
     size_t trafficSignIdOne = 200;
     std::vector<std::string> trafficSignElementOneValues{"50"};
-    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MAX_SPEED), trafficSignElementOneValues)}};
+    auto trafficSignElementsOne{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MAX_SPEED, trafficSignElementOneValues)}};
     auto vertexOne{vertex{0, 0}};
     auto trafficSignOne{std::make_shared<TrafficSign>(trafficSignIdOne, trafficSignElementsOne, vertexOne, false)};
     // required speed traffic sign
     size_t trafficSignIdTwo = 201;
     std::vector<std::string> trafficSignElementTwoValues{"10"};
-    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::MIN_SPEED), trafficSignElementTwoValues)}};
+    auto trafficSignElementsTwo{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::MIN_SPEED, trafficSignElementTwoValues)}};
     auto vertTwo{vertex{0, 0}};
     auto trafficSignTwo{std::make_shared<TrafficSign>(trafficSignIdTwo, trafficSignElementsTwo, vertTwo, false)};
     // stop sign
     size_t trafficSignIdThree = 201;
     std::vector<std::string> trafficSignElementThreeValues;
-    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{std::make_shared<TrafficSignElement>(
-        trafficSignIDLookupTable->at(TrafficSignTypes::STOP), trafficSignElementThreeValues)}};
+    auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::STOP, trafficSignElementThreeValues)}};
     auto vertThree{vertex{40, 0}};
     auto trafficSignThree{
         std::make_shared<TrafficSign>(trafficSignIdThree, trafficSignElementsThree, vertThree, false)};
     // stop line
-    std::vector<vertex> slPositionOne{vertex{20.0, 0.0}, vertex{20.0, 3.0}};
-    std::vector<vertex> slPositionTwo{vertex{20.0, 3.0}, vertex{21.0, 6.0}};
-    auto stopLineOne{std::make_shared<StopLine>(
-        slPositionOne, std::vector<std::shared_ptr<TrafficSign>>{trafficSignThree}, LineMarking::broad_solid)};
-    auto stopLineTwo{std::make_shared<StopLine>(
-        slPositionTwo, std::vector<std::shared_ptr<TrafficSign>>{trafficSignThree}, LineMarking::broad_solid)};
+    std::pair<vertex, vertex> slPositionOne{{20.0, 0.0}, {20.0, 3.0}};
+    std::pair<vertex, vertex> slPositionTwo{{20.0, 3.0}, {21.0, 6.0}};
+    auto stopLineOne{std::make_shared<StopLine>(slPositionOne, LineMarking::broad_solid)};
+    auto stopLineTwo{std::make_shared<StopLine>(slPositionTwo, LineMarking::broad_solid)};
 
     // lanelet 1
     size_t idLaneletOne = 100;
@@ -264,8 +248,8 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
                                           laneletTypeLaneletTwo, userOneWayLaneletTwo, userBidirectionalLaneletTwo));
     laneletTwo->setStopLine(stopLineTwo);
 
-    laneletOne->setLeftAdjacent(laneletTwo, DrivingDirection::same);
-    laneletTwo->setRightAdjacent(laneletOne, DrivingDirection::same);
+    laneletOne->setLeftAdjacent(laneletTwo, false);
+    laneletTwo->setRightAdjacent(laneletOne, false);
     laneletTwo->setLineMarkingLeft(LineMarking::broad_dashed);
 
     // third lanelet
@@ -283,8 +267,8 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
                                                           rightBorderLaneletThree, laneletTypeLaneletThree,
                                                           userOneWayLaneletThree, userBidirectionalLaneletThree));
 
-    laneletThree->setRightAdjacent(laneletTwo, DrivingDirection::same);
-    laneletTwo->setLeftAdjacent(laneletThree, DrivingDirection::same);
+    laneletThree->setRightAdjacent(laneletTwo, false);
+    laneletTwo->setLeftAdjacent(laneletThree, false);
     laneletThree->setLineMarkingLeft(LineMarking::broad_dashed);
     laneletThree->setLineMarkingRight(LineMarking::broad_dashed);
 
@@ -303,8 +287,8 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
         std::make_shared<Lanelet>(Lanelet(idLaneletFour, leftBorderLaneletFour, rightBorderLaneletFour,
                                           laneletTypeLaneletFour, userOneWayLaneletFour, userBidirectionalLaneletFour));
 
-    laneletFour->setRightAdjacent(laneletThree, DrivingDirection::same);
-    laneletThree->setLeftAdjacent(laneletFour, DrivingDirection::same);
+    laneletFour->setRightAdjacent(laneletThree, false);
+    laneletThree->setLeftAdjacent(laneletFour, false);
     laneletFour->setLineMarkingLeft(LineMarking::broad_dashed);
     laneletFour->setLineMarkingRight(LineMarking::broad_dashed);
 
@@ -323,8 +307,8 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
         std::make_shared<Lanelet>(Lanelet(idLaneletFive, leftBorderLaneletFive, rightBorderLaneletFive,
                                           laneletTypeLaneletFive, userOneWayLaneletFive, userBidirectionalLaneletFive));
 
-    laneletFive->setRightAdjacent(laneletFour, DrivingDirection::same);
-    laneletFour->setLeftAdjacent(laneletFive, DrivingDirection::same);
+    laneletFive->setRightAdjacent(laneletFour, false);
+    laneletFour->setLeftAdjacent(laneletFive, false);
     laneletFive->setLineMarkingRight(LineMarking::broad_dashed);
 
     // sixth lanelet
@@ -342,8 +326,8 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
         std::make_shared<Lanelet>(Lanelet(idLaneletSix, leftBorderLaneletSix, rightBorderLaneletSix,
                                           laneletTypeLaneletSix, userOneWayLaneletSix, userBidirectionalLaneletSix));
 
-    laneletSix->setRightAdjacent(laneletFive, DrivingDirection::same);
-    laneletFive->setLeftAdjacent(laneletSix, DrivingDirection::same);
+    laneletSix->setRightAdjacent(laneletFive, false);
+    laneletFive->setLeftAdjacent(laneletSix, false);
 
     return std::make_shared<RoadNetwork>(
         RoadNetwork({laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive, laneletSix},
@@ -420,13 +404,13 @@ std::shared_ptr<RoadNetwork> create_road_network_with_2_successors(
                 laneletTypeSuccessorLeft, userOneWayLaneletSuccessorLeft, userBidirectionalLaneletSuccessorLeft));
 
     // Dependencies between the Lanelets
-    laneletLeft->setRightAdjacent(laneletRight, DrivingDirection::same);
+    laneletLeft->setRightAdjacent(laneletRight, false);
     laneletLeft->addSuccessor(laneletSuccessorLeft);
-    laneletRight->setLeftAdjacent(laneletLeft, DrivingDirection::same);
+    laneletRight->setLeftAdjacent(laneletLeft, false);
     laneletRight->addSuccessor(laneletSuccessorRight);
-    laneletSuccessorLeft->setRightAdjacent(laneletSuccessorRight, DrivingDirection::same);
+    laneletSuccessorLeft->setRightAdjacent(laneletSuccessorRight, false);
     laneletSuccessorLeft->addPredecessor(laneletLeft);
-    laneletSuccessorRight->setLeftAdjacent(laneletSuccessorLeft, DrivingDirection::same);
+    laneletSuccessorRight->setLeftAdjacent(laneletSuccessorLeft, false);
     laneletSuccessorRight->addPredecessor(laneletRight);
 
     return std::make_shared<RoadNetwork>(
@@ -526,7 +510,7 @@ std::shared_ptr<RoadNetwork> create_road_network_with_circle(const std::set<Lane
 
 std::shared_ptr<RoadNetwork> create_narrow_road_network(double width) {
     size_t idLaneletOne = 100;
-    auto userBidirectionalLaneletOne = std::set<ObstacleType>{ObstacleType::vehicle};
+    auto userBidirectionalLaneletOne = std::set<ObstacleType>{ObstacleType::car};
     auto leftBorderLaneletOne = std::vector<vertex>{
         vertex{0, width},   vertex{10, width},  vertex{20, width},  vertex{30, width},  vertex{40, width},
         vertex{50, width},  vertex{60, width},  vertex{70, width},  vertex{80, width},  vertex{90, width},

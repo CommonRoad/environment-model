@@ -13,7 +13,8 @@ bool NarrowRoadPredicate::booleanEvaluation(
     auto occupied_lanelets = world->getRoadNetwork()->findLaneletsByPosition(obsK_x, obsK_y);
     return std::all_of(occupied_lanelets.begin(), occupied_lanelets.end(),
                        [obsK_x, obsK_y, world, this](const std::shared_ptr<Lanelet> &lanelet) {
-                           return lanelet_operations::roadWidth(lanelet, obsK_x, obsK_y) <= parameters.narrowRoad;
+                           return lanelet_operations::roadWidth(lanelet, obsK_x, obsK_y) <=
+                                  parameters.paramMap["narrowRoad"];
                        });
 }
 

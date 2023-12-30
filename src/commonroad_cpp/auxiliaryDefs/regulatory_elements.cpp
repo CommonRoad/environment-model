@@ -565,11 +565,21 @@ TrafficSignTable TrafficSignIDSpain = {
     {TrafficSignTypes::PEDESTRIANS_CROSSING, "s13"},
 };
 
+TrafficSignTable TrafficSignIDArgentina = {
+    {TrafficSignTypes::MAX_SPEED, "R15"},
+};
+
+TrafficSignTable TrafficSignIDBelgium = {
+    {TrafficSignTypes::MAX_SPEED, "C43"},
+};
+
 const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> TrafficSignLookupTableByCountry = {
     {SupportedTrafficSignCountry::GERMANY, &TrafficSignIDGermany},
     {SupportedTrafficSignCountry::ZAMUNDA, &TrafficSignIDGermany},
+    {SupportedTrafficSignCountry::ARGENTINA, &TrafficSignIDArgentina},
     {SupportedTrafficSignCountry::USA, &TrafficSignIDUSA},
     {SupportedTrafficSignCountry::SPAIN, &TrafficSignIDSpain},
+    {SupportedTrafficSignCountry::BELGIUM, &TrafficSignIDBelgium},
 };
 
 // left, straight right

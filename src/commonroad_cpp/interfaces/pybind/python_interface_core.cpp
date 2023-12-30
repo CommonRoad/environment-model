@@ -29,7 +29,6 @@ void init_python_interface_core(py::module_ &m) {
         .value("pedestrian", ObstacleType::pedestrian)
         .value("bus", ObstacleType::bus)
         .value("unknown", ObstacleType::unknown)
-        .value("vehicle", ObstacleType::vehicle)
         .value("bicycle", ObstacleType::bicycle)
         .value("priority_vehicle", ObstacleType::priority_vehicle)
         .value("train", ObstacleType::train)

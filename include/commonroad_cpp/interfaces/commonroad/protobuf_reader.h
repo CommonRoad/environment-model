@@ -1,25 +1,21 @@
-//
-// Created by Yannick Ballnath.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/geometry/circle.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/roadNetwork/lanelet/bound.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
-#include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad.pb.h>
+#include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_dynamic.pb.h>
+#include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_map.pb.h>
+#include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_scenario.pb.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <fstream>
 #include <google/protobuf/message_lite.h>
 #include <memory>
 #include <tuple>
-#include <vector>
 #include <variant>
+#include <vector>
 
 namespace ProtobufReader {
 
@@ -30,49 +26,89 @@ using IntegerExactOrInterval = std::variant<int, IntegerInterval>;
 using FloatExactOrInterval = std::variant<double, FloatInterval>;
 
 using LaneletContainer = std::unordered_map<size_t, std::shared_ptr<Lanelet>>;
+using BoundaryContainer = std::unordered_map<size_t, std::shared_ptr<Bound>>;
 using TrafficSignContainer = std::unordered_map<size_t, std::shared_ptr<TrafficSign>>;
 using TrafficLightContainer = std::unordered_map<size_t, std::shared_ptr<TrafficLight>>;
-using IncomingContainer = std::unordered_map<size_t, std::shared_ptr<Incoming>>;
+using IncomingGroupContainer = std::unordered_map<size_t, std::shared_ptr<IncomingGroup>>;
+using OutgoingGroupContainer = std::unordered_map<size_t, std::shared_ptr<OutgoingGroup>>;
+using CrossingGroupContainer = std::unordered_map<size_t, std::shared_ptr<CrossingGroup>>;
 
 /**
- * Loads a CommonRoad message from protobuf file.
+ * Loads a CommonRoadDynamic message from protobuf file.
  *
  * @param filePath File path
  * @return Message
  */
-commonroad::CommonRoad loadProtobufMessage(const std::string &filePath);
+commonroad_dynamic::CommonRoadDynamic loadDynamicProtobufMessage(const std::string &filePath);
+
+/**
+ * Loads a CommonRoadMap message from protobuf file.
+ *
+ * @param filePath File path
+ * @return Message
+ */
+commonroad_map::CommonRoadMap loadMapProtobufMessage(const std::string &filePath);
+
+/**
+ * Loads a CommonRoadScenario message from protobuf file.
+ *
+ * @param filePath File path
+ * @return Message
+ */
+commonroad_scenario::CommonRoadScenario loadScenarioProtobufMessage(const std::string &filePath);
 
 /**
  * Initializes container of lanelets.
  *
  * @param laneletContainer Lanelet container
- * @param commonRoadMsg CommonRoad message
+ * @param commonRoadMapMsg CommonRoad message
  */
-void initLaneletContainer(LaneletContainer& laneletContainer, const commonroad::CommonRoad& commonRoadMsg);
+void initLaneletContainer(LaneletContainer &laneletContainer, const commonroad_map::CommonRoadMap &commonRoadMapMsg);
 
 /**
  * Initializes container of traffic signs.
  *
  * @param trafficSignContainer Traffic sign container
- * @param commonRoadMsg CommonRoad message
+ * @param commonRoadMapMsg CommonRoad message
  */
-void initTrafficSignContainer(TrafficSignContainer& trafficSignContainer, const commonroad::CommonRoad& commonRoadMsg);
+void initTrafficSignContainer(TrafficSignContainer &trafficSignContainer,
+                              const commonroad_map::CommonRoadMap &commonRoadMapMsg);
 
 /**
  * Initializes container of traffic lights.
  *
  * @param trafficLightContainer Traffic light container
- * @param commonRoadMsg CommonRoad message
+ * @param commonRoadMapMsg CommonRoad message
  */
-void initTrafficLightContainer(TrafficLightContainer& trafficLightContainer, const commonroad::CommonRoad& commonRoadMsg);
+void initTrafficLightContainer(TrafficLightContainer &trafficLightContainer,
+                               const commonroad_map::CommonRoadMap &commonRoadMapMsg);
 
 /**
- * Initializes container of incomings.
+ * Initializes container of incomingGroups.
  *
- * @param incomingContainer Incoming container
+ * @param incomingGroupContainer IncomingGroup container
  * @param intersectionMsg CommonRoad message
  */
-void initIncomingContainer(IncomingContainer& incomingContainer, const commonroad::Intersection& intersectionMsg);
+void initIncomingGroupContainer(IncomingGroupContainer &incomingGroupContainer,
+                                const commonroad_map::Intersection &intersectionMsg);
+
+/**
+ * Initializes container of outgoingGroups.
+ *
+ * @param outgoingGroupContainer OutgoingGroup container
+ * @param intersectionMsg CommonRoad message
+ */
+void initOutgoingGroupContainer(OutgoingGroupContainer &outgoingGroupContainer,
+                                const commonroad_map::Intersection &intersectionMsg);
+
+/**
+ * Initializes container of crossingGroups.
+ *
+ * @param crossingGroupContainer CrossingGroup container
+ * @param intersectionMsg CommonRoad message
+ */
+void initCrossingGroupContainer(CrossingGroupContainer &crossingGroupContainer,
+                                const commonroad_map::Intersection &intersectionMsg);
 
 /**
  * Returns lanelet from container of lanelets.
@@ -81,7 +117,7 @@ void initIncomingContainer(IncomingContainer& incomingContainer, const commonroa
  * @param laneletContainer Lanelet container
  * @return Lanelet
  */
-std::shared_ptr<Lanelet> getLaneletFromContainer(size_t laneletId, LaneletContainer& laneletContainer);
+std::shared_ptr<Lanelet> getLaneletFromContainer(size_t laneletId, LaneletContainer &laneletContainer);
 
 /**
  * Returns traffic sign from container of traffic signs.
@@ -90,7 +126,8 @@ std::shared_ptr<Lanelet> getLaneletFromContainer(size_t laneletId, LaneletContai
  * @param trafficSignContainer Traffic sign container
  * @return Traffic sign
  */
-std::shared_ptr<TrafficSign> getTrafficSignFromContainer(size_t trafficSignId, TrafficSignContainer& trafficSignContainer);
+std::shared_ptr<TrafficSign> getTrafficSignFromContainer(size_t trafficSignId,
+                                                         TrafficSignContainer &trafficSignContainer);
 
 /**
  * Returns traffic light from container of traffic lights.
@@ -99,32 +136,30 @@ std::shared_ptr<TrafficSign> getTrafficSignFromContainer(size_t trafficSignId, T
  * @param trafficLightContainer Traffic light container
  * @return Traffic light
  */
-std::shared_ptr<TrafficLight> getTrafficLightFromContainer(size_t trafficLightId, TrafficLightContainer& trafficLightContainer);
-
-/**
- * Returns incoming from container of incomings.
- *
- * @param incomingId Incoming id
- * @param incomingContainer Incoming container
- * @return Incoming
- */
-std::shared_ptr<Incoming> getIncomingFromContainer(size_t incomingId, IncomingContainer& incomingContainer);
+std::shared_ptr<TrafficLight> getTrafficLightFromContainer(size_t trafficLightId,
+                                                           TrafficLightContainer &trafficLightContainer);
 
 /**
  * Creates CR scenario from protobuf message "CommonRoad".
  *
- * @param commonRoadMsg Protobuf message
- * @return Scenario
+ * @param commonRoadDynamicMsg Protobuf message for dynamic information
+ * @param commonRoadMapMsg Protobuf message for static information
+ * @param commonRoadMapMsg Protobuf message for scenario information
+ * @return List of obstacles, road network, and time step
  */
-std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double> createCommonRoadFromMessage(const commonroad::CommonRoad& commonRoadMsg);
+std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
+createCommonRoadFromMessage(const commonroad_dynamic::CommonRoadDynamic &commonRoadDynamicMsg,
+                            const commonroad_map::CommonRoadMap &commonRoadMapMsg,
+                            const commonroad_scenario::CommonRoadScenario &commonRoadScenarioMsg, int fileGiven);
 
 /**
- * Creates scenario information from protobuf message "ScenarioInformation".
+ * Creates scenario information from protobuf message "ScenarioMetaInformation".
  *
- * @param scenarioInformationMsg Protobuf message
+ * @param scenarioMetaInformationMsg Protobuf message
  * @return Benchmark id and step size
  */
-std::tuple<std::string, double> createScenarioInformationFromMessage(const commonroad::ScenarioInformation& scenarioInformationMsg);
+std::tuple<std::string, double>
+createScenarioMetaInformationFromMessage(const commonroad_common::ScenarioMetaInformation &scenarioMetaInformationMsg);
 
 /**
  * Creates lanelet from protobuf message "Lanelet".
@@ -133,17 +168,23 @@ std::tuple<std::string, double> createScenarioInformationFromMessage(const commo
  * @param laneletContainer Lanelet container
  * @param trafficSignContainer Traffic sign container
  * @param trafficLightContainer Traffic light container
+ * @param boundaries Vector of boundaries.
  * @return Lanelet
  */
-std::shared_ptr<Lanelet> createLaneletFromMessage(const commonroad::Lanelet& laneletMsg, LaneletContainer& laneletContainer, TrafficSignContainer& trafficSignContainer, TrafficLightContainer& trafficLightContainer);
+std::shared_ptr<Lanelet> createLaneletFromMessage(const commonroad_map::Lanelet &laneletMsg,
+                                                  LaneletContainer &laneletContainer,
+                                                  TrafficSignContainer &trafficSignContainer,
+                                                  TrafficLightContainer &trafficLightContainer,
+                                                  const std::vector<std::shared_ptr<Bound>> &boundaries,
+                                                  const commonroad_map::CommonRoadMap &commonRoadMapMsg);
 
 /**
  * Creates boundary from protobuf message "Bound".
  *
  * @param boundMsg Protobuf message
- * @return Vertices and line marking
+ * @return Boundary
  */
-std::tuple<std::vector<vertex>, std::unique_ptr<LineMarking>> createBoundFromMessage(const commonroad::Bound& boundMsg);
+std::shared_ptr<Bound> createBoundFromMessage(const commonroad_map::Bound &boundMsg);
 
 /**
  * Creates stop line from protobuf message "StopLine".
@@ -153,24 +194,30 @@ std::tuple<std::vector<vertex>, std::unique_ptr<LineMarking>> createBoundFromMes
  * @param trafficLightContainer Traffic light container
  * @return Stop line
  */
-std::shared_ptr<StopLine> createStopLineFromMessage(const commonroad::StopLine& stopLineMsg, TrafficSignContainer& trafficSignContainer, TrafficLightContainer& trafficLightContainer);
+std::shared_ptr<StopLine> createStopLineFromMessage(const commonroad_map::StopLine &stopLineMsg);
 
 /**
  * Creates traffic sign from protobuf message "TrafficSign".
  *
  * @param trafficSignMsg Protobuf message
  * @param trafficSignContainer Traffic sign container
+ * @param country Country ID of map
  * @return Traffic sign
  */
-std::shared_ptr<TrafficSign> createTrafficSignFromMessage(const commonroad::TrafficSign& trafficSignMsg, TrafficSignContainer& trafficSignContainer);
+std::shared_ptr<TrafficSign> createTrafficSignFromMessage(const commonroad_map::TrafficSign &trafficSignMsg,
+                                                          TrafficSignContainer &trafficSignContainer,
+                                                          const std::string &country);
 
 /**
  * Creates traffic sign element from protobuf message "TrafficSignElement".
  *
  * @param trafficSignElementMsg Protobuf message
+ * @param country Country ID of map.
  * @return Traffic sign element
  */
-std::shared_ptr<TrafficSignElement> createTrafficSignElementFromMessage(const commonroad::TrafficSignElement& trafficSignElementMsg);
+std::shared_ptr<TrafficSignElement>
+createTrafficSignElementFromMessage(const commonroad_common::TrafficSignElement &trafficSignElementMsg,
+                                    const std::string &country);
 
 /**
  * Creates traffic light from protobuf message "TrafficLight".
@@ -179,7 +226,10 @@ std::shared_ptr<TrafficSignElement> createTrafficSignElementFromMessage(const co
  * @param trafficLightContainer Traffic light container
  * @return Traffic light
  */
-std::shared_ptr<TrafficLight> createTrafficLightFromMessage(const commonroad::TrafficLight& trafficLightMsg, TrafficLightContainer& trafficLightContainer);
+std::shared_ptr<TrafficLight>
+createTrafficLightFromMessage(const commonroad_map::TrafficLight &trafficLightMsg,
+                              const commonroad_dynamic::TrafficLightCycle &trafficLightCycleMsg,
+                              TrafficLightContainer &trafficLightContainer);
 
 /**
  * Creates traffic light cycle element from protobuf message "CycleElement".
@@ -187,7 +237,7 @@ std::shared_ptr<TrafficLight> createTrafficLightFromMessage(const commonroad::Tr
  * @param cycleElementMsg Protobuf message
  * @return Traffic light cycle element
  */
-TrafficLightCycleElement createCycleElementFromMessage(const commonroad::CycleElement& cycleElementMsg);
+TrafficLightCycleElement createCycleElementFromMessage(const commonroad_dynamic::CycleElement &cycleElementMsg);
 
 /**
  * Creates intersection from protobuf message "Intersection".
@@ -196,17 +246,44 @@ TrafficLightCycleElement createCycleElementFromMessage(const commonroad::CycleEl
  * @param laneletContainer Lanelet container
  * @return Intersection
  */
-std::shared_ptr<Intersection> createIntersectionFromMessage(const commonroad::Intersection& intersectionMsg, LaneletContainer& laneletContainer);
+std::shared_ptr<Intersection> createIntersectionFromMessage(const commonroad_map::Intersection &intersectionMsg,
+                                                            LaneletContainer &laneletContainer);
 
 /**
- * Creates incoming from protobuf message "Incoming".
+ * Creates incomingGroup from protobuf message "incomingGroup".
  *
- * @param incomingMsg Protobuf message
+ * @param incomingGroupMsg Protobuf message
  * @param laneletContainer Lanelet container
- * @param incomingContainer Incoming container
+ * @param incomingGroupContainer IncomingGroup container
  * @return Incoming
  */
-std::shared_ptr<Incoming> createIncomingFromMessage(const commonroad::Incoming& incomingMsg, LaneletContainer& laneletContainer, IncomingContainer& incomingContainer);
+std::shared_ptr<IncomingGroup> createIncomingGroupFromMessage(const commonroad_map::IncomingGroup &incomingGroupMsg,
+                                                              LaneletContainer &laneletContainer,
+                                                              IncomingGroupContainer &incomingGroupContainer);
+
+/**
+ * Creates outgoingGroup from protobuf message "outgoingGroup".
+ *
+ * @param outgoingGroupMsg Protobuf message
+ * @param laneletContainer Lanelet container
+ * @param outgoingGroupContainer IncomingGroup container
+ * @return Outgoing
+ */
+std::shared_ptr<OutgoingGroup> createOutgoingGroupFromMessage(const commonroad_map::OutgoingGroup &outgoingGroupMsg,
+                                                              LaneletContainer &laneletContainer,
+                                                              OutgoingGroupContainer &outgoingGroupContainer);
+
+/**
+ * Creates crossing group from protobuf message "crossingGroup".
+ *
+ * @param crossingGroupMsg Protobuf message
+ * @param laneletContainer Lanelet container
+ * @param crossingGroupContainer CrossingGroup container
+ * @return Crossing
+ */
+std::shared_ptr<CrossingGroup> createCrossingGroupFromMessage(const commonroad_map::CrossingGroup &crossingGroupMsg,
+                                                              LaneletContainer &laneletContainer,
+                                                              CrossingGroupContainer &crossingGroupContainer);
 
 /**
  * Creates obstacle from protobuf message "StaticObstacle".
@@ -214,7 +291,7 @@ std::shared_ptr<Incoming> createIncomingFromMessage(const commonroad::Incoming& 
  * @param staticObstacleMsg Protobuf message
  * @return Static obstacle
  */
-std::shared_ptr<Obstacle> createStaticObstacleFromMessage(const commonroad::StaticObstacle& staticObstacleMsg);
+std::shared_ptr<Obstacle> createStaticObstacleFromMessage(const commonroad_dynamic::StaticObstacle &staticObstacleMsg);
 
 /**
  * Creates obstacle from protobuf message "DynamicObstacle".
@@ -222,7 +299,8 @@ std::shared_ptr<Obstacle> createStaticObstacleFromMessage(const commonroad::Stat
  * @param dynamicObstacleMsg Protobuf message
  * @return Dynamic obstacle
  */
-std::shared_ptr<Obstacle> createDynamicObstacleFromMessage(const commonroad::DynamicObstacle& dynamicObstacleMsg);
+std::shared_ptr<Obstacle>
+createDynamicObstacleFromMessage(const commonroad_dynamic::DynamicObstacle &dynamicObstacleMsg);
 
 /**
  * Creates obstacle from protobuf message "EnvironmentObstacle".
@@ -230,7 +308,8 @@ std::shared_ptr<Obstacle> createDynamicObstacleFromMessage(const commonroad::Dyn
  * @param environmentObstacleMsg Protobuf message
  * @return Environment obstacle
  */
-std::shared_ptr<Obstacle> createEnvironmentObstacleFromMessage(const commonroad::EnvironmentObstacle& environmentObstacleMsg);
+std::shared_ptr<Obstacle>
+createEnvironmentObstacleFromMessage(const commonroad_map::EnvironmentObstacle &environmentObstacleMsg);
 
 /**
  * Creates obstacle from protobuf message "PhantomObstacle".
@@ -238,7 +317,8 @@ std::shared_ptr<Obstacle> createEnvironmentObstacleFromMessage(const commonroad:
  * @param phantomObstacleMsg Protobuf message
  * @return Phantom obstacle
  */
-std::shared_ptr<Obstacle> createPhantomObstacleFromMessage(const commonroad::PhantomObstacle& phantomObstacleMsg);
+std::shared_ptr<Obstacle>
+createPhantomObstacleFromMessage(const commonroad_dynamic::PhantomObstacle &phantomObstacleMsg);
 
 /**
  * Creates sequence of states from protobuf message "TrajectoryPrediction".
@@ -246,7 +326,8 @@ std::shared_ptr<Obstacle> createPhantomObstacleFromMessage(const commonroad::Pha
  * @param trajectoryPredictionMsg Protobuf message
  * @return States
  */
-std::vector<std::shared_ptr<State>> createTrajectoryPredictionFromMessage(const commonroad::TrajectoryPrediction& trajectoryPredictionMsg);
+std::vector<std::shared_ptr<State>>
+createTrajectoryPredictionFromMessage(const commonroad_dynamic::TrajectoryPrediction &trajectoryPredictionMsg);
 
 /**
  * Creates sequence of states from protobuf message "Trajectory".
@@ -254,7 +335,23 @@ std::vector<std::shared_ptr<State>> createTrajectoryPredictionFromMessage(const 
  * @param trajectoryMsg Protobuf message
  * @return States
  */
-std::vector<std::shared_ptr<State>> createTrajectoryFromMessage(const commonroad::Trajectory& trajectoryMsg);
+std::vector<std::shared_ptr<State>> createTrajectoryFromMessage(const commonroad_dynamic::Trajectory &trajectoryMsg);
+
+/**
+ * Creates scenario ID from protobuf message "ScenarioID".
+ *
+ * @param scenarioIDMsg Protobuf message
+ * @return Benchmark id as string
+ */
+std::string createScenarioIDFromMessage(const commonroad_common::ScenarioID &scenarioIdMsg);
+
+/**
+ * Creates scenario ID from protobuf message "MapID".
+ *
+ * @param mapIdMsg Protobuf message
+ * @return Map id as string
+ */
+std::string createMapIDFromMessage(const commonroad_common::MapID &mapIdMsg);
 
 /**
  * Creates state from protobuf message "State".
@@ -262,14 +359,14 @@ std::vector<std::shared_ptr<State>> createTrajectoryFromMessage(const commonroad
  * @param stateMsg Protobuf message
  * @return State
  */
-std::shared_ptr<State> createStateFromMessage(const commonroad::State& stateMsg);
+std::shared_ptr<State> createStateFromMessage(const commonroad_common::State &stateMsg);
 
 /**
  * Creates signal state from protobuf message "SignalState".
  * @param stateMsg Protobuf message
  * @return State
  */
-std::shared_ptr<SignalState> createSignalStateFromMessage(const commonroad::SignalState &stateMsg);
+std::shared_ptr<SignalState> createSignalStateFromMessage(const commonroad_common::SignalState &stateMsg);
 
 /**
  * Creates vertex from protobuf message "Point".
@@ -277,7 +374,7 @@ std::shared_ptr<SignalState> createSignalStateFromMessage(const commonroad::Sign
  * @param pointMsg Protobuf message
  * @return Vertex
  */
-vertex createPointFromMessage(const commonroad::Point& pointMsg);
+vertex createPointFromMessage(const commonroad_common::Point &pointMsg);
 
 /**
  * Creates shape from protobuf message "Shape".
@@ -285,7 +382,7 @@ vertex createPointFromMessage(const commonroad::Point& pointMsg);
  * @param shapeMsg Protobuf message
  * @return Shape
  */
-std::unique_ptr<Shape> createShapeFromMessage(const commonroad::Shape& shapeMsg);
+std::unique_ptr<Shape> createShapeFromMessage(const commonroad_common::Shape &shapeMsg);
 
 /**
  * Creates rectangle from protobuf message "Rectangle".
@@ -293,7 +390,7 @@ std::unique_ptr<Shape> createShapeFromMessage(const commonroad::Shape& shapeMsg)
  * @param rectangleMsg Protobuf message
  * @return Rectangle
  */
-std::unique_ptr<Rectangle> createRectangleFromMessage(const commonroad::Rectangle& rectangleMsg);
+std::unique_ptr<Rectangle> createRectangleFromMessage(const commonroad_common::Rectangle &rectangleMsg);
 
 /**
  * Creates circle from protobuf message "Circle".
@@ -301,7 +398,7 @@ std::unique_ptr<Rectangle> createRectangleFromMessage(const commonroad::Rectangl
  * @param circleMsg Protobuf message
  * @return Circle
  */
-std::unique_ptr<Circle> createCircleFromMessage(const commonroad::Circle& circleMsg);
+std::unique_ptr<Circle> createCircleFromMessage(const commonroad_common::Circle &circleMsg);
 
 /**
  * Creates integer interval from protobuf message "IntegerInterval".
@@ -309,7 +406,7 @@ std::unique_ptr<Circle> createCircleFromMessage(const commonroad::Circle& circle
  * @param integerIntervalMsg Protobuf message
  * @return Integer interval
  */
-IntegerInterval createIntegerIntervalFromMessage(const commonroad::IntegerInterval& integerIntervalMsg);
+IntegerInterval createIntegerIntervalFromMessage(const commonroad_common::IntegerInterval &integerIntervalMsg);
 
 /**
  * Creates float interval from protobuf message "FloatInterval".
@@ -317,7 +414,7 @@ IntegerInterval createIntegerIntervalFromMessage(const commonroad::IntegerInterv
  * @param floatIntervalMsg Protobuf message
  * @return Float interval
  */
-FloatInterval createFloatIntervalFromMessage(const commonroad::FloatInterval& floatIntervalMsg);
+FloatInterval createFloatIntervalFromMessage(const commonroad_common::FloatInterval &floatIntervalMsg);
 
 /**
  * Creates either integer or integer interval from protobuf message "IntegerExactOrInterval".
@@ -325,7 +422,8 @@ FloatInterval createFloatIntervalFromMessage(const commonroad::FloatInterval& fl
  * @param integerExactOrIntervalMsg Protobuf message
  * @return Integer or integer interval
  */
-IntegerExactOrInterval createIntegerExactOrInterval(const commonroad::IntegerExactOrInterval& integerExactOrIntervalMsg);
+IntegerExactOrInterval
+createIntegerExactOrInterval(const commonroad_common::IntegerExactOrInterval &integerExactOrIntervalMsg);
 
 /**
  * Creates either float or float interval from protobuf message "FloatExactOrInterval".
@@ -333,6 +431,6 @@ IntegerExactOrInterval createIntegerExactOrInterval(const commonroad::IntegerExa
  * @param floatExactOrIntervalMsg Protobuf message
  * @return Float or float interval
  */
-FloatExactOrInterval createFloatExactOrInterval(const commonroad::FloatExactOrInterval& floatExactOrIntervalMsg);
+FloatExactOrInterval createFloatExactOrInterval(const commonroad_common::FloatExactOrInterval &floatExactOrIntervalMsg);
 
-}
+} // namespace ProtobufReader

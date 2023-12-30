@@ -21,7 +21,8 @@ bool InRightmostLanePredicate::booleanEvaluation(
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
         return lanelet->getAdjacentRight().adj == nullptr ||
-               lanelet->getAdjacentRight().dir != lanelet->getAdjacentRight().adj->getAdjacentLeft().dir;
+               lanelet->getAdjacentRight().oppositeDir !=
+                   lanelet->getAdjacentRight().adj->getAdjacentLeft().oppositeDir;
     });
 }
 

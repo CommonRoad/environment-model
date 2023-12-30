@@ -19,8 +19,8 @@ bool OvertakingBicycleSameLanePredicate::booleanEvaluation(
     DrivesRightmostPredicate drivesRightmostPredicate;
     KeepsSafeDistancePrecPredicate KeepsSafeDistancePrecPredicate;
     bool overtakingBicycle = false;
-    std::shared_ptr<OptionalPredicateParameters> predicateParameters =
-        std::make_shared<OptionalPredicateParameters>(OptionalPredicateParameters(parameters.minSafetyDistance));
+    std::shared_ptr<OptionalPredicateParameters> predicateParameters = std::make_shared<OptionalPredicateParameters>(
+        OptionalPredicateParameters(parameters.paramMap["minSafetyDistance"]));
     std::shared_ptr<Obstacle> rightObstacle =
         obstacle_operations::obstacleDirectlyRight(timeStep, world->getObstacles(), obstacleK, world->getRoadNetwork());
 
@@ -30,7 +30,8 @@ bool OvertakingBicycleSameLanePredicate::booleanEvaluation(
         if (obs->getObstacleType() == ObstacleType::bicycle &&
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) &&
             ((((inFrontOfPredicate.robustEvaluation(timeStep, world, obstacleK, obs) > 0.0 &&
-                inFrontOfPredicate.robustEvaluation(timeStep, world, obstacleK, obs) < parameters.closeToBicycle) ||
+                inFrontOfPredicate.robustEvaluation(timeStep, world, obstacleK, obs) <
+                    parameters.paramMap["closeToBicycle"]) ||
                (inFrontOfPredicate.booleanEvaluation(timeStep, world, obs, obstacleK) &&
                 !KeepsSafeDistancePrecPredicate.booleanEvaluation(timeStep, world, obs, obstacleK,
                                                                   predicateParameters))) &&

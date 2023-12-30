@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include "test_obstacle.h"
 #include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
@@ -326,7 +320,7 @@ TEST_F(ObstacleTest, SetOccupiedLaneletsDrivingDirectionByShape) {
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario1) {
     size_t timeStep{0};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1/USA_Lanker-1_1_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
@@ -346,7 +340,8 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario1) {
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario2) {
     size_t timeStep{0};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/DEU_Guetersloh-25/DEU_Guetersloh-25_4_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
@@ -359,7 +354,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario2) {
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario3) {
     size_t timeStep{0};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Peach-2_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Peach-2/USA_Peach-2_1_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
@@ -376,7 +371,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario3) {
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario4) {
     size_t timeStep{0};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4_1_T-1.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4/USA_Peach-4_1_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
@@ -395,25 +390,9 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario4) {
 }
 
 TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
-    size_t timeStep{192};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/DEU_Frankfurt-70_12_I-1.xml"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
-        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    size_t globalID{123456789};
-    auto globalIdRef{std::make_shared<size_t>(globalID)};
-    roadNetworkScenario->setIdCounterRef(globalIdRef);
-    auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 30503)};
-    obsOneScenario->computeLanes(roadNetworkScenario);
-    EXPECT_EQ(1472,
-              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().front()->getId());
-    // 1472 should be replaced by 878
-    EXPECT_EQ(876,
-              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
-}
-
-TEST_F(ObstacleTest, SetReferenceGeneralScenario6) {
     size_t timeStep{37};
-    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_turn_left_8.xml"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_8_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};

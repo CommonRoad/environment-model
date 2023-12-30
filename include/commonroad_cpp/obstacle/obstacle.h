@@ -15,18 +15,19 @@
 #include "state.h"
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
-#include <geometry/curvilinear_coordinate_system.h>
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
 #include <commonroad_cpp/roadNetwork/types.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 #include <boost/container_hash/hash.hpp>
 
 #include "actuator_parameters.h"
 #include "sensor_parameters.h"
 #include "signal_state.h"
+#include "state_meta_info.h"
 
 #include <tsl/robin_map.h>
 
@@ -39,8 +40,7 @@ class RoadNetwork;
  */
 class Obstacle {
   public:
-    template <typename Value>
-    using time_step_map_t = tsl::robin_map<time_step_t, Value>;
+    template <typename Value> using time_step_map_t = tsl::robin_map<time_step_t, Value>;
     //** type of history/trajectory prediction maps for physical states */
     using state_map_t = time_step_map_t<std::shared_ptr<State>>;
     //** type of history/trajectory prediction maps for signal states*/
@@ -69,9 +69,10 @@ class Obstacle {
      * @param width Width of the obstacle [m].
      * @param fov Field of view.
      */
-    Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-             double vMax, double aMax, double aMaxLong, double aMinLong, std::optional<double> reactionTime,
-             state_map_t trajectoryPrediction, double length, double width, const std::vector<vertex> &fov = {});
+    Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
+             ObstacleType obstacleType, double vMax, double aMax, double aMaxLong, double aMinLong,
+             std::optional<double> reactionTime, state_map_t trajectoryPrediction, double length, double width,
+             const std::vector<vertex> &fov = {});
 
     /**
      * Constructor initializing several obstacle attributes.
@@ -86,9 +87,9 @@ class Obstacle {
      * @param shape Obstacle shape. (only rectangles are currently supported!)
      * @param fov Field of view.
      */
-    Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState, ObstacleType obstacleType,
-             ActuatorParameters actuatorParameters, SensorParameters sensorParameters, state_map_t trajectoryPrediction,
-             std::unique_ptr<Shape> shape, const std::vector<vertex> &fov);
+    Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
+             ObstacleType obstacleType, ActuatorParameters actuatorParameters, SensorParameters sensorParameters,
+             state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape, const std::vector<vertex> &fov);
 
     /**
      * Setter for ID of obstacle.
@@ -109,7 +110,7 @@ class Obstacle {
      *
      * @param type Role of obstacle
      */
-     void setObstacleRole(ObstacleRole type);
+    void setObstacleRole(ObstacleRole type);
 
     /**
      * Setter for current state.
@@ -353,8 +354,8 @@ class Obstacle {
      * @param timeStep Time step of interest
      * @return List of pointers to occupied lanelets by front of the car.
      */
-    std::vector<std::shared_ptr<Lanelet>>
-    getOccupiedLaneletsByFront(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+    std::vector<std::shared_ptr<Lanelet>> getOccupiedLaneletsByFront(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                                     size_t timeStep);
 
     /**
      * Getter for occupied lanelets by the back of the car at a time steps within a road network.
@@ -363,8 +364,8 @@ class Obstacle {
      * @param timeStep Time step of interest
      * @return List of pointers to occupied lanelets by back of the car.
      */
-    std::vector<std::shared_ptr<Lanelet>>
-    getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+    std::vector<std::shared_ptr<Lanelet>> getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                                    size_t timeStep);
 
     /**
      * Provides state given a time step. The time step can belong to the current state, history, or prediction.
@@ -743,7 +744,7 @@ class Obstacle {
      * @return Distance [m]
      */
     double getLateralDistanceToObstacle(time_step_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                                 const std::shared_ptr<RoadNetwork> &roadnetwork);
+                                        const std::shared_ptr<RoadNetwork> &roadnetwork);
 
     /**
      * Returns trajectory as vector (by default it is a map).
@@ -800,17 +801,19 @@ class Obstacle {
     std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
     std::shared_ptr<SignalState> currentSignalState;  //**< pointer to current signal state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
-    size_t firstTimeStep; //**< first time step (current state or in history */
-    size_t finalTimeStep; //**< final time step (current state or in prediction */
-    size_t relevantTimeIntervalSize{100};  //**< relevant interval size around current time step to extract occupied lanelets in driving direction  */
+    size_t firstTimeStep;                             //**< first time step (current state or in history */
+    size_t finalTimeStep;                             //**< final time step (current state or in prediction */
+    size_t relevantTimeIntervalSize{
+        100}; //**< relevant interval size around current time step to extract occupied lanelets in driving direction */
 
     std::optional<ActuatorParameters> actuatorParameters;
     std::optional<SensorParameters> sensorParameters;
 
-    state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
-    signal_state_map_t signalSeries{};         //**< signal series of the obstacle */
-    state_map_t trajectoryHistory{};              //**< previous states of the obstacle */
-    signal_state_map_t signalSeriesHistory{};         //**< previous signal states of the obstacle */
+    state_map_t trajectoryPrediction{};       //**< trajectory prediction of the obstacle */
+    signal_state_map_t signalSeries{};        //**< signal series of the obstacle */
+    state_map_t trajectoryHistory{};          //**< previous states of the obstacle */
+    signal_state_map_t signalSeriesHistory{}; //**< previous signal states of the obstacle */
+    StateMetaInfo stateMetaInfo{};
 
     std::unique_ptr<Shape>
         geoShape; // TODO make general                                          //**< shape of the obstacle */
@@ -819,7 +822,8 @@ class Obstacle {
         occupiedLanelets; //**< map of time steps to lanelets occupied by the obstacle */
 
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLaneletsFront; //**< map of time steps to lanelets in driving direction occupied by the obstacles front */
+        occupiedLaneletsFront; //**< map of time steps to lanelets in driving direction occupied by the obstacles front
+                               //*/
 
     std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
         occupiedLaneletsBack; //**< map of time steps to lanelets in driving direction occupied by the obstacles back */
@@ -842,8 +846,9 @@ class Obstacle {
     mutable time_step_map_t<std::vector<double>>
         backXYPositions; //**< map of time steps to backXY position of the obstacle */
 
-    mutable time_step_map_t<std::map<size_t , double>>
-        lateralDistanceToObjects; //**< map of time steps to map of other obstacles and the regarding distance to the obstacle */
+    mutable time_step_map_t<std::map<size_t, double>>
+        lateralDistanceToObjects; //**< map of time steps to map of other obstacles and the regarding distance to the
+                                  // obstacle */
 
     using curvilinear_position_t = std::array<double, 3>; //**< curvilinear position of an obstacle */
     using curvilinear_position_map_t =

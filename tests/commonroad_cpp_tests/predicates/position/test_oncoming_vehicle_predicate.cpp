@@ -6,8 +6,9 @@
 
 void TestOncomingVehiclePredicate::SetUp() {
     pathToTestFileOncoming =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_two_lanes_with_opposite_directions.xml";
-    pathToTestFile = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_three_lanes.xml";
+        TestUtils::getTestScenarioDirectory() +
+        "/predicates/DEU_TwoLanesWithOppositeDirections-1/DEU_TwoLanesWithOppositeDirections-1_1_T-1.pb";
+    pathToTestFile = TestUtils::getTestScenarioDirectory() + "/predicates/DEU_ThreeLanes-1/DEU_ThreeLanes-1_1_T-1.pb";
 
     // obstacleEgo on right lane
     // obstacleOne on right lane in front of obstacleEgo

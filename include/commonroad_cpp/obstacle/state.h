@@ -194,5 +194,5 @@ class State {
     double curvilinearOrientation{0.0};   //**< orientation along reference path [rad] */
     ValidStates validStates{false, false, //**< set of states which are already set and therefore are valid */
                             false, false, false, false, false, false};
-    size_t timeStep{0}; //**< time step of the state variables */
+    time_step_t timeStep{0}; //**< time step of the state variables */
 };

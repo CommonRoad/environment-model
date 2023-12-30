@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include <cstddef>
@@ -23,6 +16,7 @@
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
+#include "commonroad_cpp/roadNetwork/environment/area.h"
 #include <commonroad_cpp/roadNetwork/types.h>
 
 /**
@@ -71,7 +65,7 @@ class Lanelet {
      */
     struct adjacent {
         std::shared_ptr<Lanelet> adj;
-        DrivingDirection dir{DrivingDirection::invalid};
+        bool oppositeDir{false};
     };
 
     /**
@@ -87,7 +81,7 @@ class Lanelet {
      * @param left pointer to left lanelet.
      * @param dir driving direction of adjacent left lanelet.
      */
-    void setLeftAdjacent(const std::shared_ptr<Lanelet> &left, DrivingDirection dir);
+    void setLeftAdjacent(const std::shared_ptr<Lanelet> &left, bool oppositeDir);
 
     /**
      * Setter for adjacent right lanelet.
@@ -95,7 +89,7 @@ class Lanelet {
      * @param right pointer to right lanelet.
      * @param dir driving direction of adjacent right lanelet.
      */
-    void setRightAdjacent(const std::shared_ptr<Lanelet> &right, DrivingDirection dir);
+    void setRightAdjacent(const std::shared_ptr<Lanelet> &right, bool oppositeDir);
 
     /**
      * Setter for left lanelet border vertices.
@@ -435,18 +429,19 @@ class Lanelet {
     std::vector<std::shared_ptr<TrafficLight>>
         trafficLights; //**< list of pointers to traffic lights assigned to lanelet*/
     std::vector<std::shared_ptr<TrafficSign>>
-        trafficSigns;                          //**< list of pointers to traffic signs assigned to lanelet*/
-    std::set<LaneletType> laneletTypes;        //**< list of relevant lanelet types*/
-    std::set<ObstacleType> usersOneWay;        //**< list of relevant allowed users one way*/
-    std::set<ObstacleType> usersBidirectional; //**< list of relevant allowed users bidirectional*/
-    std::shared_ptr<StopLine> stopLine;        //**< stopLine assigned to lanelet*/
-    LineMarking lineMarkingLeft;               //**< Line marking of left boundary*/
-    LineMarking lineMarkingRight;              //**< Line marking of right boundary*/
-    mutable std::vector<double> orientation;   //**< orientation along center line */
-    mutable std::vector<double> pathLength;    //**< path length along center line */
-    mutable std::vector<double> width;         //**< width along center line */
+        trafficSigns;                                  //**< list of pointers to traffic signs assigned to lanelet*/
+    std::vector<std::shared_ptr<Area>> adjacent_areas; //**< list of pointers to adjacent areas*/
+    std::set<LaneletType> laneletTypes;                //**< list of relevant lanelet types*/
+    std::set<ObstacleType> usersOneWay;                //**< list of relevant allowed users one way*/
+    std::set<ObstacleType> usersBidirectional;         //**< list of relevant allowed users bidirectional*/
+    std::shared_ptr<StopLine> stopLine;                //**< stopLine assigned to lanelet*/
+    LineMarking lineMarkingLeft;                       //**< Line marking of left boundary*/
+    LineMarking lineMarkingRight;                      //**< Line marking of right boundary*/
+    mutable std::vector<double> orientation;           //**< orientation along center line */
+    mutable std::vector<double> pathLength;            //**< path length along center line */
+    mutable std::vector<double> width;                 //**< width along center line */
 };
 
 extern const std::unordered_map<std::string, LaneletType> LaneletTypeNames;
 
-extern const std::unordered_map<std::string, DrivingDirection> DrivingDirectionNames;
+extern const std::unordered_map<std::string, bool> DrivingDirectionNames;

@@ -2163,7 +2163,7 @@
   </lanelet>
   <trafficSign id="6408">
     <trafficSignElement>
-      <trafficSignID>274</trafficSignID>
+      <trafficSignID>R15</trafficSignID>
       <additionalValue>11.11111111111111</additionalValue>
     </trafficSignElement>
     <position>
@@ -2176,7 +2176,7 @@
   </trafficSign>
   <trafficSign id="6399">
     <trafficSignElement>
-      <trafficSignID>274</trafficSignID>
+      <trafficSignID>R15</trafficSignID>
       <additionalValue>11.11111111111111</additionalValue>
     </trafficSignElement>
     <position>
@@ -2189,7 +2189,7 @@
   </trafficSign>
   <trafficSign id="6386">
     <trafficSignElement>
-      <trafficSignID>274</trafficSignID>
+      <trafficSignID>R15</trafficSignID>
       <additionalValue>11.11111111111111</additionalValue>
     </trafficSignElement>
     <position>
@@ -2202,7 +2202,7 @@
   </trafficSign>
   <trafficSign id="6337">
     <trafficSignElement>
-      <trafficSignID>274</trafficSignID>
+      <trafficSignID>R15</trafficSignID>
       <additionalValue>11.11111111111111</additionalValue>
     </trafficSignElement>
     <position>

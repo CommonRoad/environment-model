@@ -7,12 +7,11 @@
  * is dangerous.
  */
 class SafeDistanceGapRightViolatedPredicate : public CommonRoadPredicate {
-public:
+  public:
     /**
      * Constructor for SafeDistanceGapRightViolatedPredicate.
      */
     SafeDistanceGapRightViolatedPredicate();
-
 
     /**
      * Boolean evaluation of predicate using objects.
@@ -28,7 +27,6 @@ public:
                       const std::shared_ptr<Obstacle> &obstacleP = {},
                       const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
-
     /**
      * Constraint evaluation of predicate using objects.
      *
@@ -39,9 +37,9 @@ public:
      * @return Constraints defined by the predicate.
      */
     Constraint constraintEvaluation(
-            size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-            const std::shared_ptr<Obstacle> &obstacleP = {},
-            const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
+        size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+        const std::shared_ptr<Obstacle> &obstacleP = {},
+        const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
      * Robustness evaluation of predicate using objects.
@@ -56,5 +54,4 @@ public:
     robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
                      const std::shared_ptr<Obstacle> &obstacleP = {},
                      const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
-
 };

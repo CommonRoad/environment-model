@@ -64,14 +64,17 @@ void ChangeLanePredicateTest::SetUp() {
     world2 = std::make_shared<World>(World(0, roadNetwork2, {obstacleOne}, {obstacleTwo, obstacleThree}, 0.1));
 
     // Worlds with access- and exit-ramps on interstate
-    pathToTestFileAccessRamp =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_consider_entering_vehicles_for_lane_change.xml";
-    pathToTestFileExitRamp =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOvertakingExitRamp-1_1_T-1.xml";
+    pathToTestFileAccessRamp = TestUtils::getTestScenarioDirectory() +
+                               "/predicates/DEU_TestConsiderEnteringVehiclesForLaneChange-1/"
+                               "DEU_TestConsiderEnteringVehiclesForLaneChange-1_1_T-1.pb";
+    pathToTestFileExitRamp = TestUtils::getTestScenarioDirectory() +
+                             "/predicates/DEU_TestOvertakingExitRamp-1/DEU_TestOvertakingExitRamp-1_1_T-1.pb";
     pathToTestFileTwoFollowingLaneletsAndAccessRampFalse =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_on_following_lanelets_and_access_ramp_false.xml";
-    pathToTestFileTwoFollowingLaneletsAndAccessRampTrue =
-        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_on_following_lanelets_and_access_ramp_true.xml";
+        TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestOnFollowingLaneletsAndAccessRampFalse-1/"
+                                                "DEU_TestOnFollowingLaneletsAndAccessRampFalse-1_1_T-1.pb";
+    pathToTestFileTwoFollowingLaneletsAndAccessRampTrue = TestUtils::getTestScenarioDirectory() +
+                                                          "/predicates/DEU_TestOnFollowingLaneletsAndAccessRampTrue-1/"
+                                                          "DEU_TestOnFollowingLaneletsAndAccessRampTrue-1_1_T-1.pb";
 
     optLeft = std::make_shared<OptionalPredicateParameters>();
     optLeft->turningDirection = {TurningDirection::left};
@@ -181,6 +184,7 @@ TEST_F(ChangeLanePredicateTest, OnFollowingLaneletsAndAccessRampConnected) {
 }
 
 TEST_F(ChangeLanePredicateTest, OnFollowingLaneletsAndAccessRampNotConnected) {
+    // test case assumes invalid lanelet network (missing successor relationship)
     const auto &[obstacles, roadNetwork, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileTwoFollowingLaneletsAndAccessRampTrue);
     std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacles[0]}, {}, 0.1));

@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include "test_in_intersection_conflict_area_predicate.h"
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/geometry/geometric_operations.h"
@@ -34,7 +28,6 @@ void InIntersectionConflictAreaPredicateTest::SetUp() {
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
 
     setUpIncoming();
-    setUpIntersection();
 
     auto roadNetwork = std::make_shared<RoadNetwork>(
         RoadNetwork(lanelets, SupportedTrafficSignCountry::GERMANY, {}, {}, {intersection1}));
@@ -53,97 +46,88 @@ TEST_F(InIntersectionConflictAreaPredicateTest, BooleanEvaluationObjects) {
 }
 
 TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario1) {
-    std::array<std::string, 1> scenarios{"DEU_test_turn_left_2.xml"};
-    for (const auto &scen : scenarios) {
-        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" + scen};
-        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-            InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-        auto world{
-            std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_2_T-1.pb"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0))); //
-        //   depends on selected reference since it is not clear whether vehicle turns
+    EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0))); //
+    //   depends on selected reference since it is not clear whether vehicle turns
 
-        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(
-            44, world, obstaclesScenarioOne.at(1),
-            obstaclesScenarioOne.at(0))); // depends on selected reference since it is not clear whether
-        //        vehicle turns
+    EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(
+        44, world, obstaclesScenarioOne.at(1),
+        obstaclesScenarioOne.at(0))); // depends on selected reference since it is not clear whether
+    //        vehicle turns
 
-        EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
-        EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-    }
+    EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
 }
 
 TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario2) {
-    std::array<std::string, 1> scenarios{"DEU_test_right_before_left_2.xml"};
-    for (const auto &scen : scenarios) {
-        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" + scen};
-        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-            InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-        auto world{
-            std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/predicates/DEU_TestRightBeforeLeft-1/DEU_TestRightBeforeLeft-1_2_T-1.pb"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(34, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
-        EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-    }
+    EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(50, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
 }
 
 TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario3) {
-    std::array<std::string, 1> scenarios{"DEU_test_turn_left_8.xml"};
-    for (const auto &scen : scenarios) {
-        std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" + scen};
-        const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
-            InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-        auto world{
-            std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
+                                  "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_8_T-1.pb"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_TRUE(pred.booleanEvaluation(27, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(27, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_TRUE(pred.booleanEvaluation(27, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(27, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(37, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(38, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_FALSE(pred.booleanEvaluation(38, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(38, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(38, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(42, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
+    EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 
-        EXPECT_FALSE(pred.booleanEvaluation(49, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
-        EXPECT_TRUE(pred.booleanEvaluation(49, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
-    }
+    EXPECT_FALSE(pred.booleanEvaluation(49, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(49, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
 }
 
 TEST_F(InIntersectionConflictAreaPredicateTest, RobustEvaluation) {

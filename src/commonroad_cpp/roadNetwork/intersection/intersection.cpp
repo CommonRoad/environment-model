@@ -1,38 +1,38 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 
 #include <algorithm>
 #include <deque>
 #include <utility>
 
+#include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
+
+Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
+                           std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups,
+                           std::vector<std::shared_ptr<CrossingGroup>> crossingGroups)
+    : id(intersectionId), incomings(std::move(incomingGroups)), outgoings(std::move(outgoingGroups)),
+      crossings(std::move(crossingGroups)) {}
+
 size_t Intersection::getId() const { return id; }
 
 void Intersection::setId(size_t num) { Intersection::id = num; }
 
-const std::vector<std::shared_ptr<Incoming>> &Intersection::getIncomings() const { return incomings; }
+const std::vector<std::shared_ptr<IncomingGroup>> &Intersection::getIncomingGroups() const { return incomings; }
 
-void Intersection::addIncoming(const std::shared_ptr<Incoming> &inc) {
-    incomings.push_back(inc);
+void Intersection::addIncomingGroup(const std::shared_ptr<IncomingGroup> &incoming) {
+    incomings.push_back(incoming);
     memberLanelets.clear();
 }
 
-const std::vector<std::shared_ptr<Lanelet>> &Intersection::getCrossings() const { return crossings; }
+void Intersection::addOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoing) {
+    outgoings.push_back(outgoing);
+    memberLanelets.clear();
+}
 
-void Intersection::setIncomings(const std::vector<std::shared_ptr<Incoming>> &incs) { incomings = incs; }
+const std::vector<std::shared_ptr<OutgoingGroup>> &Intersection::getOutgoingGroups() const { return outgoings; }
 
-void Intersection::setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cross) { crossings = cross; }
+void Intersection::setIncomingGroups(const std::vector<std::shared_ptr<IncomingGroup>> &incs) { incomings = incs; }
 
-void Intersection::addCrossing(const std::shared_ptr<Lanelet> &cross) { crossings.push_back(cross); }
-
-Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<Incoming>> incomings,
-                           std::vector<std::shared_ptr<Lanelet>> crossings)
-    : id(intersectionId), incomings(std::move(incomings)), crossings(std::move(crossings)) {}
+void Intersection::setOutgoingGroups(const std::vector<std::shared_ptr<OutgoingGroup>> &outs) { outgoings = outs; }
 
 const std::vector<std::shared_ptr<Lanelet>> &
 Intersection::getMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork) {
@@ -46,6 +46,7 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
     // collect outgoings
     for (const auto &incom : incomings) {
         for (const auto &letInc : incom->getIncomingLanelets()) {
+            letInc->addLaneletType(LaneletType::incoming);
             memberLanelets.push_back(letInc);
             for (const auto &letOut : incom->getLeftOutgoings()) {
                 letOut->addLaneletType(LaneletType::intersectionLeftOutgoing);
@@ -93,5 +94,11 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
                 }
             }
         }
+        intersection_operations::findLeftOf(incom, roadNetwork);
     }
 }
+void Intersection::setCrossingGroups(const std::vector<std::shared_ptr<CrossingGroup>> &cros) { crossings = cros; }
+
+void Intersection::addCrossingGroup(const std::shared_ptr<CrossingGroup> &crossing) { crossings.push_back(crossing); }
+
+const std::vector<std::shared_ptr<CrossingGroup>> &Intersection::getCrossingGroups() const { return crossings; }

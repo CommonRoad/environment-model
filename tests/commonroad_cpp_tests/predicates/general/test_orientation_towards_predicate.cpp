@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include "test_orientation_towards_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
@@ -69,7 +63,8 @@ TEST_F(OrientationTowardsPredicateTest, BooleanEvaluation) {
 }
 
 TEST_F(OrientationTowardsPredicateTest, BooleanEvaluationScenarioTest) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_test_safe_distance.xml"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
+                               "/predicates/DEU_TestSafeDistance-1/DEU_TestSafeDistance-1_1_T-1.pb"};
     const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFile);
     auto obs1{obstacle_operations::getObstacleById(obstaclesScenario, 1008)};

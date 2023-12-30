@@ -18,11 +18,11 @@ class StopLineTest : public testing::Test {
     StopLine stopLine5;
     std::shared_ptr<TrafficSign> trafficSign;
     std::shared_ptr<TrafficLight> trafficLight;
-    std::vector<vertex> pointsStopLine1;
-    std::vector<vertex> pointsStopLine2;
-    std::vector<vertex> pointsStopLine3;
-    std::vector<vertex> pointsStopLine4;
-    std::vector<vertex> pointsStopLine5;
+    std::pair<vertex, vertex> pointsStopLine1;
+    std::pair<vertex, vertex> pointsStopLine2;
+    std::pair<vertex, vertex> pointsStopLine3;
+    std::pair<vertex, vertex> pointsStopLine4;
+    std::pair<vertex, vertex> pointsStopLine5;
     LineMarking lineMarkingStopLine1;
     LineMarking lineMarkingStopLine2;
     LineMarking lineMarkingStopLine3;

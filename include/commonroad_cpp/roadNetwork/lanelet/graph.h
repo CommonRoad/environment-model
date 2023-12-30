@@ -59,8 +59,8 @@ template <class V, class E> class graph {
 
         for (const auto &edge : m_edges) {
             if ((edge.source_vertex_id() == vertex_id) || (edge.target_vertex_id() == vertex_id)) {
-                m_vertices[edge.source_vertex_id()].remove_edge(edge.id());
-                m_freed_edge_ids.insert(edge.id());
+                m_vertices[edge.source_vertex_id()].remove_edge(edge.groupID());
+                m_freed_edge_ids.insert(edge.groupID());
             }
         }
     }
@@ -158,9 +158,9 @@ template <class V, class E> class graph {
 
     void transpose() {
         for (auto &edge : m_edges) {
-            m_vertices[edge.source_vertex_id()].remove_edge(edge.id());
+            m_vertices[edge.source_vertex_id()].remove_edge(edge.groupID());
             edge.transpose();
-            m_vertices[edge.source_vertex_id()].add_edge(edge.id());
+            m_vertices[edge.source_vertex_id()].add_edge(edge.groupID());
         }
     }
 
@@ -169,15 +169,15 @@ template <class V, class E> class graph {
         out << "digraph {\n";
 
         for (const auto &v : m_vertices) {
-            if (m_freed_vertex_ids.find(v.id()) == m_freed_vertex_ids.end()) {
-                out << "\t" << v.id() << " [label=\"(" << v.id() << ") " << v.data() << "\"]\n";
+            if (m_freed_vertex_ids.find(v.groupID()) == m_freed_vertex_ids.end()) {
+                out << "\t" << v.groupID() << " [label=\"(" << v.groupID() << ") " << v.data() << "\"]\n";
             }
         }
 
         for (const auto &e : m_edges) {
-            if (m_freed_vertex_ids.find(e.id()) == m_freed_vertex_ids.end()) {
-                out << "\t" << e.source_vertex_id() << " -> " << e.target_vertex_id() << " [label=\"(" << e.id() << ") "
-                    << e.data() << "\"]\n";
+            if (m_freed_vertex_ids.find(e.groupID()) == m_freed_vertex_ids.end()) {
+                out << "\t" << e.source_vertex_id() << " -> " << e.target_vertex_id() << " [label=\"(" << e.groupID()
+                    << ") " << e.data() << "\"]\n";
             }
         }
 
