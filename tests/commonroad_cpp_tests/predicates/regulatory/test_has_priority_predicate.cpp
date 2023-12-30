@@ -7,7 +7,9 @@
 #include "test_has_priority_predicate.h"
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
-TEST_F(HasPriorityPredicateTest, BooleanEvaluationAtStopSign) {}
+TEST_F(HasPriorityPredicateTest, BooleanEvaluationAtStopSign) {
+    // Todo
+}
 
 TEST_F(HasPriorityPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);

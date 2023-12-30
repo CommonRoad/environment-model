@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_regulatory_elements_utils.h"
 #include "../../predicates/utils_predicate_test.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
@@ -37,73 +30,92 @@ TEST_F(RegulatoryElementsUtilsTest, TypeSpeedLimit) {
 }
 
 TEST_F(RegulatoryElementsUtilsTest, SpeedLimitSingle) {
-    EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(111), "274"), 35.0);
-    EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(222), "274"),
+    EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(111),
+                                                    TrafficSignTypes::MAX_SPEED),
+              35.0);
+    EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(222),
+                                                    TrafficSignTypes::MAX_SPEED),
               std::numeric_limits<double>::max());
-    EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(333), "274"),
+    EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(333),
+                                                    TrafficSignTypes::MAX_SPEED),
               std::numeric_limits<double>::max());
-    EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(444), "274"),
+    EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(444),
+                                                    TrafficSignTypes::MAX_SPEED),
               std::numeric_limits<double>::max());
 }
 
 TEST_F(RegulatoryElementsUtilsTest, SpeedLimitVector) {
-    EXPECT_EQ(
-        regulatory_elements_utils::speedLimit(
-            {world->getRoadNetwork()->findLaneletById(111), world->getRoadNetwork()->findLaneletById(222)}, "274"),
-        35.0);
-    EXPECT_EQ(
-        regulatory_elements_utils::speedLimit(
-            {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)}, "274"),
-        std::numeric_limits<double>::max());
-    EXPECT_EQ(
-        regulatory_elements_utils::speedLimit(
-            {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)}, "274"),
-        std::numeric_limits<double>::max());
-    EXPECT_EQ(regulatory_elements_utils::speedLimit({world->getRoadNetwork()->findLaneletById(111)}, "274"), 35.0);
+    EXPECT_EQ(regulatory_elements_utils::speedLimit(
+                  {world->getRoadNetwork()->findLaneletById(111), world->getRoadNetwork()->findLaneletById(222)},
+                  TrafficSignTypes::MAX_SPEED),
+              35.0);
+    EXPECT_EQ(regulatory_elements_utils::speedLimit(
+                  {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)},
+                  TrafficSignTypes::MAX_SPEED),
+              std::numeric_limits<double>::max());
+    EXPECT_EQ(regulatory_elements_utils::speedLimit(
+                  {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)},
+                  TrafficSignTypes::MAX_SPEED),
+              std::numeric_limits<double>::max());
+    EXPECT_EQ(regulatory_elements_utils::speedLimit({world->getRoadNetwork()->findLaneletById(111)},
+                                                    TrafficSignTypes::MAX_SPEED),
+              35.0);
 }
 
 TEST_F(RegulatoryElementsUtilsTest, RequiredVelocitySingle) {
-    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(111), "275"), 10.0);
-    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(222), "275"),
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(111),
+                                                          TrafficSignTypes::MIN_SPEED),
+              10.0);
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(222),
+                                                          TrafficSignTypes::MIN_SPEED),
               std::numeric_limits<double>::lowest());
-    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(333), "275"),
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(333),
+                                                          TrafficSignTypes::MIN_SPEED),
               std::numeric_limits<double>::lowest());
-    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(444), "275"),
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(world->getRoadNetwork()->findLaneletById(444),
+                                                          TrafficSignTypes::MIN_SPEED),
               std::numeric_limits<double>::lowest());
 }
 
 TEST_F(RegulatoryElementsUtilsTest, RequiredVelocityVector) {
-    EXPECT_EQ(
-        regulatory_elements_utils::requiredVelocity(
-            {world->getRoadNetwork()->findLaneletById(111), world->getRoadNetwork()->findLaneletById(222)}, "275"),
-        10.0);
-    EXPECT_EQ(
-        regulatory_elements_utils::requiredVelocity(
-            {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)}, "275"),
-        std::numeric_limits<double>::lowest());
-    EXPECT_EQ(
-        regulatory_elements_utils::requiredVelocity(
-            {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)}, "275"),
-        std::numeric_limits<double>::lowest());
-    EXPECT_EQ(regulatory_elements_utils::requiredVelocity({world->getRoadNetwork()->findLaneletById(111)}, "275"),
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(
+                  {world->getRoadNetwork()->findLaneletById(111), world->getRoadNetwork()->findLaneletById(222)},
+                  TrafficSignTypes::MIN_SPEED),
+              10.0);
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(
+                  {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)},
+                  TrafficSignTypes::MIN_SPEED),
+              std::numeric_limits<double>::lowest());
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity(
+                  {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)},
+                  TrafficSignTypes::MIN_SPEED),
+              std::numeric_limits<double>::lowest());
+    EXPECT_EQ(regulatory_elements_utils::requiredVelocity({world->getRoadNetwork()->findLaneletById(111)},
+                                                          TrafficSignTypes::MIN_SPEED),
               10.0);
 }
 
 TEST_F(RegulatoryElementsUtilsTest, SpeedLimitSuggested) {
-    EXPECT_EQ(
-        regulatory_elements_utils::speedLimitSuggested(
-            {world->getRoadNetwork()->findLaneletById(111), world->getRoadNetwork()->findLaneletById(222)}, "274"),
-        35.0);
-    EXPECT_EQ(
-        regulatory_elements_utils::speedLimitSuggested(
-            {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)}, "274"),
-        36.11);
-    EXPECT_EQ(
-        regulatory_elements_utils::speedLimitSuggested(
-            {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)}, "274"),
-        36.11);
-    EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested({world->getRoadNetwork()->findLaneletById(111)}, "274"),
+    EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested(
+                  {world->getRoadNetwork()->findLaneletById(111), world->getRoadNetwork()->findLaneletById(222)},
+                  TrafficSignTypes::MAX_SPEED),
               35.0);
+    EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested(
+                  {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)},
+                  TrafficSignTypes::MAX_SPEED),
+              36.11);
+    EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested(
+                  {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)},
+                  TrafficSignTypes::MAX_SPEED),
+              36.11);
+    EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested({world->getRoadNetwork()->findLaneletById(111)},
+                                                             TrafficSignTypes::MAX_SPEED),
+              35.0);
+}
+
+TEST_F(RegulatoryElementsUtilsTest, ExtractTypeFromString) {
+    EXPECT_EQ(regulatory_elements_utils::extractTypeFromNationalID("274", SupportedTrafficSignCountry::GERMANY, "DEU"),
+              TrafficSignTypes::MAX_SPEED);
 }
 
 TEST_F(RegulatoryElementsUtilsTest, TrafficSignReferencesStopSign) {}

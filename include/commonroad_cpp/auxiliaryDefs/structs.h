@@ -11,9 +11,9 @@
 #include "types_and_definitions.h"
 #include "vector"
 #include <climits>
+#include <cmath>
 #include <cstddef>
 #include <utility>
-#include <cmath>
 
 struct TrafficLightCycleElement {
     TrafficLightState color;
@@ -91,11 +91,12 @@ struct SimulationParameters {
           outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)){};
     SimulationParameters() = default;
 
-    EvaluationMode evaluationMode{EvaluationMode::directory}; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
-    size_t egoVehicleId{0};                  //**< ID of ego vehicle */
-    std::string benchmarkId{"DEU_test_max_speed_limit"};                 //**< CommonRoad benchmark ID */
+    EvaluationMode evaluationMode{
+        EvaluationMode::directory}; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
+    size_t egoVehicleId{0};         //**< ID of ego vehicle */
+    std::string benchmarkId{"DEU_test_max_speed_limit"}; //**< CommonRoad benchmark ID */
     std::vector<std::string> directoryPaths{}; //**< List of directories in which all scenarios should be evaluated */
-    bool performanceMeasurement{true};   //**< Flag indicating whether performance should me measured. */
+    bool performanceMeasurement{true};         //**< Flag indicating whether performance should me measured. */
     std::string outputDirectory{"path/to/output/directory"};   //**< Path to output directory of file to generate. */
-    std::string outputFileName {"traffic_rule_evaluation.txt"};    //**< name and file type for to generate. */
+    std::string outputFileName{"traffic_rule_evaluation.txt"}; //**< name and file type for to generate. */
 };

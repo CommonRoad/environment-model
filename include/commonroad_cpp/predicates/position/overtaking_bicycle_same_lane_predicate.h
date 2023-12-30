@@ -6,7 +6,7 @@
  * Evaluates whether the kth vehicle overtakes a bicycle.
  */
 class OvertakingBicycleSameLanePredicate : public CommonRoadPredicate {
-public:
+  public:
     /**
      * Constructor for OvertakingBicycleSameLanePredicate.
      */
@@ -37,7 +37,7 @@ public:
      */
     double
     robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-                     const std::shared_ptr<Obstacle> &obstacleP ={},
+                     const std::shared_ptr<Obstacle> &obstacleP = {},
                      const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
@@ -50,7 +50,7 @@ public:
      * @return Real value indicating robustness of the predicate.
      */
     Constraint constraintEvaluation(
-            size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-            const std::shared_ptr<Obstacle> &obstacleP = {},
-            const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
+        size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+        const std::shared_ptr<Obstacle> &obstacleP = {},
+        const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 };

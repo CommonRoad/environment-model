@@ -2,6 +2,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/auxiliaryDefs/regulatory_elements.cpp
         commonroad_cpp/roadNetwork/road_network.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet.cpp
+        commonroad_cpp/roadNetwork/lanelet/bound.cpp
         commonroad_cpp/roadNetwork/lanelet/lane.cpp
         commonroad_cpp/roadNetwork/lanelet/lane_operations.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet_operations.cpp
@@ -10,15 +11,18 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.cpp
         commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.cpp
-        commonroad_cpp/roadNetwork/intersection/incoming.cpp
+        commonroad_cpp/roadNetwork/intersection/incoming_group.cpp
         commonroad_cpp/roadNetwork/intersection/intersection.cpp
         commonroad_cpp/roadNetwork/intersection/intersection_operations.cpp
+        commonroad_cpp/roadNetwork/intersection/outgoing_group.cpp
+        commonroad_cpp/roadNetwork/intersection/crossing_group.cpp
         commonroad_cpp/roadNetwork/road_network_config.cpp
         commonroad_cpp/obstacle/obstacle.cpp
         commonroad_cpp/obstacle/obstacle_operations.cpp
         commonroad_cpp/obstacle/obstacle_reference.cpp
-        commonroad_cpp/obstacle/state.cpp
         commonroad_cpp/obstacle/signal_state.cpp
+        commonroad_cpp/obstacle/state.cpp
+        commonroad_cpp/obstacle/state_meta_info.cpp
         commonroad_cpp/geometry/circle.cpp
         commonroad_cpp/geometry/geometric_operations.cpp
         commonroad_cpp/geometry/rectangle.cpp
@@ -30,6 +34,9 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp
+        commonroad_cpp/roadNetwork/environment/environment.cpp
+        commonroad_cpp/roadNetwork/environment/area.cpp
+        commonroad_cpp/roadNetwork/environment/area_border.cpp
         commonroad_cpp/interfaces/commonroad/protobuf_reader.cpp)
 
 set(ENV_MODEL_HDR_FILES
@@ -45,6 +52,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/geometry/types.h
         commonroad_cpp/interfaces/commonroad/input_utils.h
         commonroad_cpp/interfaces/commonroad/xml_reader.h
+        commonroad_cpp/interfaces/commonroad/protobuf_reader.h
         commonroad_cpp/obstacle/actuator_parameters.h
         commonroad_cpp/obstacle/obstacle.h
         commonroad_cpp/obstacle/obstacle_reference.h
@@ -52,13 +60,17 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/obstacle/sensor_parameters.h
         commonroad_cpp/obstacle/state.h
         commonroad_cpp/obstacle/signal_state.h
-        commonroad_cpp/roadNetwork/intersection/incoming.h
+        commonroad_cpp/obstacle/state_meta_info.h
+        commonroad_cpp/roadNetwork/intersection/incoming_group.h
         commonroad_cpp/roadNetwork/intersection/intersection.h
         commonroad_cpp/roadNetwork/intersection/intersection_operations.h
+        commonroad_cpp/roadNetwork/intersection/outgoing_group.h
+        commonroad_cpp/roadNetwork/intersection/crossing_group.h
         commonroad_cpp/roadNetwork/lanelet/dijkstra.h
         commonroad_cpp/roadNetwork/lanelet/graph.h
         commonroad_cpp/roadNetwork/lanelet/lane.h
         commonroad_cpp/roadNetwork/lanelet/lanelet.h
+        commonroad_cpp/roadNetwork/lanelet/bound.h
         commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h
         commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h
         commonroad_cpp/roadNetwork/lanelet/lane_operations.h
@@ -67,6 +79,9 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h
         commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h
+        commonroad_cpp/roadNetwork/environment/environment.h
+        commonroad_cpp/roadNetwork/environment/area.h
+        commonroad_cpp/roadNetwork/environment/area_border.h
         commonroad_cpp/roadNetwork/road_network.h
         commonroad_cpp/roadNetwork/types.h
         commonroad_cpp/roadNetwork/road_network_config.h
@@ -118,6 +133,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/general/in_congestion_predicate.cpp
         commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.cpp
         commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.cpp
+        commonroad_cpp/predicates/general/is_vehicle_predicate.cpp
         commonroad_cpp/predicates/general/makes_u_turn_predicate.cpp
         commonroad_cpp/predicates/general/interstate_broad_enough_predicate.cpp
         commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.cpp
@@ -165,6 +181,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/general/orientation_towards_predicate.h
         commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.h
         commonroad_cpp/predicates/general/is_vru_predicate.h
+        commonroad_cpp/predicates/general/is_vehicle_predicate.h
         commonroad_cpp/predicates/general/narrow_road_predicate.h
         commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h
         commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.h

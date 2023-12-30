@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
 #include "../../obstacle/obstacle.h"
@@ -29,5 +23,12 @@ bool onIncoming(size_t timeStep, const std::shared_ptr<Obstacle> &obs, const std
  */
 bool checkSameIncoming(const std::shared_ptr<Lanelet> &letK, const std::shared_ptr<Lanelet> &letP,
                        const std::shared_ptr<RoadNetwork> &roadNetwork);
+
+/**
+ * Calculate left of given incomingGroup
+ *
+ * @param origin originGroup of interest
+ */
+void findLeftOf(const std::shared_ptr<IncomingGroup> &origin, const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 } // namespace intersection_operations

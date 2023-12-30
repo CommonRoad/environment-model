@@ -9,7 +9,7 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h>
 #include <commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h>
-#include <commonroad_cpp/roadNetwork/intersection/incoming.h>
+#include <commonroad_cpp/roadNetwork/intersection/incoming_group.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
@@ -30,19 +30,19 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(
     for (const auto &letK : laneK->getContainedLanelets()) {
         if (!letK->hasLaneletType(LaneletType::incoming))
             continue;
-        auto incomingK{world->getRoadNetwork()->findIncomingByLanelet(letK)};
+        auto incomingK{world->getRoadNetwork()->findIncomingGroupByLanelet(letK)};
         if (!incomingK) {
-            throw std::runtime_error{"missing incoming"};
+            throw std::runtime_error{"missing incoming (obstacleK)"};
         }
         for (const auto &letP : laneP->getContainedLanelets()) {
             if (!letP->hasLaneletType(LaneletType::incoming))
                 continue;
-            auto incomingP{world->getRoadNetwork()->findIncomingByLanelet(letP)};
+            auto incomingP{world->getRoadNetwork()->findIncomingGroupByLanelet(letP)};
             if (!incomingP) {
-                throw std::runtime_error{"missing incoming"};
+                throw std::runtime_error{"missing incoming (obstacleP)"};
             }
             if (!incomingP->getIsLeftOf()) {
-                throw std::runtime_error{"missing incoming"};
+                throw std::runtime_error{"missing 'left of' incoming"};
             }
             if (incomingK->getIsLeftOf()->getId() == incomingP->getId())
                 return true;

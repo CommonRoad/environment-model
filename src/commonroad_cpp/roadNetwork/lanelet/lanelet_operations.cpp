@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include <algorithm>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
@@ -21,20 +15,23 @@ LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type
         throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type!");
 }
 
-DrivingDirection lanelet_operations::matchStringToDrivingDirection(const std::string &type) {
-    std::string str{type};
-    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
-    if (DrivingDirectionNames.count(str) == 1)
-        return DrivingDirectionNames.at(str);
-    else
-        return DrivingDirection::invalid;
-}
-
 LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type) {
     if (type == "solid")
         return LineMarking::solid;
     else if (type == "dashed")
         return LineMarking::dashed;
+    else if (type == "solid_solid")
+        return LineMarking::solid_solid;
+    else if (type == "dashed_dashed")
+        return LineMarking::dashed_dashed;
+    else if (type == "solid_dashed")
+        return LineMarking::solid_dashed;
+    else if (type == "dashed_solid")
+        return LineMarking::dashed_solid;
+    else if (type == "curb")
+        return LineMarking::curb;
+    else if (type == "lowered_curb")
+        return LineMarking::lowered_curb;
     else if (type == "broad_solid")
         return LineMarking::broad_solid;
     else if (type == "broad_dashed")
@@ -55,7 +52,7 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet
                         [curLanelet](const std::shared_ptr<Lanelet> &let) {
                             return let->getId() == curLanelet->getAdjacentRight().adj->getId();
                         }) and
-           (!sameDirection or curLanelet->getAdjacentRight().dir == DrivingDirection::same)) {
+           (!sameDirection or !curLanelet->getAdjacentRight().oppositeDir)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentRight().adj);
         curLanelet = curLanelet->getAdjacentRight().adj;
     }
@@ -72,7 +69,7 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(
                         [curLanelet](const std::shared_ptr<Lanelet> &let) {
                             return let->getId() == curLanelet->getAdjacentLeft().adj->getId();
                         }) and
-           (!sameDirection or curLanelet->getAdjacentLeft().dir == DrivingDirection::same)) {
+           (!sameDirection or !curLanelet->getAdjacentLeft().oppositeDir)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentLeft().adj);
         curLanelet = curLanelet->getAdjacentLeft().adj;
     }
@@ -132,10 +129,10 @@ lanelet_operations::activeTlsByLanelet(size_t timeStep, const std::shared_ptr<La
 
 bool lanelet_operations::bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &lanelet) {
     auto is_road = [](const std::shared_ptr<Lanelet> &lanelet) {
-        return !lanelet->hasLaneletType(LaneletType::bikeLane) and !lanelet->hasLaneletType(LaneletType::sidewalk);
+        return !lanelet->hasLaneletType(LaneletType::bicycleLane) and !lanelet->hasLaneletType(LaneletType::sidewalk);
     };
 
-    if (!lanelet->hasLaneletType(LaneletType::bikeLane))
+    if (!lanelet->hasLaneletType(LaneletType::bicycleLane))
         return false;
 
     std::shared_ptr<Lanelet> left = lanelet->getAdjacentLeft().adj;

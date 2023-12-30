@@ -22,10 +22,10 @@ bool OncomingVehiclePredicate::booleanEvaluation(
         if ((inFrontOfPredicate.booleanEvaluation(timeStep, world, obs, obstacleK)) &&
             inNeighboringLeftLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) &&
             !inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) &&
-            (obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]->getAdjacentLeft().dir ==
-                 DrivingDirection::opposite &&
-             obs->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]->getAdjacentLeft().dir ==
-                 DrivingDirection::opposite)) {
+            (obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]
+                 ->getAdjacentLeft()
+                 .oppositeDir &&
+             obs->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)[0]->getAdjacentLeft().oppositeDir)) {
             oncomingTraffic = true;
             break;
         }

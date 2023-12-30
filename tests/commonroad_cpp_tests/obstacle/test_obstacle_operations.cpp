@@ -36,7 +36,6 @@ TEST_F(ObstacleOperationsTest, MatchObstacleTypeToString) {
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("pedestrian"), ObstacleType::pedestrian);
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("bus"), ObstacleType::bus);
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("unknown"), ObstacleType::unknown);
-    EXPECT_EQ(obstacle_operations::matchStringToObstacleType("vehicle"), ObstacleType::vehicle);
 }
 
 TEST_F(ObstacleOperationsTest, ObstacleDirectlyLeft) {
@@ -201,7 +200,8 @@ TEST_F(ObstacleOperationsTest, LaneletsLeftOfObstacle) {
 
 TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
     std::string pathToTestFile =
-        TestUtils::getTestScenarioDirectory() + "/DEU_two_lanes_with_different_orientation.xml";
+        TestUtils::getTestScenarioDirectory() +
+        "/DEU_TwoLanesWithDifferentOrientation-1/DEU_TwoLanesWithDifferentOrientation-1_1_T-1.pb";
     const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 10, 0, 0);
@@ -258,7 +258,8 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
 }
 
 TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
-    std::string pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_corner_with_180_degree.xml";
+    std::string pathToTestFile =
+        TestUtils::getTestScenarioDirectory() + "/DEU_CornerWith180Degree-1/DEU_CornerWith180Degree-1_1_T-1.pb";
     const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
     const double cornerRadius = 10.0;
     const double distanceToCover = M_PI * cornerRadius;

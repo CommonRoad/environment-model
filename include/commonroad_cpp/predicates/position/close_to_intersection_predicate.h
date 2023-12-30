@@ -11,18 +11,18 @@
 class CloseToIntersectionPredicate : public CommonRoadPredicate {
   public:
     /**
-      * Constructor for CloseToIntersectionPredicate
+     * Constructor for CloseToIntersectionPredicate
      */
     CloseToIntersectionPredicate();
 
     /**
-      * Boolean evaluation of predicate using objects.
-      *
-      * @param timeStep Time step of interest.
-      * @param world World object.
-      * @param obstacleK The kth obstacle.
-      * @param obstacleP The pth obstacle. This is an optional parameter.
-      * @return Boolean indicating satisfaction of the predicate.
+     * Boolean evaluation of predicate using objects.
+     *
+     * @param timeStep Time step of interest.
+     * @param world World object.
+     * @param obstacleK The kth obstacle.
+     * @param obstacleP The pth obstacle. This is an optional parameter.
+     * @return Boolean indicating satisfaction of the predicate.
      */
     bool
     booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

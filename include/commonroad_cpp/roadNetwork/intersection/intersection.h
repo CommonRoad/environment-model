@@ -1,15 +1,10 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
-#include "incoming.h"
+#include "crossing_group.h"
+#include "incoming_group.h"
+#include "outgoing_group.h"
 
 /**
  * Class representing an intersection.
@@ -24,11 +19,13 @@ class Intersection {
     /**
      * Constructor of intersection class.
      * @param intersectionId Id of intersection.
-     * @param incomings List of references to incomings of intersection.
-     * @param crossings List of references to crossing lanelets of intersection.
+     * @param incomingGroups List of references to ingoing groups of intersection.
+     * @param outgoingGroups List of references to outgoing groups of intersection.
+     * @param crossingGroups List of references to crossing groups of intersection.
      */
-    Intersection(size_t intersectionId, std::vector<std::shared_ptr<Incoming>> incomings,
-                 std::vector<std::shared_ptr<Lanelet>> crossings);
+    Intersection(size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
+                 std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups,
+                 std::vector<std::shared_ptr<CrossingGroup>> crossingGroups);
 
     /**
      * Getter for intersection ID.
@@ -38,18 +35,25 @@ class Intersection {
     [[nodiscard]] size_t getId() const;
 
     /**
-     * Getter for incomings belonging to intersection.
+     * Getter for incomingGroups belonging to intersection.
      *
-     * @return List of pointers to incomings.
+     * @return List of pointers to IncomingGroups.
      */
-    [[nodiscard]] const std::vector<std::shared_ptr<Incoming>> &getIncomings() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<IncomingGroup>> &getIncomingGroups() const;
 
     /**
-     * Getter for crossing lanelets belonging to intersection.
+     * Getter for outgoinGroups belonging to intersection.
      *
-     * @return List of pointers to lanelets.
+     * @return List of pointers to OutcomingGroups.
      */
-    [[nodiscard]] const std::vector<std::shared_ptr<Lanelet>> &getCrossings() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<OutgoingGroup>> &getOutgoingGroups() const;
+
+    /**
+     * Getter for crossing groups belonging to intersection.
+     *
+     * @return List of pointers to crossing groups.
+     */
+    [[nodiscard]] const std::vector<std::shared_ptr<CrossingGroup>> &getCrossingGroups() const;
 
     /**
      * Getter for intersection ID.
@@ -59,56 +63,67 @@ class Intersection {
     void setId(size_t num);
 
     /**
-     * Setter for incomings.
+     * Setter for incomingGroups.
      *
-     * @param incs List of pointers to incomings.
+     * @param incs List of pointers to IncomingGroup.
      */
-    void setIncomings(const std::vector<std::shared_ptr<Incoming>> &incs);
+    void setIncomingGroups(const std::vector<std::shared_ptr<IncomingGroup>> &incs);
 
     /**
-     * Adds and incoming to the intersection.
+     * Setter for outgoingGroups.
      *
-     * @param incoming Pointer to incoming.
+     * @param outs List of pointers to OutgoingGroup.
      */
-    void addIncoming(const std::shared_ptr<Incoming> &incoming);
+    void setOutgoingGroups(const std::vector<std::shared_ptr<OutgoingGroup>> &outs);
 
     /**
-     * Setter for crossing lanelets belonging to intersection.
+     * Setter for crossing groups.
      *
-     * @param cross List of pointers to lanelets.
+     * @param cros List of pointers to crossing groups.
      */
-    void setCrossings(const std::vector<std::shared_ptr<Lanelet>> &cross);
+    void setCrossingGroups(const std::vector<std::shared_ptr<CrossingGroup>> &cros);
 
     /**
-     * Adds crossing to list of crossings.
+     * Adds an incomingGroup to the intersection.
      *
-     * @param cross Crossing
+     * @param incoming Pointer to IncomingGroup.
      */
-    void addCrossing(const std::shared_ptr<Lanelet> & cross);
+    void addIncomingGroup(const std::shared_ptr<IncomingGroup> &incoming);
 
     /**
+     * Adds an outgoingGroup to the intersection.
      *
-     * @return
+     * @param incoming Pointer to OutgoingGroup.
+     */
+    void addOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoing);
+
+    /**
+     * Adds an crossing group to the intersection.
+     *
+     * @param crossing Pointer to crossing group.
+     */
+    void addCrossingGroup(const std::shared_ptr<CrossingGroup> &crossing);
+
+    /**
+     * Getter for all member lanelets of the intersection
+     * @return vector of pointer to Lanelets
      */
     const std::vector<std::shared_ptr<Lanelet>> &getMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
     /**
-     *
+     * Based on the incomingGroups, this fuction computes the member lanelets of the intersection and sets appropriate
+     * LaneletTypes for all member lanelets
      */
     void computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
   private:
-    size_t id;                                        //**< ID of intersection. */
-    std::vector<std::shared_ptr<Incoming>> incomings; //**< List of pointers to incomings belonging to intersection. */
-    std::vector<std::shared_ptr<Lanelet>>
-        crossings; //**< List of pointers to crossing lanelets belonging to intersection. */
+    size_t id; //**< ID of intersection. */
+    std::vector<std::shared_ptr<IncomingGroup>>
+        incomings; //**< List of pointers to incoming groups belonging to intersection. */
+    std::vector<std::shared_ptr<OutgoingGroup>>
+        outgoings; //**< List of pointers to outgoing groups belonging to intersection. */
+    std::vector<std::shared_ptr<CrossingGroup>>
+        crossings; //**< List of pointers to crossing groups belonging to intersection. */
     std::vector<std::shared_ptr<Lanelet>> memberLanelets; //**< List of lanelets belonging to intersection starting from
                                                           // incoming until outgoing. Crossings are not considered. */
-
-    /**
-     *
-     * @param lanelet
-     * @param turn
-     */
-    void addIntersectionMemberLanelets(const std::shared_ptr<Lanelet> &lanelet, TurningDirection turn);
 };

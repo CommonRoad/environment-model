@@ -12,65 +12,92 @@
 
 using time_step_t = size_t; //**< type of history/trajectory prediction time steps */
 
+enum class AreaType { bus_stop, border, parking, restricted, unknown };
+
 enum class EvaluationMode { directory, singleScenario, singleVehicle, directory_single_vehicle };
 
 enum class OperatingMode { boolean, constraint, robustness };
 
+enum class TimeOfDay { afternoon, morning, night, noon, sunset, unknown };
+
+enum class Weather { clear, cloudy, fog, hail, heavy_rain, light_rain, mid_rain, snow, unknown };
+
+enum class Underground { clean, damaged, dirty, ice, snow, wet, unknown };
+
 enum class ObstacleType {
+    unknown,
     car,
     truck,
-    pedestrian,
     bus,
-    unknown,
-    vehicle,
     bicycle,
+    pedestrian,
     priority_vehicle,
+    parked_vehicl,
+    construction_zone,
     train,
+    road_boundary,
     motorcycle,
-    taxi
+    taxi,
+    building,
+    pillar,
+    median_strip,
 };
 
 enum class ObstacleRole { STATIC, DYNAMIC, ENVIRONMENT, PHANTOM };
 
 enum class LaneletType {
-    interstate,
-    urban,
-    crosswalk,
+    accessRamp,
+    bicycleLane,
+    border,
+    busLane,
     busStop,
     country,
-    highway,
+    crosswalk,
     driveWay,
-    mainCarriageWay,
-    accessRamp,
     exitRamp,
-    shoulder,
-    busLane,
-    bikeLane,
-    sidewalk,
-    unknown,
+    highway,
+    incoming,
     intersection,
-    left,
-    right,
-    straight,
     intersectionLeftOutgoing,
     intersectionRightOutgoing,
     intersectionStraightOutgoing,
-    incoming
+    interstate,
+    left,
+    mainCarriageWay,
+    parking,
+    restricted,
+    right,
+    shoulder,
+    sidewalk,
+    straight,
+    urban,
+    unknown
 };
 
-enum class LineMarking { solid, dashed, broad_dashed, broad_solid, unknown, no_marking };
+enum class LineMarking {
+    solid,
+    dashed,
+    solid_solid,
+    dashed_dashed,
+    solid_dashed,
+    dashed_solid,
+    curb,
+    lowered_curb,
+    broad_dashed,
+    broad_solid,
+    unknown,
+    no_marking
+};
 
 enum class TrafficLightState { red, green, yellow, red_yellow, inactive };
 
 enum class TurningDirection { left, straight, right, leftStraight, straightRight, leftRight, all };
 
-enum class DrivingDirection { same, opposite, invalid };
-
 enum class ShapeType { rectangle, circle };
 
 enum class ContainmentType { PARTIALLY_CONTAINED, COMPLETELY_CONTAINED };
 
-enum class SupportedTrafficSignCountry { GERMANY, ZAMUNDA, USA, SPAIN };
+enum class SupportedTrafficSignCountry { GERMANY, ZAMUNDA, USA, SPAIN, BELGIUM, ARGENTINA };
 
 enum class TrafficSignTypes {
     WARNING_DANGER_SPOT,

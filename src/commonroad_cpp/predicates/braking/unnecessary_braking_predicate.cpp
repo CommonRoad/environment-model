@@ -42,13 +42,14 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(
             KeepsSafeDistancePrecPredicate.booleanEvaluation(timeStep, world, obstacleK, obs)) {
             if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)
                 obs->interpolateAcceleration(timeStep, world->getDt());
-            constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt);
+            constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() +
+                                       parameters.paramMap["aAbrupt"]);
         }
     }
     if (!constraintValues.empty())
         return {*max_element(constraintValues.begin(), constraintValues.end())};
     else
-        return {parameters.aAbrupt};
+        return {parameters.paramMap["aAbrupt"]};
 }
 
 double UnnecessaryBrakingPredicate::robustEvaluation(
@@ -71,14 +72,15 @@ double UnnecessaryBrakingPredicate::robustEvaluation(
             KeepsSafeDistancePrecPredicate.booleanEvaluation(timeStep, world, obstacleK, obs)) {
             if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)
                 obs->interpolateAcceleration(timeStep, world->getDt());
-            robustnessValues.push_back(parameters.aAbrupt - obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
+            robustnessValues.push_back(parameters.paramMap["aAbrupt"] -
+                                       obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
                                        obs->getStateByTimeStep(timeStep)->getAcceleration());
         }
     }
     if (!robustnessValues.empty())
         return *max_element(robustnessValues.begin(), robustnessValues.end());
     else
-        return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.aAbrupt;
+        return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.paramMap["aAbrupt"];
 }
 
 UnnecessaryBrakingPredicate::UnnecessaryBrakingPredicate() : CommonRoadPredicate(false) {}
