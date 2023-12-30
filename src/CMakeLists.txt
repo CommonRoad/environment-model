@@ -1,52 +1,410 @@
 set(ENV_MODEL_SRC_FILES
-        roadNetwork/road_network.cpp
-        roadNetwork/lanelet/lanelet.cpp
-        roadNetwork/lanelet/lane.cpp
-        roadNetwork/lanelet/lanelet_operations.cpp
-        roadNetwork/regulatoryElements/stop_line.cpp
-        roadNetwork/regulatoryElements/traffic_light.cpp
-        roadNetwork/regulatoryElements/traffic_sign.cpp
-        roadNetwork/regulatoryElements/traffic_sign_element.cpp
-        roadNetwork/intersection/incoming.cpp
-        roadNetwork/intersection/intersection.cpp
-        obstacle/obstacle.cpp
-        obstacle/obstacle_operations.cpp
-        obstacle/state.cpp
-        geometry/circle.cpp
-        geometry/geometric_operations.cpp
-        geometry/rectangle.cpp
-        interfaces/commonroad/pugi_xml/pugixml.cpp
-        interfaces/commonroad/commonroad_factory_2018b.cpp
-        interfaces/commonroad/commonroad_factory_2020a.cpp
-        interfaces/commonroad/xml_reader.cpp
-        world.cpp
-        predicates/predicate.cpp
-        predicates/safe_distance_predicate.cpp
-        predicates/in_front_of_predicate.cpp
-        predicates/in_same_lane_predicate.cpp
+        commonroad_cpp/auxiliaryDefs/regulatory_elements.cpp
+        commonroad_cpp/roadNetwork/road_network.cpp
+        commonroad_cpp/roadNetwork/lanelet/lanelet.cpp
+        commonroad_cpp/roadNetwork/lanelet/lane.cpp
+        commonroad_cpp/roadNetwork/lanelet/lane_operations.cpp
+        commonroad_cpp/roadNetwork/lanelet/lanelet_operations.cpp
+        commonroad_cpp/roadNetwork/regulatoryElements/stop_line.cpp
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.cpp
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.cpp
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.cpp
+        commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.cpp
+        commonroad_cpp/roadNetwork/intersection/incoming.cpp
+        commonroad_cpp/roadNetwork/intersection/intersection.cpp
+        commonroad_cpp/roadNetwork/intersection/intersection_operations.cpp
+        commonroad_cpp/roadNetwork/road_network_config.cpp
+        commonroad_cpp/obstacle/obstacle.cpp
+        commonroad_cpp/obstacle/obstacle_operations.cpp
+        commonroad_cpp/obstacle/obstacle_reference.cpp
+        commonroad_cpp/obstacle/state.cpp
+        commonroad_cpp/obstacle/signal_state.cpp
+        commonroad_cpp/geometry/circle.cpp
+        commonroad_cpp/geometry/geometric_operations.cpp
+        commonroad_cpp/geometry/rectangle.cpp
+        commonroad_cpp/interfaces/commonroad/commonroad_factory_2018b.cpp
+        commonroad_cpp/interfaces/commonroad/commonroad_factory_2020a.cpp
+        commonroad_cpp/interfaces/commonroad/xml_reader.cpp
+        commonroad_cpp/interfaces/commonroad/input_utils.cpp
+        commonroad_cpp/world.cpp
+        commonroad_cpp/commonroad_container.cpp
+        commonroad_cpp/auxiliaryDefs/timer.cpp
+        commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp
+        commonroad_cpp/interfaces/commonroad/protobuf_reader.cpp)
+
+set(ENV_MODEL_HDR_FILES
+        commonroad_cpp/auxiliaryDefs/regulatory_elements.h
+        commonroad_cpp/auxiliaryDefs/structs.h
+        commonroad_cpp/auxiliaryDefs/timer.h
+        commonroad_cpp/auxiliaryDefs/types_and_definitions.h
+        commonroad_cpp/commonroad_container.h
+        commonroad_cpp/geometry/circle.h
+        commonroad_cpp/geometry/geometric_operations.h
+        commonroad_cpp/geometry/rectangle.h
+        commonroad_cpp/geometry/shape.h
+        commonroad_cpp/geometry/types.h
+        commonroad_cpp/interfaces/commonroad/input_utils.h
+        commonroad_cpp/interfaces/commonroad/xml_reader.h
+        commonroad_cpp/obstacle/actuator_parameters.h
+        commonroad_cpp/obstacle/obstacle.h
+        commonroad_cpp/obstacle/obstacle_reference.h
+        commonroad_cpp/obstacle/obstacle_operations.h
+        commonroad_cpp/obstacle/sensor_parameters.h
+        commonroad_cpp/obstacle/state.h
+        commonroad_cpp/obstacle/signal_state.h
+        commonroad_cpp/roadNetwork/intersection/incoming.h
+        commonroad_cpp/roadNetwork/intersection/intersection.h
+        commonroad_cpp/roadNetwork/intersection/intersection_operations.h
+        commonroad_cpp/roadNetwork/lanelet/dijkstra.h
+        commonroad_cpp/roadNetwork/lanelet/graph.h
+        commonroad_cpp/roadNetwork/lanelet/lane.h
+        commonroad_cpp/roadNetwork/lanelet/lanelet.h
+        commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h
+        commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h
+        commonroad_cpp/roadNetwork/lanelet/lane_operations.h
+        commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h
+        commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h
+        commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h
+        commonroad_cpp/roadNetwork/road_network.h
+        commonroad_cpp/roadNetwork/types.h
+        commonroad_cpp/roadNetwork/road_network_config.h
+        commonroad_cpp/world.h
+)
+
+set(ENV_MODEL_PREDICATES_SRC_FILES
+        commonroad_cpp/predicates/commonroad_predicate.cpp
+        commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.cpp
+        commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.cpp
+        commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
+        commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
+        commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.cpp
+        commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.cpp
+        commonroad_cpp/predicates/braking/decelerates_predicate.cpp
+        commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.cpp
+        commonroad_cpp/predicates/position/in_front_of_predicate.cpp
+        commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
+        commonroad_cpp/predicates/position/in_single_lane_predicate.cpp
+        commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp/predicates/position/left_of_predicate.cpp
+        commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.cpp
+        commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.cpp
+        commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.cpp
+        commonroad_cpp/predicates/position/on_road_predicate.cpp
+        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.cpp
+        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.cpp
+        commonroad_cpp/predicates/position/in_leftmost_lane_predicate.cpp
+        commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
+        commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
+        commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
+        commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.cpp
+        commonroad_cpp/predicates/position/on_incoming_left_of_predicate.cpp
+        commonroad_cpp/predicates/position/on_oncoming_of_predicate.cpp
+        commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.cpp
+        commonroad_cpp/predicates/position/close_to_intersection_predicate.cpp
+        commonroad_cpp/predicates/position/in_neighboring_left_lane_predicate.cpp
+        commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.cpp
+        commonroad_cpp/predicates/position/oncoming_vehicle_predicate.cpp
+        commonroad_cpp/predicates/position/overtaking_bicycle_same_lane_predicate.cpp
+        commonroad_cpp/predicates/position/right_of_predicate.cpp
+        commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.cpp
+        commonroad_cpp/predicates/general/change_lane_predicate.cpp
+        commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
+        commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
+        commonroad_cpp/predicates/general/left_signal_set_predicate.cpp
+        commonroad_cpp/predicates/general/right_signal_set_predicate.cpp
+        commonroad_cpp/predicates/general/in_congestion_predicate.cpp
+        commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.cpp
+        commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.cpp
+        commonroad_cpp/predicates/general/makes_u_turn_predicate.cpp
+        commonroad_cpp/predicates/general/interstate_broad_enough_predicate.cpp
+        commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.cpp
+        commonroad_cpp/predicates/general/is_vru_predicate.cpp
+        commonroad_cpp/predicates/general/narrow_road_predicate.cpp
+        commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.cpp
+        commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
+        commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_min_speed_limit_predicate.cpp
+        commonroad_cpp/predicates/velocity/in_standstill_predicate.cpp
+        commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.cpp
+        commonroad_cpp/predicates/velocity/drives_faster_predicate.cpp
+        commonroad_cpp/predicates/velocity/reverses_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.cpp
+        commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.cpp
+        commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.cpp
+        commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.cpp
+        commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/same_priority_predicate.cpp
+        commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
+        commonroad_cpp/predicates/predicate_config.cpp)
+
+set(ENV_MODEL_PREDICATES_HDR_FILES
+        commonroad_cpp/predicates/braking/brakes_stronger_predicate.h
+        commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.h
+        commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h
+        commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h
+        commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.h
+        commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h
+        commonroad_cpp/predicates/braking/decelerates_predicate.h
+        commonroad_cpp/predicates/commonroad_predicate.h
+        commonroad_cpp/predicates/general/change_lane_predicate.h
+        commonroad_cpp/predicates/general/in_congestion_predicate.h
+        commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.h
+        commonroad_cpp/predicates/general/in_slow_moving_traffic_predicate.h
+        commonroad_cpp/predicates/general/interstate_broad_enough_predicate.h
+        commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h
+        commonroad_cpp/predicates/general/left_signal_set_predicate.h
+        commonroad_cpp/predicates/general/right_signal_set_predicate.h
+        commonroad_cpp/predicates/general/makes_u_turn_predicate.h
+        commonroad_cpp/predicates/general/orientation_towards_predicate.h
+        commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.h
+        commonroad_cpp/predicates/general/is_vru_predicate.h
+        commonroad_cpp/predicates/general/narrow_road_predicate.h
+        commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h
+        commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.h
+        commonroad_cpp/predicates/position/drives_leftmost_predicate.h
+        commonroad_cpp/predicates/position/drives_rightmost_predicate.h
+        commonroad_cpp/predicates/position/in_front_of_predicate.h
+        commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.h
+        commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h
+        commonroad_cpp/predicates/position/in_rightmost_lane_predicate.h
+        commonroad_cpp/predicates/position/in_same_lane_predicate.h
+        commonroad_cpp/predicates/position/in_single_lane_predicate.h
+        commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h
+        commonroad_cpp/predicates/position/left_of_predicate.h
+        commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.h
+        commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h
+        commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h
+        commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.h
+        commonroad_cpp/predicates/position/on_oncoming_of_predicate.h
+        commonroad_cpp/predicates/position/on_road_predicate.h
+        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.h
+        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.h
+        commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h
+        commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.h
+        commonroad_cpp/predicates/position/close_to_intersection_predicate.h
+        commonroad_cpp/predicates/position/in_neighboring_left_lane_predicate.h
+        commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.h
+        commonroad_cpp/predicates/position/oncoming_vehicle_predicate.h
+        commonroad_cpp/predicates/position/overtaking_bicycle_same_lane_predicate.h
+        commonroad_cpp/predicates/position/right_of_predicate.h
+        commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.h
+        commonroad_cpp/predicates/predicate_config.h
+        commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h
+        commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h
+        commonroad_cpp/predicates/regulatory/has_priority_predicate.h
+        commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h
+        commonroad_cpp/predicates/regulatory/same_priority_predicate.h
+        commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h
+        commonroad_cpp/predicates/velocity/drives_faster_predicate.h
+        commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h
+        commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.h
+        commonroad_cpp/predicates/velocity/in_standstill_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_min_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/reverses_predicate.h
+        commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.h
+)
+
+add_library(env_model_core ${ENV_MODEL_SRC_FILES})
+
+# TODO: Currently specifying the headers is a little weird as they're in a parent directory.
+# It might be easier if src/include are in a common subdirectory,
+# e.g. commonroad_cpp/src and commonroad_cpp/include.
+
+set(ENV_MODEL_HDR_FILES_ABS ${ENV_MODEL_HDR_FILES})
+set(ENV_MODEL_PREDICATES_HDR_FILES_ABS ${ENV_MODEL_PREDICATES_HDR_FILES})
+
+list(TRANSFORM ENV_MODEL_HDR_FILES_ABS PREPEND ../include/)
+list(TRANSFORM ENV_MODEL_PREDICATES_HDR_FILES_ABS PREPEND ../include/)
+
+target_sources(env_model_core PRIVATE ${ENV_MODEL_HDR_FILES_ABS})
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
+    target_sources(env_model_core
+            INTERFACE
+            FILE_SET env_model_core_headers
+            TYPE HEADERS
+            BASE_DIRS ../include
+            FILES ${ENV_MODEL_HDR_FILES_ABS})
+endif()
+
+target_compile_features(env_model_core
+        PUBLIC cxx_lambdas cxx_auto_type
+        PRIVATE cxx_lambdas cxx_auto_type)
+
+set_property(TARGET env_model_core PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+target_include_directories(env_model_core
+        PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        )
+
+target_link_libraries(env_model_core
+        PRIVATE
+        pugixml::pugixml
+        spdlog::spdlog
+)
+
+target_link_libraries(env_model_core
+        PUBLIC
+        OpenMP::OpenMP_CXX
+        Eigen3::Eigen
+        Boost::headers
+        range-v3::range-v3
+        commonroad_protobuf
+        tsl::robin_map
+        crccosy
+        )
+
+target_precompile_headers(env_model_core
+        PUBLIC
+        $<BUILD_INTERFACE:<Eigen/Dense$<ANGLE-R>>
+        $<BUILD_INTERFACE:<boost/geometry/geometry.hpp$<ANGLE-R>>
+        $<BUILD_INTERFACE:<geometry/curvilinear_coordinate_system.h$<ANGLE-R>>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lane.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/roadNetwork/road_network.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_operations.h>
+    #    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_reference.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/world.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
+        )
+
+add_library(env_model_predicates ${ENV_MODEL_PREDICATES_SRC_FILES})
+
+
+target_sources(env_model_predicates PRIVATE ${ENV_MODEL_PREDICATES_HDR_FILES_ABS})
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23.0)
+    target_sources(env_model_predicates
+            INTERFACE
+            FILE_SET env_model_predicates_headers
+            TYPE HEADERS
+            BASE_DIRS ../include
+            FILES ${ENV_MODEL_PREDICATES_HDR_FILES_ABS})
+endif()
+
+target_include_directories(env_model_predicates
+        PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        )
+
+target_link_libraries(env_model_predicates
+        PRIVATE
+        spdlog::spdlog
+        )
+
+target_link_libraries(env_model_predicates
+        PUBLIC
+        OpenMP::OpenMP_CXX
+        Eigen3::Eigen
+        range-v3
+        env_model_core
+        )
+
+set_property(TARGET env_model_predicates PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+target_precompile_headers(env_model_predicates
+        PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/predicates/commonroad_predicate.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/predicates/predicate_config.h>
         )
 
 # Create environment model library
-add_library(env_model SHARED ${ENV_MODEL_SRC_FILES})
+add_library(env_model INTERFACE)
 
-target_include_directories(env_model PUBLIC "." ${LIB_CRCCOSY_INCLUDE})
-target_link_libraries(env_model PUBLIC
-        ${CRCCOSY_LIBRARY}
-        Boost::filesystem
-        Boost::program_options
-        OpenMP::OpenMP_CXX
-        Eigen3::Eigen)
+target_link_libraries(env_model
+        INTERFACE
+        env_model_core
+        env_model_predicates
+        )
 
-# Create environment model test node
-add_executable(env_model_example_node interfaces/standalone/main.cpp)
+add_library(EnvironmentModel::env_model ALIAS env_model)
 
-target_link_libraries(env_model_example_node PRIVATE env_model)
-
+find_package(pybind11 2.7.0 QUIET)
 
 # add pybind module
-pybind11_add_module(cpp_env_model
-        interfaces/pybind/python_interface.cpp
-        interfaces/pybind/python_interface.h
-        interfaces/pybind/translate_python_types.cpp
-        interfaces/pybind/translate_python_types.h)
-target_link_libraries(cpp_env_model PRIVATE env_model)
+if(SKBUILD)
+    message(STATUS "The project is built using scikit-build")
+endif()
+if(pybind11_FOUND AND NOT SKBUILD)
+    message(STATUS "Adding Python interface for compilation only")
+endif()
+if(pybind11_FOUND)
+    add_library(env_model_python OBJECT
+            commonroad_cpp/interfaces/pybind/python_interface.cpp
+            commonroad_cpp/interfaces/pybind/python_interface_core.cpp
+            commonroad_cpp/interfaces/pybind/python_interface_core.h
+            commonroad_cpp/interfaces/pybind/python_interface_legacy.cpp
+            commonroad_cpp/interfaces/pybind/python_interface_legacy.h
+            commonroad_cpp/interfaces/pybind/python_interface_predicates.cpp
+            commonroad_cpp/interfaces/pybind/python_interface_predicates.h
+            commonroad_cpp/interfaces/pybind/translate_python_types.cpp
+            commonroad_cpp/interfaces/pybind/translate_python_types.h)
+    target_link_libraries(env_model_python PRIVATE env_model pybind11::module)
+    set_property(TARGET env_model_python PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+    # For predicate_instantiation.cpp.inc (see predicates.cmake)
+    target_include_directories(env_model_python
+        PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}
+        )
+endif()
+
+if(SKBUILD)
+    set(python_module_name crcpp)
+    pybind11_add_module(${python_module_name} MODULE $<TARGET_OBJECTS:env_model_python>)
+
+    target_link_libraries(${python_module_name} PRIVATE env_model)
+
+    install(TARGETS ${python_module_name}
+            LIBRARY DESTINATION .
+            COMPONENT PythonModules
+            )
+
+    add_custom_target(install-python-modules-${python_module_name}
+        ${CMAKE_COMMAND}
+        -DCMAKE_INSTALL_COMPONENT=PythonModules
+        -P "${PROJECT_BINARY_DIR}/cmake_install.cmake"
+        DEPENDS ${python_module_name}
+        )
+
+    # include(utils/CheckRuntimeDependencies)
+    # check_python_runtime_dependencies(${python_module_name})
+endif(SKBUILD)
+
+include(predicates.cmake)
+
+foreach(target IN ITEMS env_model_core env_model_predicates)
+    # _USE_MATH_DEFINES is required for M_PI
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        target_compile_definitions(${target} PRIVATE _USE_MATH_DEFINES)
+    endif()
+
+    # this adds many warnings to the build. They usually help to find some bugs
+    # TODO: Check whether each warning flag is actually supported by the compiler before adding it
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wconversion
+            -pedantic -Wfatal-errors -Wno-unused-parameter)
+    endif()
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        target_compile_options(${target} PRIVATE /W3)
+    endif()
+endforeach()
+
+

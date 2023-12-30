@@ -1,0 +1,13 @@
+graft example
+graft cmake
+graft src
+graft include
+
+include CMakeLists.txt
+
+global-exclude *.pyc
+
+prune ci
+prune example
+prune docs
+prune scripts
