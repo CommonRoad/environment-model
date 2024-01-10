@@ -30,7 +30,8 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(
         return false;
     auto distance{obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)) -
                   obstacleP->frontS(world->getRoadNetwork(), timeStep)};
-    return 0 <= distance and distance <= parameters.paramMap["dBrakingIntersection"] and
+    return parameters.paramMap["dCauseBreakingIntersection"] <= distance and
+           distance <= parameters.paramMap["dBrakingIntersection"] and
            obstacleP->getStateByTimeStep(timeStep)->getAcceleration() < parameters.paramMap["aBrakingIntersection"];
 }
 
@@ -48,4 +49,4 @@ double CausesBrakingIntersectionPredicate::robustEvaluation(
     throw std::runtime_error("CausesBrakingIntersectionPredicate does not support robust evaluation!");
 }
 
-CausesBrakingIntersectionPredicate::CausesBrakingIntersectionPredicate() : CommonRoadPredicate(false) {}
+CausesBrakingIntersectionPredicate::CausesBrakingIntersectionPredicate() : CommonRoadPredicate(true) {}
