@@ -21,8 +21,7 @@ bool onIncoming(size_t timeStep, const std::shared_ptr<Obstacle> &obs, const std
  * @param roadNetwork
  * @return
  */
-bool checkSameIncoming(const std::shared_ptr<Lanelet> &letK, const std::shared_ptr<Lanelet> &letP,
-                       const std::shared_ptr<RoadNetwork> &roadNetwork);
+bool checkSameIncoming(const std::shared_ptr<Lanelet> &letK, const std::shared_ptr<Lanelet> &letP);
 
 /**
  * Calculate left of given incomingGroup

@@ -28,6 +28,7 @@ void PredicateParameters::checkParameterValidity() {
     assert(paramMap["uTurnUpper"] > 0);
     assert(paramMap["uTurnLower"] > 0);
     assert(paramMap["aboveCenterlineTh"] > 0);
+    assert(paramMap["close_to_intersection_max_distance"] > 0);
 }
 
 void PredicateParameters::updateParam(const std::string &name, double value) {
