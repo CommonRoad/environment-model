@@ -8,6 +8,7 @@
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
+#include "commonroad_cpp/roadNetwork/road_network_config.h"
 
 /**
  * Evaluates if the kth obstacle is on the incoming of the pth vehicle
@@ -60,4 +61,6 @@ class OnOncomingOfPredicate : public CommonRoadPredicate {
         size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
         const std::shared_ptr<Obstacle> &obstacleP = {},
         const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
+
+    RoadNetworkParameters roadNetworkParameters{};
 };

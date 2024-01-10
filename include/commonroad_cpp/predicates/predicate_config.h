@@ -69,6 +69,8 @@ struct PredicateParameters {
         {"dMinUrban", 1.5},
         {"dMinNonUrban", 2.0},
 
+        {"dCauseBreakingIntersection", -2},
+
         {"laneletOccupancySimilarity", 0.25},
 
         {"intersectionBrakingPossible", -4.0},

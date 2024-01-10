@@ -19,8 +19,7 @@ bool intersection_operations::onIncoming(size_t timeStep, const std::shared_ptr<
 }
 
 bool intersection_operations::checkSameIncoming(const std::shared_ptr<Lanelet> &letK,
-                                                const std::shared_ptr<Lanelet> &letP,
-                                                const std::shared_ptr<RoadNetwork> &roadNetwork) {
+                                                const std::shared_ptr<Lanelet> &letP) {
     auto simLaneletsK{lane_operations::combineLaneLanelets(lane_operations::combineLaneletAndPredecessorsToLane(letK))};
     auto simLaneletsP{lane_operations::combineLaneLanelets(lane_operations::combineLaneletAndPredecessorsToLane(letP))};
     for (const auto &laK : simLaneletsK) {

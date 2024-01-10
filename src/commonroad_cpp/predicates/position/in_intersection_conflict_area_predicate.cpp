@@ -35,10 +35,10 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
                 !std::any_of(
                     simLaneletsK.begin(), simLaneletsK.end(),
                     [letK](const std::shared_ptr<Lanelet> &letSim) { return letSim->getId() == letK->getId(); }) and
-                !std::any_of(
-                    simLaneletsK.begin(), simLaneletsK.end(), [letP, world](const std::shared_ptr<Lanelet> &letSim) {
-                        return intersection_operations::checkSameIncoming(letP, letSim, world->getRoadNetwork());
-                    }))
+                !std::any_of(simLaneletsK.begin(), simLaneletsK.end(),
+                             [letP, world](const std::shared_ptr<Lanelet> &letSim) {
+                                 return intersection_operations::checkSameIncoming(letP, letSim);
+                             }))
                 return true;
         }
     }
