@@ -203,9 +203,9 @@ ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
 
 ObstacleRole Obstacle::getObstacleRole() const { return obstacleRole; }
 
-ActuatorParameters Obstacle::getActuatorParameters() const { return *actuatorParameters; };
+ActuatorParameters Obstacle::getActuatorParameters() const { return *actuatorParameters; }
 
-SensorParameters Obstacle::getSensorParameters() const { return *sensorParameters; };
+SensorParameters Obstacle::getSensorParameters() const { return *sensorParameters; }
 
 double Obstacle::getVmax() const {
     assert(actuatorParameters);

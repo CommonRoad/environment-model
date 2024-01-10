@@ -335,7 +335,7 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
 }
 
 /**
- * Creates a roadnetwork as follows (u = unknown, sr = successor right, sl = successor left):
+ * Creates a roadnetwork as follows (l = left, r = right, sl = successor left, sr = successor right):
  *          l l l l l l l l l l sl sl sl sl sl sl sl sl sl sl
  *          r r r r r r r r r r sr sr sr sr sr sr sr sr sr sr
  * @param laneletTypeRight : r
