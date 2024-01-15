@@ -232,3 +232,41 @@ TrafficSignTypes regulatory_elements_utils::extractTypeFromNationalID(const std:
     throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown traffic sign ID " +
                              trafficSignId + " in country " + country_string);
 }
+
+bool regulatory_elements_utils::lineInFront(const std::vector<vertex> &line, const std::shared_ptr<Obstacle> &obs,
+                                            size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork) {
+    auto ccs{obs->getReferenceLane(roadNetwork, timeStep)->getCurvilinearCoordinateSystem()};
+    if (!ccs->cartesianPointInProjectionDomain(line.at(0).x, line.at(0).y))
+        return false;
+    auto a{ccs->convertToCurvilinearCoords(line.at(0).x, line.at(0).y)};
+    if (!ccs->cartesianPointInProjectionDomain(line.at(1).x, line.at(1).y))
+        return false;
+    auto b{ccs->convertToCurvilinearCoords(line.at(1).x, line.at(1).y)};
+    polygon_type shape{obs->getOccupancyPolygonShape(timeStep)};
+    for (size_t idx{0}; idx < shape.outer().size(); ++idx) {
+        auto point{shape.outer().at(idx)};
+        if (!ccs->cartesianPointInProjectionDomain(point.x(), point.y()))
+            return false;
+        auto c{ccs->convertToCurvilinearCoords(point.x(), point.y())};
+        // ((b.X - a.X)*(c.Y - a.Y) > (b.Y - a.Y)*(c.X - a.X)) -> left of line a.y < b.y
+        if (a.y() < 0) {
+            if ((b.x() - a.x()) * (c.y() - a.y()) < (b.y() - a.y()) * (c.x() - a.x()))
+                return false;
+        } else {
+            if ((b.x() - a.x()) * (c.y() - a.y()) > (b.y() - a.y()) * (c.x() - a.x()))
+                return false;
+        }
+    }
+    return true;
+}
+
+double regulatory_elements_utils::minDistance(const std::vector<vertex> &line, polygon_type shape) {
+    auto a{(line.at(0).y - line.at(1).y)};
+    auto b{line.at(1).x - line.at(0).x};
+    auto c{(line.at(0).x - line.at(1).x) * line.at(0).y + (line.at(1).y - line.at(0).y) * line.at(0).x};
+    std::vector<double> distances;
+    for (const auto &point : shape.outer()) {
+        distances.push_back(std::fabs((a * point.x() + b * point.y() + c)) / (sqrt(a * a + b * b)));
+    }
+    return *std::min_element(distances.begin(), distances.end());
+}

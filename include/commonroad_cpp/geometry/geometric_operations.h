@@ -11,6 +11,7 @@
 
 #include "circle.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 
 namespace geometric_operations {
 
@@ -132,5 +133,31 @@ double scalarProduct(const vertex &vertA, const vertex &vertB);
  * @return Equal or not
  */
 bool equalValues(double fstValue, double sndValue, double thresh = std::numeric_limits<double>::epsilon());
+
+/**
+ * Gets the orientation of the lanelet in degree
+ *
+ * @param lanelet Lanelet
+ * @return orientation in degree
+ */
+double getOrientationInDeg(std::shared_ptr<Lanelet> lanelet);
+
+/**
+ * Evaluates if two orientations in degree have a 90° to each other
+ *
+ * @param degree1 first orientation in degree
+ * @param degree2 second orientation in degree
+ * @return orientation in degree
+ */
+bool is90Deg(double degree1, double degree2);
+
+/**
+ * Evaluates if two orientations in degree have a 180° to each other
+ *
+ * @param degree1 first orientation in degree
+ * @param degree2 second orientation in degree
+ * @return orientation in degree
+ */
+bool is180Deg(double degree1, double degree2);
 
 } // namespace geometric_operations

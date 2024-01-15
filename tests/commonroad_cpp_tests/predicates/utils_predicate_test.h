@@ -18,6 +18,7 @@ create_road_network(const std::set<LaneletType> &laneletTypeLaneletOne = {Lanele
                     const std::set<LaneletType> &laneletTypeLaneletTwo = {LaneletType::interstate});
 std::shared_ptr<RoadNetwork> create_road_network_2();
 std::shared_ptr<RoadNetwork> create_road_network_3();
+std::shared_ptr<RoadNetwork> create_road_network_4();
 std::shared_ptr<RoadNetwork> create_road_network_with_2_successors(
     const std::set<LaneletType> &laneletTypeRight = {LaneletType::intersection},
     const std::set<LaneletType> &laneletTypeLeft = {LaneletType::intersection},

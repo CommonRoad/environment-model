@@ -14,6 +14,7 @@ extern TrafficSignTable TrafficSignIDUSA;
 extern TrafficSignTable TrafficSignIDSpain;
 extern TrafficSignTable TrafficSignIDArgentina;
 extern TrafficSignTable TrafficSignIDBelgium;
+extern TrafficSignTable TrafficSignIDAustralia;
 
 extern const std::unordered_map<std::string, TrafficSignTypes> TrafficSignNames;
 

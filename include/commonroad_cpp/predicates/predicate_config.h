@@ -58,6 +58,9 @@ struct PredicateParameters {
          std::numeric_limits<double>::max()}, // max double value close to zero for different purposes
         {"desiredInterstateVelocity", 36.11}, // desired velocity on interstates
 
+        {"intersectionDistance", 1.5},
+        {"crossingDistance", 2},
+
         {"fovSpeedLimit", 50}, //**< compute with calc_v_max_fov(ego_vehicle_param, simulation_param) */
         {"brakingSpeedLimit",
          43}, //**< compute with calc_v_max_braking(ego_vehicle_param, simulation_param, traffic_rule_param) */
@@ -76,6 +79,7 @@ struct PredicateParameters {
         {"intersectionBrakingPossible", -4.0},
 
         {"close_to_intersection_max_distance", 30},
+        {"dCloseToCrossing", 20.0},
     };
 
     void checkParameterValidity();

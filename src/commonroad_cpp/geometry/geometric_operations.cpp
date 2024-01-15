@@ -285,3 +285,24 @@ double geometric_operations::scalarProduct(const vertex &vertA, const vertex &ve
 bool geometric_operations::equalValues(double fstValue, double sndValue, double thresh) {
     return fabs(fstValue - sndValue) < thresh;
 }
+
+double geometric_operations::getOrientationInDeg(std::shared_ptr<Lanelet> lanelet) {
+    const auto last_vertex = lanelet->getCenterVertices()[lanelet->getCenterVertices().size() - 1];
+    const auto second_last_vertex = lanelet->getCenterVertices()[lanelet->getCenterVertices().size() - 2];
+
+    const auto rad = atan2(last_vertex.y - second_last_vertex.y, last_vertex.x - second_last_vertex.x);
+
+    return (rad / M_PI) * 180;
+}
+
+bool geometric_operations::is90Deg(double degree1, double degree2) {
+    return std::abs(std::abs(degree1) - std::abs(degree2)) <= 95 &&
+           std::abs(std::abs(degree1) - std::abs(degree2)) >= 85;
+}
+
+bool geometric_operations::is180Deg(double degree1, double degree2) {
+    return (std::abs(std::abs(degree1) - std::abs(degree2)) >= 175 &&
+            std::abs(std::abs(degree1) - std::abs(degree2)) <= 185) ||
+           (std::abs(std::abs(degree1) - std::abs(degree2)) >= -5 &&
+            std::abs(std::abs(degree1) - std::abs(degree2)) <= 5);
+}

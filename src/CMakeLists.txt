@@ -97,6 +97,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.cpp
         commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.cpp
         commonroad_cpp/predicates/braking/decelerates_predicate.cpp
+        commonroad_cpp/predicates/position/close_to_crosswalk_predicate.cpp
         commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
@@ -125,6 +126,16 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/position/overtaking_bicycle_same_lane_predicate.cpp
         commonroad_cpp/predicates/position/right_of_predicate.cpp
         commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.cpp
+        commonroad_cpp/predicates/position/approach_t_intersection_predicate.cpp
+        commonroad_cpp/predicates/position/approach_four_way_stop_predicate.cpp
+        commonroad_cpp/predicates/position/approach_intersection_predicate.cpp
+        commonroad_cpp/predicates/position/approach_uncontrolled_intersection_predicate.cpp
+        commonroad_cpp/predicates/position/at_same_intersection_predicate.cpp
+        commonroad_cpp/predicates/regulatory/in_front_of_intersection_predicate.cpp
+        commonroad_cpp/predicates/position/in_same_dir_predicate.cpp
+        commonroad_cpp/predicates/position/on_t_incoming_predicate.cpp
+        commonroad_cpp/predicates/general/obstacle_is_static_predicate.cpp
+        commonroad_cpp/predicates/general/two_or_more_lanes_for_one_dir_predicate.cpp
         commonroad_cpp/predicates/general/change_lane_predicate.cpp
         commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
         commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
@@ -183,8 +194,18 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/general/is_vru_predicate.h
         commonroad_cpp/predicates/general/is_vehicle_predicate.h
         commonroad_cpp/predicates/general/narrow_road_predicate.h
-        commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h
         commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.h
+        commonroad_cpp/predicates/general/obstacle_is_static_predicate.h
+        commonroad_cpp/predicates/general/two_or_more_lanes_for_one_dir_predicate.h
+        commonroad_cpp/predicates/position/approach_t_intersection_predicate.h
+        commonroad_cpp/predicates/position/approach_four_way_stop_predicate.h
+        commonroad_cpp/predicates/position/approach_intersection_predicate.h
+        commonroad_cpp/predicates/position/approach_uncontrolled_intersection_predicate.h
+        commonroad_cpp/predicates/position/at_same_intersection_predicate.h
+        commonroad_cpp/predicates/position/close_to_crosswalk_predicate.h
+        commonroad_cpp/predicates/position/in_same_dir_predicate.h
+        commonroad_cpp/predicates/position/on_t_incoming_predicate.h
+        commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h
         commonroad_cpp/predicates/position/drives_leftmost_predicate.h
         commonroad_cpp/predicates/position/drives_rightmost_predicate.h
         commonroad_cpp/predicates/position/in_front_of_predicate.h
@@ -216,6 +237,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h
         commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h
         commonroad_cpp/predicates/regulatory/has_priority_predicate.h
+        commonroad_cpp/predicates/regulatory/in_front_of_intersection_predicate.h
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h
         commonroad_cpp/predicates/regulatory/same_priority_predicate.h
         commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h
