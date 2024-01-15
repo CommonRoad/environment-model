@@ -220,6 +220,12 @@ size_t Lanelet::findClosestIndex(double positionX, double positionY,
 
 bool Lanelet::hasLaneletType(LaneletType laType) const { return laneletTypes.find(laType) != laneletTypes.end(); }
 
+bool Lanelet::hasTrafficSign(TrafficSignTypes trafficSignType) const {
+    return std::any_of(trafficSigns.begin(), trafficSigns.end(), [trafficSignType](std::shared_ptr<TrafficSign> ts) {
+        return !ts->getTrafficSignElementsOfType(trafficSignType).empty();
+    });
+}
+
 void Lanelet::addLaneletType(LaneletType laType) { laneletTypes.insert(laType); }
 
 LineMarking Lanelet::getLineMarkingLeft() const { return lineMarkingLeft; }

@@ -340,6 +340,12 @@ Obstacle::getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
     return setOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep);
 }
 
+std::vector<std::shared_ptr<Lanelet>>
+Obstacle::getOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                        size_t timeStep) {
+    return setOccupiedLaneletsNotDrivingDirectionByShape(roadNetwork, timeStep);
+}
+
 void Obstacle::convertPointToCurvilinear(time_step_t timeStep, const std::shared_ptr<Lane> &refLane) {
     convertPointToCurvilinear(timeStep, refLane->getCurvilinearCoordinateSystem());
 }
@@ -712,6 +718,26 @@ Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
 
     occupiedLaneletsDrivingDir[timeStep] = lanelets;
     return occupiedLaneletsDrivingDir[timeStep];
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+Obstacle::setOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                        time_step_t timeStep) {
+    if (occupiedLaneletsNotDrivingDir.find(timeStep) != occupiedLaneletsNotDrivingDir.end())
+        return occupiedLaneletsNotDrivingDir[timeStep];
+
+    auto occ = getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep);
+    auto all = getOccupiedLaneletsByShape(roadNetwork, timeStep);
+
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    for (const auto &lanelet : all) {
+        if (std::none_of(occ.begin(), occ.end(),
+                         [lanelet](std::shared_ptr<Lanelet> &occL) { return lanelet->getId() == occL->getId(); }))
+            lanelets.emplace_back(lanelet);
+    }
+
+    occupiedLaneletsNotDrivingDir[timeStep] = lanelets;
+    return occupiedLaneletsNotDrivingDir[timeStep];
 }
 
 void Obstacle::setCurrentSignalState(const std::shared_ptr<SignalState> &state) { currentSignalState = state; }

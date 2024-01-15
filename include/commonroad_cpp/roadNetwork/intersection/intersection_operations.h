@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../../obstacle/obstacle.h"
-#include "../road_network.h"
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
+#include <commonroad_cpp/world.h>
 
 namespace intersection_operations {
 
@@ -29,5 +30,23 @@ bool checkSameIncoming(const std::shared_ptr<Lanelet> &letK, const std::shared_p
  * @param origin originGroup of interest
  */
 void findLeftOf(const std::shared_ptr<IncomingGroup> &origin, const std::shared_ptr<RoadNetwork> &roadNetwork);
+
+/**
+ * Gets the intersection on which the obstacle is currently.
+ * @param timeStep Time step of interest.
+ * @param obs Pointer to obstacle.
+ * @param roadNetwork Pointer to road network.
+ * @return Boolean indicating whether incoming is occupied by obstacle.
+ */
+std::shared_ptr<Intersection> currentIntersection(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK);
+
+/**
+ * Gets the incoming from the intersection on which the obstacle is currently.
+ * @param timeStep Time step of interest.
+ * @param obs Pointer to obstacle.
+ * @param roadNetwork Pointer to road network.
+ * @return Boolean indicating whether incoming is occupied by obstacle.
+ */
+std::shared_ptr<IncomingGroup> currentIncoming(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obs);
 
 } // namespace intersection_operations

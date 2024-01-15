@@ -93,6 +93,25 @@ int extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lane
 
 int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<Obstacle> &obs,
                 TurningDirection dir);
+/**
+ * Evaluates if a line is in front of obstacle
+ *
+ * @param line Line between border vertices
+ * @param obs Pointer to obstacle
+ * @param timeStep Time Step of interest
+ * @param roadNetwork Pointer to road network
+ * @return True/False
+ */
+bool lineInFront(const std::vector<vertex> &line, const std::shared_ptr<Obstacle> &obs, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork);
+
+/**
+ * Calculates the minimum distance between the line and the shape
+ *
+ * @param line Line between border vertices
+ * @param shape Shape of obstacle
+ * @return minimum speed [m]
+ */
+double minDistance(const std::vector<vertex> &line, polygon_type shape);
 
 /**
  * Matches national traffic sign ID to global CommonRoad ID.

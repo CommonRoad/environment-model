@@ -333,6 +333,73 @@ std::shared_ptr<RoadNetwork> create_road_network_3() {
         RoadNetwork({laneletOne, laneletTwo, laneletThree, laneletFour, laneletFive, laneletSix},
                     SupportedTrafficSignCountry::GERMANY, {trafficSignOne, trafficSignTwo}));
 }
+/**
+ * create road network with 2 straight lanes in the same direction
+ * and one straight lane in the opposite direction of the others
+ *
+ * @return roadnetwork with 3 lanes
+ */
+std::shared_ptr<RoadNetwork> create_road_network_4() {
+
+    // right lanelet
+    size_t idLaneletOne = 100;
+    auto userOneWayLaneletOne = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto laneletTypeLaneletOne = std::set<LaneletType>{LaneletType::interstate, LaneletType::shoulder};
+    auto userBidirectionalLaneletOne = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletOne = std::vector<vertex>{
+        vertex{0, 4},   vertex{10, 4},  vertex{20, 4},  vertex{30, 4},  vertex{40, 4},  vertex{50, 4},
+        vertex{60, 4},  vertex{70, 4},  vertex{80, 4},  vertex{90, 4},  vertex{100, 4}, vertex{110, 4},
+        vertex{120, 4}, vertex{130, 4}, vertex{140, 4}, vertex{150, 4}, vertex{160, 4}, vertex{170, 4}};
+    auto rightBorderLaneletOne = std::vector<vertex>{
+        vertex{0, 0},   vertex{10, 0},  vertex{20, 0},  vertex{30, 0},  vertex{40, 0},  vertex{50, 0},
+        vertex{60, 0},  vertex{70, 0},  vertex{80, 0},  vertex{90, 0},  vertex{100, 0}, vertex{110, 0},
+        vertex{120, 0}, vertex{130, 0}, vertex{140, 0}, vertex{150, 0}, vertex{160, 0}, vertex{170, 0}};
+    auto laneletOne =
+        std::make_shared<Lanelet>(Lanelet(idLaneletOne, leftBorderLaneletOne, rightBorderLaneletOne,
+                                          laneletTypeLaneletOne, userOneWayLaneletOne, userBidirectionalLaneletOne));
+
+    // middle lanelet
+    size_t idLaneletTwo = 101;
+    auto userOneWayLaneletTwo = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto laneletTypeLaneletTwo = std::set<LaneletType>{LaneletType::interstate, LaneletType::shoulder};
+    auto userBidirectionalLaneletTwo = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletTwo = std::vector<vertex>{
+        vertex{0, 4},  vertex{10, 4}, vertex{20, 4}, vertex{30, 4},  vertex{40, 4},  vertex{50, 4}, vertex{60, 4},
+        vertex{70, 4}, vertex{80, 4}, vertex{90, 4}, vertex{100, 4}, vertex{110, 4}, vertex{120, 4}};
+    auto rightBorderLaneletTwo = std::vector<vertex>{
+        vertex{0, 8},  vertex{10, 8}, vertex{20, 8}, vertex{30, 8},  vertex{40, 8},  vertex{50, 8}, vertex{60, 8},
+        vertex{70, 8}, vertex{80, 8}, vertex{90, 8}, vertex{100, 8}, vertex{110, 8}, vertex{120, 8}};
+    auto laneletTwo =
+        std::make_shared<Lanelet>(Lanelet(idLaneletTwo, leftBorderLaneletTwo, rightBorderLaneletTwo,
+                                          laneletTypeLaneletTwo, userOneWayLaneletTwo, userBidirectionalLaneletTwo));
+
+    laneletOne->setLeftAdjacent(laneletTwo, true);
+    laneletTwo->setRightAdjacent(laneletOne, true);
+
+    // left lanelet
+    size_t idLaneletThree = 102;
+    auto userOneWayLaneletThree = std::set<ObstacleType>{ObstacleType::car, ObstacleType::bus};
+    auto laneletTypeLaneletThree = std::set<LaneletType>{LaneletType::interstate, LaneletType::shoulder};
+    auto userBidirectionalLaneletThree = std::set<ObstacleType>{ObstacleType::truck, ObstacleType::pedestrian};
+    auto leftBorderLaneletThree = std::vector<vertex>{
+        vertex{0, 8},  vertex{10, 8}, vertex{20, 8}, vertex{30, 8},  vertex{40, 8},  vertex{50, 8}, vertex{60, 8},
+        vertex{70, 8}, vertex{80, 8}, vertex{90, 8}, vertex{100, 8}, vertex{110, 8}, vertex{120, 8}};
+    auto rightBorderLaneletThree =
+        std::vector<vertex>{vertex{0, 12},   vertex{10, 12},  vertex{20, 12}, vertex{30, 12}, vertex{40, 12},
+                            vertex{50, 12},  vertex{60, 12},  vertex{70, 12}, vertex{80, 12}, vertex{90, 12},
+                            vertex{100, 12}, vertex{110, 12}, vertex{120, 12}};
+    auto laneletThree = std::make_shared<Lanelet>(Lanelet(idLaneletThree, leftBorderLaneletThree,
+                                                          rightBorderLaneletThree, laneletTypeLaneletThree,
+                                                          userOneWayLaneletThree, userBidirectionalLaneletThree));
+
+    laneletTwo->setRightAdjacent(laneletThree, false);
+    laneletThree->setLeftAdjacent(laneletTwo, false);
+    laneletOne->setRightAdjacent(laneletThree, true);
+    laneletThree->setLeftAdjacent(laneletOne, true);
+
+    return std::make_shared<RoadNetwork>(
+        RoadNetwork({laneletOne, laneletTwo, laneletThree}, SupportedTrafficSignCountry::GERMANY, {}));
+}
 
 /**
  * Creates a roadnetwork as follows (l = left, r = right, sl = successor left, sr = successor right):

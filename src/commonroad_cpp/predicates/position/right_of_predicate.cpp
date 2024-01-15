@@ -10,8 +10,9 @@ bool RightOfPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    auto rightObstacles{
-        obstacle_operations::obstaclesRight(timeStep, world->getObstacles(), obstacleP, world->getRoadNetwork())};
+    std::vector<std::shared_ptr<Obstacle>> allObs{world->getObstacles()};
+    allObs.emplace_back(obstacleK);
+    auto rightObstacles{obstacle_operations::obstaclesRight(timeStep, allObs, obstacleP, world->getRoadNetwork())};
     return std::any_of(rightObstacles.begin(), rightObstacles.end(), [obstacleK](const std::shared_ptr<Obstacle> &obs) {
         return obstacleK->getId() == obs->getId();
     });

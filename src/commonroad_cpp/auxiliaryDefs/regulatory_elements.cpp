@@ -35,6 +35,7 @@ const std::unordered_map<std::string, TrafficSignTypes> TrafficSignNames = {
     {"RAILWAY", TrafficSignTypes::RAILWAY},
     {"YIELD", TrafficSignTypes::YIELD},
     {"STOP", TrafficSignTypes::STOP},
+    {"STOP_4_WAY", TrafficSignTypes::STOP_4_WAY},
     {"PRIORITY_OPPOSITE_DIRECTION", TrafficSignTypes::PRIORITY_OPPOSITE_DIRECTION},
     {"TURN_RIGHT_AHEAD", TrafficSignTypes::TURN_RIGHT_AHEAD},
     {"TURN_LEFT_AHEAD", TrafficSignTypes::TURN_LEFT_AHEAD},
@@ -271,6 +272,8 @@ const std::unordered_map<std::string, TrafficSignTypes> TrafficSignNames = {
     {"ADDITION_VALID_ON_SHOULDER", TrafficSignTypes::ADDITION_VALID_ON_SHOULDER},
     {"ADDITION_VALID_WHEN_WET", TrafficSignTypes::ADDITION_VALID_WHEN_WET},
     {"LINE_MARKING_MISSING", TrafficSignTypes::LINE_MARKING_MISSING},
+    {"NO_TURN_ON_RED", TrafficSignTypes::NO_TURN_ON_RED},
+    {"ONEWAY", TrafficSignTypes::ONEWAY},
 };
 
 // automatically generated from commonroad-io with:
@@ -520,6 +523,8 @@ TrafficSignTable TrafficSignIDGermany = {
     {TrafficSignTypes::UNKNOWN, ""}};
 
 TrafficSignTable TrafficSignIDUSA = {
+    {TrafficSignTypes::STOP, "R1-1"},
+    {TrafficSignTypes::STOP_4_WAY, "R1-3"},
     {TrafficSignTypes::MAX_SPEED, "R2-1"},
     {TrafficSignTypes::U_TURN, "R3-4"},
     {TrafficSignTypes::ROAD_WORK_AHEAD, "CW20-1"},
@@ -534,6 +539,8 @@ TrafficSignTable TrafficSignIDUSA = {
     {TrafficSignTypes::TURN_ONLY_LANES, "R3-8b"},
     {TrafficSignTypes::NO_RIGHT_TURN, "R3-1"},
     {TrafficSignTypes::KEEP_RIGHT, "R4-7"},
+    {TrafficSignTypes::NO_TURN_ON_RED, "R10-11"},
+    {TrafficSignTypes::ONEWAY, "R1-6"},
     {TrafficSignTypes::SIGNAL_AHEAD, "W3-3"},
     {TrafficSignTypes::LOADING_ZONE, "R8-3gP"},
     {TrafficSignTypes::NO_PARKING, "R8-3"},
@@ -573,6 +580,10 @@ TrafficSignTable TrafficSignIDBelgium = {
     {TrafficSignTypes::MAX_SPEED, "C43"},
 };
 
+TrafficSignTable TrafficSignIDAustralia = {
+    {TrafficSignTypes::STOP, "R1-1"},
+};
+
 const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> TrafficSignLookupTableByCountry = {
     {SupportedTrafficSignCountry::GERMANY, &TrafficSignIDGermany},
     {SupportedTrafficSignCountry::ZAMUNDA, &TrafficSignIDGermany},
@@ -580,6 +591,7 @@ const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> Traffi
     {SupportedTrafficSignCountry::USA, &TrafficSignIDUSA},
     {SupportedTrafficSignCountry::SPAIN, &TrafficSignIDSpain},
     {SupportedTrafficSignCountry::BELGIUM, &TrafficSignIDBelgium},
+    {SupportedTrafficSignCountry::AUSTRALIA, &TrafficSignIDAustralia},
 };
 
 // left, straight right

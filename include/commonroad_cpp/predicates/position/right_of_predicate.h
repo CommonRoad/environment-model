@@ -4,7 +4,6 @@
 
 /**
  * Predicate to evaluate if the k-th vehicle is right of the p-th vehicle
- * Attention: If ego vehicle is k-th vehicle use 'left_of' instead
  */
 class RightOfPredicate : public CommonRoadPredicate {
   public:
