@@ -304,7 +304,7 @@ std::shared_ptr<Lanelet> ProtobufReader::createLaneletFromMessage(
     if (laneletMsg.has_adjacent_right()) {
         auto containerLanelet = getLaneletFromContainer(laneletMsg.adjacent_right(), laneletContainer);
         if (containerLanelet != nullptr)
-            lanelet->setRightAdjacent(containerLanelet, laneletMsg.adjacent_left_opposite_dir());
+            lanelet->setRightAdjacent(containerLanelet, laneletMsg.adjacent_right_opposite_dir());
     }
 
     if (laneletMsg.has_stop_line()) {

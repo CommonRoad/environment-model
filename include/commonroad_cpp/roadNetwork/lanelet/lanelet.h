@@ -368,6 +368,14 @@ class Lanelet {
     bool hasLaneletType(LaneletType laType) const;
 
     /**
+     * Evaluates whether a lanelet has a specific traffic sign.
+     *
+     * @param tsType trafficSign type which existence should be checked.
+     * @return Boolean indicating whether the traffic sign exists.
+     */
+    bool hasTrafficSign(TrafficSignTypes trafficSignType) const;
+
+    /**
      * Adds a lanelet type to the lanelet.
      *
      * @param laType Lanelet type which should be added.

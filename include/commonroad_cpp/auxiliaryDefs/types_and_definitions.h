@@ -97,7 +97,7 @@ enum class ShapeType { rectangle, circle };
 
 enum class ContainmentType { PARTIALLY_CONTAINED, COMPLETELY_CONTAINED };
 
-enum class SupportedTrafficSignCountry { GERMANY, ZAMUNDA, USA, SPAIN, BELGIUM, ARGENTINA };
+enum class SupportedTrafficSignCountry { GERMANY, ZAMUNDA, USA, SPAIN, BELGIUM, ARGENTINA, AUSTRALIA };
 
 enum class TrafficSignTypes {
     WARNING_DANGER_SPOT,
@@ -364,5 +364,8 @@ enum class TrafficSignTypes {
     NO_WAITING,
     NO_STOPPING,
     LINE_MARKING_MISSING,
-    UNKNOWN
+    STOP_4_WAY,
+    NO_TURN_ON_RED,
+    ONEWAY,
+    UNKNOWN,
 };
