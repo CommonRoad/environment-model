@@ -68,7 +68,7 @@ bool StopLineInFrontPredicate::booleanEvaluation(
 
         if (lineInFront(stopLine->getPoints(), obstacleK, timeStep, world->getRoadNetwork()) and
             minDistance(stopLine->getPoints(), obstacleK->getOccupancyPolygonShape(timeStep)) <
-                parameters.paramMap["stopLineDistance"])
+                parameters.getParam("stopLineDistance"))
             return true;
     }
     return false;

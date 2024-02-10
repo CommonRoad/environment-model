@@ -46,7 +46,7 @@ bool CloseToCrosswalkPredicate::booleanEvaluation(
         // true if it is smaller than the max distance to intersections
         for (const std::shared_ptr<Lanelet> &lane : lanelets) {
             if (lane->hasTrafficSign(TrafficSignTypes::PEDESTRIANS_CROSSING)) {
-                if (resultIdsWithDistance.find(lane->getId())->second < parameters.paramMap["dCloseToCrossing"])
+                if (resultIdsWithDistance.find(lane->getId())->second < parameters.getParam("dCloseToCrossing"))
                     return true;
             } else {
                 if (!lane->getSuccessors().empty()) {
@@ -54,7 +54,7 @@ bool CloseToCrosswalkPredicate::booleanEvaluation(
                         double distance =
                             resultIdsWithDistance.find(lane->getId())->second + successor->getPathLength().back();
                         if (resultIdsWithDistance.find(successor->getId()) == resultIdsWithDistance.end() and
-                            distance < parameters.paramMap["dCloseToCrossing"]) {
+                            distance < parameters.getParam("dCloseToCrossing")) {
                             tmp_succs.push_back(successor);
                             resultIdsWithDistance.insert({successor->getId(), distance});
                         }

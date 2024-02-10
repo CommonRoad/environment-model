@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
@@ -19,11 +12,11 @@ bool PreservesTrafficFlowPredicate::booleanEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
                               obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
-                              TrafficSignTypes::MAX_SPEED),
+                              TrafficSignTypes::MAX_SPEED, parameters.getParam("desiredInterstateVelocity")),
                           regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
-                          parameters.paramMap["brakingSpeedLimit"], parameters.paramMap["fovSpeedLimit"],
-                          parameters.paramMap["roadConditionSpeedLimit"]})};
-    return (vMax - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.paramMap["minVelocityDif"];
+                          parameters.getParam("brakingSpeedLimit"), parameters.getParam("fovSpeedLimit"),
+                          parameters.getParam("roadConditionSpeedLimit")})};
+    return (vMax - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.getParam("minVelocityDif");
 }
 
 double PreservesTrafficFlowPredicate::robustEvaluation(

@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h>
@@ -43,13 +36,13 @@ Constraint UnnecessaryBrakingPredicate::constraintEvaluation(
             if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)
                 obs->interpolateAcceleration(timeStep, world->getDt());
             constraintValues.push_back(obs->getStateByTimeStep(timeStep)->getAcceleration() +
-                                       parameters.paramMap["aAbrupt"]);
+                                       parameters.getParam("aAbrupt"));
         }
     }
     if (!constraintValues.empty())
         return {*max_element(constraintValues.begin(), constraintValues.end())};
     else
-        return {parameters.paramMap["aAbrupt"]};
+        return {parameters.getParam("aAbrupt")};
 }
 
 double UnnecessaryBrakingPredicate::robustEvaluation(
@@ -72,7 +65,7 @@ double UnnecessaryBrakingPredicate::robustEvaluation(
             KeepsSafeDistancePrecPredicate.booleanEvaluation(timeStep, world, obstacleK, obs)) {
             if (!obs->getStateByTimeStep(timeStep)->getValidStates().acceleration)
                 obs->interpolateAcceleration(timeStep, world->getDt());
-            robustnessValues.push_back(parameters.paramMap["aAbrupt"] -
+            robustnessValues.push_back(parameters.getParam("aAbrupt") -
                                        obstacleK->getStateByTimeStep(timeStep)->getAcceleration() +
                                        obs->getStateByTimeStep(timeStep)->getAcceleration());
         }
@@ -80,7 +73,7 @@ double UnnecessaryBrakingPredicate::robustEvaluation(
     if (!robustnessValues.empty())
         return *max_element(robustnessValues.begin(), robustnessValues.end());
     else
-        return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.paramMap["aAbrupt"];
+        return -obstacleK->getStateByTimeStep(timeStep)->getAcceleration() + parameters.getParam("aAbrupt");
 }
 
 UnnecessaryBrakingPredicate::UnnecessaryBrakingPredicate() : CommonRoadPredicate(false) {}

@@ -98,18 +98,18 @@ TEST_F(RegulatoryElementsUtilsTest, RequiredVelocityVector) {
 TEST_F(RegulatoryElementsUtilsTest, SpeedLimitSuggested) {
     EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested(
                   {world->getRoadNetwork()->findLaneletById(111), world->getRoadNetwork()->findLaneletById(222)},
-                  TrafficSignTypes::MAX_SPEED),
+                  TrafficSignTypes::MAX_SPEED, 36.11),
               35.0);
     EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested(
                   {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)},
-                  TrafficSignTypes::MAX_SPEED),
+                  TrafficSignTypes::MAX_SPEED, 36.11),
               36.11);
     EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested(
                   {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)},
-                  TrafficSignTypes::MAX_SPEED),
+                  TrafficSignTypes::MAX_SPEED, 36.11),
               36.11);
     EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested({world->getRoadNetwork()->findLaneletById(111)},
-                                                             TrafficSignTypes::MAX_SPEED),
+                                                             TrafficSignTypes::MAX_SPEED, 36.11),
               35.0);
 }
 

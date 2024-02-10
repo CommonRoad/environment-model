@@ -117,6 +117,14 @@ double interpolate(double value, const std::vector<double> &xValues, const std::
 double subtractOrientations(double lhs, double rhs);
 
 /**
+ * Constrains angle to ``[-math.pi, math.pi]``.
+ *
+ * @param angle Angle to constrain [rad]
+ * @return Constrained angle.
+ */
+double constrainAngle(double angle);
+
+/**
  * Computes scalar product between two vertices.
  * @param vertA First vertex.
  * @param vertB Second vertex.

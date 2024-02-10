@@ -21,12 +21,12 @@ bool InQueueOfVehiclesPredicate::booleanEvaluation(
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.paramMap["maxQueueOfVehiclesVelocity"] and
+        if (obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.getParam("maxQueueOfVehiclesVelocity") and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             num_vehicles += 1;
     }
-    return num_vehicles >= parameters.paramMap["numVehQueueOfVehicles"];
+    return num_vehicles >= parameters.getParam("numVehQueueOfVehicles");
 }
 
 Constraint InQueueOfVehiclesPredicate::constraintEvaluation(

@@ -542,7 +542,7 @@ double Obstacle::getCurvilinearOrientation(size_t timeStep, const std::shared_pt
             throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "getCurvilinearOrientation"));
         }
     }
-    return convertedPositions[timeStep][ccs][2];
+    return geometric_operations::constrainAngle(convertedPositions[timeStep][ccs][2]);
 }
 
 size_t Obstacle::getFirstTrajectoryTimeStep() const {

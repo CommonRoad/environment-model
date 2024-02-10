@@ -15,7 +15,7 @@ bool ReversesPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return obstacleK->getStateByTimeStep(timeStep)->getVelocity() < -parameters.paramMap["standstillError"];
+    return obstacleK->getStateByTimeStep(timeStep)->getVelocity() < -parameters.getParam("standstillError");
 }
 
 Constraint ReversesPredicate::constraintEvaluation(

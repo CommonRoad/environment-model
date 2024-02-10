@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/general/makes_u_turn_predicate.h>
@@ -17,7 +11,7 @@ bool MakesUTurnPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     auto orientationCcs{obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep)};
-    return parameters.paramMap["uTurnLower"] <= orientationCcs and orientationCcs <= parameters.paramMap["uTurnUpper"];
+    return parameters.getParam("uTurnLower") <= orientationCcs and orientationCcs <= parameters.getParam("uTurnUpper");
 }
 
 Constraint MakesUTurnPredicate::constraintEvaluation(
