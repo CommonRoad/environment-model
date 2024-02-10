@@ -8,20 +8,20 @@
  *  Evaluates if a vehicle is on the incoming of a t intersection
  */
 class OnTIncomingPredicate : public CommonRoadPredicate {
-public:
+  public:
     /**
-      * Constructor for OnTIncomingPredicate
+     * Constructor for OnTIncomingPredicate
      */
     OnTIncomingPredicate();
 
     /**
-      * Boolean evaluation of predicate using objects.
-      *
-      * @param timeStep Time step of interest.
-      * @param world World object.
-      * @param obstacleK The kth obstacle.
-      * @param obstacleP The pth obstacle. This is an optional parameter.
-      * @return Boolean indicating satisfaction of the predicate.
+     * Boolean evaluation of predicate using objects.
+     *
+     * @param timeStep Time step of interest.
+     * @param world World object.
+     * @param obstacleK The kth obstacle.
+     * @param obstacleP The pth obstacle. This is an optional parameter.
+     * @return Boolean indicating satisfaction of the predicate.
      */
     bool
     booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
@@ -52,7 +52,7 @@ public:
      * @return Real value indicating robustness of the predicate.
      */
     Constraint constraintEvaluation(
-            size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-            const std::shared_ptr<Obstacle> &obstacleP = {},
-            const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
+        size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+        const std::shared_ptr<Obstacle> &obstacleP = {},
+        const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 };

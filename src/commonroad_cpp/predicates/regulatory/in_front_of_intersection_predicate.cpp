@@ -35,7 +35,7 @@ bool InFrontOfIntersectionPredicate::booleanEvaluation(
         std::vector<vertex> last_line{rightBorder.back(), leftBorder.back()};
         auto min_dist{regulatory_elements_utils::minDistance(last_line, obstacleK->getOccupancyPolygonShape(timeStep))};
 
-        if (min_dist < parameters.paramMap["intersectionDistance"])
+        if (min_dist < parameters.getParam("intersectionDistance"))
             return true;
     }
     return false;

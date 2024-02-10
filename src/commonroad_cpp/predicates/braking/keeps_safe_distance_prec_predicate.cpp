@@ -87,7 +87,7 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(
         deltaS = obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
                  obstacleK->frontS(world->getRoadNetwork(), timeStep);
     else
-        return parameters.paramMap["epsilon"];
+        return parameters.getParam("epsilon");
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
     // robustness
     if (deltaS < 0)

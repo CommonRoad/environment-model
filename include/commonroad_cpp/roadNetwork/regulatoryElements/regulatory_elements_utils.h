@@ -55,9 +55,11 @@ double speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const T
  *
  * @param lanelets List of pointers to lanelets which should be considered.
  * @param signType Type of speed limit sign.
+ * @param desiredInterstateVelocity Desired interstate velocity.
  * @return Speed limit [m/s]
  */
-double speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const TrafficSignTypes &signType);
+double speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const TrafficSignTypes &signType,
+                           double desiredInterstateVelocity);
 
 /**
  * Computes applicable required speed on provided lanelet.
@@ -102,7 +104,8 @@ int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork
  * @param roadNetwork Pointer to road network
  * @return True/False
  */
-bool lineInFront(const std::vector<vertex> &line, const std::shared_ptr<Obstacle> &obs, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork);
+bool lineInFront(const std::vector<vertex> &line, const std::shared_ptr<Obstacle> &obs, size_t timeStep,
+                 const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 /**
  * Calculates the minimum distance between the line and the shape

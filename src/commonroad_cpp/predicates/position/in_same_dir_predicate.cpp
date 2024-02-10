@@ -1,16 +1,8 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/position/in_same_lane_predicate.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
-#include <commonroad_cpp/world.h>
 
 #include <commonroad_cpp/predicates/position/in_same_dir_predicate.h>
 
@@ -30,7 +22,10 @@ bool InSameDirPredicate::booleanEvaluation(
     const auto global_ori_p{obstacleP->getStateByTimeStep(timeStep)->getGlobalOrientation()};
     const auto global_ori_k{obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation()};
 
-    if (!(std::abs(global_ori_k - global_ori_p) < 0.3) or !(std::abs(orientation_k - orientation_p) < 0.3)) {
+    if (std::abs(geometric_operations::subtractOrientations(global_ori_k, global_ori_p)) >=
+            parameters.getParam("globalInSameDirOrientation") or
+        std::abs(geometric_operations::subtractOrientations(orientation_k, orientation_p)) >=
+            parameters.getParam("curvilinearInSameDirOrientation")) {
         return false;
     }
     // now check it the two lanes are next to each other

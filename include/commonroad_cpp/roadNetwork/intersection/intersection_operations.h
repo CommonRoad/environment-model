@@ -38,7 +38,8 @@ void findLeftOf(const std::shared_ptr<IncomingGroup> &origin, const std::shared_
  * @param roadNetwork Pointer to road network.
  * @return Boolean indicating whether incoming is occupied by obstacle.
  */
-std::shared_ptr<Intersection> currentIntersection(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK);
+std::shared_ptr<Intersection> currentIntersection(size_t timeStep, const std::shared_ptr<World> &world,
+                                                  const std::shared_ptr<Obstacle> &obstacleK);
 
 /**
  * Gets the incoming from the intersection on which the obstacle is currently.
@@ -47,6 +48,7 @@ std::shared_ptr<Intersection> currentIntersection(size_t timeStep, const std::sh
  * @param roadNetwork Pointer to road network.
  * @return Boolean indicating whether incoming is occupied by obstacle.
  */
-std::shared_ptr<IncomingGroup> currentIncoming(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obs);
+std::shared_ptr<IncomingGroup> currentIncoming(size_t timeStep, const std::shared_ptr<World> &world,
+                                               const std::shared_ptr<Obstacle> &obs);
 
 } // namespace intersection_operations

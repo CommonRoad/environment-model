@@ -169,7 +169,8 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/same_priority_predicate.cpp
         commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
-        commonroad_cpp/predicates/predicate_config.cpp)
+        commonroad_cpp/predicates/predicate_parameter.cpp
+        commonroad_cpp/predicates/predicate_parameter_collection.cpp)
 
 set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.h
@@ -233,7 +234,8 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/position/overtaking_bicycle_same_lane_predicate.h
         commonroad_cpp/predicates/position/right_of_predicate.h
         commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.h
-        commonroad_cpp/predicates/predicate_config.h
+        commonroad_cpp/predicates/predicate_parameter.h
+        commonroad_cpp/predicates/predicate_parameter_collection.h
         commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h
         commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h
         commonroad_cpp/predicates/regulatory/has_priority_predicate.h
