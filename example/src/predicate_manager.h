@@ -7,7 +7,7 @@
 #pragma once
 
 #include <commonroad_cpp/predicates/commonroad_predicate.h>
-#include <commonroad_cpp/predicates/predicate_config.h>
+#include <commonroad_cpp/predicates/predicate_parameter_collection.h>
 #include <memory>
 #include <vector>
 

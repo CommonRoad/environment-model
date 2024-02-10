@@ -12,8 +12,8 @@ bool InStandstillPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return (-parameters.paramMap["standstillError"] < obstacleK->getStateByTimeStep(timeStep)->getVelocity() and
-            parameters.paramMap["standstillError"] > obstacleK->getStateByTimeStep(timeStep)->getVelocity());
+    return (-parameters.getParam("standstillError") < obstacleK->getStateByTimeStep(timeStep)->getVelocity() and
+            parameters.getParam("standstillError") > obstacleK->getStateByTimeStep(timeStep)->getVelocity());
 }
 
 double InStandstillPredicate::robustEvaluation(

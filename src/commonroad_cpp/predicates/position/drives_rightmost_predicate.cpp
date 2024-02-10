@@ -27,7 +27,7 @@ bool DrivesRightmostPredicate::booleanEvaluation(
     if (vehicle_directly_right != nullptr and
         (obstacleK->rightD(world->getRoadNetwork(), timeStep) -
          vehicle_directly_right->leftD(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep))) <
-            parameters.paramMap["closeToOtherVehicle"]) {
+            parameters.getParam("closeToOtherVehicle")) {
         return true;
     } else {
         std::vector<std::shared_ptr<Lane>> lanes{obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)};
@@ -35,7 +35,7 @@ bool DrivesRightmostPredicate::booleanEvaluation(
             return 0.5 * lane->getWidth(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                         obstacleK->getStateByTimeStep(timeStep)->getYPosition()) +
                        obstacleK->rightD(timeStep, lane) <=
-                   parameters.paramMap["closeToLaneBorder"];
+                   parameters.getParam("closeToLaneBorder");
         });
     }
 }

@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include <memory>
@@ -12,7 +5,7 @@
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/auxiliaryDefs/timer.h"
 
-#include "predicate_config.h"
+#include "predicate_parameter_collection.h"
 #include <omp.h>
 
 class Obstacle;

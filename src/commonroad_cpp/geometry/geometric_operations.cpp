@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/geometry/geometric_operations.h>
 
 #include <boost/geometry/algorithms/convex_hull.hpp>
@@ -251,6 +244,17 @@ double geometric_operations::interpolate(double xDistance, const std::vector<dou
     double deltaX{upperX - lowerX};
 
     return lowerY + ((xDistance - lowerX) / deltaX) * deltaY;
+}
+
+double geometric_operations::constrainAngle(double angle) {
+    const double TWO_PI = 2.0 * M_PI;
+    angle = fmod(angle, TWO_PI);
+    if (angle < -M_PI) {
+        angle += TWO_PI;
+    } else if (angle > M_PI) {
+        angle -= TWO_PI;
+    }
+    return angle;
 }
 
 double geometric_operations::subtractOrientations(double lhs, double rhs) {

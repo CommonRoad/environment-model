@@ -21,12 +21,12 @@ bool InSlowMovingTrafficPredicate::booleanEvaluation(
     for (const auto &obs : world->getObstacles()) {
         if (!obs->timeStepExists(timeStep))
             continue;
-        if (obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.paramMap["maxSlowMovingTrafficVelocity"] and
+        if (obs->getStateByTimeStep(timeStep)->getVelocity() <= parameters.getParam("maxSlowMovingTrafficVelocity") and
             inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obs) and
             inFrontOfPredicate.booleanEvaluation(timeStep, world, obstacleK, obs))
             num_vehicles += 1;
     }
-    return num_vehicles >= parameters.paramMap["numVehSlowMovingTraffic"];
+    return num_vehicles >= parameters.getParam("numVehSlowMovingTraffic");
 }
 
 Constraint InSlowMovingTrafficPredicate::constraintEvaluation(
