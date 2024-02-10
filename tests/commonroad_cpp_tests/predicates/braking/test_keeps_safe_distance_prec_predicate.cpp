@@ -97,16 +97,16 @@ TEST_F(KeepsSafeDistancePrecPredicateTest, ComputeSafeDistance) {
 
 // Tests for CommonRoadPredicate Interface
 TEST_F(KeepsSafeDistancePrecPredicateTest, GetParameters) {
-    EXPECT_EQ(pred.getParameters().paramMap["aAbrupt"], -2);
-    EXPECT_EQ(pred.getParameters().paramMap["minInterstateWidth"], 7.0);
+    EXPECT_EQ(pred.getParameters().getParam("aAbrupt"), -2);
+    EXPECT_EQ(pred.getParameters().getParam("minInterstateWidth"), 7.0);
 }
 
 TEST_F(KeepsSafeDistancePrecPredicateTest, SetParameters) {
     PredicateParameters tmpParameters;
-    tmpParameters.paramMap["minInterstateWidth"] = 5;
-    EXPECT_EQ(pred.getParameters().paramMap["minInterstateWidth"], 7.0);
+    tmpParameters.updateParam("minInterstateWidth", 5);
+    EXPECT_EQ(pred.getParameters().getParam("minInterstateWidth"), 7.0);
     pred.setParameters(tmpParameters);
-    EXPECT_EQ(pred.getParameters().paramMap["minInterstateWidth"], 5);
+    EXPECT_EQ(pred.getParameters().getParam("minInterstateWidth"), 5);
 }
 
 TEST_F(KeepsSafeDistancePrecPredicateTest, ResetStatistics) {

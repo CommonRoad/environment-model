@@ -18,7 +18,7 @@ void InSameDirPredicateTest::SetUp() {
     std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 23.5, 10, 0, 0, -M_PI, 0, 16.5, 0.0);
 
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 10, 0.0, 0, 0, 0, 0.1, 10, 0.0);
-    std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 15, 3, 0, 0, 0, 0, 15, 0.0);
+    std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 15, 3, 0, 0, 0, 0.0, 15, 0.0);
 
     Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),

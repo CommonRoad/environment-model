@@ -838,7 +838,8 @@ class Obstacle {
         occupiedLaneletsDrivingDir; //**< map of time steps to lanelets in driving direction occupied by the obstacle */
 
     mutable time_step_map_t<std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLaneletsNotDrivingDir; //**< map of time steps to lanelets in not driving direction occupied by the obstacle */
+        occupiedLaneletsNotDrivingDir; //**< map of time steps to lanelets in not driving direction occupied by the
+                                       // obstacle */
 
     mutable time_step_map_t<std::shared_ptr<Lane>>
         referenceLane; //**< lane which is used as reference for curvilinear projection */
@@ -898,7 +899,8 @@ class Obstacle {
      * @return List of occupied lanelets in driving direction.
      */
     std::vector<std::shared_ptr<Lanelet>>
-    setOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+    setOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                  time_step_t timeStep);
 
     /**
      * Private setter for polygon shape of obstacle at given time step.

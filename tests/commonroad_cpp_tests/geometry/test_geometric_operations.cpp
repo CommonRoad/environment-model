@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include "test_geometric_operations.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/geometry/geometric_operations.h"
@@ -205,6 +199,12 @@ TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesRotate90Degree) {
 
     EXPECT_NEAR(result.at(0).x, expectedVector.at(0).x, epsilon);
     EXPECT_NEAR(result.at(0).y, expectedVector.at(0).y, epsilon);
+}
+
+TEST_F(GeometricOperationsTest, ConstrainAngle) {
+    EXPECT_NEAR(geometric_operations::constrainAngle(3 * M_PI), M_PI, 1e-9);
+    EXPECT_NEAR(geometric_operations::constrainAngle(-3 * M_PI), -M_PI, 1e-9);
+    EXPECT_NEAR(geometric_operations::constrainAngle(0), 0, 1e-9);
 }
 
 TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesTranslate) {

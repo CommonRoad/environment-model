@@ -1,14 +1,7 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <algorithm>
 
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
-#include <commonroad_cpp/predicates/predicate_config.h>
+#include <commonroad_cpp/predicates/predicate_parameter_collection.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
@@ -72,7 +65,7 @@ bool regulatory_elements_utils::atTrafficLightDirState(size_t timeStep, const st
 
 double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lanelet,
                                              const TrafficSignTypes &signType) {
-    double limit = PredicateParameters().paramMap["maxPositiveDouble"];
+    double limit = std::numeric_limits<double>::max();
     std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
     for (const std::shared_ptr<TrafficSign> &signPtr : trafficSigns) {
         for (const std::shared_ptr<TrafficSignElement> &elemPtr : signPtr->getTrafficSignElements()) {
@@ -96,12 +89,13 @@ double regulatory_elements_utils::speedLimit(const std::vector<std::shared_ptr<L
 }
 
 double regulatory_elements_utils::speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
-                                                      const TrafficSignTypes &signType) {
+                                                      const TrafficSignTypes &signType,
+                                                      double desiredInterstateVelocity) {
     double vMaxLane{speedLimit(lanelets, signType)};
-    if (vMaxLane == PredicateParameters().paramMap["maxPositiveDouble"])
-        return PredicateParameters().paramMap["desiredInterstateVelocity"];
+    if (vMaxLane == std::numeric_limits<double>::max())
+        return desiredInterstateVelocity;
     else
-        return std::min(PredicateParameters().paramMap["desiredInterstateVelocity"], vMaxLane);
+        return std::min(desiredInterstateVelocity, vMaxLane);
 }
 
 double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet> &lanelet,
