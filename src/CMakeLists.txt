@@ -146,6 +146,8 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/general/in_queue_of_vehicles_predicate.cpp
         commonroad_cpp/predicates/general/is_vehicle_predicate.cpp
         commonroad_cpp/predicates/general/makes_u_turn_predicate.cpp
+        commonroad_cpp/predicates/general/low_computation_time_test_predicate.cpp
+        commonroad_cpp/predicates/general/high_computation_time_test_predicate.cpp
         commonroad_cpp/predicates/general/interstate_broad_enough_predicate.cpp
         commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.cpp
         commonroad_cpp/predicates/general/is_vru_predicate.cpp
@@ -191,6 +193,8 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/general/right_signal_set_predicate.h
         commonroad_cpp/predicates/general/makes_u_turn_predicate.h
         commonroad_cpp/predicates/general/orientation_towards_predicate.h
+        commonroad_cpp/predicates/general/low_computation_time_test_predicate.h
+        commonroad_cpp/predicates/general/high_computation_time_test_predicate.h
         commonroad_cpp/predicates/general/is_special_vehicle_purpose_predicate.h
         commonroad_cpp/predicates/general/is_vru_predicate.h
         commonroad_cpp/predicates/general/is_vehicle_predicate.h
@@ -363,7 +367,8 @@ set_property(TARGET env_model_predicates PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_precompile_headers(env_model_predicates
         PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/predicates/commonroad_predicate.h>
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/predicates/predicate_config.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/predicates/predicate_parameter.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/predicates/predicate_parameter_collection.h>
         )
 
 # Create environment model library
