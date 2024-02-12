@@ -1,3 +1,5 @@
+#include <boost/range/adaptor/map.hpp>
+#include <boost/range/algorithm/copy.hpp>
 #include <commonroad_cpp/predicates/predicate_parameter_collection.h>
 #include <stdexcept>
 
@@ -11,6 +13,8 @@ void PredicateParameters::updateParam(const std::string &name, double value) {
     if (parameterCollection.count(name) == 1) {
         parameterCollection.find(name)->second.updateValue(value);
         parameterCollection.find(name)->second.checkParameterValidity();
+    } else if (constantMap.count(name) == 1) {
+        constantMap.at(name) = value;
     } else
         throw std::runtime_error("No predicate " + name + " found for update");
 }
@@ -22,6 +26,31 @@ double PredicateParameters::getParam(const std::string &name) {
         return constantMap.find(name)->second;
     else
         throw std::runtime_error("No predicate " + name + " found");
+}
+
+std::vector<std::string> PredicateParameters::getPredicateNames() const {
+    std::vector<std::string> keys;
+    boost::copy(parameterCollection | boost::adaptors::map_keys, std::back_inserter(keys));
+    return keys;
+}
+
+std::vector<std::string> PredicateParameters::getConstantNames() const {
+    std::vector<std::string> keys;
+    boost::copy(constantMap | boost::adaptors::map_keys, std::back_inserter(keys));
+    return keys;
+}
+
+std::map<std::string, std::tuple<std::string, std::string, double, double, std::vector<std::string>, std::string,
+                                 std::string, std::string, std::string, double>>
+PredicateParameters::getParameterCollection() const {
+    std::map<std::string, std::tuple<std::string, std::string, double, double, std::vector<std::string>, std::string,
+                                     std::string, std::string, std::string, double>>
+        parameterCollectionTuple;
+
+    for (const auto &[key, value] : parameterCollection)
+        parameterCollectionTuple.emplace(key, value.asTuple());
+
+    return parameterCollectionTuple;
 }
 
 // when using a parameter in a new predicate or adding a new parameter, add it to the yaml file and generate the

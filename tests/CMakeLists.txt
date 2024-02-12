@@ -118,7 +118,9 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/velocity/test_keeps_type_speed_limit_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_fov_speed_limit_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_braking_speed_limit_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_change_lane_predicate.cpp)
+        commonroad_cpp_tests/predicates/general/test_change_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_low_computation_time_test_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_high_computation_time_test_predicate.cpp)
 
 
 # Create executable for test
