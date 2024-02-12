@@ -36,12 +36,21 @@ class PredicateParam {
      * Getter of value.
      * @return Value as double.
      */
-    double getValue();
+    [[nodiscard]] double getValue() const;
 
     /**
      * Checks validity of parameter, i.e., that value is within min/max.
      */
-    void checkParameterValidity();
+    void checkParameterValidity() const;
+
+    /**
+     * Creates a tuple containing the class variables.
+     *
+     * @return Tuple containing the class variables.
+     */
+    [[nodiscard]] std::tuple<std::string, std::string, double, double, std::vector<std::string>, std::string,
+                             std::string, std::string, std::string, double>
+    asTuple() const;
 
   private:
     std::string name;                     //**<Name of parameter.*/

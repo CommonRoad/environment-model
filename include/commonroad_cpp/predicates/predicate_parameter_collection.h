@@ -43,11 +43,34 @@ struct PredicateParameters {
      */
     double getParam(const std::string &name);
 
+    /**
+     * Getter for all predicate names.
+     *
+     * @return Vector of strings containing names.
+     */
+    [[nodiscard]] std::vector<std::string> getPredicateNames() const;
+
+    /**
+     * Getter for all constant names.
+     *
+     * @return Vector of strings containing names.
+     */
+    [[nodiscard]] std::vector<std::string> getConstantNames() const;
+
+    /**
+     * Returns all predicate parameters as map with parameter name as key and tuple as value.
+     *
+     * @return Map containing all predicates as tuple indexed by name.
+     */
+    [[nodiscard]] std::map<std::string, std::tuple<std::string, std::string, double, double, std::vector<std::string>,
+                                                   std::string, std::string, std::string, std::string, double>>
+    getParameterCollection() const;
+
   private:
     std::map<std::string, double> constantMap{
         {"epsilon", 1e-6},         // small value close to zero for different purposes
         {"fovSpeedLimit", 50},     // field of view speed limit; will be replaced by compute with calc_v_max_fov() [m/s]
-        {"brakingSpeedLimit", 43}, // braking speed limit; will be replaced by compute with calc_v_max_braking() [m/s]
+        {"brakingSpeedLimit", 50}, // braking speed limit; will be replaced by compute with calc_v_max_braking() [m/s]
         {"roadConditionSpeedLimit",
          50}, // road condition speed limit; will be replaced by compute with calc_v_max_road_condition() [m/s]
     };
