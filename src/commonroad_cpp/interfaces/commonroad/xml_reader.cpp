@@ -261,7 +261,7 @@ void XMLReader::extractLaneletBoundary(const std::vector<std::shared_ptr<Lanelet
 
 void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                      size_t arrayIndex, const pugi::xml_node &child, const char *type) {
-    size_t lid{child.first_attribute().as_ullong()};
+    size_t lid = static_cast<size_t>(child.first_attribute().as_ullong());
     for (size_t i{0}; i < tempLaneletContainer.size(); i++) {
         if (tempLaneletContainer[i]->getId() == lid) {
             if ((strcmp(type, "successor")) == 0)
@@ -275,7 +275,7 @@ void XMLReader::extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>>
 
 void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer,
                                         size_t arrayIndex, const pugi::xml_node &child, const char *type) {
-    size_t adjacentId{child.attribute("ref").as_ullong()};
+    size_t adjacentId = static_cast<size_t>(child.attribute("ref").as_ullong());
     bool oppositeDir{false};
     if ((strcmp(child.attribute("drivingDir").as_string(), "same")) == 0)
         oppositeDir = false;

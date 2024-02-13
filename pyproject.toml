@@ -23,9 +23,9 @@ docs = [
 
 [build-system]
 requires = [
-    "scikit-build-core~=0.6.0",
+    "scikit-build-core~=0.8.0",
     "pybind11~=2.11.1",
-    "setuptools_scm[toml]~=7.1.0"
+    "setuptools_scm[toml]~=8.0.3"
     ]
 build-backend = "scikit_build_core.build"
 
@@ -39,6 +39,7 @@ sdist.include = ["src/python/crcpp/_version.py"]
 wheel.packages = []
 build-dir = "build/{wheel_tag}"
 
+cmake.minimum-version = "3.24"
 
 [tool.sphinx-pyproject]
 language = "en"
@@ -48,7 +49,7 @@ language = "en"
 skip = "pp*"
 archs = ["auto"]
 environment = { PIP_DISABLE_PIP_VERSION_CHECK="1" }
-#build-verbosity = 1
+build-verbosity = 1
 
 # Skip tests on musllinux due to missing wheels
 test-skip = "*i686 *-musllinux*"
@@ -59,4 +60,5 @@ test-command = "python -m pytest {package}/tests/python"
 archs = ["x86_64", "arm64"]
 
 # macOS 10.14 is required for full C++17 support
-environment = {MACOSX_DEPLOYMENT_TARGET=10.14}
+# macOS 10.15 is required for directory_iterator
+environment = {MACOSX_DEPLOYMENT_TARGET=10.15}
