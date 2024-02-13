@@ -11,8 +11,7 @@
 #include <optional>
 #include <unordered_set>
 #include <vector> // for vector
-
-#include <omp.h>
+#include <mutex>
 
 #include "lanelet.h"
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
@@ -112,5 +111,5 @@ class Lane : public Lanelet {
         curvilinearCoordinateSystem;                //**< curvilinear coordinate system defined by lane */
     std::unordered_set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
 
-    omp_lock_t ccs_lock;
+    std::mutex ccs_lock;
 };

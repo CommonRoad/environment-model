@@ -30,6 +30,11 @@ else()
             FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 endif()
 
+if(LOCAL_CRDC OR DEFINED ENV{CIBUILDWHEEL})
+    # Using bundled crdc
+    install(TARGETS crccosy EXPORT ${export_name})
+endif()
+
 # Define INSTALL_..._FROM_SYSTEM for each dependency depending on whether we're using
 # our own version (via FetchContent) or a system version (via find_package)
 # This information is used in the installed config file.
@@ -71,16 +76,26 @@ install(EXPORT ${export_name}
         DESTINATION ${env_model_install_cmakedir}
         )
 
+# Export is disabled by default because it can cause issues with FetchContent in surprising ways
+set(_enable_package_export FALSE)
 
-# Export target configuration (allows find_package to find local build tree without
-# first installing it)
-export(EXPORT ${export_name}
-        FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake
-        NAMESPACE ${PROJECT_NAME}::
-        )
+if(_enable_package_export)
+    # Export target configuration (allows find_package to find local build tree without
+    # first installing it)
+    export(EXPORT ${export_name}
+            FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake
+            NAMESPACE ${PROJECT_NAME}::
+            )
+elseif(TARGET eigen)
+    # Workaround for required Eigen export
+    export(TARGETS eigen
+            FILE ${PROJECT_BINARY_DIR}/eigen-export-private.cmake
+            NAMESPACE ${PROJECT_NAME}_private::
+            )
+endif()
 
 # Required for export()
-foreach(foreign_target spdlog::spdlog yaml-cpp::yaml-cpp protobuf::libprotobuf)
+foreach(foreign_target spdlog::spdlog yaml-cpp::yaml-cpp protobuf::libprotobuf Eigen3::Eigen)
     get_target_property(aliased_target ${foreign_target} ALIASED_TARGET)
     if(aliased_target)
         set(foreign_target ${aliased_target})

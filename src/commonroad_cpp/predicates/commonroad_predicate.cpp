@@ -18,8 +18,9 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(
     long compTime{evaluationTimer.stop(startTime)};
 
     // TODO Thread-local storage for stats?
-    omp_set_lock(&writelock);
     {
+        std::unique_lock lock{writelock};
+
         statistics.numExecutions++;
         statistics.totalComputationTime += static_cast<unsigned long>(compTime);
         if (compTime > statistics.maxComputationTime)
@@ -28,7 +29,6 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(
             statistics.minComputationTime = static_cast<size_t>(compTime);
         if (result)
             statistics.numSatisfaction++;
-        omp_unset_lock(&writelock);
     }
     return result;
 }
@@ -49,9 +49,7 @@ void CommonRoadPredicate::resetStatistics() {
 
 const Timer &CommonRoadPredicate::getEvaluationTimer() const { return evaluationTimer; }
 
-CommonRoadPredicate::CommonRoadPredicate(bool vehicleDependent) : vehicleDependent(vehicleDependent) {
-    omp_init_lock(&writelock);
-}
+CommonRoadPredicate::CommonRoadPredicate(bool vehicleDependent) : vehicleDependent(vehicleDependent) {}
 
 bool CommonRoadPredicate::simpleBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                   const std::shared_ptr<Obstacle> &obstacleK,
@@ -59,7 +57,7 @@ bool CommonRoadPredicate::simpleBooleanEvaluation(size_t timeStep, const std::sh
     return this->booleanEvaluation(timeStep, world, obstacleK, obstacleP);
 }
 
-CommonRoadPredicate::~CommonRoadPredicate() { omp_destroy_lock(&writelock); }
+CommonRoadPredicate::~CommonRoadPredicate() {}
 
 bool CommonRoadPredicate::isVehicleDependent() const { return vehicleDependent; }
 
