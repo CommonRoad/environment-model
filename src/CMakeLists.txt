@@ -304,7 +304,6 @@ target_link_libraries(env_model_core
 
 target_link_libraries(env_model_core
         PUBLIC
-        OpenMP::OpenMP_CXX
         Eigen3::Eigen
         Boost::headers
         range-v3::range-v3
@@ -356,7 +355,6 @@ target_link_libraries(env_model_predicates
 
 target_link_libraries(env_model_predicates
         PUBLIC
-        OpenMP::OpenMP_CXX
         Eigen3::Eigen
         range-v3
         env_model_core

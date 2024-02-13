@@ -20,12 +20,6 @@ set(EIGEN_BUILD_TESTING OFF CACHE INTERNAL "" FORCE)
 
 FetchContent_MakeAvailable(Eigen3)
 
-if(TARGET eigen)
-    install(TARGETS eigen
-            EXPORT EnvironmentModel_Targets
-            )
-endif()
-
 if(NOT TARGET Eigen3::Eigen)
     # fcl (in crdc) does weird things if Eigen3::Eigen is not present
     add_library(Eigen3::Eigen ALIAS eigen)

@@ -168,7 +168,7 @@ if (ENV_MODEL_BUILD_CODE_COVERAGE)
         bilke_cmake_modules
 
         GIT_REPOSITORY https://github.com/bilke/cmake-modules.git
-        GIT_TAG        1b68d17d3e3321c08092f994a40e0b6a13dff817
+        GIT_TAG        1fcf7f4a2179a7b649be15473906882871ef5f0b
     )
     FetchContent_MakeAvailable(bilke_cmake_modules)
     include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage.cmake)
