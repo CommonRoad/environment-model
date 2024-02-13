@@ -49,20 +49,36 @@ if(NOT SKBUILD)
 endif()
 
 # Ugly hack to make CMake discover libomp from Homebrew on Github Actions
-if(APPLE AND DEFINED ENV{CIBUILDWHEEL})
-    list(APPEND CMAKE_PREFIX_PATH /usr/local/opt/libomp)
+if(APPLE)
+    set(_omp_path NOTFOUND)
+
+    if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm64")
+        set(_omp_path /opt/homebrew/opt/libomp)
+    else()
+        set(_omp_path /usr/local/opt/libomp)
+    endif()
+
+    if(NOT EXISTS ${_omp_path})
+        message(FATAL_ERROR "could not find OpenMP path!")
+    endif()
+
+    list(APPEND CMAKE_PREFIX_PATH ${_omp_path})
+
+    message(STATUS "OpenMP prefix: ${_omp_path}")
+
+    find_path(_omp_include_dir
+        NAMES omp.h
+        PATHS ${_omp_path}/include
+        REQUIRED
+    )
+    message(STATUS "OpenMP include dir: ${_omp_include_dir}")
 
     foreach(_lang IN ITEMS C CXX)
         if(CMAKE_${_lang}_COMPILER_ID MATCHES "AppleClang")
-            set(OpenMP_${_lang}_LIB_NAMES "omp")
-            set(OpenMP_${_lang}_INCLUDE_DIR /usr/local/opt/libomp/include)
+            # set(OpenMP_${_lang}_LIB_NAMES "omp")
+            set(OpenMP_${_lang}_INCLUDE_DIR ${_omp_include_dir})
         endif()
     endforeach()
-
-    find_library(OpenMP_omp_LIBRARY
-        NAMES omp
-        PATHS /usr/local/opt/libomp/lib
-      )
 
     set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
 endif()
@@ -92,10 +108,10 @@ if(SKBUILD)
             OUTPUT_STRIP_TRAILING_WHITESPACE)
         list(APPEND CMAKE_PREFIX_PATH "${_tmp_dir}")
 
-        # set(Python_FIND_VIRTUALENV ONLY)
+        set(Python_FIND_VIRTUALENV FIRST)
 
         set(PYBIND11_FINDPYTHON ON)
-        find_package(Python 3.7 REQUIRED COMPONENTS Development.Module)
+        find_package(Python 3.7 REQUIRED COMPONENTS Development.Module Interpreter)
 
         # Now we can find pybind11
         find_package(pybind11 2.7.0 CONFIG REQUIRED)
@@ -276,7 +292,7 @@ endif()
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
 find_package(Threads REQUIRED)
-find_package(OpenMP REQUIRED)
+find_package(OpenMP)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/external)
 
@@ -341,10 +357,12 @@ add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 # Add Environment model node
 add_subdirectory(src)
 
-if(ENV_MODEL_BUILD_EXECUTABLE AND TARGET Boost::program_options)
+if(ENV_MODEL_BUILD_EXECUTABLE AND TARGET Boost::program_options AND TARGET OpenMP::OpenMP_CXX)
     add_subdirectory(example)
 elseif(NOT TARGET Boost::program_options)
     message(WARNING "disabling example because Boost::program_options was not found")
+elseif(NOT TARGET OpenMP::OpenMP_CXX)
+    message(WARNING "disabling example because OpenMP was not found")
 endif()
 
 ## Doxygen
@@ -353,11 +371,13 @@ if(ENV_MODEL_BUILD_DOXYGEN)
 endif()
 
 # add unit testing
-if(ENV_MODEL_BUILD_TESTS AND TARGET Boost::filesystem)
+if(ENV_MODEL_BUILD_TESTS AND TARGET Boost::filesystem AND TARGET OpenMP::OpenMP_CXX)
     enable_testing()
     add_subdirectory(tests)
 elseif(NOT TARGET Boost::filesystem)
     message(WARNING "disabling tests because Boost::program_options was not found")
+elseif(NOT TARGET OpenMP::OpenMP_CXX)
+    message(WARNING "disabling tests because OpenMP was not found")
 endif()
 
 include(cmake/install.cmake)

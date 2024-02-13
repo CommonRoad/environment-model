@@ -3,6 +3,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <string>
 
 #include "regulatory_elements.h"
 #include "types_and_definitions.h"

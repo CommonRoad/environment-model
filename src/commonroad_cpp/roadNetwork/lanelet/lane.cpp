@@ -19,21 +19,17 @@
  * alignment of certain structures. If different allocators are used for the allocation and deallocation,
  * silent memory corruption will occur resulting in hard to find bugs.
  */
-Lane::~Lane() { omp_destroy_lock(&ccs_lock); }
+Lane::~Lane() {}
 
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
            std::shared_ptr<CurvilinearCoordinateSystem> ccs)
     : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets), curvilinearCoordinateSystem(std::move(ccs)) {
-
-    omp_init_lock(&ccs_lock);
-
     for (const auto &coLa : containedLanelets)
         containedLaneletIds.insert(coLa->getId());
 }
 
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet)
     : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets) {
-    omp_init_lock(&ccs_lock);
     for (const auto &coLa : containedLanelets)
         containedLaneletIds.insert(coLa->getId());
 }
@@ -41,7 +37,7 @@ Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanel
 const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const { return containedLanelets; }
 
 const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordinateSystem() {
-    omp_set_lock(&ccs_lock);
+    std::unique_lock lock{ccs_lock};
 
     if (!curvilinearCoordinateSystem) {
         geometry::EigenPolyline temp_path;
@@ -67,8 +63,6 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
             std::make_shared<CurvilinearCoordinateSystem>(reference_path, RoadNetworkParameters::projectionDomainLimit,
                                                           RoadNetworkParameters::eps1, RoadNetworkParameters::eps2);
     }
-
-    omp_unset_lock(&ccs_lock);
 
     return curvilinearCoordinateSystem;
 }
