@@ -41,6 +41,8 @@ build-dir = "build/{wheel_tag}"
 
 cmake.minimum-version = "3.24"
 
+install.components = ["PythonModules"]
+
 [tool.sphinx-pyproject]
 language = "en"
 
