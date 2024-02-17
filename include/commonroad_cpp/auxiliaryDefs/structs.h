@@ -78,18 +78,22 @@ struct Constraint {
 struct SimulationParameters {
     SimulationParameters(std::vector<std::string> directoryPaths, size_t egoVehicleId, std::string benchmarkId,
                          EvaluationMode evaluationMode, bool performanceMeasurement, std::string outputDirectory,
-                         std::string outputFileName)
+                         std::string outputFileName, bool checkObstacleRoadNetwork, bool removeVRU)
         : directoryPaths(std::move(directoryPaths)), egoVehicleId(egoVehicleId), benchmarkId(std::move(benchmarkId)),
           evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement),
+          checkObstacleRoadNetwork(checkObstacleRoadNetwork), removeVRU(removeVRU),
           outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)){};
     SimulationParameters() = default;
 
+    std::vector<std::string> directoryPaths{}; //**< List of directories in which all scenarios should be evaluated */
+    size_t egoVehicleId{0};                    //**< ID of ego vehicle */
+    std::string benchmarkId{"DEU_test_max_speed_limit"}; //**< CommonRoad benchmark ID */
     EvaluationMode evaluationMode{
         EvaluationMode::directory}; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
-    size_t egoVehicleId{0};         //**< ID of ego vehicle */
-    std::string benchmarkId{"DEU_test_max_speed_limit"}; //**< CommonRoad benchmark ID */
-    std::vector<std::string> directoryPaths{}; //**< List of directories in which all scenarios should be evaluated */
-    bool performanceMeasurement{true};         //**< Flag indicating whether performance should me measured. */
+    bool performanceMeasurement{true}; //**< Flag indicating whether performance should be measured. */
+    bool checkObstacleRoadNetwork{
+        true}; //**< Boolean indicating whether obstacles out of road network or always standing should be ignored. */
+    bool removeVRU{true}; //**< Boolean indicating whether VRU obstacles should be ignored. */
     std::string outputDirectory{"path/to/output/directory"};   //**< Path to output directory of file to generate. */
     std::string outputFileName{"traffic_rule_evaluation.txt"}; //**< name and file type for to generate. */
 };

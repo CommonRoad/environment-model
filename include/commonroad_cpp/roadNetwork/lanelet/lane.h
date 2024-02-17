@@ -8,10 +8,10 @@
 #pragma once
 
 #include <memory> // for shared_ptr
+#include <mutex>
 #include <optional>
 #include <unordered_set>
 #include <vector> // for vector
-#include <mutex>
 
 #include "lanelet.h"
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
