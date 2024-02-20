@@ -66,6 +66,13 @@ struct PredicateParameters {
                                                    std::string, std::string, std::string, std::string, double>>
     getParameterCollection() const;
 
+    /**
+     * Returns als updatable and constant parameters.
+     *
+     * @return Map containing all parameters.
+     */
+    std::map<std::string, double> getParameterCollectionComplete() const;
+
   private:
     std::map<std::string, double> constantMap{
         {"epsilon", 1e-6},         // small value close to zero for different purposes
