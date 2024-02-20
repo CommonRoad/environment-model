@@ -136,21 +136,21 @@ class CommonRoadPredicate {
      *
      * @return Statistics of predicate.
      */
-    const PredicateStatistics &getStatistics() const;
+    [[nodiscard]] const PredicateStatistics &getStatistics() const;
 
     /**
      * Getter for timer of predicate.
      *
      * @return Timer of predicate.
      */
-    const Timer &getEvaluationTimer() const;
+    [[nodiscard]] const Timer &getEvaluationTimer() const;
 
     /**
      * Returns whether predicate is vehicle dependent.
      *
      * @return Boolean indicating whether predicate is vehicle dependent.
      */
-    bool isVehicleDependent() const;
+    [[nodiscard]] bool isVehicleDependent() const;
 
     /**
      * Resets predicate statistic.

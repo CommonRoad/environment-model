@@ -52,6 +52,12 @@ PredicateParameters::getParameterCollection() const {
 
     return parameterCollectionTuple;
 }
+std::map<std::string, double> PredicateParameters::getParameterCollectionComplete() const {
+    auto tmpMap{constantMap};
+    for (const auto &elem : parameterCollection)
+        tmpMap.insert({elem.first, elem.second.getValue()});
+    return tmpMap;
+}
 
 // when using a parameter in a new predicate or adding a new parameter, add it to the yaml file and generate the
 // cpp via the Python script

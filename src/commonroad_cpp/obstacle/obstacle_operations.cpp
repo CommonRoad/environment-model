@@ -34,7 +34,7 @@ ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &t
         return ObstacleType::bus;
     else if (type == "bicycle")
         return ObstacleType::bicycle;
-    else if (type == "priority_vehicle")
+    else if (type == "priorityVehicle")
         return ObstacleType::priority_vehicle;
     else if (type == "train")
         return ObstacleType::train;
@@ -42,6 +42,8 @@ ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &t
         return ObstacleType::motorcycle;
     else if (type == "taxi")
         return ObstacleType::taxi;
+    else if (type == "vehicle")
+        return ObstacleType::vehicle;
     else
         return ObstacleType::unknown;
 }
