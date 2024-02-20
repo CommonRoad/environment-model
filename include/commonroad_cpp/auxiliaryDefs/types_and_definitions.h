@@ -25,7 +25,7 @@ enum class ObstacleType {
     bicycle,
     pedestrian,
     priority_vehicle,
-    parked_vehicl,
+    parked_vehicle,
     construction_zone,
     train,
     road_boundary,
@@ -34,6 +34,7 @@ enum class ObstacleType {
     building,
     pillar,
     median_strip,
+    vehicle,
 };
 
 enum class ObstacleRole { STATIC, DYNAMIC, ENVIRONMENT, PHANTOM };
