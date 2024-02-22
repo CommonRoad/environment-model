@@ -78,7 +78,8 @@ SimulationParameters InputUtils::initializeSimulationParameters(const std::strin
             config["simulation_param"]["output_directory"].as<std::string>(),
             config["simulation_param"]["output_file_name"].as<std::string>(),
             config["simulation_param"]["checkObstacleRoadNetwork"].as<bool>(),
-            config["simulation_param"]["removeVRU"].as<bool>()};
+            config["simulation_param"]["removeVRU"].as<bool>(),
+            config["simulation_param"]["checkEgoRoadNetwork"].as<bool>()};
 }
 
 EvaluationMode InputUtils::stringToEvaluationMode(const std::string &evalMode) {
