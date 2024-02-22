@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <Eigen/Dense>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
@@ -60,7 +53,18 @@ bool StopLineInFrontPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
+    std::set<size_t> laneletIDs;
+    auto laneletsTmp{obstacleK->getOccupiedLaneletsByFront(world->getRoadNetwork(), timeStep)};
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    for (const auto &lanelet : laneletsTmp) {
+        laneletIDs.insert(lanelet->getId());
+        lanelets.push_back(lanelet);
+        for (const auto &suc : lanelet->getSuccessors())
+            if (laneletIDs.find(suc->getId()) == laneletIDs.end()) {
+                laneletIDs.insert(suc->getId());
+                lanelets.push_back(suc);
+            }
+    }
     for (const auto &lanelet : lanelets) {
         std::shared_ptr<StopLine> stopLine{lanelet->getStopLine()};
         if (stopLine == nullptr)

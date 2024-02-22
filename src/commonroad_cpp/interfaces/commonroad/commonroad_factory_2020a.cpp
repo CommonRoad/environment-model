@@ -113,10 +113,10 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                     std::shared_ptr<StopLine> stopL = std::make_shared<StopLine>();
                     for (pugi::xml_node elem = child.first_child(); elem != nullptr; elem = elem.next_sibling()) {
                         if ((strcmp(elem.name(), "point")) == 0) {
-                            vertex newVertice{};
-                            newVertice.x = elem.child("x").text().as_double();
-                            newVertice.y = elem.child("y").text().as_double();
-                            // points.push_back(newVertice); TODO not working with V3
+                            vertex newVertex{};
+                            newVertex.x = elem.child("x").text().as_double();
+                            newVertex.y = elem.child("y").text().as_double();
+                            points.push_back(newVertex);
                         }
                         if ((strcmp(elem.name(), "lineMarking")) == 0)
                             stopL->setLineMarking(
@@ -136,7 +136,12 @@ CommonRoadFactory2020a::createLanelets(std::vector<std::shared_ptr<TrafficSign>>
                             }
                         }*/
                     }
-                    // stopL->setPoints(points); TODO not working with V3
+                    if (!points.empty())
+                        stopL->setPoints({points.at(0), points.at(1)});
+                    else {
+                        stopL->setPoints({tempLaneletContainer[arrayIndex]->getLeftBorderVertices().back(),
+                                          tempLaneletContainer[arrayIndex]->getRightBorderVertices().back()});
+                    }
                     tempLaneletContainer[arrayIndex]->setStopLine(stopL);
                 }
             }
