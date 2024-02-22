@@ -78,13 +78,11 @@ struct Constraint {
 struct SimulationParameters {
     SimulationParameters(std::vector<std::string> directoryPaths, size_t egoVehicleId, std::string benchmarkId,
                          EvaluationMode evaluationMode, bool performanceMeasurement, std::string outputDirectory,
-                         std::string outputFileName, bool checkObstacleRoadNetwork, bool removeVRU,
-                         bool checkEgoRoadNetwork)
+                         std::string outputFileName, bool checkObstacleValid, bool removeVRU, bool checkEgoValid)
         : directoryPaths(std::move(directoryPaths)), egoVehicleId(egoVehicleId), benchmarkId(std::move(benchmarkId)),
           evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement),
-          checkObstacleRoadNetwork(checkObstacleRoadNetwork), removeVRU(removeVRU),
-          checkEgoRoadNetwork(checkEgoRoadNetwork), outputDirectory(std::move(outputDirectory)),
-          outputFileName(std::move(outputFileName)){};
+          checkObstacleValid(checkObstacleValid), removeVRU(removeVRU), checkEgoValid(checkEgoValid),
+          outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)){};
     SimulationParameters() = default;
 
     std::vector<std::string> directoryPaths{}; //**< List of directories in which all scenarios should be evaluated */
@@ -93,11 +91,11 @@ struct SimulationParameters {
     EvaluationMode evaluationMode{
         EvaluationMode::directory}; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
     bool performanceMeasurement{true}; //**< Flag indicating whether performance should be measured. */
-    bool checkObstacleRoadNetwork{
+    bool checkObstacleValid{
         true}; //**< Boolean indicating whether obstacles out of road network or always standing should be ignored. */
-    bool removeVRU{true};           //**< Boolean indicating whether VRU obstacles should be ignored. */
-    bool checkEgoRoadNetwork{true}; //**< Boolean indicating whether ego vehicles out of road network or always standing
-                                    // should be ignored. */
+    bool removeVRU{true};     //**< Boolean indicating whether VRU obstacles should be ignored. */
+    bool checkEgoValid{true}; //**< Boolean indicating whether ego vehicles out of road network or always standing
+                              // should be ignored. */
     std::string outputDirectory{"path/to/output/directory"};   //**< Path to output directory of file to generate. */
     std::string outputFileName{"traffic_rule_evaluation.txt"}; //**< name and file type for to generate. */
 };
