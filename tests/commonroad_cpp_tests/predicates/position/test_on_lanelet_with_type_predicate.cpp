@@ -76,7 +76,7 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnAccessRamp) {
 
 void OnLaneletWithTypePredicateTest::initializeTestData(LaneletType laneletType1, LaneletType laneletType2) {
     auto roadNetwork{utils_predicate_test::create_road_network({laneletType1, laneletType2})};
-    this->world = std::make_shared<World>(World(0, roadNetwork, {this->egoVehicle}, {}, 0.1));
+    this->world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {this->egoVehicle}, {}, 0.1));
     opt = std::make_shared<OptionalPredicateParameters>();
     opt->laneletType = {laneletType1};
 }
@@ -107,8 +107,9 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationIntersection) {
         std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50, 10,
                                             3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2))};
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{egoVehicle, obstacleOne}, {}, timeStepSize));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
+                                          std::vector<std::shared_ptr<Obstacle>>{egoVehicle, obstacleOne}, {},
+                                          timeStepSize));
     EXPECT_FALSE(
         pred.booleanEvaluation(0, world, egoVehicle, {}, opt)); // in front of intersection / completely on incoming
     EXPECT_TRUE(

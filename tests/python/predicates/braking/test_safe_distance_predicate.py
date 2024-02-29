@@ -39,7 +39,7 @@ class TestSafeDistancePredicate(unittest.TestCase):
                                              CustomState(time_step=1, position=np.array([30, 0]), velocity=0,
                                                          acceleration=0, orientation=0)]), Rectangle(5, 2)))
 
-        crcpp.register_scenario(123, 0, 0.1, "DEU", self.lanelet_network, [ego_obstacle], [other_obstacle])
+        crcpp.register_scenario(123, "testScenario", 0, 0.1, "DEU", self.lanelet_network, [ego_obstacle], [other_obstacle])
 
         # Monitor-Mode
         sol_monitor_mode_1_obstacles = crcpp.safe_distance_boolean_evaluation(123, 0, 1, 2)

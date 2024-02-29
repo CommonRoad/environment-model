@@ -37,9 +37,9 @@ void DrivesRightmostPredicateTest::SetUp() {
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
-    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {}, 0.1));
 
-    world2 = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {obstacleOne}, 0.1));
+    world2 = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {obstacleOne}, 0.1));
 }
 
 TEST_F(DrivesRightmostPredicateTest, BooleanEvaluationObjects) {

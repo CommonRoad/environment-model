@@ -131,10 +131,11 @@ void TestInNeighboringRightLanePredicate::SetUp() {
     obstacleSix = std::make_shared<Obstacle>(Obstacle(6, ObstacleRole::DYNAMIC, stateZeroObstacleSix, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleSix, 5, 2));
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, {obstacleEgo}, {obstacleOne, obstacleTwo, obstacleThree, obstacleFour}, 0.1));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo},
+                                          {obstacleOne, obstacleTwo, obstacleThree, obstacleFour}, 0.1));
 
-    worldOncoming = std::make_shared<World>(World(0, roadNetworkOncoming, {obstacleSix}, {obstacleFive}, 0.1));
+    worldOncoming =
+        std::make_shared<World>(World("testWorld", 0, roadNetworkOncoming, {obstacleSix}, {obstacleFive}, 0.1));
 }
 
 TEST_F(TestInNeighboringRightLanePredicate, BooleanEvaluationObjectsOncoming) {

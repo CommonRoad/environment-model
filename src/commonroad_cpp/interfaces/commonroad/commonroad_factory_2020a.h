@@ -63,4 +63,11 @@ class CommonRoadFactory2020a : public CommonRoadFactory {
      * @return Time step size.
      */
     double getTimeStepSize() override;
+
+    /**
+     * Extracts CommonRoad benchmark/scenario ID:
+     *
+     * @return Benchmark/scenario as string.
+     */
+    std::string benchmarkID() override;
 };

@@ -50,8 +50,9 @@ void TestInFrontOfPredicate::SetUp() {
                                             3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
-                                          std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
+    world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
+                                      std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
 }
 
 TEST_F(TestInFrontOfPredicate, BooleanEvaluationObjects) {
@@ -105,8 +106,10 @@ TEST_F(TestInFrontOfPredicate, RobustEvaluationValues) {
 }
 
 TEST_F(TestInFrontOfPredicate, StatisticBooleanEvaluation) {
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo));
-    EXPECT_EQ(pred.getStatistics().numExecutions, 1);
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo));
-    EXPECT_EQ(pred.getStatistics().numExecutions, 2);
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat, obstacleTwo));
+    EXPECT_EQ(stat->numExecutions, 1);
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat, obstacleTwo));
+    EXPECT_EQ(stat->numExecutions, 2);
 }

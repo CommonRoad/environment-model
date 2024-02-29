@@ -63,7 +63,7 @@ std::shared_ptr<World> XMLReader::createWorldFromXML(const std::string &xmlFile)
     for (const auto &inter : roadNetwork->getIntersections())
         inter->computeMemberLanelets(roadNetwork);
     double timeStepSize{factory->getTimeStepSize()};
-    return std::make_shared<World>(0, roadNetwork, dummyEgo, obstacle, timeStepSize);
+    return std::make_shared<World>(factory->benchmarkID(), 0, roadNetwork, dummyEgo, obstacle, timeStepSize);
 }
 
 std::vector<std::shared_ptr<TrafficSign>> XMLReader::createTrafficSignFromXML(const std::string &xmlFile) {

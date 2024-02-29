@@ -105,7 +105,7 @@ obstacle_3 = DynamicObstacle(3, ObstacleType.CAR, Rectangle(5, 2),
                                  CustomState(time_step=1, position=np.array([0, 12]), velocity=10, acceleration=0,
                                              orientation=0)]), Rectangle(5, 2)))
 
-crcpp.register_scenario(123, 0, 0.1, "DEU", lanelet_network, [obstacle_1],
+crcpp.register_scenario(123, "testScenario", 0, 0.1, "DEU", lanelet_network, [obstacle_1],
                         [obstacle_2, obstacle_3])
 
 # Monitor-Mode

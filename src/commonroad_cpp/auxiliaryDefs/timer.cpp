@@ -19,4 +19,6 @@ long Timer::stop(std::chrono::high_resolution_clock::time_point startTime) {
     return diff;
 }
 
+void Timer::reset() { totalTime = 0; }
+
 void Timer::addTime(long nanoseconds) { totalTime += nanoseconds; }

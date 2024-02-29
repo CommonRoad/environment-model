@@ -62,8 +62,8 @@ void InSlowMovingTrafficPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world =
-        std::make_shared<World>(World(0, roadNetwork, {obstacleOne}, {obstacleTwo, obstacleThree, obstacleFour}, 0.1));
+    world = std::make_shared<World>(
+        World("testWorld", 0, roadNetwork, {obstacleOne}, {obstacleTwo, obstacleThree, obstacleFour}, 0.1));
 }
 
 TEST_F(InSlowMovingTrafficPredicateTest, BooleanEvaluationObjects) {

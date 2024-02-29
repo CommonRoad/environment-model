@@ -36,8 +36,9 @@ TEST_F(AtRedTrafficLightPredicateTest, BooleanEvaluationDirectionAll) {
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, timeStepSize));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
+                                          std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
+                                          timeStepSize));
 
     auto opt{std::make_shared<OptionalPredicateParameters>()};
     opt->trafficLightState = {TrafficLightState::red};
@@ -82,23 +83,28 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionAll) {
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, timeStepSize));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
+                                          std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
+                                          timeStepSize));
 
     auto opt{std::make_shared<OptionalPredicateParameters>()};
     opt->trafficLightState = {TrafficLightState::red};
     opt->turningDirection = {TurningDirection::all};
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(
-        0, world, obstacleOne, {}, opt)); // in front of intersection/traffic light -> completely on incoming
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne, {},
+
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat, {},
+                                        opt)); // in front of intersection/traffic light -> completely on incoming
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat, {},
                                                 opt)); // standing on stop line -> partially in intersection
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(2, world, obstacleOne, {}, opt)); // inside intersection
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(3, world, obstacleOne, {}, opt)); // left intersection
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat, {}, opt)); // inside intersection
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat, {}, opt)); // left intersection
     EXPECT_TRUE(pred.statisticBooleanEvaluation(
-        0, world, obstacleTwo, {},
+        0, world, obstacleTwo, timer, stat, {},
         opt)); // in front of intersection/traffic light with another direction -> completely on incoming
     EXPECT_TRUE(pred.statisticBooleanEvaluation(
-        1, world, obstacleTwo, {},
+        1, world, obstacleTwo, timer, stat, {},
         opt)); // standing on stop line -> partially in intersection, traffic light has another direction
 }
 
@@ -128,8 +134,9 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionRight)
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, timeStepSize));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
+                                          std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
+                                          timeStepSize));
 
     auto opt{std::make_shared<OptionalPredicateParameters>()};
     opt->trafficLightState = {TrafficLightState::red};
@@ -174,8 +181,9 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionLeft) 
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, timeStepSize));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
+                                          std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
+                                          timeStepSize));
 
     auto opt{std::make_shared<OptionalPredicateParameters>()};
     opt->trafficLightState = {TrafficLightState::red};
@@ -220,8 +228,9 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionStraig
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, timeStepSize));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
+                                          std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
+                                          timeStepSize));
 
     auto opt{std::make_shared<OptionalPredicateParameters>()};
     opt->trafficLightState = {TrafficLightState::red};

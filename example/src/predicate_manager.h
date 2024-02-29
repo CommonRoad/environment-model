@@ -66,4 +66,11 @@ class PredicateManager {
      * Collects complete path to scenarios within configured directories.
      */
     void extractScenarios();
+
+    /**
+     * Extract benchmark ID from path.
+     * @param path File path.
+     * @return Benchmark/Scenario ID.
+     */
+    std::string extractBenchmarkIdFromPath(std::string path);
 };

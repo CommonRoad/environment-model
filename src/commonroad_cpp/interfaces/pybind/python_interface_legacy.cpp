@@ -38,9 +38,9 @@
 
 namespace py = pybind11;
 
-void py_registerScenario(size_t scenarioId, size_t timeStep, double dt, const std::string &country,
-                         const py::handle &py_laneletNetwork, const py::list &py_egoVehicles,
-                         const py::list &py_obstacles);
+void py_registerScenario(size_t scenarioId, const std::string &scenarioName, size_t timeStep, double dt,
+                         const std::string &country, const py::handle &py_laneletNetwork,
+                         const py::list &py_egoVehicles, const py::list &py_obstacles);
 
 void py_removeScenario(size_t scenarioId);
 
@@ -73,9 +73,9 @@ bool py_in_front_of_boolean_evaluation_with_parameters(double lonPosK, double lo
 
 double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double lonPosP, double lengthK, double lengthP);
 
-void py_registerScenario(size_t scenarioId, size_t timeStep, double dt, const std::string &country,
-                         const py::handle &py_laneletNetwork, const py::list &py_egoVehicles,
-                         const py::list &py_obstacles) {
+void py_registerScenario(size_t scenarioId, const std::string &scenarioName, size_t timeStep, double dt,
+                         const std::string &country, const py::handle &py_laneletNetwork,
+                         const py::list &py_egoVehicles, const py::list &py_obstacles) {
 
     auto convertedCountry{RoadNetwork::matchStringToCountry(country)};
     auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
@@ -94,7 +94,8 @@ void py_registerScenario(size_t scenarioId, size_t timeStep, double dt, const st
 
     std::shared_ptr<CommonRoadContainer> eval = CommonRoadContainer::getInstance();
 
-    eval->registerScenario(scenarioId, timeStep, dt, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer);
+    eval->registerScenario(scenarioId, scenarioName, timeStep, dt, roadNetwork, tempEgoVehicleContainer,
+                           tempObstacleContainer);
 }
 
 void py_removeScenario(size_t scenarioId) {
@@ -171,8 +172,8 @@ double py_in_front_of_robust_evaluation_with_parameters(double lonPosK, double l
 void init_python_interface_legacy(py::module_ &m) {
 
     m.def("register_scenario", &py_registerScenario, "Add new scenario to C++ environment model", py::arg("scenarioId"),
-          py::arg("timeStep"), py::arg("dt"), py::arg("country"), py::arg("py_lanelets"), py::arg("py_egoVehicles"),
-          py::arg("py_obstacles"));
+          py::arg("scenarioName"), py::arg("timeStep"), py::arg("dt"), py::arg("country"), py::arg("py_lanelets"),
+          py::arg("py_egoVehicles"), py::arg("py_obstacles"));
 
     m.def("remove_scenario", &py_removeScenario, "Remove scenario to C++ environment model", py::arg("scenarioId"));
 

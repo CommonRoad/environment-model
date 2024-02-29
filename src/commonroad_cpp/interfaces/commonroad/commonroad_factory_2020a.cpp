@@ -374,3 +374,5 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
     }
     return tempIntersectionContainer;
 }
+
+std::string CommonRoadFactory2020a::benchmarkID() { return doc->child("commonRoad").attribute("benchmarkID").value(); }

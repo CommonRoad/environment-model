@@ -1,6 +1,5 @@
 #include "test_is_special_vehicle_purpose.h"
 #include "../utils_predicate_test.h"
-#include "commonroad_cpp/obstacle/state.h"
 
 void IsSpecialVehiclePurposeTest::SetUp() {
     std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0, 0, 0, 0, 0);
@@ -16,7 +15,7 @@ void IsSpecialVehiclePurposeTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
 TEST_F(IsSpecialVehiclePurposeTest, DetectsBus) {
