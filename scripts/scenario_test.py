@@ -29,7 +29,7 @@ scenario_list = []
 def eval_scenario(scenario_path: str):
     try:
         sc, _ = CommonRoadFileReader(full_path).open()
-        crcpp.register_scenario(scenario_id, 0, "DEU", sc.lanelet_network, sc.obstacles, [])
+        crcpp.register_scenario(scenario_id, str(scenario.scenario_id), 0, "DEU", sc.lanelet_network, sc.obstacles, [])
         crcpp.remove_scenario(scenario_id)
         print("Successful - " + scenario_path)
     except:

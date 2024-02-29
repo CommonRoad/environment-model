@@ -120,8 +120,8 @@ TEST_F(InLaneletDrivingDirPredicateTest, BooleanEvaluationBidirectionalBicycle) 
 void InLaneletDrivingDirPredicateTest::initializeTestData(const std::set<ObstacleType> &userOneWayLanelet,
                                                           const std::set<ObstacleType> &userBidirectionalLanelet) {
     auto roadNetwork{utils_predicate_test::create_road_network_users(userOneWayLanelet, userBidirectionalLanelet)};
-    this->world = std::make_shared<World>(
-        World(0, roadNetwork, {this->vehicleOne}, {this->vehicleTwo, this->vehicleThree, this->vehicleFour}, 0.1));
+    this->world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {this->vehicleOne},
+                                                {this->vehicleTwo, this->vehicleThree, this->vehicleFour}, 0.1));
 }
 
 TEST_F(InLaneletDrivingDirPredicateTest, RobustEvaluation) {

@@ -41,14 +41,14 @@ void CompletelyOnLaneletTypePredicateTest::SetUp() {
     // world 1
     auto roadNetwork{utils_predicate_test::create_road_network_with_2_successors(
         {LaneletType::urban}, {LaneletType::urban}, {LaneletType::intersection}, {LaneletType::mainCarriageWay})};
-    world1 = std::make_shared<World>(World(0, roadNetwork, {obstacleOne}, {}, 0.1));
+    world1 = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleOne}, {}, 0.1));
 
     // world 2
     auto pathToTestFileAccessRamp = TestUtils::getTestScenarioDirectory() +
                                     "/predicates/DEU_TestOnFollowingLaneletsAndAccessRampFalse-1/"
                                     "DEU_TestOnFollowingLaneletsAndAccessRampFalse-1_1_T-1.pb";
     const auto &[obstacles, roadNetwork2, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFileAccessRamp);
-    world2 = std::make_shared<World>(World(0, roadNetwork2, {}, {}, 0.1));
+    world2 = std::make_shared<World>(World("testWorld", 0, roadNetwork2, {}, {}, 0.1));
 }
 
 TEST_F(CompletelyOnLaneletTypePredicateTest, CheckOnTwoParallelLanes) {

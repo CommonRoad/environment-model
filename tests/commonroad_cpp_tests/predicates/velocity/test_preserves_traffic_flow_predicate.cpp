@@ -24,8 +24,8 @@ void PreservesTrafficFlowPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world =
-        std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
+    world = std::make_shared<World>(
+        World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
 }
 
 TEST_F(PreservesTrafficFlowPredicateTest, BooleanEvaluationObjects) {
@@ -35,12 +35,16 @@ TEST_F(PreservesTrafficFlowPredicateTest, BooleanEvaluationObjects) {
 }
 
 TEST_F(PreservesTrafficFlowPredicateTest, StatisticBooleanEvaluation) {
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne)); // vehicle drives too slow
-    EXPECT_EQ(pred.getStatistics().numExecutions, 1);
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne)); // vehicle drives at lower limit to
-    EXPECT_EQ(pred.getStatistics().numExecutions, 2);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne)); // vehicle drives faster than velocity limit
-    EXPECT_EQ(pred.getStatistics().numExecutions, 3);
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat)); // vehicle drives too slow
+    EXPECT_EQ(stat->numExecutions, 1);
+    EXPECT_FALSE(
+        pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat)); // vehicle drives at lower limit to
+    EXPECT_EQ(stat->numExecutions, 2);
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne, timer,
+                                                stat)); // vehicle drives faster than velocity limit
+    EXPECT_EQ(stat->numExecutions, 3);
 }
 
 TEST_F(PreservesTrafficFlowPredicateTest, RobustEvaluation) {

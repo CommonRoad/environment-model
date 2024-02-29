@@ -116,8 +116,8 @@ TEST_F(TestSafeDistanceGapRightViolatedPredicate, BooleanEvaluationObjectsMultil
     // obstacleThree on left lane changing to middle lane (at timestep 2)
     // obstacleFour on left lane
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
-    world = std::make_shared<World>(
-        World(0, roadNetwork, {obstacleEgo}, {obstacleOne, obstacleTwo, obstacleThree, obstacleFour}, 0.1));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo},
+                                          {obstacleOne, obstacleTwo, obstacleThree, obstacleFour}, 0.1));
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleEgo));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleEgo));
@@ -157,7 +157,8 @@ TEST_F(TestSafeDistanceGapRightViolatedPredicate, BooleanEvaluationObjectsMultil
 
 TEST_F(TestSafeDistanceGapRightViolatedPredicate, BooleanEvaluationObjectsMultilaneOvertaking) {
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFileOvertaking);
-    world = std::make_shared<World>(World(0, roadNetwork, {obstacles[2]}, {obstacles[1], obstacles[0]}, 0.1));
+    world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacles[2]}, {obstacles[1], obstacles[0]}, 0.1));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacles[2]));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacles[2]));
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacles[2]));

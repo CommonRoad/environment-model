@@ -19,7 +19,7 @@ class TestPythonInterface(unittest.TestCase):
             scenario, _, _ = CommonRoadReadAll(full_path).open()
             try:
                 print("Converting - " + full_path)
-                crcpp.register_scenario(scenario_id, 0, scenario.dt, "DEU", scenario.lanelet_network,
+                crcpp.register_scenario(scenario_id, str(scenario.scenario_id), 0, scenario.dt, "DEU", scenario.lanelet_network,
                                         scenario.obstacles, [])
                 crcpp.remove_scenario(123)
                 print("Successful")

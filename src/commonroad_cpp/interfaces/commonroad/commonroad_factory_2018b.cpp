@@ -139,3 +139,5 @@ CommonRoadFactory2018b::createIntersections(const std::vector<std::shared_ptr<La
     std::vector<std::shared_ptr<Intersection>> tempLaneletContainer{};
     return tempLaneletContainer;
 }
+
+std::string CommonRoadFactory2018b::benchmarkID() { return doc->child("commonRoad").attribute("benchmarkID").value(); }

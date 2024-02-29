@@ -29,7 +29,7 @@ void UnobstructedIntersectionViewPredicateTest::SetUp() {
 
     auto roadNetwork = std::make_shared<RoadNetwork>(
         RoadNetwork(lanelets, SupportedTrafficSignCountry::GERMANY, {}, {}, {intersection1}));
-    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
 TEST_F(UnobstructedIntersectionViewPredicateTest, BooleanEvaluationObjects) {

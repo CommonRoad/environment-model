@@ -36,6 +36,11 @@ class Timer {
      */
     [[nodiscard]] long getTotalTime() const { return totalTime; }
 
+    /**
+     * Resets timer.
+     */
+    void reset();
+
   private:
     /**
      * Accumulated total time.

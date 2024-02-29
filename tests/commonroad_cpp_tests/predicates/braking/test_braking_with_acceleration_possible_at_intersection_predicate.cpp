@@ -33,10 +33,10 @@ void BrakingWithAccelerationPossibleAtIntersectionPredicateTest::SetUp() {
     auto roadNetwork1{utils_predicate_test::create_road_network({LaneletType::incoming}, {LaneletType::intersection})};
     auto roadNetwork2{utils_predicate_test::create_road_network_2()};
 
-    world1 =
-        std::make_shared<World>(World(0, roadNetwork1, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
-    world2 =
-        std::make_shared<World>(World(0, roadNetwork2, std::vector<std::shared_ptr<Obstacle>>{obstacleTwo}, {}, 0.1));
+    world1 = std::make_shared<World>(
+        World("testWorld", 0, roadNetwork1, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
+    world2 = std::make_shared<World>(
+        World("testWorld", 0, roadNetwork2, std::vector<std::shared_ptr<Obstacle>>{obstacleTwo}, {}, 0.1));
 }
 
 TEST_F(BrakingWithAccelerationPossibleAtIntersectionPredicateTest, BooleanEvaluation) {

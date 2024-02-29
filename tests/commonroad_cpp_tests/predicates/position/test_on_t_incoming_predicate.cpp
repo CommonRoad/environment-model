@@ -23,10 +23,10 @@ void OnTIncomingPredicateTest::SetUp() {
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
 
     world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, timeStepSize));
+        World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, timeStepSize));
 
     world_2 = std::make_shared<World>(
-        World(0, roadNetwork_2, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, timeStepSize_2));
+        World("testWorld", 0, roadNetwork_2, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, timeStepSize_2));
 }
 
 TEST_F(OnTIncomingPredicateTest, BooleanEvaluation) {

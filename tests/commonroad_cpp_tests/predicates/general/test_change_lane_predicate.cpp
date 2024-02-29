@@ -56,12 +56,14 @@ void ChangeLanePredicateTest::SetUp() {
 
     // World1 with just two parallel lanelets
     auto roadNetwork1{utils_predicate_test::create_road_network()};
-    world1 = std::make_shared<World>(World(0, roadNetwork1, {obstacleOne}, {obstacleTwo, obstacleThree}, 0.1));
+    world1 =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork1, {obstacleOne}, {obstacleTwo, obstacleThree}, 0.1));
 
     // World2 with 2 lanelets followed by 1 uccessor each
     auto roadNetwork2{utils_predicate_test::create_road_network_with_2_successors(
         {LaneletType::urban}, {LaneletType::urban}, {LaneletType::urban}, {LaneletType::urban})};
-    world2 = std::make_shared<World>(World(0, roadNetwork2, {obstacleOne}, {obstacleTwo, obstacleThree}, 0.1));
+    world2 =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork2, {obstacleOne}, {obstacleTwo, obstacleThree}, 0.1));
 
     // Worlds with access- and exit-ramps on interstate
     pathToTestFileAccessRamp = TestUtils::getTestScenarioDirectory() +
@@ -150,7 +152,7 @@ TEST_F(ChangeLanePredicateTest, TwoParallelLaneletsWithSuccessorsRightChange) {
 
 TEST_F(ChangeLanePredicateTest, AccessRampNoChange) {
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFileAccessRamp);
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacles[0]}, {}, 0.1));
+    std::shared_ptr<World> world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacles[0]}, {}, 0.1));
     EXPECT_EQ(obstacles[0]->getId(), 1000);
     EXPECT_EQ(obstacles[0]->getStateByTimeStep(57)->getXPosition(), 167.5);
     for (int i = 0; i < 61; ++i) {
@@ -168,7 +170,7 @@ TEST_F(ChangeLanePredicateTest, AccessRampNoChange) {
 
 TEST_F(ChangeLanePredicateTest, ExitRampNoChange) {
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFileExitRamp);
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleFour}, {}, 0.1));
+    std::shared_ptr<World> world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleFour}, {}, 0.1));
     for (int i = 0; i < 51; ++i) {
         EXPECT_FALSE(pred.booleanEvaluation(i, world, obstacleFour, {}, optLeft));
         EXPECT_FALSE(pred.booleanEvaluation(i, world, obstacleFour, {}, optRight));
@@ -178,7 +180,7 @@ TEST_F(ChangeLanePredicateTest, ExitRampNoChange) {
 TEST_F(ChangeLanePredicateTest, OnFollowingLaneletsAndAccessRampConnected) {
     const auto &[obstacles, roadNetwork, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileTwoFollowingLaneletsAndAccessRampFalse);
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacles[0]}, {}, 0.1));
+    std::shared_ptr<World> world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacles[0]}, {}, 0.1));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacles[0], {}, optRight));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacles[0], {}, optLeft));
 }
@@ -187,7 +189,7 @@ TEST_F(ChangeLanePredicateTest, OnFollowingLaneletsAndAccessRampNotConnected) {
     // test case assumes invalid lanelet network (missing successor relationship)
     const auto &[obstacles, roadNetwork, timeStepSize] =
         InputUtils::getDataFromCommonRoad(pathToTestFileTwoFollowingLaneletsAndAccessRampTrue);
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacles[0]}, {}, 0.1));
+    std::shared_ptr<World> world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacles[0]}, {}, 0.1));
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacles[0], {}, optRight));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacles[0], {}, optLeft));
 }

@@ -34,7 +34,7 @@ void TestInSingleLanePredicate::SetUp() {
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
+    world = std::make_shared<World>("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
                                     std::vector<std::shared_ptr<Obstacle>>{}, 0.1);
 }
 
@@ -47,11 +47,14 @@ TEST_F(TestInSingleLanePredicate, BooleanEvaluationObjects) {
 }
 
 TEST_F(TestInSingleLanePredicate, StatisticBooleanEvaluation) {
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne));
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne)); // ego vehicle partially in two lanes
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne));
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne));
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(4, world, obstacleOne));
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat));
+    EXPECT_FALSE(
+        pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat)); // ego vehicle partially in two lanes
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat));
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat));
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(4, world, obstacleOne, timer, stat));
 }
 
 TEST_F(TestInSingleLanePredicate, RobustEvaluation) {

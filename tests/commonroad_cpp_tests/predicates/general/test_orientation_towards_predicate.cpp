@@ -48,8 +48,9 @@ void OrientationTowardsPredicateTest::SetUp() {
                                             3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
     auto roadNetwork{utils_predicate_test::create_road_network_3()};
 
-    world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
-                                          std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
+    world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
+                                      std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
 }
 
 TEST_F(OrientationTowardsPredicateTest, BooleanEvaluation) {
@@ -70,8 +71,9 @@ TEST_F(OrientationTowardsPredicateTest, BooleanEvaluationScenarioTest) {
     auto obs1{obstacle_operations::getObstacleById(obstaclesScenario, 1008)};
     auto obs2{obstacle_operations::getObstacleById(obstaclesScenario, 1009)};
     auto obs3{obstacle_operations::getObstacleById(obstaclesScenario, 1010)};
-    auto worldScenario{std::make_shared<World>(
-        World(0, roadNetworkScenario, {obstacle_operations::getObstacleById(obstaclesScenario, 1008)}, {}, 0.1))};
+    auto worldScenario{
+        std::make_shared<World>(World("testWorld", 0, roadNetworkScenario,
+                                      {obstacle_operations::getObstacleById(obstaclesScenario, 1008)}, {}, 0.1))};
     EXPECT_FALSE(pred.booleanEvaluation(18, worldScenario, obs1, obs2)); // obs1 drives straight
     EXPECT_FALSE(pred.booleanEvaluation(18, worldScenario, obs2, obs1)); // obs2 leaves lane of obs1
     EXPECT_TRUE(pred.booleanEvaluation(18, worldScenario, obs3, obs1));  // obs2 performs cut-in towards obs1
@@ -79,14 +81,17 @@ TEST_F(OrientationTowardsPredicateTest, BooleanEvaluationScenarioTest) {
 }
 
 TEST_F(OrientationTowardsPredicateTest, StatisticBooleanEvaluation) {
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne,
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat,
                                                  obstacleTwo)); // obs1 vehicle drives straight
-    EXPECT_TRUE(
-        pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo)); // obs1 vehicle drives to other from left
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(2, world, obstacleOne, obstacleTwo)); // both drive straight
-    EXPECT_TRUE(
-        pred.statisticBooleanEvaluation(3, world, obstacleOne, obstacleTwo)); // obs1 vehicle drives to other from right
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne,
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // obs1 vehicle drives to other from left
+    EXPECT_FALSE(
+        pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat, obstacleTwo)); // both drive straight
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // obs1 vehicle drives to other from right
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat,
                                                 obstacleThree)); // obs1 drives to other from right
 }
 

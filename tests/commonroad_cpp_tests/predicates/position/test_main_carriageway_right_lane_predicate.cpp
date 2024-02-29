@@ -44,9 +44,9 @@ void MainCarriagewayRightLanePredicateTest::SetUp() {
         utils_predicate_test::create_road_network({}, {LaneletType::interstate, LaneletType::mainCarriageWay})};
     auto roadNetworkThree{utils_predicate_test::create_road_network(
         {LaneletType::interstate, LaneletType::shoulder}, {LaneletType::interstate, LaneletType::mainCarriageWay})};
-    worldOne = std::make_shared<World>(World(0, roadNetworkOne, {obstacleOne}, {}, 0.1));
-    worldTwo = std::make_shared<World>(World(0, roadNetworkTwo, {obstacleTwo}, {}, 0.1));
-    worldThree = std::make_shared<World>(World(0, roadNetworkThree, {obstacleThree}, {}, 0.1));
+    worldOne = std::make_shared<World>(World("testWorld", 0, roadNetworkOne, {obstacleOne}, {}, 0.1));
+    worldTwo = std::make_shared<World>(World("testWorld", 0, roadNetworkTwo, {obstacleTwo}, {}, 0.1));
+    worldThree = std::make_shared<World>(World("testWorld", 0, roadNetworkThree, {obstacleThree}, {}, 0.1));
 }
 
 TEST_F(MainCarriagewayRightLanePredicateTest, BooleanEvaluationObjects) {

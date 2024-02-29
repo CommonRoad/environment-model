@@ -84,7 +84,7 @@ void TestOncomingVehiclePredicate::SetUp() {
 TEST_F(TestOncomingVehiclePredicate, BooleanEvaluationObjectsMultilane) {
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
     std::shared_ptr<World> world =
-        std::make_shared<World>(World(0, roadNetwork, {obstacleEgo}, {obstacleOne, obstacleThree}, 0.1));
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne, obstacleThree}, 0.1));
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleEgo));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleEgo));
@@ -99,7 +99,7 @@ TEST_F(TestOncomingVehiclePredicate, BooleanEvaluationObjectsNoOncomingTraffic) 
     const auto &[obstaclesOncoming, roadNetworkOncoming, timeStepSizeOncoming] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOncoming);
     std::shared_ptr<World> worldOncoming =
-        std::make_shared<World>(World(0, roadNetworkOncoming, {obstacleEgo}, {obstacleOne}, 0.1));
+        std::make_shared<World>(World("testWorld", 0, roadNetworkOncoming, {obstacleEgo}, {obstacleOne}, 0.1));
     EXPECT_FALSE(pred.booleanEvaluation(0, worldOncoming, obstacleEgo));
     EXPECT_FALSE(pred.booleanEvaluation(1, worldOncoming, obstacleEgo));
     EXPECT_FALSE(pred.booleanEvaluation(2, worldOncoming, obstacleEgo));
@@ -120,7 +120,7 @@ TEST_F(TestOncomingVehiclePredicate, BooleanEvaluationObjectsOncomingTraffic) {
     const auto &[obstaclesOncoming, roadNetworkOncoming, timeStepSizeOncoming] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOncoming);
     std::shared_ptr<World> worldOncoming =
-        std::make_shared<World>(World(0, roadNetworkOncoming, {obstacleEgo}, {obstacleTwo}, 0.1));
+        std::make_shared<World>(World("testWorld", 0, roadNetworkOncoming, {obstacleEgo}, {obstacleTwo}, 0.1));
     EXPECT_TRUE(pred.booleanEvaluation(0, worldOncoming, obstacleEgo));
     EXPECT_TRUE(pred.booleanEvaluation(1, worldOncoming, obstacleEgo));
     EXPECT_TRUE(pred.booleanEvaluation(2, worldOncoming, obstacleEgo));
@@ -128,8 +128,8 @@ TEST_F(TestOncomingVehiclePredicate, BooleanEvaluationObjectsOncomingTraffic) {
     EXPECT_FALSE(pred.booleanEvaluation(4, worldOncoming, obstacleEgo));
     EXPECT_FALSE(pred.booleanEvaluation(5, worldOncoming, obstacleEgo));
     //
-    worldOncoming =
-        std::make_shared<World>(World(0, roadNetworkOncoming, {obstacleTwo}, {obstacleEgo, obstacleOne}, 0.1));
+    worldOncoming = std::make_shared<World>(
+        World("testWorld", 0, roadNetworkOncoming, {obstacleTwo}, {obstacleEgo, obstacleOne}, 0.1));
     EXPECT_TRUE(pred.booleanEvaluation(0, worldOncoming, obstacleTwo));
     EXPECT_TRUE(pred.booleanEvaluation(1, worldOncoming, obstacleTwo));
     EXPECT_TRUE(pred.booleanEvaluation(2, worldOncoming, obstacleTwo));
@@ -141,13 +141,13 @@ TEST_F(TestOncomingVehiclePredicate, BooleanEvaluationObjectsOncomingTraffic) {
 TEST_F(TestOncomingVehiclePredicate, RobustEvaluation) {
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
     std::shared_ptr<World> world =
-        std::make_shared<World>(World(0, roadNetwork, {obstacleEgo}, {obstacleOne, obstacleThree}, 0.1));
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne, obstacleThree}, 0.1));
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
 }
 
 TEST_F(TestOncomingVehiclePredicate, ConstraintEvaluation) {
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
     std::shared_ptr<World> world =
-        std::make_shared<World>(World(0, roadNetwork, {obstacleEgo}, {obstacleOne, obstacleThree}, 0.1));
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne, obstacleThree}, 0.1));
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
 }

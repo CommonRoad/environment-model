@@ -68,8 +68,8 @@ void SlowLeadingVehiclePredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, {obstacleOne}, {obstacleTwo, obstacleThree, obstacleFour, obstacleFive}, 0.1));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleOne},
+                                          {obstacleTwo, obstacleThree, obstacleFour, obstacleFive}, 0.1));
 }
 
 TEST_F(SlowLeadingVehiclePredicateTest, BooleanEvaluationObjects) {
@@ -80,15 +80,19 @@ TEST_F(SlowLeadingVehiclePredicateTest, BooleanEvaluationObjects) {
 }
 
 TEST_F(SlowLeadingVehiclePredicateTest, StatisticBooleanEvaluation) {
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne)); // no leading vehicle at all
-    EXPECT_EQ(pred.getStatistics().numExecutions, 1);
-    EXPECT_FALSE(
-        pred.statisticBooleanEvaluation(1, world, obstacleOne)); // two leading vehicles which drive with speed limit
-    EXPECT_EQ(pred.getStatistics().numExecutions, 2);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne)); // first leading vehicle is drives to slow
-    EXPECT_EQ(pred.getStatistics().numExecutions, 3);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne)); // third leading vehicle drives to slow
-    EXPECT_EQ(pred.getStatistics().numExecutions, 4);
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat)); // no leading vehicle at all
+    EXPECT_EQ(stat->numExecutions, 1);
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer,
+                                                 stat)); // two leading vehicles which drive with speed limit
+    EXPECT_EQ(stat->numExecutions, 2);
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat)); // first leading vehicle is drives to slow
+    EXPECT_EQ(stat->numExecutions, 3);
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat)); // third leading vehicle drives to slow
+    EXPECT_EQ(stat->numExecutions, 4);
 }
 
 TEST_F(SlowLeadingVehiclePredicateTest, RobustEvaluation) {

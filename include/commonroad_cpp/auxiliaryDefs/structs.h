@@ -69,6 +69,14 @@ struct PredicateStatistics {
     size_t totalComputationTime{0};
     size_t numExecutions{0};
     size_t numSatisfaction{0};
+
+    void reset() {
+        maxComputationTime = LONG_MIN;
+        minComputationTime = LONG_MAX;
+        totalComputationTime = 0;
+        numExecutions = 0;
+        numSatisfaction = 0;
+    }
 };
 
 struct Constraint {
