@@ -12,7 +12,7 @@ void CommonRoadContainerTest::SetUp() {
         std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/" + scen.substr(0, scen.size() - 6) +
                                       "/" + scen + ".pb"};
         const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-        eval->registerScenario(scenarioId, 0, timeStepSize, roadNetwork, obstacles, {});
+        eval->registerScenario(scenarioId, scen, 0, timeStepSize, roadNetwork, obstacles, {});
         scenarioId++;
     }
 }

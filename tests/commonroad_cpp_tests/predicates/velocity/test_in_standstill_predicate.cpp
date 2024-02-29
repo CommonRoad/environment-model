@@ -26,8 +26,8 @@ void InStandstillPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world =
-        std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
+    world = std::make_shared<World>(
+        World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
 }
 
 TEST_F(InStandstillPredicateTest, BooleanEvaluationObjects) {
@@ -40,16 +40,19 @@ TEST_F(InStandstillPredicateTest, BooleanEvaluationObjects) {
 }
 
 TEST_F(InStandstillPredicateTest, StatisticBooleanEvaluation) {
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne)); // drives with too high velocity
-    EXPECT_EQ(pred.getStatistics().numExecutions, 1);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne)); // vehicle drives exactly zero speed
-    EXPECT_EQ(pred.getStatistics().numExecutions, 2);
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat)); // drives with too high velocity
+    EXPECT_EQ(stat->numExecutions, 1);
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat)); // vehicle drives exactly zero speed
+    EXPECT_EQ(stat->numExecutions, 2);
     EXPECT_TRUE(pred.statisticBooleanEvaluation(
-        2, world, obstacleOne)); // drives with speed slightly below upper standstill error margin
-    EXPECT_EQ(pred.getStatistics().numExecutions, 3);
+        2, world, obstacleOne, timer, stat)); // drives with speed slightly below upper standstill error margin
+    EXPECT_EQ(stat->numExecutions, 3);
     EXPECT_TRUE(pred.statisticBooleanEvaluation(
-        3, world, obstacleOne)); // drives with speed slightly above upper standstill error margin
-    EXPECT_EQ(pred.getStatistics().numExecutions, 4);
+        3, world, obstacleOne, timer, stat)); // drives with speed slightly above upper standstill error margin
+    EXPECT_EQ(stat->numExecutions, 4);
 }
 
 TEST_F(InStandstillPredicateTest, RobustEvaluation) {

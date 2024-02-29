@@ -70,6 +70,13 @@ class CommonRoadFactory {
      */
     virtual double getTimeStepSize() = 0;
 
+    /**
+     * Extracts CommonRoad benchmark/scenario ID:
+     *
+     * @return Benchmark/scenario as string.
+     */
+    virtual std::string benchmarkID() = 0;
+
   protected:
     std::unique_ptr<pugi::xml_document> doc; //**< Pointer to loaded CommonRoad XML. */
 };

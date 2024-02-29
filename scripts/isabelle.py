@@ -4,7 +4,7 @@ from commonroad.common.file_reader import CommonRoadFileReader
 scenario, _ = \
     CommonRoadFileReader("../tests/scenarios/DEU_test_safe_distance.xml").open()
 scenario_id = 123
-crcpp.register_scenario(scenario_id, 0, "DEU", scenario.lanelet_network, scenario.obstacles, [])
+crcpp.register_scenario(scenario_id, str(scenario.scenario_id), 0, "DEU", scenario.lanelet_network, scenario.obstacles, [])
 final_time_step = max([obs.prediction.final_time_step for obs in scenario.dynamic_obstacles])
 
 with open('safe_distance_rule.log', 'w') as f:

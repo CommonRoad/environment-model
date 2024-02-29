@@ -47,8 +47,9 @@ void LaneBasedOrientationSimilarPredicateTest::SetUp() {
                                             3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
-                                          std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
+    world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
+                                      std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
 }
 
 TEST_F(LaneBasedOrientationSimilarPredicateTest, BooleanEvaluation) {
@@ -62,13 +63,17 @@ TEST_F(LaneBasedOrientationSimilarPredicateTest, BooleanEvaluation) {
 }
 
 TEST_F(LaneBasedOrientationSimilarPredicateTest, StatisticBooleanEvaluation) {
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo)); // ego vehicle drives straight
-    EXPECT_FALSE(
-        pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo)); // ego vehicle drives to other from left
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne, obstacleTwo)); // both drive straight
-    EXPECT_FALSE(
-        pred.statisticBooleanEvaluation(3, world, obstacleOne, obstacleTwo)); // ego vehicle drives to other from right
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne,
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // ego vehicle drives straight
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat,
+                                                 obstacleTwo)); // ego vehicle drives to other from left
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat, obstacleTwo)); // both drive straight
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat,
+                                                 obstacleTwo)); // ego vehicle drives to other from right
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat,
                                                  obstacleThree)); // ego vehicle drives to other from right
 }
 

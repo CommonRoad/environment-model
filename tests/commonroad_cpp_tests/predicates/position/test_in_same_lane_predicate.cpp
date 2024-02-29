@@ -46,7 +46,7 @@ void TestInSameLanePredicate::SetUp() {
                                             3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
+    world = std::make_shared<World>("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
                                     std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1);
 }
 
@@ -60,15 +60,18 @@ TEST_F(TestInSameLanePredicate, BooleanEvaluationObjects) {
 }
 
 TEST_F(TestInSameLanePredicate, StatisticBooleanEvaluation) {
-    EXPECT_TRUE(
-        pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo)); // vehicles completely on same lane
-    EXPECT_TRUE(
-        pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo)); // ego vehicle partially in another lane
-    EXPECT_TRUE(
-        pred.statisticBooleanEvaluation(2, world, obstacleOne, obstacleTwo)); // other vehicle partially in another lane
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(3, world, obstacleOne, obstacleTwo)); // vehicles not in same lane
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // vehicles completely on same lane
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // ego vehicle partially in another lane
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // other vehicle partially in another lane
+    EXPECT_FALSE(
+        pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat, obstacleTwo)); // vehicles not in same lane
     EXPECT_TRUE(pred.statisticBooleanEvaluation(
-        4, world, obstacleOne,
+        4, world, obstacleOne, timer, stat,
         obstacleThree)); // vehicles completely on same lane, but other vehicle is behind
 }
 
@@ -81,7 +84,8 @@ TEST_F(TestInSameLanePredicate, BooleanEvaluationObjectsInIntersection) {
     std::vector<std::shared_ptr<Obstacle>> relevantObstacles{
         obstacle_operations::getObstacleById(obstaclesScenarioOne, 1230),
         obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
-    auto world{std::make_shared<World>(0, roadNetworkScenarioOne, egoObstacles, relevantObstacles, timeStepSizeOne)};
+    auto world{std::make_shared<World>("testWorld", 0, roadNetworkScenarioOne, egoObstacles, relevantObstacles,
+                                       timeStepSizeOne)};
     EXPECT_FALSE(pred.booleanEvaluation(
         0, world, egoObstacles.at(0),
         relevantObstacles.at(0))); // vehicles on right turning lane, but ego vehicle drives straight

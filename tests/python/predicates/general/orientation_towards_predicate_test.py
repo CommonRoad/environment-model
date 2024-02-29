@@ -62,7 +62,7 @@ class TestOrientationTowardsPredicate(unittest.TestCase):
                                                      acceleration=0,
                                                      orientation=0)]), Rectangle(5, 2)))
 
-        crcpp.register_scenario(123, 0, 0.1, "DEU", self.lanelet_network, [obstacle_1],
+        crcpp.register_scenario(123, "testScenario", 0, 0.1, "DEU", self.lanelet_network, [obstacle_1],
                                 [obstacle_2, obstacle_3])
 
         # Monitor-Mode

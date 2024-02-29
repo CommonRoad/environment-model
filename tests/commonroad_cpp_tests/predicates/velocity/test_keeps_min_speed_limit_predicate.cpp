@@ -26,8 +26,8 @@ void KeepsMinSpeedLimitPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world =
-        std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
+    world = std::make_shared<World>(
+        World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
 }
 
 TEST_F(KeepsMinSpeedLimitPredicateTest, BooleanEvaluationObjects) {
@@ -38,15 +38,19 @@ TEST_F(KeepsMinSpeedLimitPredicateTest, BooleanEvaluationObjects) {
 }
 
 TEST_F(KeepsMinSpeedLimitPredicateTest, StatisticBooleanEvaluation) {
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne)); // vehicle drives too slow
-    EXPECT_EQ(pred.getStatistics().numExecutions, 1);
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat)); // vehicle drives too slow
+    EXPECT_EQ(stat->numExecutions, 1);
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer,
+                                                stat)); // vehicle drives exactly with the min. required speed
+    EXPECT_EQ(stat->numExecutions, 2);
     EXPECT_TRUE(
-        pred.statisticBooleanEvaluation(1, world, obstacleOne)); // vehicle drives exactly with the min. required speed
-    EXPECT_EQ(pred.getStatistics().numExecutions, 2);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne)); // vehicle drives with higher velocity
-    EXPECT_EQ(pred.getStatistics().numExecutions, 3);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne)); // there exists not a min. required speed
-    EXPECT_EQ(pred.getStatistics().numExecutions, 4);
+        pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat)); // vehicle drives with higher velocity
+    EXPECT_EQ(stat->numExecutions, 3);
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat)); // there exists not a min. required speed
+    EXPECT_EQ(stat->numExecutions, 4);
 }
 
 TEST_F(KeepsMinSpeedLimitPredicateTest, RobustEvaluation) {

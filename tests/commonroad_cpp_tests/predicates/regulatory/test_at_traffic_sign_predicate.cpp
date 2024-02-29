@@ -25,8 +25,8 @@ TEST_F(AtTrafficSignPredicateTest, BooleanEvaluationAtStopSign) {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world =
-        std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
+    world = std::make_shared<World>(
+        World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
 
     auto opt{std::make_shared<OptionalPredicateParameters>(std::vector<TrafficSignTypes>{TrafficSignTypes::STOP})};
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {}, opt)); // occupied lanelet references stop sign

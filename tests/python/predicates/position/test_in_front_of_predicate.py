@@ -58,7 +58,7 @@ class TestInFrontOfPredicate(unittest.TestCase):
                                          CustomState(time_step=4, position=np.array([29, 0]), velocity=5,
                                                acceleration=0, orientation=0)]), Rectangle(5, 2)))
 
-        crcpp.register_scenario(123, 0, 0.1, "DEU", self.lanelet_network, [obstacle_1], [obstacle_2, obstacle_3])
+        crcpp.register_scenario(123, "testScenario", 0, 0.1, "DEU", self.lanelet_network, [obstacle_1], [obstacle_2, obstacle_3])
 
         # Monitor-Mode
         sol_monitor_mode_1 = crcpp.in_front_of_boolean_evaluation(123, 0, 1, 2)

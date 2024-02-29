@@ -31,8 +31,9 @@ void ApproachIntersectionPredicateTest::SetUp() {
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
-    world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, timeStepSize));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
+                                          std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
+                                          timeStepSize));
 }
 
 TEST_F(ApproachIntersectionPredicateTest, BooleanEvaluation) {

@@ -37,7 +37,7 @@ void InSameDirPredicateTest::SetUp() {
     obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
 
-    world = std::make_shared<World>(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
+    world = std::make_shared<World>("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
                                     std::vector<std::shared_ptr<Obstacle>>{obstacleTwo}, 0.1);
 }
 

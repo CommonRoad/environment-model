@@ -111,11 +111,11 @@ class CommonRoadPredicate {
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      */
-    bool
-    statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                               const std::shared_ptr<Obstacle> &obstacleK,
-                               const std::shared_ptr<Obstacle> &obstacleP = {},
-                               const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {});
+    bool statisticBooleanEvaluation(
+        size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+        const std::shared_ptr<Timer> &evaluationTimer, const std::shared_ptr<PredicateStatistics> &statistics,
+        const std::shared_ptr<Obstacle> &obstacleP = {},
+        const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {});
 
     /**
      * Getter for parameters.
@@ -132,38 +132,15 @@ class CommonRoadPredicate {
     void setParameters(const PredicateParameters &parameters);
 
     /**
-     * Getter for statistics of predicate.
-     *
-     * @return Statistics of predicate.
-     */
-    [[nodiscard]] const PredicateStatistics &getStatistics() const;
-
-    /**
-     * Getter for timer of predicate.
-     *
-     * @return Timer of predicate.
-     */
-    [[nodiscard]] const Timer &getEvaluationTimer() const;
-
-    /**
      * Returns whether predicate is vehicle dependent.
      *
      * @return Boolean indicating whether predicate is vehicle dependent.
      */
     [[nodiscard]] bool isVehicleDependent() const;
 
-    /**
-     * Resets predicate statistic.
-     */
-    void resetStatistics();
-
   protected:
     PredicateParameters parameters; //**< Struct containing parameters of all predicates. */
-    Timer evaluationTimer;          //**< Time measuring object for predicates. */
-    PredicateStatistics statistics; //**< Struct storing statistics of a predicate, e.g., average computation
-                                    // time,  number of calls, etc. */
     const bool vehicleDependent; //**< Boolean indicating whether predicate depends on one specific obstacle or two. */
-    std::mutex writelock;        //**< omp lock for statisticBooleanEvaluation*/
 };
 
 extern std::map<std::string, std::shared_ptr<CommonRoadPredicate>> predicates; //**< List of all predicates **/
