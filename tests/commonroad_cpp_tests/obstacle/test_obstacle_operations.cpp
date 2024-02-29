@@ -238,7 +238,8 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
         std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::bus, 50, 10,
                                             3, -10, 0.3, trajectoryPredictionTwoVehicle, 10, 2));
 
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
+    std::shared_ptr<World> world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
 
     // obstacle one drive horizontally
     ASSERT_EQ(obstacle_operations::drivingDistanceToCoordinatePoint(30, 0, roadNetwork, obstacleOne, 0),
@@ -282,7 +283,8 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
         std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
                                             3, -10, 0.3, trajectoryPredictionOneVehicle, 5, 2));
 
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
+    std::shared_ptr<World> world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
 
     // Larger tolerances for the edges of the lanelet, because then the result depends on how we extrapolate its center
     // line

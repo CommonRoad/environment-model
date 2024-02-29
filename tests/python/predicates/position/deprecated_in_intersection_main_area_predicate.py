@@ -43,7 +43,7 @@ class TestInIntersectionMainAreaPredicate(unittest.TestCase):
                                                      acceleration=0,
                                                      orientation=-math.pi)]), Rectangle(5, 2)))
 
-        crcpp.register_scenario(123, 0, self.dt, "DEU", self.lanelet_network, [obstacle_1, obstacle_2], [])
+        crcpp.register_scenario(123, "testScenario", 0, self.dt, "DEU", self.lanelet_network, [obstacle_1, obstacle_2], [])
 
         # Monitor-Mode
         sol_monitor_mode_1 = crcpp.in_intersection_main_area_boolean_evaluation(123, 0, 1)

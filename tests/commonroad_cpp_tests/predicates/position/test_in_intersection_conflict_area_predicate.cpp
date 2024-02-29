@@ -31,7 +31,7 @@ void InIntersectionConflictAreaPredicateTest::SetUp() {
 
     auto roadNetwork = std::make_shared<RoadNetwork>(
         RoadNetwork(lanelets, SupportedTrafficSignCountry::GERMANY, {}, {}, {intersection1}));
-    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
 TEST_F(InIntersectionConflictAreaPredicateTest, BooleanEvaluationObjects) {
@@ -50,7 +50,8 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario1) {
                                   "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_2_T-1.pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    auto world{std::make_shared<World>(
+        World("testWorld", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
@@ -77,7 +78,8 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario2) {
                                   "/predicates/DEU_TestRightBeforeLeft-1/DEU_TestRightBeforeLeft-1_2_T-1.pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    auto world{std::make_shared<World>(
+        World("testWorld", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));
@@ -106,7 +108,8 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario3) {
                                   "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_8_T-1.pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    auto world{std::make_shared<World>(
+        World("testWorld", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0), obstaclesScenarioOne.at(1)));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1), obstaclesScenarioOne.at(0)));

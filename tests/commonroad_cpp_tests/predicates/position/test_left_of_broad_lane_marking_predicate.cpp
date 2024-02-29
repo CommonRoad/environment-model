@@ -32,7 +32,7 @@ void LeftOfBroadLaneMarkingPredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network_3()};
 
-    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {}, 0.1));
 }
 
 // See adding one more lane to the network

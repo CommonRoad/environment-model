@@ -53,7 +53,7 @@ void TestSafeDistanceToVrusPredicate::SetUp() {
 TEST_F(TestSafeDistanceToVrusPredicate, Urban) {
     auto roadNetwork1{utils_predicate_test::create_road_network_with_2_successors(
         {LaneletType::urban}, {LaneletType::urban}, {LaneletType::urban}, {LaneletType::urban})};
-    auto world = std::make_shared<World>(World(0, roadNetwork1, {egoVehicle}, {obstacleOne}, 0.1));
+    auto world = std::make_shared<World>(World("testWorld", 0, roadNetwork1, {egoVehicle}, {obstacleOne}, 0.1));
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle, obstacleOne));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, obstacleOne));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, obstacleOne));
@@ -66,7 +66,7 @@ TEST_F(TestSafeDistanceToVrusPredicate, Urban) {
 TEST_F(TestSafeDistanceToVrusPredicate, Interstate) {
     auto roadNetwork2{utils_predicate_test::create_road_network_with_2_successors(
         {LaneletType::interstate}, {LaneletType::interstate}, {LaneletType::interstate}, {LaneletType::interstate})};
-    auto world = std::make_shared<World>(World(0, roadNetwork2, {egoVehicle}, {obstacleOne}, 0.1));
+    auto world = std::make_shared<World>(World("testWorld", 0, roadNetwork2, {egoVehicle}, {obstacleOne}, 0.1));
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle, obstacleOne));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, obstacleOne));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, obstacleOne));
@@ -79,13 +79,13 @@ TEST_F(TestSafeDistanceToVrusPredicate, Interstate) {
 TEST_F(TestSafeDistanceToVrusPredicate, RobustEvaluation) {
     auto roadNetwork2{utils_predicate_test::create_road_network_with_2_successors(
         {LaneletType::interstate}, {LaneletType::interstate}, {LaneletType::interstate}, {LaneletType::interstate})};
-    auto world = std::make_shared<World>(World(0, roadNetwork2, {egoVehicle}, {obstacleOne}, 0.1));
+    auto world = std::make_shared<World>(World("testWorld", 0, roadNetwork2, {egoVehicle}, {obstacleOne}, 0.1));
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, egoVehicle), std::runtime_error);
 }
 
 TEST_F(TestSafeDistanceToVrusPredicate, ConstraintEvaluation) {
     auto roadNetwork2{utils_predicate_test::create_road_network_with_2_successors(
         {LaneletType::interstate}, {LaneletType::interstate}, {LaneletType::interstate}, {LaneletType::interstate})};
-    auto world = std::make_shared<World>(World(0, roadNetwork2, {egoVehicle}, {obstacleOne}, 0.1));
+    auto world = std::make_shared<World>(World("testWorld", 0, roadNetwork2, {egoVehicle}, {obstacleOne}, 0.1));
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, egoVehicle), std::runtime_error);
 }

@@ -72,16 +72,16 @@ void ExistStandingLeadingVehiclePredicateTest::SetUp() {
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world0 = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {obstacleFour}, 0.1));
+    world0 = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {obstacleFour}, 0.1));
 
-    world1 =
-        std::make_shared<World>(World(1, roadNetwork, {egoVehicle}, {obstacleOne, obstacleTwo, obstacleFour}, 0.1));
+    world1 = std::make_shared<World>(
+        World("testWorld", 1, roadNetwork, {egoVehicle}, {obstacleOne, obstacleTwo, obstacleFour}, 0.1));
 
-    world2 =
-        std::make_shared<World>(World(2, roadNetwork, {egoVehicle}, {obstacleOne, obstacleTwo, obstacleThree}, 0.1));
+    world2 = std::make_shared<World>(
+        World("testWorld", 2, roadNetwork, {egoVehicle}, {obstacleOne, obstacleTwo, obstacleThree}, 0.1));
 
-    world3 =
-        std::make_shared<World>(World(3, roadNetwork, {egoVehicle}, {obstacleOne, obstacleTwo, obstacleThree}, 0.1));
+    world3 = std::make_shared<World>(
+        World("testWorld", 3, roadNetwork, {egoVehicle}, {obstacleOne, obstacleTwo, obstacleThree}, 0.1));
 }
 
 TEST_F(ExistStandingLeadingVehiclePredicateTest, BooleanEvaluationObjects) {

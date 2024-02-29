@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <memory>
@@ -13,11 +6,11 @@
 
 #include <commonroad_cpp/world.h>
 
-World::World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+World::World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
              std::vector<std::shared_ptr<Obstacle>> egos, std::vector<std::shared_ptr<Obstacle>> otherObstacles,
              double timeStepSize)
-    : timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egos)), obstacles(std::move(otherObstacles)),
-      dt(timeStepSize) {
+    : name(name), timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egos)),
+      obstacles(std::move(otherObstacles)), dt(timeStepSize) {
     for (const auto &lane : roadNetwork->getLanes())
         idCounter = std::max(idCounter, lane->getId());
     for (const auto &lanelet : roadNetwork->getLaneletNetwork())
@@ -81,3 +74,5 @@ void World::setCurvilinearStates() {
 }
 
 void World::setEgoVehicles(std::vector<std::shared_ptr<Obstacle>> &egos) { egoVehicles = egos; }
+
+const std::string &World::getName() const { return name; }

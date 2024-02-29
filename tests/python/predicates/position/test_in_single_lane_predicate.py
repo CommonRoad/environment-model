@@ -35,7 +35,7 @@ class TestInSameLanePredicate(unittest.TestCase):
                                          CustomState(time_step=4, position=np.array([40, 2]), velocity=10,
                                                      acceleration=0, orientation=0)]), Rectangle(5, 2)))
 
-        crcpp.register_scenario(123, 0, 0.1, "DEU", self.lanelet_network, [obstacle_1], [])
+        crcpp.register_scenario(123, "testScenario", 0, 0.1, "DEU", self.lanelet_network, [obstacle_1], [])
 
         # Monitor-Mode
         sol_monitor_mode_1 = crcpp.in_single_lane_boolean_evaluation(123, 0, 1)

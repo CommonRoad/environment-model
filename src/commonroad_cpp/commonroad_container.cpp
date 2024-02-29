@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <stdexcept>
 
 #include <commonroad_cpp/world.h>
@@ -15,14 +8,14 @@
 std::shared_ptr<CommonRoadContainer> CommonRoadContainer::instance =
     nullptr; // with static declaration, this can live outside of class instance
 
-void CommonRoadContainer::registerScenario(const size_t scenarioId, size_t timeStep, double timeStepSize,
-                                           const std::shared_ptr<RoadNetwork> &roadNetwork,
+void CommonRoadContainer::registerScenario(const size_t scenarioId, const std::string &name, size_t timeStep,
+                                           double timeStepSize, const std::shared_ptr<RoadNetwork> &roadNetwork,
                                            const std::vector<std::shared_ptr<Obstacle>> &egoVehicles,
                                            const std::vector<std::shared_ptr<Obstacle>> &obstacleList) {
     if (worldList.find(scenarioId) != worldList.end())
         return; // ID does already exist
     worldList.insert(
-        {scenarioId, std::make_shared<World>(timeStep, roadNetwork, egoVehicles, obstacleList, timeStepSize)});
+        {scenarioId, std::make_shared<World>(name, timeStep, roadNetwork, egoVehicles, obstacleList, timeStepSize)});
 }
 
 std::shared_ptr<CommonRoadContainer> CommonRoadContainer::getInstance() {

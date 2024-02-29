@@ -51,7 +51,7 @@ void TestOvertakingBicycleSameLanePredicate::SetUp() {
 TEST_F(TestOvertakingBicycleSameLanePredicate, BooleanEvaluationObjectsNoBicycle) {
     // only obstacleEgo, no bicycle
     auto roadNetwork{utils_predicate_test::create_road_network()};
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleEgo}, {}, 0.1));
+    std::shared_ptr<World> world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {}, 0.1));
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleEgo));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleEgo));
@@ -67,7 +67,8 @@ TEST_F(TestOvertakingBicycleSameLanePredicate, BooleanEvaluationObjectsNoBicycle
 TEST_F(TestOvertakingBicycleSameLanePredicate, BooleanEvaluationObjectsOvertakingBicycle) {
     // obsstacleEgo overtakes bicycle at timesteps 2, 3, and 4
     auto roadNetwork{utils_predicate_test::create_road_network()};
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
+    std::shared_ptr<World> world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
 
     //    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleEgo));
     //    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleEgo));
@@ -79,7 +80,7 @@ TEST_F(TestOvertakingBicycleSameLanePredicate, BooleanEvaluationObjectsOvertakin
     EXPECT_FALSE(pred.booleanEvaluation(7, world, obstacleEgo));
     //    EXPECT_FALSE(pred.booleanEvaluation(8, world, obstacleEgo));
     //
-    //    world = std::make_shared<World>(World(0, roadNetwork, {obstacleOne}, {obstacleEgo}, 0.1));
+    //    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleOne}, {obstacleEgo}, 0.1));
     //    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne));
     //    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne));
     //    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne));
@@ -93,12 +94,14 @@ TEST_F(TestOvertakingBicycleSameLanePredicate, BooleanEvaluationObjectsOvertakin
 
 TEST_F(TestOvertakingBicycleSameLanePredicate, RobustEvaluation) {
     auto roadNetwork{utils_predicate_test::create_road_network()};
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
+    std::shared_ptr<World> world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
 }
 
 TEST_F(TestOvertakingBicycleSameLanePredicate, ConstraintEvaluation) {
     auto roadNetwork{utils_predicate_test::create_road_network()};
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
+    std::shared_ptr<World> world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
 }

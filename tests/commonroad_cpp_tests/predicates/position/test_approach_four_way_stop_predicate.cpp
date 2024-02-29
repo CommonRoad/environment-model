@@ -33,8 +33,8 @@ void ApproachFourWayStopPredicateTest::SetUp() {
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
-    world = std::make_shared<World>(World(0, roadNetwork, {egoVehicle}, {}, 0.1));
-    world_2 = std::make_shared<World>(World(0, roadNetwork2, {egoVehicle}, {}, 0.1));
+    world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {}, 0.1));
+    world_2 = std::make_shared<World>(World("testWorld", 0, roadNetwork2, {egoVehicle}, {}, 0.1));
 }
 
 TEST_F(ApproachFourWayStopPredicateTest, BooleanEvaluation) {

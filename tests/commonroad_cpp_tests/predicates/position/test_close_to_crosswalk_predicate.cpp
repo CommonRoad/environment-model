@@ -11,7 +11,7 @@ void ClossToCrosswalkPredicateTest::SetUp() {
     obstacleOne = obstacles[0];
     obstacleTwo = obstacles[1];
     world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, timeStepSize));
+        World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, timeStepSize));
 }
 
 TEST_F(ClossToCrosswalkPredicateTest, BooleanEvaluation) {

@@ -36,7 +36,7 @@ void StopLineInFrontPredicateTest::SetUp() {
     auto roadNetwork{utils_predicate_test::create_road_network_2()};
 
     world = std::make_shared<World>(
-        World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, 0.1));
+        World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, 0.1));
 }
 
 TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
@@ -58,7 +58,8 @@ TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
                                   "/predicates/DEU_TestStopLine-1/DEU_TestStopLine-1_1_T-1.pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    auto world{std::make_shared<World>(World(0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
+    auto world{std::make_shared<World>(
+        World("testWorld", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(0)));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(1)));

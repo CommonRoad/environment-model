@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
 
 class RoadNetwork;
@@ -11,14 +12,16 @@ class World {
     /**
      * Constructor for world.
      *
+     * @param ID/Name of world.
      * @param timeStep Current time step of world object.
      * @param roadNetwork Currently relevant road network.
      * @param egos List of ego vehicles.
      * @param otherObstacles List of obstacles.
      * @param timeStepSize Time step size [s].
      */
-    World(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, std::vector<std::shared_ptr<Obstacle>> egos,
-          std::vector<std::shared_ptr<Obstacle>> otherObstacles, double timeStepSize);
+    World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+          std::vector<std::shared_ptr<Obstacle>> egos, std::vector<std::shared_ptr<Obstacle>> otherObstacles,
+          double timeStepSize);
 
     /**
      * Getter for world time step.
@@ -83,16 +86,24 @@ class World {
      * Creates pointer to ID counter so that it can be increased by other classes.
      * @return Pointer to ID counter.
      */
-    std::shared_ptr<size_t> getIdCounterRef() const;
+    [[nodiscard]] std::shared_ptr<size_t> getIdCounterRef() const;
 
     /**
      * Getter for time step size.
      *
      * @return Time step size [s].
      */
-    double getDt() const;
+    [[nodiscard]] double getDt() const;
+
+    /**
+     * Getter for name.
+     *
+     * @return Name of world.
+     */
+    [[nodiscard]] const std::string &getName() const;
 
   private:
+    std::string name;                                   //**< ID/name of world. */
     size_t timeStep;                                    //**< reference time step where world was created. */
     size_t idCounter{0};                                //**< counter to ensure unique IDs among all objects. */
     std::shared_ptr<RoadNetwork> roadNetwork;           //**< road network containing lanelets, traffic signs, etc. */

@@ -30,7 +30,7 @@ void OnRoadPredicateTest::initializeTestData(LaneletType laneletTypeRight, Lanel
                                              LaneletType laneletTypeSuccessorLeft) {
     auto roadNetwork{utils_predicate_test::create_road_network_with_2_successors(
         {laneletTypeRight}, {laneletTypeLeft}, {laneletTypeSuccessorRight}, {laneletTypeSuccessorLeft})};
-    this->world = std::make_shared<World>(World(0, roadNetwork, {this->egoVehicle}, {}, 0.1));
+    this->world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {this->egoVehicle}, {}, 0.1));
 }
 
 TEST_F(OnRoadPredicateTest, AllUrban) {
