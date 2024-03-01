@@ -83,7 +83,7 @@ Scenario readFromProtobufFile(const std::string &pbFilePath) {
 } // namespace
 
 Scenario InputUtils::getDataFromCommonRoad(const std::string &path) {
-    spdlog::info("Read file: {}", path);
+    spdlog::debug("Read file: {}", path);
     std::vector<std::string> fileEndingSplit;
     boost::split(fileEndingSplit, path, boost::is_any_of("."));
     Scenario scenario;
@@ -94,6 +94,6 @@ Scenario InputUtils::getDataFromCommonRoad(const std::string &path) {
     else
         throw std::runtime_error("Invalid file name " + path + ": .xml or .pb ending missing!");
 
-    spdlog::info("File successfully read: {}", path);
+    spdlog::debug("File successfully read: {}", path);
     return scenario;
 }
