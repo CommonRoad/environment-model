@@ -1,17 +1,23 @@
+//
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
+//
+
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
-#include "commonroad_cpp/world.h"
 
 /**
- * Evaluates whether the a vehicle has a stop line in front (<5m).
+ * Evaluates whether the a vehicle has a stop line directly in front (<1m).
  */
-class StopLineInFrontPredicate : public CommonRoadPredicate {
+class CloseToStopLinePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for StopLineInFrontPredicate.
+     * Constructor for CloseToStopLinePredicate.
      */
-    StopLineInFrontPredicate();
+    CloseToStopLinePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

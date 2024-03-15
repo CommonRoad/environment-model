@@ -168,6 +168,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.cpp
         commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.cpp
+        commonroad_cpp/predicates/regulatory/close_to_stop_line_predicate.cpp
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/same_priority_predicate.cpp
         commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
@@ -247,6 +248,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h
         commonroad_cpp/predicates/regulatory/same_priority_predicate.h
         commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h
+        commonroad_cpp/predicates/regulatory/close_to_stop_line_predicate.h
         commonroad_cpp/predicates/velocity/drives_faster_predicate.h
         commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h
         commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.h
