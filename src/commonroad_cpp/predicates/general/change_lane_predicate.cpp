@@ -30,26 +30,47 @@ bool ChangeLanePredicate::booleanEvaluation(
                         }))
             return false;
     }
+
     // Check if vehicle is changing to the left adjacent
     if (additionalFunctionParameters->turningDirection.front() == TurningDirection::left) {
         for (const auto &front : occupiedLaneletsFront) {
-            if (std::any_of(occupiedLaneletsBack.begin(), occupiedLaneletsBack.end(),
-                            [front, additionalFunctionParameters](const std::shared_ptr<Lanelet> &back) {
-                                if (back->getAdjacentLeft().adj)
-                                    return back->getAdjacentLeft().adj->getId() == front->getId();
-                                return false;
-                            }))
+            if (std::any_of(
+                    occupiedLaneletsBack.begin(), occupiedLaneletsBack.end(),
+                    [&](const std::shared_ptr<Lanelet> &back) {
+                        auto occDrivDir =
+                            obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
+                        if (back->getAdjacentLeft().adj &&
+                            // check whether lanelet occupied by the back of the car has a left adjacent which is
+                            // occupied by the front of the car
+                            back->getAdjacentLeft().adj->getId() == front->getId() &&
+                            // check if back is also in the lanelts, which are occupied and in driving direction,
+                            // to avoid false positive if changing to the right coming from oncoming lanelet
+                            std::any_of(occDrivDir.begin(), occDrivDir.end(),
+                                        [back](const auto &occ) { return back->getId() == occ->getId(); }))
+                            return true;
+                        return false;
+                    }))
                 return true;
         }
     } // Check if vehicle is changing to the right adjacent
     else if (additionalFunctionParameters->turningDirection.front() == TurningDirection::right) {
         for (const auto &front : occupiedLaneletsFront) {
-            if (std::any_of(occupiedLaneletsBack.begin(), occupiedLaneletsBack.end(),
-                            [front, additionalFunctionParameters](const std::shared_ptr<Lanelet> &back) {
-                                if (back->getAdjacentRight().adj)
-                                    return back->getAdjacentRight().adj->getId() == front->getId();
-                                return false;
-                            }))
+            if (std::any_of(
+                    occupiedLaneletsBack.begin(), occupiedLaneletsBack.end(),
+                    [&](const std::shared_ptr<Lanelet> &back) {
+                        auto occ =
+                            obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
+                        // check whether lanelet occupied by the back of the car has a right adjacent which is
+                        // occupied by the front of the car
+                        if (back->getAdjacentRight().adj && back->getAdjacentRight().adj->getId() == front->getId())
+                            return true;
+                        // Catch false negative if changing to the right if coming from oncoming lanelet
+                        if (back->getAdjacentLeft().adj && back->getAdjacentLeft().adj->getId() == front->getId() &&
+                            std::none_of(occ.begin(), occ.end(),
+                                         [back](const auto &occ) { return back->getId() == occ->getId(); }))
+                            return true;
+                        return false;
+                    }))
                 return true;
         }
     } else {

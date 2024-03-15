@@ -20,6 +20,7 @@ class ChangeLanePredicateTest : public testing::Test {
     std::string pathToTestFileExitRamp;
     std::string pathToTestFileTwoFollowingLaneletsAndAccessRampFalse;
     std::string pathToTestFileTwoFollowingLaneletsAndAccessRampTrue;
+    std::string pathToTestFileOvertakingOncomingLanelet;
 
     std::shared_ptr<OptionalPredicateParameters> optLeft;
     std::shared_ptr<OptionalPredicateParameters> optRight;
