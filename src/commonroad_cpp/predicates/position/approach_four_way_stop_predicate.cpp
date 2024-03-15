@@ -30,12 +30,8 @@ bool ApproachFourWayStopPredicate::booleanEvaluation(
     // if each lanelet has STOP sign it is 4 way stop
     for (const auto &incoming : currentIntersection->getIncomingGroups()) {
         for (const auto &lanelet : incoming->getIncomingLanelets()) {
-            for (const auto &trafficSigns : lanelet->getTrafficSigns()) {
-                for (const auto &trafficSignElement : trafficSigns->getTrafficSignElements()) {
-                    if (trafficSignElement->getTrafficSignType() == TrafficSignTypes::STOP_4_WAY) {
-                        return true;
-                    }
-                }
+            if (lanelet->hasTrafficSign(TrafficSignTypes::STOP_4_WAY)) {
+                return true;
             }
         }
     }
