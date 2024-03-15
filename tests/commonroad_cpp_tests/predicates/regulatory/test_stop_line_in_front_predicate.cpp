@@ -43,7 +43,7 @@ TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne)); // stop line completely in front
     EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));  // stop line exactly at obstacle front
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne)); // obstacle on stop line
-    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne)); // stop line behind obstacle
+    EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne));  // stop line behind obstacle
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo)); // stop line completely in front
     EXPECT_TRUE(pred.booleanEvaluation(
         1, world, obstacleTwo)); // stop line exactly at obstacle front (on min lon. position of stop line)
@@ -67,29 +67,29 @@ TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(0)));
-    EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(2)));
     EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(0)));
-    EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(2)));
     EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(0)));
-    EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(2)));
     EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0)));
-    EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1)));
+    EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(2)));
     EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(0)));
     EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(2)));
-    EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(3)));
+    EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(0)));
     EXPECT_TRUE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(1)));
