@@ -100,7 +100,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/position/test_overtaking_bicycle_same_lane_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_safe_distance_to_vrus_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_stop_line_in_front_predicate.cpp
-        commonroad_cpp_tests/predicates/regulatory/test_stop_line_in_front_predicate.cpp
+        commonroad_cpp_tests/predicates/regulatory/test_close_to_stop_line_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_at_traffic_light_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_at_traffic_sign_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_same_priority_predicate.cpp

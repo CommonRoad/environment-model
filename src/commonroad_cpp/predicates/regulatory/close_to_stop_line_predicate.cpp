@@ -1,3 +1,10 @@
+//
+// Created by Sebastian Maierhofer.
+// Technical University of Munich - Cyber-Physical Systems Group
+// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
+// Credits: BMW Car@TUM
+//
+
 #include <Eigen/Dense>
 
 #include <commonroad_cpp/obstacle/obstacle.h>
@@ -9,38 +16,40 @@
 #include <commonroad_cpp/world.h>
 #include <geometry/curvilinear_coordinate_system.h>
 
+#include <commonroad_cpp/predicates/regulatory/close_to_stop_line_predicate.h>
 #include <commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h>
 
-bool StopLineInFrontPredicate::booleanEvaluation(
+bool CloseToStopLinePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
-    return std::any_of(lanelets.begin(), lanelets.end(), [&](const std::shared_ptr<Lanelet> &lanelet) {
+    for (const auto &lanelet : lanelets) {
         std::shared_ptr<StopLine> stopLine{lanelet->getStopLine()};
         if (stopLine == nullptr)
-            return false;
+            continue;
 
         if (obstacle_operations::lineInFrontOfObstacle(stopLine->getPoints(), obstacleK, timeStep,
                                                        world->getRoadNetwork()) and
             obstacle_operations::minDistanceToPoint(timeStep, stopLine->getPoints(), obstacleK) <
-                parameters.getParam("stopLineDistance"))
+                parameters.getParam("closeStopLineDistance"))
             return true;
-        return false;
-    });
+    }
+    return false;
 }
 
-double StopLineInFrontPredicate::robustEvaluation(
+double CloseToStopLinePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("StopLineInFrontPredicate does not support robust evaluation!");
 }
 
-Constraint StopLineInFrontPredicate::constraintEvaluation(
+Constraint CloseToStopLinePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     throw std::runtime_error("StopLineInFrontPredicate does not support constraint evaluation!");
 }
-StopLineInFrontPredicate::StopLineInFrontPredicate() : CommonRoadPredicate(false) {}
+
+CloseToStopLinePredicate::CloseToStopLinePredicate() : CommonRoadPredicate(false) {}

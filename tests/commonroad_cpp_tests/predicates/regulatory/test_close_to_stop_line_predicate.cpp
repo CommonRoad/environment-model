@@ -1,8 +1,8 @@
-#include "test_stop_line_in_front_predicate.h"
+#include "test_close_to_stop_line_predicate.h"
 #include "../utils_predicate_test.h"
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
-void StopLineInFrontPredicateTest::SetUp() {
+void CloseToStopLinePredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 5, 2, 17.5, 0, 0, 0, 5, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 5, 6, 17.5, 0, 0, 0, 5, 0);
 
@@ -39,11 +39,11 @@ void StopLineInFrontPredicateTest::SetUp() {
         World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {}, 0.1));
 }
 
-TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
+TEST_F(CloseToStopLinePredicateTest, BooleanEvaluation) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne)); // stop line completely in front
     EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));  // stop line exactly at obstacle front
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne)); // obstacle on stop line
-    EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne));  // stop line behind obstacle
+    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne)); // stop line behind obstacle
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo)); // stop line completely in front
     EXPECT_TRUE(pred.booleanEvaluation(
         1, world, obstacleTwo)); // stop line exactly at obstacle front (on min lon. position of stop line)
@@ -52,7 +52,7 @@ TEST_F(StopLineInFrontPredicateTest, BooleanEvaluation) {
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleTwo)); // stop line behind obstacle
 }
 
-TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
+TEST_F(CloseToStopLinePredicateTest, TestScenario1) {
     std::array<std::string, 1> scenarios{"DEU_testStopLine-1"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
                                   "/predicates/DEU_TestStopLine-1/DEU_TestStopLine-1_1_T-1.pb"};
@@ -67,29 +67,29 @@ TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(0)));
-    EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(2)));
     EXPECT_FALSE(pred.booleanEvaluation(39, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(0)));
-    EXPECT_TRUE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(2)));
     EXPECT_FALSE(pred.booleanEvaluation(40, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(0)));
-    EXPECT_TRUE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(2)));
     EXPECT_FALSE(pred.booleanEvaluation(41, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(0)));
-    EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1)));
+    EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(2)));
     EXPECT_FALSE(pred.booleanEvaluation(44, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(0)));
     EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(1)));
     EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(2)));
-    EXPECT_TRUE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(3)));
+    EXPECT_FALSE(pred.booleanEvaluation(69, world, obstaclesScenarioOne.at(3)));
 
     EXPECT_FALSE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(0)));
     EXPECT_TRUE(pred.booleanEvaluation(70, world, obstaclesScenarioOne.at(1)));
@@ -102,10 +102,10 @@ TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
     EXPECT_FALSE(pred.booleanEvaluation(150, world, obstaclesScenarioOne.at(3)));
 }
 
-TEST_F(StopLineInFrontPredicateTest, RobustEvaluation) {
+TEST_F(CloseToStopLinePredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }
 
-TEST_F(StopLineInFrontPredicateTest, ConstraintEvaluation) {
+TEST_F(CloseToStopLinePredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }
