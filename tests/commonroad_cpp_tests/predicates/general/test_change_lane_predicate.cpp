@@ -78,6 +78,10 @@ void ChangeLanePredicateTest::SetUp() {
                                                           "/predicates/DEU_TestOnFollowingLaneletsAndAccessRampTrue-1/"
                                                           "DEU_TestOnFollowingLaneletsAndAccessRampTrue-1_1_T-1.pb";
 
+    pathToTestFileOvertakingOncomingLanelet = TestUtils::getTestScenarioDirectory() +
+                                              "/predicates/DEU_testOvertakingAllowed-1/"
+                                              "DEU_testOvertakingAllowed-1.pb";
+
     optLeft = std::make_shared<OptionalPredicateParameters>();
     optLeft->turningDirection = {TurningDirection::left};
     optRight = std::make_shared<OptionalPredicateParameters>();
@@ -192,4 +196,19 @@ TEST_F(ChangeLanePredicateTest, OnFollowingLaneletsAndAccessRampNotConnected) {
     std::shared_ptr<World> world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacles[0]}, {}, 0.1));
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacles[0], {}, optRight));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacles[0], {}, optLeft));
+}
+
+TEST_F(ChangeLanePredicateTest, OvertakingOncomingTraffic) {
+    // test case assumes invalid lanelet network (missing successor relationship)
+    const auto &[obstacles, roadNetwork, timeStepSize] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOvertakingOncomingLanelet);
+    std::shared_ptr<World> world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacles[0]}, {}, 0.1));
+    EXPECT_FALSE(pred.booleanEvaluation(10, world, obstacles[0], {}, optRight));
+    EXPECT_TRUE(pred.booleanEvaluation(10, world, obstacles[0], {}, optLeft));
+    EXPECT_FALSE(pred.booleanEvaluation(11, world, obstacles[0], {}, optRight));
+    EXPECT_TRUE(pred.booleanEvaluation(11, world, obstacles[0], {}, optLeft));
+    EXPECT_TRUE(pred.booleanEvaluation(36, world, obstacles[0], {}, optRight));
+    EXPECT_FALSE(pred.booleanEvaluation(36, world, obstacles[0], {}, optLeft));
+    EXPECT_TRUE(pred.booleanEvaluation(37, world, obstacles[0], {}, optRight));
+    EXPECT_FALSE(pred.booleanEvaluation(37, world, obstacles[0], {}, optLeft));
 }

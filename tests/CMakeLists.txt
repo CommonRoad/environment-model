@@ -57,6 +57,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/general/test_narrow_road_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_in_lanelet_driving_dir_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_obstacle_is_static_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_overtaking_allowed_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_two_or_more_lanes_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_approach_four_way_stop_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_approach_intersection_predicate.cpp
