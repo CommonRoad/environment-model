@@ -18,13 +18,13 @@ pip install -v .
 ```bash
 python setup.py install
 ```
-They do not consider modern Python packaging standards and can cause various issues.
+This command does not consider modern Python packaging standards and can cause various issues.
 
 #### Accelerating Repeated Builds
 It is possible to significantly speed up repeated builds
 of the Python module by specifying the `--no-build-isolation` flag:
 ```
-pip install -v --no-build-isolation .
+pip install --no-build-isolation -ve.
 ```
 This is completely optional. It might require some additional steps outlined below.
 
@@ -43,6 +43,7 @@ To install them, run the following:
 ```
 pip install "setuptools>=61.0" "wheel" "scikit-build-core~=0.6.0" "pybind11~=2.11.1" "setuptools_scm[toml]>=7.1.0"
 ```
+**Note that the package version might have changed in the meantime!**
 
 ### Debugging the C++ interface codr from Python
 For debugging the Python interface you can use the methods described [here](https://www.jetbrains.com/help/clion/debugging-python-extensions.html#debug-custom-py) (Option 2).   
