@@ -344,9 +344,67 @@ class Obstacle {
     [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
     getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
+    /**
+     * Extracts occupied lanes and adjacent lanes of them for given time step.
+     *
+     * @param roadNetwork CommonRoad road network.
+     * @param timeStep Time step of interest.
+     * @return List of pointers to lanes.
+     */
+    std::vector<std::shared_ptr<Lane>> getOccupiedLanesAndAdjacent(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                                   size_t timeStep);
+
+    /**
+     * Extracts the occupied lanelets in driving direction for given time step. Lanelets in opposite driving direction
+     * are not considered.
+     *
+     * @param roadNetwork CommonRoad road network.
+     * @param timeStep Time step of interest.
+     * @return List of occupied lanelets.
+     */
     [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
     getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
+    /**
+     * Extracts the occupied lanelets of road for given time step. Lanelets in opposite driving direction are
+     * considered.
+     *
+     * @param roadNetwork CommonRoad road network.
+     * @param timeStep Time step of interest.
+     * @return List of pointers to occupied lanelets.
+     */
+    std::vector<std::shared_ptr<Lanelet>>
+    getOccupiedLaneletsRoadByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+
+    /**
+     * Extracts the occupied lanes in driving direction for given time step. Lanes in opposite driving direction are not
+     * considered.
+     *
+     * @param roadNetwork CommonRoad road network.
+     * @param timeStep Time step of interest.
+     * @return List of pointers to occupied lanes.
+     */
+    std::vector<std::shared_ptr<Lane>> getOccupiedLanesDrivingDirection(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                                        size_t timeStep);
+
+    /**
+     * Sets the occupied lanelets in driving direction for given time step. Lanes in opposite driving direction are not
+     * considered.
+     *
+     * @param roadNetwork CommonRoad road network.
+     * @param timeStep Time step of interest.
+     * @return List of pointers to occupied lanelets.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
+    setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+
+    /**
+     * Sets the occupied lanelets not in driving direction for given time step.
+     *
+     * @param roadNetwork CommonRoad road network.
+     * @param timeStep Time step of interest.
+     * @return List of pointers to occupied lanelets.
+     */
     [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
     getOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
 
@@ -612,14 +670,13 @@ class Obstacle {
                                                         time_step_t timeStep); // TODO create test case
 
     /**
-     * Computes driving paths at time step. Driving path is defined by all lanes completely adjacent to reference lane.
-     *
-     * @param roadNetwork Pointer to road network.
+     * Extracts the occupied lanes of road for given time step. Lanes in opposite driving direction are considered.
+     * @param roadNetwork CommonRoad road network.
      * @param timeStep Time step of interest.
-     * @return List of pointers to lanes which are part of driving path.
+     * @return List of pointers to occupied lanes.
      */
-    std::vector<std::shared_ptr<Lane>> getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                           time_step_t timeStep); // TODO create test case
+    std::vector<std::shared_ptr<Lane>> getOccupiedRoadLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                            size_t timeStep); // TODO create test case
 
     /**
      * Converts the x- and y-coordinate into the Curvilinear domain given own reference lane.
@@ -882,16 +939,6 @@ class Obstacle {
                                                                      time_step_t timeStep);
 
     /**
-     * Sets the occupied lanelets in driving direction for a time step.
-     *
-     * @param roadNetwork Road network.
-     * @param timeStep Time step of interest.
-     * @return List of occupied lanelets in driving direction.
-     */
-    std::vector<std::shared_ptr<Lanelet>>
-    setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
-
-    /**
      * Sets the occupied lanelets not in driving direction for a time step.
      *
      * @param roadNetwork Road network.
@@ -920,18 +967,6 @@ class Obstacle {
      * @return Pointer to lane object.
      */
     std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
-
-    /**
-     * Computes main reference path of obstacle at given time step.
-     *
-     * @param roadNetwork Road network.
-     * @param timeStep Time step of interest.
-     * @param lane Relevant lanes used for computing reference path.
-     *
-     * @return Lane which is used as reference path.
-     */
-    std::vector<std::shared_ptr<Lane>> computeMainRef(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                                                      const std::vector<std::shared_ptr<Lane>> &lane);
 
     /**
      * Creates logging message in case of ccs conversion errors.

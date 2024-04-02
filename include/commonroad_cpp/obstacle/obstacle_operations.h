@@ -22,16 +22,16 @@ std::shared_ptr<Obstacle> getObstacleById(const std::vector<std::shared_ptr<Obst
                                           size_t obstacleId);
 
 /**
-     * Checks if a line is in front
-     *
-     * @param line Line of interest
-     * @param obs Obstacle of interest
-     * @param timeStep timestep of interest
-     * @param roadNetwork Roadnetwork
-     * @return bool
+ * Checks if a line is in front
+ *
+ * @param line Line of interest
+ * @param obs Obstacle of interest
+ * @param timeStep timestep of interest
+ * @param roadNetwork Roadnetwork
+ * @return bool
  */
 bool lineInFrontOfObstacle(const std::pair<vertex, vertex> &line, const std::shared_ptr<Obstacle> &obs, size_t timeStep,
-                        const std::shared_ptr<RoadNetwork> &roadNetwork);
+                           const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 /**
  * Matches a string to an obstacle type
@@ -42,13 +42,14 @@ bool lineInFrontOfObstacle(const std::pair<vertex, vertex> &line, const std::sha
 ObstacleType matchStringToObstacleType(const std::string &type);
 
 /**
-     * Calculates the min distance from the shape to a line
-     *
-     * @param line Line of interest
-     * @param shape vehicle shape
-     * @return double
+ * Calculates the min distance from the shape to a line
+ *
+ * @param line Line of interest
+ * @param shape vehicle shape
+ * @return double
  */
-double minDistanceToPoint(size_t timeStep, const std::pair<vertex, vertex> &line, const std::shared_ptr<Obstacle> &obstacleK);
+double minDistanceToPoint(size_t timeStep, const std::pair<vertex, vertex> &line,
+                          const std::shared_ptr<Obstacle> &obstacleK);
 
 /**
  * Computes obstacle which is directly left of a given obstacle.

@@ -15,6 +15,7 @@ class TestOncomingVehiclePredicate : public testing::Test {
     OncomingVehiclePredicate pred;
     std::string pathToTestFile;
     std::string pathToTestFileOncoming;
+    void initObstacles();
 
   private:
     void SetUp() override;

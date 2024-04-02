@@ -9,6 +9,11 @@
 class NarrowRoadPredicateTest : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> egoVehicle;
+    std::shared_ptr<Obstacle> egoVehicle2;
+    std::shared_ptr<Obstacle> egoVehicle3;
+    std::shared_ptr<Obstacle> egoVehicle4;
+    std::shared_ptr<Obstacle> egoVehicle5;
+    std::shared_ptr<Obstacle> egoVehicle6;
     NarrowRoadPredicate pred;
     std::shared_ptr<World> world;
     std::shared_ptr<World> world2;

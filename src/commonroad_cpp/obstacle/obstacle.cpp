@@ -606,7 +606,7 @@ void Obstacle::setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes,
 void Obstacle::setObstacleRole(ObstacleRole type) { obstacleRole = type; }
 
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
-    auto lanelets{getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep)};
+    auto lanelets{getOccupiedLaneletsRoadByShape(roadNetwork, timeStep)};
     assert(sensorParameters);
     std::vector<std::shared_ptr<Lane>> occLanes{lane_operations::createLanesBySingleLanelets(
         lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront(), 2,
@@ -614,8 +614,72 @@ void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
     occupiedLanes[timeStep] = occLanes;
 }
 
-std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                                 size_t timeStep) {
+std::vector<std::shared_ptr<Lanelet>>
+Obstacle::getOccupiedLaneletsRoadByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+
+    std::set<size_t> relevantLanelets1;
+    std::set<size_t> relevantLanelets2;
+    auto lets{getOccupiedLaneletsByShape(roadNetwork, timeStep)};
+    for (const auto &let : lets) {
+        relevantLanelets1.insert(let->getId());
+    }
+
+    // special case where obstacle drives mostly on lanelets in other driving direction (see
+    // SetReferenceGeneralScenario4 test case)
+    size_t startTime{0};
+    if (timeStep < relevantTimeIntervalSize)
+        startTime = firstTimeStep;
+    else
+        startTime = std::max(firstTimeStep, timeStep - relevantTimeIntervalSize);
+
+    // find all paths for all occupied initial lanelets to all occupied final lanelets
+    for (const auto &initialLet : getOccupiedLaneletsByShape(roadNetwork, startTime))
+        for (const auto &finalLet :
+             getOccupiedLaneletsByShape(roadNetwork, std::min(finalTimeStep, timeStep + relevantTimeIntervalSize))) {
+            auto path{roadNetwork->getTopologicalMap()->findPaths(initialLet->getId(), finalLet->getId(), true)};
+            relevantLanelets2.insert(path.begin(), path.end());
+        }
+
+    // get lanelet objects for relevant lanelets and also consider adjacent lanelets
+    for (const auto &letBase : relevantLanelets2)
+        for (const auto &adj : lanelet_operations::adjacentLanelets(roadNetwork->findLaneletById(letBase), true))
+            relevantLanelets2.insert(adj->getId());
+
+    // todo part above could be extracted and only computed on demand (usually when trajectoryPrediction changes)
+    // restrict lanelets to the ones which are currently occupied
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    for (const auto &letBase : getOccupiedLaneletsByShape(roadNetwork, timeStep))
+        if (relevantLanelets1.find(letBase->getId()) != relevantLanelets1.end() and
+            relevantLanelets2.find(letBase->getId()) != relevantLanelets2.end())
+            lanelets.push_back(letBase);
+
+    return lanelets;
+}
+
+std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedRoadLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                                  size_t timeStep) {
+    auto occLanes{getOccupiedLanes(roadNetwork, timeStep)};
+    if (occLanes.size() == 1)
+        return occLanes;
+    else {
+        auto occLanelets{getOccupiedLaneletsRoadByShape(roadNetwork, timeStep)};
+        std::vector<std::shared_ptr<Lane>> relevantLanes;
+        for (const auto &lane : occLanes) {
+            if (lane->getId() == getReferenceLane(roadNetwork, timeStep)->getId()) {
+                relevantLanes.push_back(lane);
+                continue;
+            }
+            // check whether lanelet is adjacent to reference lane
+            if (lanelet_operations::areLaneletsInDirectlyAdjacentLanes(getReferenceLane(roadNetwork, timeStep), lane,
+                                                                       occLanelets))
+                relevantLanes.push_back(lane);
+        }
+        return relevantLanes;
+    }
+}
+
+std::vector<std::shared_ptr<Lane>>
+Obstacle::getOccupiedLanesDrivingDirection(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     auto occLanes{getOccupiedLanes(roadNetwork, timeStep)};
     if (occLanes.size() == 1)
         return occLanes;
@@ -627,11 +691,12 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getDrivingPathLanes(const std::shar
                 relevantLanes.push_back(lanelet);
                 continue;
             }
+            // check whether lanelet is adjacent to reference lane
             if (lanelet_operations::areLaneletsInDirectlyAdjacentLanes(getReferenceLane(roadNetwork, timeStep), lanelet,
                                                                        occLanelets))
                 relevantLanes.push_back(lanelet);
         }
-        return {relevantLanes};
+        return relevantLanes;
     }
 }
 
@@ -640,6 +705,29 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_
     if (occupiedLanes[timeStep].empty())
         setOccupiedLanes(roadNetwork, timeStep);
     return occupiedLanes[timeStep];
+}
+
+std::vector<std::shared_ptr<Lane>>
+Obstacle::getOccupiedLanesAndAdjacent(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+    std::set<size_t> relevantLanelets;
+    std::vector<std::shared_ptr<Lanelet>> lanelets;
+    auto lets{getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep)};
+    if (lets.empty())
+        lets = getOccupiedLaneletsByShape(roadNetwork, timeStep);
+    for (const auto &let : lets) {
+        relevantLanelets.insert(let->getId());
+        for (const auto &let2 : lanelet_operations::adjacentLanelets(let, false))
+            relevantLanelets.insert(let2->getId());
+    }
+    for (const auto &id : relevantLanelets)
+        lanelets.push_back(roadNetwork->findLaneletById(id));
+
+    assert(sensorParameters);
+    std::vector<std::shared_ptr<Lane>> occLanes{lane_operations::createLanesBySingleLanelets(
+        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront(), 2,
+        {getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition()})};
+
+    return occLanes;
 }
 
 void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, bool considerHistory) {
@@ -689,6 +777,19 @@ Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
     if (occupiedLaneletsDrivingDir.find(timeStep) != occupiedLaneletsDrivingDir.end())
         return occupiedLaneletsDrivingDir[timeStep];
 
+    std::set<size_t> relevantLanelets1;
+    std::set<size_t> relevantLanelets2;
+
+    auto occLanelets{getOccupiedLaneletsByShape(roadNetwork, timeStep)};
+    for (const auto &la : occLanelets)
+        if (std::abs(geometric_operations::subtractOrientations(
+                la->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                             getStateByTimeStep(timeStep)->getYPosition()),
+                getStateByTimeStep(timeStep)->getGlobalOrientation())) < 0.785)
+            relevantLanelets1.insert(la->getId());
+
+    // special case where obstacle drives mostly on lanelets in other driving direction (see
+    // SetReferenceGeneralScenario4 test case)
     size_t startTime{0};
     if (timeStep < relevantTimeIntervalSize)
         startTime = firstTimeStep;
@@ -696,24 +797,19 @@ Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
         startTime = std::max(firstTimeStep, timeStep - relevantTimeIntervalSize);
 
     // find all paths for all occupied initial lanelets to all occupied final lanelets
-    std::set<size_t> relevantLanelets;
-    for (const auto &initialLet : setOccupiedLaneletsByShape(roadNetwork, startTime))
+    for (const auto &initialLet : getOccupiedLaneletsByShape(roadNetwork, startTime))
         for (const auto &finalLet :
-             setOccupiedLaneletsByShape(roadNetwork, std::min(finalTimeStep, timeStep + relevantTimeIntervalSize))) {
+             getOccupiedLaneletsByShape(roadNetwork, std::min(finalTimeStep, timeStep + relevantTimeIntervalSize))) {
             auto path{roadNetwork->getTopologicalMap()->findPaths(initialLet->getId(), finalLet->getId(), true)};
-            relevantLanelets.insert(path.begin(), path.end());
+            relevantLanelets2.insert(path.begin(), path.end());
         }
-
-    // get lanelet objects for relevant lanelets and also consider adjacent lanelets
-    for (const auto &letBase : relevantLanelets)
-        for (const auto &adj : lanelet_operations::adjacentLanelets(roadNetwork->findLaneletById(letBase), true))
-            relevantLanelets.insert(adj->getId());
 
     // todo part above could be extracted and only computed on demand (usually when trajectoryPrediction changes)
     // restrict lanelets to the ones which are currently occupied
     std::vector<std::shared_ptr<Lanelet>> lanelets;
-    for (const auto &letBase : setOccupiedLaneletsByShape(roadNetwork, timeStep))
-        if (relevantLanelets.find(letBase->getId()) != relevantLanelets.end())
+    for (const auto &letBase : getOccupiedLaneletsByShape(roadNetwork, timeStep))
+        if (relevantLanelets1.find(letBase->getId()) != relevantLanelets1.end() and
+            relevantLanelets2.find(letBase->getId()) != relevantLanelets2.end())
             lanelets.push_back(letBase);
 
     occupiedLaneletsDrivingDir[timeStep] = lanelets;

@@ -1,8 +1,9 @@
 import unittest
 import os
+from pathlib import Path
 
 import crcpp
-from commonroad.common.file_reader import CommonRoadReadAll
+from commonroad.common.file_reader import CommonRoadFileReader
 
 
 class TestPythonInterface(unittest.TestCase):
@@ -16,7 +17,12 @@ class TestPythonInterface(unittest.TestCase):
         scenario_id = 123
         for scenario in self.filenames:
             full_path = self.path + scenario
-            scenario, _, _ = CommonRoadReadAll(full_path).open()
+            scenario_path_tmp = Path(full_path)
+            map_path = (
+                    scenario_path_tmp.parent
+                    / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
+            )
+            scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
             try:
                 print("Converting - " + full_path)
                 crcpp.register_scenario(scenario_id, str(scenario.scenario_id), 0, scenario.dt, "DEU", scenario.lanelet_network,

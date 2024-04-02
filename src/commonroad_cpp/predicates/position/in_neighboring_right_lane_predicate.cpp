@@ -1,7 +1,5 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/world.h>
 
 #include <commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.h>
@@ -12,7 +10,7 @@ bool InNeighboringRightLanePredicate::booleanEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     std::unordered_set<unsigned long> relevantIDs;
     auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    for (const auto &laneK : obstacleK->getDrivingPathLanes(world->getRoadNetwork(), timeStep)) {
+    for (const auto &laneK : obstacleK->getOccupiedRoadLanes(world->getRoadNetwork(), timeStep)) {
         for (const auto &laneletK : laneK->getContainedLanelets()) {
             if (laneletK->getAdjacentRight().adj and
                 std::any_of(laneletsP.begin(), laneletsP.end(), [laneletK](const std::shared_ptr<Lanelet> &lanelet) {

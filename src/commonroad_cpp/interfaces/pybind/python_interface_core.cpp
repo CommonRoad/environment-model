@@ -90,7 +90,7 @@ void init_python_interface_core(py::module_ &m) {
         .def("shape", &Obstacle::getGeoShape)
 
         .def("occupied_lanes", &Obstacle::getOccupiedLanes)
-        .def("driving_path_lanes", &Obstacle::getDrivingPathLanes)
+        .def("driving_direction_lanes", &Obstacle::getOccupiedLanesDrivingDirection)
 
         .def("time_step_exists", &Obstacle::timeStepExists)
 
