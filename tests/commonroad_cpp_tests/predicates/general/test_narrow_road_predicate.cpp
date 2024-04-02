@@ -21,28 +21,38 @@ void NarrowRoadPredicateTest::SetUp() {
     world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {}, 0.1));
 
     auto roadNetwork2{utils_predicate_test::create_narrow_road_network(5.5)};
-    world2 = std::make_shared<World>(World("testWorld", 0, roadNetwork2, {egoVehicle}, {}, 0.1));
+    egoVehicle2 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    world2 = std::make_shared<World>(World("testWorld", 0, roadNetwork2, {egoVehicle2}, {}, 0.1));
 
     auto roadNetwork3{utils_predicate_test::create_narrow_road_network(7)};
-    world3 = std::make_shared<World>(World("testWorld", 0, roadNetwork3, {egoVehicle}, {}, 0.1));
+    egoVehicle3 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    world3 = std::make_shared<World>(World("testWorld", 0, roadNetwork3, {egoVehicle3}, {}, 0.1));
 
     auto roadNetwork4{utils_predicate_test::create_narrow_road_network(3)};
-    world4 = std::make_shared<World>(World("testWorld", 0, roadNetwork4, {egoVehicle}, {}, 0.1));
+    egoVehicle4 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    world4 = std::make_shared<World>(World("testWorld", 0, roadNetwork4, {egoVehicle4}, {}, 0.1));
 
+    egoVehicle5 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
     std::string pathToTestFileOncoming =
         TestUtils::getTestScenarioDirectory() +
         "/predicates/DEU_TwoLanesWithOppositeDirections-1/DEU_TwoLanesWithOppositeDirections-1_1_T-1.pb";
     const auto &[obstaclesOncoming, roadNetworkOncoming, timeStepSizeOncoming] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOncoming);
-    worldOncoming = std::make_shared<World>(World("testWorld", 0, roadNetworkOncoming, {egoVehicle}, {}, 0.1));
+    worldOncoming = std::make_shared<World>(World("testWorld", 0, roadNetworkOncoming, {egoVehicle5}, {}, 0.1));
 
+    egoVehicle6 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
     std::string pathToTestFileOncomingNarrow =
         TestUtils::getTestScenarioDirectory() +
         "/predicates/DEU_TwoLanesWithOppositeDirectionsNarrow-1/DEU_TwoLanesWithOppositeDirectionsNarrow-1_1_T-1.pb";
     const auto &[obstaclesOncomingNarrow, roadNetworkOncomingNarrow, timeStepSizeOncomingNarrow] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOncomingNarrow);
     worldOncomingNarrow =
-        std::make_shared<World>(World("testWorld", 0, roadNetworkOncomingNarrow, {egoVehicle}, {}, 0.1));
+        std::make_shared<World>(World("testWorld", 0, roadNetworkOncomingNarrow, {egoVehicle6}, {}, 0.1));
 }
 
 TEST_F(NarrowRoadPredicateTest, BooleanEvaluationObjects) {
@@ -50,25 +60,25 @@ TEST_F(NarrowRoadPredicateTest, BooleanEvaluationObjects) {
     EXPECT_FALSE(pred.booleanEvaluation(1, world, egoVehicle));
     EXPECT_FALSE(pred.booleanEvaluation(2, world, egoVehicle));
 
-    EXPECT_TRUE(pred.booleanEvaluation(0, world2, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world2, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(2, world2, egoVehicle));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world2, egoVehicle2));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world2, egoVehicle2));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world2, egoVehicle2));
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, world3, egoVehicle));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world3, egoVehicle));
-    EXPECT_FALSE(pred.booleanEvaluation(2, world3, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world3, egoVehicle3));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world3, egoVehicle3));
+    EXPECT_FALSE(pred.booleanEvaluation(2, world3, egoVehicle3));
 
-    EXPECT_TRUE(pred.booleanEvaluation(0, world4, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world4, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(2, world4, egoVehicle));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world4, egoVehicle4));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world4, egoVehicle4));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world4, egoVehicle4));
 
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldOncomingNarrow, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(1, worldOncomingNarrow, egoVehicle));
-    EXPECT_TRUE(pred.booleanEvaluation(2, worldOncomingNarrow, egoVehicle));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldOncomingNarrow, egoVehicle5));
+    EXPECT_TRUE(pred.booleanEvaluation(1, worldOncomingNarrow, egoVehicle5));
+    EXPECT_TRUE(pred.booleanEvaluation(2, worldOncomingNarrow, egoVehicle5));
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldOncoming, egoVehicle));
-    EXPECT_FALSE(pred.booleanEvaluation(1, worldOncoming, egoVehicle));
-    EXPECT_FALSE(pred.booleanEvaluation(2, worldOncoming, egoVehicle));
+    EXPECT_FALSE(pred.booleanEvaluation(0, worldOncoming, egoVehicle6));
+    EXPECT_FALSE(pred.booleanEvaluation(1, worldOncoming, egoVehicle6));
+    EXPECT_FALSE(pred.booleanEvaluation(2, worldOncoming, egoVehicle6));
 }
 
 TEST_F(NarrowRoadPredicateTest, RobustEvaluation) {

@@ -389,6 +389,23 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario4) {
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
 }
 
+TEST_F(ObstacleTest, GetOccupiedLaneletsDrivingDirectionScenario4) {
+    size_t timeStep{0};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4/USA_Peach-4_1_T-1.pb"};
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    size_t globalID{123456789};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    roadNetworkScenario->setIdCounterRef(globalIdRef);
+    auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 88)};
+    EXPECT_EQ(43486,
+              obsOneScenario
+                  ->getOccupiedLaneletsDrivingDirectionByShape(roadNetworkScenario, obsOneScenario->getFinalTimeStep())
+                  .at(0)
+                  ->getId());
+    EXPECT_EQ(0, obsOneScenario->getOccupiedLaneletsDrivingDirectionByShape(roadNetworkScenario, 10).size());
+}
+
 TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
     size_t timeStep{37};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +

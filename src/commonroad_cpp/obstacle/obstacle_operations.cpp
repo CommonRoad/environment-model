@@ -95,15 +95,26 @@ obstacle_operations::obstacleDirectlyLeft(size_t timeStep, const std::vector<std
                                           const std::shared_ptr<Obstacle> &obstacleK,
                                           const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_left = obstaclesLeft(timeStep, obstacles, obstacleK, roadNetwork);
-    if (vehicles_left.empty())
+    if (vehicles_left.empty() or
+        (vehicles_left.size() == 1 and
+         !obstacleK->getReferenceLane(roadNetwork, timeStep)
+              ->getCurvilinearCoordinateSystem()
+              ->cartesianPointInProjectionDomain(vehicles_left[0]->getStateByTimeStep(timeStep)->getXPosition(),
+                                                 vehicles_left[0]->getStateByTimeStep(timeStep)->getYPosition())))
         return nullptr;
     else if (vehicles_left.size() == 1)
         return vehicles_left[0];
     else {
-        std::shared_ptr<Obstacle> vehicle_directly_left = vehicles_left[0];
+        std::shared_ptr<Obstacle> vehicle_directly_left = nullptr;
         for (const auto &obs : vehicles_left)
-            if (obs->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)) <
-                vehicle_directly_left->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)))
+            if (obstacleK->getReferenceLane(roadNetwork, timeStep)
+                    ->getCurvilinearCoordinateSystem()
+                    ->cartesianPointInProjectionDomain(obs->getStateByTimeStep(timeStep)->getXPosition(),
+                                                       obs->getStateByTimeStep(timeStep)->getYPosition()) and
+                (vehicle_directly_left == nullptr or
+                 obs->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)) <
+                     vehicle_directly_left->getLatPosition(timeStep,
+                                                           obstacleK->getReferenceLane(roadNetwork, timeStep))))
                 vehicle_directly_left = obs;
 
         return vehicle_directly_left;
@@ -192,15 +203,26 @@ obstacle_operations::obstacleDirectlyRight(size_t timeStep, const std::vector<st
                                            const std::shared_ptr<Obstacle> &obstacleK,
                                            const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_right = obstaclesRight(timeStep, obstacles, obstacleK, roadNetwork);
-    if (vehicles_right.empty())
+    if (vehicles_right.empty() or
+        (vehicles_right.size() == 1 and
+         !obstacleK->getReferenceLane(roadNetwork, timeStep)
+              ->getCurvilinearCoordinateSystem()
+              ->cartesianPointInProjectionDomain(vehicles_right[0]->getStateByTimeStep(timeStep)->getXPosition(),
+                                                 vehicles_right[0]->getStateByTimeStep(timeStep)->getYPosition())))
         return nullptr;
     else if (vehicles_right.size() == 1)
         return vehicles_right[0];
     else {
-        std::shared_ptr<Obstacle> vehicle_directly_right = vehicles_right[0];
+        std::shared_ptr<Obstacle> vehicle_directly_right = nullptr;
         for (const auto &obs : vehicles_right)
-            if (obs->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)) >
-                vehicle_directly_right->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)))
+            if (obstacleK->getReferenceLane(roadNetwork, timeStep)
+                    ->getCurvilinearCoordinateSystem()
+                    ->cartesianPointInProjectionDomain(obs->getStateByTimeStep(timeStep)->getXPosition(),
+                                                       obs->getStateByTimeStep(timeStep)->getYPosition()) and
+                (vehicle_directly_right == nullptr or
+                 obs->getLatPosition(timeStep, obstacleK->getReferenceLane(roadNetwork, timeStep)) >
+                     vehicle_directly_right->getLatPosition(timeStep,
+                                                            obstacleK->getReferenceLane(roadNetwork, timeStep))))
                 vehicle_directly_right = obs;
         return vehicle_directly_right;
     }

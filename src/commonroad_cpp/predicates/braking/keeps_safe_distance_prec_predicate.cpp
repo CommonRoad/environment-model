@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <cmath>
 #include <stdexcept>
 
@@ -83,7 +76,11 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(
     if (obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
             ->getCurvilinearCoordinateSystem()
             ->cartesianPointInProjectionDomain(obstacleP->getStateByTimeStep(timeStep)->getXPosition(),
-                                               obstacleP->getStateByTimeStep(timeStep)->getYPosition()))
+                                               obstacleP->getStateByTimeStep(timeStep)->getYPosition()) and
+        obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+            ->getCurvilinearCoordinateSystem()
+            ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                                               obstacleK->getStateByTimeStep(timeStep)->getYPosition()))
         deltaS = obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
                  obstacleK->frontS(world->getRoadNetwork(), timeStep);
     else
