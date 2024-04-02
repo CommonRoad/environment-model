@@ -1,5 +1,5 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/world.h>
 
@@ -12,6 +12,12 @@ bool InLaneletDrivingDirPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double theta = obstacleK->getStateByTimeStep(timeStep)->getGlobalOrientation();
+
+    if (!obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+             ->getCurvilinearCoordinateSystem()
+             ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                                                obstacleK->getStateByTimeStep(timeStep)->getYPosition()))
+        return false;
     obstacleK->convertPointToCurvilinear(world->getRoadNetwork(), timeStep);
     std::vector<std::shared_ptr<Lanelet>> lanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);

@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lane.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
@@ -24,7 +17,11 @@ bool DrivesRightmostPredicate::booleanEvaluation(
     std::shared_ptr<Obstacle> vehicle_directly_right =
         obstacle_operations::obstacleDirectlyRight(timeStep, world->getObstacles(), obstacleK, world->getRoadNetwork());
 
+    auto referenceLaneK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
     if (vehicle_directly_right != nullptr and
+        referenceLaneK->getCurvilinearCoordinateSystem()->cartesianPointInProjectionDomain(
+            obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+            obstacleK->getStateByTimeStep(timeStep)->getYPosition()) and
         (obstacleK->rightD(world->getRoadNetwork(), timeStep) -
          vehicle_directly_right->leftD(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep))) <
             parameters.getParam("closeToOtherVehicle")) {
@@ -32,10 +29,13 @@ bool DrivesRightmostPredicate::booleanEvaluation(
     } else {
         std::vector<std::shared_ptr<Lane>> lanes{obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)};
         return std::all_of(lanes.begin(), lanes.end(), [obstacleK, this, timeStep](const std::shared_ptr<Lane> &lane) {
-            return 0.5 * lane->getWidth(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+            return lane->getCurvilinearCoordinateSystem()->cartesianPointInProjectionDomain(
+                       obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                       obstacleK->getStateByTimeStep(timeStep)->getYPosition()) and
+                   0.5 * lane->getWidth(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                         obstacleK->getStateByTimeStep(timeStep)->getYPosition()) +
-                       obstacleK->rightD(timeStep, lane) <=
-                   parameters.getParam("closeToLaneBorder");
+                           obstacleK->rightD(timeStep, lane) <=
+                       parameters.getParam("closeToLaneBorder");
         });
     }
 }

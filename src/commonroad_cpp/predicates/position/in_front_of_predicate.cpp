@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/position/in_front_of_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
@@ -43,7 +36,11 @@ InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<Worl
     if (!obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
              ->getCurvilinearCoordinateSystem()
              ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                                obstacleK->getStateByTimeStep(timeStep)->getYPosition()))
+                                                obstacleK->getStateByTimeStep(timeStep)->getYPosition()) or
+        !obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
+             ->getCurvilinearCoordinateSystem()
+             ->cartesianPointInProjectionDomain(obstacleP->getStateByTimeStep(timeStep)->getXPosition(),
+                                                obstacleP->getStateByTimeStep(timeStep)->getYPosition()))
         return false; // todo logging
     return obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)) -
            obstacleP->frontS(world->getRoadNetwork(), timeStep);

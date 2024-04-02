@@ -1,8 +1,6 @@
 #include "commonroad_cpp/predicates/position/close_to_intersection_predicate.h"
-
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
-#include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
 CloseToIntersectionPredicate::CloseToIntersectionPredicate() : CommonRoadPredicate(false) {}
@@ -18,6 +16,14 @@ bool CloseToIntersectionPredicate::booleanEvaluation(
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for (const std::shared_ptr<Lanelet> &lanelet : occupiedLanelets) {
         auto centerEndOfLane = lanelet->getCenterVertices().back();
+        if (!obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+                 ->getCurvilinearCoordinateSystem()
+                 ->cartesianPointInProjectionDomain(centerEndOfLane.x, centerEndOfLane.y) or
+            !obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+                 ->getCurvilinearCoordinateSystem()
+                 ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
+                                                    obstacleK->getStateByTimeStep(timeStep)->getYPosition()))
+            continue;
         double distToEnd = obstacle_operations::drivingDistanceToCoordinatePoint(
             centerEndOfLane.x, centerEndOfLane.y, world->getRoadNetwork(), obstacleK, timeStep);
         resultIdsWithDistance.insert({lanelet->getId(), distToEnd});

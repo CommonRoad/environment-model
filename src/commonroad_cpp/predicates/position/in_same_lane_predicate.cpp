@@ -8,7 +8,7 @@ bool InSameLanePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    for (const auto &laneK : obstacleK->getDrivingPathLanes(world->getRoadNetwork(), timeStep)) {
+    for (const auto &laneK : obstacleK->getOccupiedLanesDrivingDirection(world->getRoadNetwork(), timeStep)) {
         const auto &relevantIDs{laneK->getContainedLaneletIDs()};
         for (const auto &laneletP : obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep))
             if (relevantIDs.find(laneletP->getId()) != relevantIDs.end())

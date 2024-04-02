@@ -22,15 +22,18 @@ void OnTIncomingPredicateTest::SetUp() {
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
 
+    obstacleTwo = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
+                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
+
     world = std::make_shared<World>(
         World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, timeStepSize));
 
     world_2 = std::make_shared<World>(
-        World("testWorld", 0, roadNetwork_2, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, timeStepSize_2));
+        World("testWorld", 0, roadNetwork_2, std::vector<std::shared_ptr<Obstacle>>{obstacleTwo}, {}, timeStepSize_2));
 }
 
 TEST_F(OnTIncomingPredicateTest, BooleanEvaluation) {
-    EXPECT_FALSE(pred.booleanEvaluation(0, world_2, obstacleOne)); // approaches no t-intersection
+    EXPECT_FALSE(pred.booleanEvaluation(0, world_2, obstacleTwo)); // approaches no t-intersection
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne));   // approaches t-intersection but not t-incoming
     EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));    // approaches t-intersection and on t-incoming
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne));   // approaches t-intersection but not on t-incoming
