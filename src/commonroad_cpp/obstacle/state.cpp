@@ -98,3 +98,5 @@ size_t State::getTimeStep() const { return timeStep; }
 void State::setTimeStep(size_t time) { timeStep = time; }
 
 const ValidStates &State::getValidStates() const { return validStates; }
+
+vertex State::get2DVertex() { return {xPosition, yPosition}; }

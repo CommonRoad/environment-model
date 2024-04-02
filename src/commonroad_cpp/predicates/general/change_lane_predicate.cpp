@@ -37,8 +37,7 @@ bool ChangeLanePredicate::booleanEvaluation(
             if (std::any_of(
                     occupiedLaneletsBack.begin(), occupiedLaneletsBack.end(),
                     [&](const std::shared_ptr<Lanelet> &back) {
-                        auto occDrivDir =
-                            obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
+                        auto occDrivDir = obstacleK->getOccupiedLaneletsRoadByShape(world->getRoadNetwork(), timeStep);
                         if (back->getAdjacentLeft().adj &&
                             // check whether lanelet occupied by the back of the car has a left adjacent which is
                             // occupied by the front of the car
@@ -58,8 +57,7 @@ bool ChangeLanePredicate::booleanEvaluation(
             if (std::any_of(
                     occupiedLaneletsBack.begin(), occupiedLaneletsBack.end(),
                     [&](const std::shared_ptr<Lanelet> &back) {
-                        auto occ =
-                            obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
+                        auto occ = obstacleK->getOccupiedLaneletsRoadByShape(world->getRoadNetwork(), timeStep);
                         // check whether lanelet occupied by the back of the car has a right adjacent which is
                         // occupied by the front of the car
                         if (back->getAdjacentRight().adj && back->getAdjacentRight().adj->getId() == front->getId())
@@ -75,7 +73,7 @@ bool ChangeLanePredicate::booleanEvaluation(
         }
     } else {
         throw std::invalid_argument(
-            "Ivalid TurningDirection for change_lanelet_predicate. Only 'left' and 'right' are allowed");
+            "Invalid TurningDirection for change_lanelet_predicate. Only 'left' and 'right' are allowed");
     }
     return false;
 }

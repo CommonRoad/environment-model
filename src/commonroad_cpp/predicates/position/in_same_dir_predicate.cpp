@@ -29,7 +29,7 @@ bool InSameDirPredicate::booleanEvaluation(
         return false;
     }
     // now check it the two lanes are next to each other
-    const auto lanes_p{obstacleP->getOccupiedLanes(world->getRoadNetwork(), timeStep)};
+    const auto lanes_p{obstacleP->getOccupiedRoadLanes(world->getRoadNetwork(), timeStep)};
     const auto lanelets_k{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
 
     for (const auto &lanelet : lanelets_k) {

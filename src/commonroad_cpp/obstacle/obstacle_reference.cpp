@@ -5,8 +5,8 @@
 std::vector<std::shared_ptr<Lane>>
 obstacle_reference::computeRef(Obstacle &obstacle, const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
 
-    auto refLaneTmp{obstacle_reference::computeRefGivenLanes(obstacle, roadNetwork, timeStep,
-                                                             obstacle.getOccupiedLanes(roadNetwork, timeStep))};
+    auto refLaneTmp{obstacle_reference::computeRefGivenLanes(
+        obstacle, roadNetwork, timeStep, obstacle.getOccupiedLanesAndAdjacent(roadNetwork, timeStep))};
 
     if (refLaneTmp.empty()) {
         // try adjacent lanes
@@ -76,7 +76,7 @@ obstacle_reference::countOccupanciesOverTime(Obstacle &obstacle, const std::shar
         std::map<size_t, size_t> numOccupancies;
         for (size_t newTimeStep{timeStep}; newTimeStep <= obstacle.getFinalTimeStep(); ++newTimeStep)
             for (const auto &lane : relevantOccupiedLanes)
-                if (lane->contains(obstacle.getOccupiedLaneletsDrivingDirectionByShape(roadNetwork, newTimeStep)))
+                if (lane->contains(obstacle.getOccupiedLaneletsRoadByShape(roadNetwork, newTimeStep)))
                     numOccupancies[lane->getId()]++;
 
         if (!numOccupancies.empty()) { // find lane with most occupancies
