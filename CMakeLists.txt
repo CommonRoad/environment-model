@@ -240,6 +240,10 @@ cmake_dependent_option(ENV_MODEL_BUILD_EXECUTABLE
     "NOT SKBUILD"
     OFF)
 
+option(ENV_MODEL_BUILD_PYTHON_BINDINGS
+        "Build Python bindings"
+        ${ENV_MODEL_BUILD_EXTRAS_DEFAULT})
+
 set(CMAKE_SUPPORTS_TRY_FIND_PACKAGE OFF)
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24.0)
     set(CMAKE_SUPPORTS_TRY_FIND_PACKAGE ON)
@@ -357,12 +361,14 @@ add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 # Add Environment model node
 add_subdirectory(src)
 
-if(ENV_MODEL_BUILD_EXECUTABLE AND TARGET Boost::program_options AND TARGET OpenMP::OpenMP_CXX)
-    add_subdirectory(example)
-elseif(NOT TARGET Boost::program_options)
-    message(WARNING "disabling example because Boost::program_options was not found")
-elseif(NOT TARGET OpenMP::OpenMP_CXX)
-    message(WARNING "disabling example because OpenMP was not found")
+if(ENV_MODEL_BUILD_EXECUTABLE)
+    if(TARGET Boost::program_options AND TARGET OpenMP::OpenMP_CXX)
+        add_subdirectory(example)
+    elseif(NOT TARGET Boost::program_options)
+        message(WARNING "disabling example because Boost::program_options was not found")
+    elseif(NOT TARGET OpenMP::OpenMP_CXX)
+        message(WARNING "disabling example because OpenMP was not found")
+    endif()
 endif()
 
 ## Doxygen
@@ -371,13 +377,15 @@ if(ENV_MODEL_BUILD_DOXYGEN)
 endif()
 
 # add unit testing
-if(ENV_MODEL_BUILD_TESTS AND TARGET Boost::filesystem AND TARGET OpenMP::OpenMP_CXX)
-    enable_testing()
-    add_subdirectory(tests)
-elseif(NOT TARGET Boost::filesystem)
-    message(WARNING "disabling tests because Boost::program_options was not found")
-elseif(NOT TARGET OpenMP::OpenMP_CXX)
-    message(WARNING "disabling tests because OpenMP was not found")
+if(ENV_MODEL_BUILD_TESTS)
+    if(TARGET Boost::filesystem AND TARGET OpenMP::OpenMP_CXX)
+        enable_testing()
+        add_subdirectory(tests)
+    elseif(NOT TARGET Boost::filesystem)
+        message(WARNING "disabling tests because Boost::program_options was not found")
+    elseif(NOT TARGET OpenMP::OpenMP_CXX)
+        message(WARNING "disabling tests because OpenMP was not found")
+    endif()
 endif()
 
 include(cmake/install.cmake)
