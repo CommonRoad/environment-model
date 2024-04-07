@@ -387,54 +387,56 @@ add_library(EnvironmentModel::env_model ALIAS env_model)
 find_package(pybind11 2.7.0 QUIET)
 
 # add pybind module
-if(SKBUILD)
-    message(STATUS "The project is built using scikit-build")
-endif()
-if(pybind11_FOUND AND NOT SKBUILD)
-    message(STATUS "Adding Python interface for compilation only")
-endif()
-if(pybind11_FOUND)
-    add_library(env_model_python OBJECT
-            commonroad_cpp/interfaces/pybind/python_interface.cpp
-            commonroad_cpp/interfaces/pybind/python_interface_core.cpp
-            commonroad_cpp/interfaces/pybind/python_interface_core.h
-            commonroad_cpp/interfaces/pybind/python_interface_legacy.cpp
-            commonroad_cpp/interfaces/pybind/python_interface_legacy.h
-            commonroad_cpp/interfaces/pybind/python_interface_predicates.cpp
-            commonroad_cpp/interfaces/pybind/python_interface_predicates.h
-            commonroad_cpp/interfaces/pybind/translate_python_types.cpp
-            commonroad_cpp/interfaces/pybind/translate_python_types.h)
-    target_link_libraries(env_model_python PRIVATE env_model pybind11::module)
-    set_property(TARGET env_model_python PROPERTY POSITION_INDEPENDENT_CODE ON)
+if (ENV_MODEL_BUILD_PYTHON_BINDINGS)
+    if (SKBUILD)
+        message(STATUS "The project is built using scikit-build")
+    endif ()
+    if (pybind11_FOUND AND NOT SKBUILD)
+        message(STATUS "Adding Python interface for compilation only")
+    endif ()
+    if (pybind11_FOUND)
+        add_library(env_model_python OBJECT
+                commonroad_cpp/interfaces/pybind/python_interface.cpp
+                commonroad_cpp/interfaces/pybind/python_interface_core.cpp
+                commonroad_cpp/interfaces/pybind/python_interface_core.h
+                commonroad_cpp/interfaces/pybind/python_interface_legacy.cpp
+                commonroad_cpp/interfaces/pybind/python_interface_legacy.h
+                commonroad_cpp/interfaces/pybind/python_interface_predicates.cpp
+                commonroad_cpp/interfaces/pybind/python_interface_predicates.h
+                commonroad_cpp/interfaces/pybind/translate_python_types.cpp
+                commonroad_cpp/interfaces/pybind/translate_python_types.h)
+        target_link_libraries(env_model_python PRIVATE env_model pybind11::module)
+        set_property(TARGET env_model_python PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-    # For predicate_instantiation.cpp.inc (see predicates.cmake)
-    target_include_directories(env_model_python
-        PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}
+        # For predicate_instantiation.cpp.inc (see predicates.cmake)
+        target_include_directories(env_model_python
+                PRIVATE
+                ${CMAKE_CURRENT_BINARY_DIR}
         )
-endif()
+    endif ()
 
-if(SKBUILD)
-    set(python_module_name crcpp)
-    pybind11_add_module(${python_module_name} MODULE $<TARGET_OBJECTS:env_model_python>)
+    if (SKBUILD)
+        set(python_module_name crcpp)
+        pybind11_add_module(${python_module_name} MODULE $<TARGET_OBJECTS:env_model_python>)
 
-    target_link_libraries(${python_module_name} PRIVATE env_model)
+        target_link_libraries(${python_module_name} PRIVATE env_model)
 
-    install(TARGETS ${python_module_name}
-            LIBRARY DESTINATION .
-            COMPONENT PythonModules
-            )
-
-    add_custom_target(install-python-modules-${python_module_name}
-        ${CMAKE_COMMAND}
-        -DCMAKE_INSTALL_COMPONENT=PythonModules
-        -P "${PROJECT_BINARY_DIR}/cmake_install.cmake"
-        DEPENDS ${python_module_name}
+        install(TARGETS ${python_module_name}
+                LIBRARY DESTINATION .
+                COMPONENT PythonModules
         )
 
-    # include(utils/CheckRuntimeDependencies)
-    # check_python_runtime_dependencies(${python_module_name})
-endif(SKBUILD)
+        add_custom_target(install-python-modules-${python_module_name}
+                ${CMAKE_COMMAND}
+                -DCMAKE_INSTALL_COMPONENT=PythonModules
+                -P "${PROJECT_BINARY_DIR}/cmake_install.cmake"
+                DEPENDS ${python_module_name}
+        )
+
+        # include(utils/CheckRuntimeDependencies)
+        # check_python_runtime_dependencies(${python_module_name})
+    endif (SKBUILD)
+endif ()
 
 include(predicates.cmake)
 

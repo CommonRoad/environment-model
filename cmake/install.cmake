@@ -30,7 +30,7 @@ else()
             FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 endif()
 
-if(LOCAL_CRDC OR DEFINED ENV{CIBUILDWHEEL})
+if(ENV_MODEL_USE_LOCAL_CRDC)
     # Using bundled crdc
     install(TARGETS crccosy EXPORT ${export_name})
 endif()
