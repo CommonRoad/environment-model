@@ -24,6 +24,11 @@ class World {
           double timeStepSize);
 
     /**
+     * Default constructor without parameters for a scenario.
+     */
+    World() = default;
+
+    /**
      * Getter for world time step.
      *
      * @return Time step of world.
@@ -50,6 +55,13 @@ class World {
      * @param egos vector of pointer to obstacles
      */
     void setEgoVehicles(std::vector<std::shared_ptr<Obstacle>> &egos);
+
+    /**
+     * Sets ego vehicles for scenario by ids and moves the respective obstacles from obstacles to egoVehicles
+     *
+     * @param egos
+     */
+    void setEgoVehicles(std::vector<size_t> &egos);
 
     /**
      * Getter for pointer to vector of ego vehicle objects.
@@ -109,5 +121,5 @@ class World {
     std::shared_ptr<RoadNetwork> roadNetwork;           //**< road network containing lanelets, traffic signs, etc. */
     std::vector<std::shared_ptr<Obstacle>> egoVehicles; //**< pointers to ego vehicle objects */
     std::vector<std::shared_ptr<Obstacle>> obstacles;   //**< pointers to obstacles *
-    const double dt;                                    //**<Time step size [s] *
+    double dt;                                          //**<Time step size [s] *
 };
