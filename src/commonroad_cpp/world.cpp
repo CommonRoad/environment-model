@@ -75,4 +75,16 @@ void World::setCurvilinearStates() {
 
 void World::setEgoVehicles(std::vector<std::shared_ptr<Obstacle>> &egos) { egoVehicles = egos; }
 
+void World::setEgoVehicles(std::vector<size_t> &egos) {
+    for (const auto &eID : egos) {
+        auto itr{std::find_if(obstacles.begin(), obstacles.end(),
+                              [eID](const std::shared_ptr<Obstacle> &obs) { return obs->getId() == eID; })};
+        if (itr != obstacles.end()) {
+            egoVehicles.push_back(*itr);
+            obstacles.erase(itr);
+        } else
+            throw std::runtime_error("PythonInterface::createScenario: Unknwon ego ID.");
+    }
+}
+
 const std::string &World::getName() const { return name; }
