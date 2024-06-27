@@ -24,7 +24,7 @@
 {"dMinUrban", 1.5},  // minimum lateral distance to VRUs in urban areas [m]
 {"dMinNonUrban", 2.0}, // minimum lateral distance to VRUs in non-urban areas [m]
 {"dBrakingIntersection", 15.0},  // maximum longitudinal distance to obstacle to be considered to cause braking [m]
-{"dCauseBreakingIntersection", -2.0},  // minimum longitudinal distance to obstacle to be considered to cause braking [m]
+{"dCauseBrakingIntersection", -2.0},  // minimum longitudinal distance to obstacle to be considered to cause braking [m]
 {"aBrakingIntersection", -1.0},  // acceleration of obstacle which we cause to brake [m/s^2]
 {"dCloseToCrossing", 20.0},   // maximum distance to be close to a intersection crosswalk [m]
 {"intersectionBrakingPossible", -4.0}, // threshold indicating whether braking is possible in an intersection [m/s^2]
