@@ -77,7 +77,7 @@ dBrakingIntersection:
   type: float
   unit: m
   value: 15.0
-dCauseBreakingIntersection:
+dCauseBrakingIntersection:
   description: minimum longitudinal distance to obstacle to be considered to cause braking [m]
   max: 30.0
   min: -10.0
