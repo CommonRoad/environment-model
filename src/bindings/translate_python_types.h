@@ -1,21 +1,15 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
+#include "commonroad_cpp/world.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 
 namespace TranslatePythonTypes {
 /**
@@ -26,7 +20,7 @@ namespace TranslatePythonTypes {
  * @param trafficLights List of pointers to traffic lights
  * @return List of pointers to lanelet objects.
  */
-std::vector<std::shared_ptr<Lanelet>> convertLanelets(const py::handle &py_laneletNetwork,
+std::vector<std::shared_ptr<Lanelet>> convertLanelets(const nb::handle &py_laneletNetwork,
                                                       const std::vector<std::shared_ptr<TrafficSign>> &trafficSigns,
                                                       const std::vector<std::shared_ptr<TrafficLight>> &trafficLights);
 
@@ -36,7 +30,7 @@ std::vector<std::shared_ptr<Lanelet>> convertLanelets(const py::handle &py_lanel
  * @param py_obstacles List of Python version of dynamic obstacles.
  * @return List of pointers to obstacle objects.
  */
-std::vector<std::shared_ptr<Obstacle>> convertObstacles(const py::list &py_obstacles);
+std::vector<std::shared_ptr<Obstacle>> convertObstacles(const nb::list &py_obstacles);
 
 /**
  * Converts Python traffic sign objects to C++ representation.
@@ -44,7 +38,7 @@ std::vector<std::shared_ptr<Obstacle>> convertObstacles(const py::list &py_obsta
  * @param py_laneletNetwork Python lanelet network object.
  * @return List of pointers to traffic sign objects.
  */
-std::vector<std::shared_ptr<TrafficSign>> convertTrafficSigns(const py::handle &py_laneletNetwork);
+std::vector<std::shared_ptr<TrafficSign>> convertTrafficSigns(const nb::handle &py_laneletNetwork);
 
 /**
  * Converts Python traffic light objects to C++ representation.
@@ -52,7 +46,7 @@ std::vector<std::shared_ptr<TrafficSign>> convertTrafficSigns(const py::handle &
  * @param py_laneletNetwork Python lanelet network object.
  * @return List of pointers to traffic light objects.
  */
-std::vector<std::shared_ptr<TrafficLight>> convertTrafficLights(const py::handle &py_laneletNetwork);
+std::vector<std::shared_ptr<TrafficLight>> convertTrafficLights(const nb::handle &py_laneletNetwork);
 
 /**
  * Converts Python intersection objects to C++ representation.
@@ -61,7 +55,7 @@ std::vector<std::shared_ptr<TrafficLight>> convertTrafficLights(const py::handle
  * @param lanelets List of pointers to lanelets.
  * @return List of pointers to intersection objects.
  */
-std::vector<std::shared_ptr<Intersection>> convertIntersections(const py::handle &py_laneletNetwork,
+std::vector<std::shared_ptr<Intersection>> convertIntersections(const nb::handle &py_laneletNetwork,
                                                                 const std::vector<std::shared_ptr<Lanelet>> &lanelets);
 
 /**
@@ -72,7 +66,7 @@ std::vector<std::shared_ptr<Intersection>> convertIntersections(const py::handle
  * @param trafficLights List of pointers to traffic lights
  * @return
  */
-std::shared_ptr<StopLine> convertStopLine(const py::handle &py_stopLine,
+std::shared_ptr<StopLine> convertStopLine(const nb::handle &py_stopLine,
                                           const std::vector<std::shared_ptr<TrafficSign>> &trafficSigns,
                                           const std::vector<std::shared_ptr<TrafficLight>> &trafficLights);
 
