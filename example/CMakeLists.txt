@@ -20,6 +20,13 @@ target_link_libraries(env_model_example_node
         toolchain::dl
     )
 
+
+if(APPLE)
+    # Required to find library -lomp on mac
+    # MAC_LIBOMP_PATH defined in root CMakeLists.txt
+    target_link_directories(env_model_example_node PUBLIC "${MAC_LIBOMP_PATH}/lib")
+endif()
+
 # this adds many warnings to the build. They usually help to find some bugs
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     if(ENV_MODEL_BUILD_EXECUTABLE)
