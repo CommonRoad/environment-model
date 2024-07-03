@@ -17,7 +17,7 @@
 
 #include "@all_predicates_gen_file@"
 
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 
 #ifdef @instantiate_macro_name@
 #warning "@instantiate_macro_name@ already defined - undefining it"
@@ -25,8 +25,8 @@
 #endif
 
 #define @instantiate_macro_name@(predicate) \
-    { pybind11::class_<predicate, CommonRoadPredicate, std::shared_ptr<predicate>>(m, #predicate).def(pybind11::init<>()); }
+    { nanobind::class_<predicate, CommonRoadPredicate>(m, #predicate).def(nanobind::init<>()); }
 
-void instantiate_predicates(pybind11::module_ &m) {
+void instantiate_predicates(nanobind::module_ &m) {
 @predicate_instantiations_str@
 }

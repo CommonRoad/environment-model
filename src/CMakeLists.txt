@@ -31,7 +31,6 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
         commonroad_cpp/interfaces/commonroad/input_utils.cpp
         commonroad_cpp/world.cpp
-        commonroad_cpp/commonroad_container.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp
         commonroad_cpp/roadNetwork/environment/environment.cpp
@@ -44,7 +43,6 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/auxiliaryDefs/structs.h
         commonroad_cpp/auxiliaryDefs/timer.h
         commonroad_cpp/auxiliaryDefs/types_and_definitions.h
-        commonroad_cpp/commonroad_container.h
         commonroad_cpp/geometry/circle.h
         commonroad_cpp/geometry/geometric_operations.h
         commonroad_cpp/geometry/rectangle.h
@@ -329,6 +327,8 @@ target_precompile_headers(env_model_core
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_operations.h>
     #    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_reference.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/world.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/input_utils.h>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/xml_reader.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
         )
 
@@ -384,45 +384,46 @@ target_link_libraries(env_model
 
 add_library(EnvironmentModel::env_model ALIAS env_model)
 
-find_package(pybind11 2.7.0 QUIET)
 
-# add pybind module
 if (ENV_MODEL_BUILD_PYTHON_BINDINGS)
     if (SKBUILD)
-        message(STATUS "The project is built using scikit-build")
-    endif ()
-    if (pybind11_FOUND AND NOT SKBUILD)
-        message(STATUS "Adding Python interface for compilation only")
-    endif ()
-    if (pybind11_FOUND)
-        add_library(env_model_python OBJECT
-                commonroad_cpp/interfaces/pybind/python_interface.cpp
-                commonroad_cpp/interfaces/pybind/python_interface_core.cpp
-                commonroad_cpp/interfaces/pybind/python_interface_core.h
-                commonroad_cpp/interfaces/pybind/python_interface_legacy.cpp
-                commonroad_cpp/interfaces/pybind/python_interface_legacy.h
-                commonroad_cpp/interfaces/pybind/python_interface_predicates.cpp
-                commonroad_cpp/interfaces/pybind/python_interface_predicates.h
-                commonroad_cpp/interfaces/pybind/translate_python_types.cpp
-                commonroad_cpp/interfaces/pybind/translate_python_types.h)
-        target_link_libraries(env_model_python PRIVATE env_model pybind11::module)
-        set_property(TARGET env_model_python PROPERTY POSITION_INDEPENDENT_CODE ON)
-
-        # For predicate_instantiation.cpp.inc (see predicates.cmake)
-        target_include_directories(env_model_python
-                PRIVATE
-                ${CMAKE_CURRENT_BINARY_DIR}
+        set(python_module_name _crcpp)
+        nanobind_add_module(${python_module_name} MODULE
+                bindings/python_interface.cpp
+                bindings/python_interface_core.cpp
+                bindings/python_interface_core.h
+                bindings/translate_python_types.cpp
+                bindings/translate_python_types.h
+#                bindings/python_interface_predicates.cpp
+#                bindings/python_interface_predicates.h
         )
-    endif ()
 
-    if (SKBUILD)
-        set(python_module_name crcpp)
-        pybind11_add_module(${python_module_name} MODULE $<TARGET_OBJECTS:env_model_python>)
+        target_precompile_headers(nanobind-static
+                PUBLIC
+                <nanobind/nanobind.h>
+        )
 
-        target_link_libraries(${python_module_name} PRIVATE env_model)
+        nanobind_add_stub(
+                _crcpp_stub
+                MODULE _crcpp
+                OUTPUT _crcpp.pyi
+                PYTHON_PATH $<TARGET_FILE_DIR:${python_module_name}>
+                DEPENDS ${python_module_name}
+                MARKER_FILE py.typed
+                VERBOSE
+        )
+
+        install(FILES
+                ${CMAKE_CURRENT_BINARY_DIR}/_crcpp.pyi
+                ${CMAKE_CURRENT_BINARY_DIR}/py.typed
+                DESTINATION crcpp
+                COMPONENT PythonModules
+        )
+
+        target_link_libraries(${python_module_name} PRIVATE env_model spdlog::spdlog)
 
         install(TARGETS ${python_module_name}
-                LIBRARY DESTINATION .
+                LIBRARY DESTINATION crcpp
                 COMPONENT PythonModules
         )
 
@@ -432,10 +433,7 @@ if (ENV_MODEL_BUILD_PYTHON_BINDINGS)
                 -P "${PROJECT_BINARY_DIR}/cmake_install.cmake"
                 DEPENDS ${python_module_name}
         )
-
-        # include(utils/CheckRuntimeDependencies)
-        # check_python_runtime_dependencies(${python_module_name})
-    endif (SKBUILD)
+    endif ()
 endif ()
 
 include(predicates.cmake)
