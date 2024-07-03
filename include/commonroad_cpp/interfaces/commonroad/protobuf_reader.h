@@ -1,5 +1,11 @@
 #pragma once
 
+#include <fstream>
+#include <memory>
+#include <tuple>
+#include <variant>
+#include <vector>
+
 #include "commonroad_cpp/geometry/circle.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/bound.h"
@@ -8,14 +14,10 @@
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_dynamic.pb.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_map.pb.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_scenario.pb.h>
+#include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/environment_obstacle.pb.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <fstream>
 #include <google/protobuf/message_lite.h>
-#include <memory>
-#include <tuple>
-#include <variant>
-#include <vector>
 
 namespace ProtobufReader {
 
@@ -286,6 +288,15 @@ std::shared_ptr<CrossingGroup> createCrossingGroupFromMessage(const commonroad_m
                                                               CrossingGroupContainer &crossingGroupContainer);
 
 /**
+ * Creates obstacle from protobuf message "EnvironmentObstacle".
+ *
+ * @param environmentObstacleMsg Protobuf message
+ * @return Environment obstacle
+ */
+std::shared_ptr<Obstacle>
+createEnvironmentObstacleFromMessage(const commonroad_map::EnvironmentObstacle &environmentObstacleMsg);
+
+/**
  * Creates obstacle from protobuf message "StaticObstacle".
  *
  * @param staticObstacleMsg Protobuf message
@@ -301,15 +312,6 @@ std::shared_ptr<Obstacle> createStaticObstacleFromMessage(const commonroad_dynam
  */
 std::shared_ptr<Obstacle>
 createDynamicObstacleFromMessage(const commonroad_dynamic::DynamicObstacle &dynamicObstacleMsg);
-
-/**
- * Creates obstacle from protobuf message "EnvironmentObstacle".
- *
- * @param environmentObstacleMsg Protobuf message
- * @return Environment obstacle
- */
-std::shared_ptr<Obstacle>
-createEnvironmentObstacleFromMessage(const commonroad_map::EnvironmentObstacle &environmentObstacleMsg);
 
 /**
  * Creates obstacle from protobuf message "PhantomObstacle".

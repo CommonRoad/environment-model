@@ -6,22 +6,17 @@
 # The cmake_minimum_required(VERSION) command implicitly invokes the cmake_policy(VERSION)
 # command to specify that the current project code is written for the given range of CMake versions.
 # Source: https://cmake.org/cmake/help/v3.25/command/cmake_minimum_required.html
-cmake_minimum_required(VERSION 3.20..3.27)
+cmake_minimum_required(VERSION 3.20..3.29)
 
 project(EnvironmentModel
     LANGUAGES C CXX
-    # TODO: Find an automatic way to sync the version with setuptools_scm/Git tags
-    VERSION 2022.0
+    VERSION 0.1.0
     HOMEPAGE_URL "https://commonroad.in.tum.de/"
     DESCRIPTION "Classes and methods to represent the CommonRoad format in C++17")
 
 # CMP0077 (3.13) - option() honors normal variables.
 # Relevant for Eigen3
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-
-# CMP0063 - Honor visibility properties for all target types
-# TODO: Probably not required anymore - check all configurations and remove if possible
-# cmake_policy(SET CMP0063 NEW)
 
 # CMP0126 (3.21) - Removal of normal variables by set(CACHE)
 if(POLICY CMP0126)
@@ -44,9 +39,8 @@ if(CMAKE_VERSION VERSION_LESS 3.21.0)
   set(${PROJECT_NAME}_IS_TOP_LEVEL ${PROJECT_IS_TOP_LEVEL})
 endif()
 
-if(NOT SKBUILD)
-    set(CMAKE_VERIFY_INTERFACE_HEADER_SETS ON)
-endif()
+set(CMAKE_VERIFY_INTERFACE_HEADER_SETS ON)
+
 
 # Ugly hack to make CMake discover libomp from Homebrew on Github Actions
 if(APPLE)
@@ -95,26 +89,15 @@ if(CMAKE_EXPORT_COMPILE_COMMANDS)
 endif()
 
 
-# IMPORTANT: DO NOT MOVE this section, in particular the calls to find_package(Python)
-# and find_package(pybind11), without careful consideration
-if(SKBUILD)
-        # Scikit-Build does not add your site-packages to the search path
-        # automatically, so we need to add it _or_ the pybind11 specific directory
-        # here.
+if (ENV_MODEL_BUILD_PYTHON_BINDINGS)
+    if(SKBUILD)
+        find_package(Python 3.8 COMPONENTS Interpreter Development.Module REQUIRED)
+
         execute_process(
-            COMMAND "${PYTHON_EXECUTABLE}" -c
-                    "import pybind11; print(pybind11.get_cmake_dir())"
-            OUTPUT_VARIABLE _tmp_dir
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-        list(APPEND CMAKE_PREFIX_PATH "${_tmp_dir}")
-
-        set(Python_FIND_VIRTUALENV FIRST)
-
-        set(PYBIND11_FINDPYTHON ON)
-        find_package(Python 3.7 REQUIRED COMPONENTS Development.Module Interpreter)
-
-        # Now we can find pybind11
-        find_package(pybind11 2.7.0 CONFIG REQUIRED)
+                COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+                OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE NB_DIR)
+        list(APPEND CMAKE_PREFIX_PATH "${NB_DIR}")
+        find_package(nanobind CONFIG REQUIRED)
 
         # SKBUILD_SELF_CONTAINED controls whether we try to build all dependencies
         # ourselves. This is used in order to build cross-platform wheels
@@ -135,11 +118,13 @@ if(SKBUILD)
         # Globally build static libraries (affects all calls to add_library
         # without an explicit library type)
         set(BUILD_SHARED_LIBS OFF)
+
         set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
         # Globally set visibility preset
         set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
         set(CMAKE_CXX_VISIBILITY_PRESET default)
+    endif()
 endif()
 
 set(CMAKE_CXX_STANDARD 17)

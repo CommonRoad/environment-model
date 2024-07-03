@@ -1,6 +1,5 @@
 #include "commonroad_cpp/interfaces/commonroad/protobuf_reader.h"
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
-#include "commonroad_cpp/roadNetwork/lanelet/bound.h"
 #include <boost/algorithm/string/case_conv.hpp> // for to_lower_copy
 #include <stdexcept>
 #include <utility>

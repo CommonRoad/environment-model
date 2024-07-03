@@ -1,14 +1,8 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
-#include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
-
-#include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
-#include <commonroad_cpp/roadNetwork/road_network.h>
 
 #include <filesystem>
 #include <iostream>
-
 #include <spdlog/spdlog.h>
 
 namespace {

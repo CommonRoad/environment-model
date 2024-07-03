@@ -13,8 +13,7 @@ class TestPythonInterface(unittest.TestCase):
                           'ZAM_TestReadingAll-1/ZAM_TestReadingAll-1_1_T-1.pb',
                           'ZAM_Tjunction-1/ZAM_Tjunction-1_47_T-1.pb']
 
-    def test_scenario_registration(self):
-        scenario_id = 123
+    def test_scenario_binding(self):
         for scenario in self.filenames:
             full_path = self.path + scenario
             scenario_path_tmp = Path(full_path)
@@ -23,14 +22,14 @@ class TestPythonInterface(unittest.TestCase):
                     / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
             )
             scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
-            try:
-                print("Converting - " + full_path)
-                crcpp.register_scenario(scenario_id, str(scenario.scenario_id), 0, scenario.dt, "DEU", scenario.lanelet_network,
-                                        scenario.obstacles, [])
-                crcpp.remove_scenario(123)
-                print("Successful")
-            except:
-                print("Failed")
+            print(scenario.scenario_id)
+            world1 = crcpp.World(str(scenario.scenario_id), 2, 0.1, "DEU",
+                                scenario.lanelet_network, [], scenario.obstacles)
+            self.assertEquals(world1.time_step, 2)
+
+            world2 = crcpp.World(scenario)
+            self.assertEqual(len(world1.road_network.lanelets), len(world2.road_network.lanelets))
+            self.assertEqual(len(world1.obstacles), len(world2.obstacles))
 
 
 if __name__ == '__main__':
