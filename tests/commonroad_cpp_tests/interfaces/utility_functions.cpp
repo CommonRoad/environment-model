@@ -13,7 +13,7 @@
 #include <tuple>
 
 std::string TestUtils::getTestScenarioDirectory() {
-    std::string curDir{get_current_dir_name()};
+    std::string curDir{std::filesystem::current_path()};
     std::string srcDir{curDir + "/tests/scenarios"};
     if (!existsDirectory(srcDir) && existsDirectory(curDir + "/../tests/scenarios"))
         srcDir = curDir + "/../tests/scenarios";

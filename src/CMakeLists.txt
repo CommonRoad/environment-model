@@ -379,6 +379,12 @@ target_link_libraries(env_model
         env_model_predicates
         )
 
+if(APPLE)
+    # Required to find library -lomp on mac
+    # MAC_LIBOMP_PATH defined in root CMakeLists.txt
+    target_link_directories(env_model INTERFACE "${MAC_LIBOMP_PATH}/lib")
+endif()
+
 add_library(EnvironmentModel::env_model ALIAS env_model)
 
 
