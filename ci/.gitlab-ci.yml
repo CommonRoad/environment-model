@@ -233,6 +233,7 @@ upload-wheel:
     # Also upload wheels if the UPLOAD_WHEELS was manually set to true
     # For example, use git push -o ci.variable="UPLOAD_WHEELS=1" to test this
     - if: $UPLOAD_WHEELS == "1"
+    - when: manual
 
 ### tests ###
 test:
