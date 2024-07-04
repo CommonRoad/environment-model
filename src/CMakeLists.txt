@@ -327,9 +327,6 @@ target_precompile_headers(env_model_core
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_operations.h>
     #    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/obstacle/obstacle_reference.h>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/world.h>
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/input_utils.h>
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/xml_reader.h>
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
         )
 
 add_library(env_model_predicates ${ENV_MODEL_PREDICATES_SRC_FILES})
