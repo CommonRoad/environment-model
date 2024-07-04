@@ -149,7 +149,7 @@ build-sdist:
   artifacts:
     paths:
       - dist/*.tar.gz
-    expire_in: 30 minutes
+    expire_in: 60 minutes
 
 .common-rules:
   rules:
@@ -194,7 +194,7 @@ build-wheel:
   artifacts:
     paths:
       - wheelhouse/*.whl
-    expire_in: 30 minutes
+    expire_in: 60 minutes
   rules:
     - *skip_merge_request_pipeline
     # When we are building wheels for a tag/release, build wheel for all supported Python versions and platform
@@ -209,7 +209,7 @@ build-wheel:
         CIBW_BUILD: "cp310-manylinux_x86_64"
 
 upload-wheel:
-  stage: python
+  stage: publish
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   variables:
     TWINE_USERNAME: gitlab-ci-token
