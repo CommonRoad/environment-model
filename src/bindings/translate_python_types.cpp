@@ -438,7 +438,7 @@ std::shared_ptr<SignalState> extractSignalState(nb::handle py_state) {
     return state;
 }
 
-std::shared_ptr<Obstacle> createDynamicObstacle(nb::handle py_singleObstacle) {
+std::shared_ptr<Obstacle> TranslatePythonTypes::createDynamicObstacle(nb::handle py_singleObstacle) {
     // TODO: add other prediction than trajectory prediction
     std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
     tempObstacle->setActuatorParameters(ActuatorParameters::vehicleDefaults());
@@ -459,7 +459,7 @@ std::shared_ptr<Obstacle> createDynamicObstacle(nb::handle py_singleObstacle) {
     return tempObstacle;
 }
 
-std::shared_ptr<Obstacle> createStaticObstacle(nb::handle py_singleObstacle) {
+std::shared_ptr<Obstacle> TranslatePythonTypes::createStaticObstacle(nb::handle py_singleObstacle) {
     std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
     tempObstacle->setIsStatic(true);
     return tempObstacle;
