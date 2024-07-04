@@ -142,6 +142,12 @@ if (ENV_MODEL_BUILD_TESTS)
             spdlog::spdlog
             )
 
+    if(APPLE)
+        # Required to find library -lomp on mac
+        # MAC_LIBOMP_PATH defined in root CMakeLists.txt
+        target_link_directories(env_model_test PUBLIC "${MAC_LIBOMP_PATH}/lib")
+    endif()
+
     target_precompile_headers(env_model_test
             PRIVATE
             <gtest/gtest.h>)
