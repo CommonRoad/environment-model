@@ -82,6 +82,25 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("reaction_time", &SensorParameters::getReactionTime);
 
     nb::class_<Obstacle>(m, "Obstacle")
+        .def(
+            "__init__",
+            [](Obstacle *t, const nb::handle &py_obstacle) {
+                std::string obstacleRole{nb::cast<std::string>(py_obstacle.attr("obstacle_role").attr("value"))};
+                std::shared_ptr<Obstacle> obs;
+                if (obstacleRole == "dynamic")
+                    obs = TranslatePythonTypes::createDynamicObstacle(py_obstacle);
+                else if (obstacleRole == "static")
+                    obs = TranslatePythonTypes::createStaticObstacle(py_obstacle);
+                std::vector<vertex> fov;
+                for (const auto &vert : obs->getFov().outer())
+                    fov.push_back({vert.x(), vert.y()});
+
+                new (t) Obstacle(obs->getId(), obs->getObstacleRole(), obs->getCurrentState(), obs->getObstacleType(),
+                                 obs->getVmax(), obs->getAmax(), obs->getAmaxLong(), obs->getAminLong(),
+                                 obs->getReactionTime(), obs->getTrajectoryPrediction(), obs->getGeoShape().getLength(),
+                                 obs->getGeoShape().getWidth(), fov);
+            },
+            "py_obstacle")
         .def_prop_rw("id", &Obstacle::getId, &Obstacle::setId)
         .def_prop_rw("type", &Obstacle::getObstacleType, &Obstacle::setObstacleType)
         .def_prop_ro("current_state", &Obstacle::getCurrentState)

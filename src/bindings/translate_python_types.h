@@ -33,6 +33,20 @@ std::vector<std::shared_ptr<Lanelet>> convertLanelets(const nb::handle &py_lanel
 std::vector<std::shared_ptr<Obstacle>> convertObstacles(const nb::list &py_obstacles);
 
 /**
+ * Create dynamic obstacle.
+ * @param py_singleObstacle Python dynamic obstacle.
+ * @return C++ dynamic obstacle.
+ */
+std::shared_ptr<Obstacle> createDynamicObstacle(nb::handle py_singleObstacle);
+
+/**
+ * Create static obstacle.
+ * @param py_singleObstacle Python static obstacle.
+ * @return C++ static obstacle.
+ */
+std::shared_ptr<Obstacle> createStaticObstacle(nb::handle py_singleObstacle);
+
+/**
  * Converts Python traffic sign objects to C++ representation.
  *
  * @param py_laneletNetwork Python lanelet network object.
