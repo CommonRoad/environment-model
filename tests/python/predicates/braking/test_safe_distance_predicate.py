@@ -1,23 +1,60 @@
 import unittest
-import numpy as np
 
 import crcpp
-
-from commonroad.scenario.state import CustomState, InitialState
+import numpy as np
 from commonroad.geometry.shape import Rectangle
-from commonroad.scenario.lanelet import LaneletNetwork, Lanelet
-from commonroad.scenario.obstacle import ObstacleType, DynamicObstacle
-from commonroad.prediction.prediction import TrajectoryPrediction, Trajectory
+from commonroad.prediction.prediction import Trajectory, TrajectoryPrediction
+from commonroad.scenario.lanelet import Lanelet, LaneletNetwork
+from commonroad.scenario.obstacle import DynamicObstacle, ObstacleType
+from commonroad.scenario.state import CustomState, InitialState
 
 
 class TestSafeDistancePredicate(unittest.TestCase):
     def setUp(self):
-        right_vertices = np.array([[0, 0], [10, 0], [20, 0], [30, 0], [40, 0], [50, 0], [60, 0], [70, 0], [80, 0]])
-        left_vertices = np.array([[0, 4], [10, 4], [20, 4], [30, 4], [40, 4], [50, 4], [60, 4], [70, 4], [80, 4]])
-        center_vertices = np.array([[0, 2], [10, 2], [20, 2], [30, 2], [40, 2], [50, 2], [60, 2], [70, 2], [80, 2]])
+        right_vertices = np.array(
+            [
+                [0, 0],
+                [10, 0],
+                [20, 0],
+                [30, 0],
+                [40, 0],
+                [50, 0],
+                [60, 0],
+                [70, 0],
+                [80, 0],
+            ]
+        )
+        left_vertices = np.array(
+            [
+                [0, 4],
+                [10, 4],
+                [20, 4],
+                [30, 4],
+                [40, 4],
+                [50, 4],
+                [60, 4],
+                [70, 4],
+                [80, 4],
+            ]
+        )
+        center_vertices = np.array(
+            [
+                [0, 2],
+                [10, 2],
+                [20, 2],
+                [30, 2],
+                [40, 2],
+                [50, 2],
+                [60, 2],
+                [70, 2],
+                [80, 2],
+            ]
+        )
         lanelet_id = 1
         self.lanelet_network = LaneletNetwork()
-        self.lanelet_network.add_lanelet(Lanelet(left_vertices, center_vertices, right_vertices, lanelet_id))
+        self.lanelet_network.add_lanelet(
+            Lanelet(left_vertices, center_vertices, right_vertices, lanelet_id)
+        )
 
     def test_keeps_safe_distance(self):
         # expected solutions
@@ -26,20 +63,70 @@ class TestSafeDistancePredicate(unittest.TestCase):
         exp_sol_robustness_mode_1 = 9.0
         exp_sol_robustness_mode_2 = -21.0
 
-        ego_obstacle = DynamicObstacle(1, ObstacleType.CAR, Rectangle(5, 2),
-                                       InitialState(time_step=0, position=np.array([0, 0]), velocity=20,
-                                                    acceleration=-1, orientation=0),
-                                       TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
-                                           CustomState(time_step=1, position=np.array([20, 0]), velocity=20,
-                                                       acceleration=-1, orientation=0)]), Rectangle(5, 2)))
-        other_obstacle = DynamicObstacle(2, ObstacleType.CAR, Rectangle(5, 2),
-                                         InitialState(time_step=0, position=np.array([20, 0]), velocity=20,
-                                                      acceleration=-1, orientation=0),
-                                         TrajectoryPrediction(Trajectory(initial_time_step=1, state_list=[
-                                             CustomState(time_step=1, position=np.array([30, 0]), velocity=0,
-                                                         acceleration=0, orientation=0)]), Rectangle(5, 2)))
+        ego_obstacle = DynamicObstacle(
+            1,
+            ObstacleType.CAR,
+            Rectangle(5, 2),
+            InitialState(
+                time_step=0,
+                position=np.array([0, 0]),
+                velocity=20,
+                acceleration=-1,
+                orientation=0,
+            ),
+            TrajectoryPrediction(
+                Trajectory(
+                    initial_time_step=1,
+                    state_list=[
+                        CustomState(
+                            time_step=1,
+                            position=np.array([20, 0]),
+                            velocity=20,
+                            acceleration=-1,
+                            orientation=0,
+                        )
+                    ],
+                ),
+                Rectangle(5, 2),
+            ),
+        )
+        other_obstacle = DynamicObstacle(
+            2,
+            ObstacleType.CAR,
+            Rectangle(5, 2),
+            InitialState(
+                time_step=0,
+                position=np.array([20, 0]),
+                velocity=20,
+                acceleration=-1,
+                orientation=0,
+            ),
+            TrajectoryPrediction(
+                Trajectory(
+                    initial_time_step=1,
+                    state_list=[
+                        CustomState(
+                            time_step=1,
+                            position=np.array([30, 0]),
+                            velocity=0,
+                            acceleration=0,
+                            orientation=0,
+                        )
+                    ],
+                ),
+                Rectangle(5, 2),
+            ),
+        )
 
-        world = crcpp.World("testScenario", 0, 0.1, "DEU", self.lanelet_network, [ego_obstacle], [other_obstacle])
+        world = crcpp.World(
+            "testScenario",
+            0,
+            0.1,
+            "DEU",
+            self.lanelet_network,
+            [ego_obstacle],
+            [other_obstacle],
+        )
 
         # Monitor-Mode
         # sol_monitor_mode_1_obstacles = crcpp.safe_distance_boolean_evaluation(123, 0, 1, 2)
@@ -70,28 +157,27 @@ class TestSafeDistancePredicate(unittest.TestCase):
         # self.assertEqual(exp_sol_robustness_mode_1, sol_robustness_mode_1_parameters)
         # self.assertEqual(exp_sol_robustness_mode_2, sol_robustness_mode_2_parameters)
 
-
     # def test_safe_distance(self):
-        # invalid parameters a_min_follow, a_min_lead
-        # self.assertRaises(RuntimeError, crcpp.safe_distance, 0, 0, -1, 0, 0)
-        # self.assertRaises(RuntimeError, crcpp.safe_distance, 0, 0, 0, -1, 0)
-        #
-        # exp_sol = 0  # both vehicles standing, no reaction time
-        # solution = crcpp.safe_distance(0, 0, -10, -10, 0)
-        # self.assertEqual(exp_sol, solution)
-        #
-        # exp_sol = 0  # both vehicles same velocity, no reaction time
-        # solution = crcpp.safe_distance(5, 5, -10, -10, 0)
-        # self.assertEqual(exp_sol, solution)
-        #
-        # exp_sol = 50.0  # both vehicles same velocity, with reaction time
-        # solution = crcpp.safe_distance(5, 5, -10, -10, 10)
-        # self.assertEqual(exp_sol, solution)
-        #
-        # exp_sol = 5.0  # following vehicle higher velocity, no reaction time
-        # solution = crcpp.safe_distance(10, 0, -10, -10, 0)
-        # self.assertEqual(exp_sol, solution)
-        #
-        # exp_sol = -5.0  # leading vehicle higher velocity, no reaction time
-        # solution = crcpp.safe_distance(0, 10, -10, -10, 0)
-        # self.assertEqual(exp_sol, solution)
+    # invalid parameters a_min_follow, a_min_lead
+    # self.assertRaises(RuntimeError, crcpp.safe_distance, 0, 0, -1, 0, 0)
+    # self.assertRaises(RuntimeError, crcpp.safe_distance, 0, 0, 0, -1, 0)
+    #
+    # exp_sol = 0  # both vehicles standing, no reaction time
+    # solution = crcpp.safe_distance(0, 0, -10, -10, 0)
+    # self.assertEqual(exp_sol, solution)
+    #
+    # exp_sol = 0  # both vehicles same velocity, no reaction time
+    # solution = crcpp.safe_distance(5, 5, -10, -10, 0)
+    # self.assertEqual(exp_sol, solution)
+    #
+    # exp_sol = 50.0  # both vehicles same velocity, with reaction time
+    # solution = crcpp.safe_distance(5, 5, -10, -10, 10)
+    # self.assertEqual(exp_sol, solution)
+    #
+    # exp_sol = 5.0  # following vehicle higher velocity, no reaction time
+    # solution = crcpp.safe_distance(10, 0, -10, -10, 0)
+    # self.assertEqual(exp_sol, solution)
+    #
+    # exp_sol = -5.0  # leading vehicle higher velocity, no reaction time
+    # solution = crcpp.safe_distance(0, 10, -10, -10, 0)
+    # self.assertEqual(exp_sol, solution)
