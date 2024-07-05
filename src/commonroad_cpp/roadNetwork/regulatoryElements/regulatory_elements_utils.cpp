@@ -200,6 +200,8 @@ int regulatory_elements_utils::getPriority(size_t timeStep, const std::shared_pt
 TrafficSignTypes regulatory_elements_utils::extractTypeFromNationalID(const std::string &trafficSignId,
                                                                       SupportedTrafficSignCountry country,
                                                                       const std::string &country_string) {
+    if (trafficSignId == "274") // some old scenarios use German ID for other countries.
+        return TrafficSignTypes::MAX_SPEED;
     if (country == SupportedTrafficSignCountry::GERMANY or country == SupportedTrafficSignCountry::ZAMUNDA) {
         for (const auto &countrySign : TrafficSignIDGermany)
             if (countrySign.second == trafficSignId)
@@ -221,9 +223,9 @@ TrafficSignTypes regulatory_elements_utils::extractTypeFromNationalID(const std:
             if (countrySign.second == trafficSignId)
                 return countrySign.first;
     } else
-        throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown country ID " +
+        throw std::runtime_error("regulatory_elements_utils::extractTypeFromNationalID: Unknown country ID " +
                                  country_string);
-    throw std::runtime_error("ProtobufReader::createTrafficSignElementFromMessage: Unknown traffic sign ID " +
+    throw std::runtime_error("regulatory_elements_utils::extractTypeFromNationalID: Unknown traffic sign ID " +
                              trafficSignId + " in country " + country_string);
 }
 

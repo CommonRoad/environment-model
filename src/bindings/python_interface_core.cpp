@@ -3,6 +3,8 @@
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
@@ -117,9 +119,9 @@ void init_python_interface_core(nb::module_ &m) {
 
     // nb::class_<StopLine>(m, "StopLine");
 
-    // nb::class_<TrafficSign>(m, "TrafficSign");
+    nb::class_<TrafficSign>(m, "TrafficSign").def_prop_rw("id", &TrafficSign::getId, &TrafficSign::setId);
 
-    // nb::class_<TrafficLight>(m, "TrafficLight");
+    nb::class_<TrafficLight>(m, "TrafficLight").def_prop_rw("id", &TrafficLight::getId, &TrafficLight::setId);
 
     nb::class_<Lanelet>(m, "Lanelet")
         .def_prop_rw("id", &Lanelet::getId, &Lanelet::setId)
