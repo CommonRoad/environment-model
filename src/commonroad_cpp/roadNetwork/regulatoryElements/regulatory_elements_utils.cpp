@@ -222,6 +222,10 @@ TrafficSignTypes regulatory_elements_utils::extractTypeFromNationalID(const std:
         for (const auto &countrySign : TrafficSignIDBelgium)
             if (countrySign.second == trafficSignId)
                 return countrySign.first;
+    } else if (country == SupportedTrafficSignCountry::AUSTRALIA) {
+        for (const auto &countrySign : TrafficSignIDAustralia)
+            if (countrySign.second == trafficSignId)
+                return countrySign.first;
     } else
         throw std::runtime_error("regulatory_elements_utils::extractTypeFromNationalID: Unknown country ID " +
                                  country_string);

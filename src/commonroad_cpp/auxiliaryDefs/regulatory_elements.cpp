@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "vector"
 #include <iostream>
 #include <map>
@@ -582,6 +575,8 @@ TrafficSignTable TrafficSignIDBelgium = {
 
 TrafficSignTable TrafficSignIDAustralia = {
     {TrafficSignTypes::STOP, "R1-1"},
+    {TrafficSignTypes::YIELD, "R1-2"},
+    {TrafficSignTypes::PEDESTRIANS_CROSSING, "R3-1"},
 };
 
 const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *> TrafficSignLookupTableByCountry = {
