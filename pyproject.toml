@@ -49,19 +49,22 @@ ENV_MODEL_BUILD_PYTHON_BINDINGS = "ON"
 language = "en"
 
 [tool.cibuildwheel]
-# Skip PyPy
-skip = "pp*"
+skip = ["pp*", "*i686, *-musllinux*"]
 archs = ["auto"]
-environment = { PIP_DISABLE_PIP_VERSION_CHECK="1" }
+environment = { PIP_DISABLE_PIP_VERSION_CHECK="1" } # Disable pip warning about newer versions being available
 build-verbosity = 1
-# Skip tests on musllinux due to missing wheels
-test-skip = "*i686 *-musllinux*"
+test-skip = ["pp*", "*i686, *-musllinux*"] # Skip tests on musllinux due to missing wheels
 test-extras = ["test"]
 test-command = "python -m pytest {package}/tests/python"
 
 [tool.cibuildwheel.macos]
 archs = ["x86_64", "arm64"]
-
 # macOS 10.14 is required for full C++17 support
 # macOS 10.15 is required for directory_iterator
 environment = {MACOSX_DEPLOYMENT_TARGET=10.15}
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
