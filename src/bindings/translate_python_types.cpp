@@ -467,16 +467,14 @@ std::shared_ptr<Obstacle> TranslatePythonTypes::createStaticObstacle(nb::handle 
 
 std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertObstacles(const nb::list &py_obstacle_list) {
     std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer{};
-    tempObstacleContainer.reserve(py_obstacle_list.size()); // Already know the size --> Faster memory allocation
-    // all obstacles must be initialized first
-    for (size_t i{0}; i < py_obstacle_list.size(); i++) {
-        std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
-        tempObstacleContainer.emplace_back(tempObstacle);
-    }
-    std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
+
     size_t arrayIndex{0};
     for (nb::handle py_singleObstacle : py_obstacle_list) {
         std::string obstacleRole{nb::cast<std::string>(py_singleObstacle.attr("obstacle_role").attr("value"))};
+        if (obstacleRole == "dynamic" or obstacleRole == "static") {
+            std::shared_ptr<Obstacle> tempObstacle = std::make_shared<Obstacle>();
+            tempObstacleContainer.emplace_back(tempObstacle);
+        }
         if (obstacleRole == "dynamic")
             tempObstacleContainer[arrayIndex] = createDynamicObstacle(py_singleObstacle);
         else if (obstacleRole == "static")

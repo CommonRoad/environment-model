@@ -109,7 +109,7 @@ We recommend Ubuntu 20.04 or newer.
 
 #### Ubuntu 20.04
 You need to install the following packages:
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev default-jdk`, 
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev default-jdk`,
 where  default-jdk is only needed for the CommonRoad Monitor or Runtime-Verification repository.
 All other required packages should be part of the standard Ubuntu installation.
 

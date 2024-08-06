@@ -13,10 +13,7 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(
 
     statistics->numExecutions++;
     statistics->totalComputationTime += static_cast<unsigned long>(compTime);
-    if (compTime > statistics->maxComputationTime)
-        statistics->maxComputationTime = compTime;
-    if (static_cast<unsigned long>(compTime) < statistics->minComputationTime)
-        statistics->minComputationTime = static_cast<size_t>(compTime);
+    statistics->computationTime.push_back(static_cast<double>(compTime) / 1e6);
     if (result)
         statistics->numSatisfaction++;
 

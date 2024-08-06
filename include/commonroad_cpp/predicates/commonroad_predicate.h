@@ -26,6 +26,7 @@ struct OptionalPredicateParameters {
     std::vector<TurningDirection> turningDirection;
     std::vector<TrafficLightState> trafficLightState;
     double minSafetyDistance;
+    double acceleration; // e.g. relative acceleration value
 };
 
 /**

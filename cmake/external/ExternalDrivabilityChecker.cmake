@@ -38,5 +38,3 @@ mark_as_advanced(
     ADD_TRIANGLE
     BUILD_S11N
 )
-
-

@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/braking/brakes_stronger_predicate.h>
 #include <commonroad_cpp/world.h>
@@ -13,27 +6,23 @@ bool BrakesStrongerPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP) > 0;
+    return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters) > 0;
 }
 
 Constraint BrakesStrongerPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    if (!obstacleP->getStateByTimeStep(timeStep)->getValidStates().acceleration)
-        obstacleP->interpolateAcceleration(timeStep, world->getDt());
-    return {std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(), 0.0)};
+    return {std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(),
+                     additionalFunctionParameters->acceleration)};
 }
 
 double BrakesStrongerPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
-        obstacleK->interpolateAcceleration(timeStep, world->getDt());
-    if (!obstacleP->getStateByTimeStep(timeStep)->getValidStates().acceleration)
-        obstacleP->interpolateAcceleration(timeStep, world->getDt());
-    return std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(), 0.0) -
+    return std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(),
+                    additionalFunctionParameters->acceleration) -
            obstacleK->getStateByTimeStep(timeStep)->getAcceleration();
 }
 

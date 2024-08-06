@@ -1,4 +1,4 @@
-Predicate Name,Num. Satisfactions,Num. Executions,Satisfaction in %,Max. Comp. Time,Min. Comp. Time,Avg. Comp. Time,Weight Max. Comp. Time,Weight Avg. Comp. Time 
+Predicate Name,Num. Satisfactions,Num. Executions,Satisfaction in %,Max. Comp. Time,Min. Comp. Time,Avg. Comp. Time,Weight Max. Comp. Time,Weight Avg. Comp. Time
 brakes_stronger,541,9588,0.0564247,0.01708 [ms],8.3e-05 [ms],0.000139445 [ms],0.0106644,0.00635162
 drives_faster,3675,9588,0.383292,0.000344 [ms],4.9e-05 [ms],7.93725e-05 [ms],0.000190871,0
 drives_leftmost,8,1173,0.00682012,0.654335 [ms],0.001593 [ms],0.00374296 [ms],0.409463,0.387362

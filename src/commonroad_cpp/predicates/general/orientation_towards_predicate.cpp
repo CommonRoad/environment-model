@@ -10,13 +10,6 @@ bool OrientationTowardsPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     auto referenceLaneP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
-    if (!referenceLaneP->getCurvilinearCoordinateSystem()->cartesianPointInProjectionDomain(
-            obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-            obstacleK->getStateByTimeStep(timeStep)->getYPosition()) or
-        !referenceLaneP->getCurvilinearCoordinateSystem()->cartesianPointInProjectionDomain(
-            obstacleP->getStateByTimeStep(timeStep)->getXPosition(),
-            obstacleP->getStateByTimeStep(timeStep)->getYPosition()))
-        return false;
     return (obstacleK->getLatPosition(timeStep, referenceLaneP) > // k on left side
                 obstacleP->getLatPosition(world->getRoadNetwork(), timeStep) and
             obstacleK->getCurvilinearOrientation(timeStep, referenceLaneP) < 0) or
