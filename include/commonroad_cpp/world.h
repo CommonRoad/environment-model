@@ -85,11 +85,6 @@ class World {
     [[nodiscard]] std::shared_ptr<Obstacle> findObstacle(size_t obstacleId) const;
 
     /**
-     * Computes for all ego vehicles occupied lanes per time step and sets reference lane.
-     */
-    void setInitialLanes();
-
-    /**
      * Computes all curvilinear states for ego vehicles and obstacles.
      */
     void setCurvilinearStates();
@@ -122,4 +117,14 @@ class World {
     std::vector<std::shared_ptr<Obstacle>> egoVehicles; //**< pointers to ego vehicle objects */
     std::vector<std::shared_ptr<Obstacle>> obstacles;   //**< pointers to obstacles *
     double dt;                                          //**<Time step size [s] *
+
+    /**
+     * Initializes missing state information, e.g, acceleration or reaction time.
+     */
+    void initMissingInformation();
+
+    /**
+     * Computes for all ego vehicles occupied lanes per time step and sets reference lane.
+     */
+    void setInitialLanes();
 };

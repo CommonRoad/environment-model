@@ -9,7 +9,7 @@
 World::World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
              std::vector<std::shared_ptr<Obstacle>> egos, std::vector<std::shared_ptr<Obstacle>> otherObstacles,
              double timeStepSize)
-    : name(name), timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egos)),
+    : name(std::move(name)), timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egos)),
       obstacles(std::move(otherObstacles)), dt(timeStepSize) {
     for (const auto &lane : roadNetwork->getLanes())
         idCounter = std::max(idCounter, lane->getId());
@@ -21,6 +21,7 @@ World::World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwor
         idCounter = std::max(idCounter, obs->getId());
     roadNetwork->setIdCounterRef(std::make_shared<size_t>(idCounter));
     setInitialLanes();
+    initMissingInformation();
 }
 
 size_t World::getTimeStep() const { return timeStep; }
@@ -88,3 +89,17 @@ void World::setEgoVehicles(std::vector<size_t> &egos) {
 }
 
 const std::string &World::getName() const { return name; }
+
+void World::initMissingInformation() {
+    for (const auto &obs : egoVehicles) {
+        for (const auto &obsTimeStep : obs->getTimeSteps())
+            if (!obs->getStateByTimeStep(obsTimeStep)->getValidStates().acceleration)
+                obs->interpolateAcceleration(obsTimeStep, dt);
+        if (!obs->getReactionTime().has_value())
+            obs->getReactionTime() = 0.5;
+    }
+    for (const auto &obs : obstacles)
+        for (const auto &obsTimeStep : obs->getTimeSteps())
+            if (!obs->getStateByTimeStep(obsTimeStep)->getValidStates().acceleration)
+                obs->interpolateAcceleration(obsTimeStep, dt);
+}

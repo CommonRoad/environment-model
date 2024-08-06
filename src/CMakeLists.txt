@@ -90,7 +90,6 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/commonroad_predicate.cpp
         commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.cpp
         commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.cpp
-        commonroad_cpp/predicates/braking/unnecessary_braking_predicate.cpp
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.cpp
         commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.cpp
@@ -152,6 +151,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/general/narrow_road_predicate.cpp
         commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.cpp
         commonroad_cpp/predicates/general/overtaking_allowed_predicate.cpp
+        commonroad_cpp/predicates/general/in_projection_domain_predicate.cpp
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
         commonroad_cpp/predicates/velocity/slow_leading_vehicle_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp
@@ -180,7 +180,6 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h
         commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h
         commonroad_cpp/predicates/braking/safe_distance_gap_right_violated_predicate.h
-        commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h
         commonroad_cpp/predicates/braking/decelerates_predicate.h
         commonroad_cpp/predicates/commonroad_predicate.h
         commonroad_cpp/predicates/general/change_lane_predicate.h
@@ -203,6 +202,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/general/obstacle_is_static_predicate.h
         commonroad_cpp/predicates/general/overtaking_allowed_predicate.h
         commonroad_cpp/predicates/general/two_or_more_lanes_for_one_dir_predicate.h
+        commonroad_cpp/predicates/general/in_projection_domain_predicate.h
         commonroad_cpp/predicates/position/approach_t_intersection_predicate.h
         commonroad_cpp/predicates/position/approach_four_way_stop_predicate.h
         commonroad_cpp/predicates/position/approach_intersection_predicate.h
@@ -457,5 +457,3 @@ foreach(target IN ITEMS env_model_core env_model_predicates)
         target_compile_options(${target} PRIVATE /W3)
     endif()
 endforeach()
-
-

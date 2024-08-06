@@ -32,7 +32,7 @@ def eval_scenario(scenario_path: str):
         crcpp.register_scenario(scenario_id, str(scenario.scenario_id), 0, "DEU", sc.lanelet_network, sc.obstacles, [])
         crcpp.remove_scenario(scenario_id)
         print("Successful - " + scenario_path)
-    except:
+    except Exception:
         print("Failed - " + scenario_path)
 
 

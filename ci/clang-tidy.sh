@@ -2,17 +2,17 @@
 
 # set exit on error
 # set -e
- 
+
 exit_flag=false
 
 clang_tidy_version='10'
 clang_tidy="clang-tidy-$clang_tidy_version"
 
 target_branch="master"
- 
+
 # Retrieve list of cpp-files that were changed in source branch with respect to master (target branch)
 filelist=($(git diff origin/${target_branch} --name-only | grep ".cpp"))
- 
+
 
 if [[ "${#filelist[@]}" -eq "0" ]]; then
     echo "==> No cpp files found"
@@ -20,7 +20,7 @@ if [[ "${#filelist[@]}" -eq "0" ]]; then
     exit 0
 else
     echo "==> Found ${#filelist[@]} cpp files"
-    echo "==> ${filelist[*]}" 
+    echo "==> ${filelist[*]}"
     echo "==> Let's start our clang-tidy check"
 fi
 
@@ -48,7 +48,7 @@ for f in ${filelist[*]}; do
         echo "Checking matching file ${f}"
         touch output.txt
         $clang_tidy -p=build ${f} --extra-arg=--cuda-host-only > output.txt
-         
+
         # decide if error or warning fail
         if [[ -n $(grep "warning: " output.txt) ]] || [[ -n $(grep "error: " output.txt) ]]; then
             echo ""

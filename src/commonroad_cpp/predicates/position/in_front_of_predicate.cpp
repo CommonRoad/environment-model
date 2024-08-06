@@ -31,17 +31,6 @@ InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<Worl
                                      const std::shared_ptr<Obstacle> &obstacleP,
                                      const std::shared_ptr<Obstacle> &obstacleK,
                                      const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    // check whether kth obstacle is in the projection domain of the reference of the pth vehicle -> otherwise ccs
-    // fails
-    if (!obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
-             ->getCurvilinearCoordinateSystem()
-             ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                                obstacleK->getStateByTimeStep(timeStep)->getYPosition()) or
-        !obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
-             ->getCurvilinearCoordinateSystem()
-             ->cartesianPointInProjectionDomain(obstacleP->getStateByTimeStep(timeStep)->getXPosition(),
-                                                obstacleP->getStateByTimeStep(timeStep)->getYPosition()))
-        return false; // todo logging
     return obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)) -
            obstacleP->frontS(world->getRoadNetwork(), timeStep);
 }

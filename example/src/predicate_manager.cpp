@@ -41,8 +41,8 @@ void PredicateManager::extractPredicateSatisfaction() {
             std::vector<std::shared_ptr<Obstacle>> others;
             others.reserve(obstacles.size() - 1);
             for (const auto &obs : obstacles) {
-                if (obs->getId() == ego->getId() or (obs->getFinalTimeStep() < minTimeStep and
-                                                     maxTimeStep < obs->getFirstTimeStep()))
+                if (obs->getId() == ego->getId() or
+                    (obs->getFinalTimeStep() < minTimeStep and maxTimeStep < obs->getFirstTimeStep()))
                     continue;
                 others.push_back(obs);
             }
@@ -119,10 +119,10 @@ void PredicateManager::extractPredicateSatisfaction() {
         }
     }
     spdlog::info("Evaluation finished.");
- //   writeFile();
+    //   writeFile();
 }
 
-//void PredicateManager::writeFile() {
+// void PredicateManager::writeFile() {
 //    std::ofstream file;
 //    double globalMinExecutionTime{std::numeric_limits<double>::max()};
 //    double globalMaxExecutionTime{std::numeric_limits<double>::lowest()};
@@ -165,7 +165,8 @@ void PredicateManager::extractPredicateSatisfaction() {
 //    for (const auto &[predName, pred] : predicateStatistics) {
 //        file << predName << "," << std::get<0>(pred) << "," << std::get<1>(pred) << "," << std::get<2>(pred) << ","
 //             << std::get<3>(pred) << " [ms]," << std::get<4>(pred) << " [ms]," << std::get<5>(pred) << " [ms],"
-//             << (std::get<3>(pred) - globalMinExecutionTime) / (globalMaxExecutionTime - globalMinExecutionTime) << ","
+//             << (std::get<3>(pred) - globalMinExecutionTime) / (globalMaxExecutionTime - globalMinExecutionTime) <<
+//             ","
 //             << (std::get<5>(pred) - globalMinAvgExecutionTime) /
 //                    (globalMaxAvgExecutionTime - globalMinAvgExecutionTime)
 //             << "\n";
@@ -214,6 +215,6 @@ void PredicateManager::extractRelevantPredicates(const std::string &configPath) 
     }
 }
 void PredicateManager::reset() {
- //   for (const auto &predName : relevantPredicates)
- //       predicates[predName]->resetStatistics();
+    //   for (const auto &predName : relevantPredicates)
+    //       predicates[predName]->resetStatistics();
 }

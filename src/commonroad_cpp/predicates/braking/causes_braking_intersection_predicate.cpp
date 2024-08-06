@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h>
@@ -17,10 +10,6 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    if (!obstacleK->getStateByTimeStep(timeStep)->getValidStates().acceleration)
-        obstacleK->interpolateAcceleration(timeStep, world->getDt());
-    if (!obstacleP->getStateByTimeStep(timeStep)->getValidStates().acceleration)
-        obstacleP->interpolateAcceleration(timeStep, world->getDt());
 
     // check whether kth obstacle is in the projection domain of the reference of the pth vehicle -> otherwise ccs fails
     if (!obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)

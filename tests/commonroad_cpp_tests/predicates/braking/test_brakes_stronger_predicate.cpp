@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_brakes_stronger_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
@@ -54,22 +47,25 @@ void BrakesStrongerPredicateTest::SetUp() {
 }
 
 TEST_F(BrakesStrongerPredicateTest, BooleanEvaluation) {
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, obstacleTwo));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo));
-    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo));
-    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo));
+    auto opt{std::make_shared<OptionalPredicateParameters>()};
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, obstacleTwo, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo, opt));
 }
 
 TEST_F(BrakesStrongerPredicateTest, ConstraintEvaluation) {
-    EXPECT_EQ(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo).realValuedConstraint, -1);
-    EXPECT_EQ(pred.constraintEvaluation(1, world, obstacleOne, obstacleTwo).realValuedConstraint, -2);
-    EXPECT_EQ(pred.constraintEvaluation(2, world, obstacleOne, obstacleTwo).realValuedConstraint, 0);
-    EXPECT_EQ(pred.constraintEvaluation(3, world, obstacleOne, obstacleTwo).realValuedConstraint, 0);
+    auto opt{std::make_shared<OptionalPredicateParameters>()};
+    EXPECT_EQ(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo, opt).realValuedConstraint, -1);
+    EXPECT_EQ(pred.constraintEvaluation(1, world, obstacleOne, obstacleTwo, opt).realValuedConstraint, -2);
+    EXPECT_EQ(pred.constraintEvaluation(2, world, obstacleOne, obstacleTwo, opt).realValuedConstraint, 0);
+    EXPECT_EQ(pred.constraintEvaluation(3, world, obstacleOne, obstacleTwo, opt).realValuedConstraint, 0);
 }
 
 TEST_F(BrakesStrongerPredicateTest, RobustEvaluation) {
-    EXPECT_EQ(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), 1);
-    EXPECT_EQ(pred.robustEvaluation(1, world, obstacleOne, obstacleTwo), -1);
-    EXPECT_NEAR(pred.robustEvaluation(2, world, obstacleOne, obstacleTwo), -1, 0.0001);
-    EXPECT_EQ(pred.robustEvaluation(3, world, obstacleOne, obstacleTwo), -2);
+    auto opt{std::make_shared<OptionalPredicateParameters>()};
+    EXPECT_EQ(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo, opt), 1);
+    EXPECT_EQ(pred.robustEvaluation(1, world, obstacleOne, obstacleTwo, opt), -1);
+    EXPECT_NEAR(pred.robustEvaluation(2, world, obstacleOne, obstacleTwo, opt), -1, 0.0001);
+    EXPECT_EQ(pred.robustEvaluation(3, world, obstacleOne, obstacleTwo, opt), -2);
 }
