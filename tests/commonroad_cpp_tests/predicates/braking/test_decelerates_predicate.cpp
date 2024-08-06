@@ -42,37 +42,40 @@ void TestDeceleratePredicate::SetUp() {
 }
 
 TEST_F(TestDeceleratePredicate, BooleanEvaluation) {
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne));
-    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne));
-    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne));
-    EXPECT_FALSE(pred.booleanEvaluation(4, world, obstacleOne));
-    EXPECT_FALSE(pred.booleanEvaluation(5, world, obstacleOne));
+    auto opt{std::make_shared<OptionalPredicateParameters>()};
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne, {}, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, {}, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, {}, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne, {}, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(4, world, obstacleOne, {}, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(5, world, obstacleOne, {}, opt));
 
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleTwo));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleTwo));
-    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleTwo));
-    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleTwo));
-    EXPECT_FALSE(pred.booleanEvaluation(4, world, obstacleTwo));
-    EXPECT_FALSE(pred.booleanEvaluation(5, world, obstacleTwo));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleTwo, {}, opt));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleTwo, {}, opt));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleTwo, {}, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleTwo, {}, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(4, world, obstacleTwo, {}, opt));
+    EXPECT_FALSE(pred.booleanEvaluation(5, world, obstacleTwo, {}, opt));
 }
 
 TEST_F(TestDeceleratePredicate, ConstraintEvaluation) {
-    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);
+    auto opt{std::make_shared<OptionalPredicateParameters>()};
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, {}, opt), std::runtime_error);
 }
 
 TEST_F(TestDeceleratePredicate, RobustEvaluation) {
-    EXPECT_EQ(pred.robustEvaluation(0, world, obstacleOne), 0);
-    EXPECT_EQ(pred.robustEvaluation(1, world, obstacleOne), 0);
-    EXPECT_EQ(pred.robustEvaluation(2, world, obstacleOne), 1);
-    EXPECT_EQ(pred.robustEvaluation(3, world, obstacleOne), 1);
-    EXPECT_EQ(pred.robustEvaluation(4, world, obstacleOne), 1);
-    EXPECT_EQ(pred.robustEvaluation(5, world, obstacleOne), 1);
+    auto opt{std::make_shared<OptionalPredicateParameters>()};
+    EXPECT_EQ(pred.robustEvaluation(0, world, obstacleOne, {}, opt), 0);
+    EXPECT_EQ(pred.robustEvaluation(1, world, obstacleOne, {}, opt), 0);
+    EXPECT_EQ(pred.robustEvaluation(2, world, obstacleOne, {}, opt), 1);
+    EXPECT_EQ(pred.robustEvaluation(3, world, obstacleOne, {}, opt), 1);
+    EXPECT_EQ(pred.robustEvaluation(4, world, obstacleOne, {}, opt), 1);
+    EXPECT_EQ(pred.robustEvaluation(5, world, obstacleOne, {}, opt), 1);
 
-    EXPECT_EQ(pred.robustEvaluation(0, world, obstacleTwo), -1);
-    EXPECT_EQ(pred.robustEvaluation(1, world, obstacleTwo), -2);
-    EXPECT_EQ(pred.robustEvaluation(2, world, obstacleTwo), -1);
-    EXPECT_EQ(pred.robustEvaluation(3, world, obstacleTwo), 1);
-    EXPECT_EQ(pred.robustEvaluation(4, world, obstacleTwo), 0);
-    EXPECT_EQ(pred.robustEvaluation(5, world, obstacleTwo), 0);
+    EXPECT_EQ(pred.robustEvaluation(0, world, obstacleTwo, {}, opt), -1);
+    EXPECT_EQ(pred.robustEvaluation(1, world, obstacleTwo, {}, opt), -2);
+    EXPECT_EQ(pred.robustEvaluation(2, world, obstacleTwo, {}, opt), -1);
+    EXPECT_EQ(pred.robustEvaluation(3, world, obstacleTwo, {}, opt), 1);
+    EXPECT_EQ(pred.robustEvaluation(4, world, obstacleTwo, {}, opt), 0);
+    EXPECT_EQ(pred.robustEvaluation(5, world, obstacleTwo, {}, opt), 0);
 }

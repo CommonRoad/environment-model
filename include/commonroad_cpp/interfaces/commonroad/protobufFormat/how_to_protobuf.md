@@ -15,7 +15,3 @@ The following command can be used to create the source and header files manually
  ./include/commonroad_cpp/interfaces/commonroad/protobufFormat/**/*.proto
 ```
 We recommend to use libprotoc 3.6.1 for generating the code (you can check the version via ```protoc --version```).
-
-
-
-

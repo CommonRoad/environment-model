@@ -39,5 +39,3 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         target_compile_options(env_model_example_node PRIVATE /W3 /WX)
     endif(ENV_MODEL_BUILD_EXECUTABLE)
 endif()
-
-

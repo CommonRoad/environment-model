@@ -59,12 +59,14 @@ test-command = "python -m pytest {package}/tests/python"
 
 [tool.cibuildwheel.macos]
 archs = ["x86_64", "arm64"]
-# macOS 10.14 is required for full C++17 support
-# macOS 10.15 is required for directory_iterator
-environment = {MACOSX_DEPLOYMENT_TARGET=10.15}
+environment = {MACOSX_DEPLOYMENT_TARGET=10.15} # macOS 10.15 for directory_iterator and C++17 support (macOS 10.14)
 
-[tool.black]
+[tool.ruff]
 line-length = 120
+indent-width = 4
+format.quote-style = "double"
+target-version = "py311"
+ignore = ["E203"]
 
-[tool.isort]
-profile = "black"
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "F401"]

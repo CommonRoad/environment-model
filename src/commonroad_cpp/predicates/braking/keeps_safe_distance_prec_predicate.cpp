@@ -35,18 +35,12 @@ Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
-    double tReact;
-    try {
-        tReact = obstacleK->getReactionTime().value();
-    } catch (const std::bad_optional_access &e) {
-        throw std::logic_error{"tried to evaluate KeepsSafeDistancePrecPredicate on an obstacle which does not have a "
-                               "reaction time defined"};
-    }
 
     return {obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
             0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength() -
             computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
-                                obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
+                                obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP,
+                                obstacleK->getReactionTime().value())};
 }
 
 Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(double lonPosP, double velocityK, double velocityP,
@@ -62,29 +56,13 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
-    double tReact;
-    try {
-        tReact = obstacleK->getReactionTime().value();
-    } catch (const std::bad_optional_access &e) {
-        throw std::logic_error{"tried to evaluate KeepsSafeDistancePrecPredicate on an obstacle which does not have a "
-                               "reaction time defined"};
-    }
+
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
-                                     obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP, tReact)};
-    double deltaS{0};
-    // check whether pth vehicle is in projection domain, e.g. for intersections
-    if (obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
-            ->getCurvilinearCoordinateSystem()
-            ->cartesianPointInProjectionDomain(obstacleP->getStateByTimeStep(timeStep)->getXPosition(),
-                                               obstacleP->getStateByTimeStep(timeStep)->getYPosition()) and
-        obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
-            ->getCurvilinearCoordinateSystem()
-            ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                               obstacleK->getStateByTimeStep(timeStep)->getYPosition()))
-        deltaS = obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
-                 obstacleK->frontS(world->getRoadNetwork(), timeStep);
-    else
-        return parameters.getParam("epsilon");
+                                     obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP,
+                                     obstacleK->getReactionTime().value())};
+    double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
+                  obstacleK->frontS(world->getRoadNetwork(), timeStep)};
+
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
     // robustness
     if (deltaS < 0)

@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_keeps_safe_distance_prec_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
@@ -118,14 +111,12 @@ TEST_F(KeepsSafeDistancePrecPredicateTest, ResetStatistics) {
     EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat, obstacleTwo));
     EXPECT_EQ(stat->numExecutions, 1);
     EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat, obstacleTwo));
-    EXPECT_LT(stat->minComputationTime, LONG_MAX);
-    EXPECT_GT(stat->maxComputationTime, LONG_MIN);
+    EXPECT_GT(stat->computationTime.at(0), 0);
     EXPECT_GT(stat->totalComputationTime, 0);
     EXPECT_GE(stat->numSatisfaction, 0);
     EXPECT_EQ(stat->numExecutions, 2);
     stat = {std::make_shared<PredicateStatistics>()};
-    EXPECT_EQ(stat->minComputationTime, LONG_MAX);
-    EXPECT_EQ(stat->maxComputationTime, LONG_MIN);
+    EXPECT_EQ(stat->computationTime.size(), 0);
     EXPECT_EQ(stat->totalComputationTime, 0);
     EXPECT_EQ(stat->numSatisfaction, 0);
     EXPECT_EQ(stat->numExecutions, 0);

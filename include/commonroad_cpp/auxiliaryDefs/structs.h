@@ -64,15 +64,13 @@ struct ValidStates {
 };
 
 struct PredicateStatistics {
-    long maxComputationTime{LONG_MIN};
-    size_t minComputationTime{LONG_MAX};
-    size_t totalComputationTime{0};
+    std::vector<double> computationTime; // ms
+    size_t totalComputationTime{0};      // ns
     size_t numExecutions{0};
     size_t numSatisfaction{0};
 
     void reset() {
-        maxComputationTime = LONG_MIN;
-        minComputationTime = LONG_MAX;
+        computationTime.clear();
         totalComputationTime = 0;
         numExecutions = 0;
         numSatisfaction = 0;
