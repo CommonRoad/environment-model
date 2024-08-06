@@ -49,4 +49,3 @@ CheckOptions:
   - key:             readability-identifier-naming.ClassConstantCase
     value:           UPPER_CASE
 ...
-

@@ -246,8 +246,12 @@ std::vector<size_t> Obstacle::getHistoryTimeSteps() {
 
 std::vector<size_t> Obstacle::getTimeSteps() {
     std::vector<size_t> timeSteps{getPredictionTimeSteps()};
-    if (timeSteps.front() != currentState->getTimeStep())
+    if (timeSteps.empty())
         timeSteps.insert(timeSteps.begin(), currentState->getTimeStep());
+    else {
+        if (timeSteps.front() != currentState->getTimeStep())
+            timeSteps.insert(timeSteps.begin(), currentState->getTimeStep());
+    }
     return timeSteps;
 }
 

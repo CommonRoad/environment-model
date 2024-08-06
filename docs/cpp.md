@@ -32,5 +32,3 @@ pathToExecutable/env_model_example_node --input-file pathToRepository/src/common
 where *--input-file* specifies the path to a configuration file based on the default configuration file and *--t* specifies the number of threads which should be used.
 **Attention**: The environment-model library is not developed for parallelization.
 Therefore, we recommend to use copies inside threads.
-
-

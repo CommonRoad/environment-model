@@ -6,7 +6,7 @@ bool DeceleratesPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP) < 0;
+    return robustEvaluation(timeStep, world, obstacleK, obstacleP) < additionalFunctionParameters->acceleration;
 }
 
 Constraint DeceleratesPredicate::constraintEvaluation(

@@ -37,6 +37,15 @@ cppcheck:
     - job: build-compile-commands
       artifacts: true
 
+pre_commit:
+  image: python:3.11
+  stage: static-test
+  before_script:
+    - pip install pre-commit
+  script:
+    - pre-commit run --all-files --show-diff-on-failure
+  needs: []
+
 .cache-build-dir:
   cache: &cache_dependency_archives
     key: cache-dependency-archives
@@ -156,7 +165,7 @@ build-wheel:
   stage: python
   # Use the privileged runner as required for Docker-in-Docker (dind)
   tags:
-    - wheel
+    - dind
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   # make a docker daemon available for cibuildwheel to use
   services:

@@ -28,12 +28,12 @@ pip install --no-build-isolation -ve.
 ```
 This is completely optional. It might require some additional steps outlined below.
 
-Explanation: When build isolation is enabled (default in recent pip versions),  
+Explanation: When build isolation is enabled (default in recent pip versions),
 pip will provide the Python interpreter files in a temporary directory.
 The name of the temporary changes for every invocation of `pip install` even if the files are identical.
 Therefore, CMake will decide to reconfigure the project, requiring recompilation of all source files.
-By disabling build isolation for development builds, CMake won't need to reconfigure as the paths to the 
-Python installation stay the same. 
+By disabling build isolation for development builds, CMake won't need to reconfigure as the paths to the
+Python installation stay the same.
 Therefore, CMake can reuse files from the previous build, making it the build faster.
 
 However, if you want to use `--no-build-isolation` you need to ensure all
@@ -46,9 +46,9 @@ pip install "setuptools>=61.0" "wheel" "scikit-build-core~=0.6.0" "pybind11~=2.1
 **Note that the package version might have changed in the meantime!**
 
 ### Debugging the C++ interface codr from Python
-For debugging the Python interface you can use the methods described [here](https://www.jetbrains.com/help/clion/debugging-python-extensions.html#debug-custom-py) (Option 2).   
-For example, here are two screenshots of a working configuration:    
-![img.png](./clion_python_debug_config/img.png)   
-![img_1.png](./clion_python_debug_config/img_1.png)   
-![img_2.png](./clion_python_debug_config/img_2.png)  
+For debugging the Python interface you can use the methods described [here](https://www.jetbrains.com/help/clion/debugging-python-extensions.html#debug-custom-py) (Option 2).
+For example, here are two screenshots of a working configuration:
+![img.png](./clion_python_debug_config/img.png)
+![img_1.png](./clion_python_debug_config/img_1.png)
+![img_2.png](./clion_python_debug_config/img_2.png)
 **Note that the correct Python environment must be selected several times!**

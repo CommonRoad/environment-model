@@ -105,7 +105,7 @@ endif()
 if (ENV_MODEL_BUILD_PYTHON_BINDINGS)
     if(SKBUILD)
         find_package(Python 3.8 COMPONENTS Interpreter Development.Module REQUIRED)
-        
+
         if (NOT NB_DIR)
             execute_process(
                     COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir

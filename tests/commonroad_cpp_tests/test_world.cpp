@@ -1,7 +1,6 @@
 #include "test_world.h"
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
-#include "commonroad_cpp/predicates/braking/unnecessary_braking_predicate.h"
 #include "commonroad_cpp/world.h"
 #include "interfaces/utility_functions.h"
 #include <array>
@@ -118,7 +117,6 @@ TEST_F(WorldTest, SetCurvilinearStates) {
                                   scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    UnnecessaryBrakingPredicate pred;
     auto world1{World("USA_Peach-2_1_T-1", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1)};
     EXPECT_NO_THROW(world1.setCurvilinearStates());
 }
