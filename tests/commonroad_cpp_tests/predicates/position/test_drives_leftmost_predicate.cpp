@@ -1,9 +1,4 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
+
 #include "test_drives_leftmost_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"

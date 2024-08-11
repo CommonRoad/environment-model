@@ -1,11 +1,10 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/world.h>
 
+#include "commonroad_cpp/predicates/general/is_of_type_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.h>
-#include <commonroad_cpp/predicates/general/is_vehicle_predicate.h>
 
 bool InLaneletDrivingDirPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
@@ -21,6 +20,7 @@ bool InLaneletDrivingDirPredicate::booleanEvaluation(
     obstacleK->convertPointToCurvilinear(world->getRoadNetwork(), timeStep);
     std::vector<std::shared_ptr<Lanelet>> lanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+
     return std::any_of(lanelets.begin(), lanelets.end(), [&, theta](const std::shared_ptr<Lanelet> &lanelet) {
         double lanelet_orientation =
             lanelet->getOrientationAtPosition(obstacleK->getStateByTimeStep(timeStep)->getLonPosition(),
@@ -31,19 +31,23 @@ bool InLaneletDrivingDirPredicate::booleanEvaluation(
             static_cast<double>(std::abs(theta) >= std::abs(lanelet_orientation)) * (theta - lanelet_orientation) +
             static_cast<double>(std::abs(theta) < std::abs(lanelet_orientation)) * (lanelet_orientation - theta);
 
+        IsOfTypePredicate isVehicle;
+        std::shared_ptr<OptionalPredicateParameters> opt{std::make_shared<OptionalPredicateParameters>()};
+        opt->obstacleType = ObstacleType::vehicle;
+
         // Check whether the vehicle type of the kth vehicle is allowed to use the lanelet in one direction.
         std::set<ObstacleType> usersOneWay = lanelet->getUsersOneWay();
-        bool oneWay = std::any_of(usersOneWay.begin(), usersOneWay.end(), [&](const ObstacleType &user) {
+        bool oneWay = std::any_of(usersOneWay.begin(), usersOneWay.end(), [&, opt](const ObstacleType &user) {
             return user == obstacleK->getObstacleType() or
-                   isVehicle.booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters);
+                   isVehicle.booleanEvaluation(timeStep, world, obstacleK, obstacleP, opt);
         });
 
         // Check whether the vehicle type of the kth vehicle is allowed to use the lanelet in both directions.
         std::set<ObstacleType> usersBidirectional = lanelet->getUsersBidirectional();
         bool bidirectional =
-            std::any_of(usersBidirectional.begin(), usersBidirectional.end(), [&](const ObstacleType &user) {
+            std::any_of(usersBidirectional.begin(), usersBidirectional.end(), [&, opt](const ObstacleType &user) {
                 return user == obstacleK->getObstacleType() or
-                       isVehicle.booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters);
+                       isVehicle.booleanEvaluation(timeStep, world, obstacleK, obstacleP, opt);
             });
 
         // The kth vehicle is driving in the direction of travel of the lanelet if it is allowed to only drive in

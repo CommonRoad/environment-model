@@ -2,15 +2,14 @@
 
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/predicates/velocity/in_standstill_predicate.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
+#include "commonroad_cpp/predicates/velocity/velocity_below_threshold_predicate.h"
 #include "commonroad_cpp/world.h"
 #include <gtest/gtest.h>
 
-class InStandstillPredicateTest : public testing::Test {
+class VelocityBelowThresholdPredicateTest : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> obstacleOne;
-    InStandstillPredicate pred;
+    VelocityBelowThresholdPredicate pred;
     std::shared_ptr<World> world;
 
   private:
