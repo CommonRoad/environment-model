@@ -1,11 +1,11 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/predicates/general/is_vru_predicate.h>
+#include <commonroad_cpp/predicates/general/is_of_type_predicate.h>
 #include <gtest/gtest.h>
 
-class TestIsVruPredicate : public testing::Test {
+class TestIsOfTypePredicate : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> egoVehicle;
-    IsVruPredicate pred;
+    IsOfTypePredicate pred;
 
   private:
     void SetUp() override;

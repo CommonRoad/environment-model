@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <geometry/curvilinear_coordinate_system.h>
 
 #include <algorithm> // for max, min
@@ -20,15 +13,11 @@
 #include <boost/geometry/geometries/ring.hpp> // for ring
 
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
-#include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/geometry/rectangle.h>
-#include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/obstacle/obstacle_reference.h>
-#include <commonroad_cpp/obstacle/state.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 

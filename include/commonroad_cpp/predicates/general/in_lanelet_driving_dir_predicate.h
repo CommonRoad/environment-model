@@ -1,10 +1,9 @@
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
-#include "is_vehicle_predicate.h"
 
 /**
- * Evaluates if a vehicle drives in the correct diretion
+ * Evaluates if a vehicle drives in the correct direction
  */
 class InLaneletDrivingDirPredicate : public CommonRoadPredicate {
   public:
@@ -54,7 +53,4 @@ class InLaneletDrivingDirPredicate : public CommonRoadPredicate {
         size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
         const std::shared_ptr<Obstacle> &obstacleP = {},
         const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
-
-  private:
-    IsVehiclePredicate isVehicle;
 };

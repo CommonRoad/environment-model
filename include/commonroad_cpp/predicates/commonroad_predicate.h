@@ -25,8 +25,10 @@ struct OptionalPredicateParameters {
     std::vector<LaneletType> laneletType;
     std::vector<TurningDirection> turningDirection;
     std::vector<TrafficLightState> trafficLightState;
+    ObstacleType obstacleType;
     double minSafetyDistance;
-    double acceleration; // e.g. relative acceleration value
+    double acceleration;       // e.g. relative acceleration value
+    double velocity_threshold; // e.g. congestion velocity
 };
 
 /**

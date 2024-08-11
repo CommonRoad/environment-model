@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
