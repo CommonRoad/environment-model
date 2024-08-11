@@ -1,7 +1,7 @@
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
-#include "commonroad_cpp/predicates/general/is_vru_predicate.h"
+#include "commonroad_cpp/predicates/general/is_of_type_predicate.h"
 #include "commonroad_cpp/predicates/position/right_of_predicate.h"
 
 /**
@@ -56,8 +56,4 @@ class SafeLateralDistanceToVrusPredicate : public CommonRoadPredicate {
         size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
         const std::shared_ptr<Obstacle> &obstacleP = {},
         const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
-
-  private:
-    IsVruPredicate isVRU;
-    RightOfPredicate isRightOf;
 };

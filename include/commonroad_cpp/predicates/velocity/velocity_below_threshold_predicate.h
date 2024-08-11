@@ -1,23 +1,16 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate for evaluating if a vehicle is in a congestion
+ * Predicate which checks if the kth vehicle drives below a threshold velocity
  */
-class InCongestionPredicate : public CommonRoadPredicate {
+class VelocityBelowThresholdPredicate : public CommonRoadPredicate {
   public:
-    /* TODO boolean Evaluation with python params */
     /**
-     * Constructor for InCongestionPredicate
+     * Constructor for VelocityBelowThresholdPredicate
      */
-    InCongestionPredicate();
+    VelocityBelowThresholdPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

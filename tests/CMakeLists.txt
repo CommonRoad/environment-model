@@ -26,7 +26,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/predicate_manager_test.cpp
         commonroad_cpp_tests/predicates/utils_predicate_test.cpp
         commonroad_cpp_tests/predicates/braking/test_keeps_safe_distance_prec_predicate.cpp
-        commonroad_cpp_tests/predicates/braking/test_safe_distance_gap_right_violated_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_brakes_stronger_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_braking_with_acceleration_possible_at_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_causes_braking_intersection_predicate.cpp
@@ -43,11 +42,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/general/test_change_lane_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_orientation_towards_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_lane_based_orientation_similar_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_in_congestion_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_in_slow_moving_traffic_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_in_queue_of_vehicles_predicate.cpp
-        commonroad_cpp_tests/predicates/general/test_is_special_vehicle_purpose.cpp
-        commonroad_cpp_tests/predicates/general/test_is_vru_predicate.cpp
+        commonroad_cpp_tests/predicates/general/test_is_of_type_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_makes_u_turn_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_interstate_broad_enough.cpp
         commonroad_cpp_tests/predicates/general/test_left_signal_set_predicate.cpp
@@ -95,8 +90,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/position/test_on_oncoming_of_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_unobstructed_intersection_view_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_in_intersection_conflict_area_predicate.cpp
-        commonroad_cpp_tests/predicates/position/test_oncoming_vehicle_predicate.cpp
-        commonroad_cpp_tests/predicates/position/test_overtaking_bicycle_same_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/position/test_neighboring_lane_opp_driving_dir_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_safe_distance_to_vrus_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_stop_line_in_front_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_close_to_stop_line_predicate.cpp
@@ -108,7 +102,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/velocity/test_keeps_lane_speed_limit_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_min_speed_limit_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
-        commonroad_cpp_tests/predicates/velocity/test_slow_leading_vehicle_predicate.cpp
+        commonroad_cpp_tests/predicates/velocity/test_slow_other_vehicle_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_in_standstill_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_exist_standing_leading_vehicle_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_drives_faster_predicate.cpp
@@ -117,6 +111,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/velocity/test_keeps_type_speed_limit_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_fov_speed_limit_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_keeps_braking_speed_limit_predicate.cpp
+        commonroad_cpp_tests/predicates/velocity/test_velocity_below_threshold_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_change_lane_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_low_computation_time_test_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_high_computation_time_test_predicate.cpp)

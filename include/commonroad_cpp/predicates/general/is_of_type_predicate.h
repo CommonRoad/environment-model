@@ -1,22 +1,14 @@
-//
-// Created by Sebastian Maierhofer and  Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
-#include "../commonroad_predicate.h"
+#include "commonroad_cpp/predicates/commonroad_predicate.h"
 
-/**
- * Predicate for evaluating if a vehicle is part of a queue of vehicles
- */
-class InQueueOfVehiclesPredicate : public CommonRoadPredicate {
+// Evaluates whether obstacles has provided type.
+class IsOfTypePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for InQueueOfVehiclesPredicate
+     * Constructor for IsOfTypePredicate
      */
-    InQueueOfVehiclesPredicate();
+    IsOfTypePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
@@ -33,13 +25,13 @@ class InQueueOfVehiclesPredicate : public CommonRoadPredicate {
                       const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
-     * Robustness evaluation of predicate using objects.
+     * Constraint evaluation of predicate using objects. (Currently not supported for this predicate)
      *
      * @param timeStep Time step of interest.
      * @param world World object.
      * @param obstacleK The kth obstacle.
-     * @param obstacleP The pth obstacle. This is an optional parameter.
-     * @return Real value indicating robustness of the predicate.
+     * @param obstacleP The pth obstacle.
+     * @return Constraints defined by the predicate.
      */
     double
     robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
@@ -47,13 +39,13 @@ class InQueueOfVehiclesPredicate : public CommonRoadPredicate {
                      const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters = {}) override;
 
     /**
-     * Constraint evaluation of predicate using objects.
+     * Robustness evaluation of predicate using objects. (Currently not supported for this predicate)
      *
      * @param timeStep Time step of interest.
      * @param world World object.
      * @param obstacleK The kth obstacle.
      * @param obstacleP The pth obstacle. This is an optional parameter.
-     * @return Constraints defined by the predicate.
+     * @return Real value indicating robustness of the predicate.
      */
     Constraint constraintEvaluation(
         size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

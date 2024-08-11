@@ -1,7 +1,3 @@
-//
-// Created by valentin on 04.11.22.
-//
-
 #pragma once
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
