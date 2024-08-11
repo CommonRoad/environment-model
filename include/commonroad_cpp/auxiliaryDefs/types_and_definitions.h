@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <string>
 #include <unordered_map>
 
 using time_step_t = size_t; //**< type of history/trajectory prediction time steps */
@@ -35,6 +36,30 @@ enum class ObstacleType {
     pillar,
     median_strip,
     vehicle,
+    vru,
+    special_purpose_vehicle
+};
+
+const std::unordered_map<std::string, ObstacleType> ObstacleTypeNames{
+    {"unknown", ObstacleType::unknown},
+    {"car", ObstacleType::car},
+    {"truck", ObstacleType::truck},
+    {"bus", ObstacleType::bus},
+    {"bicycle", ObstacleType::bicycle},
+    {"pedestrian", ObstacleType::pedestrian},
+    {"priority_vehicle", ObstacleType::priority_vehicle},
+    {"parked_vehicle", ObstacleType::parked_vehicle},
+    {"construction_zone", ObstacleType::construction_zone},
+    {"train", ObstacleType::train},
+    {"road_boundary", ObstacleType::road_boundary},
+    {"motorcycle", ObstacleType::motorcycle},
+    {"taxi", ObstacleType::taxi},
+    {"building", ObstacleType::building},
+    {"pillar", ObstacleType::pillar},
+    {"median_strip", ObstacleType::median_strip},
+    {"vehicle", ObstacleType::vehicle},
+    {"vru", ObstacleType::vru},
+    {"special_purpose_vehicle", ObstacleType::special_purpose_vehicle},
 };
 
 enum class ObstacleRole { STATIC, DYNAMIC, ENVIRONMENT, PHANTOM };

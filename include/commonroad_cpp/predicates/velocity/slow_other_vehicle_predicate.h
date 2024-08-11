@@ -1,22 +1,16 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
 #include "../commonroad_predicate.h"
 
 /**
- * Predicate for evaluating if a vehicle is part of slow moving traffic
+ * Evaluates whether the pth vehicle is a slow vehicle with respect to the kth vehicle.
  */
-class InSlowMovingTrafficPredicate : public CommonRoadPredicate {
+class SlowOtherVehiclePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for InSlowMovingTrafficPredicate.
+     * Constructor for SlowOtherVehiclePredicate.
      */
-    InSlowMovingTrafficPredicate();
+    SlowOtherVehiclePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

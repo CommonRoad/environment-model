@@ -1,30 +1,24 @@
-//
-// Created by Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-#include "test_in_congestion_predicate.h"
+#include "test_slow_other_vehicle_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
 
-void InCongestionPredicateTest::SetUp() {
+void SlowOtherVehiclePredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 2, 0, 0, 0, 10, 0);
-    std::shared_ptr<State> stateZeroObstacleFive = std::make_shared<State>(1, 0, 6, 60, 0, 0, 0, 0, 0);
+    std::shared_ptr<State> stateZeroObstacleFive = std::make_shared<State>(0, 0, 6, 60, 0, 0, 0, 0, 0);
 
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 12, 2, 2.7, 0, 0, 0, 12, 0);
-    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 22, 2, 1.73, 0, 0, 0, 22, 0);
-    std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 32, 2, 1.5, 0, 0, 0, 32, 0);
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 12, 2, 2, 0, 0, 0, 12, 0);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 22, 2, 50, 0, 0, 0, 22, 0);
+    std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 32, 2, 36, 0, 0, 0, 32, 0);
     std::shared_ptr<State> stateOneObstacleFive = std::make_shared<State>(1, 60, 9.5, 0, 0, 0, 0, 60, 1.5);
 
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 14, 2, 2, 0, 0, 0, 14, 0);
-    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 72, 2, 1.53, 0, 0, 0, 72, 0);
-    std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 68, 2, 1.27, 0, 0, 0, 68, 0);
-    std::shared_ptr<State> stateTwoObstacleFour = std::make_shared<State>(2, 44, 2, 1.5, 0, 0, 0, 44, 0);
+    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 72, 2, 12, 0, 0, 0, 72, 0);
+    std::shared_ptr<State> stateTwoObstacleThree = std::make_shared<State>(2, 68, 2, 36, 0, 0, 0, 68, 0);
+    std::shared_ptr<State> stateTwoObstacleFour = std::make_shared<State>(2, 44, 2, 50, 0, 0, 0, 44, 0);
 
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 16, 2, 2, 0, 0, 0, 16, 0);
     std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 84, 2, 2, 0, 0, 0, 84, 0);
-    std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 98, 2, 1.86, 0, 0, 0, 98, 0);
+    std::shared_ptr<State> stateThreeObstacleThree = std::make_shared<State>(3, 98, 2, 36, 0, 0, 0, 98, 0);
     std::shared_ptr<State> stateThreeObstacleFour = std::make_shared<State>(3, 94, 2, 0, 0, 0, 0, 94, 0);
 
     Obstacle::state_map_t trajectoryPredictionEgoVehicle{
@@ -71,30 +65,30 @@ void InCongestionPredicateTest::SetUp() {
                                           {obstacleTwo, obstacleThree, obstacleFour, obstacleFive}, 0.1));
 }
 
-TEST_F(InCongestionPredicateTest, BooleanEvaluationObjects) {
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne));
-    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne));
-    EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne));
+TEST_F(SlowOtherVehiclePredicateTest, BooleanEvaluationObjects) {
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo));
+    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, obstacleThree));
+    EXPECT_TRUE(pred.booleanEvaluation(3, world, obstacleOne, obstacleFour));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, obstacleFive));
 }
 
-TEST_F(InCongestionPredicateTest, StatisticBooleanEvaluation) {
+TEST_F(SlowOtherVehiclePredicateTest, StatisticBooleanEvaluation) {
     auto timer{std::make_shared<Timer>()};
     auto stat{std::make_shared<PredicateStatistics>()};
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat));
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat, obstacleTwo));
     EXPECT_EQ(stat->numExecutions, 1);
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat));
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat, obstacleThree));
     EXPECT_EQ(stat->numExecutions, 2);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat));
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat, obstacleFour));
     EXPECT_EQ(stat->numExecutions, 3);
-    EXPECT_TRUE(pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat));
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat, obstacleFive));
     EXPECT_EQ(stat->numExecutions, 4);
 }
 
-TEST_F(InCongestionPredicateTest, RobustEvaluation) {
+TEST_F(SlowOtherVehiclePredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }
 
-TEST_F(InCongestionPredicateTest, ConstraintEvaluation) {
+TEST_F(SlowOtherVehiclePredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }

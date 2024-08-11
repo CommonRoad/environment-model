@@ -3,14 +3,15 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- * Evaluates whether the kth vehicle overtakes a bicycle.
+ * Evaluates if the adjacent lanelet of any occupied lanelet is of opposite driving direction.
+ * Left/right adjacency is specified via a parameter.
  */
-class OvertakingBicycleSameLanePredicate : public CommonRoadPredicate {
+class NeighboringLaneOppDrivingDirPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for OvertakingBicycleSameLanePredicate.
+     * Constructor for OncomingVehiclePredicate.
      */
-    OvertakingBicycleSameLanePredicate();
+    NeighboringLaneOppDrivingDirPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
