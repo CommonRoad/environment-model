@@ -10,13 +10,12 @@ OnLaneletWithSuccessorTypePredicate::OnLaneletWithSuccessorTypePredicate() : Com
 
 bool OnLaneletWithSuccessorTypePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
 
     for (auto &lanelet : occupiedLanelets) {
-        if (lanelet->hasLaneletType(additionalFunctionParameters->laneletType.at(0)))
+        if (lanelet->hasLaneletType(lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0))))
             return true;
         auto idx{lanelet->findClosestIndex(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                            obstacleK->getStateByTimeStep(timeStep)->getYPosition(), true)};
@@ -25,7 +24,8 @@ bool OnLaneletWithSuccessorTypePredicate::booleanEvaluation(
                                                                -lanelet->getPathLength().at(idx));
         for (auto &vec : successors) {
             for (auto &lane : vec) {
-                if (lane->hasLaneletType(additionalFunctionParameters->laneletType.at(0)))
+                if (lane->hasLaneletType(
+                        lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0))))
                     return true;
             }
         }
@@ -35,14 +35,12 @@ bool OnLaneletWithSuccessorTypePredicate::booleanEvaluation(
 
 double OnLaneletWithSuccessorTypePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("On Lanelet With Successor Type Predicate does not support robust evaluation!");
 }
 
 Constraint OnLaneletWithSuccessorTypePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("On Lanelet With Successor Type Predicate does not support constraint evaluation!");
 }

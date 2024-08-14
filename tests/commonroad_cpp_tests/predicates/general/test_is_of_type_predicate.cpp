@@ -13,8 +13,7 @@ void TestIsOfTypePredicate::SetUp() {
 }
 
 TEST_F(TestIsOfTypePredicate, VRU) {
-    std::shared_ptr<OptionalPredicateParameters> opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->obstacleType = ObstacleType::vru;
+    std::vector<std::string> opt{"vru"};
     EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
     egoVehicle->setObstacleType(ObstacleType::bicycle);
     EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
@@ -23,8 +22,7 @@ TEST_F(TestIsOfTypePredicate, VRU) {
 }
 
 TEST_F(TestIsOfTypePredicate, NotVRU) {
-    std::shared_ptr<OptionalPredicateParameters> opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->obstacleType = ObstacleType::vru;
+    std::vector<std::string> opt{"vru"};
     egoVehicle->setObstacleType(ObstacleType::bus);
     EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
     egoVehicle->setObstacleType(ObstacleType::car);
@@ -38,8 +36,7 @@ TEST_F(TestIsOfTypePredicate, NotVRU) {
 }
 
 TEST_F(TestIsOfTypePredicate, SpecialPurposeVehicle) {
-    std::shared_ptr<OptionalPredicateParameters> opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->obstacleType = ObstacleType::special_purpose_vehicle;
+    std::vector<std::string> opt{"special_purpose_vehicle"};
     egoVehicle->setObstacleType(ObstacleType::bicycle);
     EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
     egoVehicle->setObstacleType(ObstacleType::bus);
@@ -49,8 +46,7 @@ TEST_F(TestIsOfTypePredicate, SpecialPurposeVehicle) {
 }
 
 TEST_F(TestIsOfTypePredicate, NotSpecialPurposeVehicle) {
-    std::shared_ptr<OptionalPredicateParameters> opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->obstacleType = ObstacleType::special_purpose_vehicle;
+    std::vector<std::string> opt{"special_purpose_vehicle"};
     egoVehicle->setObstacleType(ObstacleType::car);
     EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
     egoVehicle->setObstacleType(ObstacleType::vehicle);

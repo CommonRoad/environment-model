@@ -6,10 +6,10 @@
 #include <commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 
-bool PreservesTrafficFlowPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool PreservesTrafficFlowPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                      const std::shared_ptr<Obstacle> &obstacleK,
+                                                      const std::shared_ptr<Obstacle> &obstacleP,
+                                                      const std::vector<std::string> &additionalFunctionParameters) {
     double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
                               obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
                               TrafficSignTypes::MAX_SPEED, parameters.getParam("desiredInterstateVelocity")),
@@ -19,17 +19,16 @@ bool PreservesTrafficFlowPredicate::booleanEvaluation(
     return (vMax - obstacleK->getStateByTimeStep(timeStep)->getVelocity()) < parameters.getParam("minVelocityDif");
 }
 
-double PreservesTrafficFlowPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double PreservesTrafficFlowPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                       const std::shared_ptr<Obstacle> &obstacleK,
+                                                       const std::shared_ptr<Obstacle> &obstacleP,
+                                                       const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support robust evaluation!");
 }
 
 Constraint PreservesTrafficFlowPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support constraint evaluation!");
 }
 PreservesTrafficFlowPredicate::PreservesTrafficFlowPredicate() : CommonRoadPredicate(false) {}

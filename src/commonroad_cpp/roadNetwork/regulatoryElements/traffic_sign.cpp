@@ -7,6 +7,9 @@
 
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
+#include <algorithm>
+#include <stdexcept>
 #include <utility>
 
 void TrafficSign::setId(const size_t num) { id = num; }
@@ -46,4 +49,13 @@ TrafficSign::getTrafficSignElementsOfType(const TrafficSignTypes &signType) cons
             relevantTrafficSignElements.push_back(signElement);
     }
     return relevantTrafficSignElements;
+}
+
+TrafficSignTypes TrafficSign::matchTrafficSign(const std::string &trafficSignName) {
+    std::string str{trafficSignName};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    if (TrafficSignNames.count(str) == 1)
+        return TrafficSignNames.at(str);
+    else
+        throw std::logic_error("TrafficSign::matchTrafficSign: Invalid traffic sign name '" + str + "'!");
 }

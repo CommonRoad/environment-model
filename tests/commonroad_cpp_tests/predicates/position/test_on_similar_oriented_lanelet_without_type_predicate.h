@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
@@ -17,9 +11,7 @@ class OnSimilarOrientedLaneletWithoutTypePredicateTest : public testing::Test {
     std::shared_ptr<Obstacle> egoVehicle;
     OnSimilarOrientedLaneletWithoutTypePredicate pred;
     std::shared_ptr<World> world;
-    std::shared_ptr<OptionalPredicateParameters> opt;
-
-    void initializeTestData(LaneletType laneletType1, LaneletType laneletType2);
+    std::vector<std::string> opt;
 
   private:
     void SetUp() override;

@@ -17,27 +17,27 @@
 #include <commonroad_cpp/predicates/regulatory/has_priority_predicate.h>
 #include <commonroad_cpp/predicates/regulatory/same_priority_predicate.h>
 
-bool SamePriorityPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool SamePriorityPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                              const std::shared_ptr<Obstacle> &obstacleK,
+                                              const std::shared_ptr<Obstacle> &obstacleP,
+                                              const std::vector<std::string> &additionalFunctionParameters) {
     HasPriorityPredicate hasPriorityPredicate;
     return !hasPriorityPredicate.booleanEvaluation(timeStep, world, obstacleK, obstacleP,
                                                    additionalFunctionParameters) and
            !hasPriorityPredicate.booleanEvaluation(timeStep, world, obstacleP, obstacleK, additionalFunctionParameters);
 }
 
-double SamePriorityPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double SamePriorityPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                               const std::shared_ptr<Obstacle> &obstacleK,
+                                               const std::shared_ptr<Obstacle> &obstacleP,
+                                               const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("SamePriorityPredicate does not support robust evaluation!");
 }
 
-Constraint SamePriorityPredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+Constraint SamePriorityPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                       const std::shared_ptr<Obstacle> &obstacleK,
+                                                       const std::shared_ptr<Obstacle> &obstacleP,
+                                                       const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("SamePriorityPredicate does not support constraint evaluation!");
 }
 

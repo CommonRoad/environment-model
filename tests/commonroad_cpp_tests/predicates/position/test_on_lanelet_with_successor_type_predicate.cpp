@@ -1,7 +1,6 @@
 #include "test_on_lanelet_with_successor_type_predicate.h"
 #include "../utils_predicate_test.h"
-#include "commonroad_cpp/obstacle/state.h"
-#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 
 void OnLaneletWithSuccessorTypePredicateTest::SetUp() {
 
@@ -27,17 +26,17 @@ void OnLaneletWithSuccessorTypePredicateTest::SetUp() {
 
 void OnLaneletWithSuccessorTypePredicateTest::initializeTestData(LaneletType laneletTypeRight,
                                                                  LaneletType laneletTypeLeft,
-                                                                 LaneletType laneletTypeSuccessorRight,
+                                                                 const std::string &laneletTypeSuccessorRight,
                                                                  LaneletType laneletTypeSuccessorLeft) {
     auto roadNetwork{utils_predicate_test::create_road_network_with_2_successors(
-        {laneletTypeRight}, {laneletTypeLeft}, {laneletTypeSuccessorRight}, {laneletTypeSuccessorLeft})};
+        {laneletTypeRight}, {laneletTypeLeft},
+        {lanelet_operations::matchStringToLaneletType(laneletTypeSuccessorRight)}, {laneletTypeSuccessorLeft})};
     this->world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {this->egoVehicle}, {}, 0.1));
-    opt = std::make_shared<OptionalPredicateParameters>();
-    opt->laneletType = {laneletTypeSuccessorRight};
+    opt = {laneletTypeSuccessorRight};
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionRightGoingLaneNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::right, LaneletType::intersection);
+    initializeTestData(LaneletType::urban, LaneletType::urban, "right", LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -46,7 +45,7 @@ TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionR
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionLeftGoingLaneNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::left, LaneletType::intersection);
+    initializeTestData(LaneletType::urban, LaneletType::urban, "left", LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -55,7 +54,7 @@ TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionL
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionStraightGoingLaneNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::straight, LaneletType::intersection);
+    initializeTestData(LaneletType::urban, LaneletType::urban, "straight", LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -64,7 +63,7 @@ TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnIntersectionS
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnShoulderNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::shoulder, LaneletType::interstate);
+    initializeTestData(LaneletType::urban, LaneletType::urban, "shoulder", LaneletType::interstate);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -73,7 +72,7 @@ TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnShoulderNext)
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnUrbanRoadNext) {
-    initializeTestData(LaneletType::exitRamp, LaneletType::exitRamp, LaneletType::urban, LaneletType::intersection);
+    initializeTestData(LaneletType::exitRamp, LaneletType::exitRamp, "urban", LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -82,7 +81,7 @@ TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnUrbanRoadNext
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnMainCarriageWayNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::mainCarriageWay, LaneletType::intersection);
+    initializeTestData(LaneletType::urban, LaneletType::urban, "mainCarriageWay", LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -91,7 +90,7 @@ TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnMainCarriageW
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnExitRampNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::exitRamp, LaneletType::intersection);
+    initializeTestData(LaneletType::urban, LaneletType::urban, "exitRamp", LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -100,7 +99,7 @@ TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnExitRampNext)
 }
 
 TEST_F(OnLaneletWithSuccessorTypePredicateTest, BooleanEvaluationOnAccessRampNext) {
-    initializeTestData(LaneletType::urban, LaneletType::urban, LaneletType::accessRamp, LaneletType::intersection);
+    initializeTestData(LaneletType::urban, LaneletType::urban, "accessRamp", LaneletType::intersection);
     EXPECT_FALSE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));

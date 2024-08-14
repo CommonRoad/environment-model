@@ -92,14 +92,19 @@ const std::string &World::getName() const { return name; }
 
 void World::initMissingInformation() {
     for (const auto &obs : egoVehicles) {
+        if (obs->isStatic())
+            continue;
         for (const auto &obsTimeStep : obs->getTimeSteps())
             if (!obs->getStateByTimeStep(obsTimeStep)->getValidStates().acceleration)
                 obs->interpolateAcceleration(obsTimeStep, dt);
         if (!obs->getReactionTime().has_value())
             obs->getReactionTime() = 0.5;
     }
-    for (const auto &obs : obstacles)
+    for (const auto &obs : obstacles) {
+        if (obs->isStatic())
+            continue;
         for (const auto &obsTimeStep : obs->getTimeSteps())
             if (!obs->getStateByTimeStep(obsTimeStep)->getValidStates().acceleration)
                 obs->interpolateAcceleration(obsTimeStep, dt);
+    }
 }

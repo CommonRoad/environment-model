@@ -1,23 +1,25 @@
 #include "commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
 #include <algorithm>
 
 CompletelyOnLaneletTypePredicate::CompletelyOnLaneletTypePredicate() : CommonRoadPredicate(false) {}
 
-bool CompletelyOnLaneletTypePredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool CompletelyOnLaneletTypePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                         const std::shared_ptr<Obstacle> &obstacleK,
+                                                         const std::shared_ptr<Obstacle> &obstacleP,
+                                                         const std::vector<std::string> &additionalFunctionParameters) {
     auto vertices = obstacleK->getOccupancyPolygonShape(timeStep).outer();
-    for (int i = 0; i < vertices.size(); i++) {
+    for (auto vertice : vertices) {
         std::vector<std::shared_ptr<Lanelet>> lanelets =
-            world->getRoadNetwork()->findLaneletsByPosition(vertices[i].x(), vertices[i].y());
+            world->getRoadNetwork()->findLaneletsByPosition(vertice.x(), vertice.y());
         if (std::all_of(lanelets.begin(), lanelets.end(),
                         [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                            return !lanelet->hasLaneletType(additionalFunctionParameters->laneletType[0]);
+                            return !lanelet->hasLaneletType(
+                                lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0)));
                         }))
             return false;
     }
@@ -26,14 +28,12 @@ bool CompletelyOnLaneletTypePredicate::booleanEvaluation(
 
 double CompletelyOnLaneletTypePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("CompletelyOnOneLaneletTypePredicate does not support robust evaluation!");
 }
 
 Constraint CompletelyOnLaneletTypePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("CompletelyOnOneLaneletTypePredicate does not support constraint evaluation!");
 }
