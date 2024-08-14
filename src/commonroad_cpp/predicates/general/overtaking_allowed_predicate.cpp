@@ -6,10 +6,10 @@
 
 OvertakingAllowedPredicate::OvertakingAllowedPredicate() : CommonRoadPredicate(false) {}
 
-bool OvertakingAllowedPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool OvertakingAllowedPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                   const std::shared_ptr<Obstacle> &obstacleK,
+                                                   const std::shared_ptr<Obstacle> &obstacleP,
+                                                   const std::vector<std::string> &additionalFunctionParameters) {
 
     // checking if line-marking or traffic sign of occupied lanelet prohibits overtaking
     auto occLanelets = obstacleK->getOccupiedLaneletsByBack(world->getRoadNetwork(), timeStep);
@@ -47,16 +47,15 @@ bool OvertakingAllowedPredicate::booleanEvaluation(
     return true;
 }
 
-double OvertakingAllowedPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double OvertakingAllowedPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                    const std::shared_ptr<Obstacle> &obstacleK,
+                                                    const std::shared_ptr<Obstacle> &obstacleP,
+                                                    const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("OvertakingAllowedPredicate does not support robust evaluation!");
 }
 
 Constraint OvertakingAllowedPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("OvertakingAllowedPredicate does not support constraint evaluation!");
 }

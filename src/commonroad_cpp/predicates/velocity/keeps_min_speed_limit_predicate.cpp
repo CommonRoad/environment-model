@@ -10,27 +10,26 @@
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 #include <commonroad_cpp/world.h>
 
-bool KeepsMinSpeedLimitPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool KeepsMinSpeedLimitPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                    const std::shared_ptr<Obstacle> &obstacleK,
+                                                    const std::shared_ptr<Obstacle> &obstacleP,
+                                                    const std::vector<std::string> &additionalFunctionParameters) {
     double vReqLane{regulatory_elements_utils::requiredVelocity(
         obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
         TrafficSignTypes::MIN_SPEED)};
     return vReqLane <= obstacleK->getStateByTimeStep(timeStep)->getVelocity();
 }
 
-double KeepsMinSpeedLimitPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double KeepsMinSpeedLimitPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                     const std::shared_ptr<Obstacle> &obstacleK,
+                                                     const std::shared_ptr<Obstacle> &obstacleP,
+                                                     const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("KeepsMinSpeedLimitPredicate does not support robust evaluation!");
 }
 
 Constraint KeepsMinSpeedLimitPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("KeepsMinSpeedLimitPredicate does not support constraint evaluation!");
 }
 KeepsMinSpeedLimitPredicate::KeepsMinSpeedLimitPredicate() : CommonRoadPredicate(false) {}

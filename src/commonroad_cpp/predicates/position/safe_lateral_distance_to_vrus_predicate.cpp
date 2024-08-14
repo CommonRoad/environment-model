@@ -6,8 +6,7 @@ SafeLateralDistanceToVrusPredicate::SafeLateralDistanceToVrusPredicate() : Commo
 
 bool SafeLateralDistanceToVrusPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
 
     auto lanelets = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     double dist = obstacleK->getLateralDistanceToObstacle(timeStep, obstacleP, world->getRoadNetwork());
@@ -22,14 +21,12 @@ bool SafeLateralDistanceToVrusPredicate::booleanEvaluation(
 
 double SafeLateralDistanceToVrusPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("SafeLateralDistanceToVrusPredicate does not support robust evaluation!");
 }
 
 Constraint SafeLateralDistanceToVrusPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("SafeLateralDistanceToVrusPredicate does not support constraint evaluation!");
 }

@@ -1,24 +1,23 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/velocity/velocity_below_threshold_predicate.h>
 
-bool VelocityBelowThresholdPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return obstacleK->getStateByTimeStep(timeStep)->getVelocity() <= additionalFunctionParameters->velocity_threshold;
+bool VelocityBelowThresholdPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                        const std::shared_ptr<Obstacle> &obstacleK,
+                                                        const std::shared_ptr<Obstacle> &obstacleP,
+                                                        const std::vector<std::string> &additionalFunctionParameters) {
+    return obstacleK->getStateByTimeStep(timeStep)->getVelocity() <= stod(additionalFunctionParameters.at(0));
 }
 
 Constraint VelocityBelowThresholdPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("VelocityBelowThresholdPredicate does not support constraint evaluation!");
 }
 
-double VelocityBelowThresholdPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double VelocityBelowThresholdPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                         const std::shared_ptr<Obstacle> &obstacleK,
+                                                         const std::shared_ptr<Obstacle> &obstacleP,
+                                                         const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("VelocityBelowThresholdPredicate does not support robust evaluation!");
 }
 

@@ -14,8 +14,7 @@
 
 bool BrakingAtIntersectionPossiblePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     double distanceIntersection{0.0};
 
     double brakingDistance{std::pow(obstacleK->getStateByTimeStep(timeStep)->getVelocity(), 2) /
@@ -42,15 +41,13 @@ bool BrakingAtIntersectionPossiblePredicate::booleanEvaluation(
 
 Constraint BrakingAtIntersectionPossiblePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("BrakingWithAccelerationPossible does not support robust evaluation!");
 }
 
 double BrakingAtIntersectionPossiblePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("BrakingWithAccelerationPossible does not support robust evaluation!");
 }
 

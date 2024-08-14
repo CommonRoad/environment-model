@@ -13,10 +13,10 @@
 
 #include <commonroad_cpp/predicates/position/at_same_intersection_predicate.h>
 
-bool AtSameIntersectionPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool AtSameIntersectionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                    const std::shared_ptr<Obstacle> &obstacleK,
+                                                    const std::shared_ptr<Obstacle> &obstacleP,
+                                                    const std::vector<std::string> &additionalFunctionParameters) {
 
     auto currentIntersection_k = intersection_operations::currentIntersection(timeStep, world, obstacleK);
     auto currentIntersection_p = intersection_operations::currentIntersection(timeStep, world, obstacleP);
@@ -26,16 +26,15 @@ bool AtSameIntersectionPredicate::booleanEvaluation(
 
     return false;
 }
-double AtSameIntersectionPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double AtSameIntersectionPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                     const std::shared_ptr<Obstacle> &obstacleK,
+                                                     const std::shared_ptr<Obstacle> &obstacleP,
+                                                     const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("AtSameIntersectionPredicate does not support robust evaluation!");
 }
 Constraint AtSameIntersectionPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("AtSameIntersectionPredicate does not support constraint evaluation!");
 }
 AtSameIntersectionPredicate::AtSameIntersectionPredicate() : CommonRoadPredicate(true) {}

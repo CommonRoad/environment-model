@@ -12,7 +12,7 @@ LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type
     if (LaneletTypeNames.count(str) == 1)
         return LaneletTypeNames.at(str);
     else
-        throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type!");
+        throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type '" + str + "'!");
 }
 
 LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type) {

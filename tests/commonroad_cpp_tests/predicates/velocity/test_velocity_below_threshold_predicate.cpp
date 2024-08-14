@@ -25,14 +25,13 @@ void VelocityBelowThresholdPredicateTest::SetUp() {
 }
 
 TEST_F(VelocityBelowThresholdPredicateTest, BooleanEvaluationObjects) {
-    std::shared_ptr<OptionalPredicateParameters> opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->velocity_threshold = 0;
+    std::vector<std::string> opt{"0"};
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne, {}, opt));
-    opt->velocity_threshold = 1;
+    opt = {"1"};
     EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, {}, opt));
-    opt->velocity_threshold = 2;
+    opt = {"2"};
     EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne, {}, opt));
-    opt->velocity_threshold = 0;
+    opt = {"0"};
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne, {}, opt));
 }
 

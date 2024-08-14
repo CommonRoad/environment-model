@@ -7,10 +7,10 @@
 #include <commonroad_cpp/predicates/position/close_to_crosswalk_predicate.h>
 #include <valarray>
 
-bool CloseToCrosswalkPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool CloseToCrosswalkPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                  const std::shared_ptr<Obstacle> &obstacleK,
+                                                  const std::shared_ptr<Obstacle> &obstacleP,
+                                                  const std::vector<std::string> &additionalFunctionParameters) {
 
     auto occNotDrivDir = obstacleK->getOccupiedLaneletsNotDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
     auto occDrivDir = obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
@@ -66,16 +66,15 @@ bool CloseToCrosswalkPredicate::booleanEvaluation(
     }
     return false;
 }
-double CloseToCrosswalkPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double CloseToCrosswalkPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                   const std::shared_ptr<Obstacle> &obstacleK,
+                                                   const std::shared_ptr<Obstacle> &obstacleP,
+                                                   const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("CloseToCrosswalkPredicate does not support robust evaluation!");
 }
 Constraint CloseToCrosswalkPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("CloseToCrosswalkPredicate does not support constraint evaluation!");
 }
 CloseToCrosswalkPredicate::CloseToCrosswalkPredicate() : CommonRoadPredicate(false) {}

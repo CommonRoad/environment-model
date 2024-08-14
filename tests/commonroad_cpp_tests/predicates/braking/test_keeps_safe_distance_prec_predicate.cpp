@@ -1,6 +1,5 @@
 #include "test_keeps_safe_distance_prec_predicate.h"
 #include "../utils_predicate_test.h"
-#include "commonroad_cpp/obstacle/state.h"
 
 void KeepsSafeDistancePrecPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 20, 0, 0);

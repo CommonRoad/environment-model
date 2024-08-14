@@ -1,14 +1,13 @@
 #include "commonroad_cpp/predicates/general/change_lane_predicate.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/world.h"
 
 #include <stdexcept>
 
-bool ChangeLanePredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool ChangeLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                            const std::shared_ptr<Obstacle> &obstacleK,
+                                            const std::shared_ptr<Obstacle> &obstacleP,
+                                            const std::vector<std::string> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLaneletsFront =
         obstacleK->getOccupiedLaneletsByFront(world->getRoadNetwork(), timeStep);
     std::vector<std::shared_ptr<Lanelet>> occupiedLaneletsBack =
@@ -32,7 +31,7 @@ bool ChangeLanePredicate::booleanEvaluation(
     }
 
     // Check if vehicle is changing to the left adjacent
-    if (additionalFunctionParameters->turningDirection.front() == TurningDirection::left) {
+    if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::left) {
         for (const auto &front : occupiedLaneletsFront) {
             if (std::any_of(
                     occupiedLaneletsBack.begin(), occupiedLaneletsBack.end(),
@@ -52,7 +51,7 @@ bool ChangeLanePredicate::booleanEvaluation(
                 return true;
         }
     } // Check if vehicle is changing to the right adjacent
-    else if (additionalFunctionParameters->turningDirection.front() == TurningDirection::right) {
+    else if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::right) {
         for (const auto &front : occupiedLaneletsFront) {
             if (std::any_of(
                     occupiedLaneletsBack.begin(), occupiedLaneletsBack.end(),
@@ -78,17 +77,17 @@ bool ChangeLanePredicate::booleanEvaluation(
     return false;
 }
 
-Constraint ChangeLanePredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+Constraint ChangeLanePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                     const std::shared_ptr<Obstacle> &obstacleK,
+                                                     const std::shared_ptr<Obstacle> &obstacleP,
+                                                     const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("ChangeLane Predicate does not support constraint evaluation!");
 }
 
-double ChangeLanePredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double ChangeLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                             const std::shared_ptr<Obstacle> &obstacleK,
+                                             const std::shared_ptr<Obstacle> &obstacleP,
+                                             const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("ChangeLane Predicate does not support robust evaluation!");
 }
 

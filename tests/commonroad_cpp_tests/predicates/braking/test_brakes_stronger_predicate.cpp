@@ -47,7 +47,7 @@ void BrakesStrongerPredicateTest::SetUp() {
 }
 
 TEST_F(BrakesStrongerPredicateTest, BooleanEvaluation) {
-    auto opt{std::make_shared<OptionalPredicateParameters>()};
+    std::vector<std::string> opt{"0.0"};
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, obstacleTwo, opt));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo, opt));
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo, opt));
@@ -55,7 +55,7 @@ TEST_F(BrakesStrongerPredicateTest, BooleanEvaluation) {
 }
 
 TEST_F(BrakesStrongerPredicateTest, ConstraintEvaluation) {
-    auto opt{std::make_shared<OptionalPredicateParameters>()};
+    std::vector<std::string> opt{"0.0"};
     EXPECT_EQ(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo, opt).realValuedConstraint, -1);
     EXPECT_EQ(pred.constraintEvaluation(1, world, obstacleOne, obstacleTwo, opt).realValuedConstraint, -2);
     EXPECT_EQ(pred.constraintEvaluation(2, world, obstacleOne, obstacleTwo, opt).realValuedConstraint, 0);
@@ -63,7 +63,7 @@ TEST_F(BrakesStrongerPredicateTest, ConstraintEvaluation) {
 }
 
 TEST_F(BrakesStrongerPredicateTest, RobustEvaluation) {
-    auto opt{std::make_shared<OptionalPredicateParameters>()};
+    std::vector<std::string> opt{"0.0"};
     EXPECT_EQ(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo, opt), 1);
     EXPECT_EQ(pred.robustEvaluation(1, world, obstacleOne, obstacleTwo, opt), -1);
     EXPECT_NEAR(pred.robustEvaluation(2, world, obstacleOne, obstacleTwo, opt), -1, 0.0001);
