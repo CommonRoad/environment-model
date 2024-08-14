@@ -4,10 +4,10 @@
 
 #include <commonroad_cpp/predicates/position/in_neighboring_left_lane_predicate.h>
 
-bool InNeighboringLeftLanePredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool InNeighboringLeftLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                       const std::shared_ptr<Obstacle> &obstacleK,
+                                                       const std::shared_ptr<Obstacle> &obstacleP,
+                                                       const std::vector<std::string> &additionalFunctionParameters) {
     std::unordered_set<unsigned long> relevantIDs;
     auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     for (const auto &laneK : obstacleK->getOccupiedRoadLanes(world->getRoadNetwork(), timeStep)) {
@@ -23,17 +23,16 @@ bool InNeighboringLeftLanePredicate::booleanEvaluation(
     return false;
 }
 
-double InNeighboringLeftLanePredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double InNeighboringLeftLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                        const std::shared_ptr<Obstacle> &obstacleK,
+                                                        const std::shared_ptr<Obstacle> &obstacleP,
+                                                        const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("In Neighboring Lane Predicate does not support robust evaluation!");
 }
 
 Constraint InNeighboringLeftLanePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("In Neighboring Lane Predicate does not support constraint evaluation!");
 }
 InNeighboringLeftLanePredicate::InNeighboringLeftLanePredicate() : CommonRoadPredicate(true) {}

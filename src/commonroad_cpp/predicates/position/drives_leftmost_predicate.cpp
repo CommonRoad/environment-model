@@ -6,10 +6,10 @@
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/predicates/position/drives_leftmost_predicate.h>
 
-bool DrivesLeftmostPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool DrivesLeftmostPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                const std::shared_ptr<Obstacle> &obstacleK,
+                                                const std::shared_ptr<Obstacle> &obstacleP,
+                                                const std::vector<std::string> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets =
         obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
     std::shared_ptr<Obstacle> vehicle_directly_left =
@@ -31,17 +31,17 @@ bool DrivesLeftmostPredicate::booleanEvaluation(
     }
 }
 
-double DrivesLeftmostPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double DrivesLeftmostPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                 const std::shared_ptr<Obstacle> &obstacleK,
+                                                 const std::shared_ptr<Obstacle> &obstacleP,
+                                                 const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Drives Leftmost Predicate does not support robust evaluation!");
 }
 
-Constraint DrivesLeftmostPredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+Constraint DrivesLeftmostPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                         const std::shared_ptr<Obstacle> &obstacleK,
+                                                         const std::shared_ptr<Obstacle> &obstacleP,
+                                                         const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Drives Leftmost Predicate does not support constraint evaluation!");
 }
 

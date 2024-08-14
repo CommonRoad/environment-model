@@ -22,8 +22,8 @@ class ChangeLanePredicateTest : public testing::Test {
     std::string pathToTestFileTwoFollowingLaneletsAndAccessRampTrue;
     std::string pathToTestFileOvertakingOncomingLanelet;
 
-    std::shared_ptr<OptionalPredicateParameters> optLeft;
-    std::shared_ptr<OptionalPredicateParameters> optRight;
+    std::vector<std::string> optLeft;
+    std::vector<std::string> optRight;
 
   private:
     void SetUp() override;

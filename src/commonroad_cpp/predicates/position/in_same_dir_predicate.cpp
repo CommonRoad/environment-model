@@ -6,10 +6,10 @@
 
 #include <commonroad_cpp/predicates/position/in_same_dir_predicate.h>
 
-bool InSameDirPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool InSameDirPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                           const std::shared_ptr<Obstacle> &obstacleK,
+                                           const std::shared_ptr<Obstacle> &obstacleP,
+                                           const std::vector<std::string> &additionalFunctionParameters) {
     // if in same lane vehicles have the same dir
     InSameLanePredicate inSameLanePredicate = InSameLanePredicate();
     if (inSameLanePredicate.booleanEvaluation(timeStep, world, obstacleK, obstacleP)) {
@@ -54,17 +54,16 @@ bool InSameDirPredicate::booleanEvaluation(
     }
     return true;
 }
-double
-InSameDirPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                     const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double InSameDirPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                            const std::shared_ptr<Obstacle> &obstacleK,
+                                            const std::shared_ptr<Obstacle> &obstacleP,
+                                            const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("InSameDirPredicate does not support robust evaluation!");
 }
-Constraint InSameDirPredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+Constraint InSameDirPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                    const std::shared_ptr<Obstacle> &obstacleK,
+                                                    const std::shared_ptr<Obstacle> &obstacleP,
+                                                    const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("InSameDirPredicate does not support constraint evaluation!");
 }
 InSameDirPredicate::InSameDirPredicate() : CommonRoadPredicate(true) {}

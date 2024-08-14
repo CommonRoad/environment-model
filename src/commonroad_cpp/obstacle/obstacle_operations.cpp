@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
@@ -52,10 +45,13 @@ bool obstacle_operations::lineInFrontOfObstacle(const std::pair<vertex, vertex> 
 }
 
 ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &type) {
-    if (ObstacleTypeNames.find(type) != ObstacleTypeNames.end())
-        return ObstacleTypeNames.at(type);
+    std::string str{type};
+    std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+    str.erase(remove(str.begin(), str.end(), '_'), str.end());
+    if (ObstacleTypeNames.find(str) != ObstacleTypeNames.end())
+        return ObstacleTypeNames.at(str);
     else
-        return ObstacleType::unknown;
+        throw std::logic_error("obstacle_operations::matchStringToObstacleType: Invalid obstacle type '" + str + "'!");
 }
 
 double obstacle_operations::minDistanceToPoint(size_t timeStep, const std::pair<vertex, vertex> &line,

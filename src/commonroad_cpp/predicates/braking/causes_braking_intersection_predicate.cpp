@@ -8,8 +8,7 @@
 
 bool CausesBrakingIntersectionPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
 
     // check whether kth obstacle is in the projection domain of the reference of the pth vehicle -> otherwise ccs fails
     if (!obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
@@ -26,15 +25,13 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(
 
 Constraint CausesBrakingIntersectionPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("CausesBrakingIntersectionPredicate does not support robust evaluation!");
 }
 
 double CausesBrakingIntersectionPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("CausesBrakingIntersectionPredicate does not support robust evaluation!");
 }
 

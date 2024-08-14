@@ -15,8 +15,7 @@
 
 bool ApproachUncontrolledIntersectionPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     ApproachIntersectionPredicate approachIntersection = ApproachIntersectionPredicate();
     if (!approachIntersection.booleanEvaluation(timeStep, world, obstacleK, obstacleP)) {
         return false;
@@ -34,14 +33,12 @@ bool ApproachUncontrolledIntersectionPredicate::booleanEvaluation(
 }
 double ApproachUncontrolledIntersectionPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("ApproachUncontrolledIntersectionPredicate does not support robust evaluation!");
 }
 Constraint ApproachUncontrolledIntersectionPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("ApproachUncontrolledIntersectionPredicate does not support constraint evaluation!");
 }
 ApproachUncontrolledIntersectionPredicate::ApproachUncontrolledIntersectionPredicate() : CommonRoadPredicate(false) {}

@@ -14,10 +14,10 @@
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h>
 
-bool LeftOfBroadLaneMarkingPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool LeftOfBroadLaneMarkingPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                        const std::shared_ptr<Obstacle> &obstacleK,
+                                                        const std::shared_ptr<Obstacle> &obstacleP,
+                                                        const std::vector<std::string> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> lanelets_occ =
         obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
 
@@ -36,17 +36,16 @@ bool LeftOfBroadLaneMarkingPredicate::booleanEvaluation(
                        });
 }
 
-double LeftOfBroadLaneMarkingPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double LeftOfBroadLaneMarkingPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                         const std::shared_ptr<Obstacle> &obstacleK,
+                                                         const std::shared_ptr<Obstacle> &obstacleP,
+                                                         const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Left Of Broad Lane Marking Predicate does not support robust evaluation!");
 }
 
 Constraint LeftOfBroadLaneMarkingPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Left Of Broad Lane Marking Predicate does not support constraint evaluation!");
 }
 

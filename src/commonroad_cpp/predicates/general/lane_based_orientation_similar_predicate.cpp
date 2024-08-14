@@ -6,8 +6,7 @@
 
 bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleK, const std::vector<std::string> &additionalFunctionParameters) {
     auto referenceLaneP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
     return std::abs(geometric_operations::subtractOrientations(
                obstacleK->getCurvilinearOrientation(timeStep, referenceLaneP),
@@ -17,15 +16,13 @@ bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
 
 Constraint LaneBasedOrientationSimilarPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleK, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Lane Based Orientation Similar does not support constraint evaluation!");
 }
 
 double LaneBasedOrientationSimilarPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleK, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Lane Based Orientation Similar does not support robust evaluation!");
 }
 LaneBasedOrientationSimilarPredicate::LaneBasedOrientationSimilarPredicate() : CommonRoadPredicate(true) {}

@@ -4,26 +4,26 @@
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
-bool MakesUTurnPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool MakesUTurnPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                            const std::shared_ptr<Obstacle> &obstacleK,
+                                            const std::shared_ptr<Obstacle> &obstacleP,
+                                            const std::vector<std::string> &additionalFunctionParameters) {
     auto orientationCcs{obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep)};
     return parameters.getParam("uTurnLower") <= abs(orientationCcs) and
            abs(orientationCcs) <= parameters.getParam("uTurnUpper");
 }
 
-Constraint MakesUTurnPredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+Constraint MakesUTurnPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                     const std::shared_ptr<Obstacle> &obstacleK,
+                                                     const std::shared_ptr<Obstacle> &obstacleP,
+                                                     const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Makes U Turn Predicate does not support constraint evaluation!");
 }
 
-double MakesUTurnPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double MakesUTurnPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                             const std::shared_ptr<Obstacle> &obstacleK,
+                                             const std::shared_ptr<Obstacle> &obstacleP,
+                                             const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Makes U Turn Predicate does not support robust evaluation!");
 }
 

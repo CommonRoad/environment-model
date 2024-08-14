@@ -52,10 +52,8 @@ void CompletelyOnLaneletTypePredicateTest::SetUp() {
 }
 
 TEST_F(CompletelyOnLaneletTypePredicateTest, CheckOnTwoParallelLanes) {
-    auto optInt = std::make_shared<OptionalPredicateParameters>();
-    optInt->laneletType = {LaneletType::intersection};
-    auto optMain = std::make_shared<OptionalPredicateParameters>();
-    optMain->laneletType = {LaneletType::mainCarriageWay};
+    std::vector<std::string> optInt{"INTERSECTION"};
+    std::vector<std::string> optMain{"MAINCARRIAGEWAY"};
     EXPECT_FALSE(pred.booleanEvaluation(0, world1, obstacleOne, {}, optInt));
     EXPECT_FALSE(pred.booleanEvaluation(1, world1, obstacleOne, {}, optInt));
     EXPECT_FALSE(pred.booleanEvaluation(2, world1, obstacleOne, {}, optInt));
@@ -71,10 +69,8 @@ TEST_F(CompletelyOnLaneletTypePredicateTest, CheckOnTwoParallelLanes) {
 }
 
 TEST_F(CompletelyOnLaneletTypePredicateTest, CheckOnMergingLanelets) {
-    auto optAcc = std::make_shared<OptionalPredicateParameters>();
-    optAcc->laneletType = {LaneletType::accessRamp};
-    auto optMain = std::make_shared<OptionalPredicateParameters>();
-    optMain->laneletType = {LaneletType::mainCarriageWay};
+    std::vector<std::string> optAcc{"ACCESSRAMP"};
+    std::vector<std::string> optMain{"MAINCARRIAGEWAY"};
     EXPECT_TRUE(pred.booleanEvaluation(0, world2, obstacleTwo, {}, optAcc));
     EXPECT_TRUE(pred.booleanEvaluation(1, world2, obstacleTwo, {}, optAcc));
     EXPECT_TRUE(pred.booleanEvaluation(2, world2, obstacleTwo, {}, optAcc));

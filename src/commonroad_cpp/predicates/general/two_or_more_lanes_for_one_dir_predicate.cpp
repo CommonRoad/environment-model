@@ -11,10 +11,10 @@
 
 #include <commonroad_cpp/predicates/general/two_or_more_lanes_for_one_dir_predicate.h>
 
-bool TwoOrMoreLanesForOneDirPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool TwoOrMoreLanesForOneDirPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                         const std::shared_ptr<Obstacle> &obstacleK,
+                                                         const std::shared_ptr<Obstacle> &obstacleP,
+                                                         const std::vector<std::string> &additionalFunctionParameters) {
     const auto lanelets = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(lanelets.begin(), lanelets.end(), [](const auto &lanelet) {
         return (lanelet->getAdjacentLeft().adj && !lanelet->getAdjacentLeft().oppositeDir) ||
@@ -23,14 +23,12 @@ bool TwoOrMoreLanesForOneDirPredicate::booleanEvaluation(
 }
 double TwoOrMoreLanesForOneDirPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("TwoOrMoreLanesForOneDirPredicate does not support robust evaluation!");
 }
 Constraint TwoOrMoreLanesForOneDirPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("TwoOrMoreLanesForOneDirPredicate does not support constraint evaluation!");
 }
 TwoOrMoreLanesForOneDirPredicate::TwoOrMoreLanesForOneDirPredicate() : CommonRoadPredicate(false) {}

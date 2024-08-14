@@ -14,10 +14,10 @@ double KeepsSafeDistancePrecPredicate::computeSafeDistance(double velocityK, dou
            pow(velocityK, 2) / (-2 * std::abs(minAccelerationK)) + velocityK * tReact;
 }
 
-bool KeepsSafeDistancePrecPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool KeepsSafeDistancePrecPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                       const std::shared_ptr<Obstacle> &obstacleK,
+                                                       const std::shared_ptr<Obstacle> &obstacleP,
+                                                       const std::vector<std::string> &additionalFunctionParameters) {
     return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters) > 0;
 }
 
@@ -31,8 +31,7 @@ bool KeepsSafeDistancePrecPredicate::booleanEvaluation(double lonPosK, double lo
 
 Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
 
@@ -50,10 +49,10 @@ Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(double lonPosP, 
             computeSafeDistance(velocityK, velocityP, minAccelerationK, minAccelerationP, tReact)};
 }
 
-double KeepsSafeDistancePrecPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                        const std::shared_ptr<Obstacle> &obstacleK,
+                                                        const std::shared_ptr<Obstacle> &obstacleP,
+                                                        const std::vector<std::string> &additionalFunctionParameters) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
 
@@ -67,8 +66,8 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(
     // robustness
     if (deltaS < 0)
         return std::abs(deltaS);
-    else if (additionalFunctionParameters != nullptr && (deltaS - additionalFunctionParameters->minSafetyDistance) < 0)
-        return std::min(deltaS - additionalFunctionParameters->minSafetyDistance, deltaS - dSafe);
+    else if (deltaS - stod(additionalFunctionParameters.at(0)) < 0)
+        return std::min(deltaS - stod(additionalFunctionParameters.at(0)), deltaS - dSafe);
     else
         return (deltaS - dSafe);
 }

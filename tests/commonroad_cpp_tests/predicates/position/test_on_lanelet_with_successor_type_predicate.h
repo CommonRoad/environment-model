@@ -11,10 +11,10 @@ class OnLaneletWithSuccessorTypePredicateTest : public testing::Test {
     std::shared_ptr<Obstacle> egoVehicle;
     OnLaneletWithSuccessorTypePredicate pred;
     std::shared_ptr<World> world;
-    std::shared_ptr<OptionalPredicateParameters> opt;
+    std::vector<std::string> opt;
 
     void initializeTestData(LaneletType laneletTypeRight, LaneletType laneletTypeLeft,
-                            LaneletType laneletTypeSuccessorRight, LaneletType laneletTypeSuccessorLeft);
+                            const std::string &laneletTypeSuccessorRight, LaneletType laneletTypeSuccessorLeft);
 
   private:
     void SetUp() override;

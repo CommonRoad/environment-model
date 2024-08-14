@@ -82,10 +82,8 @@ void ChangeLanePredicateTest::SetUp() {
                                               "/predicates/DEU_testOvertakingAllowed-1/"
                                               "DEU_testOvertakingAllowed-1.pb";
 
-    optLeft = std::make_shared<OptionalPredicateParameters>();
-    optLeft->turningDirection = {TurningDirection::left};
-    optRight = std::make_shared<OptionalPredicateParameters>();
-    optRight->turningDirection = {TurningDirection::right};
+    optLeft = {"LEFT"};
+    optRight = {"RIGHT"};
 }
 
 TEST_F(ChangeLanePredicateTest, TwoParallelLaneletsNoChange) {

@@ -15,7 +15,7 @@ class InLaneletDrivingDirPredicateTest : public testing::Test {
     std::shared_ptr<Obstacle> vehicleFive;
     InLaneletDrivingDirPredicate pred;
     std::shared_ptr<World> world;
-    std::shared_ptr<OptionalPredicateParameters> opt;
+    std::vector<std::string> opt;
 
     void initializeTestData(const std::set<ObstacleType> &userOneWayLanelet,
                             const std::set<ObstacleType> &userBidirectionalLanelet);

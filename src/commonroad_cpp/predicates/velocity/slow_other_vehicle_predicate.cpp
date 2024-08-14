@@ -5,10 +5,10 @@
 #include <commonroad_cpp/predicates/velocity/slow_other_vehicle_predicate.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 
-bool SlowOtherVehiclePredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool SlowOtherVehiclePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                  const std::shared_ptr<Obstacle> &obstacleK,
+                                                  const std::shared_ptr<Obstacle> &obstacleP,
+                                                  const std::vector<std::string> &additionalFunctionParameters) {
     double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
                               obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
                               TrafficSignTypes::MAX_SPEED, parameters.getParam("desiredInterstateVelocity")),
@@ -17,17 +17,16 @@ bool SlowOtherVehiclePredicate::booleanEvaluation(
     return vMax - obstacleP->getStateByTimeStep(timeStep)->getVelocity() >= parameters.getParam("minVelocityDif");
 }
 
-double SlowOtherVehiclePredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double SlowOtherVehiclePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                   const std::shared_ptr<Obstacle> &obstacleK,
+                                                   const std::shared_ptr<Obstacle> &obstacleP,
+                                                   const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("SlowLeadingVehiclePredicate does not support robust evaluation!");
 }
 
 Constraint SlowOtherVehiclePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("SlowLeadingVehiclePredicate does not support constraint evaluation!");
 }
 
