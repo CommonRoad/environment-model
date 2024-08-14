@@ -52,15 +52,15 @@ TEST_F(TestNeighboringLaneOppDrivingDirPredicate, BooleanEvaluationObjectsMultil
     std::shared_ptr<World> world =
         std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
 
-    std::shared_ptr<OptionalPredicateParameters> opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->turningDirection = {TurningDirection::left};
+    std::vector<std::string> opt;
+    opt = {"left"};
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleEgo, {}, opt));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleEgo, {}, opt));
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleEgo, {}, opt));
     EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleEgo, {}, opt));
     EXPECT_FALSE(pred.booleanEvaluation(4, world, obstacleEgo, {}, opt));
 
-    opt->turningDirection = {TurningDirection::right};
+    opt = {"right"};
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleEgo, {}, opt));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleEgo, {}, opt));
     EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleEgo, {}, opt));
@@ -77,8 +77,8 @@ TEST_F(TestNeighboringLaneOppDrivingDirPredicate, BooleanEvaluationObjectsNoOnco
     std::shared_ptr<World> worldOncoming =
         std::make_shared<World>(World("testWorld", 0, roadNetworkOncoming, {obstacleEgo}, {obstacleOne}, 0.1));
 
-    std::shared_ptr<OptionalPredicateParameters> opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->turningDirection = {TurningDirection::left};
+    std::vector<std::string> opt;
+    opt = {"left"};
     EXPECT_TRUE(pred.booleanEvaluation(0, worldOncoming, obstacleEgo, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, worldOncoming, obstacleEgo, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, worldOncoming, obstacleEgo, {}, opt));
@@ -91,7 +91,7 @@ TEST_F(TestNeighboringLaneOppDrivingDirPredicate, BooleanEvaluationObjectsNoOnco
     EXPECT_TRUE(pred.booleanEvaluation(3, worldOncoming, obstacleOne, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(4, worldOncoming, obstacleOne, {}, opt));
 
-    opt->turningDirection = {TurningDirection::right};
+    opt = {"right"};
     EXPECT_FALSE(pred.booleanEvaluation(0, worldOncoming, obstacleEgo, {}, opt));
     EXPECT_FALSE(pred.booleanEvaluation(1, worldOncoming, obstacleEgo, {}, opt));
     EXPECT_FALSE(pred.booleanEvaluation(2, worldOncoming, obstacleEgo, {}, opt));

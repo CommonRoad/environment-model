@@ -196,9 +196,9 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
     // extract ID, type, shape, and initial state
     tempObstacle->setId(roadElements.first_attribute().as_ullong());
     tempObstacle->setIsStatic(true);
-    tempObstacle->setObstacleType(
-        obstacle_operations::matchStringToObstacleType(roadElements.first_child().text().as_string()));
     for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
+        if ((strcmp(child.name(), "type")) == 0)
+            tempObstacle->setObstacleType(obstacle_operations::matchStringToObstacleType(child.text().as_string()));
         if ((strcmp(child.name(), "shape")) == 0) {
             extractShape(tempObstacle, child);
             continue;

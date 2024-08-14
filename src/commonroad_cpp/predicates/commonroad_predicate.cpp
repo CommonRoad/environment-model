@@ -1,12 +1,11 @@
 #include <commonroad_cpp/predicates/commonroad_predicate.h>
 
-#include <utility>
-
-bool CommonRoadPredicate::statisticBooleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Timer> &evaluationTimer, const std::shared_ptr<PredicateStatistics> &statistics,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                     const std::shared_ptr<Obstacle> &obstacleK,
+                                                     const std::shared_ptr<Timer> &evaluationTimer,
+                                                     const std::shared_ptr<PredicateStatistics> &statistics,
+                                                     const std::shared_ptr<Obstacle> &obstacleP,
+                                                     const std::vector<std::string> &additionalFunctionParameters) {
     auto startTime{Timer::start()};
     bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters)};
     long compTime{evaluationTimer->stop(startTime)};
@@ -35,20 +34,3 @@ bool CommonRoadPredicate::simpleBooleanEvaluation(size_t timeStep, const std::sh
 CommonRoadPredicate::~CommonRoadPredicate() {}
 
 bool CommonRoadPredicate::isVehicleDependent() const { return vehicleDependent; }
-
-OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType)
-    : signType(std::move(signType)) {}
-OptionalPredicateParameters::OptionalPredicateParameters(std::vector<LaneletType> laneletType)
-    : laneletType(std::move(laneletType)) {}
-OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TurningDirection> turningDirection)
-    : turningDirection(std::move(turningDirection)) {}
-OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficSignTypes> signType,
-                                                         std::vector<LaneletType> laneletType,
-                                                         std::vector<TurningDirection> turningDirection,
-                                                         std::vector<TrafficLightState> trafficLightState)
-    : signType(std::move(signType)), laneletType(std::move(laneletType)), turningDirection(std::move(turningDirection)),
-      trafficLightState(std::move(trafficLightState)) {}
-OptionalPredicateParameters::OptionalPredicateParameters(std::vector<TrafficLightState> trafficLightState)
-    : trafficLightState(std::move(trafficLightState)) {}
-OptionalPredicateParameters::OptionalPredicateParameters(double minSafetyDistance)
-    : minSafetyDistance(minSafetyDistance) {}

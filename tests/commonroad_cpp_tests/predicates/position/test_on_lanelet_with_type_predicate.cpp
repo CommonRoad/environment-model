@@ -1,6 +1,7 @@
 #include "test_on_lanelet_with_type_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void OnLaneletWithTypePredicateTest::SetUp() {
@@ -24,7 +25,7 @@ void OnLaneletWithTypePredicateTest::SetUp() {
 }
 
 TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnShoulder) {
-    initializeTestData(LaneletType::shoulder, LaneletType::interstate);
+    initializeTestData("SHOULDER", "interstate");
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -33,7 +34,7 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnShoulder) {
 }
 
 TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnSUrbanRoad) {
-    initializeTestData(LaneletType::urban, LaneletType::intersection);
+    initializeTestData("URBAN", "INTERSECTION");
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -42,7 +43,7 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnSUrbanRoad) {
 }
 
 TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnMainCarriageWay) {
-    initializeTestData(LaneletType::mainCarriageWay, LaneletType::interstate);
+    initializeTestData("MAINCARRIAGEWAY", "interstate");
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -51,7 +52,7 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnMainCarriageWay) {
 }
 
 TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnExitRamp) {
-    initializeTestData(LaneletType::exitRamp, LaneletType::interstate);
+    initializeTestData("EXITRAMP", "interstate");
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -60,7 +61,7 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnExitRamp) {
 }
 
 TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnAccessRamp) {
-    initializeTestData(LaneletType::accessRamp, LaneletType::interstate);
+    initializeTestData("ACCESSRAMP", "interstate");
     EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, opt));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, opt));
@@ -68,15 +69,17 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationOnAccessRamp) {
     EXPECT_FALSE(pred.booleanEvaluation(4, world, egoVehicle, {}, opt));
 }
 
-void OnLaneletWithTypePredicateTest::initializeTestData(LaneletType laneletType1, LaneletType laneletType2) {
-    auto roadNetwork{utils_predicate_test::create_road_network({laneletType1, laneletType2})};
+void OnLaneletWithTypePredicateTest::initializeTestData(const std::string &laneletType1,
+                                                        const std::string &laneletType2) {
+    auto roadNetwork{
+        utils_predicate_test::create_road_network({lanelet_operations::matchStringToLaneletType(laneletType1),
+                                                   lanelet_operations::matchStringToLaneletType(laneletType2)})};
     this->world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {this->egoVehicle}, {}, 0.1));
-    opt = std::make_shared<OptionalPredicateParameters>();
-    opt->laneletType = {laneletType1};
+    opt = {laneletType1};
 }
 
 TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationIntersection) {
-    initializeTestData(LaneletType::intersection, LaneletType::urban);
+    initializeTestData("INTERSECTION", "URBAN");
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
                                "/predicates/DEU_TrafficLightTest-1/DEU_TrafficLightTest-1_1_T-1.pb"};
     const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);

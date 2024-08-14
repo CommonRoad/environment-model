@@ -55,7 +55,7 @@ TurningDirection TrafficLight::matchTurningDirections(const std::string &dir) {
     if (TurningDirectionNames.count(str) == 1)
         return TurningDirectionNames.at(str);
     else
-        throw std::logic_error("TrafficLight::matchTurningDirections: Invalid turning direction state!");
+        throw std::logic_error("TrafficLight::matchTurningDirections: Invalid turning direction state '" + str + "'!");
 }
 
 TrafficLightState TrafficLight::matchTrafficLightState(const std::string &trafficLightState) {
@@ -65,7 +65,7 @@ TrafficLightState TrafficLight::matchTrafficLightState(const std::string &traffi
     if (TrafficLightStateNames.count(str) == 1)
         return TrafficLightStateNames.at(str);
     else
-        throw std::logic_error("TrafficLight::matchTrafficLightState: Invalid traffic light state!");
+        throw std::logic_error("TrafficLight::matchTrafficLightState: Invalid traffic light state '" + str + "'!");
 }
 
 TrafficLight::TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset,

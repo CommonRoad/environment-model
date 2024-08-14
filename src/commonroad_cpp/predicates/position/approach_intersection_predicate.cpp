@@ -10,10 +10,10 @@
 
 #include <commonroad_cpp/predicates/position/approach_intersection_predicate.h>
 
-bool ApproachIntersectionPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool ApproachIntersectionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                      const std::shared_ptr<Obstacle> &obstacleK,
+                                                      const std::shared_ptr<Obstacle> &obstacleP,
+                                                      const std::vector<std::string> &additionalFunctionParameters) {
     const auto lanelets = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     bool approach_intersection = false;
     for (const auto &lanelet : lanelets) {
@@ -27,16 +27,15 @@ bool ApproachIntersectionPredicate::booleanEvaluation(
 
     return approach_intersection;
 }
-double ApproachIntersectionPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double ApproachIntersectionPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                       const std::shared_ptr<Obstacle> &obstacleK,
+                                                       const std::shared_ptr<Obstacle> &obstacleP,
+                                                       const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("ApproachIntersectionPredicate does not support robust evaluation!");
 }
 Constraint ApproachIntersectionPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("ApproachIntersectionPredicate does not support constraint evaluation!");
 }
 ApproachIntersectionPredicate::ApproachIntersectionPredicate() : CommonRoadPredicate(false) {}

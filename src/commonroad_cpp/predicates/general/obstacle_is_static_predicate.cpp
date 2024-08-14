@@ -10,24 +10,23 @@
 
 #include <commonroad_cpp/predicates/general/obstacle_is_static_predicate.h>
 
-bool ObstacleIsStaticPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool ObstacleIsStaticPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                  const std::shared_ptr<Obstacle> &obstacleK,
+                                                  const std::shared_ptr<Obstacle> &obstacleP,
+                                                  const std::vector<std::string> &additionalFunctionParameters) {
 
     return obstacleK->isStatic();
 }
 
-double ObstacleIsStaticPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double ObstacleIsStaticPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                   const std::shared_ptr<Obstacle> &obstacleK,
+                                                   const std::shared_ptr<Obstacle> &obstacleP,
+                                                   const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("ObstacleIsStaticPredicate does not support robust evaluation!");
 }
 Constraint ObstacleIsStaticPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("ObstacleIsStaticPredicate does not support constraint evaluation!");
 }
 ObstacleIsStaticPredicate::ObstacleIsStaticPredicate() : CommonRoadPredicate(false) {}

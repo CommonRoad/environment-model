@@ -4,37 +4,33 @@
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/world.h>
 
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h>
 
-bool OnLaneletWithTypePredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    if (!additionalFunctionParameters) {
-        throw std::runtime_error{"missing additionalFunctionParameters"};
-    }
-    assert(additionalFunctionParameters);
-
+bool OnLaneletWithTypePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                   const std::shared_ptr<Obstacle> &obstacleK,
+                                                   const std::shared_ptr<Obstacle> &obstacleP,
+                                                   const std::vector<std::string> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lanelet>> lanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                           return lanelet->hasLaneletType(additionalFunctionParameters->laneletType.at(0));
+                           return lanelet->hasLaneletType(
+                               lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0)));
                        });
 }
 
-double OnLaneletWithTypePredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double OnLaneletWithTypePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                    const std::shared_ptr<Obstacle> &obstacleK,
+                                                    const std::shared_ptr<Obstacle> &obstacleP,
+                                                    const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("OnLaneletWithTypePredicate does not support robust evaluation!");
 }
 
 Constraint OnLaneletWithTypePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("OnLaneletWithTypePredicate does not support constraint evaluation!");
 }
 OnLaneletWithTypePredicate::OnLaneletWithTypePredicate() : CommonRoadPredicate(false) {}

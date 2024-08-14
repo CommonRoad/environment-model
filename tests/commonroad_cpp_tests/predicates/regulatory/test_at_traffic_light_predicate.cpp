@@ -40,9 +40,7 @@ TEST_F(AtRedTrafficLightPredicateTest, BooleanEvaluationDirectionAll) {
                                           std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
                                           timeStepSize));
 
-    auto opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->trafficLightState = {TrafficLightState::red};
-    opt->turningDirection = {TurningDirection::all};
+    std::vector<std::string> opt{"all", "red"};
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {},
                                        opt)); // in front of intersection/traffic light -> completely on incoming
     EXPECT_TRUE(
@@ -87,10 +85,7 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionAll) {
                                           std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
                                           timeStepSize));
 
-    auto opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->trafficLightState = {TrafficLightState::red};
-    opt->turningDirection = {TurningDirection::all};
-
+    std::vector<std::string> opt{"all", "red"};
     auto timer{std::make_shared<Timer>()};
     auto stat{std::make_shared<PredicateStatistics>()};
     EXPECT_TRUE(
@@ -138,9 +133,7 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionRight)
                                           std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
                                           timeStepSize));
 
-    auto opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->trafficLightState = {TrafficLightState::red};
-    opt->turningDirection = {TurningDirection::right};
+    std::vector<std::string> opt = {"right", "red"};
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {},
                                        opt)); // in front of intersection/traffic light -> completely on incoming
     EXPECT_TRUE(
@@ -185,9 +178,7 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionLeft) 
                                           std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
                                           timeStepSize));
 
-    auto opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->trafficLightState = {TrafficLightState::red};
-    opt->turningDirection = {TurningDirection::left};
+    std::vector<std::string> opt = {"left", "red"};
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {},
                                        opt)); // in front of intersection/traffic light -> completely on incoming
     EXPECT_TRUE(
@@ -232,9 +223,7 @@ TEST_F(AtRedTrafficLightPredicateTest, StatisticBooleanEvaluationDirectionStraig
                                           std::vector<std::shared_ptr<Obstacle>>{obstacleOne, obstacleTwo}, {},
                                           timeStepSize));
 
-    auto opt{std::make_shared<OptionalPredicateParameters>()};
-    opt->trafficLightState = {TrafficLightState::red};
-    opt->turningDirection = {TurningDirection::straight};
+    std::vector<std::string> opt = {"straight", "red"};
     EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {},
                                        opt)); // in front of intersection/traffic light -> completely on incoming
     EXPECT_TRUE(

@@ -1,13 +1,12 @@
 #include "commonroad_cpp/predicates/general/narrow_road_predicate.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/world.h"
 
-bool NarrowRoadPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+bool NarrowRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                            const std::shared_ptr<Obstacle> &obstacleK,
+                                            const std::shared_ptr<Obstacle> &obstacleP,
+                                            const std::vector<std::string> &additionalFunctionParameters) {
     double obsK_x = obstacleK->getStateByTimeStep(timeStep)->getXPosition();
     double obsK_y = obstacleK->getStateByTimeStep(timeStep)->getYPosition();
     auto occupied_lanelets = world->getRoadNetwork()->findLaneletsByPosition(obsK_x, obsK_y);
@@ -18,17 +17,17 @@ bool NarrowRoadPredicate::booleanEvaluation(
                        });
 }
 
-Constraint NarrowRoadPredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+Constraint NarrowRoadPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                     const std::shared_ptr<Obstacle> &obstacleK,
+                                                     const std::shared_ptr<Obstacle> &obstacleP,
+                                                     const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Narrow Road Predicate does not support constraint evaluation!");
 }
 
-double NarrowRoadPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+double NarrowRoadPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                             const std::shared_ptr<Obstacle> &obstacleK,
+                                             const std::shared_ptr<Obstacle> &obstacleP,
+                                             const std::vector<std::string> &additionalFunctionParameters) {
     throw std::runtime_error("Narrow Road Predicate does not support robust evaluation!");
 }
 
