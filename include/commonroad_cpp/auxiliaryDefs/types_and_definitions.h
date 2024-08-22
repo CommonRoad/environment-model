@@ -90,7 +90,9 @@ enum class LaneletType {
     sidewalk,
     straight,
     urban,
-    unknown
+    unknown,
+    any,
+    all
 };
 
 enum class LineMarking {

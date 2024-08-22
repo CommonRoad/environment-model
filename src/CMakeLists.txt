@@ -95,13 +95,13 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/braking/decelerates_predicate.cpp
         commonroad_cpp/predicates/position/close_to_crosswalk_predicate.cpp
         commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.cpp
+        commonroad_cpp/predicates/position/adjacent_lanelet_of_type_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_single_lane_predicate.cpp
         commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_predicate.cpp
-        commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.cpp
         commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.cpp
         commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.cpp
         commonroad_cpp/predicates/position/on_road_predicate.cpp
@@ -109,8 +109,8 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.cpp
         commonroad_cpp/predicates/position/in_leftmost_lane_predicate.cpp
         commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
-        commonroad_cpp/predicates/position/drives_leftmost_predicate.cpp
-        commonroad_cpp/predicates/position/drives_rightmost_predicate.cpp
+        commonroad_cpp/predicates/position/close_to_lane_border_predicate.cpp
+        commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.cpp
         commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.cpp
         commonroad_cpp/predicates/position/on_incoming_left_of_predicate.cpp
         commonroad_cpp/predicates/position/on_oncoming_of_predicate.cpp
@@ -200,8 +200,9 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/position/in_same_dir_predicate.h
         commonroad_cpp/predicates/position/on_t_incoming_predicate.h
         commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h
-        commonroad_cpp/predicates/position/drives_leftmost_predicate.h
-        commonroad_cpp/predicates/position/drives_rightmost_predicate.h
+        commonroad_cpp/predicates/position/close_to_lane_border_predicate.h
+        commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.h
+        commonroad_cpp/predicates/position/adjacent_lanelet_of_type_predicate.h
         commonroad_cpp/predicates/position/in_front_of_predicate.h
         commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.h
         commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h
@@ -210,7 +211,6 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/position/in_single_lane_predicate.h
         commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h
         commonroad_cpp/predicates/position/left_of_predicate.h
-        commonroad_cpp/predicates/position/main_carriageway_right_lane_predicate.h
         commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h
         commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h
         commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.h

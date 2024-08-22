@@ -1,23 +1,18 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *  Evaluates whether a vehicle occupies the rightmost main carriageway lane
+ *  Evaluates if a the adjacent lanelet of a vehicle has a provided type.
+ *  The side and lanelet type must be provided as parameter.
+ *  Only lanelets which are not occupied are considered as adjacent.
  */
-class MainCarriagewayRightLanePredicate : public CommonRoadPredicate {
+class AdjacentLaneletOfTypePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for InRightmostLanePredicate
+     * Constructor for AdjacentLaneletOfTypePredicate
      */
-    MainCarriagewayRightLanePredicate();
+    AdjacentLaneletOfTypePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
