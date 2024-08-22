@@ -368,6 +368,14 @@ class Lanelet {
     bool hasLaneletType(LaneletType laType) const;
 
     /**
+     * Evaluates whether a lanelet has several lanelet types.
+     *
+     * @param laType List of lanelet types which existence should be checked.
+     * @return Boolean indicating whether the lanelet types match.
+     */
+    bool hasLaneletTypes(std::vector<LaneletType> laType) const;
+
+    /**
      * Evaluates whether a lanelet has a specific traffic sign.
      *
      * @param tsType trafficSign type which existence should be checked.
@@ -423,6 +431,8 @@ class Lanelet {
      */
     size_t findClosestIndex(double positionX, double positionY, bool considerLastIndex = false) const;
 
+    double getMinWidth() const;
+
   private:
     lanelet_id_t laneletId{};                                  //**< unique ID of lanelet */
     std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
@@ -448,6 +458,7 @@ class Lanelet {
     mutable std::vector<double> orientation;           //**< orientation along center line */
     mutable std::vector<double> pathLength;            //**< path length along center line */
     mutable std::vector<double> width;                 //**< width along center line */
+    mutable double minWidth;                           //**< minimum width of lanelet */
 };
 
 extern const std::unordered_map<std::string, LaneletType> LaneletTypeNames;

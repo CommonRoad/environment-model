@@ -1,13 +1,7 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-#include "test_main_carriageway_right_lane_predicate.h"
+#include "test_adjacent_lanelet_of_type_predicate.h"
 #include "../utils_predicate_test.h"
 
-void MainCarriagewayRightLanePredicateTest::SetUp() {
+void AdjacentLaneletOfTypePredicateTest::SetUp() {
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 6, 10, 0, 0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 10, 4, 10, 0, 0);
@@ -49,22 +43,32 @@ void MainCarriagewayRightLanePredicateTest::SetUp() {
     worldThree = std::make_shared<World>(World("testWorld", 0, roadNetworkThree, {obstacleThree}, {}, 0.1));
 }
 
-TEST_F(MainCarriagewayRightLanePredicateTest, BooleanEvaluationObjects) {
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldOne, obstacleOne));
-    EXPECT_TRUE(pred.booleanEvaluation(1, worldOne, obstacleOne));
-    EXPECT_TRUE(pred.booleanEvaluation(2, worldOne, obstacleOne));
-    EXPECT_TRUE(pred.booleanEvaluation(3, worldTwo, obstacleTwo));
-    EXPECT_TRUE(pred.booleanEvaluation(4, worldTwo, obstacleTwo));
-    EXPECT_FALSE(pred.booleanEvaluation(5, worldTwo, obstacleTwo));
-    EXPECT_TRUE(pred.booleanEvaluation(6, worldThree, obstacleThree));
-    EXPECT_TRUE(pred.booleanEvaluation(7, worldThree, obstacleThree));
-    EXPECT_FALSE(pred.booleanEvaluation(8, worldThree, obstacleThree));
+TEST_F(AdjacentLaneletOfTypePredicateTest, BooleanEvaluationObjects) {
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldOne, obstacleOne, {}, {"right", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(1, worldOne, obstacleOne, {}, {"right", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(2, worldOne, obstacleOne, {}, {"right", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(3, worldTwo, obstacleTwo, {}, {"right", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(4, worldTwo, obstacleTwo, {}, {"right", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(5, worldTwo, obstacleTwo, {}, {"right", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(6, worldThree, obstacleThree, {}, {"right", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(7, worldThree, obstacleThree, {}, {"right", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(8, worldThree, obstacleThree, {}, {"right", "mainCarriageWay"}));
+
+    EXPECT_FALSE(pred.booleanEvaluation(0, worldOne, obstacleOne, {}, {"left", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(1, worldOne, obstacleOne, {}, {"left", "mainCarriageWay"}));
+    EXPECT_TRUE(pred.booleanEvaluation(2, worldOne, obstacleOne, {}, {"left", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(3, worldTwo, obstacleTwo, {}, {"left", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(4, worldTwo, obstacleTwo, {}, {"left", "mainCarriageWay"}));
+    EXPECT_TRUE(pred.booleanEvaluation(5, worldTwo, obstacleTwo, {}, {"left", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(6, worldThree, obstacleThree, {}, {"left", "mainCarriageWay"}));
+    EXPECT_FALSE(pred.booleanEvaluation(7, worldThree, obstacleThree, {}, {"left", "mainCarriageWay"}));
+    EXPECT_TRUE(pred.booleanEvaluation(8, worldThree, obstacleThree, {}, {"left", "mainCarriageWay"}));
 }
 
-TEST_F(MainCarriagewayRightLanePredicateTest, RobustEvaluation) {
+TEST_F(AdjacentLaneletOfTypePredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, worldOne, obstacleOne), std::runtime_error);
 }
 
-TEST_F(MainCarriagewayRightLanePredicateTest, ConstraintEvaluation) {
+TEST_F(AdjacentLaneletOfTypePredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, worldOne, obstacleOne), std::runtime_error);
 }

@@ -1,23 +1,19 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *  Evaluates if a vehicle drives rightmost within its occupied lanes
+ *  Evaluates if a vehicle is close to an obstacle in lateral direction.
+ *  The evaluation on which side is provided as parameter.
+ *  The obstacles do not need to be adjacent.
+ *  This needs to be evaluated with the corresponding predicate.
  */
-class DrivesRightmostPredicate : public CommonRoadPredicate {
+class CloseLateralDistanceToObstaclePredicate : public CommonRoadPredicate {
   public:
     /**
      * Constructor for DrivesRightmostPredicate
      */
-    DrivesRightmostPredicate();
+    CloseLateralDistanceToObstaclePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
