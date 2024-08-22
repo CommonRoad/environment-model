@@ -2,19 +2,18 @@
 #pragma once
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/predicates/position/drives_rightmost_predicate.h"
+#include "commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
 #include <gtest/gtest.h>
 
-class DrivesRightmostPredicateTest : public testing::Test {
+class CloseLateralDistanceToObstaclePredicateTest : public testing::Test {
   protected:
     std::shared_ptr<Obstacle> egoVehicle;
     std::shared_ptr<Obstacle> obstacleOne;
-    DrivesRightmostPredicate pred;
+    CloseLateralDistanceToObstaclePredicate pred;
     std::shared_ptr<World> world;
     std::shared_ptr<World> world2;
-
-  private:
-    void SetUp() override;
+    void setUpLeft();
+    void setUpRight();
 };

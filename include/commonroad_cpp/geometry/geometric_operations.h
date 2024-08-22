@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include <vector>
@@ -92,8 +85,8 @@ double euclideanDistance2Dim(const vertex &pointA, const vertex &pointB);
  * @param polylineB Second polyline.
  * @return Width along polylines.
  */
-std::vector<double> computeDistanceFromPolylines(const std::vector<vertex> &polylineA,
-                                                 const std::vector<vertex> &polylineB);
+std::tuple<std::vector<double>, double> computeDistanceFromPolylines(const std::vector<vertex> &polylineA,
+                                                                     const std::vector<vertex> &polylineB);
 
 /**
  * Interpolates value based on two polylines.

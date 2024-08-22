@@ -7,14 +7,30 @@ bool NarrowRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::vector<std::string> &additionalFunctionParameters) {
-    double obsK_x = obstacleK->getStateByTimeStep(timeStep)->getXPosition();
-    double obsK_y = obstacleK->getStateByTimeStep(timeStep)->getYPosition();
-    auto occupied_lanelets = world->getRoadNetwork()->findLaneletsByPosition(obsK_x, obsK_y);
-    return std::all_of(occupied_lanelets.begin(), occupied_lanelets.end(),
-                       [obsK_x, obsK_y, world, this](const std::shared_ptr<Lanelet> &lanelet) {
-                           return lanelet_operations::roadWidth(lanelet, obsK_x, obsK_y) <=
-                                  parameters.getParam("narrowRoad");
-                       });
+    auto occLaneletsFront{obstacleK->getOccupiedLaneletsByFront(world->getRoadNetwork(), timeStep)};
+    auto occLaneletsRear{obstacleK->getOccupiedLaneletsByFront(world->getRoadNetwork(), timeStep)};
+    if (std::all_of(occLaneletsFront.begin(), occLaneletsFront.end(),
+                    [this](const std::shared_ptr<Lanelet> &lanelet) {
+                        return lanelet->getMinWidth() > parameters.getParam("narrowRoad");
+                    }) and
+        std::all_of(occLaneletsRear.begin(), occLaneletsRear.end(), [this](const std::shared_ptr<Lanelet> &lanelet) {
+            return lanelet->getMinWidth() > parameters.getParam("narrowRoad");
+        }))
+        return false;
+    if (std::any_of(occLaneletsFront.begin(), occLaneletsFront.end(),
+                    [this, obstacleK, timeStep](const std::shared_ptr<Lanelet> &lanelet) {
+                        auto obsPos{obstacleK->getFrontXYCoordinates(timeStep)};
+                        return lanelet_operations::roadWidth(lanelet, obsPos.at(0), obsPos.at(1)) <=
+                               parameters.getParam("narrowRoad");
+                    }) and
+        std::any_of(occLaneletsRear.begin(), occLaneletsRear.end(),
+                    [this, obstacleK, timeStep](const std::shared_ptr<Lanelet> &lanelet) {
+                        auto obsPos{obstacleK->getBackXYCoordinates(timeStep)};
+                        return lanelet_operations::roadWidth(lanelet, obsPos.at(0), obsPos.at(1)) <=
+                               parameters.getParam("narrowRoad");
+                    }))
+        return true;
+    return false;
 }
 
 Constraint NarrowRoadPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

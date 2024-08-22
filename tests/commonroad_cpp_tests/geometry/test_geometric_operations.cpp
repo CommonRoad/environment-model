@@ -228,12 +228,13 @@ TEST_F(GeometricOperationsTest, computeDistanceFromPolylines) {
     auto polylineC{std::vector<vertex>{vertex{0, 0}}};
     auto polylineD{std::vector<vertex>{vertex{0, 0}, vertex{1, 0}}};
     auto result{geometric_operations::computeDistanceFromPolylines(polylineA, polylineB)};
-    EXPECT_EQ(result[0], 1);
-    EXPECT_EQ(result[1], 2);
-    EXPECT_EQ(result[2], 1.5);
-    EXPECT_EQ(result[3], 1);
-    EXPECT_EQ(result[4], 1);
-    EXPECT_NEAR(result[5], 5.02494, 0.0001);
+    EXPECT_EQ(std::get<0>(result)[0], 1);
+    EXPECT_EQ(std::get<0>(result)[1], 2);
+    EXPECT_EQ(std::get<0>(result)[2], 1.5);
+    EXPECT_EQ(std::get<0>(result)[3], 1);
+    EXPECT_EQ(std::get<0>(result)[4], 1);
+    EXPECT_NEAR(std::get<0>(result)[5], 5.02494, 0.0001);
+    EXPECT_EQ(std::get<1>(result), 1);
 
     EXPECT_THROW(geometric_operations::computeDistanceFromPolylines(polylineA, polylineC), std::logic_error);
     EXPECT_THROW(geometric_operations::computeDistanceFromPolylines(polylineA, polylineD), std::logic_error);
