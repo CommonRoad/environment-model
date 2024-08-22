@@ -267,8 +267,10 @@ double geometric_operations::euclideanDistance2Dim(const vertex &pointA, const v
     return sqrt(pow(xDifference, 2) + pow(yDifference, 2));
 }
 
-std::vector<double> geometric_operations::computeDistanceFromPolylines(const std::vector<vertex> &polylineA,
-                                                                       const std::vector<vertex> &polylineB) {
+std::tuple<std::vector<double>, double>
+geometric_operations::computeDistanceFromPolylines(const std::vector<vertex> &polylineA,
+                                                   const std::vector<vertex> &polylineB) {
+    double minWidth{std::numeric_limits<double>::max()};
     if (polylineA.size() < 2 or polylineB.size() < 2 or polylineA.size() != polylineB.size())
         throw std::logic_error(
             "geometric_operations computeOrientationFromPolyline: "
@@ -276,10 +278,14 @@ std::vector<double> geometric_operations::computeDistanceFromPolylines(const std
     std::vector<double> width;
     width.reserve(polylineA.size());
 
-    for (size_t idx{0}; idx < polylineA.size(); ++idx)
-        width.push_back(euclideanDistance2Dim(polylineA[idx], polylineB[idx]));
+    for (size_t idx{0}; idx < polylineA.size(); ++idx) {
+        auto tmpWidth{euclideanDistance2Dim(polylineA[idx], polylineB[idx])};
+        width.push_back(tmpWidth);
+        if (tmpWidth < minWidth)
+            minWidth = tmpWidth;
+    }
 
-    return width;
+    return {width, minWidth};
 }
 
 double geometric_operations::scalarProduct(const vertex &vertA, const vertex &vertB) {

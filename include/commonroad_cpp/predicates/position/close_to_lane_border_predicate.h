@@ -1,23 +1,16 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *  Evaluates if a vehicle drives leftmost within its occupied lanes
+ *  Evaluates if a vehicle drives close to its lane border. The side (right/left) must be provided via parameter).
  */
-class DrivesLeftmostPredicate : public CommonRoadPredicate {
+class CloseToLaneBorderPredicate : public CommonRoadPredicate {
   public:
     /**
      * Constructor for DrivesLeftmostPredicate
      */
-    DrivesLeftmostPredicate();
+    CloseToLaneBorderPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

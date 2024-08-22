@@ -211,12 +211,23 @@ size_t Lanelet::findClosestIndex(double positionX, double positionY,
     return minimum_index;
 }
 
-bool Lanelet::hasLaneletType(LaneletType laType) const { return laneletTypes.find(laType) != laneletTypes.end(); }
+bool Lanelet::hasLaneletType(LaneletType laType) const {
+    return laType == LaneletType::all or laType == LaneletType::any or laneletTypes.find(laType) != laneletTypes.end();
+}
+
+bool Lanelet::hasLaneletTypes(std::vector<LaneletType> laTypes) const {
+    if (laTypes.size() == 1)
+        return laTypes.at(0) == LaneletType::any or laneletTypes.find(laTypes.at(0)) != laneletTypes.end();
+    else
+        return std::all_of(laTypes.begin(), laTypes.end(),
+                           [this](LaneletType ty) { return laneletTypes.find(ty) != laneletTypes.end(); });
+}
 
 bool Lanelet::hasTrafficSign(TrafficSignTypes trafficSignType) const {
-    return std::any_of(trafficSigns.begin(), trafficSigns.end(), [trafficSignType](std::shared_ptr<TrafficSign> ts) {
-        return !ts->getTrafficSignElementsOfType(trafficSignType).empty();
-    });
+    return std::any_of(trafficSigns.begin(), trafficSigns.end(),
+                       [trafficSignType](const std::shared_ptr<TrafficSign> &ts) {
+                           return !ts->getTrafficSignElementsOfType(trafficSignType).empty();
+                       });
 }
 
 void Lanelet::addLaneletType(LaneletType laType) { laneletTypes.insert(laType); }
@@ -243,13 +254,16 @@ const std::vector<double> &Lanelet::getPathLength() const {
 
 const std::vector<double> &Lanelet::getWidthAlongLanelet() const {
     if (width.empty())
-        width = geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder);
+        width = std::get<0>(geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder));
     return width;
 }
 
 double Lanelet::getWidth(double positionX, double positionY) const {
-    if (width.empty())
-        width = geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder);
+    if (width.empty()) {
+        auto tmpWidth{geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder)};
+        width = std::get<0>(tmpWidth);
+        minWidth = std::get<1>(tmpWidth);
+    }
     unsigned long closestIndex = findClosestIndex(positionX, positionY);
     vertex vertS{centerVertices[closestIndex + 1] - centerVertices[closestIndex]};
     vertex vertV{vertex{positionX, positionY} - centerVertices[closestIndex]};
@@ -260,6 +274,15 @@ double Lanelet::getWidth(double positionX, double positionY) const {
                                                     vertP + centerVertices[closestIndex]) /
         geometric_operations::euclideanDistance2Dim(centerVertices[closestIndex], centerVertices[closestIndex + 1])};
     return width[closestIndex] + (width[closestIndex + 1] - width[closestIndex]) * scalar;
+}
+
+double Lanelet::getMinWidth() const {
+    if (width.empty()) {
+        auto tmpWidth{geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder)};
+        width = std::get<0>(tmpWidth);
+        minWidth = std::get<1>(tmpWidth);
+    }
+    return minWidth;
 }
 
 const std::unordered_map<std::string, LaneletType> LaneletTypeNames = {
@@ -289,4 +312,6 @@ const std::unordered_map<std::string, LaneletType> LaneletTypeNames = {
     {"BORDER", LaneletType::border},
     {"PARKING", LaneletType::parking},
     {"RESTRICTED", LaneletType::restricted},
+    {"ANY", LaneletType::any},
+    {"ALL", LaneletType::all},
 };
