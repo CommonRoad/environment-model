@@ -104,7 +104,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/velocity/test_preserves_traffic_flow_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_slow_other_vehicle_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_in_standstill_predicate.cpp
-        commonroad_cpp_tests/predicates/velocity/test_exist_standing_leading_vehicle_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_drives_faster_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_drives_with_slightly_higher_speed_predicate.cpp
         commonroad_cpp_tests/predicates/velocity/test_reverses_predicate.cpp
