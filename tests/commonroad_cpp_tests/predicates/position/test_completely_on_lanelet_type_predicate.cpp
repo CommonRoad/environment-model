@@ -8,14 +8,14 @@ void CompletelyOnLaneletTypePredicateTest::SetUp() {
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 100, 2, 25, 0, 0);
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 125, 2, 25, 0, 0);
     std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 150, 4, 25, 0, 0);
-    std::shared_ptr<State> stateFiveObstacleOne = std::make_shared<State>(4, 175, 6, 25, 0, 0);
+    std::shared_ptr<State> stateFiveObstacleOne = std::make_shared<State>(5, 175, 6, 25, 0, 0);
 
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 155, -1.5, 25, 0, 0);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 161, -1.4, 25, 0, 0.3);
     std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 167, -0.5, 25, 0, 0.3);
     std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 173, 0.5, 25, 0, 0.3);
     std::shared_ptr<State> stateFourObstacleTwo = std::make_shared<State>(4, 179, 1.4, 25, 0, 0);
-    std::shared_ptr<State> stateFiveObstacleTwo = std::make_shared<State>(4, 185, 1.5, 25, 0, 0);
+    std::shared_ptr<State> stateFiveObstacleTwo = std::make_shared<State>(5, 185, 1.5, 25, 0, 0);
 
     Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
