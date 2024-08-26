@@ -150,7 +150,6 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_min_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/in_standstill_predicate.cpp
-        commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.cpp
         commonroad_cpp/predicates/velocity/drives_faster_predicate.cpp
         commonroad_cpp/predicates/velocity/reverses_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.cpp
@@ -238,7 +237,6 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/regulatory/close_to_stop_line_predicate.h
         commonroad_cpp/predicates/velocity/drives_faster_predicate.h
         commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h
-        commonroad_cpp/predicates/velocity/exist_standing_leading_vehicle_predicate.h
         commonroad_cpp/predicates/velocity/in_standstill_predicate.h
         commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.h
         commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.h
