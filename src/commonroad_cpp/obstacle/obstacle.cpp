@@ -20,6 +20,7 @@
 #include <commonroad_cpp/obstacle/obstacle_reference.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <spdlog/spdlog.h>
 
 static std::array<double, 4> rotatedCornerLatitudes(const Rectangle &rect, const double theta) {
     const double width = rect.getWidth();
@@ -183,9 +184,8 @@ std::shared_ptr<SignalState> Obstacle::getSignalStateByTimeStep(size_t timeStep)
         return currentSignalState;
     else if (signalSeriesHistory.count(timeStep) == 1)
         return signalSeriesHistory.at(timeStep);
-    else
-        throw std::logic_error("SignalState for time step does not exist. Obstacle ID: " +
-                               std::to_string(this->getId()) + " - Time step: " + std::to_string(timeStep));
+    spdlog::info("Obstacle::getSignalStateByTimeStep: No signal state found. Returning default signal state.");
+    return std::make_shared<SignalState>(false, false, false, false, false, false, timeStep);
 }
 
 ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
