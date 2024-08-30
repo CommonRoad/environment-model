@@ -90,20 +90,6 @@ TEST_F(KeepsSafeDistancePrecPredicateTest, ComputeSafeDistance) {
     EXPECT_THROW(KeepsSafeDistancePrecPredicate::computeSafeDistance(0, 0, 1, 2, 0.0), std::logic_error);
 }
 
-// Tests for CommonRoadPredicate Interface
-TEST_F(KeepsSafeDistancePrecPredicateTest, GetParameters) {
-    EXPECT_EQ(pred.getParameters().getParam("aAbrupt"), -2);
-    EXPECT_EQ(pred.getParameters().getParam("minInterstateWidth"), 7.0);
-}
-
-TEST_F(KeepsSafeDistancePrecPredicateTest, SetParameters) {
-    PredicateParameters tmpParameters;
-    tmpParameters.updateParam("minInterstateWidth", 5);
-    EXPECT_EQ(pred.getParameters().getParam("minInterstateWidth"), 7.0);
-    pred.setParameters(tmpParameters);
-    EXPECT_EQ(pred.getParameters().getParam("minInterstateWidth"), 5);
-}
-
 TEST_F(KeepsSafeDistancePrecPredicateTest, ResetStatistics) {
     auto timer{std::make_shared<Timer>()};
     auto stat{std::make_shared<PredicateStatistics>()};

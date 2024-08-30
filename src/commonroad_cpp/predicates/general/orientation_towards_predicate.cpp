@@ -1,5 +1,5 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/predicates/position/in_same_lane_predicate.h>
+#include <commonroad_cpp/predicates/lane/in_same_lane_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 

@@ -1,10 +1,6 @@
-#include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
-#include <commonroad_cpp/predicates/position/approach_intersection_predicate.h>
-#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
-#include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
-
 #include <commonroad_cpp/predicates/position/close_to_crosswalk_predicate.h>
+#include <commonroad_cpp/world.h>
 #include <valarray>
 
 bool CloseToCrosswalkPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
