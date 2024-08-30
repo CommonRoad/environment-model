@@ -7,16 +7,8 @@ SafeLateralDistanceToVrusPredicate::SafeLateralDistanceToVrusPredicate() : Commo
 bool SafeLateralDistanceToVrusPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
-
-    auto lanelets = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    double dist = obstacleK->getLateralDistanceToObstacle(timeStep, obstacleP, world->getRoadNetwork());
-    if (dist < parameters.getParam("dMinUrban") or (!std::any_of(lanelets.begin(), lanelets.end(),
-                                                                 [](const std::shared_ptr<Lanelet> &lanelet) {
-                                                                     return lanelet->hasLaneletType(LaneletType::urban);
-                                                                 }) and
-                                                    dist < parameters.getParam("dMinNonUrban")))
-        return false;
-    return true;
+    auto dist{obstacleK->getLateralDistanceToObstacle(timeStep, obstacleP, world->getRoadNetwork())};
+    return dist >= std::stod(additionalFunctionParameters.at(0));
 }
 
 double SafeLateralDistanceToVrusPredicate::robustEvaluation(

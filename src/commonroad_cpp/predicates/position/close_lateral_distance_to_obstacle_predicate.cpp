@@ -14,7 +14,7 @@ bool CloseLateralDistanceToObstaclePredicate::booleanEvaluation(
     if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::right) {
         auto rightK{obstacleK->rightD(world->getRoadNetwork(), timeStep)};
         auto maxP{std::max(leftP, rightP)}; // different driving directions / orientations
-        return rightK > maxP and (rightK - maxP) <= parameters.getParam("closeToOtherVehicle");
+        return rightK > maxP and (rightK - maxP) < parameters.getParam("closeToOtherVehicle");
     } else if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::left) {
         auto leftK{obstacleK->leftD(world->getRoadNetwork(), timeStep)};
         auto minP{std::min(leftP, rightP)}; // different driving directions / orientations

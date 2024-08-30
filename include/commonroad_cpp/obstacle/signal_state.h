@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
@@ -46,7 +39,7 @@ class SignalState {
      * @return time step.
      */
 
-    bool isHorn() const;
+    [[nodiscard]] bool isHorn() const;
 
     /**
      * Getter for horn.
@@ -60,35 +53,35 @@ class SignalState {
      * @return Boolean indicating active indicator left.
      */
 
-    bool isIndicatorLeft() const;
+    [[nodiscard]] bool isIndicatorLeft() const;
 
     /**
      * Getter for indicator right.
      *
      * @return Boolean indicating active indicator right.
      */
-    bool isIndicatorRight() const;
+    [[nodiscard]] bool isIndicatorRight() const;
 
     /**
      * Getter for braking lights.
      *
      * @return Boolean indicating active braking lights.
      */
-    bool isBrakingLights() const;
+    [[nodiscard]] bool isBrakingLights() const;
 
     /**
      * Getter for hazard warning lights.
      *
      * @return Boolean indicating active hazard warning lights.
      */
-    bool isHazardWarningLights() const;
+    [[nodiscard]] bool isHazardWarningLights() const;
 
     /**
      * Getter for flashing blue lights.
      *
      * @return Boolean indicating active flashing blue lights.
      */
-    bool isFlashingBlueLights() const;
+    [[nodiscard]] bool isFlashingBlueLights() const;
 
     /**
      * Setter for horn.
@@ -138,6 +131,14 @@ class SignalState {
      * @param tsp Time step of state.
      */
     void setTimeStep(size_t tsp);
+
+    /**
+     * Checks whether given signal is activated.
+     *
+     * @param signalName Name of signal.
+     * @return Boolean indicating whether signal is activated.
+     */
+    bool isSignalSet(const std::string &signalName);
 
   private:
     bool horn{false};                //**< Boolean indicating activity of horn. */

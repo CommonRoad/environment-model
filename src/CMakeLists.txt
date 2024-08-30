@@ -88,63 +88,75 @@ set(ENV_MODEL_HDR_FILES
 
 set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/commonroad_predicate.cpp
+        commonroad_cpp/predicates/predicate_parameter.cpp
+        commonroad_cpp/predicates/predicate_parameter_collection.cpp
+
         commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.cpp
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.cpp
         commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.cpp
         commonroad_cpp/predicates/braking/decelerates_predicate.cpp
+
+        commonroad_cpp/predicates/misc/low_computation_time_test_predicate.cpp
+        commonroad_cpp/predicates/misc/high_computation_time_test_predicate.cpp
+        commonroad_cpp/predicates/misc/in_projection_domain_predicate.cpp
+
+        commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
+        commonroad_cpp/predicates/general/signal_set_predicate.cpp
+        commonroad_cpp/predicates/general/makes_u_turn_predicate.cpp
+        commonroad_cpp/predicates/general/is_of_type_predicate.cpp
+
+        commonroad_cpp/predicates/intersection/at_t_intersection_predicate.cpp
+        commonroad_cpp/predicates/intersection/at_four_way_stop_predicate.cpp
+        commonroad_cpp/predicates/intersection/approach_intersection_predicate.cpp
+        commonroad_cpp/predicates/intersection/at_uncontrolled_intersection_predicate.cpp
+        commonroad_cpp/predicates/intersection/at_same_intersection_predicate.cpp
+        commonroad_cpp/predicates/intersection/on_t_incoming_predicate.cpp
+        commonroad_cpp/predicates/intersection/in_intersection_conflict_area_predicate.cpp
+        commonroad_cpp/predicates/intersection/close_to_intersection_predicate.cpp
+        commonroad_cpp/predicates/intersection/unobstructed_intersection_view_predicate.cpp
+        commonroad_cpp/predicates/intersection/on_incoming_left_of_predicate.cpp
+        commonroad_cpp/predicates/intersection/on_oncoming_of_predicate.cpp
+
+        commonroad_cpp/predicates/lane/overtaking_allowed_predicate.cpp
+        commonroad_cpp/predicates/lane/interstate_broad_enough_predicate.cpp
+        commonroad_cpp/predicates/lane/narrow_road_predicate.cpp
+        commonroad_cpp/predicates/lane/in_lanelet_driving_dir_predicate.cpp
+        commonroad_cpp/predicates/lane/lane_based_orientation_similar_predicate.cpp
+        commonroad_cpp/predicates/lane/two_or_more_lanes_for_one_dir_predicate.cpp
+        commonroad_cpp/predicates/lane/change_lane_predicate.cpp
+        commonroad_cpp/predicates/lane/adjacent_lanelet_of_type_predicate.cpp
+        commonroad_cpp/predicates/lane/on_lanelet_with_type_predicate.cpp
+        commonroad_cpp/predicates/lane/on_lanelet_with_successor_type_predicate.cpp
+        commonroad_cpp/predicates/lane/on_road_predicate.cpp
+        commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_with_type_predicate.cpp
+        commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_without_type_predicate.cpp
+        commonroad_cpp/predicates/lane/in_leftmost_lane_predicate.cpp
+        commonroad_cpp/predicates/lane/in_rightmost_lane_predicate.cpp
+        commonroad_cpp/predicates/lane/close_to_lane_border_predicate.cpp
+        commonroad_cpp/predicates/lane/completely_on_lanelet_type_predicate.cpp
+        commonroad_cpp/predicates/lane/in_same_lane_predicate.cpp
+        commonroad_cpp/predicates/lane/in_single_lane_predicate.cpp
+        commonroad_cpp/predicates/lane/right_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp/predicates/lane/left_of_broad_lane_marking_predicate.cpp
+        commonroad_cpp/predicates/lane/in_neighboring_left_lane_predicate.cpp
+        commonroad_cpp/predicates/lane/in_neighboring_right_lane_predicate.cpp
+        commonroad_cpp/predicates/lane/neighboring_lane_opp_driving_dir_predicate.cpp
+
         commonroad_cpp/predicates/position/close_to_crosswalk_predicate.cpp
-        commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.cpp
-        commonroad_cpp/predicates/position/adjacent_lanelet_of_type_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
-        commonroad_cpp/predicates/position/in_same_lane_predicate.cpp
-        commonroad_cpp/predicates/position/in_single_lane_predicate.cpp
-        commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.cpp
-        commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.cpp
         commonroad_cpp/predicates/position/left_of_predicate.cpp
-        commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.cpp
-        commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.cpp
-        commonroad_cpp/predicates/position/on_road_predicate.cpp
-        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.cpp
-        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.cpp
-        commonroad_cpp/predicates/position/in_leftmost_lane_predicate.cpp
-        commonroad_cpp/predicates/position/in_rightmost_lane_predicate.cpp
-        commonroad_cpp/predicates/position/close_to_lane_border_predicate.cpp
-        commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.cpp
-        commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.cpp
-        commonroad_cpp/predicates/position/on_incoming_left_of_predicate.cpp
-        commonroad_cpp/predicates/position/on_oncoming_of_predicate.cpp
-        commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.cpp
-        commonroad_cpp/predicates/position/close_to_intersection_predicate.cpp
-        commonroad_cpp/predicates/position/in_neighboring_left_lane_predicate.cpp
-        commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.cpp
-        commonroad_cpp/predicates/position/neighboring_lane_opp_driving_dir_predicate.cpp
         commonroad_cpp/predicates/position/right_of_predicate.cpp
         commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.cpp
-        commonroad_cpp/predicates/position/approach_t_intersection_predicate.cpp
-        commonroad_cpp/predicates/position/approach_four_way_stop_predicate.cpp
-        commonroad_cpp/predicates/position/approach_intersection_predicate.cpp
-        commonroad_cpp/predicates/position/approach_uncontrolled_intersection_predicate.cpp
-        commonroad_cpp/predicates/position/at_same_intersection_predicate.cpp
-        commonroad_cpp/predicates/regulatory/in_front_of_intersection_predicate.cpp
-        commonroad_cpp/predicates/position/in_same_dir_predicate.cpp
-        commonroad_cpp/predicates/position/on_t_incoming_predicate.cpp
-        commonroad_cpp/predicates/general/obstacle_is_static_predicate.cpp
-        commonroad_cpp/predicates/general/two_or_more_lanes_for_one_dir_predicate.cpp
-        commonroad_cpp/predicates/general/change_lane_predicate.cpp
-        commonroad_cpp/predicates/general/orientation_towards_predicate.cpp
-        commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.cpp
-        commonroad_cpp/predicates/general/left_signal_set_predicate.cpp
-        commonroad_cpp/predicates/general/right_signal_set_predicate.cpp
-        commonroad_cpp/predicates/general/makes_u_turn_predicate.cpp
-        commonroad_cpp/predicates/general/low_computation_time_test_predicate.cpp
-        commonroad_cpp/predicates/general/high_computation_time_test_predicate.cpp
-        commonroad_cpp/predicates/general/interstate_broad_enough_predicate.cpp
-        commonroad_cpp/predicates/general/is_of_type_predicate.cpp
-        commonroad_cpp/predicates/general/narrow_road_predicate.cpp
-        commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.cpp
-        commonroad_cpp/predicates/general/overtaking_allowed_predicate.cpp
-        commonroad_cpp/predicates/general/in_projection_domain_predicate.cpp
+        commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.cpp
+
+        commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.cpp
+        commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.cpp
+        commonroad_cpp/predicates/regulatory/close_to_stop_line_predicate.cpp
+        commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
+        commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
+
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
         commonroad_cpp/predicates/velocity/slow_other_vehicle_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.cpp
@@ -156,97 +168,91 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.cpp
         commonroad_cpp/predicates/velocity/velocity_below_threshold_predicate.cpp
-        commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.cpp
-        commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.cpp
-        commonroad_cpp/predicates/regulatory/close_to_stop_line_predicate.cpp
-        commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
-        commonroad_cpp/predicates/regulatory/same_priority_predicate.cpp
-        commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
-        commonroad_cpp/predicates/predicate_parameter.cpp
-        commonroad_cpp/predicates/predicate_parameter_collection.cpp)
+        commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.cpp)
 
 set(ENV_MODEL_PREDICATES_HDR_FILES
-        commonroad_cpp/predicates/braking/brakes_stronger_predicate.h
-        commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.h
-        commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h
-        commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h
-        commonroad_cpp/predicates/braking/decelerates_predicate.h
-        commonroad_cpp/predicates/commonroad_predicate.h
-        commonroad_cpp/predicates/general/change_lane_predicate.h
-        commonroad_cpp/predicates/general/interstate_broad_enough_predicate.h
-        commonroad_cpp/predicates/general/lane_based_orientation_similar_predicate.h
-        commonroad_cpp/predicates/general/left_signal_set_predicate.h
-        commonroad_cpp/predicates/general/right_signal_set_predicate.h
-        commonroad_cpp/predicates/general/makes_u_turn_predicate.h
-        commonroad_cpp/predicates/general/orientation_towards_predicate.h
-        commonroad_cpp/predicates/general/low_computation_time_test_predicate.h
-        commonroad_cpp/predicates/general/high_computation_time_test_predicate.h
-        commonroad_cpp/predicates/general/is_of_type_predicate.h
-        commonroad_cpp/predicates/general/narrow_road_predicate.h
-        commonroad_cpp/predicates/general/in_lanelet_driving_dir_predicate.h
-        commonroad_cpp/predicates/general/obstacle_is_static_predicate.h
-        commonroad_cpp/predicates/general/overtaking_allowed_predicate.h
-        commonroad_cpp/predicates/general/two_or_more_lanes_for_one_dir_predicate.h
-        commonroad_cpp/predicates/general/in_projection_domain_predicate.h
-        commonroad_cpp/predicates/position/approach_t_intersection_predicate.h
-        commonroad_cpp/predicates/position/approach_four_way_stop_predicate.h
-        commonroad_cpp/predicates/position/approach_intersection_predicate.h
-        commonroad_cpp/predicates/position/approach_uncontrolled_intersection_predicate.h
-        commonroad_cpp/predicates/position/at_same_intersection_predicate.h
-        commonroad_cpp/predicates/position/close_to_crosswalk_predicate.h
-        commonroad_cpp/predicates/position/in_same_dir_predicate.h
-        commonroad_cpp/predicates/position/on_t_incoming_predicate.h
-        commonroad_cpp/predicates/position/completely_on_lanelet_type_predicate.h
-        commonroad_cpp/predicates/position/close_to_lane_border_predicate.h
-        commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.h
-        commonroad_cpp/predicates/position/adjacent_lanelet_of_type_predicate.h
-        commonroad_cpp/predicates/position/in_front_of_predicate.h
-        commonroad_cpp/predicates/position/in_intersection_conflict_area_predicate.h
-        commonroad_cpp/predicates/position/in_leftmost_lane_predicate.h
-        commonroad_cpp/predicates/position/in_rightmost_lane_predicate.h
-        commonroad_cpp/predicates/position/in_same_lane_predicate.h
-        commonroad_cpp/predicates/position/in_single_lane_predicate.h
-        commonroad_cpp/predicates/position/left_of_broad_lane_marking_predicate.h
-        commonroad_cpp/predicates/position/left_of_predicate.h
-        commonroad_cpp/predicates/position/on_incoming_left_of_predicate.h
-        commonroad_cpp/predicates/position/on_lanelet_with_type_predicate.h
-        commonroad_cpp/predicates/position/on_lanelet_with_successor_type_predicate.h
-        commonroad_cpp/predicates/position/on_oncoming_of_predicate.h
-        commonroad_cpp/predicates/position/on_road_predicate.h
-        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_with_type_predicate.h
-        commonroad_cpp/predicates/position/on_similar_oriented_lanelet_without_type_predicate.h
-        commonroad_cpp/predicates/position/right_of_broad_lane_marking_predicate.h
-        commonroad_cpp/predicates/position/unobstructed_intersection_view_predicate.h
-        commonroad_cpp/predicates/position/close_to_intersection_predicate.h
-        commonroad_cpp/predicates/position/in_neighboring_left_lane_predicate.h
-        commonroad_cpp/predicates/position/in_neighboring_right_lane_predicate.h
-        commonroad_cpp/predicates/position/neighboring_lane_opp_driving_dir_predicate.h
-        commonroad_cpp/predicates/position/right_of_predicate.h
-        commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.h
         commonroad_cpp/predicates/predicate_parameter.h
         commonroad_cpp/predicates/predicate_parameter_collection.h
+        commonroad_cpp/predicates/commonroad_predicate.h
+
+        commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h
+        commonroad_cpp/predicates/braking/brakes_stronger_predicate.h
+        commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h
+        commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.h
+        commonroad_cpp/predicates/braking/decelerates_predicate.h
+
+        commonroad_cpp/predicates/misc/low_computation_time_test_predicate.h
+        commonroad_cpp/predicates/misc/high_computation_time_test_predicate.h
+        commonroad_cpp/predicates/misc/in_projection_domain_predicate.h
+
+        commonroad_cpp/predicates/general/orientation_towards_predicate.h
+        commonroad_cpp/predicates/general/signal_set_predicate.h
+        commonroad_cpp/predicates/general/makes_u_turn_predicate.h
+        commonroad_cpp/predicates/general/is_of_type_predicate.h
+
+        commonroad_cpp/predicates/intersection/at_t_intersection_predicate.h
+        commonroad_cpp/predicates/intersection/at_four_way_stop_predicate.h
+        commonroad_cpp/predicates/intersection/approach_intersection_predicate.h
+        commonroad_cpp/predicates/intersection/at_uncontrolled_intersection_predicate.h
+        commonroad_cpp/predicates/intersection/at_same_intersection_predicate.h
+        commonroad_cpp/predicates/intersection/on_t_incoming_predicate.h
+        commonroad_cpp/predicates/intersection/in_intersection_conflict_area_predicate.h
+        commonroad_cpp/predicates/intersection/close_to_intersection_predicate.h
+        commonroad_cpp/predicates/intersection/unobstructed_intersection_view_predicate.h
+        commonroad_cpp/predicates/intersection/on_incoming_left_of_predicate.h
+        commonroad_cpp/predicates/intersection/on_oncoming_of_predicate.h
+
+        commonroad_cpp/predicates/lane/overtaking_allowed_predicate.h
+        commonroad_cpp/predicates/lane/interstate_broad_enough_predicate.h
+        commonroad_cpp/predicates/lane/narrow_road_predicate.h
+        commonroad_cpp/predicates/lane/in_lanelet_driving_dir_predicate.h
+        commonroad_cpp/predicates/lane/lane_based_orientation_similar_predicate.h
+        commonroad_cpp/predicates/lane/two_or_more_lanes_for_one_dir_predicate.h
+        commonroad_cpp/predicates/lane/change_lane_predicate.h
+        commonroad_cpp/predicates/lane/adjacent_lanelet_of_type_predicate.h
+        commonroad_cpp/predicates/lane/on_lanelet_with_type_predicate.h
+        commonroad_cpp/predicates/lane/on_lanelet_with_successor_type_predicate.h
+        commonroad_cpp/predicates/lane/on_road_predicate.h
+        commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_with_type_predicate.h
+        commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_without_type_predicate.h
+        commonroad_cpp/predicates/lane/in_leftmost_lane_predicate.h
+        commonroad_cpp/predicates/lane/in_rightmost_lane_predicate.h
+        commonroad_cpp/predicates/lane/close_to_lane_border_predicate.h
+        commonroad_cpp/predicates/lane/completely_on_lanelet_type_predicate.h
+        commonroad_cpp/predicates/lane/in_same_lane_predicate.h
+        commonroad_cpp/predicates/lane/in_single_lane_predicate.h
+        commonroad_cpp/predicates/lane/right_of_broad_lane_marking_predicate.h
+        commonroad_cpp/predicates/lane/left_of_broad_lane_marking_predicate.h
+        commonroad_cpp/predicates/lane/in_neighboring_left_lane_predicate.h
+        commonroad_cpp/predicates/lane/in_neighboring_right_lane_predicate.h
+        commonroad_cpp/predicates/lane/neighboring_lane_opp_driving_dir_predicate.h
+
+        commonroad_cpp/predicates/position/close_to_crosswalk_predicate.h
+        commonroad_cpp/predicates/position/in_front_of_predicate.h
+        commonroad_cpp/predicates/position/left_of_predicate.h
+        commonroad_cpp/predicates/position/right_of_predicate.h
+        commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.h
+        commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.h
+
         commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h
         commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h
-        commonroad_cpp/predicates/regulatory/has_priority_predicate.h
-        commonroad_cpp/predicates/regulatory/in_front_of_intersection_predicate.h
-        commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h
-        commonroad_cpp/predicates/regulatory/same_priority_predicate.h
         commonroad_cpp/predicates/regulatory/stop_line_in_front_predicate.h
         commonroad_cpp/predicates/regulatory/close_to_stop_line_predicate.h
-        commonroad_cpp/predicates/velocity/drives_faster_predicate.h
-        commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h
-        commonroad_cpp/predicates/velocity/in_standstill_predicate.h
-        commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.h
-        commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.h
-        commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.h
-        commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.h
+        commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h
+        commonroad_cpp/predicates/regulatory/has_priority_predicate.h
+
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h
-        commonroad_cpp/predicates/velocity/keeps_min_speed_limit_predicate.h
-        commonroad_cpp/predicates/velocity/reverses_predicate.h
         commonroad_cpp/predicates/velocity/slow_other_vehicle_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_min_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/in_standstill_predicate.h
+        commonroad_cpp/predicates/velocity/drives_faster_predicate.h
+        commonroad_cpp/predicates/velocity/reverses_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_type_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_fov_speed_limit_predicate.h
+        commonroad_cpp/predicates/velocity/keeps_braking_speed_limit_predicate.h
         commonroad_cpp/predicates/velocity/velocity_below_threshold_predicate.h
+        commonroad_cpp/predicates/velocity/drives_with_slightly_higher_speed_predicate.h
 )
 
 add_library(env_model_core ${ENV_MODEL_SRC_FILES})

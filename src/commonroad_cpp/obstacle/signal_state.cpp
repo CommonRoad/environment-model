@@ -1,11 +1,6 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "commonroad_cpp/obstacle/signal_state.h"
+#include <algorithm>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 
 size_t SignalState::getTimeStep() const { return timeStep; }
@@ -40,3 +35,22 @@ void SignalState::setHazardWarningLights(bool hwl) { hazardWarningLights = hwl; 
 void SignalState::setFlashingBlueLights(bool fbl) { flashingBlueLights = fbl; }
 
 void SignalState::setTimeStep(size_t tsp) { timeStep = tsp; }
+
+bool SignalState::isSignalSet(const std::string &signalName) {
+    auto sigNameTmp{signalName};
+    std::transform(sigNameTmp.begin(), sigNameTmp.end(), sigNameTmp.begin(), ::tolower);
+    if (sigNameTmp == "horn")
+        return isHorn();
+    if (sigNameTmp == "indicatorleft")
+        return isIndicatorLeft();
+    if (sigNameTmp == "indicatorright")
+        return isIndicatorRight();
+    if (sigNameTmp == "brakinglights")
+        return isBrakingLights();
+    if (sigNameTmp == "hazardwarninglights")
+        return isHazardWarningLights();
+    if (sigNameTmp == "flashingbluelights")
+        return isFlashingBlueLights();
+    spdlog::error("SignalState::isSignalSet: Unknown signal name!");
+    return false;
+}

@@ -462,7 +462,7 @@ TEST_F(ObstacleTest, testGetSignalStateByTimeStep) {
     obstacleOne->appendSignalStateToSeries(signalStateTwo);
     EXPECT_TRUE(obstacleOne->getSignalStateByTimeStep(0)->isHorn());
     EXPECT_FALSE(obstacleOne->getSignalStateByTimeStep(1)->isHorn());
-    EXPECT_THROW(obstacleOne->getSignalStateByTimeStep(2), std::logic_error);
+    EXPECT_FALSE(obstacleOne->getSignalStateByTimeStep(2)->isHorn());
 }
 
 TEST_F(ObstacleTest, testGetFieldOfViewRearDistance) {
