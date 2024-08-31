@@ -7,10 +7,7 @@
 #include <memory>
 #include <unordered_set>
 
-#include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 
 void ObstacleTestInitialization::setUpObstacles() {
     size_t globalID{1234};

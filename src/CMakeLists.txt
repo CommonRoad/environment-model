@@ -142,12 +142,12 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/lane/in_neighboring_left_lane_predicate.cpp
         commonroad_cpp/predicates/lane/in_neighboring_right_lane_predicate.cpp
         commonroad_cpp/predicates/lane/neighboring_lane_opp_driving_dir_predicate.cpp
+        commonroad_cpp/predicates/lane/close_to_crosswalk_predicate.cpp
 
-        commonroad_cpp/predicates/position/close_to_crosswalk_predicate.cpp
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/left_of_predicate.cpp
         commonroad_cpp/predicates/position/right_of_predicate.cpp
-        commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.cpp
+        commonroad_cpp/predicates/position/lateral_distance_to_obstacle_above_threshold_predicate.cpp
         commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.cpp
 
         commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.cpp
@@ -226,12 +226,12 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/lane/in_neighboring_left_lane_predicate.h
         commonroad_cpp/predicates/lane/in_neighboring_right_lane_predicate.h
         commonroad_cpp/predicates/lane/neighboring_lane_opp_driving_dir_predicate.h
+        commonroad_cpp/predicates/lane/close_to_crosswalk_predicate.h
 
-        commonroad_cpp/predicates/position/close_to_crosswalk_predicate.h
         commonroad_cpp/predicates/position/in_front_of_predicate.h
         commonroad_cpp/predicates/position/left_of_predicate.h
         commonroad_cpp/predicates/position/right_of_predicate.h
-        commonroad_cpp/predicates/position/safe_lateral_distance_to_vrus_predicate.h
+        commonroad_cpp/predicates/position/lateral_distance_to_obstacle_above_threshold_predicate.h
         commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.h
 
         commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h
