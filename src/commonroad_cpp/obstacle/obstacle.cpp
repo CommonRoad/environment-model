@@ -429,7 +429,8 @@ double Obstacle::rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t 
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
     double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
-    return latPos + rotatedMinimumLatitude(rect, theta);
+    rightLatPosition[timeStep] = latPos + rotatedMinimumLatitude(rect, theta);
+    return rightLatPosition[timeStep];
 }
 
 double Obstacle::rightD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
@@ -456,7 +457,8 @@ double Obstacle::leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t t
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
     double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
-    return latPos + rotatedMaximumLatitude(rect, theta);
+    leftLatPosition[timeStep] = latPos + rotatedMaximumLatitude(rect, theta);
+    return leftLatPosition[timeStep];
 }
 
 double Obstacle::leftD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
@@ -902,8 +904,8 @@ double Obstacle::getLateralDistanceToObstacle(time_step_t timeStep, const std::s
         lateralDistanceToObjects[timeStep].find(obs->getId()) != lateralDistanceToObjects[timeStep].end())
         return lateralDistanceToObjects[timeStep][obs->getId()];
 
-    double leftThis = leftD(timeStep, getReferenceLane(roadnetwork, timeStep));
-    double rightThis = rightD(timeStep, getReferenceLane(roadnetwork, timeStep));
+    double leftThis = leftD(roadnetwork, timeStep);
+    double rightThis = rightD(roadnetwork, timeStep);
 
     double leftOther = obs->leftD(timeStep, getReferenceLane(roadnetwork, timeStep));
     double rightOther = obs->rightD(timeStep, getReferenceLane(roadnetwork, timeStep));

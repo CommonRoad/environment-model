@@ -903,6 +903,10 @@ class Obstacle {
     mutable time_step_map_t<std::vector<double>>
         backXYPositions; //**< map of time steps to backXY position of the obstacle */
 
+    mutable time_step_map_t<double> leftLatPosition; //**< todo */
+
+    mutable time_step_map_t<double> rightLatPosition; //**< todo */
+
     mutable time_step_map_t<std::map<size_t, double>>
         lateralDistanceToObjects; //**< map of time steps to map of other obstacles and the regarding distance to the
                                   // obstacle */
