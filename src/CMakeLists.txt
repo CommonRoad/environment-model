@@ -148,7 +148,6 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/position/left_of_predicate.cpp
         commonroad_cpp/predicates/position/right_of_predicate.cpp
         commonroad_cpp/predicates/position/lateral_distance_to_obstacle_above_threshold_predicate.cpp
-        commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.cpp
 
         commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.cpp
@@ -232,7 +231,6 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/position/left_of_predicate.h
         commonroad_cpp/predicates/position/right_of_predicate.h
         commonroad_cpp/predicates/position/lateral_distance_to_obstacle_above_threshold_predicate.h
-        commonroad_cpp/predicates/position/close_lateral_distance_to_obstacle_predicate.h
 
         commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h
         commonroad_cpp/predicates/regulatory/at_traffic_sign_predicate.h

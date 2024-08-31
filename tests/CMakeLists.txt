@@ -83,7 +83,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/position/test_left_of_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_right_of_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_lateral_distance_to_obstacle_above_threshold_predicate.cpp
-        commonroad_cpp_tests/predicates/position/test_close_lateral_distance_to_obstacle_predicate.cpp
 
         commonroad_cpp_tests/predicates/regulatory/test_at_traffic_light_predicate.cpp
         commonroad_cpp_tests/predicates/regulatory/test_at_traffic_sign_predicate.cpp
