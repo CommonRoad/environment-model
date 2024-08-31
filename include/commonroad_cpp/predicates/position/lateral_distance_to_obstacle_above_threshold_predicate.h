@@ -5,15 +5,14 @@
 #include "commonroad_cpp/predicates/position/right_of_predicate.h"
 
 /**
- * Evaluates if the k-th vehicle has a safe distance to the p-th vehicle if the p-th vehicle is right of the k-th
- * vehicle and a vru (vulnerable road user)
+ * Evaluates if the k-th vehicle's lateral distance is above a provided threshold.
  */
-class SafeLateralDistanceToVrusPredicate : public CommonRoadPredicate {
+class LateralDistanceToObstacleAboveThresholdPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for SafeDistanceToVrusPredicate
+     * Constructor for LateralDistanceToObstacleAboveThresholdPredicate
      */
-    SafeLateralDistanceToVrusPredicate();
+    LateralDistanceToObstacleAboveThresholdPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

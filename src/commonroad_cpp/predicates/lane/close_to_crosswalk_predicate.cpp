@@ -1,5 +1,5 @@
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
-#include <commonroad_cpp/predicates/position/close_to_crosswalk_predicate.h>
+#include <commonroad_cpp/predicates/lane/close_to_crosswalk_predicate.h>
 #include <commonroad_cpp/world.h>
 #include <valarray>
 
