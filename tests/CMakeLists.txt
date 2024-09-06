@@ -78,6 +78,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/lane/test_in_neighboring_right_lane_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_neighboring_lane_opp_driving_dir_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_close_to_crosswalk_predicate.cpp
+        commonroad_cpp_tests/predicates/lane/test_on_same_road_predicate.cpp
 
         commonroad_cpp_tests/predicates/position/test_in_front_of_predicate.cpp
         commonroad_cpp_tests/predicates/position/test_left_of_predicate.cpp
