@@ -35,7 +35,9 @@ Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
 
-    return {obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
+    return {obstacleP->rearS(
+                timeStep,
+                obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()) -
             0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength() -
             computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                 obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP,
@@ -59,7 +61,8 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const s
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP,
                                      obstacleK->getReactionTime().value())};
-    double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)) -
+    double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
+                                                 ->getCurvilinearCoordinateSystem()) -
                   obstacleK->frontS(world->getRoadNetwork(), timeStep)};
 
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive

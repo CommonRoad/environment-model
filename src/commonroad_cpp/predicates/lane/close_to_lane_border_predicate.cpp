@@ -15,14 +15,14 @@ bool CloseToLaneBorderPredicate::booleanEvaluation(size_t timeStep, const std::s
         return std::all_of(lanes.begin(), lanes.end(), [obstacleK, this, timeStep](const std::shared_ptr<Lane> &lane) {
             return 0.5 * lane->getWidth(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                         obstacleK->getStateByTimeStep(timeStep)->getYPosition()) -
-                       obstacleK->leftD(timeStep, lane) <=
+                       obstacleK->leftD(timeStep, lane->getCurvilinearCoordinateSystem()) <=
                    parameters.getParam("closeToLaneBorder");
         });
     else if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::right) {
         return std::all_of(lanes.begin(), lanes.end(), [obstacleK, this, timeStep](const std::shared_ptr<Lane> &lane) {
             return 0.5 * lane->getWidth(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                         obstacleK->getStateByTimeStep(timeStep)->getYPosition()) +
-                       obstacleK->rightD(timeStep, lane) <=
+                       obstacleK->rightD(timeStep, lane->getCurvilinearCoordinateSystem()) <=
                    parameters.getParam("closeToLaneBorder");
         });
     }

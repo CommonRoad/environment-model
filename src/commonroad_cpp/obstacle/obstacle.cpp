@@ -339,10 +339,6 @@ Obstacle::getOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<Ro
     return setOccupiedLaneletsNotDrivingDirectionByShape(roadNetwork, timeStep);
 }
 
-void Obstacle::convertPointToCurvilinear(time_step_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    convertPointToCurvilinear(timeStep, refLane->getCurvilinearCoordinateSystem());
-}
-
 void Obstacle::convertPointToCurvilinear(size_t timeStep,
                                          const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs) {
     auto state{getStateByTimeStep(timeStep)};
@@ -375,10 +371,6 @@ double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t 
     return lonPosition + rotatedMaximumLongitude(rect, theta);
 }
 
-double Obstacle::frontS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    return frontS(timeStep, refLane->getCurvilinearCoordinateSystem());
-}
-
 double Obstacle::frontS(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs) {
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
@@ -402,10 +394,6 @@ double Obstacle::rearS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t t
 
     // use minimum of all corners
     return lonPosition + rotatedMinimumLongitude(rect, theta);
-}
-
-double Obstacle::rearS(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    return rearS(timeStep, refLane->getCurvilinearCoordinateSystem());
 }
 
 double Obstacle::rearS(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs) {
@@ -433,10 +421,6 @@ double Obstacle::rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t 
     return rightLatPosition[timeStep];
 }
 
-double Obstacle::rightD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    return rightD(timeStep, refLane->getCurvilinearCoordinateSystem());
-}
-
 double Obstacle::rightD(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs) {
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
@@ -459,10 +443,6 @@ double Obstacle::leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t t
 
     leftLatPosition[timeStep] = latPos + rotatedMaximumLatitude(rect, theta);
     return leftLatPosition[timeStep];
-}
-
-double Obstacle::leftD(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    return leftD(timeStep, refLane->getCurvilinearCoordinateSystem());
 }
 
 double Obstacle::leftD(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs) {
@@ -494,8 +474,7 @@ double Obstacle::getLatPosition(const std::shared_ptr<RoadNetwork> &roadNetwork,
     return getStateByTimeStep(timeStep)->getLatPosition();
 }
 
-double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    auto ccs = refLane->getCurvilinearCoordinateSystem();
+double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs) {
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
@@ -506,8 +485,7 @@ double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<Lane> &re
     return convertedPositions[timeStep][ccs][0];
 }
 
-double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    auto ccs = refLane->getCurvilinearCoordinateSystem();
+double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs) {
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
@@ -528,8 +506,8 @@ double Obstacle::getCurvilinearOrientation(const std::shared_ptr<RoadNetwork> &r
     return getStateByTimeStep(timeStep)->getCurvilinearOrientation();
 }
 
-double Obstacle::getCurvilinearOrientation(size_t timeStep, const std::shared_ptr<Lane> &refLane) {
-    auto ccs = refLane->getCurvilinearCoordinateSystem();
+double Obstacle::getCurvilinearOrientation(size_t timeStep,
+                                           const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs) {
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
@@ -907,8 +885,9 @@ double Obstacle::getLateralDistanceToObstacle(time_step_t timeStep, const std::s
     double leftThis = leftD(roadnetwork, timeStep);
     double rightThis = rightD(roadnetwork, timeStep);
 
-    double leftOther = obs->leftD(timeStep, getReferenceLane(roadnetwork, timeStep));
-    double rightOther = obs->rightD(timeStep, getReferenceLane(roadnetwork, timeStep));
+    double leftOther = obs->leftD(timeStep, getReferenceLane(roadnetwork, timeStep)->getCurvilinearCoordinateSystem());
+    double rightOther =
+        obs->rightD(timeStep, getReferenceLane(roadnetwork, timeStep)->getCurvilinearCoordinateSystem());
 
     double min = std::min(abs(rightThis - leftOther), abs(leftThis - rightOther));
 
