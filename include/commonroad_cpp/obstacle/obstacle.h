@@ -471,16 +471,6 @@ class Obstacle {
 
     /**
      * Computes the maximum longitudinal front position of obstacle (for rectangle shapes) based on a given reference
-     * lane.
-     *
-     * @param timeStep Time step of interest.
-     * @param refLane Pointer to reference lane which should be used.
-     * @return Longitudinal position of obstacle front
-     */
-    double frontS(time_step_t timeStep, const std::shared_ptr<Lane> &refLane);
-
-    /**
-     * Computes the maximum longitudinal front position of obstacle (for rectangle shapes) based on a given reference
      * curvilinear coordinate system.
      *
      * @param timeStep Time step of interest.
@@ -497,15 +487,6 @@ class Obstacle {
      * @return longitudinal position of obstacle rear
      */
     double rearS(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
-
-    /**
-     * Computes the minimum longitudinal rear position of obstacle (for rectangle shapes) based on given reference lane.
-     *
-     * @param timeStep Time step of interest.
-     * @param refLane Pointer to reference lane which should be used.
-     * @return Longitudinal position.
-     */
-    double rearS(time_step_t timeStep, const std::shared_ptr<Lane> &refLane);
 
     /**
      * Computes the minimum longitudinal rear position of obstacle (for rectangle shapes) based on given reference
@@ -527,15 +508,6 @@ class Obstacle {
     double rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
     /**
-     * Calculates right lateral position of obstacle based on given reference lane
-     *
-     * @param timeStep time step to consider
-     * @param refLane Pointer to reference lane which should be used.
-     * @return lateral position [m]
-     */
-    double rightD(time_step_t timeStep, const std::shared_ptr<Lane> &refLane);
-
-    /**
      * Calculates right lateral position of obstacle based on given reference curvilinear coordinate system
      *
      * @param timeStep time step to consider
@@ -552,15 +524,6 @@ class Obstacle {
      * @return left d-coordinate [m]
      */
     double leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
-
-    /**
-     * Calculates left lateral position of obstacle based on given reference lane
-     *
-     * @param timeStep time step to consider
-     * @param refLane Pointer to reference lane which should be used.
-     * @return lateral position [m]
-     */
-    double leftD(time_step_t timeStep, const std::shared_ptr<Lane> &refLane);
 
     /**
      * Calculates left lateral position of obstacle based on given reference curvilinear coordinate system
@@ -581,13 +544,14 @@ class Obstacle {
     [[nodiscard]] double getLonPosition(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
     /**
-     * Computes the longitudinal position of obstacle based on Cartesian state and provided reference lane.
+     * Computes the longitudinal position of obstacle based on Cartesian state and provided reference CCS.
      *
      * @param timeStep Time Step of interest.
-     * @param refLane Pointer to reference lane.
+     * @param ccs Pointer to reference CCS which should be used.
      * @return longitudinal position of obstacle state
      */
-    [[nodiscard]] double getLonPosition(time_step_t timeStep, const std::shared_ptr<Lane> &refLane);
+    [[nodiscard]] double getLonPosition(time_step_t timeStep,
+                                        const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
 
     /**
      * Computes the lateral position of obstacle based on Cartesian state and assigned reference lane
@@ -599,13 +563,14 @@ class Obstacle {
     [[nodiscard]] double getLatPosition(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
     /**
-     * Computes the lateral position of obstacle based on Cartesian state and assigned reference lane
+     * Computes the lateral position of obstacle based on Cartesian state and assigned reference CCS
      *
      * @param timeStep Time step of interest.
-     * @param refLane Pointer to reference lane.
+     * @param ccs Pointer to reference CCS which should be used.
      * @return lateral position of obstacle state
      */
-    [[nodiscard]] double getLatPosition(time_step_t timeStep, const std::shared_ptr<Lane> &refLane);
+    [[nodiscard]] double getLatPosition(time_step_t timeStep,
+                                        const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
 
     /**
      * Computes the curvilinear orientation of obstacle based on Cartesian state and assigned lane
@@ -618,14 +583,15 @@ class Obstacle {
                                                    time_step_t timeStep); // Todo create test case
 
     /**
-     * Computes the curvilinear orientation of obstacle based on Cartesian state and provided reference lane
+     * Computes the curvilinear orientation of obstacle based on Cartesian state and provided reference
+     * curvilinear coordinate system.
      *
-     * @param timeStep time step of interest
-     * @param refLane Reference lane based on which curvilinear orientation should be computed.
+     * @param timeStep Time step of interest.
+     * @param ccs Pointer to reference CCS which should be used.
      * @return curvilinear orientation of obstacle state
      */
     [[nodiscard]] double getCurvilinearOrientation(time_step_t timeStep,
-                                                   const std::shared_ptr<Lane> &refLane); // Todo create test case
+                                                   const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
 
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
@@ -730,14 +696,6 @@ class Obstacle {
      * @param roadNetwork Pointer to road network
      */
     void setCurvilinearStates(const std::shared_ptr<RoadNetwork> &roadNetwork);
-
-    /**
-     * Converts position at a given time step to curvilinear coordinate system given a reference lane.
-     * Point is stored locally in variable convertedPositions.
-     * @param timeStep time step of interest
-     * @param refLane Reference lane which should be used.
-     */
-    void convertPointToCurvilinear(time_step_t timeStep, const std::shared_ptr<Lane> &refLane);
 
     /**
      * Converts position at a given time step to curvilinear coordinate system given a reference CCS.

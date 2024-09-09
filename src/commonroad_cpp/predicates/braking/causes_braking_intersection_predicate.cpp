@@ -16,7 +16,8 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(
              ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                                 obstacleK->getStateByTimeStep(timeStep)->getYPosition()))
         return false;
-    auto distance{obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)) -
+    auto distance{obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
+                                                 ->getCurvilinearCoordinateSystem()) -
                   obstacleP->frontS(world->getRoadNetwork(), timeStep)};
     return parameters.getParam("dCauseBrakingIntersection") <= distance and
            distance <= parameters.getParam("dBrakingIntersection") and
