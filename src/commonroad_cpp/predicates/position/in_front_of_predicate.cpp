@@ -30,7 +30,9 @@ double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::vector<std::string> &additionalFunctionParameters) {
-    return obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)) -
+    return obstacleK->rearS(
+               timeStep,
+               obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()) -
            obstacleP->frontS(world->getRoadNetwork(), timeStep);
 }
 
