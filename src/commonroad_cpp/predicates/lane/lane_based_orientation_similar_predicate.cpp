@@ -7,9 +7,9 @@
 bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<Obstacle> &obstacleK, const std::vector<std::string> &additionalFunctionParameters) {
-    auto referenceLaneP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
+    auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
     return std::abs(geometric_operations::subtractOrientations(
-               obstacleK->getCurvilinearOrientation(timeStep, referenceLaneP),
+               obstacleK->getCurvilinearOrientation(timeStep, ccsP),
                obstacleP->getCurvilinearOrientation(world->getRoadNetwork(), timeStep))) <
            parameters.getParam("laneMatchingOrientation");
 }
