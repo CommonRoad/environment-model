@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "../road_network.h"
@@ -95,4 +88,13 @@ std::vector<std::shared_ptr<TrafficLight>> activeTlsByLanelet(size_t timeStep, c
  * @return bool
  */
 bool bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &lanelet);
+
+/**
+ * Checks whether two lanelets are adjacent to each other.
+ *
+ * @param laneletOne First lanelet.
+ * @param laneletTwo Second lanelet.
+ * @return Boolean indicating whether lanelets are adjacent.
+ */
+bool areLaneletsAdjacent(const std::shared_ptr<Lanelet> &laneletOne, const std::shared_ptr<Lanelet> &laneletTwo);
 } // namespace lanelet_operations

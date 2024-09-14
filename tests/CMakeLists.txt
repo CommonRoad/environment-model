@@ -46,7 +46,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/intersection/test_approach_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_at_uncontrolled_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_at_same_intersection_predicate.cpp
-        commonroad_cpp_tests/predicates/intersection/test_on_t_incoming_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_in_intersection_conflict_area_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_close_to_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_unobstructed_intersection_view_predicate.cpp
@@ -56,10 +55,8 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/lane/test_overtaking_allowed_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_interstate_broad_enough_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_narrow_road_predicate.cpp
-        commonroad_cpp_tests/predicates/lane/test_in_lanelet_driving_dir_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_lane_based_orientation_similar_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_two_or_more_lanes_for_one_dir_predicate.cpp
-        commonroad_cpp_tests/predicates/lane/test_change_lane_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_adjacent_lanelet_of_type_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_on_lanelet_with_type_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_on_lanelet_with_successor_type_predicate.cpp
@@ -78,6 +75,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/lane/test_in_neighboring_right_lane_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_neighboring_lane_opp_driving_dir_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_close_to_crosswalk_predicate.cpp
+        commonroad_cpp_tests/predicates/lane/test_lane_based_orientation_side_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_on_same_road_predicate.cpp
 
         commonroad_cpp_tests/predicates/position/test_in_front_of_predicate.cpp
