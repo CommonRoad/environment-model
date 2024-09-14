@@ -22,7 +22,7 @@ bool NarrowRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                         auto obsPos{obstacleK->getFrontXYCoordinates(timeStep)};
                         return lanelet_operations::roadWidth(lanelet, obsPos.at(0), obsPos.at(1)) <=
                                parameters.getParam("narrowRoad");
-                    }) and
+                    }) or
         std::any_of(occLaneletsRear.begin(), occLaneletsRear.end(),
                     [this, obstacleK, timeStep](const std::shared_ptr<Lanelet> &lanelet) {
                         auto obsPos{obstacleK->getBackXYCoordinates(timeStep)};

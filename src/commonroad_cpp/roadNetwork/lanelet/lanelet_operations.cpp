@@ -90,6 +90,14 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const
     return adjLanelets;
 }
 
+bool lanelet_operations::areLaneletsAdjacent(const std::shared_ptr<Lanelet> &laneletOne,
+                                             const std::shared_ptr<Lanelet> &laneletTwo) {
+    return (laneletOne->getAdjacentRight().adj != nullptr and
+            laneletOne->getAdjacentRight().adj->getId() == laneletTwo->getId()) or
+           (laneletOne->getAdjacentLeft().adj != nullptr and
+            laneletOne->getAdjacentLeft().adj->getId() == laneletTwo->getId());
+}
+
 bool lanelet_operations::areLaneletsInDirectlyAdjacentLanes(
     const std::shared_ptr<Lane> &laneOne, const std::shared_ptr<Lane> &laneTwo,
     const std::vector<std::shared_ptr<Lanelet>> &relevantLanelets) {
@@ -97,8 +105,7 @@ bool lanelet_operations::areLaneletsInDirectlyAdjacentLanes(
         for (const auto &la2 : relevantLanelets) {
             if (la1->getId() == la2->getId())
                 continue;
-            if ((la1->getAdjacentRight().adj != nullptr and la1->getAdjacentRight().adj->getId() == la2->getId()) or
-                (la1->getAdjacentLeft().adj != nullptr and la1->getAdjacentLeft().adj->getId() == la2->getId()))
+            if (areLaneletsAdjacent(la1, la2))
                 if ((laneOne->getContainedLaneletIDs().find(la1->getId()) != laneOne->getContainedLaneletIDs().end() and
                      laneTwo->getContainedLaneletIDs().find(la2->getId()) != laneTwo->getContainedLaneletIDs().end()) or
                     (laneTwo->getContainedLaneletIDs().find(la1->getId()) != laneTwo->getContainedLaneletIDs().end() and

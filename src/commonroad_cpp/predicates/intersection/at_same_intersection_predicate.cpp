@@ -3,8 +3,6 @@
 #include <commonroad_cpp/predicates/intersection/at_same_intersection_predicate.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/world.h>
 
 bool AtSameIntersectionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
