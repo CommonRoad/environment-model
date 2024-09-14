@@ -15,7 +15,7 @@ bool InSingleLanePredicate::booleanEvaluation(size_t timeStep, const std::shared
         return lanelets1.size() == 1 and lanelets2.size() == 1 and lanelets1.at(0)->getId() == lanelets2.at(0)->getId();
     };
 
-    return occLanelets.size() == 1 or obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep).size() == 1 or
+    return occLanelets.size() == 1 or
            (occLanelets.size() == 2 and !lanelet_operations::areLaneletsAdjacent(occLanelets[0], occLanelets[1])) or
            (occLanelets.size() == 2 and
             (comparePreSuc(occLanelets.at(0)->getPredecessors(), occLanelets.at(1)->getPredecessors()) or
