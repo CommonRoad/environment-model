@@ -312,6 +312,7 @@ const std::unordered_map<std::string, LaneletType> LaneletTypeNames = {
     {"BORDER", LaneletType::border},
     {"PARKING", LaneletType::parking},
     {"RESTRICTED", LaneletType::restricted},
+    {"RESTRICTEDAREA", LaneletType::restrictedArea},
     {"ANY", LaneletType::any},
     {"ALL", LaneletType::all},
 };
