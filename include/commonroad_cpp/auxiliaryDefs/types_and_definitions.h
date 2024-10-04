@@ -89,6 +89,7 @@ enum class LaneletType {
     shoulder,
     sidewalk,
     straight,
+    restrictedArea,
     urban,
     unknown,
     any,
