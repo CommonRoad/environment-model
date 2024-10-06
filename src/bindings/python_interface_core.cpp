@@ -19,11 +19,18 @@
 namespace nb = nanobind;
 
 static std::string extractName(nb::handle py_scen) {
-    return {nb::cast<std::string>(py_scen.attr("country_id")) + "_" + nb::cast<std::string>(py_scen.attr("map_name")) +
-            "-" + std::to_string(nb::cast<int>(py_scen.attr("map_id"))) + "_" +
-            std::to_string(nb::cast<int>(py_scen.attr("configuration_id"))) + "_" +
-            nb::cast<std::string>(py_scen.attr("obstacle_behavior")) + "-" +
-            std::to_string(nb::cast<int>(py_scen.attr("prediction_id")))};
+    if (py_scen.attr("configuration_id").is_none() || py_scen.attr("obstacle_behavior").is_none() ||
+        py_scen.attr("prediction_id").is_none())
+        return {nb::cast<std::string>(py_scen.attr("country_id")) + "_" +
+                nb::cast<std::string>(py_scen.attr("map_name")) + "-" +
+                std::to_string(nb::cast<int>(py_scen.attr("map_id")))};
+    else
+        return {nb::cast<std::string>(py_scen.attr("country_id")) + "_" +
+                nb::cast<std::string>(py_scen.attr("map_name")) + "-" +
+                std::to_string(nb::cast<int>(py_scen.attr("map_id"))) + "_" +
+                std::to_string(nb::cast<int>(py_scen.attr("configuration_id"))) + "_" +
+                nb::cast<std::string>(py_scen.attr("obstacle_behavior")) + "-" +
+                std::to_string(nb::cast<int>(py_scen.attr("prediction_id")))};
 }
 
 void init_python_interface_core(nb::module_ &m) {
