@@ -31,22 +31,15 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(size_t timeStep, const std::sh
         if (!letK->hasLaneletType(LaneletType::incoming))
             continue;
         auto incomingK{world->getRoadNetwork()->findIncomingGroupByLanelet(letK)};
-        if (!incomingK) {
-            throw std::runtime_error{"missing incoming (obstacleK)"};
-        }
+        if (incomingK->getIsLeftOf() == nullptr)
+            return false; // e.g, T-intersection or intersection with single incoming group
         for (const auto &letP : laneP->getContainedLanelets()) {
             if (!letP->hasLaneletType(LaneletType::incoming))
                 continue;
             auto incomingP{world->getRoadNetwork()->findIncomingGroupByLanelet(letP)};
-            if (!incomingP) {
-                throw std::runtime_error{"missing incoming (obstacleP)"};
-            }
-            if (!incomingP->getIsLeftOf()) {
-                throw std::runtime_error{"missing 'left of' incoming"};
-            }
             if (incomingK->getIsLeftOf()->getId() == incomingP->getId())
                 return true;
-        };
+        }
     }
     return false;
 }
