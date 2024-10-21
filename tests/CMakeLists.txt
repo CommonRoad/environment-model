@@ -49,7 +49,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/intersection/test_in_intersection_conflict_area_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_close_to_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_unobstructed_intersection_view_predicate.cpp
-       # commonroad_cpp_tests/predicates/intersection/test_on_incoming_left_of_predicate.cpp
+        commonroad_cpp_tests/predicates/intersection/test_on_incoming_left_of_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_on_oncoming_of_predicate.cpp
 
         commonroad_cpp_tests/predicates/lane/test_overtaking_allowed_predicate.cpp
