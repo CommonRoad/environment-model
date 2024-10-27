@@ -128,16 +128,13 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/lane/on_road_predicate.cpp
         commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_with_type_predicate.cpp
         commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_without_type_predicate.cpp
-        commonroad_cpp/predicates/lane/in_leftmost_lane_predicate.cpp
-        commonroad_cpp/predicates/lane/in_rightmost_lane_predicate.cpp
+        commonroad_cpp/predicates/lane/in_outermost_lane_predicate.cpp
         commonroad_cpp/predicates/lane/close_to_lane_border_predicate.cpp
         commonroad_cpp/predicates/lane/completely_on_lanelet_type_predicate.cpp
         commonroad_cpp/predicates/lane/in_same_lane_predicate.cpp
         commonroad_cpp/predicates/lane/in_single_lane_predicate.cpp
-        commonroad_cpp/predicates/lane/right_of_broad_lane_marking_predicate.cpp
-        commonroad_cpp/predicates/lane/left_of_broad_lane_marking_predicate.cpp
-        commonroad_cpp/predicates/lane/in_neighboring_left_lane_predicate.cpp
-        commonroad_cpp/predicates/lane/in_neighboring_right_lane_predicate.cpp
+        commonroad_cpp/predicates/lane/parallel_to_lane_marking_of_type_on_side_predicate.cpp
+        commonroad_cpp/predicates/lane/in_neighboring_lane_predicate.cpp
         commonroad_cpp/predicates/lane/neighboring_lane_opp_driving_dir_predicate.cpp
         commonroad_cpp/predicates/lane/on_same_road_predicate.cpp
         commonroad_cpp/predicates/lane/lane_based_orientation_side_predicate.cpp
@@ -210,16 +207,13 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/lane/on_road_predicate.h
         commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_with_type_predicate.h
         commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_without_type_predicate.h
-        commonroad_cpp/predicates/lane/in_leftmost_lane_predicate.h
-        commonroad_cpp/predicates/lane/in_rightmost_lane_predicate.h
+        commonroad_cpp/predicates/lane/in_outermost_lane_predicate.h
         commonroad_cpp/predicates/lane/close_to_lane_border_predicate.h
         commonroad_cpp/predicates/lane/completely_on_lanelet_type_predicate.h
         commonroad_cpp/predicates/lane/in_same_lane_predicate.h
         commonroad_cpp/predicates/lane/in_single_lane_predicate.h
-        commonroad_cpp/predicates/lane/right_of_broad_lane_marking_predicate.h
-        commonroad_cpp/predicates/lane/left_of_broad_lane_marking_predicate.h
-        commonroad_cpp/predicates/lane/in_neighboring_left_lane_predicate.h
-        commonroad_cpp/predicates/lane/in_neighboring_right_lane_predicate.h
+        commonroad_cpp/predicates/lane/parallel_to_lane_marking_of_type_on_side_predicate.h
+        commonroad_cpp/predicates/lane/in_neighboring_lane_predicate.h
         commonroad_cpp/predicates/lane/neighboring_lane_opp_driving_dir_predicate.h
         commonroad_cpp/predicates/lane/on_same_road_predicate.h
         commonroad_cpp/predicates/lane/lane_based_orientation_side_predicate.h

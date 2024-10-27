@@ -63,16 +63,13 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/lane/test_on_road_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_on_similar_oriented_lanelet_with_type_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_on_similar_oriented_lanelet_without_type_predicate.cpp
-        commonroad_cpp_tests/predicates/lane/test_in_leftmost_lane_predicate.cpp
-        commonroad_cpp_tests/predicates/lane/test_in_rightmost_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/lane/test_in_outermost_lane_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_close_to_lane_border_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_completely_on_lanelet_type_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_in_same_lane_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_in_single_lane_predicate.cpp
-        commonroad_cpp_tests/predicates/lane/test_right_of_broad_lane_marking_predicate.cpp
-        commonroad_cpp_tests/predicates/lane/test_left_of_broad_lane_marking_predicate.cpp
-        commonroad_cpp_tests/predicates/lane/test_in_neighboring_left_lane_predicate.cpp
-        commonroad_cpp_tests/predicates/lane/test_in_neighboring_right_lane_predicate.cpp
+        commonroad_cpp_tests/predicates/lane/test_parallel_of_lane_marking_of_type_on_side_predicate.cpp
+        commonroad_cpp_tests/predicates/lane/test_in_neighboring_lane_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_neighboring_lane_opp_driving_dir_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_lane_based_orientation_side_predicate.cpp
         commonroad_cpp_tests/predicates/lane/test_on_same_road_predicate.cpp
