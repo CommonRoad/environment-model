@@ -1,23 +1,17 @@
-//
-// Created by Sebastian Maierhofer and Evald Nexhipi.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- * Evaluates if a vehicle is completely left of a broad lane marking
+ * Evaluates whether the pth vehicle is in the lane to the left/right of the kth vehicle. The side is given as
+ * parameter.
  */
-class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
+class InNeighboringLanePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for LeftOfBroadLaneMarkingPredicate
+     * Constructor for InNeighboringLanePredicate.
      */
-    LeftOfBroadLaneMarkingPredicate();
+    InNeighboringLanePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
@@ -29,7 +23,7 @@ class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
      * @return Boolean indicating satisfaction of the predicate.
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                           const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP = {},
+                           const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP,
                            const std::vector<std::string> &additionalFunctionParameters = {}) override;
 
     /**
@@ -42,7 +36,7 @@ class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
      * @return Constraints defined by the predicate.
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                            const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP = {},
+                            const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP,
                             const std::vector<std::string> &additionalFunctionParameters = {}) override;
 
     /**
@@ -56,6 +50,6 @@ class LeftOfBroadLaneMarkingPredicate : public CommonRoadPredicate {
      */
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::shared_ptr<Obstacle> &obstacleP = {},
+                                    const std::shared_ptr<Obstacle> &obstacleP,
                                     const std::vector<std::string> &additionalFunctionParameters = {}) override;
 };
