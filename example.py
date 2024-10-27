@@ -2,6 +2,7 @@ from pathlib import Path
 
 import crcpp
 from commonroad.common.file_reader import CommonRoadFileReader
+from crcpp import IsOfTypePredicate
 
 full_path = "/media/sebastian/TUM/06_code/internal/environment-model/tests/scenarios/ZAM_TestReadingAll-1/ZAM_TestReadingAll-1_1_T-1.pb"
 scenario_path_tmp = Path(full_path)
@@ -19,3 +20,6 @@ world1 = crcpp.World(
     [],
     scenario.obstacles,
 )
+
+obstacle = world1.obstacles[0]
+pred = IsOfTypePredicate.boolean_evaluation(0, world1, obstacle, obstacle, ["car"])

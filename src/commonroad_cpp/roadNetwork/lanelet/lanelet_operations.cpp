@@ -42,6 +42,37 @@ LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type
         return LineMarking::unknown;
 }
 
+std::vector<LineMarking> lanelet_operations::matchStringToLineMarkingOptions(const std::string &type) {
+    std::string str{type};
+    std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+    if (str == "solid")
+        return {LineMarking::solid, LineMarking::solid_solid, LineMarking::solid_dashed, LineMarking::broad_solid};
+    else if (str == "dashed")
+        return {LineMarking::dashed, LineMarking::dashed_dashed, LineMarking::dashed_solid, LineMarking::broad_dashed};
+    else if (str == "broad")
+        return {LineMarking::broad_solid, LineMarking::broad_dashed};
+    else if (str == "solid_solid")
+        return {LineMarking::solid_solid};
+    else if (str == "dashed_dashed")
+        return {LineMarking::dashed_dashed};
+    else if (str == "solid_dashed")
+        return {LineMarking::solid_dashed};
+    else if (str == "dashed_solid")
+        return {LineMarking::dashed_solid};
+    else if (str == "curb")
+        return {LineMarking::curb};
+    else if (str == "lowered_curb")
+        return {LineMarking::lowered_curb};
+    else if (str == "broad_solid")
+        return {LineMarking::broad_solid};
+    else if (str == "broad_dashed")
+        return {LineMarking::broad_dashed};
+    else if (str == "no_marking")
+        return {LineMarking::no_marking};
+    else
+        return {LineMarking::unknown};
+}
+
 std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet,
                                                                                  bool sameDirection) {
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
@@ -155,4 +186,18 @@ bool lanelet_operations::bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &l
         right = right->getAdjacentRight().adj;
     }
     return false;
+}
+
+bool lanelet_operations::anyLaneletsContainLineMarkingType(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
+                                                           const std::vector<LineMarking> &lineMarkingTypes,
+                                                           const std::string &direction) {
+    return std::any_of(
+        lanelets.begin(), lanelets.end(), [lineMarkingTypes, direction](const std::shared_ptr<Lanelet> &lanelet) {
+            return (TrafficLight::matchTurningDirections(direction) == TurningDirection::left and
+                    std::find(lineMarkingTypes.begin(), lineMarkingTypes.end(), lanelet->getLineMarkingLeft()) !=
+                        lineMarkingTypes.end()) or
+                   (TrafficLight::matchTurningDirections(direction) == TurningDirection::right and
+                    std::find(lineMarkingTypes.begin(), lineMarkingTypes.end(), lanelet->getLineMarkingRight()) !=
+                        lineMarkingTypes.end());
+        });
 }

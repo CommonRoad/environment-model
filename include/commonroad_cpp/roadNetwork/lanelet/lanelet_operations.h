@@ -23,6 +23,14 @@ LaneletType matchStringToLaneletType(const std::string &type);
 LineMarking matchStringToLineMarking(const std::string &type);
 
 /**
+ * Matches a string to a list of line markings
+ *
+ * @param type for which line marking should be extracted
+ * @return list of line markings which corresponds to string or empty list if string does not match
+ */
+std::vector<LineMarking> matchStringToLineMarkingOptions(const std::string &type);
+
+/**
  * Extracts all lanelets right of a given lanelet in the same direction.
  *
  * @param lanelet Pointer to reference lanelet.
@@ -97,4 +105,15 @@ bool bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &lanelet);
  * @return Boolean indicating whether lanelets are adjacent.
  */
 bool areLaneletsAdjacent(const std::shared_ptr<Lanelet> &laneletOne, const std::shared_ptr<Lanelet> &laneletTwo);
+
+/**
+ * Checks whether any lanelets contain a specific line marking type.
+ *
+ * @param lanelets List of lanelets to be checked.
+ * @param lineMarkingTypes List of line marking types to be checked.
+ * @param direction Side of lanelets to be checked.
+ * @return Boolean indicating whether any lanelet contains a specific line marking type.
+ */
+bool anyLaneletsContainLineMarkingType(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
+                                       const std::vector<LineMarking> &lineMarkingTypes, const std::string &direction);
 } // namespace lanelet_operations

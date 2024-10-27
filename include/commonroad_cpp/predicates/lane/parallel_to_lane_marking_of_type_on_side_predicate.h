@@ -3,14 +3,15 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *  Evaluates if a vehicle is in the rightmost lane
+ * Evaluates if a vehicle is completely left/right of (parallel to) a given lane marking type. The side and lane marking
+ * type are given as parameter.
  */
-class InRightmostLanePredicate : public CommonRoadPredicate {
+class ParallelToLaneMarkingOfTypeOnSidePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for InRightmostLanePredicate
+     * Constructor for ParallelToLaneMarkingOfTypeOnSidePredicate
      */
-    InRightmostLanePredicate();
+    ParallelToLaneMarkingOfTypeOnSidePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.
