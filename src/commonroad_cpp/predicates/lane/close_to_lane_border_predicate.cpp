@@ -3,6 +3,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 
 #include "commonroad_cpp/predicates/lane/close_to_lane_border_predicate.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 
@@ -11,14 +12,14 @@ bool CloseToLaneBorderPredicate::booleanEvaluation(size_t timeStep, const std::s
                                                    const std::shared_ptr<Obstacle> &obstacleP,
                                                    const std::vector<std::string> &additionalFunctionParameters) {
     std::vector<std::shared_ptr<Lane>> lanes{obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)};
-    if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::left)
+    if (regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)) == Direction::left)
         return std::all_of(lanes.begin(), lanes.end(), [obstacleK, this, timeStep](const std::shared_ptr<Lane> &lane) {
             return 0.5 * lane->getWidth(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                         obstacleK->getStateByTimeStep(timeStep)->getYPosition()) -
                        obstacleK->leftD(timeStep, lane->getCurvilinearCoordinateSystem()) <=
                    parameters.getParam("closeToLaneBorder");
         });
-    else if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::right) {
+    else if (regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)) == Direction::right) {
         return std::all_of(lanes.begin(), lanes.end(), [obstacleK, this, timeStep](const std::shared_ptr<Lane> &lane) {
             return 0.5 * lane->getWidth(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                         obstacleK->getStateByTimeStep(timeStep)->getYPosition()) +
@@ -26,8 +27,8 @@ bool CloseToLaneBorderPredicate::booleanEvaluation(size_t timeStep, const std::s
                    parameters.getParam("closeToLaneBorder");
         });
     }
-    throw std::runtime_error("CloseToLaneBorderPredicate::booleanEvaluation: Unknown side '" +
-                             additionalFunctionParameters.at(0) + "'!");
+    throw std::invalid_argument("CloseToLaneBorderPredicate::booleanEvaluation: Unknown side '" +
+                                additionalFunctionParameters.at(0) + "'!");
 }
 
 double CloseToLaneBorderPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

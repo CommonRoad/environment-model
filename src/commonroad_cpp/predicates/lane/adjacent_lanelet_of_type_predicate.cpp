@@ -1,4 +1,5 @@
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/lane/adjacent_lanelet_of_type_predicate.h>
 #include <commonroad_cpp/world.h>
@@ -13,34 +14,22 @@ bool AdjacentLaneletOfTypePredicate::booleanEvaluation(size_t timeStep, const st
     for (const auto &la : lanelets)
         laneletIDs.insert(la->getId());
     std::vector<LaneletType> laTypes{lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(1))};
-    if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::left)
-        return std::any_of(lanelets.begin(), lanelets.end(),
-                           [laneletIDs, laTypes](const std::shared_ptr<Lanelet> &lanelet) {
-                               std::vector<LaneletType> laTypesTmp;
-                               if (laTypes.size() == 1 and laTypes.at(0) == LaneletType::all)
-                                   laTypesTmp.insert(laTypesTmp.end(), lanelet->getLaneletTypes().begin(),
-                                                     lanelet->getLaneletTypes().end());
-                               else
-                                   laTypesTmp = laTypes;
-                               return lanelet->getAdjacentLeft().adj != nullptr and
-                                      lanelet->getAdjacentLeft().adj->hasLaneletTypes(laTypesTmp) and
-                                      laneletIDs.find(lanelet->getAdjacentLeft().adj->getId()) == laneletIDs.end();
-                           });
-    else if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::right) {
-        return std::any_of(lanelets.begin(), lanelets.end(),
-                           [laneletIDs, laTypes](const std::shared_ptr<Lanelet> &lanelet) {
-                               std::vector<LaneletType> laTypesTmp;
-                               if (laTypes.size() == 1 and laTypes.at(0) == LaneletType::all)
-                                   laTypesTmp.insert(laTypesTmp.end(), lanelet->getLaneletTypes().begin(),
-                                                     lanelet->getLaneletTypes().end());
-                               else
-                                   laTypesTmp = laTypes;
-                               return lanelet->getAdjacentRight().adj != nullptr and
-                                      lanelet->getAdjacentRight().adj->hasLaneletTypes(laTypesTmp) and
-                                      laneletIDs.find(lanelet->getAdjacentRight().adj->getId()) == laneletIDs.end();
-                           });
-    }
-    throw std::runtime_error("AdjacentLaneletOfTypePredicate::booleanEvaluation:");
+
+    return std::any_of(
+        lanelets.begin(), lanelets.end(),
+        [laneletIDs, laTypes, additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
+            std::vector<LaneletType> laTypesTmp;
+            if (laTypes.size() == 1 and laTypes.at(0) == LaneletType::all)
+                laTypesTmp.insert(laTypesTmp.end(), lanelet->getLaneletTypes().begin(),
+                                  lanelet->getLaneletTypes().end());
+            else
+                laTypesTmp = laTypes;
+            auto adjacent{
+                lanelet->getAdjacent(regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)))
+                    .adj};
+            return adjacent != nullptr and adjacent->hasLaneletTypes(laTypesTmp) and
+                   laneletIDs.find(adjacent->getId()) == laneletIDs.end();
+        });
 }
 
 double AdjacentLaneletOfTypePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

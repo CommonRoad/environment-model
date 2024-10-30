@@ -302,6 +302,14 @@ class Lanelet {
     [[nodiscard]] const adjacent &getAdjacentRight() const;
 
     /**
+     * Getter for adjacent right/left lanelet.
+     *
+     * @param dir Side of lanelet.
+     * @return Adjacent right/left lanelet struct.
+     */
+    [[nodiscard]] const adjacent &getAdjacent(Direction dir) const;
+
+    /**
      * Getter for stop line assigned to lanelet.
      *
      * @return Stop line.
@@ -321,6 +329,14 @@ class Lanelet {
      * @return Right line marking.
      */
     [[nodiscard]] LineMarking getLineMarkingRight() const;
+
+    /**
+     * Getter for right/left line marking of lanelet based on given direction.
+     *
+     * @param dir Side of lanelet.
+     * @return Right line marking.
+     */
+    [[nodiscard]] LineMarking getLineMarking(Direction dir) const;
 
     /**
      * Given a polygon, checks whether the polygon intersects with the lanelet.

@@ -1,6 +1,5 @@
 #include "test_regulatory_elements_utils.h"
 #include "../../predicates/utils_predicate_test.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 
 void RegulatoryElementsUtilsTest::SetUp() {
@@ -132,3 +131,13 @@ TEST_F(RegulatoryElementsUtilsTest, ActiveTrafficLights) {}
 //        1, world->getRoadNetwork()->findLaneletById(111)->getTrafficSigns().at(0), obstacleOne,
 //        world->getRoadNetwork()));
 //}
+
+TEST_F(RegulatoryElementsUtilsTest, MatchDirections) {
+    EXPECT_EQ(regulatory_elements_utils::matchDirections("right"), Direction::right);
+    EXPECT_EQ(regulatory_elements_utils::matchDirections("straight"), Direction::straight);
+    EXPECT_EQ(regulatory_elements_utils::matchDirections("left"), Direction::left);
+    EXPECT_EQ(regulatory_elements_utils::matchDirections("leftStraight"), Direction::leftStraight);
+    EXPECT_EQ(regulatory_elements_utils::matchDirections("straightRight"), Direction::straightRight);
+    EXPECT_EQ(regulatory_elements_utils::matchDirections("leftRight"), Direction::leftRight);
+    EXPECT_THROW(regulatory_elements_utils::matchDirections("test"), std::logic_error);
+}
