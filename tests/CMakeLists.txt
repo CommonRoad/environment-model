@@ -41,10 +41,8 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/general/test_makes_u_turn_predicate.cpp
         commonroad_cpp_tests/predicates/general/test_is_of_type_predicate.cpp
 
-        commonroad_cpp_tests/predicates/intersection/test_at_t_intersection_predicate.cpp
-        commonroad_cpp_tests/predicates/intersection/test_at_four_way_stop_predicate.cpp
+        commonroad_cpp_tests/predicates/intersection/test_at_intersection_type_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_approach_intersection_predicate.cpp
-        commonroad_cpp_tests/predicates/intersection/test_at_uncontrolled_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_at_same_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_in_intersection_conflict_area_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_close_to_intersection_predicate.cpp

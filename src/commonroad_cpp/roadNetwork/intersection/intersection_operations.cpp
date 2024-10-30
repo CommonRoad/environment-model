@@ -84,3 +84,17 @@ std::shared_ptr<IncomingGroup> intersection_operations::currentIncoming(size_t t
 
     return nullptr;
 }
+
+IntersectionType intersection_operations::matchStringToIntersectionType(const std::string &type) {
+    std::string str{type};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    if (str == "T_INTERSECTION")
+        return IntersectionType::T_INTERSECTION;
+    else if (str == "FOUR_WAY_STOP_INTERSECTION")
+        return IntersectionType::FOUR_WAY_STOP_INTERSECTION;
+    else if (str == "FOUR_WAY_INTERSECTION")
+        return IntersectionType::FOUR_WAY_INTERSECTION;
+    else if (str == "UNCONTROLLED_INTERSECTION")
+        return IntersectionType::UNCONTROLLED_INTERSECTION;
+    return IntersectionType::UNKNOWN;
+}
