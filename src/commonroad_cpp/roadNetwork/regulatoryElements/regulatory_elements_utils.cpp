@@ -22,41 +22,38 @@ regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::share
 
 bool regulatory_elements_utils::atTrafficLightDirState(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
                                                        const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                       TurningDirection turnDir, TrafficLightState tlState) {
+                                                       Direction turnDir, TrafficLightState tlState) {
     if (!intersection_operations::onIncoming(timeStep, obs, roadNetwork))
         return false;
-    std::unordered_set<TurningDirection> relevantTrafficLightDirections;
+    std::unordered_set<Direction> relevantTrafficLightDirections;
     switch (turnDir) {
-    case TurningDirection::left:
-        relevantTrafficLightDirections = {TurningDirection::left, TurningDirection::leftStraight,
-                                          TurningDirection::leftRight, TurningDirection::all};
+    case Direction::left:
+        relevantTrafficLightDirections = {Direction::left, Direction::leftStraight, Direction::leftRight,
+                                          Direction::all};
         break;
-    case TurningDirection::right:
-        relevantTrafficLightDirections = {TurningDirection::leftRight, TurningDirection::right,
-                                          TurningDirection::straightRight, TurningDirection::all};
+    case Direction::right:
+        relevantTrafficLightDirections = {Direction::leftRight, Direction::right, Direction::straightRight,
+                                          Direction::all};
         break;
-    case TurningDirection::straight:
-        relevantTrafficLightDirections = {TurningDirection::straight, TurningDirection::straightRight,
-                                          TurningDirection::leftStraight, TurningDirection::all};
+    case Direction::straight:
+        relevantTrafficLightDirections = {Direction::straight, Direction::straightRight, Direction::leftStraight,
+                                          Direction::all};
         break;
-    case TurningDirection::all:
-        relevantTrafficLightDirections = {TurningDirection::left,      TurningDirection::leftStraight,
-                                          TurningDirection::leftRight, TurningDirection::all,
-                                          TurningDirection::right,     TurningDirection::straightRight,
-                                          TurningDirection::straight};
+    case Direction::all:
+        relevantTrafficLightDirections = {Direction::left,    Direction::leftStraight, Direction::leftRight,
+                                          Direction::all,     Direction::right,        Direction::straightRight,
+                                          Direction::straight};
         break;
     default:
-        relevantTrafficLightDirections = {TurningDirection::left,      TurningDirection::leftStraight,
-                                          TurningDirection::leftRight, TurningDirection::all,
-                                          TurningDirection::right,     TurningDirection::straightRight,
-                                          TurningDirection::straight};
+        relevantTrafficLightDirections = {Direction::left,    Direction::leftStraight, Direction::leftRight,
+                                          Direction::all,     Direction::right,        Direction::straightRight,
+                                          Direction::straight};
     }
     auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
     for (const auto &light : activeTl) {
-        if (std::any_of(relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
-                        [light](const TurningDirection &relevantDirection) {
-                            return relevantDirection == light->getDirection();
-                        }) and
+        if (std::any_of(
+                relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
+                [light](const Direction &relevantDirection) { return relevantDirection == light->getDirection(); }) and
             light->getElementAtTime(timeStep).color == tlState)
             return true;
     }
@@ -170,7 +167,7 @@ regulatory_elements_utils::extractPriorityTrafficSign(const std::shared_ptr<Lane
 }
 
 int regulatory_elements_utils::extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
-                                                          TurningDirection dir) {
+                                                          Direction dir) {
     std::shared_ptr<TrafficSignElement> tmpSign;
     int currentPriorityValue{std::numeric_limits<int>::min()};
     for (const auto &let : lanelets) {
@@ -187,7 +184,7 @@ int regulatory_elements_utils::extractPriorityTrafficSign(const std::vector<std:
 }
 
 int regulatory_elements_utils::getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                           const std::shared_ptr<Obstacle> &obs, TurningDirection dir) {
+                                           const std::shared_ptr<Obstacle> &obs, Direction dir) {
     auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
     std::vector<std::shared_ptr<Lanelet>> relevantIncomingLanelets;
     for (const auto &let : lanelets) {
@@ -269,4 +266,15 @@ double regulatory_elements_utils::minDistance(const std::vector<vertex> &line, p
         distances.push_back(std::fabs((a * point.x() + b * point.y() + c)) / (sqrt(a * a + b * b)));
     }
     return *std::min_element(distances.begin(), distances.end());
+}
+
+Direction regulatory_elements_utils::matchDirections(const std::string &dir) {
+    std::string str{dir};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    str.erase(remove(str.begin(), str.end(), '_'), str.end());
+    if (DirectionNames.count(str) == 1)
+        return DirectionNames.at(str);
+    else
+        throw std::logic_error("regulatory_elements_utils::matchDirections: Invalid turning direction state '" + str +
+                               "'!");
 }

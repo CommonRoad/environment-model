@@ -257,7 +257,7 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                 }
                 if ((strcmp(trafficLightChildElement.name(), "direction")) == 0) {
                     tempLightContainer[arrayIndex]->setDirection(
-                        TrafficLight::matchTurningDirections(trafficLightChildElement.first_child().value()));
+                        regulatory_elements_utils::matchDirections(trafficLightChildElement.first_child().value()));
                     directionSet = true;
                 }
                 if ((strcmp(trafficLightChildElement.name(), "active")) == 0) {
@@ -274,7 +274,7 @@ std::vector<std::shared_ptr<TrafficLight>> CommonRoadFactory2020a::createTraffic
                 }
             }
             if (!directionSet)
-                tempLightContainer[arrayIndex]->setDirection(TurningDirection::all);
+                tempLightContainer[arrayIndex]->setDirection(Direction::all);
             ++arrayIndex;
         }
     }

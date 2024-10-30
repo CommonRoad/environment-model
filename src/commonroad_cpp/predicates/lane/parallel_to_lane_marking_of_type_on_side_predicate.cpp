@@ -1,5 +1,6 @@
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include "commonroad_cpp/world.h"
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/predicates/lane/parallel_to_lane_marking_of_type_on_side_predicate.h>
@@ -17,9 +18,9 @@ bool ParallelToLaneMarkingOfTypeOnSidePredicate::booleanEvaluation(
 
     std::vector<std::shared_ptr<Lanelet>> lanelets{};
     std::set<std::shared_ptr<Lanelet>> adjLanelets;
-    if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::left) {
+    if (regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)) == Direction::left) {
         adjLanelets = obstacle_operations::laneletsRightOfObstacle(timeStep, world->getRoadNetwork(), obstacleK);
-    } else if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::right) {
+    } else if (regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)) == Direction::right) {
         adjLanelets = obstacle_operations::laneletsLeftOfObstacle(timeStep, world->getRoadNetwork(), obstacleK);
     } else
         throw std::runtime_error(

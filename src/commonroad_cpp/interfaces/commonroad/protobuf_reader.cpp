@@ -417,7 +417,7 @@ ProtobufReader::createTrafficLightFromMessage(const commonroad_map::TrafficLight
     if (trafficLightMsg.has_direction()) {
         std::string directionName =
             commonroad_map::TrafficLightDirectionEnum_TrafficLightDirection_Name(trafficLightMsg.direction());
-        trafficLight->setDirection(TrafficLight::matchTurningDirections(directionName));
+        trafficLight->setDirection(regulatory_elements_utils::matchDirections(directionName));
     }
 
     if (trafficLightCycleMsg.has_active())
