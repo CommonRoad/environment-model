@@ -6,6 +6,14 @@
 #include "incoming_group.h"
 #include "outgoing_group.h"
 
+enum class IntersectionType {
+    UNKNOWN,
+    T_INTERSECTION,
+    FOUR_WAY_INTERSECTION,
+    FOUR_WAY_STOP_INTERSECTION,
+    UNCONTROLLED_INTERSECTION,
+};
+
 /**
  * Class representing an intersection.
  */
@@ -116,6 +124,14 @@ class Intersection {
      */
     void computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork);
 
+    /**
+     * Checks whether intersection has a specific type.
+     *
+     * @param type Type of interest.
+     * @return Boolean indicating whether intersection has the specified type.
+     */
+    [[nodiscard]] bool hasIntersectionType(IntersectionType type);
+
   private:
     size_t id; //**< ID of intersection. */
     std::vector<std::shared_ptr<IncomingGroup>>
@@ -126,4 +142,13 @@ class Intersection {
         crossings; //**< List of pointers to crossing groups belonging to intersection. */
     std::vector<std::shared_ptr<Lanelet>> memberLanelets; //**< List of lanelets belonging to intersection starting from
                                                           // incoming until outgoing. Crossings are not considered. */
+    std::set<IntersectionType> intersectionTypes;         //**< Types of intersection. */
+
+    /**
+     * Determines and sets the type of intersection based on the incoming groups, outgoing groups, and regulatory
+     * elements.
+     *
+     * @return Type of intersection.
+     */
+    void determineIntersectionType();
 };
