@@ -1,0 +1,56 @@
+site_name: "Environment Model API documentation"
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdoxy:
+      projects:
+        environment-model:
+          src-dirs: "src include"
+          full-doc: True
+          doxy-cfg:
+            FILE_PATTERNS: "*.cpp *.h*"
+            RECURSIVE: True
+            EXTRACT_ALL: True
+            EXTRACT_PACKAGE: True
+            EXTRACT_STATIC: True
+            EXTRACT_ANON_NSPACES: True
+            JAVADOC_AUTOBRIEF: True
+            TEMPLATE_RELATIONS: True
+
+nav:
+  - Home:
+      - "index.md"
+      - "License": "LICENSE"
+      - "cpp.md"
+      - "cpp_dev.md"
+      - "git.md"
+      - "nix.md"
+      - "python.md"
+      - "python_dev.md"
+      - "doc.md"
+
+  - API Documentation:
+      - "Links": "environment-model/links.md"
+      - "Classes":
+          - "Class List": "environment-model/annotated.md"
+          - "Class Index": "environment-model/classes.md"
+          - "Class Hierarchy": "environment-model/hierarchy.md"
+          - "Class Members": "environment-model/class_members.md"
+          - "Class Member Functions": "environment-model/class_member_functions.md"
+          - "Class Member Variables": "environment-model/class_member_variables.md"
+          - "Class Member Typedefs": "environment-model/class_member_typedefs.md"
+          - "Class Member Enumerations": "environment-model/class_member_enums.md"
+      - "Namespaces":
+          - "Namespace List": "environment-model/namespaces.md"
+          - "Namespace Members": "environment-model/namespace_members.md"
+          - "Namespace Member Functions": "environment-model/namespace_member_functions.md"
+          - "Namespace Member Variables": "environment-model/namespace_member_variables.md"
+          - "Namespace Member Typedefs": "environment-model/namespace_member_typedefs.md"
+          - "Namespace Member Enumerations": "environment-model/namespace_member_enums.md"
+      - "Functions": "environment-model/functions.md"
+      - "Variables": "environment-model/variables.md"
+      - "Macros": "environment-model/macros.md"
+      - "Files": "environment-model/files.md"
