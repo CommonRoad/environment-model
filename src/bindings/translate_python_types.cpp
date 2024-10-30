@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include "nanobind/ndarray.h"
 #include "translate_python_types.h"
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
@@ -63,7 +64,7 @@ TranslatePythonTypes::convertTrafficLights(const nb::handle &py_laneletNetwork) 
         tempTrafficLight->setActive(nb::cast<bool>(py_trafficLight.attr("active")));
         auto py_trafficLightPosition = nb::cast<std::vector<double>>(nb::getattr(py_trafficLight, "position"));
         tempTrafficLight->setPosition({py_trafficLightPosition.at(0), py_trafficLightPosition.at(1)});
-        tempTrafficLight->setDirection(TrafficLight::matchTurningDirections(
+        tempTrafficLight->setDirection(regulatory_elements_utils::matchDirections(
             nb::cast<std::string>(py_trafficLight.attr("direction").attr("value"))));
         trafficLightContainer.emplace_back(tempTrafficLight);
     }

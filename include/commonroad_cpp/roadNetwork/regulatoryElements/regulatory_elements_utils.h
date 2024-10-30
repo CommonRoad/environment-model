@@ -29,7 +29,7 @@ std::set<std::shared_ptr<TrafficLight>> activeTrafficLights(size_t timeStep, con
  * @return Boolean indicating whether obstacle is at red traffic light.
  */
 bool atTrafficLightDirState(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                            const std::shared_ptr<RoadNetwork> &roadNetwork, TurningDirection turnDir,
+                            const std::shared_ptr<RoadNetwork> &roadNetwork, Direction turnDir,
                             TrafficLightState tlState);
 
 /**
@@ -91,10 +91,10 @@ std::vector<std::string> getRelevantPrioritySignIDs();
 
 std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::shared_ptr<Lanelet> &lanelet);
 
-int extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets, TurningDirection dir);
+int extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets, Direction dir);
 
 int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<Obstacle> &obs,
-                TurningDirection dir);
+                Direction dir);
 /**
  * Evaluates if a line is in front of obstacle
  *
@@ -125,5 +125,13 @@ double minDistance(const std::vector<vertex> &line, polygon_type shape);
  */
 TrafficSignTypes extractTypeFromNationalID(const std::string &trafficSignId, SupportedTrafficSignCountry country,
                                            const std::string &country_string);
+
+/**
+ * Matches direction given as string to the corresponding enum value.
+ *
+ * @param dir String representing turning direction.
+ * @return Turning direction enum value.
+ */
+[[nodiscard]] Direction matchDirections(const std::string &dir);
 
 } // namespace regulatory_elements_utils

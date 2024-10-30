@@ -609,14 +609,14 @@ const std::unordered_map<std::string, std::vector<int>> priorityTable{
     std::pair<std::string, std::vector<int>>("720", {-1, -1, 0}),
 };
 
-const std::unordered_map<std::string, TurningDirection> TurningDirectionNames{
-    {"LEFT", TurningDirection::left},
-    {"STRAIGHT", TurningDirection::straight},
-    {"RIGHT", TurningDirection::right},
-    {"LEFTSTRAIGHT", TurningDirection::leftStraight},
-    {"STRAIGHTRIGHT", TurningDirection::straightRight},
-    {"LEFTRIGHT", TurningDirection::leftRight},
-    {"ALL", TurningDirection::all},
+const std::unordered_map<std::string, Direction> DirectionNames{
+    {"LEFT", Direction::left},
+    {"STRAIGHT", Direction::straight},
+    {"RIGHT", Direction::right},
+    {"LEFTSTRAIGHT", Direction::leftStraight},
+    {"STRAIGHTRIGHT", Direction::straightRight},
+    {"LEFTRIGHT", Direction::leftRight},
+    {"ALL", Direction::all},
 };
 
 const std::unordered_map<std::string, TrafficLightState> TrafficLightStateNames{

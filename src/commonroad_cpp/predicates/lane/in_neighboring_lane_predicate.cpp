@@ -2,6 +2,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
+#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include <commonroad_cpp/predicates/lane/in_neighboring_lane_predicate.h>
 
 bool InNeighboringLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -12,17 +13,12 @@ bool InNeighboringLanePredicate::booleanEvaluation(size_t timeStep, const std::s
     auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     for (const auto &laneK : obstacleK->getOccupiedRoadLanes(world->getRoadNetwork(), timeStep)) {
         for (const auto &laneletK : laneK->getContainedLanelets()) {
-            if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::left and
-                laneletK->getAdjacentLeft().adj and
-                std::any_of(laneletsP.begin(), laneletsP.end(), [laneletK](const std::shared_ptr<Lanelet> &lanelet) {
-                    return laneletK->getAdjacentLeft().adj->getId() == lanelet->getId();
-                })) {
-                return true;
-            }
-            if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::right and
-                laneletK->getAdjacentRight().adj and
-                std::any_of(laneletsP.begin(), laneletsP.end(), [laneletK](const std::shared_ptr<Lanelet> &lanelet) {
-                    return laneletK->getAdjacentRight().adj->getId() == lanelet->getId();
+            auto adjacent{
+                laneletK->getAdjacent(regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)))
+                    .adj};
+            if (adjacent and
+                std::any_of(laneletsP.begin(), laneletsP.end(), [adjacent](const std::shared_ptr<Lanelet> &lanelet) {
+                    return adjacent->getId() == lanelet->getId();
                 })) {
                 return true;
             }

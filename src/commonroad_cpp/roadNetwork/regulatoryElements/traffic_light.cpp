@@ -34,9 +34,9 @@ TrafficLightCycleElement TrafficLight::getElementAtTime(size_t time) {
     return cycle.at(static_cast<unsigned long>(cycleIndex));
 }
 
-TurningDirection TrafficLight::getDirection() const { return direction; }
+Direction TrafficLight::getDirection() const { return direction; }
 
-void TrafficLight::setDirection(TurningDirection dir) { TrafficLight::direction = dir; }
+void TrafficLight::setDirection(Direction dir) { TrafficLight::direction = dir; }
 
 bool TrafficLight::isActive() const { return active; }
 
@@ -47,16 +47,6 @@ void TrafficLight::addCycleElement(TrafficLightCycleElement cycleElement) { cycl
 void TrafficLight::setPosition(vertex pos) { position = pos; }
 
 vertex TrafficLight::getPosition() const { return position; }
-
-TurningDirection TrafficLight::matchTurningDirections(const std::string &dir) {
-    std::string str{dir};
-    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
-    str.erase(remove(str.begin(), str.end(), '_'), str.end());
-    if (TurningDirectionNames.count(str) == 1)
-        return TurningDirectionNames.at(str);
-    else
-        throw std::logic_error("TrafficLight::matchTurningDirections: Invalid turning direction state '" + str + "'!");
-}
 
 TrafficLightState TrafficLight::matchTrafficLightState(const std::string &trafficLightState) {
     std::string str{trafficLightState};
@@ -69,6 +59,6 @@ TrafficLightState TrafficLight::matchTrafficLightState(const std::string &traffi
 }
 
 TrafficLight::TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset,
-                           TurningDirection direction, bool active, const vertex &position)
+                           Direction direction, bool active, const vertex &position)
     : id(trafficLightId), cycle(std::move(cycle)), offset(offset), direction(direction), active(active),
       position(position) {}

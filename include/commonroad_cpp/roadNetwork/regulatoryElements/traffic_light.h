@@ -26,8 +26,8 @@ class TrafficLight {
      * @param active Indicator whether traffic light is currently active.
      * @param position Traffic light position.
      */
-    TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset,
-                 TurningDirection direction, bool active, const vertex &position);
+    TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset, Direction direction,
+                 bool active, const vertex &position);
 
     /**
      * Setter for traffic light ID.
@@ -55,7 +55,7 @@ class TrafficLight {
      *
      * @param dir Direction of the traffic light.
      */
-    void setDirection(TurningDirection dir);
+    void setDirection(Direction dir);
 
     /**
      * Setter for traffic light activity.
@@ -104,7 +104,7 @@ class TrafficLight {
      *
      * @return Direction of traffic light.
      */
-    [[nodiscard]] TurningDirection getDirection() const;
+    [[nodiscard]] Direction getDirection() const;
 
     /**
      * Getter for traffic light activity indicator.
@@ -129,14 +129,6 @@ class TrafficLight {
     TrafficLightCycleElement getElementAtTime(size_t time);
 
     /**
-     * Matches turning direction given as string to the corresponding enum value.
-     *
-     * @param dir String representing turning direction.
-     * @return Turning direction enum value.
-     */
-    [[nodiscard]] static TurningDirection matchTurningDirections(const std::string &dir);
-
-    /**
      * Matches a traffic light state given as string to the corresponding enum value.
      *
      * @param trafficLightState String representing traffic light state.
@@ -148,7 +140,7 @@ class TrafficLight {
     size_t id;                                   //**< unique ID of traffic light */
     std::vector<TrafficLightCycleElement> cycle; //**< cycle of traffic light */
     size_t offset;                               //**< time offset of traffic light */
-    TurningDirection direction;                  //**< direction for which traffic light is valid */
+    Direction direction;                         //**< direction for which traffic light is valid */
     bool active;                                 //**< boolean indicating whether traffic light is valid */
     vertex position;                             //**< position of traffic light */
 };
