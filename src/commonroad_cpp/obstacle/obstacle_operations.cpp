@@ -249,6 +249,17 @@ obstacle_operations::laneletsLeftOfObstacle(size_t timeStep, const std::shared_p
     return leftLanelets;
 }
 
+std::set<std::shared_ptr<Lanelet>>
+obstacle_operations::laneletsParallelToObstacle(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                const std::shared_ptr<Obstacle> &obs, Direction side) {
+    if (side == Direction::left)
+        return laneletsLeftOfObstacle(timeStep, roadNetwork, obs);
+    else if (side == Direction::right)
+        return laneletsRightOfObstacle(timeStep, roadNetwork, obs);
+    else
+        throw std::invalid_argument("obstacle_operations::laneletsParallelToObstacle: Invalid direction.");
+}
+
 std::vector<std::shared_ptr<Intersection>>
 obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
                                       const std::shared_ptr<Obstacle> &obs) {

@@ -1,3 +1,4 @@
+#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/lane/in_outermost_lane_predicate.h>
@@ -11,15 +12,9 @@ bool InOutermostLanePredicate::booleanEvaluation(size_t timeStep, const std::sha
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(
         lanelets.begin(), lanelets.end(), [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-            if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::left)
-                return lanelet->getAdjacentLeft().adj == nullptr ||
-                       lanelet->getAdjacentLeft().oppositeDir !=
-                           lanelet->getAdjacentLeft().adj->getAdjacentRight().oppositeDir;
-            if (TrafficLight::matchTurningDirections(additionalFunctionParameters.at(0)) == TurningDirection::right)
-                return lanelet->getAdjacentRight().adj == nullptr ||
-                       lanelet->getAdjacentRight().oppositeDir !=
-                           lanelet->getAdjacentRight().adj->getAdjacentLeft().oppositeDir;
-            throw std::runtime_error("InOutermostLanePredicate::booleanEvaluation: Invalid turning direction.");
+            auto adjacent{
+                lanelet->getAdjacent(regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)))};
+            return adjacent.adj == nullptr || adjacent.oppositeDir != adjacent.adj->getAdjacentRight().oppositeDir;
         });
 }
 

@@ -113,7 +113,7 @@ enum class LineMarking {
 
 enum class TrafficLightState { red, green, yellow, red_yellow, inactive };
 
-enum class TurningDirection { left, straight, right, leftStraight, straightRight, leftRight, all };
+enum class Direction { left, straight, right, leftStraight, straightRight, leftRight, all };
 
 enum class ShapeType { rectangle, circle };
 

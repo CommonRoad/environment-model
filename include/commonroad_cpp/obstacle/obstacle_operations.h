@@ -138,6 +138,18 @@ std::set<std::shared_ptr<Lanelet>> laneletsLeftOfObstacle(size_t timeStep,
                                                           const std::shared_ptr<Obstacle> &obs);
 
 /**
+ * Computes the set of lanelets parallel to the obstacle given side.
+ * @param timeStep Time step of interest.
+ * @param roadNetwork Relevant road network
+ * @param obs Obstacle based on which left lanelets are computed.
+ * @param side Side of interest.
+ * @return Set of lanelets on the side of interest of the obstacle.
+ */
+std::set<std::shared_ptr<Lanelet>> laneletsParallelToObstacle(size_t timeStep,
+                                                              const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                              const std::shared_ptr<Obstacle> &obs, Direction side);
+
+/**
  * Returns intersections of the occupied lanes for an obstacle at a specific time step.
  *
  * @param timeStep Time step of interest.

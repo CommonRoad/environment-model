@@ -3,6 +3,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <utility>
 
+#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include <range/v3/all.hpp>
 
 LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type) {
@@ -193,11 +194,8 @@ bool lanelet_operations::anyLaneletsContainLineMarkingType(const std::vector<std
                                                            const std::string &direction) {
     return std::any_of(
         lanelets.begin(), lanelets.end(), [lineMarkingTypes, direction](const std::shared_ptr<Lanelet> &lanelet) {
-            return (TrafficLight::matchTurningDirections(direction) == TurningDirection::left and
-                    std::find(lineMarkingTypes.begin(), lineMarkingTypes.end(), lanelet->getLineMarkingLeft()) !=
-                        lineMarkingTypes.end()) or
-                   (TrafficLight::matchTurningDirections(direction) == TurningDirection::right and
-                    std::find(lineMarkingTypes.begin(), lineMarkingTypes.end(), lanelet->getLineMarkingRight()) !=
-                        lineMarkingTypes.end());
+            return (std::find(lineMarkingTypes.begin(), lineMarkingTypes.end(),
+                              lanelet->getLineMarking(regulatory_elements_utils::matchDirections(direction))) !=
+                    lineMarkingTypes.end());
         });
 }

@@ -106,6 +106,14 @@ const Lanelet::adjacent &Lanelet::getAdjacentLeft() const { return adjacentLeft;
 
 const Lanelet::adjacent &Lanelet::getAdjacentRight() const { return adjacentRight; }
 
+const Lanelet::adjacent &Lanelet::getAdjacent(Direction dir) const {
+    if (dir == Direction::left)
+        return adjacentLeft;
+    else if (dir == Direction::right)
+        return adjacentRight;
+    throw std::invalid_argument("Lanelet::adjacent: Invalid direction");
+}
+
 const std::shared_ptr<StopLine> &Lanelet::getStopLine() const { return stopLine; }
 
 bool Lanelet::applyIntersectionTesting(const polygon_type &polygon_shape) const {
@@ -283,6 +291,14 @@ double Lanelet::getMinWidth() const {
         minWidth = std::get<1>(tmpWidth);
     }
     return minWidth;
+}
+
+LineMarking Lanelet::getLineMarking(Direction dir) const {
+    if (dir == Direction::left)
+        return lineMarkingLeft;
+    else if (dir == Direction::right)
+        return lineMarkingRight;
+    throw std::invalid_argument("Lanelet::getLineMarking: Invalid direction");
 }
 
 const std::unordered_map<std::string, LaneletType> LaneletTypeNames = {

@@ -23,6 +23,6 @@ extern const std::unordered_map<SupportedTrafficSignCountry, TrafficSignTable *>
 
 extern const std::unordered_map<std::string, std::vector<int>> priorityTable;
 
-extern const std::unordered_map<std::string, TurningDirection> TurningDirectionNames;
+extern const std::unordered_map<std::string, Direction> DirectionNames;
 
 extern const std::unordered_map<std::string, TrafficLightState> TrafficLightStateNames;
