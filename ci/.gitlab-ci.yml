@@ -3,7 +3,6 @@ stages:
   - python
   - test
   - static-test
-  - docs
   - publish
 
 image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci-lite:1.0
@@ -278,6 +277,15 @@ run-coverage:
           coverage_format: cobertura
           path: coverage.xml
 
+.install-python-venv: &install-python-venv
+    - apt-get update && apt-get install -y --no-install-recommends git python3-venv python3-pip
+    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
+    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de".insteadOf "ssh://git@gitlab.lrz.de"
+    - python3 -m pip config set global.disable-pip-version-check true
+    - python3 -m venv test-venv
+    - source test-venv/bin/activate
+    - python3 -m pip install pip-tools
+
 .test-python-common: &test-python-common
   stage: test
   image: python:${JOB_PYTHON_VERSION}-slim-bullseye
@@ -288,13 +296,7 @@ run-coverage:
     # Therefore, we first extract the test dependencies to a temporary requirements
     # file and then instruct pip to install them from that file.
     # Finally, we install the built wheel from the wheelhouse directory.
-    - apt-get update && apt-get install -y --no-install-recommends git
-    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
-    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de".insteadOf "ssh://git@gitlab.lrz.de"
-    - python -m pip config set global.disable-pip-version-check true
-    - python -m venv test-venv
-    - source test-venv/bin/activate
-    - python -m pip install pip-tools
+    - *install-python-venv
     - SETUPTOOLS_SCM_PRETEND_VERSION_FOR_COMMONROAD_CPP=1
 #    - python -m piptools compile --extra=test -o test_requirements.txt pyproject.toml
 #    - python -m pip install -r test_requirements.txt
@@ -338,29 +340,29 @@ test-python-manylinux:
   <<: [ *test-python-common, *test-python-matrix ]
 
 
-### create documentation ###
-docs:
-  stage: docs
-  script:
-    - cmake -G "Ninja Multi-Config" -S . -B build -DENV_MODEL_BUILD_DOXYGEN=ON
-    - cmake --build build --config RelWithDebInfo --target doc_doxygen
-  needs: []
-  artifacts:
-    paths:
-      - build/doc_doxygen/html/
-    expose_as: 'Doxygen Documentation'
-    expire_in: 30 minutes
-
 pages:
   stage: publish
+  when: manual
+  publish: site
   script:
-    - mv build/doc_doxygen/html public
-  needs:
-    - job: docs
-      artifacts: true
+    - *install-python-venv
+    - pip install ".[docs]"
+    - mkdocs build
   artifacts:
     paths:
-      - public
-    expire_in: 20 minutes
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+      - site
+  environment:
+    name: Gitlab Pages
+    url: https://cps.pages.gitlab.lrz.de/commonroad/environment-model/
+  needs: []
+
+build_pages:
+  stage: publish
+  script:
+    - *install-python-venv
+    - pip install ".[docs]"
+    - mkdocs build
+  artifacts:
+    paths:
+      - site
+  needs: []
