@@ -5,14 +5,14 @@
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 
 /**
- *  Evaluates if a vehicle is at a four way stop intersection
+ *  Evaluates if a vehicle is at a specific intersection type
  */
-class AtFourWayStopPredicate : public CommonRoadPredicate {
+class AtIntersectionTypePredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for AtFourWayStopPredicate
+     * Constructor for AtIntersectionTypePredicate
      */
-    AtFourWayStopPredicate();
+    AtIntersectionTypePredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

@@ -1,10 +1,19 @@
 #pragma once
 
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
 namespace intersection_operations {
+
+/**
+ * Matches a string to a intersection type
+ *
+ * @param type for which intersection type should be extracted
+ * @return intersection type which corresponds to string or unknown type if string does not match
+ */
+IntersectionType matchStringToIntersectionType(const std::string &type);
 
 /**
  * Evaluates whether obstacle occupies a incoming lanelet.
