@@ -1,5 +1,6 @@
 #include <memory>
 
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
@@ -8,12 +9,20 @@
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
+#include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h"
 #include "python_interface_core.h"
+#include "python_interface_predicates.h"
 #include "translate_python_types.h"
 
 #include <nanobind/nanobind.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/pair.h>
+#include <nanobind/stl/set.h>
 #include <nanobind/stl/shared_ptr.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
 #include <nanobind/stl/vector.h>
 
 namespace nb = nanobind;
@@ -35,16 +44,25 @@ static std::string extractName(nb::handle py_scen) {
 
 void init_python_interface_core(nb::module_ &m) {
     nb::enum_<ObstacleType>(m, "ObstacleType")
+        .value("unknown", ObstacleType::unknown)
         .value("car", ObstacleType::car)
         .value("truck", ObstacleType::truck)
-        .value("pedestrian", ObstacleType::pedestrian)
         .value("bus", ObstacleType::bus)
-        .value("unknown", ObstacleType::unknown)
         .value("bicycle", ObstacleType::bicycle)
+        .value("pedestrian", ObstacleType::pedestrian)
         .value("priority_vehicle", ObstacleType::priority_vehicle)
+        .value("parked_vehicle", ObstacleType::parked_vehicle)
+        .value("construction_zone", ObstacleType::construction_zone)
         .value("train", ObstacleType::train)
+        .value("road_boundary", ObstacleType::road_boundary)
         .value("motorcycle", ObstacleType::motorcycle)
         .value("taxi", ObstacleType::taxi)
+        .value("building", ObstacleType::building)
+        .value("pillar", ObstacleType::pillar)
+        .value("median_strip", ObstacleType::median_strip)
+        .value("vehicle", ObstacleType::vehicle)
+        .value("vru", ObstacleType::vru)
+        .value("special_purpose_vehicle", ObstacleType::special_purpose_vehicle)
         .export_values();
 
     nb::enum_<LineMarking>(m, "LineMarking")
@@ -56,7 +74,21 @@ void init_python_interface_core(nb::module_ &m) {
         .value("no_marking", LineMarking::no_marking)
         .export_values();
 
-    // nb::class_<Shape>(m, "Shape");
+    // TODO: Add missing lanelet types
+    nb::enum_<LaneletType>(m, "LaneletType")
+        .value("left", LaneletType::left)
+        .value("right", LaneletType::right)
+        .value("unknown", LaneletType::unknown)
+        .export_values();
+
+    nb::class_<StopLine>(m, "StopLine")
+        .def(nb::init<>())
+        .def(nb::init<std::pair<vertex, vertex>, LineMarking>())
+        .def_prop_rw("points", &StopLine::getPoints, &StopLine::setPoints)
+        .def_prop_rw("line_marking", &StopLine::getLineMarking, &StopLine::setLineMarking);
+
+    // TODO: Extend Shape definition
+    nb::class_<Shape>(m, "Shape");
 
     nb::class_<State>(m, "State")
         .def_prop_rw("time_step", &State::getTimeStep, &State::setTimeStep)
@@ -89,6 +121,8 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("fov_front", &SensorParameters::getFieldOfViewFront)
         .def_prop_ro("fov_rear", &SensorParameters::getFieldOfViewRear)
         .def_prop_ro("reaction_time", &SensorParameters::getReactionTime);
+
+    nb::class_<vertex>(m, "Vertex").def_rw("x", &vertex::x).def_rw("y", &vertex::y);
 
     nb::class_<Obstacle>(m, "Obstacle")
         .def(
@@ -142,7 +176,9 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_rw("stop_line", &Lanelet::getStopLine, &Lanelet::setStopLine)
         .def_prop_ro("traffic_lights", &Lanelet::getTrafficLights)
         .def_prop_ro("traffic_signs", &Lanelet::getTrafficSigns)
-        .def_prop_ro("outer_polygon", &Lanelet::getOuterPolygon);
+        // TODO: Needs translation for boost::geometry::model::polygon
+        // .def_prop_ro("outer_polygon", &Lanelet::getOuterPolygon)
+        ;
 
     nb::class_<Lane, Lanelet>(m, "Lane").def_prop_ro("contained_lanelets", &Lane::getContainedLanelets);
 
@@ -202,9 +238,15 @@ void init_python_interface_core(nb::module_ &m) {
                               nb::cast<double>(py_scenario.attr("dt")));
             },
             "py_scenario")
+        .def(nb::init<std::string, size_t, const std::shared_ptr<RoadNetwork> &, std::vector<std::shared_ptr<Obstacle>>,
+                      std::vector<std::shared_ptr<Obstacle>>, double>())
         .def_prop_ro("time_step", &World::getTimeStep)
         .def_prop_ro("road_network", &World::getRoadNetwork)
         .def_prop_ro("obstacles", &World::getObstacles);
 
     m.def("create_world", &XMLReader::createWorldFromXML);
+
+    m.def("read_scenario", &InputUtils::getDataFromCommonRoad);
+
+    init_python_interface_predicates(m);
 }

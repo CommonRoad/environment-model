@@ -16,6 +16,24 @@ class TestPythonInterface(unittest.TestCase):
             "ZAM_Tjunction-1/ZAM_Tjunction-1_47_T-1.pb",
         ]
 
+    def test_predicates(self):
+        for scenario in self.filenames:
+            full_path = Path(self.path + scenario)
+            (obstacles, road_network, tss) = crcpp.read_scenario(str(full_path))
+            world = crcpp.World("foo", 0, road_network, [], obstacles, tss)
+
+            predicate = crcpp.OnSameRoadPredicate()
+            for obs_a, obs_b in [(a, b) for a in world.obstacles for b in world.obstacles]:
+                if obs_a.type != crcpp.ObstacleType.car or obs_b.type != crcpp.ObstacleType.car:
+                    continue
+
+                obs_a_ts = frozenset(obs_a.get_time_steps())
+                obs_b_ts = frozenset(obs_b.get_time_steps())
+                valid_ts = frozenset.intersection(obs_a_ts, obs_b_ts)
+
+                for ts in valid_ts:
+                    result = predicate.boolean_evaluation(ts, world, obs_a, obs_b)  # noqa: F841
+
     def test_scenario_binding(self):
         for scenario in self.filenames:
             full_path = self.path + scenario
@@ -35,7 +53,7 @@ class TestPythonInterface(unittest.TestCase):
                 [],
                 scenario.obstacles,
             )
-            self.assertEquals(world1.time_step, 2)
+            self.assertEqual(world1.time_step, 2)
 
             world2 = crcpp.World(scenario)
             self.assertEqual(len(world1.road_network.lanelets), len(world2.road_network.lanelets))
