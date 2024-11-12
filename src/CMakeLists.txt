@@ -375,8 +375,8 @@ if (ENV_MODEL_BUILD_PYTHON_BINDINGS)
                 bindings/python_interface_core.h
                 bindings/translate_python_types.cpp
                 bindings/translate_python_types.h
-#                bindings/python_interface_predicates.cpp
-#                bindings/python_interface_predicates.h
+                bindings/python_interface_predicates.cpp
+                bindings/python_interface_predicates.h
         )
 
         target_precompile_headers(nanobind-static
@@ -401,7 +401,7 @@ if (ENV_MODEL_BUILD_PYTHON_BINDINGS)
                 COMPONENT PythonModules
         )
 
-        target_link_libraries(${python_module_name} PRIVATE env_model spdlog::spdlog)
+        target_link_libraries(${python_module_name} PRIVATE env_model env_model_predicates spdlog::spdlog)
 
         install(TARGETS ${python_module_name}
                 LIBRARY DESTINATION crcpp

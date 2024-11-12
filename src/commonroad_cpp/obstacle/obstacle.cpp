@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <geometry/curvilinear_coordinate_system.h>
 
 #include <algorithm> // for max, min
@@ -235,6 +236,10 @@ std::vector<size_t> Obstacle::getHistoryTimeSteps() {
 
 std::vector<size_t> Obstacle::getTimeSteps() {
     std::vector<size_t> timeSteps{getPredictionTimeSteps()};
+    if (currentState == nullptr) {
+        // TODO: Should we report an error in this case ?
+        return std::vector<size_t>{};
+    }
     if (timeSteps.empty())
         timeSteps.insert(timeSteps.begin(), currentState->getTimeStep());
     else {
