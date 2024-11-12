@@ -1,0 +1,78 @@
+{
+  "nodes": {
+    "commonroad-cmake": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1681888974,
+        "narHash": "sha256-XE5po9mnuZJhJ2mEfpTP3Ij4mF8YXiNpx8u5ardAMcI=",
+        "ref": "main",
+        "rev": "b6ec634c8299a98746def2960b3cb6544c6845e4",
+        "revCount": 14,
+        "type": "git",
+        "url": "https://gitlab.lrz.de/tum-cps/commonroad-cmake.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://gitlab.lrz.de/tum-cps/commonroad-cmake.git"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1726937504,
+        "narHash": "sha256-bvGoiQBvponpZh8ClUcmJ6QnsNKw0EMrCQJARK3bI1c=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9357f4f23713673f310988025d9dc261c20e70c6",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "commonroad-cmake": "commonroad-cmake",
+        "nixpkgs": "nixpkgs",
+        "utils": "utils"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1726560853,
+        "narHash": "sha256-X6rJYSESBVr3hBoH0WbKE5KvhPU5bloyZ2L4K60/fPQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c1dfcf08411b08f6b8615f7d8971a2bfa81d5e8a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

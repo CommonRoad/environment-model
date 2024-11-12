@@ -1,4 +1,5 @@
 include(FetchContent)
+include(utils/FetchContentHelper)
 
 find_package(Threads REQUIRED)
 
@@ -20,11 +21,14 @@ if(ENV_MODEL_USE_LOCAL_CRDC)
 
     set_property(DIRECTORY ${PROJECT_SOURCE_DIR}/third_party/crdc PROPERTY EXCLUDE_FROM_ALL ON)
 else()
-    FetchContent_Declare(
+    FetchContent_Declare_Fallback(
         crdc
+
         GIT_REPOSITORY  git@gitlab.lrz.de:cps/commonroad-drivability-checker.git
-            GIT_TAG f0905d3aeeb1d62584d67a73604601f5c948f3f2
+        GIT_TAG f0905d3aeeb1d62584d67a73604601f5c948f3f2
         #GIT_TAG        development
+
+        SYSTEM
     )
 
     FetchContent_MakeAvailable(crdc)
