@@ -126,9 +126,11 @@ endforeach()
 
 generate_all_predicates_header("${ENV_MODEL_PREDICATES_HDR_FILES}" all_predicates_gen_file)
 
-if(SKBUILD)
-    generate_instantiations("${predicates}" ${all_predicates_gen_file} predicate_instantiation_gen_file)
-    target_sources(_crcpp PRIVATE ${predicate_instantiation_gen_file})
+if (ENV_MODEL_BUILD_PYTHON_BINDINGS)
+    if(SKBUILD)
+        generate_instantiations("${predicates}" ${all_predicates_gen_file} predicate_instantiation_gen_file)
+        target_sources(_crcpp PRIVATE ${predicate_instantiation_gen_file})
+    endif()
 endif()
 
 generate_map_entries("${predicate_map_entries}" ${all_predicates_gen_file} predicate_map_gen_file)
