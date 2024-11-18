@@ -7,7 +7,7 @@ It contains an interface to Python and predicates for evaluating traffic rules.
 
 ### Dependencies to other repositories
 
-Inclusion of other internal repositoryis is automatically done via Git.
+Downloading of other internal repositories is automatically done via Git.
 An SSH key in your Gitlab account is required.
 See [here](https://docs.gitlab.com/ee/ssh/) for instructions to add an SSH key.
 
