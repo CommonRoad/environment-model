@@ -189,7 +189,7 @@ build-wheel:
   artifacts:
     paths:
       - wheelhouse/*.whl
-    expire_in: 60 minutes
+    expire_in: 360 minutes
   rules:
     - *skip_merge_request_pipeline
     - if: *full_wheel_build_condition
