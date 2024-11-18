@@ -4,7 +4,7 @@
 For using nix, please visit [Nix Tutorial](./nix.md)
 
 ### Compiler and Build System
-A recent C/C++ compiler is required in any case.
+A recent C/C++ compiler is required in any case (we tested gcc11).
 CMake is required in order to build the C++ library.
 For the Python module, you don't need to have CMake installed as pip will
 automatically provide CMake to the build system.
