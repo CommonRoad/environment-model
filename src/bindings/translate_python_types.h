@@ -33,6 +33,14 @@ std::vector<std::shared_ptr<Lanelet>> convertLanelets(const nb::handle &py_lanel
 std::vector<std::shared_ptr<Obstacle>> convertObstacles(const nb::list &py_obstacles);
 
 /**
+ * Converts Python State.
+ *
+ * @param py_state Python state object.
+ * @return C++ State.
+ */
+std::shared_ptr<State> extractState(nb::handle py_state);
+
+/**
  * Create dynamic obstacle.
  * @param py_singleObstacle Python dynamic obstacle.
  * @return C++ dynamic obstacle.
