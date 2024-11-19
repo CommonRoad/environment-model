@@ -3,7 +3,9 @@ import unittest
 from pathlib import Path
 
 import crcpp
+import numpy as np
 from commonroad.common.file_reader import CommonRoadFileReader
+from commonroad.scenario.state import CustomState
 
 
 class TestPythonInterface(unittest.TestCase):
@@ -89,6 +91,64 @@ class TestPythonInterface(unittest.TestCase):
                 [],
                 scenario.obstacles,
             )
+
+    def test_set_trajectory(self):
+        full_path = (
+            Path(__file__).parent.parent.parent
+            / "tests/scenarios/predicates/DEU_TestSafeDistance-1/DEU_TestSafeDistance-1_1_T-1.pb"
+        )
+        scenario_path_tmp = Path(full_path)
+        map_path = (
+            scenario_path_tmp.parent
+            / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
+        )
+        scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
+
+        world = crcpp.World(
+            str(scenario.scenario_id),
+            2,
+            0.1,
+            "DEU",
+            scenario.lanelet_network,
+            [],
+            scenario.obstacles,
+        )
+
+        world.obstacles[0].update_trajectory(
+            [CustomState(time_step=4, velocity=0, position=np.array([1, 2]), orientation=0, acceleration=0)]
+        )
+
+        self.assertEqual(world.obstacles[0].get_state_by_time_step(4).x, 1)
+        self.assertEqual(world.obstacles[0].get_state_by_time_step(4).y, 2)
+
+    def test_set_current_state(self):
+        full_path = (
+            Path(__file__).parent.parent.parent
+            / "tests/scenarios/predicates/DEU_TestSafeDistance-1/DEU_TestSafeDistance-1_1_T-1.pb"
+        )
+        scenario_path_tmp = Path(full_path)
+        map_path = (
+            scenario_path_tmp.parent
+            / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
+        )
+        scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
+
+        world = crcpp.World(
+            str(scenario.scenario_id),
+            2,
+            0.1,
+            "DEU",
+            scenario.lanelet_network,
+            [],
+            scenario.obstacles,
+        )
+
+        world.obstacles[0].update_current_state(
+            CustomState(time_step=4, velocity=0, position=np.array([1, 2]), orientation=0, acceleration=0)
+        )
+
+        self.assertEqual(world.obstacles[0].current_state.x, 1)
+        self.assertEqual(world.obstacles[0].current_state.y, 2)
 
 
 if __name__ == "__main__":

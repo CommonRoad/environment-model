@@ -136,7 +136,6 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/lane/neighboring_lane_opp_driving_dir_predicate.cpp
         commonroad_cpp/predicates/lane/on_same_road_predicate.cpp
         commonroad_cpp/predicates/lane/lane_based_orientation_side_predicate.cpp
-        commonroad_cpp/predicates/lane/on_same_road_predicate.cpp
 
         commonroad_cpp/predicates/position/in_front_of_predicate.cpp
         commonroad_cpp/predicates/position/left_of_predicate.cpp
@@ -213,7 +212,6 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/lane/neighboring_lane_opp_driving_dir_predicate.h
         commonroad_cpp/predicates/lane/on_same_road_predicate.h
         commonroad_cpp/predicates/lane/lane_based_orientation_side_predicate.h
-        commonroad_cpp/predicates/lane/on_same_road_predicate.h
 
         commonroad_cpp/predicates/position/in_front_of_predicate.h
         commonroad_cpp/predicates/position/left_of_predicate.h
