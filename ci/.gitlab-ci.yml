@@ -150,7 +150,7 @@ build-sdist:
   artifacts:
     paths:
       - dist/*.tar.gz
-    expire_in: 60 minutes
+    expire_in: 360 minutes
 
 .common-rules:
   rules:
