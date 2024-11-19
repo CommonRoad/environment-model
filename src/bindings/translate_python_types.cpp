@@ -407,7 +407,7 @@ std::shared_ptr<Obstacle> createCommonObstaclePart(nb::handle py_singleObstacle)
     return tempObstacle;
 }
 
-std::shared_ptr<State> extractState(nb::handle py_state) {
+std::shared_ptr<State> TranslatePythonTypes::extractState(nb::handle py_state) {
     auto state{std::make_shared<State>()};
     state->setXPosition(nb::cast<std::vector<double>>(py_state.attr("position")).at(0));
     state->setYPosition(nb::cast<std::vector<double>>(py_state.attr("position")).at(1));

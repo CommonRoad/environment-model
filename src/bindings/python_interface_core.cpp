@@ -156,9 +156,25 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_rw("sensor_parameters", &Obstacle::getSensorParameters, &Obstacle::setSensorParameters)
         .def("get_state_by_time_step", &Obstacle::getStateByTimeStep)
         .def("reference_lane_by_time_step", &Obstacle::getReferenceLane)
-        .def("get_time_steps", &Obstacle::getTimeSteps);
-
-    // nb::class_<StopLine>(m, "StopLine");
+        .def("get_time_steps", &Obstacle::getTimeSteps)
+        .def(
+            "update_trajectory",
+            [](Obstacle *t, const nb::handle &py_state_list) {
+                tsl::robin_map<time_step_t, std::shared_ptr<State>> trajectory;
+                for (const auto &py_state : py_state_list) {
+                    auto state = TranslatePythonTypes::extractState(py_state);
+                    trajectory[state->getTimeStep()] = state;
+                }
+                t->setTrajectoryPrediction(trajectory);
+            },
+            "py_state_list")
+        .def(
+            "update_current_state",
+            [](Obstacle *t, const nb::handle &py_current_state) {
+                auto state = TranslatePythonTypes::extractState(py_current_state);
+                t->setCurrentState(state);
+            },
+            "py_current_state");
 
     nb::class_<TrafficSign>(m, "TrafficSign").def_prop_rw("id", &TrafficSign::getId, &TrafficSign::setId);
 
