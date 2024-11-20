@@ -4,6 +4,7 @@
 #include <utility>
 #include <vector>
 
+#include "commonroad_cpp/roadNetwork/lanelet/lane_operations.h"
 #include <commonroad_cpp/world.h>
 
 World::World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
@@ -62,6 +63,10 @@ std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
 void World::setInitialLanes() {
     for (auto &obs : egoVehicles)
         obs->computeLanes(roadNetwork);
+    for (const auto &la : roadNetwork->getLaneletNetwork())
+        auto lanes{lane_operations::createLanesBySingleLanelets({la}, roadNetwork, 250, 250)};
+    for (const auto &lane : roadNetwork->getLanes())
+        auto l{lane->getCurvilinearCoordinateSystem()}; // This is a dummy call to ensure that the CCS is initialized
 }
 
 std::shared_ptr<size_t> World::getIdCounterRef() const { return std::make_shared<size_t>(idCounter); }
