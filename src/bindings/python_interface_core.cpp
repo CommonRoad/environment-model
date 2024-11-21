@@ -258,6 +258,7 @@ void init_python_interface_core(nb::module_ &m) {
                       std::vector<std::shared_ptr<Obstacle>>, double>())
         .def_prop_ro("time_step", &World::getTimeStep)
         .def_prop_ro("road_network", &World::getRoadNetwork)
+        .def_prop_ro("ego_vehicles", &World::getEgoVehicles)
         .def_prop_ro("obstacles", &World::getObstacles);
 
     m.def("create_world", &XMLReader::createWorldFromXML);
