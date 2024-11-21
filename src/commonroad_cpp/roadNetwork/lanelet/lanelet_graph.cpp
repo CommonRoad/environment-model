@@ -1,7 +1,3 @@
-//
-// Created by sebastian on 07.05.22.
-//
-
 #include <array>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h>
 #include <vector>
