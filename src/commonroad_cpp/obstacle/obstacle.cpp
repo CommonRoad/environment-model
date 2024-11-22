@@ -85,14 +85,7 @@ Obstacle::Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr
     if (obstacleRole == ObstacleRole::STATIC)
         setIsStatic(true);
 
-    if (this->trajectoryPrediction.empty())
-        finalTimeStep = this->currentState->getTimeStep();
-    else
-        finalTimeStep = std::max_element(this->trajectoryPrediction.begin(), this->trajectoryPrediction.end())->first;
-    if (trajectoryHistory.empty())
-        firstTimeStep = this->currentState->getTimeStep();
-    else
-        firstTimeStep = std::min_element(this->trajectoryHistory.begin(), this->trajectoryHistory.end())->first;
+    setFirstLastTimeStep();
 
     if (fov.empty()) {
         // TODO update default fov values
@@ -113,11 +106,9 @@ void Obstacle::setIsStatic(bool staticObstacle) {
 }
 
 void Obstacle::setCurrentState(const std::shared_ptr<State> &state) {
-    if (!currentState and trajectoryHistory.empty())
-        firstTimeStep = state->getTimeStep();
-    if (trajectoryPrediction.empty())
-        finalTimeStep = state->getTimeStep();
     currentState = state;
+    setFirstLastTimeStep();
+    removeTimeStepFromMappingVariables(state->getTimeStep());
 }
 
 void Obstacle::setObstacleType(ObstacleType type) { obstacleType = type; }
@@ -128,12 +119,14 @@ void Obstacle::setSensorParameters(SensorParameters params) { sensorParameters =
 
 void Obstacle::setTrajectoryPrediction(const Obstacle::state_map_t &trajPrediction) {
     trajectoryPrediction = trajPrediction;
-    finalTimeStep = std::max_element(trajectoryPrediction.begin(), trajectoryPrediction.end())->first;
+    setFirstLastTimeStep();
+    resetTimeMappingVariables();
 }
 
 void Obstacle::setTrajectoryHistory(const Obstacle::state_map_t &trajHistory) {
     trajectoryHistory = trajHistory;
-    firstTimeStep = std::min_element(trajectoryHistory.begin(), trajectoryHistory.end())->first;
+    setFirstLastTimeStep();
+    resetTimeMappingVariables();
 }
 
 void Obstacle::setRectangleShape(double length, double width) { geoShape = std::make_unique<Rectangle>(length, width); }
@@ -899,4 +892,53 @@ double Obstacle::getLateralDistanceToObstacle(time_step_t timeStep, const std::s
     lateralDistanceToObjects[timeStep][obs->getId()] = min;
 
     return min;
+}
+
+void Obstacle::resetTimeMappingVariables() {
+    occupiedLanelets.clear();
+    occupiedLaneletsFront.clear();
+    occupiedLaneletsBack.clear();
+    occupiedLanesDrivingDir.clear();
+    occupiedLanesDrivingDir.clear();
+    occupiedLaneletsDrivingDir.clear();
+    occupiedLaneletsNotDrivingDir.clear();
+    referenceLane.clear();
+    occupiedLanes.clear();
+    frontXYPositions.clear();
+    backXYPositions.clear();
+    leftLatPosition.clear();
+    rightLatPosition.clear();
+    lateralDistanceToObjects.clear();
+    convertedPositions.clear();
+    shapeAtTimeStep.clear();
+}
+
+void Obstacle::removeTimeStepFromMappingVariables(size_t timeStep) {
+    occupiedLanelets.erase(timeStep);
+    occupiedLaneletsFront.erase(timeStep);
+    occupiedLaneletsBack.erase(timeStep);
+    occupiedLanesDrivingDir.erase(timeStep);
+    occupiedLanesDrivingDir.erase(timeStep);
+    occupiedLaneletsDrivingDir.erase(timeStep);
+    occupiedLaneletsNotDrivingDir.erase(timeStep);
+    referenceLane.erase(timeStep);
+    occupiedLanes.erase(timeStep);
+    frontXYPositions.erase(timeStep);
+    backXYPositions.erase(timeStep);
+    leftLatPosition.erase(timeStep);
+    rightLatPosition.erase(timeStep);
+    lateralDistanceToObjects.erase(timeStep);
+    convertedPositions.erase(timeStep);
+    shapeAtTimeStep.erase(timeStep);
+}
+
+void Obstacle::setFirstLastTimeStep() {
+    if (this->trajectoryPrediction.empty())
+        finalTimeStep = this->currentState->getTimeStep();
+    else
+        finalTimeStep = std::max_element(this->trajectoryPrediction.begin(), this->trajectoryPrediction.end())->first;
+    if (trajectoryHistory.empty())
+        firstTimeStep = this->currentState->getTimeStep();
+    else
+        firstTimeStep = std::min_element(this->trajectoryHistory.begin(), this->trajectoryHistory.end())->first;
 }

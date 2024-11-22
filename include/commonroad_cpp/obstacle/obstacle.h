@@ -933,4 +933,21 @@ class Obstacle {
      */
     std::string ccsErrorMsg(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
                             const std::string &func) const;
+
+    /**
+     * Extracts first and last time step of obstacle.
+     */
+    void setFirstLastTimeStep();
+
+    /**
+     * Resets helper mappings for obstacle time steps.
+     */
+    void resetTimeMappingVariables();
+
+    /**
+     * Resets helper mappings for specific obstacle time step
+     *
+     * @param timeStep Relevant time step.
+     */
+    void removeTimeStepFromMappingVariables(size_t timeStep);
 };
