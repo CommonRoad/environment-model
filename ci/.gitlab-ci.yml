@@ -134,6 +134,17 @@ build-coverage:
       - build
     expire_in: 30 minutes
 
+.common-rules:
+  rules:
+    # Rule to disable a job for merge request pipelines (imitate default job behaviour)
+    - &skip_non_protected_pipeline
+      if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_REF_PROTECTED != "true"
+      when: never
+    - &skip_nightly_build_pipeline
+      if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_REF_PROTECTED != "true"
+      when: never
+    - if: &full_wheel_build_condition $CI_COMMIT_TAG || $CI_COMMIT_REF_PROTECTED == "true" || $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $CI_COMMIT_REF_NAME =~ /^(master|develop)$/
+
 build-sdist:
   stage: python
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
@@ -151,18 +162,11 @@ build-sdist:
     paths:
       - dist/*.tar.gz
     expire_in: 360 minutes
-
-.common-rules:
   rules:
-    # Rule to disable a job for merge request pipelines (imitate default job behaviour)
-    - &skip_merge_request_pipeline
-      if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: &full_wheel_build_condition $CI_COMMIT_TAG || $CI_COMMIT_REF_PROTECTED == "true" || $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $CI_COMMIT_REF_NAME =~ /^(master|develop)$/
+    - *skip_non_protected_pipeline
 
 build-wheel:
   stage: python
-  # Use the privileged runner as required for Docker-in-Docker (dind)
   tags:
     - dind
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
@@ -191,7 +195,7 @@ build-wheel:
       - wheelhouse/*.whl
     expire_in: 360 minutes
   rules:
-    - *skip_merge_request_pipeline
+    - *skip_non_protected_pipeline
     - if: *full_wheel_build_condition
       variables:
         CIBW_BUILD: "*"
@@ -201,8 +205,6 @@ build-wheel:
 
 upload-wheel:
   stage: publish
-  only:
-  - develop
   image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
   variables:
     TWINE_USERNAME: gitlab-ci-token
@@ -218,6 +220,8 @@ upload-wheel:
       artifacts: true
     - job: build-wheel
       artifacts: true
+  rules:
+    - *skip_nightly_build_pipeline
 
 ### tests ###
 test:
@@ -262,7 +266,7 @@ run-coverage:
           path: coverage.xml
 
 .install-python-venv: &install-python-venv
-    - apt-get update && apt-get install -y --no-install-recommends git python3-venv python3-pip
+    - apt-get update && apt-get install -y --no-install-recommends git python3-venv python3-pip ffmpeg libsm6 libxext6 build-essential git pkg-config wget libomp-dev gcovr doxygen graphviz cppcheck libeigen3-dev libboost-all-dev uuid-dev libcgal-dev libspdlog-dev ffmpeg default-jre default-jdk gcc
     - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
     - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de".insteadOf "ssh://git@gitlab.lrz.de"
     - python3 -m pip config set global.disable-pip-version-check true
@@ -291,7 +295,7 @@ run-coverage:
   variables:
     JOB_PYTHON_VERSION: "3.10"
   rules:
-    - *skip_merge_request_pipeline
+    - *skip_non_protected_pipeline
     - if: *full_wheel_build_condition
       when: never
     - when: on_success
@@ -301,7 +305,7 @@ run-coverage:
     matrix:
       - JOB_PYTHON_VERSION: ["3.9", "3.10", "3.11"]
   rules:
-    - *skip_merge_request_pipeline
+    - *skip_non_protected_pipeline
     - if: *full_wheel_build_condition
       when: on_success
     - when: never
@@ -314,13 +318,31 @@ test-python-manylinux-single:
 test-python-manylinux:
   <<: [ *test-python-common, *test-python-matrix ]
 
+test-python-general:
+  stage: test
+  image: python:${JOB_PYTHON_VERSION}-slim-bullseye
+  parallel:
+    matrix:
+      - JOB_PYTHON_VERSION: [ "3.9", "3.10", "3.11" ]
+  before_script:
+    - *install-python-venv
+    - python -m pip install ".[test]"
+  script:
+    - python -m pytest --junit-xml=pytest-report.xml tests/python
+  needs: []
+  artifacts:
+    reports:
+      junit: pytest-report.xml
+    expire_in: 30 minutes
 
 pages:
   stage: publish
+  image: python:3.11-slim-bullseye
   when: manual
   publish: site
-  script:
+  before_script:
     - *install-python-venv
+  script:
     - pip install ".[docs]"
     - mkdocs build
   artifacts:
@@ -333,8 +355,10 @@ pages:
 
 build_pages:
   stage: publish
-  script:
+  image: python:3.11-slim-bullseye
+  before_script:
     - *install-python-venv
+  script:
     - pip install ".[docs]"
     - mkdocs build
   artifacts:
