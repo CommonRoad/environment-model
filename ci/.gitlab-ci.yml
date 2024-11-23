@@ -138,10 +138,7 @@ build-coverage:
   rules:
     # Rule to disable a job for merge request pipelines (imitate default job behaviour)
     - &skip_non_protected_pipeline
-      if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_REF_PROTECTED != "true"
-      when: never
-    - &skip_nightly_build_pipeline
-      if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_REF_PROTECTED != "true"
+      if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_REF_PROTECTED != "true" || $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: &full_wheel_build_condition $CI_COMMIT_TAG || $CI_COMMIT_REF_PROTECTED == "true" || $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $CI_COMMIT_REF_NAME =~ /^(master|develop)$/
 
@@ -218,7 +215,7 @@ upload-wheel:
     - job: build-wheel
       artifacts: true
   rules:
-    - *skip_nightly_build_pipeline
+    - *skip_non_protected_pipeline
 
 ### tests ###
 test:
