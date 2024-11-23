@@ -216,6 +216,7 @@ upload-wheel:
       artifacts: true
   rules:
     - *skip_non_protected_pipeline
+    - when: on_success
 
 ### tests ###
 test:
