@@ -152,7 +152,6 @@ build-sdist:
     - python3 --version
     - git describe
     - python3 -m build --sdist
-  needs: []
   variables:
     # Necessary so that Git detects all tags
     GIT_STRATEGY: clone
@@ -162,8 +161,6 @@ build-sdist:
     paths:
       - dist/*.tar.gz
     expire_in: 360 minutes
-  rules:
-    - *skip_non_protected_pipeline
 
 build-wheel:
   stage: python
