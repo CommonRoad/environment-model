@@ -399,8 +399,12 @@ std::shared_ptr<Obstacle> createCommonObstaclePart(nb::handle py_singleObstacle)
         auto length{nb::cast<double>(py_obstacleShape.attr("length"))};
         auto width{nb::cast<double>(py_obstacleShape.attr("width"))};
         tempObstacle->setGeoShape(std::make_unique<Rectangle>(length, width));
+    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) ==
+               "Circle") { // TODO: add other shape types
+        auto radius{nb::cast<double>(py_obstacleShape.attr("radius"))};
+        tempObstacle->setGeoShape(std::make_unique<Circle>(radius));
     } else {
-        spdlog::error("Unknown obstacle shape (only circles, polygons and rectangles supported.");
+        spdlog::error("Unknown obstacle shape (only circles, polygons and rectangles supported).");
     }
     tempObstacle->setCurrentState(createInitialState(py_singleObstacle));
 
@@ -442,7 +446,6 @@ std::shared_ptr<SignalState> extractSignalState(nb::handle py_state) {
 std::shared_ptr<Obstacle> TranslatePythonTypes::createDynamicObstacle(nb::handle py_singleObstacle) {
     // TODO: add other prediction than trajectory prediction
     std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
-    tempObstacle->setActuatorParameters(ActuatorParameters::vehicleDefaults());
     if (nb::hasattr(py_singleObstacle.attr("prediction"), "trajectory"))
         for (const auto &py_state : py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list")) {
             tempObstacle->appendStateToTrajectoryPrediction(extractState(py_state));
@@ -455,8 +458,6 @@ std::shared_ptr<Obstacle> TranslatePythonTypes::createDynamicObstacle(nb::handle
     if (nb::hasattr(py_singleObstacle, "signal_series") and !py_singleObstacle.attr("signal_series").is_none())
         for (const auto &py_state : py_singleObstacle.attr("signal_series"))
             tempObstacle->appendSignalStateToSeries(extractSignalState(py_state));
-    tempObstacle->setSensorParameters(
-        SensorParameters{250.0, 250.0, 0.3}); // TODO replace with proper setting of sensor parameters
     return tempObstacle;
 }
 

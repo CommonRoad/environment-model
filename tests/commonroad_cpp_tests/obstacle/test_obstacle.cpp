@@ -3,6 +3,7 @@
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include <cmath>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+#include <commonroad_cpp/world.h>
 #include <map>
 #include <memory>
 #include <unordered_set>
@@ -358,6 +359,10 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario3) {
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     roadNetworkScenario->setIdCounterRef(globalIdRef);
     auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 500)};
+    obsOneScenario->setSensorParameters({250, 250, 0.3});
+    RoadNetworkParameters rp;
+    rp.numIntersectionsPerDirectionLaneGeneration = 2;
+    obsOneScenario->setRoadNetworkParameters(rp);
     EXPECT_EQ(53758,
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().front()->getId());
     EXPECT_EQ(53786, obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)
@@ -429,6 +434,62 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
               obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
 }
 
+TEST_F(ObstacleTest, SetReferenceGeneralScenario6) {
+    size_t timeStep{0};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/ZAM_CARLA-10/ZAM_CARLA-10_1_T-1.pb"};
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    size_t globalID{123456789};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    roadNetworkScenario->setIdCounterRef(globalIdRef);
+
+    auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 530)};
+    // obstacle 531 leaves road network -> do not use for tests
+    // sets occupied lanelet as lane as initial lanelet not part of new lane, e.g., in sidewalks where successors are
+    // wrongly assigned
+    EXPECT_EQ(1, obsOneScenario->getOccupiedLanes(roadNetworkScenario, timeStep).size());
+    EXPECT_EQ(1, obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().size());
+    EXPECT_EQ(295,
+              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().at(0)->getId());
+    EXPECT_EQ(295,
+              obsOneScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
+    // time step 121 of obstacle 530 results in wrong lane assignment as only real roads are considered for counting
+
+    timeStep = 0;
+    auto obsTwoScenario{obstacle_operations::getObstacleById(obstaclesScenario, 542)};
+    EXPECT_EQ(2, obsTwoScenario->getOccupiedLanes(roadNetworkScenario, timeStep).size());
+    EXPECT_EQ(5, obsTwoScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().size());
+    EXPECT_EQ(179,
+              obsTwoScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().at(0)->getId());
+    EXPECT_EQ(129,
+              obsTwoScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
+
+    timeStep = 121;
+    EXPECT_EQ(3, obsTwoScenario->getOccupiedLanes(roadNetworkScenario, timeStep).size());
+    EXPECT_EQ(5, obsTwoScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().size());
+    EXPECT_EQ(153,
+              obsTwoScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().at(0)->getId());
+    EXPECT_EQ(55,
+              obsTwoScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
+
+    timeStep = 0;
+    auto obsThreeScenario{obstacle_operations::getObstacleById(obstaclesScenario, 547)};
+    EXPECT_EQ(2, obsThreeScenario->getOccupiedLanes(roadNetworkScenario, timeStep).size());
+    EXPECT_EQ(5, obsThreeScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().size());
+    EXPECT_EQ(253,
+              obsThreeScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().at(0)->getId());
+    EXPECT_EQ(
+        73, obsThreeScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
+
+    timeStep = 34;
+    EXPECT_EQ(2, obsThreeScenario->getOccupiedLanes(roadNetworkScenario, timeStep).size());
+    EXPECT_EQ(6, obsThreeScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().size());
+    EXPECT_EQ(253,
+              obsThreeScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().at(0)->getId());
+    EXPECT_EQ(
+        76, obsThreeScenario->getReferenceLane(roadNetworkScenario, timeStep)->getContainedLanelets().back()->getId());
+}
+
 TEST_F(ObstacleTest, TestGetFirstTrajectoryTimeStep) {
     EXPECT_EQ(obstacleOne->getFirstTrajectoryTimeStep(), 1);
     EXPECT_THROW(obstacleTwo->getFirstTrajectoryTimeStep(), std::runtime_error);
@@ -463,15 +524,15 @@ TEST_F(ObstacleTest, testGetSignalStateByTimeStep) {
 }
 
 TEST_F(ObstacleTest, testGetFieldOfViewRearDistance) {
-    obstacleOne->setFieldOfViewRearDistance(77.5);
-    EXPECT_EQ(obstacleOne->getFieldOfViewRearDistance(), 77.5);
-    EXPECT_NE(obstacleOne->getFieldOfViewFrontDistance(), 77.5);
+    obstacleOne->setSensorParameters({77.5, 80.0, 0.3});
+    EXPECT_EQ(obstacleOne->getSensorParameters().getFieldOfViewRear(), 77.5);
+    EXPECT_NE(obstacleOne->getSensorParameters().getFieldOfViewFront(), 77.5);
 }
 
 TEST_F(ObstacleTest, testGetFieldOfViewFrontDistance) {
-    obstacleOne->setFieldOfViewFrontDistance(99.5);
-    EXPECT_EQ(obstacleOne->getFieldOfViewFrontDistance(), 99.5);
-    EXPECT_NE(obstacleOne->getFieldOfViewRearDistance(), 99.5);
+    obstacleOne->setSensorParameters({80.5, 77.5, 0.3});
+    EXPECT_EQ(obstacleOne->getSensorParameters().getFieldOfViewFront(), 77.5);
+    EXPECT_NE(obstacleOne->getSensorParameters().getFieldOfViewRear(), 77.5);
 }
 
 TEST_F(ObstacleTest, testGetFrontXYCoordinate) {

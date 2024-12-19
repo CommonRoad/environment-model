@@ -117,7 +117,11 @@ TEST_F(WorldTest, SetCurvilinearStates) {
                                   scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-    auto world1{World("USA_Peach-2_1_T-1", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1)};
+    RoadNetworkParameters roadParams;
+    roadParams.numIntersectionsPerDirectionLaneGeneration = 2;
+    auto world1{
+        World("USA_Peach-2_1_T-1", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1,
+              WorldParameters(roadParams, SensorParameters(250.0, 250.0, 0.3), ActuatorParameters::vehicleDefaults()))};
     EXPECT_NO_THROW(world1.setCurvilinearStates());
 }
 

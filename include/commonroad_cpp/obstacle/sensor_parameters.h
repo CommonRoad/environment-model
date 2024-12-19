@@ -11,15 +11,13 @@
  *
  */
 class SensorParameters {
-    double fieldOfViewRear{250.0};  //**< length of field of view provided by rear sensors */
-    double fieldOfViewFront{250.0}; //**< length of field of view provided by front sensors */
+    double fieldOfViewRear{100.0};  //**< length of field of view provided by rear sensors */
+    double fieldOfViewFront{150.0}; //**< length of field of view provided by front sensors */
 
     /** reaction time of obstacle in [s] */
     std::optional<double> reactionTime;
 
   public:
-    SensorParameters() = delete;
-
     /**
      * Complete constructor for SensorParameters.
      *
@@ -72,7 +70,7 @@ class SensorParameters {
      *
      * @return Default vehicle kinematic parameters.
      */
-    static SensorParameters dynamicDefaults() { return SensorParameters{250.0, 250.0, 0.3}; }
+    static SensorParameters dynamicDefaults() { return SensorParameters{100.0, 150.0, 0.3}; }
 
     /**
      * Default kinematic parameters for static obstacles:

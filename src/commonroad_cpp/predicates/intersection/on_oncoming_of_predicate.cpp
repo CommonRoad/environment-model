@@ -16,7 +16,7 @@ bool OnOncomingOfPredicate::booleanEvaluation(size_t timeStep, const std::shared
             auto angle{incom->getIncomingLanelets().at(0)->getOrientation().back()};
             auto angleDif{M_PI - std::abs(geometric_operations::subtractOrientations(
                                      angle, obstacleP->getStateByTimeStep(timeStep)->getGlobalOrientation()))};
-            if (std::abs(angleDif) < roadNetworkParameters.intersectionIncomingsSameOrientationDeviation)
+            if (std::abs(angleDif) < std::stod(additionalFunctionParameters.at(0)))
                 incomings.push_back(incom);
         }
     auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};

@@ -360,3 +360,10 @@ build_pages:
     paths:
       - site
   needs: []
+
+trigger_monitor:
+  stage: publish
+  only:
+    - develop
+  trigger:
+    project: cps/commonroad/commonroad-monitor

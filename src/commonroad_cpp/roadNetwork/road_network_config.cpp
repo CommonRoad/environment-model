@@ -8,5 +8,4 @@ void RoadNetworkParameters::checkParameterValidity() const {
     assert(stepsToResamplePolyline > 0);
     assert(cornerCuttingRefinements > 0);
     assert(projectionDomainLimit > 0.0);
-    assert(intersectionIncomingsSameOrientationDeviation > 0);
 }
