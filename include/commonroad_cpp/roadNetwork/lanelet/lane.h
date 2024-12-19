@@ -1,13 +1,11 @@
 #pragma once
 
-#include <memory> // for shared_ptr
+#include <memory>
 #include <mutex>
-#include <optional>
 #include <unordered_set>
-#include <vector> // for vector
+#include <vector>
 
 #include "lanelet.h"
-#include <commonroad_cpp/roadNetwork/road_network_config.h>
 #include <geometry/curvilinear_coordinate_system.h>
 
 namespace geometry {
@@ -63,7 +61,7 @@ class Lane : public Lanelet {
      *
      * @return Set of IDs of the lanelets contained in lane.
      */
-    [[nodiscard]] const std::unordered_set<size_t> &getContainedLaneletIDs() const;
+    [[nodiscard]] const std::set<size_t> &getContainedLaneletIDs() const;
 
     /**
      * Collects all successor lanelets within lane given a start lanelet.
@@ -97,12 +95,20 @@ class Lane : public Lanelet {
      */
     bool contains(std::vector<std::shared_ptr<Lanelet>> lanelets);
 
+    /**
+     * Checks whether provided lane is part of this lane.
+     *
+     * @param laneToCheck Lane to check if it is part of this lane
+     * @return Boolean indicating whether lane is part of this lane
+     */
+    bool isPartOf(const std::shared_ptr<Lane> &laneToCheck);
+
   private:
     mutable std::vector<std::shared_ptr<Lanelet>>
         containedLanelets; //**< list of pointers to lanelets constructing lane */
     mutable std::shared_ptr<CurvilinearCoordinateSystem>
-        curvilinearCoordinateSystem;                //**< curvilinear coordinate system defined by lane */
-    std::unordered_set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
+        curvilinearCoordinateSystem;      //**< curvilinear coordinate system defined by lane */
+    std::set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
 
     std::mutex ccs_lock;
 };

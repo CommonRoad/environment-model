@@ -14,6 +14,6 @@ struct RoadNetworkParameters {
     constexpr static const double projectionDomainLimit{
         20.0}; // maximum absolute distance of the projection domain border from the reference path
     constexpr static const size_t numAdditionalSegmentsCCS{
-        3}; // number of additional segments added at beginning to CCS
-    double intersectionIncomingsSameOrientationDeviation{0.75};
+        3};                                               // number of additional segments added at beginning to CCS
+    size_t numIntersectionsPerDirectionLaneGeneration{1}; // number of intersections considered for lane generation
 };

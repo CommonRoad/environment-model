@@ -2,7 +2,6 @@
 
 #include <cassert>
 #include <cmath>
-#include <optional>
 
 /*
  * TODO: Possible candidates for inclusion
@@ -31,18 +30,18 @@
  */
 class ActuatorParameters {
     /** maximum velocity of obstacle in m/s */
-    double vMax;
+    double vMax{50.0};
     /** maximum absolute acceleration of obstacle in [m/s^2] */
-    double aMax;
+    double aMax{3.0};
     /** maximal longitudinal acceleration of obstacle in [m/s^2] */
-    double aMaxLong;
+    double aMaxLong{3.0};
     /** minimal longitudinal acceleration of obstacle in [m/s^2] */
-    double aMinLong;
+    double aMinLong{-10.0};
     /** minimal (longitudinal) braking acceleration of obstacle in [m/s^2] */
-    double aBraking;
+    double aBraking{-5.0};
 
   public:
-    ActuatorParameters() = delete;
+    ActuatorParameters() = default;
 
     /**
      * Complete constructor for ActuatorParameters.
