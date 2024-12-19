@@ -24,7 +24,9 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
                              }) and
                 !std::any_of(simLaneletsK.begin(), simLaneletsK.end(),
                              [letP, world](const std::shared_ptr<Lanelet> &letSim) {
-                                 return intersection_operations::checkSameIncoming(letP, letSim);
+                                 return intersection_operations::checkSameIncoming(
+                                     letP, letSim, SensorParameters::dynamicDefaults().getFieldOfViewFront(),
+                                     1); // extend only until next intersection
                              }))
                 return true;
         }

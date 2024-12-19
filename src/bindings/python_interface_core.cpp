@@ -42,6 +42,19 @@ static std::string extractName(nb::handle py_scen) {
                 std::to_string(nb::cast<int>(py_scen.attr("prediction_id")))};
 }
 
+void updateTrajectory(Obstacle *t, const nb::handle &py_state_list) {
+    tsl::robin_map<time_step_t, std::shared_ptr<State>> trajectory;
+    for (const auto &py_state : py_state_list) {
+        auto state = TranslatePythonTypes::extractState(py_state);
+        trajectory[state->getTimeStep()] = state;
+    }
+    t->setTrajectoryPrediction(trajectory);
+}
+
+void updateCurrentState(Obstacle *t, const nb::handle &py_current_state) {
+    t->setCurrentState(TranslatePythonTypes::extractState(py_current_state));
+}
+
 void init_python_interface_core(nb::module_ &m) {
     nb::enum_<ObstacleType>(m, "ObstacleType")
         .value("unknown", ObstacleType::unknown)
@@ -111,6 +124,8 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_rw("flashing_blue_lights", &SignalState::isFlashingBlueLights, &SignalState::setFlashingBlueLights);
 
     nb::class_<ActuatorParameters>(m, "ActuatorParameters")
+        .def(nb::init<>())
+        .def(nb::init<double, double, double, double, double>())
         .def_prop_ro("v_max", &ActuatorParameters::getVmax)
         .def_prop_ro("a_max", &ActuatorParameters::getAmax)
         .def_prop_ro("a_max_long", &ActuatorParameters::getAmaxLong)
@@ -118,9 +133,22 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("a_braking", &ActuatorParameters::getAbraking);
 
     nb::class_<SensorParameters>(m, "SensorParameters")
+        .def(nb::init<>())
+        .def(nb::init<double, double, double>())
         .def_prop_ro("fov_front", &SensorParameters::getFieldOfViewFront)
         .def_prop_ro("fov_rear", &SensorParameters::getFieldOfViewRear)
         .def_prop_ro("reaction_time", &SensorParameters::getReactionTime);
+
+    nb::class_<RoadNetworkParameters>(m, "RoadNetworkParameters")
+        .def(nb::init<>())
+        .def_rw("num_intersections_per_direction_lane_generation",
+                &RoadNetworkParameters::numIntersectionsPerDirectionLaneGeneration);
+
+    nb::class_<WorldParameters>(m, "WorldParameters")
+        .def(nb::init<RoadNetworkParameters, SensorParameters, ActuatorParameters>())
+        .def_prop_ro("road_network_params", &WorldParameters::getRoadNetworkParams)
+        .def_prop_ro("sensor_params", &WorldParameters::getSensorParams)
+        .def_prop_ro("actuator_params", &WorldParameters::getActuatorParams);
 
     nb::class_<vertex>(m, "Vertex").def_rw("x", &vertex::x).def_rw("y", &vertex::y);
 
@@ -150,6 +178,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("current_signal_state", &Obstacle::getCurrentSignalState)
         .def("shape", &Obstacle::getGeoShape)
         .def("occupied_lanes", &Obstacle::getOccupiedLanes)
+        .def("occupied_lanelets", &Obstacle::getOccupiedLaneletsByShape)
         .def("driving_direction_lanes", &Obstacle::getOccupiedLanesDrivingDirection)
         .def("time_step_exists", &Obstacle::timeStepExists)
         .def_prop_rw("actuator_parameters", &Obstacle::getActuatorParameters, &Obstacle::setActuatorParameters)
@@ -157,24 +186,8 @@ void init_python_interface_core(nb::module_ &m) {
         .def("get_state_by_time_step", &Obstacle::getStateByTimeStep)
         .def("reference_lane_by_time_step", &Obstacle::getReferenceLane)
         .def("get_time_steps", &Obstacle::getTimeSteps)
-        .def(
-            "update_trajectory",
-            [](Obstacle *t, const nb::handle &py_state_list) {
-                tsl::robin_map<time_step_t, std::shared_ptr<State>> trajectory;
-                for (const auto &py_state : py_state_list) {
-                    auto state = TranslatePythonTypes::extractState(py_state);
-                    trajectory[state->getTimeStep()] = state;
-                }
-                t->setTrajectoryPrediction(trajectory);
-            },
-            "py_state_list")
-        .def(
-            "update_current_state",
-            [](Obstacle *t, const nb::handle &py_current_state) {
-                auto state = TranslatePythonTypes::extractState(py_current_state);
-                t->setCurrentState(state);
-            },
-            "py_current_state");
+        .def("update_trajectory", &updateTrajectory, "py_state_list")
+        .def("update_current_state", &updateCurrentState, "py_current_state");
 
     nb::class_<TrafficSign>(m, "TrafficSign").def_prop_rw("id", &TrafficSign::getId, &TrafficSign::setId);
 
@@ -184,6 +197,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_rw("id", &Lanelet::getId, &Lanelet::setId)
         .def_prop_rw("left_border_vertices", &Lanelet::getLeftBorderVertices, &Lanelet::setLeftBorderVertices)
         .def_prop_rw("right_border_vertices", &Lanelet::getRightBorderVertices, &Lanelet::setRightBorderVertices)
+        .def_prop_ro("center_vertices", &Lanelet::getCenterVertices)
         .def_prop_rw("lanelet_types", &Lanelet::getLaneletTypes, &Lanelet::setLaneletTypes)
         .def_prop_rw("line_marking_left", &Lanelet::getLineMarkingLeft, &Lanelet::setLineMarkingLeft)
         .def_prop_rw("line_marking_right", &Lanelet::getLineMarkingRight, &Lanelet::setLineMarkingRight)
@@ -204,58 +218,104 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("traffic_signs", &RoadNetwork::getTrafficSigns);
 
     nb::class_<World>(m, "World")
-        .def(
-            "__init__",
-            [](World *t, const std::string &scenarioName, size_t timeStep, double dt, const std::string &country,
-               const nb::handle &py_laneletNetwork, const nb::list &py_egoVehicles, const nb::list &py_obstacles) {
-                auto net{std::make_shared<RoadNetwork>(RoadNetwork({}))};
-                auto convertedCountry{RoadNetwork::matchStringToCountry(country)};
-                auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
-                auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
-                auto tempLaneletContainer = TranslatePythonTypes::convertLanelets(
-                    py_laneletNetwork, tempTrafficSignContainer, tempTrafficLightContainer);
-                auto tempIntersectionContainer =
-                    TranslatePythonTypes::convertIntersections(py_laneletNetwork, tempLaneletContainer);
-                auto roadNetwork =
-                    std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempTrafficSignContainer,
-                                                  tempTrafficLightContainer, tempIntersectionContainer);
-                for (const auto &intersection : roadNetwork->getIntersections())
-                    intersection->computeMemberLanelets(roadNetwork);
+        .def("__init__",
+             [](World *t, const std::string &scenarioName, size_t timeStep, double dt, const std::string &country,
+                const nb::handle &py_laneletNetwork, const nb::list &py_egoVehicles, const nb::list &py_obstacles) {
+                 auto net{std::make_shared<RoadNetwork>(RoadNetwork({}))};
+                 auto convertedCountry{RoadNetwork::matchStringToCountry(country)};
+                 auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
+                 auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
+                 auto tempLaneletContainer = TranslatePythonTypes::convertLanelets(
+                     py_laneletNetwork, tempTrafficSignContainer, tempTrafficLightContainer);
+                 auto tempIntersectionContainer =
+                     TranslatePythonTypes::convertIntersections(py_laneletNetwork, tempLaneletContainer);
+                 auto roadNetwork =
+                     std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempTrafficSignContainer,
+                                                   tempTrafficLightContainer, tempIntersectionContainer);
+                 for (const auto &intersection : roadNetwork->getIntersections())
+                     intersection->computeMemberLanelets(roadNetwork);
 
-                auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
-                auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles);
+                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
+                 auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles);
 
-                new (t) World(scenarioName, timeStep, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer, dt);
-            },
-            "scenarioName", "timeStep", "dt", "country", "py_laneletNetwork", "py_egoVehicles", "py_obstacles")
-        .def(
-            "__init__",
-            [](World *t, const nb::handle &py_scenario) {
-                auto py_laneletNetwork{py_scenario.attr("lanelet_network")};
-                std::string country{nb::cast<std::string>(py_scenario.attr("scenario_id").attr("country_id"))};
+                 new (t) World(scenarioName, timeStep, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer, dt);
+             })
+        .def("__init__",
+             [](World *t, const std::string &scenarioName, size_t timeStep, double dt, const std::string &country,
+                const nb::handle &py_laneletNetwork, const nb::list &py_egoVehicles, const nb::list &py_obstacles,
+                WorldParameters wp) {
+                 auto net{std::make_shared<RoadNetwork>(RoadNetwork({}))};
+                 auto convertedCountry{RoadNetwork::matchStringToCountry(country)};
+                 auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
+                 auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
+                 auto tempLaneletContainer = TranslatePythonTypes::convertLanelets(
+                     py_laneletNetwork, tempTrafficSignContainer, tempTrafficLightContainer);
+                 auto tempIntersectionContainer =
+                     TranslatePythonTypes::convertIntersections(py_laneletNetwork, tempLaneletContainer);
+                 auto roadNetwork =
+                     std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempTrafficSignContainer,
+                                                   tempTrafficLightContainer, tempIntersectionContainer);
+                 for (const auto &intersection : roadNetwork->getIntersections())
+                     intersection->computeMemberLanelets(roadNetwork);
 
-                auto net{std::make_shared<RoadNetwork>(RoadNetwork({}))};
-                auto convertedCountry{RoadNetwork::matchStringToCountry(country)};
-                auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
-                auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
-                auto tempLaneletContainer = TranslatePythonTypes::convertLanelets(
-                    py_laneletNetwork, tempTrafficSignContainer, tempTrafficLightContainer);
-                auto tempIntersectionContainer =
-                    TranslatePythonTypes::convertIntersections(py_laneletNetwork, tempLaneletContainer);
-                auto roadNetwork =
-                    std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempTrafficSignContainer,
-                                                  tempTrafficLightContainer, tempIntersectionContainer);
-                for (const auto &intersection : roadNetwork->getIntersections())
-                    intersection->computeMemberLanelets(roadNetwork);
+                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
+                 auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles);
 
-                auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_scenario.attr("obstacles"));
+                 new (t)
+                     World(scenarioName, timeStep, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer, dt, wp);
+             })
+        .def("__init__",
+             [](World *t, const nb::handle &py_scenario) {
+                 auto py_laneletNetwork{py_scenario.attr("lanelet_network")};
+                 std::string country{nb::cast<std::string>(py_scenario.attr("scenario_id").attr("country_id"))};
 
-                new (t) World(extractName(py_scenario.attr("scenario_id")), 0, roadNetwork, {}, tempObstacleContainer,
-                              nb::cast<double>(py_scenario.attr("dt")));
-            },
-            "py_scenario")
+                 auto net{std::make_shared<RoadNetwork>(RoadNetwork({}))};
+                 auto convertedCountry{RoadNetwork::matchStringToCountry(country)};
+                 auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
+                 auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
+                 auto tempLaneletContainer = TranslatePythonTypes::convertLanelets(
+                     py_laneletNetwork, tempTrafficSignContainer, tempTrafficLightContainer);
+                 auto tempIntersectionContainer =
+                     TranslatePythonTypes::convertIntersections(py_laneletNetwork, tempLaneletContainer);
+                 auto roadNetwork =
+                     std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempTrafficSignContainer,
+                                                   tempTrafficLightContainer, tempIntersectionContainer);
+                 for (const auto &intersection : roadNetwork->getIntersections())
+                     intersection->computeMemberLanelets(roadNetwork);
+
+                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_scenario.attr("obstacles"));
+
+                 new (t) World(extractName(py_scenario.attr("scenario_id")), 0, roadNetwork, {}, tempObstacleContainer,
+                               nb::cast<double>(py_scenario.attr("dt")));
+             })
+        .def("__init__",
+             [](World *t, const nb::handle &py_scenario, WorldParameters wp) {
+                 auto py_laneletNetwork{py_scenario.attr("lanelet_network")};
+                 std::string country{nb::cast<std::string>(py_scenario.attr("scenario_id").attr("country_id"))};
+
+                 auto net{std::make_shared<RoadNetwork>(RoadNetwork({}))};
+                 auto convertedCountry{RoadNetwork::matchStringToCountry(country)};
+                 auto tempTrafficSignContainer = TranslatePythonTypes::convertTrafficSigns(py_laneletNetwork);
+                 auto tempTrafficLightContainer = TranslatePythonTypes::convertTrafficLights(py_laneletNetwork);
+                 auto tempLaneletContainer = TranslatePythonTypes::convertLanelets(
+                     py_laneletNetwork, tempTrafficSignContainer, tempTrafficLightContainer);
+                 auto tempIntersectionContainer =
+                     TranslatePythonTypes::convertIntersections(py_laneletNetwork, tempLaneletContainer);
+                 auto roadNetwork =
+                     std::make_shared<RoadNetwork>(tempLaneletContainer, convertedCountry, tempTrafficSignContainer,
+                                                   tempTrafficLightContainer, tempIntersectionContainer);
+                 for (const auto &intersection : roadNetwork->getIntersections())
+                     intersection->computeMemberLanelets(roadNetwork);
+
+                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_scenario.attr("obstacles"));
+
+                 new (t) World(extractName(py_scenario.attr("scenario_id")), 0, roadNetwork, {}, tempObstacleContainer,
+                               nb::cast<double>(py_scenario.attr("dt")), wp);
+             })
         .def(nb::init<std::string, size_t, const std::shared_ptr<RoadNetwork> &, std::vector<std::shared_ptr<Obstacle>>,
                       std::vector<std::shared_ptr<Obstacle>>, double>())
+        .def(nb::init<std::string, size_t, const std::shared_ptr<RoadNetwork> &, std::vector<std::shared_ptr<Obstacle>>,
+                      std::vector<std::shared_ptr<Obstacle>>, double, WorldParameters>())
         .def_prop_ro("time_step", &World::getTimeStep)
         .def_prop_ro("road_network", &World::getRoadNetwork)
         .def_prop_ro("ego_vehicles", &World::getEgoVehicles)

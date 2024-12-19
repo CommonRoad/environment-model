@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "../road_network.h"
@@ -23,9 +16,10 @@ namespace lane_operations {
  * @param offset Offset from the beginning of the reference lanelet.
  * @return List containing a list of lanelets contained in lane.
  */
-std::vector<std::vector<std::shared_ptr<Lanelet>>> combineLaneletAndSuccessorsToLane(
-    const std::shared_ptr<Lanelet> &curLanelet, double fov = 250, int numIntersections = 2,
-    const std::vector<std::shared_ptr<Lanelet>> &containedLanelets = {}, double offset = 0.0);
+std::vector<std::vector<std::shared_ptr<Lanelet>>>
+combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov, int numIntersections,
+                                  const std::vector<std::shared_ptr<Lanelet>> &containedLanelets = {},
+                                  double offset = 0.0);
 
 /**
  * Combines a lanelet and all its predecessors to lanes. For each predecessor lanelet a new lane is created. The
@@ -39,8 +33,7 @@ std::vector<std::vector<std::shared_ptr<Lanelet>>> combineLaneletAndSuccessorsTo
  * @return List containing a list of lanelets contained in lane.
  */
 std::vector<std::vector<std::shared_ptr<Lanelet>>>
-combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov = 250,
-                                    int numIntersections = 2,
+combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov, int numIntersections,
                                     std::vector<std::shared_ptr<Lanelet>> containedLanelets = {}, double offset = 0.0);
 
 /**
@@ -56,8 +49,8 @@ combineLaneletAndPredecessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, 
  */
 std::vector<std::shared_ptr<Lane>>
 createLanesBySingleLanelets(const std::vector<std::shared_ptr<Lanelet>> &initialLanelets,
-                            const std::shared_ptr<RoadNetwork> &roadNetwork, double fovRear = 250,
-                            double fovFront = 250, int numIntersections = 2, vertex position = {});
+                            const std::shared_ptr<RoadNetwork> &roadNetwork, double fovRear, double fovFront,
+                            int numIntersections, vertex position);
 
 /**
  * Creates lane objects given set of lanelets which form lane.

@@ -50,8 +50,8 @@ TEST_F(RoadNetworkTest, AddLanes) {
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     roadNetworkScenario->setIdCounterRef(globalIdRef);
-    auto lanes{
-        lane_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, roadNetworkScenario)};
+    auto lanes{lane_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)},
+                                                            roadNetworkScenario, 250, 250, 1, {})};
     auto updatedLanes{roadNetworkScenario->addLanes(lanes, 10)};
     EXPECT_EQ(lanes.size(), 3);
     EXPECT_EQ(lanes.size(), updatedLanes.size());
@@ -59,8 +59,8 @@ TEST_F(RoadNetworkTest, AddLanes) {
     EXPECT_EQ(lanes.at(1)->getId(), 123456789 + 2);
     EXPECT_EQ(lanes.at(2)->getId(), 123456789 + 3);
 
-    lanes =
-        lane_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, roadNetworkScenario);
+    lanes = lane_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, roadNetworkScenario,
+                                                         250, 250, 1, {});
     Lanelet let{100000, lanes.at(0)->getLeftBorderVertices(), lanes.at(0)->getRightBorderVertices(),
                 lanes.at(0)->getLaneletTypes()};
     geometry::EigenPolyline reference_path;

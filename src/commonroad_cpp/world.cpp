@@ -6,12 +6,13 @@
 
 #include "commonroad_cpp/roadNetwork/lanelet/lane_operations.h"
 #include <commonroad_cpp/world.h>
+#include <spdlog/spdlog.h>
 
 World::World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
              std::vector<std::shared_ptr<Obstacle>> egos, std::vector<std::shared_ptr<Obstacle>> otherObstacles,
-             double timeStepSize)
+             double timeStepSize, const WorldParameters &worldParams)
     : name(std::move(name)), timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egos)),
-      obstacles(std::move(otherObstacles)), dt(timeStepSize) {
+      obstacles(std::move(otherObstacles)), dt(timeStepSize), worldParameters(worldParams) {
     for (const auto &lane : roadNetwork->getLanes())
         idCounter = std::max(idCounter, lane->getId());
     for (const auto &lanelet : roadNetwork->getLaneletNetwork())
@@ -20,6 +21,18 @@ World::World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwor
         idCounter = std::max(idCounter, obs->getId());
     for (const auto &obs : obstacles)
         idCounter = std::max(idCounter, obs->getId());
+    if (!worldParams.hasDefaultParams()) {
+        for (const auto &obs : obstacles) {
+            obs->setActuatorParameters(worldParams.getActuatorParams());
+            obs->setSensorParameters(worldParams.getSensorParams());
+            obs->setRoadNetworkParameters(worldParams.getRoadNetworkParams());
+        }
+        for (const auto &obs : egoVehicles) {
+            obs->setActuatorParameters(worldParams.getActuatorParams());
+            obs->setSensorParameters(worldParams.getSensorParams());
+            obs->setRoadNetworkParameters(worldParams.getRoadNetworkParams());
+        }
+    }
     roadNetwork->setIdCounterRef(std::make_shared<size_t>(idCounter));
     setInitialLanes();
     initMissingInformation();
@@ -61,12 +74,25 @@ std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
 }
 
 void World::setInitialLanes() {
+    // create lanes occupied by ego vehicle
     for (auto &obs : egoVehicles)
         obs->computeLanes(roadNetwork);
+    // create lanes for each lanelet as initial lanelet
     for (const auto &la : roadNetwork->getLaneletNetwork())
-        auto lanes{lane_operations::createLanesBySingleLanelets({la}, roadNetwork, 250, 250)};
+        auto lanes{lane_operations::createLanesBySingleLanelets(
+            {la}, roadNetwork, worldParameters.getSensorParams().getFieldOfViewFront(),
+            worldParameters.getSensorParams().getFieldOfViewRear(),
+            worldParameters.getRoadNetworkParams().numIntersectionsPerDirectionLaneGeneration, {})};
+    // initialize curvilinear coordinate system for each lane
     for (const auto &lane : roadNetwork->getLanes())
-        auto l{lane->getCurvilinearCoordinateSystem()}; // This is a dummy call to ensure that the CCS is initialized
+        try {
+            auto l{
+                lane->getCurvilinearCoordinateSystem()}; // This is a dummy call to ensure that the CCS is initialized
+        } catch (const std::runtime_error &e) {
+            spdlog::error("World::setInitialLanes: Error while setting initial lanes: {}", e.what());
+        } catch (...) {
+            spdlog::error("World::setInitialLanes: Error while setting initial lanes.");
+        }
 }
 
 std::shared_ptr<size_t> World::getIdCounterRef() const { return std::make_shared<size_t>(idCounter); }
@@ -89,7 +115,7 @@ void World::setEgoVehicles(std::vector<size_t> &egos) {
             egoVehicles.push_back(*itr);
             obstacles.erase(itr);
         } else
-            throw std::runtime_error("PythonInterface::createScenario: Unknwon ego ID.");
+            throw std::runtime_error("PythonInterface::createScenario: Unknown ego ID.");
     }
 }
 

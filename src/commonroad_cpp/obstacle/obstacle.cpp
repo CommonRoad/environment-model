@@ -117,6 +117,8 @@ void Obstacle::setActuatorParameters(ActuatorParameters params) { actuatorParame
 
 void Obstacle::setSensorParameters(SensorParameters params) { sensorParameters = params; }
 
+void Obstacle::setRoadNetworkParameters(RoadNetworkParameters params) { roadNetworkParameters = params; };
+
 void Obstacle::setTrajectoryPrediction(const Obstacle::state_map_t &trajPrediction) {
     trajectoryPrediction = trajPrediction;
     setFirstLastTimeStep();
@@ -186,34 +188,21 @@ ObstacleType Obstacle::getObstacleType() const { return obstacleType; }
 
 ObstacleRole Obstacle::getObstacleRole() const { return obstacleRole; }
 
-ActuatorParameters Obstacle::getActuatorParameters() const { return *actuatorParameters; }
+ActuatorParameters Obstacle::getActuatorParameters() const { return actuatorParameters; }
 
-SensorParameters Obstacle::getSensorParameters() const { return *sensorParameters; }
+SensorParameters Obstacle::getSensorParameters() const { return sensorParameters; }
 
-double Obstacle::getVmax() const {
-    assert(actuatorParameters);
-    return actuatorParameters->getVmax();
-}
+RoadNetworkParameters Obstacle::getRoadNetworkParameters() const { return roadNetworkParameters; };
 
-double Obstacle::getAmax() const {
-    assert(actuatorParameters);
-    return actuatorParameters->getAmax();
-}
+double Obstacle::getVmax() const { return actuatorParameters.getVmax(); }
 
-double Obstacle::getAmaxLong() const {
-    assert(actuatorParameters);
-    return actuatorParameters->getAmaxLong();
-}
+double Obstacle::getAmax() const { return actuatorParameters.getAmax(); }
 
-double Obstacle::getAminLong() const {
-    assert(actuatorParameters);
-    return actuatorParameters->getAminLong();
-}
+double Obstacle::getAmaxLong() const { return actuatorParameters.getAmaxLong(); }
 
-std::optional<double> Obstacle::getReactionTime() const {
-    assert(sensorParameters);
-    return sensorParameters->getReactionTime();
-}
+double Obstacle::getAminLong() const { return actuatorParameters.getAminLong(); }
+
+std::optional<double> Obstacle::getReactionTime() const { return sensorParameters.getReactionTime(); }
 
 std::vector<size_t> Obstacle::getPredictionTimeSteps() {
     std::vector<size_t> timeSteps;
@@ -304,6 +293,16 @@ Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNet
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     return setOccupiedLaneletsByShape(roadNetwork, timeStep);
+}
+
+std::vector<std::shared_ptr<Lanelet>>
+Obstacle::getOccupiedLaneletsByState(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+    if (occupiedLaneletsState.find(timeStep) != occupiedLaneletsState.end())
+        return occupiedLaneletsState.at(timeStep);
+    std::vector<std::shared_ptr<Lanelet>> occ{roadNetwork->findLaneletsByPosition(
+        getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition())};
+    occupiedLaneletsState.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occ));
+    return occ;
 }
 
 std::vector<std::shared_ptr<Lanelet>>
@@ -578,9 +577,9 @@ void Obstacle::setObstacleRole(ObstacleRole type) { obstacleRole = type; }
 
 void Obstacle::setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
     auto lanelets{getOccupiedLaneletsRoadByShape(roadNetwork, timeStep)};
-    assert(sensorParameters);
     std::vector<std::shared_ptr<Lane>> occLanes{lane_operations::createLanesBySingleLanelets(
-        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront(), 2,
+        lanelets, roadNetwork, sensorParameters.getFieldOfViewRear(), sensorParameters.getFieldOfViewFront(),
+        roadNetworkParameters.numIntersectionsPerDirectionLaneGeneration,
         {getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition()})};
     occupiedLanes[timeStep] = occLanes;
 }
@@ -633,10 +632,11 @@ std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedRoadLanes(const std::sha
     if (occLanes.size() == 1)
         return occLanes;
     else {
+        auto ref{getReferenceLane(roadNetwork, timeStep)};
         auto occLanelets{getOccupiedLaneletsRoadByShape(roadNetwork, timeStep)};
         std::vector<std::shared_ptr<Lane>> relevantLanes;
         for (const auto &lane : occLanes) {
-            if (lane->getId() == getReferenceLane(roadNetwork, timeStep)->getId()) {
+            if (lane->getId() == ref->getId() or lane->isPartOf(ref) or ref->isPartOf(lane)) {
                 relevantLanes.push_back(lane);
                 continue;
             }
@@ -693,9 +693,9 @@ Obstacle::getOccupiedLanesAndAdjacent(const std::shared_ptr<RoadNetwork> &roadNe
     for (const auto &id : relevantLanelets)
         lanelets.push_back(roadNetwork->findLaneletById(id));
 
-    assert(sensorParameters);
     std::vector<std::shared_ptr<Lane>> occLanes{lane_operations::createLanesBySingleLanelets(
-        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront(), 2,
+        lanelets, roadNetwork, sensorParameters.getFieldOfViewRear(), sensorParameters.getFieldOfViewFront(),
+        roadNetworkParameters.numIntersectionsPerDirectionLaneGeneration,
         {getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition()})};
 
     return occLanes;
@@ -705,7 +705,8 @@ void Obstacle::computeLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, boo
     const size_t timeStamp{currentState->getTimeStep()};
     auto lanelets{getOccupiedLaneletsByShape(roadNetwork, timeStamp)};
     auto lanes{lane_operations::createLanesBySingleLanelets(
-        lanelets, roadNetwork, sensorParameters->getFieldOfViewRear(), sensorParameters->getFieldOfViewFront())};
+        lanelets, roadNetwork, sensorParameters.getFieldOfViewRear(), sensorParameters.getFieldOfViewFront(),
+        roadNetworkParameters.numIntersectionsPerDirectionLaneGeneration, {})};
     setOccupiedLanes(lanes, timeStamp);
     if (!isStatic()) {
         for (const auto &time : getPredictionTimeSteps())
@@ -838,14 +839,6 @@ std::vector<std::shared_ptr<State>> Obstacle::trajectoryAsVector() const {
     return trajectory;
 }
 
-double Obstacle::getFieldOfViewRearDistance() const { return fieldOfViewRear; }
-
-double Obstacle::getFieldOfViewFrontDistance() const { return fieldOfViewFront; }
-
-void Obstacle::setFieldOfViewRearDistance(double distance) { fieldOfViewRear = distance; }
-
-void Obstacle::setFieldOfViewFrontDistance(double distance) { fieldOfViewFront = distance; }
-
 size_t Obstacle::getFirstTimeStep() const { return firstTimeStep; }
 
 size_t Obstacle::getFinalTimeStep() const { return finalTimeStep; }
@@ -896,6 +889,7 @@ double Obstacle::getLateralDistanceToObstacle(time_step_t timeStep, const std::s
 
 void Obstacle::resetTimeMappingVariables() {
     occupiedLanelets.clear();
+    occupiedLaneletsState.clear();
     occupiedLaneletsFront.clear();
     occupiedLaneletsBack.clear();
     occupiedLanesDrivingDir.clear();
@@ -915,6 +909,7 @@ void Obstacle::resetTimeMappingVariables() {
 
 void Obstacle::removeTimeStepFromMappingVariables(size_t timeStep) {
     occupiedLanelets.erase(timeStep);
+    occupiedLaneletsState.clear();
     occupiedLaneletsFront.erase(timeStep);
     occupiedLaneletsBack.erase(timeStep);
     occupiedLanesDrivingDir.erase(timeStep);

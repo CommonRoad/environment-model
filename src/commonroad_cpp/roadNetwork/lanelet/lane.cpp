@@ -1,6 +1,6 @@
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-
+#include <commonroad_cpp/roadNetwork/road_network_config.h>
 #include <geometry/curvilinear_coordinate_system.h>
 #include <utility>
 
@@ -60,7 +60,7 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
     return curvilinearCoordinateSystem;
 }
 
-const std::unordered_set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
+const std::set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
 
 bool Lane::containsLanelet(const std::shared_ptr<Lanelet> &lanelet) const { return containsLanelet(lanelet->getId()); }
 
@@ -74,11 +74,16 @@ std::vector<std::shared_ptr<Lanelet>> Lane::getSuccessorLanelets(const std::shar
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
     auto succs{lanelet->getSuccessors()};
     while (!succs.empty())
-        for (const auto &suc : succs) {
+        for (auto it = succs.begin(); it != succs.end(); ++it) {
+            const auto &suc = *it;
             if (getContainedLaneletIDs().find(suc->getId()) != getContainedLaneletIDs().end()) {
                 relevantLanelets.push_back(suc);
                 succs = relevantLanelets.back()->getSuccessors();
                 break;
+            } else {
+                it = succs.erase(it);
+                if (it == succs.end())
+                    break;
             }
         }
 
@@ -90,4 +95,9 @@ bool Lane::contains(std::vector<std::shared_ptr<Lanelet>> lanelets) {
     return std::any_of(lanelets.begin(), lanelets.end(), [containedLaneletIdsTmp](const std::shared_ptr<Lanelet> &let) {
         return containedLaneletIdsTmp.find(let->getId()) != containedLaneletIdsTmp.end();
     });
+}
+
+bool Lane::isPartOf(const std::shared_ptr<Lane> &laneToCheck) {
+    return std::includes(containedLaneletIds.begin(), containedLaneletIds.end(),
+                         laneToCheck->getContainedLaneletIDs().begin(), laneToCheck->getContainedLaneletIDs().end());
 }

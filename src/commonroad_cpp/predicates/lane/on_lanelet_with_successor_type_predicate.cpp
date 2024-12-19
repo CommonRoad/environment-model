@@ -19,8 +19,10 @@ bool OnLaneletWithSuccessorTypePredicate::booleanEvaluation(
         auto idx{lanelet->findClosestIndex(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
                                            obstacleK->getStateByTimeStep(timeStep)->getYPosition(), true)};
         std::vector<std::vector<std::shared_ptr<Lanelet>>> successors =
-            lane_operations::combineLaneletAndSuccessorsToLane(lanelet, obstacleK->getFieldOfViewFrontDistance(), 2, {},
-                                                               -lanelet->getPathLength().at(idx));
+            lane_operations::combineLaneletAndSuccessorsToLane(
+                lanelet, obstacleK->getSensorParameters().getFieldOfViewFront(),
+                obstacleK->getRoadNetworkParameters().numIntersectionsPerDirectionLaneGeneration, {},
+                -lanelet->getPathLength().at(idx));
         for (auto &vec : successors) {
             for (auto &lane : vec) {
                 if (lane->hasLaneletType(
