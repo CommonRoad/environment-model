@@ -1,7 +1,3 @@
-//
-// Created by valentin on 26.04.23.
-//
-
 #include "commonroad_cpp/obstacle/state_meta_info.h"
 
 StateMetaInfo::StateMetaInfo() = default;

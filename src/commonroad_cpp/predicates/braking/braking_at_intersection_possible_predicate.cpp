@@ -20,7 +20,10 @@ bool BrakingAtIntersectionPossiblePredicate::booleanEvaluation(
     double brakingDistance{std::pow(obstacleK->getStateByTimeStep(timeStep)->getVelocity(), 2) /
                            (2 * abs(parameters.getParam("intersectionBrakingPossible")))};
     for (const auto &lane : lane_operations::createLanesBySingleLanelets(
-             obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep), world->getRoadNetwork())) {
+             obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep), world->getRoadNetwork(),
+             obstacleK->getSensorParameters().getFieldOfViewRear(),
+             obstacleK->getSensorParameters().getFieldOfViewFront(),
+             obstacleK->getRoadNetworkParameters().numIntersectionsPerDirectionLaneGeneration, {})) {
         for (const auto &letLane : lane->getContainedLanelets()) {
             if (letLane->hasLaneletType(LaneletType::incoming)) {
                 auto curvPos{lane->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(

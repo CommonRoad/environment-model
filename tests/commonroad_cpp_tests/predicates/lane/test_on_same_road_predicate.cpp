@@ -21,13 +21,19 @@ void TestOnSameRoadPredicate::SetUp() {
     std::shared_ptr<State> stateThreeObstacleEgo = std::make_shared<State>(3, 116, 2, 2, 0, 0, 0, 116, 0);
     std::shared_ptr<State> stateFourObstacleEgo = std::make_shared<State>(4, 118, 2, 2, 0, 0, 0, 118, 0);
     std::shared_ptr<State> stateFiveObstacleEgo = std::make_shared<State>(5, 120, 2, 2, 0, 0, 0, 120, 0);
+    std::shared_ptr<State> stateSixObstacleEgo = std::make_shared<State>(6, 121, 2, 2, 0, 0, 0, 120, 0);
+    std::shared_ptr<State> stateSevenObstacleEgo = std::make_shared<State>(7, 122, 2, 2, 0, 0, 0, 120, 0);
+    std::shared_ptr<State> stateEightObstacleEgo = std::make_shared<State>(8, 123, 2, 2, 0, 0, 0, 120, 0);
     Obstacle::state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleEgo),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleEgo),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleEgo),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleEgo),
         std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleEgo),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleEgo)};
+        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleEgo),
+        std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleEgo),
+        std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleEgo),
+        std::pair<int, std::shared_ptr<State>>(8, stateSevenObstacleEgo)};
     obstacleEgo = std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleEgo, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
@@ -37,13 +43,19 @@ void TestOnSameRoadPredicate::SetUp() {
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 118, 2, 1, 0, 0, 0, 119.5, 0);
     std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 119, 2, 1, 0, 0, 0, 121, 0);
     std::shared_ptr<State> stateFiveObstacleOne = std::make_shared<State>(5, 120, 2, 1, 0, 0, 0, 122.5, 0);
+    std::shared_ptr<State> stateSixObstacleOne = std::make_shared<State>(6, 199, 2, 1, 0, 0, 0, 122.5, 0);
+    std::shared_ptr<State> stateSevenObstacleOne = std::make_shared<State>(7, 201, 2, 1, 0, 0, 0, 122.5, 0);
+    std::shared_ptr<State> stateEightObstacleOne = std::make_shared<State>(8, 250, 2, 1, 0, 0, 0, 122.5, 0);
     Obstacle::state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
         std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
         std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne)};
+        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleOne),
+        std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleOne)};
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
 
@@ -197,6 +209,13 @@ TEST_F(TestOnSameRoadPredicate, BooleanEvaluationObjectsMultilane) {
 
     EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleFour, obstacleOne));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne, obstacleFour));
+
+    // obstacle only partially on road network
+    EXPECT_TRUE(pred.booleanEvaluation(6, world, obstacleEgo, obstacleOne));
+    // obstacle partially on road network but state not
+    EXPECT_FALSE(pred.booleanEvaluation(7, world, obstacleEgo, obstacleOne));
+    // obstacle not on road network
+    EXPECT_FALSE(pred.booleanEvaluation(8, world, obstacleEgo, obstacleOne));
 }
 
 TEST_F(TestOnSameRoadPredicate, BooleanEvaluationDifferentIntersectionIncoming) {
@@ -264,7 +283,8 @@ TEST_F(TestOnSameRoadPredicate, BooleanEvaluationDifferentIntersectionIncoming) 
 
     EXPECT_FALSE(pred.booleanEvaluation(0, worldFourWay, egoVehicle, obs1));
     EXPECT_FALSE(pred.booleanEvaluation(1, worldFourWay, egoVehicle, obs1));
-    EXPECT_TRUE(pred.booleanEvaluation(2, worldFourWay, egoVehicle, obs1));
+    EXPECT_FALSE(pred.booleanEvaluation(2, worldFourWay, egoVehicle,
+                                        obs1)); // the state must be in the road; otherwise css errors might happen
     EXPECT_TRUE(pred.booleanEvaluation(3, worldFourWay, egoVehicle, obs1));
     EXPECT_TRUE(pred.booleanEvaluation(4, worldFourWay, egoVehicle, obs1));
     EXPECT_FALSE(pred.booleanEvaluation(0, worldFourWay, obs1, egoVehicle));
