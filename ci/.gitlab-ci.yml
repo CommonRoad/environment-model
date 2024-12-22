@@ -367,3 +367,5 @@ trigger_monitor:
     - develop
   trigger:
     project: cps/commonroad/commonroad-monitor
+    forward:
+      pipeline_variables: true
