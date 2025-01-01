@@ -1,16 +1,9 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/world.h>
-
-#include <commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 bool BrakingAtIntersectionPossiblePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

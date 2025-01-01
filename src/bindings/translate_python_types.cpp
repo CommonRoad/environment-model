@@ -4,6 +4,8 @@
 #include "nanobind/ndarray.h"
 #include "translate_python_types.h"
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
+#include <commonroad_cpp/geometry/circle.h>
+#include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <nanobind/stl/list.h>
@@ -447,9 +449,8 @@ std::shared_ptr<Obstacle> TranslatePythonTypes::createDynamicObstacle(nb::handle
     // TODO: add other prediction than trajectory prediction
     std::shared_ptr<Obstacle> tempObstacle = createCommonObstaclePart(py_singleObstacle);
     if (nb::hasattr(py_singleObstacle.attr("prediction"), "trajectory"))
-        for (const auto &py_state : py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list")) {
+        for (const auto &py_state : py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list"))
             tempObstacle->appendStateToTrajectoryPrediction(extractState(py_state));
-        }
     else
         spdlog::error("We currently only support trajectory predictions.");
     if (nb::hasattr(py_singleObstacle, "initial_signal_state") and
@@ -458,6 +459,9 @@ std::shared_ptr<Obstacle> TranslatePythonTypes::createDynamicObstacle(nb::handle
     if (nb::hasattr(py_singleObstacle, "signal_series") and !py_singleObstacle.attr("signal_series").is_none())
         for (const auto &py_state : py_singleObstacle.attr("signal_series"))
             tempObstacle->appendSignalStateToSeries(extractSignalState(py_state));
+    if (nb::hasattr(py_singleObstacle, "history") and !py_singleObstacle.attr("history").is_none())
+        for (const auto &py_state : py_singleObstacle.attr("history"))
+            tempObstacle->appendStateToHistory(extractState(py_state));
     return tempObstacle;
 }
 
@@ -467,7 +471,8 @@ std::shared_ptr<Obstacle> TranslatePythonTypes::createStaticObstacle(nb::handle 
     return tempObstacle;
 }
 
-std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertObstacles(const nb::list &py_obstacle_list) {
+std::vector<std::shared_ptr<Obstacle>>
+TranslatePythonTypes::convertObstacles(const nb::list &py_obstacle_list, const WorldParameters &worldParams, bool ego) {
     std::vector<std::shared_ptr<Obstacle>> tempObstacleContainer{};
 
     size_t arrayIndex{0};
@@ -482,6 +487,18 @@ std::vector<std::shared_ptr<Obstacle>> TranslatePythonTypes::convertObstacles(co
         else if (obstacleRole == "static")
             tempObstacleContainer[arrayIndex] = createStaticObstacle(py_singleObstacle);
         arrayIndex++;
+    }
+
+    if (!worldParams.hasDefaultParams()) {
+        for (const auto &obs : tempObstacleContainer) {
+            if (ego)
+                obs->setActuatorParameters(worldParams.getActuatorParamsEgo());
+            else
+                obs->setActuatorParameters(worldParams.getActuatorParamsObstacles());
+            obs->setSensorParameters(worldParams.getSensorParams());
+            obs->setRoadNetworkParameters(worldParams.getRoadNetworkParams());
+            obs->setTimeParameters(worldParams.getTimeParams());
+        }
     }
 
     return tempObstacleContainer;

@@ -1,8 +1,7 @@
+#include <boost/algorithm/string.hpp>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
-
 #include <filesystem>
-#include <iostream>
 #include <spdlog/spdlog.h>
 
 namespace {

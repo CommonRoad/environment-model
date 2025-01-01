@@ -22,7 +22,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     aMaxObstacleOne = 5.0;
     aMaxLongObstacleOne = 4.9;
     aMinLongObstacleOne = -10.5;
-    reactionTimeObstacleOne = 0.5;
+    reactionTimeObstacleOne = 0.3;
     widthObstacleOne = 2.0;
     lengthObstacleOne = 4.0;
     occupiedLaneObstacleOne.insert(std::pair<int, std::shared_ptr<Lane>>(0, laneOne));
@@ -45,7 +45,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->setObstacleType(obstacleTypeObstacleOne);
     ActuatorParameters actuatorParamsObstacleOne(vMaxObstacleOne, aMaxObstacleOne, aMaxLongObstacleOne,
                                                  aMinLongObstacleOne, aMinLongObstacleOne);
-    SensorParameters sensorParamsObstacleOne(reactionTimeObstacleOne);
+    SensorParameters sensorParamsObstacleOne{SensorParameters::dynamicDefaults()};
     obstacleOne->setActuatorParameters(actuatorParamsObstacleOne);
     obstacleOne->setSensorParameters(sensorParamsObstacleOne);
     obstacleOne->appendStateToHistory(stateOne);
@@ -60,8 +60,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     aMaxObstacleTwo = 2.5;
     aMaxLongObstacleTwo = 2.0;
     aMinLongObstacleTwo = -8.0;
-    // NOTE: Static obstacles have reactionTime = std::nullopt
-    reactionTimeObstacleTwo = std::nullopt;
+    reactionTimeObstacleTwo = 0.3;
     widthObstacleTwo = 2.5;
     lengthObstacleTwo = 10.0;
     obstacleTwo =
@@ -164,8 +163,8 @@ void ObstacleTestInitialization::setUpObstacles() {
                                             10, 3, -10, 0.3, trajectoryPredictionObstacleFive, 8, 2));
     obstacleSix = std::make_shared<Obstacle>(Obstacle(6, ObstacleRole::DYNAMIC, stateSevenObstacleSix,
                                                       ObstacleType::pedestrian, ActuatorParameters{50, 10, 3, -10, -10},
-                                                      SensorParameters{250.0, 250.0, 0.3}, {},
-                                                      std::make_unique<Circle>(Circle(1)), {}));
+                                                      SensorParameters{250.0, 250.0}, TimeParameters::dynamicDefaults(),
+                                                      {}, std::make_unique<Circle>(Circle(1)), {}));
     obstacleSeven =
         std::make_shared<Obstacle>(Obstacle(7, ObstacleRole::DYNAMIC, stateZeroObstacleSeven, ObstacleType::car, 50, 10,
                                             3, -10, 0.3, trajectoryPredictionObstacleSeven, 5, 2));
@@ -359,7 +358,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario3) {
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     roadNetworkScenario->setIdCounterRef(globalIdRef);
     auto obsOneScenario{obstacle_operations::getObstacleById(obstaclesScenario, 500)};
-    obsOneScenario->setSensorParameters({250, 250, 0.3});
+    obsOneScenario->setSensorParameters({250, 250});
     RoadNetworkParameters rp;
     rp.numIntersectionsPerDirectionLaneGeneration = 2;
     obsOneScenario->setRoadNetworkParameters(rp);
@@ -524,13 +523,13 @@ TEST_F(ObstacleTest, testGetSignalStateByTimeStep) {
 }
 
 TEST_F(ObstacleTest, testGetFieldOfViewRearDistance) {
-    obstacleOne->setSensorParameters({77.5, 80.0, 0.3});
+    obstacleOne->setSensorParameters({77.5, 80.0});
     EXPECT_EQ(obstacleOne->getSensorParameters().getFieldOfViewRear(), 77.5);
     EXPECT_NE(obstacleOne->getSensorParameters().getFieldOfViewFront(), 77.5);
 }
 
 TEST_F(ObstacleTest, testGetFieldOfViewFrontDistance) {
-    obstacleOne->setSensorParameters({80.5, 77.5, 0.3});
+    obstacleOne->setSensorParameters({80.5, 77.5});
     EXPECT_EQ(obstacleOne->getSensorParameters().getFieldOfViewFront(), 77.5);
     EXPECT_NE(obstacleOne->getSensorParameters().getFieldOfViewRear(), 77.5);
 }

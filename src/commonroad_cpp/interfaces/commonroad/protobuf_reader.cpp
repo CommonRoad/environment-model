@@ -1,6 +1,7 @@
 #include "commonroad_cpp/interfaces/commonroad/protobuf_reader.h"
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include <boost/algorithm/string/case_conv.hpp> // for to_lower_copy
+#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 #include <stdexcept>
 #include <utility>
 

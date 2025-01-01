@@ -3,6 +3,7 @@
 #include <commonroad_cpp/predicates/intersection/unobstructed_intersection_view_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/world.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 namespace bg = boost::geometry;
 
