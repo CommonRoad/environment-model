@@ -2,6 +2,7 @@
 #include <commonroad_cpp/predicates/misc/in_projection_domain_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 bool InProjectionDomainPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,

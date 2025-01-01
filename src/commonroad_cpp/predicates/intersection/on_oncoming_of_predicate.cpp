@@ -1,5 +1,6 @@
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include <cmath>
+#include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/predicates/intersection/on_oncoming_of_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>

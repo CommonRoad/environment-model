@@ -5,6 +5,7 @@
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 std::set<std::shared_ptr<TrafficLight>>
 regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::shared_ptr<Obstacle> &obs,

@@ -1,8 +1,8 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
-#include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 #include <commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h>
 

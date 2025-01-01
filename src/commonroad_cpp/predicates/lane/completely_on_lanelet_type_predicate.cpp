@@ -3,6 +3,7 @@
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/world.h"
 #include <algorithm>
+#include <boost/geometry/algorithms/append.hpp>
 
 namespace bg = boost::geometry;
 
@@ -13,7 +14,7 @@ bool CompletelyOnLaneletTypePredicate::booleanEvaluation(size_t timeStep, const 
                                                          const std::shared_ptr<Obstacle> &obstacleP,
                                                          const std::vector<std::string> &additionalFunctionParameters) {
     // does not check lanelet driving direction
-    // current implementation depends obstacle shape
+    // current implementation depends on obstacle shape
     auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
     if (std::all_of(lanelets.begin(), lanelets.end(),
                     [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {

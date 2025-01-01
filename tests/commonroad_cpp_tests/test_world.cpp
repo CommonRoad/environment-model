@@ -119,9 +119,9 @@ TEST_F(WorldTest, SetCurvilinearStates) {
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     RoadNetworkParameters roadParams;
     roadParams.numIntersectionsPerDirectionLaneGeneration = 2;
-    auto world1{
-        World("USA_Peach-2_1_T-1", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1,
-              WorldParameters(roadParams, SensorParameters(250.0, 250.0, 0.3), ActuatorParameters::vehicleDefaults()))};
+    auto world1{World("USA_Peach-2_1_T-1", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.1,
+                      WorldParameters(roadParams, SensorParameters(250.0, 250.0), ActuatorParameters::egoDefaults(),
+                                      TimeParameters::dynamicDefaults(), ActuatorParameters::vehicleDefaults()))};
     EXPECT_NO_THROW(world1.setCurvilinearStates());
 }
 
@@ -169,4 +169,132 @@ TEST_F(WorldTest, IdCounterRef) {
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world1{World("USA_Peach-2_1_T-1", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)};
     EXPECT_EQ(*world1.getIdCounterRef().get(), 53904);
+}
+
+TEST_F(WorldTest, UpdateObstacles) {
+    std::string scenario{"DEU_TestSafeDistance-1_1_T-1"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto obsManip{obstaclesScenarioOne.at(0)};
+    auto initialTimeStepTraj{obsManip->getTrajectoryPrediction().begin()->second->getTimeStep()};
+    auto wp{WorldParameters(RoadNetworkParameters(), SensorParameters(), ActuatorParameters::egoDefaults(),
+                            TimeParameters(5, 0.3), ActuatorParameters::vehicleDefaults())};
+
+    auto world1{World("DEU_TestSafeDistance-1_1_T-1", 0, roadNetworkScenarioOne, {}, {obstaclesScenarioOne.at(0)},
+                      timeStepSizeOne, wp)};
+
+    // update obstacle and add new one
+    auto obstacleCopyState{obsManip->getTrajectoryPrediction().begin()->second};
+    auto obstacleCopyTraj{obsManip->getTrajectoryPrediction()};
+    obstacleCopyTraj.erase(obstacleCopyTraj.begin());
+    auto obstacleCopy{std::make_shared<Obstacle>(
+        Obstacle(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
+                 obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
+                 obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
+                 obsManip->getGeoShape().getWidth()))};
+
+    obstaclesScenarioOne.at(1)->setTimeParameters(wp.getTimeParams());
+    std::vector<std::shared_ptr<Obstacle>> newObstacles{obstacleCopy, obstaclesScenarioOne.at(1)};
+    EXPECT_NO_THROW(world1.updateObstacles(newObstacles));
+    EXPECT_EQ(world1.getObstacles().size(), 2);
+    EXPECT_EQ(world1.findObstacle(obsManip->getId())->getCurrentState()->getTimeStep(), initialTimeStepTraj);
+    EXPECT_EQ(world1.findObstacle(obsManip->getId())->getTrajectoryPrediction().begin()->second->getTimeStep(),
+              initialTimeStepTraj + 1);
+    EXPECT_EQ(world1.findObstacle(obsManip->getId())->getTrajectoryHistory().size(), 1);
+
+    // obstacle is not present anymore -> should be considered until relevant history size has passed
+    for (size_t idx{0}; idx < 4; idx++) {
+        obstacleCopyState = obsManip->getTrajectoryPrediction().begin()->second;
+        obstacleCopyTraj = obsManip->getTrajectoryPrediction();
+        obstacleCopyTraj.erase(obstacleCopyTraj.begin());
+        obstacleCopy = std::make_shared<Obstacle>(
+            Obstacle(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
+                     obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
+                     obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
+                     obsManip->getGeoShape().getWidth()));
+        newObstacles = {obstacleCopy};
+        EXPECT_NO_THROW(world1.updateObstacles(newObstacles));
+        EXPECT_EQ(world1.getObstacles().size(), 2);
+    }
+    obstacleCopyState = obsManip->getTrajectoryPrediction().begin()->second;
+    obstacleCopyTraj = obsManip->getTrajectoryPrediction();
+    obstacleCopyTraj.erase(obstacleCopyTraj.begin());
+    obstacleCopy = std::make_shared<Obstacle>(
+        Obstacle(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
+                 obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
+                 obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
+                 obsManip->getGeoShape().getWidth()));
+    newObstacles = {obstacleCopy};
+    EXPECT_NO_THROW(world1.updateObstacles(newObstacles));
+    EXPECT_EQ(world1.getObstacles().size(), 1);
+
+    // check whether new obstacle with history is used
+    // (coverage should also be verified via debugging)
+    auto hist{obstacleCopyState};
+    obstacleCopyState = obsManip->getTrajectoryPrediction().begin()->second;
+    obstacleCopyTraj = obsManip->getTrajectoryPrediction();
+    obstacleCopyTraj.erase(obstacleCopyTraj.begin());
+    obstacleCopy = std::make_shared<Obstacle>(
+        Obstacle(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
+                 obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
+                 obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
+                 obsManip->getGeoShape().getWidth()));
+    obstacleCopy->setTrajectoryHistory({{hist->getTimeStep(), hist}});
+    newObstacles = {obstacleCopy};
+    EXPECT_NO_THROW(world1.updateObstacles(newObstacles));
+    EXPECT_EQ(world1.getObstacles().size(), 1);
+    EXPECT_EQ(world1.getObstacles().at(0)->getTrajectoryHistory().size(), 1);
+    EXPECT_EQ(world1.getObstacles().at(0)->getTrajectoryHistory().begin().value<>()->getTimeStep(),
+              hist->getTimeStep());
+}
+
+TEST_F(WorldTest, UpdateObstaclesTraj) {
+    std::string scenario{"DEU_TestSafeDistance-1_1_T-1"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto obsManip{obstaclesScenarioOne.at(0)};
+    auto initialTimeStepTraj{obsManip->getTrajectoryPrediction().begin()->second->getTimeStep()};
+    auto wp{WorldParameters(RoadNetworkParameters(), SensorParameters(), ActuatorParameters::egoDefaults(),
+                            TimeParameters(5, 0.3), ActuatorParameters::vehicleDefaults())};
+
+    auto world1{World("DEU_TestSafeDistance-1_1_T-1", 0, roadNetworkScenarioOne, {}, {obstaclesScenarioOne.at(0)},
+                      timeStepSizeOne, wp)};
+    obstaclesScenarioOne.at(1)->setTimeParameters(wp.getTimeParams());
+
+    // update obstacle and add new one
+    auto obstacleCopyState{obsManip->getTrajectoryPrediction().begin()->second};
+    auto obstacleCopyTraj{obsManip->getTrajectoryPrediction()};
+    obstacleCopyTraj.erase(obstacleCopyTraj.begin());
+    std::vector<std::shared_ptr<Obstacle>> newObstacles{obstaclesScenarioOne.at(1)};
+    std::map<size_t, std::shared_ptr<State>> cstate{{{obsManip->getId(), obstacleCopyState}}};
+    std::map<size_t, tsl::robin_map<time_step_t, std::shared_ptr<State>>> traj{{{obsManip->getId(), obstacleCopyTraj}}};
+    EXPECT_NO_THROW(world1.updateObstaclesTraj(newObstacles, cstate, traj));
+    EXPECT_EQ(world1.getObstacles().size(), 2);
+    EXPECT_EQ(world1.findObstacle(obsManip->getId())->getCurrentState()->getTimeStep(), initialTimeStepTraj);
+    EXPECT_EQ(world1.findObstacle(obsManip->getId())->getTrajectoryPrediction().begin()->second->getTimeStep(),
+              initialTimeStepTraj + 1);
+    EXPECT_EQ(world1.findObstacle(obsManip->getId())->getTrajectoryHistory().size(), 1);
+
+    // obstacle is not present anymore -> should be considered until relevant history size has passed
+    newObstacles.clear();
+    for (size_t idx{0}; idx < 4; idx++) {
+        obstacleCopyState = obsManip->getTrajectoryPrediction().begin()->second;
+        obstacleCopyTraj = obsManip->getTrajectoryPrediction();
+        obstacleCopyTraj.erase(obstacleCopyTraj.begin());
+        cstate = {{obsManip->getId(), obstacleCopyState}};
+        traj = {{obsManip->getId(), obstacleCopyTraj}};
+        EXPECT_NO_THROW(world1.updateObstaclesTraj(newObstacles, cstate, traj));
+        EXPECT_EQ(world1.getObstacles().size(), 2);
+    }
+    obstacleCopyState = obsManip->getTrajectoryPrediction().begin()->second;
+    obstacleCopyTraj = obsManip->getTrajectoryPrediction();
+    obstacleCopyTraj.erase(obstacleCopyTraj.begin());
+    cstate = {{obsManip->getId(), obstacleCopyState}};
+    traj = {{obsManip->getId(), obstacleCopyTraj}};
+    EXPECT_NO_THROW(world1.updateObstaclesTraj(newObstacles, cstate, traj));
+    EXPECT_EQ(world1.getObstacles().size(), 1);
 }
