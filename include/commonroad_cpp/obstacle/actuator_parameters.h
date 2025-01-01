@@ -38,9 +38,12 @@ class ActuatorParameters {
     /** minimal longitudinal acceleration of obstacle in [m/s^2] */
     double aMinLong{-10.0};
     /** minimal (longitudinal) braking acceleration of obstacle in [m/s^2] */
-    double aBraking{-5.0};
+    double aBraking{-10.0};
 
   public:
+    /**
+     * Default constructor.
+     */
     ActuatorParameters() = default;
 
     /**
@@ -113,20 +116,29 @@ class ActuatorParameters {
     [[nodiscard]] double getAbraking() const noexcept { return aBraking; }
 
     /**
-     * Default kinematic parameters for vehicles:
-     * vMax = 50.0 m/s, aMax = 3.0 m/s^2, aMaxLong = 3 m/s^2, aMinLong = -10.0 m/s^2, aBraking = -5.0 m/s^2
+     * Default kinematic parameters for obstacle vehicles:
+     * vMax = 50.0 m/s, aMax = 3.0 m/s^2, aMaxLong = 3 m/s^2, aMinLong = -10.5 m/s^2, aBraking = -10.5 m/s^2
      *
      *
-     * @return Default vehicle kinematic parameters.
+     * @return Default kinematic parameters.
      */
-    static ActuatorParameters vehicleDefaults() { return ActuatorParameters{50.0, 3.0, 3.0, -10.0, -5.0}; }
+    static ActuatorParameters vehicleDefaults() { return ActuatorParameters{50.0, 5.0, 5.0, -10.5, -10.5}; }
+
+    /**
+     * Default kinematic parameters for ego vehicles:
+     * vMax = 50.0 m/s, aMax = 3.0 m/s^2, aMaxLong = 3 m/s^2, aMinLong = -10.0 m/s^2, aBraking = -10.0 m/s^2
+     *
+     *
+     * @return Default kinematic parameters.
+     */
+    static ActuatorParameters egoDefaults() { return ActuatorParameters{50.0, 3.0, 3.0, -10.0, -10.0}; }
 
     /**
      * Default kinematic parameters for pedestrians:
      * vMax = 2.0 m/s, aMax = 0.6 m/s^2, other limits based on aMax,
      * reaction time = 0.3 s.
      *
-     * @return Default pedestrain kinematic parameters.
+     * @return Default pedestrian kinematic parameters.
      */
     static ActuatorParameters pedestrianDefaults() { return ActuatorParameters{2.0, 0.6}; }
 

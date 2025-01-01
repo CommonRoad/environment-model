@@ -28,9 +28,12 @@ std::vector<std::shared_ptr<Lanelet>> convertLanelets(const nb::handle &py_lanel
  * Converts Python dynamic obstacle objects to C++ representation.
  *
  * @param py_obstacles List of Python version of dynamic obstacles.
+ * @param worldParams World parameters.
+ * @param ego Flag to indicate if the obstacles are ego vehicles.
  * @return List of pointers to obstacle objects.
  */
-std::vector<std::shared_ptr<Obstacle>> convertObstacles(const nb::list &py_obstacles);
+std::vector<std::shared_ptr<Obstacle>> convertObstacles(const nb::list &py_obstacles,
+                                                        const WorldParameters &worldParams, bool ego);
 
 /**
  * Converts Python State.

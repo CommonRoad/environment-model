@@ -4,7 +4,6 @@
 #include "lanelet/lanelet_graph.h"
 #include <boost/container_hash/hash.hpp>
 #include <cstddef>
-#include <map>
 #include <memory>
 #include <set>
 #include <string>
@@ -17,8 +16,6 @@
 #include <commonroad_cpp/geometry/types.h>
 
 #include <commonroad_cpp/roadNetwork/types.h>
-
-#include <boost/graph/adjacency_list.hpp>
 
 using value = std::pair<box, unsigned>;
 

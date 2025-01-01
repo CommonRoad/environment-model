@@ -1,6 +1,7 @@
 #include "test_interfaces.h"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <tuple>
 
 TEST_F(InterfacesTest, Read2018bFileSingleThread) {
     std::string xmlFilePath{TestUtils::getTestScenarioDirectory() + "/DEU_Muc-2_1_T-1.xml"};
@@ -160,7 +161,7 @@ std::tuple<Scenario, Scenario> InterfacesTest::loadXmlAndPbScenarios(const std::
 TEST_F(InterfacesTest, ReadingIntersectionWithCrossing) {
     std::string pathToTestPbFile =
         TestUtils::getTestScenarioDirectory() + "/DEU_BicycleBothRight-1/DEU_BicycleBothRight-1_1_T-1.pb";
-    std::shared_ptr<RoadNetwork> rn{get<1>(InputUtils::getDataFromCommonRoad(pathToTestPbFile))};
+    std::shared_ptr<RoadNetwork> rn{std::get<1>(InputUtils::getDataFromCommonRoad(pathToTestPbFile))};
     EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().size(), 4);
     EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().at(0)->getCrossingGroupLanelets().size(), 1);
     EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().at(1)->getIncomingGroupID(), 501);

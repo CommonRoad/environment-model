@@ -1,3 +1,4 @@
+#include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/position/in_front_of_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>

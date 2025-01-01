@@ -16,4 +16,6 @@ struct RoadNetworkParameters {
     constexpr static const size_t numAdditionalSegmentsCCS{
         3};                                               // number of additional segments added at beginning to CCS
     size_t numIntersectionsPerDirectionLaneGeneration{1}; // number of intersections considered for lane generation
+    size_t relevantTimeIntervalSize{
+        100}; //**< relevant interval size around current time step to extract occupied lanelets in driving direction */
 };

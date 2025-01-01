@@ -1,14 +1,14 @@
 #include "predicate_manager.h"
 #include "command_line_input.h"
 #include "yaml-cpp/yaml.h"
+#include <boost/algorithm/string.hpp>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/commonroad_predicate.h>
 #include <commonroad_cpp/world.h>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
-#include <limits>
+#include <omp.h>
 #include <random>
 #include <spdlog/spdlog.h>
 #include <utility>

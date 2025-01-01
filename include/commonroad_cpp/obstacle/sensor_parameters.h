@@ -1,45 +1,30 @@
 #pragma once
 
-#include <cassert>
-#include <optional>
-
 /**
  * SensorParameters includes information regarding obstacle sensors
- *
- * Note: The following assumptions about the quantites are enforced in the constructors:
- *   - \f$reactionTime \geq 0.0\f$
- *
  */
 class SensorParameters {
     double fieldOfViewRear{100.0};  //**< length of field of view provided by rear sensors */
     double fieldOfViewFront{150.0}; //**< length of field of view provided by front sensors */
-
-    /** reaction time of obstacle in [s] */
-    std::optional<double> reactionTime;
+    // TODO update default fov values
+    std::vector<vertex> fovVertices{{0.0, -400.0}, {282.8427, -282.8427}, {400.0, 0.0},  {282.8427, 282.8427},
+                                    {0.0, 400.0},  {-282.8427, 282.8427}, {-400.0, 0.0}, {-282.8427, -282.8427},
+                                    {0.0, -400.0}}; //**< field of view region */
 
   public:
+    /**
+     * Default constructor.
+     */
+    SensorParameters() = default;
+
     /**
      * Complete constructor for SensorParameters.
      *
      * @param fieldOfViewRear length of field of view provided by rear sensors
      * @param fieldOfViewFront length of field of view provided by front sensors
-     * @param reactionTime reaction time of obstacle in [s]
      */
-    SensorParameters(double fieldOfViewRear, double fieldOfViewFront, std::optional<double> reactionTime = std::nullopt)
-        : fieldOfViewRear{fieldOfViewRear}, fieldOfViewFront{fieldOfViewFront}, reactionTime{reactionTime} {
-        // TODO These assertions might make more sense as a std::domain_error exception
-        assert(reactionTime.value_or(0.0) >= 0.0);
-    }
-
-    /**
-     * Simplified constructor for SensorParameters.
-     *
-     * @param reactionTime reaction time of obstacle in [s]
-     */
-    SensorParameters(std::optional<double> reactionTime = std::nullopt) : reactionTime{reactionTime} {
-        // TODO These assertions might make more sense as a std::domain_error exception
-        assert(reactionTime.value_or(0.0) >= 0.0);
-    }
+    SensorParameters(double fieldOfViewRear, double fieldOfViewFront)
+        : fieldOfViewRear{fieldOfViewRear}, fieldOfViewFront{fieldOfViewFront} {}
 
     /**
      * Getter for rear field of view.
@@ -56,27 +41,25 @@ class SensorParameters {
     [[nodiscard]] double getFieldOfViewFront() const noexcept { return fieldOfViewFront; }
 
     /**
-     * Getter for reaction time.
-     *
-     * @return Reaction time [s].
+     * Getter for field of view vertices.
+     * @return List of vertices spanning field of view.
      */
-    [[nodiscard]] std::optional<double> getReactionTime() const noexcept { return reactionTime; }
+    [[nodiscard]] std::vector<vertex> getFieldOfViewVertices() const noexcept { return fovVertices; }
 
     /**
-     * Default kinematic parameters for vehicles:
-     * fieldOfViewRear = fieldOfViewFront = 250,
-     * reaction time = 0.3 s.
+     * Default sensor parameters for vehicles:
+     * fieldOfViewRear = 100m, fieldOfViewFront = 150m.
      *
      *
-     * @return Default vehicle kinematic parameters.
+     * @return Default dynamic obstacle sensor parameters.
      */
-    static SensorParameters dynamicDefaults() { return SensorParameters{100.0, 150.0, 0.3}; }
+    static SensorParameters dynamicDefaults() { return SensorParameters{100.0, 150.0}; }
 
     /**
-     * Default kinematic parameters for static obstacles:
-     * vMax = 0.0 m/s, aMax = 0.0 m/s^2.
+     * Default sensor parameters for static obstacles:
+     * fieldOfViewRear = fieldOfViewFront = 0.0 m.
      *
-     * @return Default static obstacle kinematic parameters.
+     * @return Default static obstacle sensor parameters.
      */
-    static SensorParameters staticDefaults() { return SensorParameters{0.0, 0.0, std::nullopt}; }
+    static SensorParameters staticDefaults() { return SensorParameters{0.0, 0.0}; }
 };
