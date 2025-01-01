@@ -3,6 +3,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 std::shared_ptr<Obstacle>
 obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t obstacleId) {

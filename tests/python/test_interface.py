@@ -5,7 +5,10 @@ from pathlib import Path
 import crcpp
 import numpy as np
 from commonroad.common.file_reader import CommonRoadFileReader
-from commonroad.scenario.state import CustomState
+from commonroad.prediction.prediction import TrajectoryPrediction
+from commonroad.scenario.obstacle import DynamicObstacle
+from commonroad.scenario.state import CustomState, InitialState, ExtendedPMState
+from commonroad.scenario.trajectory import Trajectory
 
 
 class TestPythonInterface(unittest.TestCase):
@@ -163,7 +166,11 @@ class TestPythonInterface(unittest.TestCase):
         scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
 
         wp = crcpp.WorldParameters(
-            crcpp.RoadNetworkParameters(), crcpp.SensorParameters(250.0, 250.0, 0.3), crcpp.ActuatorParameters()
+            crcpp.RoadNetworkParameters(),
+            crcpp.SensorParameters(250.0, 250.0),
+            crcpp.ActuatorParameters(),
+            crcpp.TimeParameters(),
+            crcpp.ActuatorParameters(),
         )
         world1 = crcpp.World(
             str(scenario.scenario_id), 2, 0.1, "DEU", scenario.lanelet_network, [], scenario.obstacles, wp
@@ -177,6 +184,166 @@ class TestPythonInterface(unittest.TestCase):
         self.assertEqual(world1.obstacles[0].sensor_parameters.fov_front, 250.0)
         self.assertEqual(world2.obstacles[0].sensor_parameters.fov_front, 250.0)
         self.assertEqual(world3.obstacles[0].sensor_parameters.fov_front, 250.0)
+
+    def test_update_obstacles(self):
+        full_path = (
+            Path(__file__).parent.parent.parent
+            / "tests/scenarios/predicates/DEU_TestSafeDistance-1/DEU_TestSafeDistance-1_1_T-1.pb"
+        )
+        scenario_path_tmp = Path(full_path)
+        map_path = (
+            scenario_path_tmp.parent
+            / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
+        )
+        scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
+        obsManip = scenario.obstacles[0]
+        initialTimeStepTraj = obsManip.prediction.initial_time_step
+        wp = crcpp.WorldParameters(
+            crcpp.RoadNetworkParameters(),
+            crcpp.SensorParameters(),
+            crcpp.ActuatorParameters(),
+            crcpp.TimeParameters(5, 0.3),
+            crcpp.ActuatorParameters(),
+        )
+        world1 = crcpp.World(
+            str(scenario.scenario_id), 2, 0.1, "DEU", scenario.lanelet_network, [], [scenario.obstacles[0]], wp
+        )
+
+        # update obstacle and add new one
+        obstacle_copy_traj = obsManip.prediction.trajectory.state_list
+        obstacle_copy_state = obstacle_copy_traj[0].convert_state_to_state(InitialState())
+        obstacle_copy_state.acceleration = 0
+        obstacle_copy_traj.remove(obstacle_copy_traj[0])
+        obstacle_copy = DynamicObstacle(
+            obsManip.obstacle_id,
+            obsManip.obstacle_type,
+            obsManip.obstacle_shape,
+            obstacle_copy_state,
+            TrajectoryPrediction(
+                Trajectory(obstacle_copy_traj[0].time_step, obstacle_copy_traj), obsManip.obstacle_shape
+            ),
+        )
+        new_obstacles = [obstacle_copy, scenario.obstacles[1]]
+        world1.update_obstacles(new_obstacles)
+        self.assertEqual(len(world1.obstacles), 2)
+        self.assertEqual(obsManip.obstacle_id, world1.obstacles[0].id)
+        self.assertEqual(world1.obstacles[0].current_state.time_step, initialTimeStepTraj)
+        self.assertEqual(list(world1.obstacles[0].trajectory_prediction.keys())[0], initialTimeStepTraj + 1)
+        self.assertEqual(len(world1.obstacles[0].history), 1)
+
+        # obstacle is not present anymore -> should be considered until relevant history size has passed
+        for i in range(4):
+            obstacle_copy_traj = obsManip.prediction.trajectory.state_list
+            obstacle_copy_state = obstacle_copy_traj[0].convert_state_to_state(InitialState())
+            obstacle_copy_state.acceleration = 0
+            obstacle_copy_traj.remove(obstacle_copy_traj[0])
+            obstacle_copy = DynamicObstacle(
+                obsManip.obstacle_id,
+                obsManip.obstacle_type,
+                obsManip.obstacle_shape,
+                obstacle_copy_state,
+                TrajectoryPrediction(
+                    Trajectory(obstacle_copy_traj[0].time_step, obstacle_copy_traj), obsManip.obstacle_shape
+                ),
+            )
+            new_obstacles = [obstacle_copy]
+            world1.update_obstacles(new_obstacles)
+            self.assertEqual(len(world1.obstacles), 2)
+        obstacle_copy_traj = obsManip.prediction.trajectory.state_list
+        obstacle_copy_state = obstacle_copy_traj[0].convert_state_to_state(InitialState())
+        obstacle_copy_state.acceleration = 0
+        obstacle_copy_traj.remove(obstacle_copy_traj[0])
+        obstacle_copy = DynamicObstacle(
+            obsManip.obstacle_id,
+            obsManip.obstacle_type,
+            obsManip.obstacle_shape,
+            obstacle_copy_state,
+            TrajectoryPrediction(
+                Trajectory(obstacle_copy_traj[0].time_step, obstacle_copy_traj), obsManip.obstacle_shape
+            ),
+        )
+        new_obstacles = [obstacle_copy]
+        world1.update_obstacles(new_obstacles)
+        self.assertEqual(len(world1.obstacles), 1)
+
+        # check whether new obstacle with history is used
+        hist = obstacle_copy_state.convert_state_to_state(ExtendedPMState())
+        obstacle_copy_traj = obsManip.prediction.trajectory.state_list
+        obstacle_copy_state = obstacle_copy_traj[0].convert_state_to_state(InitialState())
+        obstacle_copy_state.acceleration = 0
+        obstacle_copy_traj.remove(obstacle_copy_traj[0])
+        obstacle_copy = DynamicObstacle(
+            obsManip.obstacle_id,
+            obsManip.obstacle_type,
+            obsManip.obstacle_shape,
+            obstacle_copy_state,
+            TrajectoryPrediction(
+                Trajectory(obstacle_copy_traj[0].time_step, obstacle_copy_traj), obsManip.obstacle_shape
+            ),
+            history=[hist],
+        )
+        new_obstacles = [obstacle_copy]
+        world1.update_obstacles(new_obstacles)
+        self.assertEqual(len(world1.obstacles), 1)
+        self.assertEqual(len(world1.obstacles[0].history), 1)
+        self.assertEqual(list(world1.obstacles[0].history.values())[0].time_step, hist.time_step)
+        self.assertEqual(list(world1.obstacles[0].history.keys())[0], hist.time_step)
+
+    def test_update_obstacles_traj(self):
+        full_path = (
+            Path(__file__).parent.parent.parent
+            / "tests/scenarios/predicates/DEU_TestSafeDistance-1/DEU_TestSafeDistance-1_1_T-1.pb"
+        )
+        scenario_path_tmp = Path(full_path)
+        map_path = (
+            scenario_path_tmp.parent
+            / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
+        )
+        scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
+        obsManip = scenario.obstacles[0]
+        initialTimeStepTraj = obsManip.prediction.initial_time_step
+        wp = crcpp.WorldParameters(
+            crcpp.RoadNetworkParameters(),
+            crcpp.SensorParameters(),
+            crcpp.ActuatorParameters(),
+            crcpp.TimeParameters(5, 0.3),
+            crcpp.ActuatorParameters(),
+        )
+        world1 = crcpp.World(
+            str(scenario.scenario_id), 2, 0.1, "DEU", scenario.lanelet_network, [], [scenario.obstacles[0]], wp
+        )
+
+        # update obstacle and add new one
+        obstacle_copy_traj = obsManip.prediction.trajectory.state_list
+        obstacle_copy_state = obstacle_copy_traj[0]
+        obstacle_copy_traj.remove(obstacle_copy_state)
+        new_obstacles = [scenario.obstacles[1]]
+        cstate = {obsManip.obstacle_id: obstacle_copy_state}
+        traj = {obsManip.obstacle_id: obstacle_copy_traj}
+        world1.update_obstacles_traj(new_obstacles, cstate, traj)
+        self.assertEqual(len(world1.obstacles), 2)
+        self.assertEqual(obsManip.obstacle_id, world1.obstacles[1].id)
+        self.assertEqual(world1.obstacles[1].current_state.time_step, initialTimeStepTraj)
+        self.assertEqual(list(world1.obstacles[1].trajectory_prediction.keys())[0], initialTimeStepTraj + 1)
+        self.assertEqual(len(world1.obstacles[1].history), 1)
+
+        # obstacle is not present anymore -> should be considered until relevant history size has passed
+        new_obstacles = []
+        for i in range(4):
+            obstacle_copy_traj = obsManip.prediction.trajectory.state_list
+            obstacle_copy_state = obstacle_copy_traj[0]
+            obstacle_copy_traj.remove(obstacle_copy_state)
+            cstate = {obsManip.obstacle_id: obstacle_copy_state}
+            traj = {obsManip.obstacle_id: obstacle_copy_traj}
+            world1.update_obstacles_traj(new_obstacles, cstate, traj)
+            self.assertEqual(len(world1.obstacles), 2)
+        obstacle_copy_traj = obsManip.prediction.trajectory.state_list
+        obstacle_copy_state = obstacle_copy_traj[0]
+        obstacle_copy_traj.remove(obstacle_copy_state)
+        cstate = {obsManip.obstacle_id: obstacle_copy_state}
+        traj = {obsManip.obstacle_id: obstacle_copy_traj}
+        world1.update_obstacles_traj(new_obstacles, cstate, traj)
+        self.assertEqual(len(world1.obstacles), 1)
 
 
 if __name__ == "__main__":

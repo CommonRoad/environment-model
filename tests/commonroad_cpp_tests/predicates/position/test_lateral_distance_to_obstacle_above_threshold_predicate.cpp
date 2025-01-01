@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include <boost/math/constants/constants.hpp>
 #include <set>
 #include <stdexcept>
 

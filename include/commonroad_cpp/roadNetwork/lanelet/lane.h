@@ -2,11 +2,9 @@
 
 #include <memory>
 #include <mutex>
-#include <unordered_set>
 #include <vector>
 
 #include "lanelet.h"
-#include <geometry/curvilinear_coordinate_system.h>
 
 namespace geometry {
 class CurvilinearCoordinateSystem;

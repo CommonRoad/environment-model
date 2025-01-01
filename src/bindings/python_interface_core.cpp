@@ -55,6 +55,56 @@ void updateCurrentState(Obstacle *t, const nb::handle &py_current_state) {
     t->setCurrentState(TranslatePythonTypes::extractState(py_current_state));
 }
 
+void updateObstaclesTraj(World *t, const nb::list &py_obstacles, const nb::mapping &py_current_states,
+                         const nb::mapping &py_trajectories) {
+    std::map<size_t, std::shared_ptr<State>> currentStates;
+    std::map<size_t, tsl::robin_map<time_step_t, std::shared_ptr<State>>> trajectoryPredictions;
+    auto wp{t->getWorldParameters()};
+    std::vector<std::shared_ptr<Obstacle>> obstacleList{
+        TranslatePythonTypes::convertObstacles(py_obstacles, wp, false)};
+
+    for (const auto &item : py_current_states.items()) {
+        auto obsId{nb::cast<size_t>(item[0])};
+        auto state{item[1]};
+        currentStates[obsId] = TranslatePythonTypes::extractState(state);
+    }
+
+    for (const auto &item : py_trajectories.items()) {
+        auto obsId{nb::cast<size_t>(item[0])};
+        auto traj{item[1]};
+        tsl::robin_map<time_step_t, std::shared_ptr<State>> trajectory;
+        for (const auto &py_state : traj) {
+            auto state = TranslatePythonTypes::extractState(py_state);
+            trajectory[state->getTimeStep()] = state;
+        }
+        trajectoryPredictions[obsId] = trajectory;
+    }
+    t->updateObstaclesTraj(obstacleList, currentStates, trajectoryPredictions);
+}
+
+void updateObstacles(World *t, const nb::list &py_obstacles) {
+    auto wp{t->getWorldParameters()};
+    std::vector<std::shared_ptr<Obstacle>> obstacleList{
+        TranslatePythonTypes::convertObstacles(py_obstacles, wp, false)};
+    t->updateObstacles(obstacleList);
+}
+
+nb::dict getTrajectoryPrediction(Obstacle *t) {
+    nb::dict trajDict;
+    for (const auto &item : t->getTrajectoryPrediction()) {
+        trajDict[nb::cast(item.first)] = nb::cast(item.second);
+    }
+    return trajDict;
+}
+
+nb::dict getTrajectoryHistory(Obstacle *t) {
+    nb::dict trajDict;
+    for (const auto &item : t->getTrajectoryHistory()) {
+        trajDict[nb::cast(item.first)] = nb::cast(item.second);
+    }
+    return trajDict;
+}
+
 void init_python_interface_core(nb::module_ &m) {
     nb::enum_<ObstacleType>(m, "ObstacleType")
         .value("unknown", ObstacleType::unknown)
@@ -130,14 +180,23 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("a_max", &ActuatorParameters::getAmax)
         .def_prop_ro("a_max_long", &ActuatorParameters::getAmaxLong)
         .def_prop_ro("a_min_long", &ActuatorParameters::getAminLong)
-        .def_prop_ro("a_braking", &ActuatorParameters::getAbraking);
+        .def_prop_ro("a_braking", &ActuatorParameters::getAbraking)
+        .def_static("ego_defaults", &ActuatorParameters::egoDefaults)
+        .def_static("pedestrians_defaults", &ActuatorParameters::pedestrianDefaults)
+        .def_static("static_defaults", &ActuatorParameters::staticDefaults)
+        .def_static("vehicle_defaults", &ActuatorParameters::vehicleDefaults);
 
     nb::class_<SensorParameters>(m, "SensorParameters")
         .def(nb::init<>())
-        .def(nb::init<double, double, double>())
+        .def(nb::init<double, double>())
         .def_prop_ro("fov_front", &SensorParameters::getFieldOfViewFront)
-        .def_prop_ro("fov_rear", &SensorParameters::getFieldOfViewRear)
-        .def_prop_ro("reaction_time", &SensorParameters::getReactionTime);
+        .def_prop_ro("fov_rear", &SensorParameters::getFieldOfViewRear);
+
+    nb::class_<TimeParameters>(m, "TimeParameters")
+        .def(nb::init<>())
+        .def(nb::init<double, double>())
+        .def_prop_ro("relevant_history_size", &TimeParameters::getRelevantHistorySize)
+        .def_prop_ro("reaction_time", &TimeParameters::getReactionTime);
 
     nb::class_<RoadNetworkParameters>(m, "RoadNetworkParameters")
         .def(nb::init<>())
@@ -145,10 +204,13 @@ void init_python_interface_core(nb::module_ &m) {
                 &RoadNetworkParameters::numIntersectionsPerDirectionLaneGeneration);
 
     nb::class_<WorldParameters>(m, "WorldParameters")
-        .def(nb::init<RoadNetworkParameters, SensorParameters, ActuatorParameters>())
+        .def(
+            nb::init<RoadNetworkParameters, SensorParameters, ActuatorParameters, TimeParameters, ActuatorParameters>())
         .def_prop_ro("road_network_params", &WorldParameters::getRoadNetworkParams)
         .def_prop_ro("sensor_params", &WorldParameters::getSensorParams)
-        .def_prop_ro("actuator_params", &WorldParameters::getActuatorParams);
+        .def_prop_ro("actuator_params_ego", &WorldParameters::getActuatorParamsEgo)
+        .def_prop_ro("actuator_params_obstacles", &WorldParameters::getActuatorParamsObstacles)
+        .def_prop_ro("time_params", &WorldParameters::getTimeParams);
 
     nb::class_<vertex>(m, "Vertex").def_rw("x", &vertex::x).def_rw("y", &vertex::y);
 
@@ -176,6 +238,8 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_rw("type", &Obstacle::getObstacleType, &Obstacle::setObstacleType)
         .def_prop_ro("current_state", &Obstacle::getCurrentState)
         .def_prop_ro("current_signal_state", &Obstacle::getCurrentSignalState)
+        .def_prop_ro("trajectory_prediction", &getTrajectoryPrediction)
+        .def_prop_ro("history", &getTrajectoryHistory)
         .def("shape", &Obstacle::getGeoShape)
         .def("occupied_lanes", &Obstacle::getOccupiedLanes)
         .def("occupied_lanelets", &Obstacle::getOccupiedLaneletsByShape)
@@ -235,8 +299,9 @@ void init_python_interface_core(nb::module_ &m) {
                  for (const auto &intersection : roadNetwork->getIntersections())
                      intersection->computeMemberLanelets(roadNetwork);
 
-                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
-                 auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles);
+                 auto wp{WorldParameters()};
+                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles, wp, false);
+                 auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles, wp, true);
 
                  new (t) World(scenarioName, timeStep, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer, dt);
              })
@@ -258,8 +323,8 @@ void init_python_interface_core(nb::module_ &m) {
                  for (const auto &intersection : roadNetwork->getIntersections())
                      intersection->computeMemberLanelets(roadNetwork);
 
-                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles);
-                 auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles);
+                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_obstacles, wp, false);
+                 auto tempEgoVehicleContainer = TranslatePythonTypes::convertObstacles(py_egoVehicles, wp, true);
 
                  new (t)
                      World(scenarioName, timeStep, roadNetwork, tempEgoVehicleContainer, tempObstacleContainer, dt, wp);
@@ -283,7 +348,9 @@ void init_python_interface_core(nb::module_ &m) {
                  for (const auto &intersection : roadNetwork->getIntersections())
                      intersection->computeMemberLanelets(roadNetwork);
 
-                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_scenario.attr("obstacles"));
+                 auto wp{WorldParameters()};
+                 auto tempObstacleContainer =
+                     TranslatePythonTypes::convertObstacles(py_scenario.attr("obstacles"), wp, false);
 
                  new (t) World(extractName(py_scenario.attr("scenario_id")), 0, roadNetwork, {}, tempObstacleContainer,
                                nb::cast<double>(py_scenario.attr("dt")));
@@ -307,7 +374,8 @@ void init_python_interface_core(nb::module_ &m) {
                  for (const auto &intersection : roadNetwork->getIntersections())
                      intersection->computeMemberLanelets(roadNetwork);
 
-                 auto tempObstacleContainer = TranslatePythonTypes::convertObstacles(py_scenario.attr("obstacles"));
+                 auto tempObstacleContainer =
+                     TranslatePythonTypes::convertObstacles(py_scenario.attr("obstacles"), wp, false);
 
                  new (t) World(extractName(py_scenario.attr("scenario_id")), 0, roadNetwork, {}, tempObstacleContainer,
                                nb::cast<double>(py_scenario.attr("dt")), wp);
@@ -319,7 +387,10 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("time_step", &World::getTimeStep)
         .def_prop_ro("road_network", &World::getRoadNetwork)
         .def_prop_ro("ego_vehicles", &World::getEgoVehicles)
-        .def_prop_ro("obstacles", &World::getObstacles);
+        .def_prop_ro("obstacles", &World::getObstacles)
+        .def("update_obstacles", &World::updateObstacles)
+        .def("update_obstacles", &updateObstacles)
+        .def("update_obstacles_traj", &updateObstaclesTraj);
 
     m.def("create_world", &XMLReader::createWorldFromXML);
 

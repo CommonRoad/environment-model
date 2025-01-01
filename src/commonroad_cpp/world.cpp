@@ -23,14 +23,16 @@ World::World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwor
         idCounter = std::max(idCounter, obs->getId());
     if (!worldParams.hasDefaultParams()) {
         for (const auto &obs : obstacles) {
-            obs->setActuatorParameters(worldParams.getActuatorParams());
+            obs->setActuatorParameters(worldParams.getActuatorParamsObstacles());
             obs->setSensorParameters(worldParams.getSensorParams());
             obs->setRoadNetworkParameters(worldParams.getRoadNetworkParams());
+            obs->setTimeParameters(worldParams.getTimeParams());
         }
         for (const auto &obs : egoVehicles) {
-            obs->setActuatorParameters(worldParams.getActuatorParams());
+            obs->setActuatorParameters(worldParams.getActuatorParamsEgo());
             obs->setSensorParameters(worldParams.getSensorParams());
             obs->setRoadNetworkParameters(worldParams.getRoadNetworkParams());
+            obs->setTimeParameters(worldParams.getTimeParams());
         }
     }
     roadNetwork->setIdCounterRef(std::make_shared<size_t>(idCounter));
@@ -128,8 +130,6 @@ void World::initMissingInformation() {
         for (const auto &obsTimeStep : obs->getTimeSteps())
             if (!obs->getStateByTimeStep(obsTimeStep)->getValidStates().acceleration)
                 obs->interpolateAcceleration(obsTimeStep, dt);
-        if (!obs->getReactionTime().has_value())
-            obs->getReactionTime() = 0.5;
     }
     for (const auto &obs : obstacles) {
         if (obs->isStatic())
@@ -139,3 +139,69 @@ void World::initMissingInformation() {
                 obs->interpolateAcceleration(obsTimeStep, dt);
     }
 }
+
+void World::updateObstacles(std::vector<std::shared_ptr<Obstacle>> &obstacleList) {
+    std::vector<std::shared_ptr<Obstacle>> newObstacles;
+    std::set<size_t> newObstacleIds;
+    for (const auto &obs : obstacleList) {
+        newObstacleIds.insert(obs->getId());
+        auto existingObs{std::find_if(obstacles.begin(), obstacles.end(), [obs](const std::shared_ptr<Obstacle> &o) {
+            return o->getId() == obs->getId();
+        })};
+
+        // obstacle is new -> add to list
+        if (existingObs == obstacles.end()) {
+            newObstacles.push_back(obs);
+            continue;
+        }
+
+        // obstacle already existing -> update if history of new obstacle is empty; otherwise add new one to list;
+        // catches case where obstacle is already updated in calling function
+        if (!obs->getTrajectoryHistory().empty()) {
+            newObstacles.push_back(obs);
+            continue;
+        }
+        (*existingObs)->updateCurrentState(obs->getCurrentState());
+        (*existingObs)->setTrajectoryPrediction(obs->getTrajectoryPrediction());
+        newObstacles.push_back(*existingObs);
+    }
+
+    // obstacle is not present anymore -> consider until history not relevant anymore
+    for (const auto &obs : obstacles) {
+        if (newObstacleIds.find(obs->getId()) == newObstacleIds.end()) {
+            // if obs history passed -> continue
+            if (obs->historyPassed(newObstacles.front()->getCurrentState()->getTimeStep()))
+                continue;
+            newObstacles.push_back(obs);
+        }
+    }
+    obstacles = newObstacles;
+}
+
+void World::updateObstaclesTraj(
+    std::vector<std::shared_ptr<Obstacle>> &obstacleList, std::map<size_t, std::shared_ptr<State>> &currentStates,
+    std::map<size_t, tsl::robin_map<time_step_t, std::shared_ptr<State>>> &trajectoryPredictions) {
+    std::vector<std::shared_ptr<Obstacle>> newObstacles{obstacleList};
+
+    for (const auto &[obsID, state] : currentStates) {
+        auto existingObs{findObstacle(obsID)};
+        existingObs->updateCurrentState(state);
+        existingObs->setTrajectoryPrediction(trajectoryPredictions[obsID]);
+        newObstacles.push_back(existingObs);
+    }
+
+    // obstacle is not present anymore -> consider until history not relevant anymore
+    for (const auto &obs : obstacles) {
+        if (std::find_if(newObstacles.begin(), newObstacles.end(), [obs](const std::shared_ptr<Obstacle> &o) {
+                return o->getId() == obs->getId();
+            }) == newObstacles.end()) {
+            // if obs history passed -> continue
+            if (obs->historyPassed(newObstacles.front()->getCurrentState()->getTimeStep()))
+                continue;
+            newObstacles.push_back(obs);
+        }
+    }
+    obstacles = newObstacles;
+}
+
+WorldParameters World::getWorldParameters() const { return worldParameters; }

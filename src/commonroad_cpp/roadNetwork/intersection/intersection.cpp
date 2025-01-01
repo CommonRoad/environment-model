@@ -1,10 +1,8 @@
-#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
-
 #include <algorithm>
-#include <deque>
-#include <utility>
-
+#include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
+#include <utility>
 
 Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
                            std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups,

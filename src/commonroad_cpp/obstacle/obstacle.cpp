@@ -63,22 +63,23 @@ static double rotatedMaximumLongitude(const Rectangle &rect, const double theta)
 
 Obstacle::Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
                    ObstacleType obstacleType, double vMax, double aMax, double aMaxLong, double aMinLong,
-                   std::optional<double> reactionTime, Obstacle::state_map_t trajectoryPrediction, double length,
-                   double width, const std::vector<vertex> &fov)
+                   double reactionTime, Obstacle::state_map_t trajectoryPrediction, double length, double width,
+                   const std::vector<vertex> &fov)
     : Obstacle{obstacleId,
                obstacleRole,
                std::move(currentState),
                obstacleType,
                ActuatorParameters{vMax, aMax, aMaxLong, aMinLong, aMinLong},
-               SensorParameters{250.0, 250.0, reactionTime},
+               SensorParameters{250.0, 250.0},
+               TimeParameters{TimeParameters::dynamicDefaults().getRelevantHistorySize(), reactionTime},
                std::move(trajectoryPrediction),
                std::make_unique<Rectangle>(length, width),
                fov} {}
 
 Obstacle::Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
                    ObstacleType obstacleType, ActuatorParameters actuatorParameters, SensorParameters sensorParameters,
-                   Obstacle::state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape,
-                   const std::vector<vertex> &fov)
+                   TimeParameters timeParameters, Obstacle::state_map_t trajectoryPrediction,
+                   std::unique_ptr<Shape> shape, const std::vector<vertex> &fov)
     : obstacleId(obstacleId), obstacleRole(obstacleRole), currentState(std::move(currentState)),
       obstacleType(obstacleType), actuatorParameters(actuatorParameters), sensorParameters(sensorParameters),
       trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(std::move(shape)) {
@@ -88,12 +89,9 @@ Obstacle::Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr
     setFirstLastTimeStep();
 
     if (fov.empty()) {
-        // TODO update default fov values
-        std::vector<vertex> fovVertices{{0.0, -400.0},        {282.8427, -282.8427},  {400.0, 0.0},
-                                        {282.8427, 282.8427}, {0.0, 400.0},           {-282.8427, 282.8427},
-                                        {-400.0, 0.0},        {-282.8427, -282.8427}, {0.0, -400.0}};
+        auto vert{sensorParameters.getFieldOfViewVertices()};
         setFov(geometric_operations::rotateAndTranslateVertices(
-            fovVertices, {this->currentState->getXPosition(), this->currentState->getYPosition()}, 0));
+            vert, {this->currentState->getXPosition(), this->currentState->getYPosition()}, 0));
     }
 }
 
@@ -111,11 +109,27 @@ void Obstacle::setCurrentState(const std::shared_ptr<State> &state) {
     removeTimeStepFromMappingVariables(state->getTimeStep());
 }
 
+void Obstacle::updateHistory() {
+    trajectoryHistory[currentState->getTimeStep()] = currentState;
+    if (trajectoryHistory.size() > timeParameters.getRelevantHistorySize()) {
+        trajectoryHistory.erase(firstTimeStep);
+        removeTimeStepFromMappingVariables(firstTimeStep);
+    }
+}
+
+void Obstacle::updateCurrentState(const std::shared_ptr<State> &state) {
+    updateHistory();
+    currentState = state;
+    setFirstLastTimeStep();
+}
+
 void Obstacle::setObstacleType(ObstacleType type) { obstacleType = type; }
 
 void Obstacle::setActuatorParameters(ActuatorParameters params) { actuatorParameters = params; }
 
 void Obstacle::setSensorParameters(SensorParameters params) { sensorParameters = params; }
+
+void Obstacle::setTimeParameters(TimeParameters params) { timeParameters = params; }
 
 void Obstacle::setRoadNetworkParameters(RoadNetworkParameters params) { roadNetworkParameters = params; };
 
@@ -145,6 +159,8 @@ void Obstacle::appendStateToTrajectoryPrediction(const std::shared_ptr<State> &s
 
 void Obstacle::appendStateToHistory(const std::shared_ptr<State> &state) {
     trajectoryHistory.insert(std::pair<size_t, std::shared_ptr<State>>(state->getTimeStep(), state));
+    if (state->getTimeStep() < firstTimeStep)
+        firstTimeStep = state->getTimeStep();
 }
 
 size_t Obstacle::getId() const { return obstacleId; }
@@ -202,7 +218,7 @@ double Obstacle::getAmaxLong() const { return actuatorParameters.getAmaxLong(); 
 
 double Obstacle::getAminLong() const { return actuatorParameters.getAminLong(); }
 
-std::optional<double> Obstacle::getReactionTime() const { return sensorParameters.getReactionTime(); }
+double Obstacle::getReactionTime() const { return timeParameters.getReactionTime(); }
 
 std::vector<size_t> Obstacle::getPredictionTimeSteps() {
     std::vector<size_t> timeSteps;
@@ -597,15 +613,15 @@ Obstacle::getOccupiedLaneletsRoadByShape(const std::shared_ptr<RoadNetwork> &roa
     // special case where obstacle drives mostly on lanelets in other driving direction (see
     // SetReferenceGeneralScenario4 test case)
     size_t startTime{0};
-    if (timeStep < relevantTimeIntervalSize)
+    if (timeStep < roadNetworkParameters.relevantTimeIntervalSize)
         startTime = firstTimeStep;
     else
-        startTime = std::max(firstTimeStep, timeStep - relevantTimeIntervalSize);
+        startTime = std::max(firstTimeStep, timeStep - roadNetworkParameters.relevantTimeIntervalSize);
 
     // find all paths for all occupied initial lanelets to all occupied final lanelets
     for (const auto &initialLet : getOccupiedLaneletsByShape(roadNetwork, startTime))
-        for (const auto &finalLet :
-             getOccupiedLaneletsByShape(roadNetwork, std::min(finalTimeStep, timeStep + relevantTimeIntervalSize))) {
+        for (const auto &finalLet : getOccupiedLaneletsByShape(
+                 roadNetwork, std::min(finalTimeStep, timeStep + roadNetworkParameters.relevantTimeIntervalSize))) {
             auto path{roadNetwork->getTopologicalMap()->findPaths(initialLet->getId(), finalLet->getId(), true)};
             relevantLanelets2.insert(path.begin(), path.end());
         }
@@ -763,15 +779,15 @@ Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
     // special case where obstacle drives mostly on lanelets in other driving direction (see
     // SetReferenceGeneralScenario4 test case)
     size_t startTime{0};
-    if (timeStep < relevantTimeIntervalSize)
+    if (timeStep < roadNetworkParameters.relevantTimeIntervalSize)
         startTime = firstTimeStep;
     else
-        startTime = std::max(firstTimeStep, timeStep - relevantTimeIntervalSize);
+        startTime = std::max(firstTimeStep, timeStep - roadNetworkParameters.relevantTimeIntervalSize);
 
     // find all paths for all occupied initial lanelets to all occupied final lanelets
     for (const auto &initialLet : getOccupiedLaneletsByShape(roadNetwork, startTime))
-        for (const auto &finalLet :
-             getOccupiedLaneletsByShape(roadNetwork, std::min(finalTimeStep, timeStep + relevantTimeIntervalSize))) {
+        for (const auto &finalLet : getOccupiedLaneletsByShape(
+                 roadNetwork, std::min(finalTimeStep, timeStep + roadNetworkParameters.relevantTimeIntervalSize))) {
             auto path{roadNetwork->getTopologicalMap()->findPaths(initialLet->getId(), finalLet->getId(), true)};
             relevantLanelets2.insert(path.begin(), path.end());
         }
@@ -936,4 +952,10 @@ void Obstacle::setFirstLastTimeStep() {
         firstTimeStep = this->currentState->getTimeStep();
     else
         firstTimeStep = std::min_element(this->trajectoryHistory.begin(), this->trajectoryHistory.end())->first;
+}
+
+bool Obstacle::historyPassed(size_t currentTimeStep) const {
+    if (currentTimeStep - firstTimeStep > timeParameters.getRelevantHistorySize())
+        return true;
+    return false;
 }

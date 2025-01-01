@@ -2,13 +2,16 @@
 
 #include "commonroad_cpp/obstacle/actuator_parameters.h"
 #include "commonroad_cpp/obstacle/sensor_parameters.h"
+#include "commonroad_cpp/obstacle/time_parameters.h"
 #include "commonroad_cpp/roadNetwork/road_network_config.h"
 #include <memory>
 #include <string>
+#include <tsl/robin_map.h>
 #include <vector>
 
 class RoadNetwork;
 class Obstacle;
+class State;
 
 /**
  * Storage for general parameters.
@@ -22,12 +25,16 @@ class WorldParameters {
      *
      * @param roadNetworkParameters Parameters for road network.
      * @param sensorParameters Parameters for obstacle sensors.
-     * @param actuatorParameters Parameters for obstacle actuators.
+     * @param actuatorParametersEgo Actuator parameters for ego vehicle.
+     * @param timeParameters Time parameters for obstacles.
+     * @param actuatorParametersObstacles Actuator parameters for obstacles.
      */
     WorldParameters(const RoadNetworkParameters &roadNetworkParameters, const SensorParameters &sensorParameters,
-                    const ActuatorParameters &actuatorParameters)
-        : roadNetworkParams(roadNetworkParameters), sensorParams(sensorParameters), actuatorParams(actuatorParameters),
-          defaultParams(false) {}
+                    const ActuatorParameters &actuatorParametersEgo, const TimeParameters &timeParameters,
+                    const ActuatorParameters &actuatorParametersObstacles)
+        : roadNetworkParams(roadNetworkParameters), sensorParams(sensorParameters),
+          actuatorParamsEgo(actuatorParametersEgo), timeParams(timeParameters),
+          actuatorParamsObstacles(actuatorParametersObstacles), defaultParams(false) {}
 
     /**
      * Getter for road network parameters.
@@ -48,7 +55,21 @@ class WorldParameters {
      *
      * @return Actuator parameters.
      */
-    [[nodiscard]] ActuatorParameters getActuatorParams() const { return actuatorParams; }
+    [[nodiscard]] ActuatorParameters getActuatorParamsEgo() const { return actuatorParamsEgo; }
+
+    /**
+     * Getter for time parameters.
+     *
+     * @return Time parameters.
+     */
+    [[nodiscard]] TimeParameters getTimeParams() const { return timeParams; }
+
+    /**
+     * Getter for actuator parameters.
+     *
+     * @return Actuator parameters.
+     */
+    [[nodiscard]] ActuatorParameters getActuatorParamsObstacles() const { return actuatorParamsObstacles; }
 
     /**
      * Checks whether default parameters are set.
@@ -57,41 +78,14 @@ class WorldParameters {
      */
     [[nodiscard]] bool hasDefaultParams() const { return defaultParams; }
 
-    /**
-     * Setter for road network parameters.
-     *
-     * @param params Road network parameters.
-     */
-    void setRoadNetworkParams(const RoadNetworkParameters &params) {
-        defaultParams = false;
-        roadNetworkParams = params;
-    }
-
-    /**
-     * Setter for sensor parameters.
-     *
-     * @param params Sensor parameters.
-     */
-    void setSensorParams(const SensorParameters &params) {
-        defaultParams = false;
-        sensorParams = params;
-    }
-
-    /**
-     * Setter for actuator parameters.
-     *
-     * @param params Actuator parameters.
-     */
-    void setActuatorParams(const ActuatorParameters &params) {
-        defaultParams = false;
-        actuatorParams = params;
-    }
-
   private:
-    RoadNetworkParameters roadNetworkParams{RoadNetworkParameters()};         //**< Parameters for road network. */
-    SensorParameters sensorParams{SensorParameters::dynamicDefaults()};       /** Parameters for obstacle sensors. */
-    ActuatorParameters actuatorParams{ActuatorParameters::vehicleDefaults()}; /** Parameters for obstacle actuators. */
-    bool defaultParams{true}; /** Boolean indicating whether default parameters are set. */
+    RoadNetworkParameters roadNetworkParams{RoadNetworkParameters()};        //**< Parameters for road network. */
+    SensorParameters sensorParams{SensorParameters::dynamicDefaults()};      /** Parameters for obstacle sensors. */
+    ActuatorParameters actuatorParamsEgo{ActuatorParameters::egoDefaults()}; /** Parameters for ego actuators. */
+    TimeParameters timeParams{TimeParameters::dynamicDefaults()};            /** Parameters for obstacle time. */
+    ActuatorParameters actuatorParamsObstacles{
+        ActuatorParameters::vehicleDefaults()}; /** Parameters for obstacle actuators. */
+    bool defaultParams{true};                   /** Boolean indicating whether default parameters are set. */
 };
 
 class World {
@@ -196,6 +190,34 @@ class World {
      * @return Name of world.
      */
     [[nodiscard]] const std::string &getName() const;
+
+    /**
+     * Updates and adds obstacles. Moves current state to history and updates prediction.
+     * Adds new obstacles and remove non-existing obstacles if history is empty.
+     *
+     * @param obstacleList List of new and updated obstacles.
+     */
+    void updateObstacles(std::vector<std::shared_ptr<Obstacle>> &obstacleList);
+
+    /**
+     * Updates and adds obstacles. Moves current state to history and updates prediction.
+     * Adds new obstacles and remove non-existing obstacles if history is empty.
+     *
+     * @param obstacleList List of new obstacles.
+     * @param currentStates Map of obstacle IDs to current states.
+     * @param trajectoryPredictions Map of obstacle IDs to trajectory predictions.
+     */
+    void
+    updateObstaclesTraj(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
+                        std::map<size_t, std::shared_ptr<State>> &currentStates,
+                        std::map<size_t, tsl::robin_map<time_step_t, std::shared_ptr<State>>> &trajectoryPredictions);
+
+    /**
+     * Getter for world parameters.
+     *
+     * @return World parameters.
+     */
+    [[nodiscard]] WorldParameters getWorldParameters() const;
 
   private:
     std::string name;                                   //**< ID/name of world. */

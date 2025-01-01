@@ -1,6 +1,7 @@
 #include <cmath>
 #include <stdexcept>
 
+#include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
@@ -41,7 +42,7 @@ Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(
             0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength() -
             computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                 obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP,
-                                obstacleK->getReactionTime().value())};
+                                obstacleK->getReactionTime())};
 }
 
 Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(double lonPosP, double velocityK, double velocityP,
@@ -60,7 +61,7 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const s
 
     double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
                                      obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP,
-                                     obstacleK->getReactionTime().value())};
+                                     obstacleK->getReactionTime())};
     double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
                                                  ->getCurvilinearCoordinateSystem()) -
                   obstacleK->frontS(world->getRoadNetwork(), timeStep)};

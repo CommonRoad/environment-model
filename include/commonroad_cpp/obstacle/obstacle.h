@@ -8,12 +8,9 @@
 #include "state.h"
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
-#include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
-#include <commonroad_cpp/roadNetwork/types.h>
-#include <geometry/curvilinear_coordinate_system.h>
 
 #include <boost/container_hash/hash.hpp>
 
@@ -21,12 +18,16 @@
 #include "sensor_parameters.h"
 #include "signal_state.h"
 #include "state_meta_info.h"
+#include "time_parameters.h"
 
 #include <tsl/robin_map.h>
 
 class Lanelet;
 class Lane;
 class RoadNetwork;
+namespace geometry {
+class CurvilinearCoordinateSystem;
+}
 
 /**
  * Class representing an obstacle.
@@ -63,26 +64,28 @@ class Obstacle {
      * @param fov Field of view.
      */
     Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
-             ObstacleType obstacleType, double vMax, double aMax, double aMaxLong, double aMinLong,
-             std::optional<double> reactionTime, state_map_t trajectoryPrediction, double length, double width,
-             const std::vector<vertex> &fov = {});
+             ObstacleType obstacleType, double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
+             state_map_t trajectoryPrediction, double length, double width, const std::vector<vertex> &fov = {});
 
     /**
      * Constructor initializing several obstacle attributes.
      * If the obstacle is static, certain values are overwritten.
      *
      * @param obstacleId ID of obstacle.
-     * @param isStatic Boolean indicating whether the obstacle is static or not.
+     * @param obstacleRole Boolean indicating whether the obstacle is static or not.
      * @param currentState Pointer to current state of obstacle.
      * @param obstacleType Type of the obstacle.
      * @param actuatorParameters Kinematic parameters of the obstacle.
+     * @param sensorParameters Sensor parameters of the obstacle.
+     * @param timeParameters Time parameters of the obstacle.
      * @param trajectoryPrediction Map matching time step to state.
      * @param shape Obstacle shape. (only rectangles are currently supported!)
      * @param fov Field of view.
      */
     Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
              ObstacleType obstacleType, ActuatorParameters actuatorParameters, SensorParameters sensorParameters,
-             state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape, const std::vector<vertex> &fov);
+             TimeParameters timeParameters, state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape,
+             const std::vector<vertex> &fov);
 
     /**
      * Setter for ID of obstacle.
@@ -106,11 +109,18 @@ class Obstacle {
     void setObstacleRole(ObstacleRole type);
 
     /**
-     * Setter for current state.
+     * Setter for current state. Overwrites existing state and resets related variables.
      *
      * @param currentState Current state of obstacle.
      */
     void setCurrentState(const std::shared_ptr<State> &currentState);
+
+    /**
+     * Updates current state. Moves current state to history.
+     *
+     * @param newState New current state of obstacle.
+     */
+    void updateCurrentState(const std::shared_ptr<State> &newState);
 
     /**
      * Setter for current signal state.
@@ -132,6 +142,13 @@ class Obstacle {
      * @param actuatorParameters Actuator parameters
      */
     void setActuatorParameters(ActuatorParameters actuatorParameters);
+
+    /**
+     * Setter for time parameters.
+     *
+     * @param timeParameters Time parameters
+     */
+    void setTimeParameters(TimeParameters timeParameters);
 
     /**
      * Setter for sensor parameters.
@@ -179,7 +196,7 @@ class Obstacle {
 
     /**
      * Setter for obstacle shape
-     * @param geoShape Shape
+     * @param shape Shape
      */
     void setGeoShape(std::unique_ptr<Shape> shape);
 
@@ -300,7 +317,7 @@ class Obstacle {
      *
      * @return Reaction time [s].
      */
-    [[nodiscard]] std::optional<double> getReactionTime() const;
+    [[nodiscard]] double getReactionTime() const;
 
     /**
      * Getter for reference lane.
@@ -610,6 +627,7 @@ class Obstacle {
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
      *
+     * @param lanes List of existing lanes.
      * @param timeStep time step of interest
      * @return list of pointers to occupied lanes
      */
@@ -766,6 +784,7 @@ class Obstacle {
      * Returns distance to obstacle
      * @param timeStep time step of interest
      * @param obs Obstacle of interest
+     * @param roadnetwork Road network.
      * @return Distance [m]
      */
     double getLateralDistanceToObstacle(time_step_t timeStep, const std::shared_ptr<Obstacle> &obs,
@@ -802,6 +821,14 @@ class Obstacle {
     std::vector<std::shared_ptr<Lanelet>> getOccupiedLaneletsByState(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                                      size_t timeStep);
 
+    /**
+     * Checks whether history contains relevant time steps.
+     * @param currentTimeStep Current time step. Not equal to time step of currentState as obstacle might not be updated
+     * for several time steps. Relevant for deleting obstacle from world.
+     * @return Boolean indicating whether obstacle is still relevant for simulation.
+     */
+    bool historyPassed(size_t currentTimeStep) const;
+
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     ObstacleRole obstacleRole{ObstacleRole::DYNAMIC}; //**< CommonRoad obstacle role */
@@ -810,8 +837,6 @@ class Obstacle {
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
     size_t firstTimeStep;                             //**< first time step (current state or in history */
     size_t finalTimeStep;                             //**< final time step (current state or in prediction */
-    size_t relevantTimeIntervalSize{
-        100}; //**< relevant interval size around current time step to extract occupied lanelets in driving direction */
 
     ActuatorParameters actuatorParameters{
         ActuatorParameters::vehicleDefaults()}; //**< actuator parameters, e.g., maximum velocity */
@@ -819,6 +844,7 @@ class Obstacle {
         SensorParameters::dynamicDefaults()}; //**< sensor parameters, e.g., field of view */
     RoadNetworkParameters
         roadNetworkParameters; //**< road network parameters, e.g., required to create reference lane */
+    TimeParameters timeParameters{TimeParameters::dynamicDefaults()};
 
     state_map_t trajectoryPrediction{};       //**< trajectory prediction of the obstacle */
     signal_state_map_t signalSeries{};        //**< signal series of the obstacle */
@@ -953,4 +979,9 @@ class Obstacle {
      * @param timeStep Relevant time step.
      */
     void removeTimeStepFromMappingVariables(size_t timeStep);
+
+    /**
+     * Updates history of obstacle.
+     */
+    void updateHistory();
 };
