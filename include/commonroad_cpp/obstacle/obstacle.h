@@ -743,7 +743,7 @@ class Obstacle {
      *
      * @return Field of view area as polygon.
      */
-    const polygon_type &getFov() const;
+    const polygon_type &getFov();
 
     /**
      * Setter for field of view area.
@@ -829,6 +829,11 @@ class Obstacle {
      */
     bool historyPassed(size_t currentTimeStep) const;
 
+    /**
+     * Propagates time, i.e., current state is added to history and first prediction time step becomes current state.
+     */
+    void propagate();
+
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     ObstacleRole obstacleRole{ObstacleRole::DYNAMIC}; //**< CommonRoad obstacle role */
@@ -909,7 +914,6 @@ class Obstacle {
         convertedPositions{}; //**< map of time steps to CCS to curvilinear positions */
 
     mutable time_step_map_t<polygon_type> shapeAtTimeStep{}; //**< occupied polygon shape at time steps */
-    polygon_type fov;                                        //**< fov of vehicle captured by sensors */
 
     /**
      * Private setter for occupied lanelets at a time steps within a road network.
