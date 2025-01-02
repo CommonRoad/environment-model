@@ -52,7 +52,7 @@ void updateTrajectory(Obstacle *t, const nb::handle &py_state_list) {
 }
 
 void updateCurrentState(Obstacle *t, const nb::handle &py_current_state) {
-    t->setCurrentState(TranslatePythonTypes::extractState(py_current_state));
+    t->updateCurrentState(TranslatePythonTypes::extractState(py_current_state));
 }
 
 void updateObstaclesTraj(World *t, const nb::list &py_obstacles, const nb::mapping &py_current_states,
