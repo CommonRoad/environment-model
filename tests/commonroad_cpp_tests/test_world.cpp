@@ -298,3 +298,35 @@ TEST_F(WorldTest, UpdateObstaclesTraj) {
     EXPECT_NO_THROW(world1.updateObstaclesTraj(newObstacles, cstate, traj));
     EXPECT_EQ(world1.getObstacles().size(), 1);
 }
+
+TEST_F(WorldTest, Propagate) {
+    std::string scenario{"DEU_TestSafeDistance-1_1_T-1"};
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/predicates/" +
+                                  scenario.substr(0, scenario.size() - 6) + "/" + scenario + ".pb"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    auto wp{WorldParameters(RoadNetworkParameters(), SensorParameters(), ActuatorParameters::egoDefaults(),
+                            TimeParameters(5, 0.3), ActuatorParameters::vehicleDefaults())};
+    auto world{World("DEU_TestSafeDistance-1_1_T-1", 0, roadNetworkScenarioOne, {obstaclesScenarioOne.at(1)},
+                     {obstaclesScenarioOne.at(0)}, timeStepSizeOne, wp)};
+    size_t t1obs{obstaclesScenarioOne.at(0)->getCurrentState()->getTimeStep()};
+    size_t t2obs{obstaclesScenarioOne.at(0)->getStateByTimeStep(t1obs + 1)->getTimeStep()};
+    size_t t1ego{obstaclesScenarioOne.at(1)->getCurrentState()->getTimeStep()};
+    size_t t2ego{obstaclesScenarioOne.at(1)->getStateByTimeStep(t1ego + 1)->getTimeStep()};
+
+    world.propagate();
+    EXPECT_EQ(world.getObstacles().at(0)->getTrajectoryHistory().size(), 1);
+    EXPECT_EQ(world.getObstacles().at(0)->getTrajectoryHistory().begin()->second->getTimeStep(), t1obs);
+    EXPECT_EQ(world.getEgoVehicles().at(0)->getTrajectoryHistory().size(), 1);
+    EXPECT_EQ(world.getEgoVehicles().at(0)->getTrajectoryHistory().begin()->second->getTimeStep(), t1ego);
+    EXPECT_EQ(world.getObstacles().at(0)->getCurrentState()->getTimeStep(), t2obs);
+    EXPECT_EQ(world.getEgoVehicles().at(0)->getCurrentState()->getTimeStep(), t2ego);
+
+    world.propagate();
+    EXPECT_EQ(world.getObstacles().at(0)->getTrajectoryHistory().size(), 2);
+    EXPECT_EQ(world.getEgoVehicles().at(0)->getTrajectoryHistory().size(), 2);
+
+    world.propagate(false);
+    EXPECT_EQ(world.getObstacles().at(0)->getTrajectoryHistory().size(), 3);
+    EXPECT_EQ(world.getEgoVehicles().at(0)->getTrajectoryHistory().size(), 2);
+}

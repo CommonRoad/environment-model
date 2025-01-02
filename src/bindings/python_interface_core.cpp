@@ -388,6 +388,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("road_network", &World::getRoadNetwork)
         .def_prop_ro("ego_vehicles", &World::getEgoVehicles)
         .def_prop_ro("obstacles", &World::getObstacles)
+        .def("propagate", &World::propagate, nb::arg("ego") = true)
         .def("update_obstacles", &World::updateObstacles)
         .def("update_obstacles", &updateObstacles)
         .def("update_obstacles_traj", &updateObstaclesTraj);

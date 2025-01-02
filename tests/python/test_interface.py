@@ -345,6 +345,55 @@ class TestPythonInterface(unittest.TestCase):
         world1.update_obstacles_traj(new_obstacles, cstate, traj)
         self.assertEqual(len(world1.obstacles), 1)
 
+    def test_world_propagate(self):
+        full_path = (
+            Path(__file__).parent.parent.parent
+            / "tests/scenarios/predicates/DEU_TestSafeDistance-1/DEU_TestSafeDistance-1_1_T-1.pb"
+        )
+        scenario_path_tmp = Path(full_path)
+        map_path = (
+            scenario_path_tmp.parent
+            / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
+        )
+        scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
+        wp = crcpp.WorldParameters(
+            crcpp.RoadNetworkParameters(),
+            crcpp.SensorParameters(),
+            crcpp.ActuatorParameters(),
+            crcpp.TimeParameters(5, 0.3),
+            crcpp.ActuatorParameters(),
+        )
+        world = crcpp.World(
+            str(scenario.scenario_id),
+            2,
+            0.1,
+            "DEU",
+            scenario.lanelet_network,
+            [scenario.obstacles[1]],
+            [scenario.obstacles[0]],
+            wp,
+        )
+        t1obs = scenario.obstacles[0].initial_state.time_step
+        t2obs = scenario.obstacles[0].state_at_time(t1obs + 1).time_step
+        t1ego = scenario.obstacles[1].initial_state.time_step
+        t2ego = scenario.obstacles[1].state_at_time(t1ego + 1).time_step
+
+        world.propagate()
+        self.assertEqual(len(world.obstacles[0].history), 1)
+        self.assertEqual(world.obstacles[0].history[0].time_step, t1obs)
+        self.assertEqual(len(world.ego_vehicles[0].history), 1)
+        self.assertEqual(world.ego_vehicles[0].history[0].time_step, t1ego)
+        self.assertEqual(world.obstacles[0].current_state.time_step, t2obs)
+        self.assertEqual(world.ego_vehicles[0].current_state.time_step, t2ego)
+
+        world.propagate()
+        self.assertEqual(len(world.obstacles[0].history), 2)
+        self.assertEqual(len(world.ego_vehicles[0].history), 2)
+
+        world.propagate(False)
+        self.assertEqual(len(world.obstacles[0].history), 3)
+        self.assertEqual(len(world.ego_vehicles[0].history), 2)
+
 
 if __name__ == "__main__":
     unittest.main()
