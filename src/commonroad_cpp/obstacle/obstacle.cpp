@@ -87,12 +87,6 @@ Obstacle::Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr
         setIsStatic(true);
 
     setFirstLastTimeStep();
-
-    if (fov.empty()) {
-        auto vert{sensorParameters.getFieldOfViewVertices()};
-        setFov(geometric_operations::rotateAndTranslateVertices(
-            vert, {this->currentState->getXPosition(), this->currentState->getYPosition()}, 0));
-    }
 }
 
 void Obstacle::setId(const size_t oId) { obstacleId = oId; }
@@ -122,6 +116,8 @@ void Obstacle::updateCurrentState(const std::shared_ptr<State> &state) {
     currentState = state;
     setFirstLastTimeStep();
 }
+
+void Obstacle::setFov(const std::vector<vertex> &fovVertices) { sensorParameters.setFov(fovVertices); }
 
 void Obstacle::setObstacleType(ObstacleType type) { obstacleType = type; }
 
@@ -742,22 +738,7 @@ void Obstacle::setCurvilinearStates(const std::shared_ptr<RoadNetwork> &roadNetw
                 convertPointToCurvilinear(roadNetwork, timeStep);
 }
 
-const polygon_type &Obstacle::getFov() const { return fov; }
-
-void Obstacle::setFov(const std::vector<vertex> &fovVertices) {
-    polygon_type polygon;
-    polygon.outer().resize(fovVertices.size());
-    size_t idx{0};
-    for (const auto &left : fovVertices) {
-        polygon.outer()[idx] = point_type{left.x, left.y};
-        idx++;
-    }
-
-    fov = polygon;
-    boost::geometry::simplify(polygon, fov, 0.01);
-    boost::geometry::unique(fov);
-    boost::geometry::correct(fov);
-}
+const polygon_type &Obstacle::getFov() { return sensorParameters.getFieldOfViewPolygon(); }
 
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
@@ -958,4 +939,10 @@ bool Obstacle::historyPassed(size_t currentTimeStep) const {
     if (currentTimeStep - firstTimeStep > timeParameters.getRelevantHistorySize())
         return true;
     return false;
+}
+
+void Obstacle::propagate() {
+    size_t newCur{getCurrentState()->getTimeStep() + 1};
+    updateCurrentState(getStateByTimeStep(newCur));
+    trajectoryPrediction.erase(trajectoryPrediction.find(newCur));
 }

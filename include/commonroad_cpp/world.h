@@ -219,6 +219,14 @@ class World {
      */
     [[nodiscard]] WorldParameters getWorldParameters() const;
 
+    /**
+     * Propagate world time, i.e., current state is added to history and first prediction time step becomes current
+     * state.
+     *
+     * @param ego Boolean indicating whether ego vehicles should be propagated.
+     */
+    void propagate(bool ego = true);
+
   private:
     std::string name;                                   //**< ID/name of world. */
     size_t timeStep;                                    //**< reference time step where world was created. */

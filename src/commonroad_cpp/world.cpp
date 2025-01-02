@@ -205,3 +205,11 @@ void World::updateObstaclesTraj(
 }
 
 WorldParameters World::getWorldParameters() const { return worldParameters; }
+
+void World::propagate(bool ego) {
+    for (const auto &obs : obstacles)
+        obs->propagate();
+    if (ego)
+        for (const auto &obs : egoVehicles)
+            obs->propagate();
+}
