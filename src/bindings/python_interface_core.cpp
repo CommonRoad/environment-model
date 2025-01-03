@@ -244,6 +244,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def("time_step_exists", &Obstacle::timeStepExists)
         .def_prop_rw("actuator_parameters", &Obstacle::getActuatorParameters, &Obstacle::setActuatorParameters)
         .def_prop_rw("sensor_parameters", &Obstacle::getSensorParameters, &Obstacle::setSensorParameters)
+        .def_prop_rw("time_parameters", &Obstacle::getTimeParameters, &Obstacle::setTimeParameters)
         .def("get_state_by_time_step", &Obstacle::getStateByTimeStep)
         .def("reference_lane_by_time_step", &Obstacle::getReferenceLane)
         .def("get_time_steps", &Obstacle::getTimeSteps)

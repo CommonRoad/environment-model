@@ -276,6 +276,13 @@ class Obstacle {
     SensorParameters getSensorParameters() const;
 
     /**
+     * Getter for time parameters.
+     *
+     * @return Time parameters
+     */
+    TimeParameters getTimeParameters() const;
+
+    /**
      * Getter for road network parameters.
      *
      * @return Road network parameters
