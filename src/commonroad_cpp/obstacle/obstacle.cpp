@@ -63,8 +63,7 @@ static double rotatedMaximumLongitude(const Rectangle &rect, const double theta)
 
 Obstacle::Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
                    ObstacleType obstacleType, double vMax, double aMax, double aMaxLong, double aMinLong,
-                   double reactionTime, Obstacle::state_map_t trajectoryPrediction, double length, double width,
-                   const std::vector<vertex> &fov)
+                   double reactionTime, Obstacle::state_map_t trajectoryPrediction, double length, double width)
     : Obstacle{obstacleId,
                obstacleRole,
                std::move(currentState),
@@ -73,16 +72,16 @@ Obstacle::Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr
                SensorParameters{250.0, 250.0},
                TimeParameters{TimeParameters::dynamicDefaults().getRelevantHistorySize(), reactionTime},
                std::move(trajectoryPrediction),
-               std::make_unique<Rectangle>(length, width),
-               fov} {}
+               std::make_unique<Rectangle>(length, width)} {}
 
 Obstacle::Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
-                   ObstacleType obstacleType, ActuatorParameters actuatorParameters, SensorParameters sensorParameters,
-                   TimeParameters timeParameters, Obstacle::state_map_t trajectoryPrediction,
-                   std::unique_ptr<Shape> shape, const std::vector<vertex> &fov)
+                   ObstacleType obstacleType, const ActuatorParameters &actuatorParameters,
+                   const SensorParameters &sensorParameters, const TimeParameters &timeParameters,
+                   Obstacle::state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape)
     : obstacleId(obstacleId), obstacleRole(obstacleRole), currentState(std::move(currentState)),
       obstacleType(obstacleType), actuatorParameters(actuatorParameters), sensorParameters(sensorParameters),
-      trajectoryPrediction(std::move(trajectoryPrediction)), geoShape(std::move(shape)) {
+      timeParameters(timeParameters), trajectoryPrediction(std::move(trajectoryPrediction)),
+      geoShape(std::move(shape)) {
     if (obstacleRole == ObstacleRole::STATIC)
         setIsStatic(true);
 
