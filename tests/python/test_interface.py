@@ -394,6 +394,23 @@ class TestPythonInterface(unittest.TestCase):
         self.assertEqual(len(world.obstacles[0].history), 3)
         self.assertEqual(len(world.ego_vehicles[0].history), 2)
 
+    def test_obstacle_creation(self):
+        full_path = (
+            Path(__file__).parent.parent.parent
+            / "tests/scenarios/predicates/DEU_TestSafeDistance-1/DEU_TestSafeDistance-1_1_T-1.pb"
+        )
+        scenario_path_tmp = Path(full_path)
+        map_path = (
+            scenario_path_tmp.parent
+            / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
+        )
+        scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
+
+        obs = crcpp.Obstacle(scenario.obstacles[0])
+        self.assertEqual(obs.id, scenario.obstacles[0].obstacle_id)
+        self.assertEqual(obs.current_state.velocity, scenario.obstacles[0].initial_state.velocity)
+        self.assertEqual(obs.get_state_by_time_step(2).velocity, scenario.obstacles[0].state_at_time(2).velocity)
+
 
 if __name__ == "__main__":
     unittest.main()

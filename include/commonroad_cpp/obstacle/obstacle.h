@@ -61,11 +61,10 @@ class Obstacle {
      * @param trajectoryPrediction Map matching time step to state.
      * @param length Length of the obstacle [m].
      * @param width Width of the obstacle [m].
-     * @param fov Field of view.
      */
     Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
              ObstacleType obstacleType, double vMax, double aMax, double aMaxLong, double aMinLong, double reactionTime,
-             state_map_t trajectoryPrediction, double length, double width, const std::vector<vertex> &fov = {});
+             state_map_t trajectoryPrediction, double length, double width);
 
     /**
      * Constructor initializing several obstacle attributes.
@@ -80,12 +79,11 @@ class Obstacle {
      * @param timeParameters Time parameters of the obstacle.
      * @param trajectoryPrediction Map matching time step to state.
      * @param shape Obstacle shape. (only rectangles are currently supported!)
-     * @param fov Field of view.
      */
     Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
-             ObstacleType obstacleType, ActuatorParameters actuatorParameters, SensorParameters sensorParameters,
-             TimeParameters timeParameters, state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape,
-             const std::vector<vertex> &fov);
+             ObstacleType obstacleType, const ActuatorParameters &actuatorParameters,
+             const SensorParameters &sensorParameters, const TimeParameters &timeParameters,
+             state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape);
 
     /**
      * Setter for ID of obstacle.
