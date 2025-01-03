@@ -3,18 +3,16 @@
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 #include <commonroad_cpp/geometry/types.h>
+#include <optional>
 
 /**
  * SensorParameters includes information regarding obstacle sensors
  */
 class SensorParameters {
-    double fieldOfViewRear{100.0};  //**< length of field of view provided by rear sensors */
-    double fieldOfViewFront{150.0}; //**< length of field of view provided by front sensors */
-    // TODO update default fov values
-    std::vector<vertex> fovVertices{{0.0, -400.0}, {282.8427, -282.8427}, {400.0, 0.0},  {282.8427, 282.8427},
-                                    {0.0, 400.0},  {-282.8427, 282.8427}, {-400.0, 0.0}, {-282.8427, -282.8427},
-                                    {0.0, -400.0}}; //**< field of view region */
-    polygon_type fovPolygon;                        //**< field of view as boost polygon */
+    double fieldOfViewRear{100.0};                  //**< length of field of view provided by rear sensors */
+    double fieldOfViewFront{150.0};                 //**< length of field of view provided by front sensors */
+    std::optional<std::vector<vertex>> fovVertices; //**< field of view region */
+    std::optional<polygon_type> fovPolygon;         //**< field of view as boost polygon */
 
   public:
     /**
@@ -49,18 +47,14 @@ class SensorParameters {
      * Getter for field of view vertices.
      * @return List of vertices spanning field of view.
      */
-    [[nodiscard]] std::vector<vertex> getFieldOfViewVertices() const noexcept { return fovVertices; }
+    [[nodiscard]] std::vector<vertex> getFieldOfViewVertices() const noexcept { return fovVertices.value(); }
 
     /**
      * Getter for field of view polygon object.
      *
      * @return Boost polygon.
      */
-    [[nodiscard]] polygon_type getFieldOfViewPolygon() noexcept {
-        if (fovPolygon.outer().empty())
-            setFov(fovVertices);
-        return fovPolygon;
-    }
+    [[nodiscard]] polygon_type getFieldOfViewPolygon() noexcept { return fovPolygon.value(); }
 
     /**
      * Setter of field of fiew.
@@ -68,6 +62,7 @@ class SensorParameters {
      * @param fovVertices Vertices representing field of view.
      */
     void setFov(const std::vector<vertex> &fovVertices) {
+        this->fovVertices = fovVertices;
         polygon_type polygon;
         polygon.outer().resize(fovVertices.size());
         size_t idx{0};
@@ -77,9 +72,9 @@ class SensorParameters {
         }
 
         fovPolygon = polygon;
-        boost::geometry::simplify(polygon, fovPolygon, 0.01);
-        boost::geometry::unique(fovPolygon);
-        boost::geometry::correct(fovPolygon);
+        boost::geometry::simplify(polygon, fovPolygon.value(), 0.01);
+        boost::geometry::unique(fovPolygon.value());
+        boost::geometry::correct(fovPolygon.value());
     }
 
     /**
@@ -98,4 +93,19 @@ class SensorParameters {
      * @return Default static obstacle sensor parameters.
      */
     static SensorParameters staticDefaults() { return SensorParameters{0.0, 0.0}; }
+
+    /**
+     * Setter for default field of view.
+     */
+    void setDefaultFov() {
+        setFov({{0.0, -400.0},
+                {282.8427, -282.8427},
+                {400.0, 0.0},
+                {282.8427, 282.8427},
+                {0.0, 400.0},
+                {-282.8427, 282.8427},
+                {-400.0, 0.0},
+                {-282.8427, -282.8427},
+                {0.0, -400.0}});
+    }
 };
