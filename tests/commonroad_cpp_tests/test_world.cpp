@@ -329,4 +329,7 @@ TEST_F(WorldTest, Propagate) {
     world.propagate(false);
     EXPECT_EQ(world.getObstacles().at(0)->getTrajectoryHistory().size(), 3);
     EXPECT_EQ(world.getEgoVehicles().at(0)->getTrajectoryHistory().size(), 2);
+
+    for (size_t idx{0}; idx < 50; idx++)
+        world.propagate();
 }
