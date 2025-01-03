@@ -164,7 +164,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleSix = std::make_shared<Obstacle>(Obstacle(6, ObstacleRole::DYNAMIC, stateSevenObstacleSix,
                                                       ObstacleType::pedestrian, ActuatorParameters{50, 10, 3, -10, -10},
                                                       SensorParameters{250.0, 250.0}, TimeParameters::dynamicDefaults(),
-                                                      {}, std::make_unique<Circle>(Circle(1)), {}));
+                                                      {}, std::make_unique<Circle>(Circle(1))));
     obstacleSeven =
         std::make_shared<Obstacle>(Obstacle(7, ObstacleRole::DYNAMIC, stateZeroObstacleSeven, ObstacleType::car, 50, 10,
                                             3, -10, 0.3, trajectoryPredictionObstacleSeven, 5, 2));
