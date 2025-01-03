@@ -394,6 +394,9 @@ class TestPythonInterface(unittest.TestCase):
         self.assertEqual(len(world.obstacles[0].history), 3)
         self.assertEqual(len(world.ego_vehicles[0].history), 2)
 
+        for idx in range(50):
+            world.propagate()
+
     def test_obstacle_creation(self):
         full_path = (
             Path(__file__).parent.parent.parent
