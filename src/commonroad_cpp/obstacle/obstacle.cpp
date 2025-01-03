@@ -942,6 +942,8 @@ bool Obstacle::historyPassed(size_t currentTimeStep) const {
 
 void Obstacle::propagate() {
     size_t newCur{getCurrentState()->getTimeStep() + 1};
-    updateCurrentState(getStateByTimeStep(newCur));
-    trajectoryPrediction.erase(trajectoryPrediction.find(newCur));
+    if (timeStepExists(newCur)) {
+        updateCurrentState(getStateByTimeStep(newCur));
+        trajectoryPrediction.erase(trajectoryPrediction.find(newCur));
+    }
 }
