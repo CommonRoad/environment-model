@@ -201,6 +201,8 @@ ObstacleRole Obstacle::getObstacleRole() const { return obstacleRole; }
 
 ActuatorParameters Obstacle::getActuatorParameters() const { return actuatorParameters; }
 
+TimeParameters Obstacle::getTimeParameters() const { return timeParameters; }
+
 SensorParameters Obstacle::getSensorParameters() const { return sensorParameters; }
 
 RoadNetworkParameters Obstacle::getRoadNetworkParameters() const { return roadNetworkParameters; };
