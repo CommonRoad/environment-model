@@ -886,28 +886,13 @@ double Obstacle::getLateralDistanceToObstacle(time_step_t timeStep, const std::s
 }
 
 void Obstacle::resetTimeMappingVariables() {
-    occupiedLanelets.clear();
-    occupiedLaneletsState.clear();
-    occupiedLaneletsFront.clear();
-    occupiedLaneletsBack.clear();
-    occupiedLanesDrivingDir.clear();
-    occupiedLanesDrivingDir.clear();
-    occupiedLaneletsDrivingDir.clear();
-    occupiedLaneletsNotDrivingDir.clear();
-    referenceLane.clear();
-    occupiedLanes.clear();
-    frontXYPositions.clear();
-    backXYPositions.clear();
-    leftLatPosition.clear();
-    rightLatPosition.clear();
-    lateralDistanceToObjects.clear();
-    convertedPositions.clear();
-    shapeAtTimeStep.clear();
+    for (auto &timeStep : trajectoryPrediction)
+        removeTimeStepFromMappingVariables(timeStep.first);
 }
 
 void Obstacle::removeTimeStepFromMappingVariables(size_t timeStep) {
     occupiedLanelets.erase(timeStep);
-    occupiedLaneletsState.clear();
+    occupiedLaneletsState.erase(timeStep);
     occupiedLaneletsFront.erase(timeStep);
     occupiedLaneletsBack.erase(timeStep);
     occupiedLanesDrivingDir.erase(timeStep);
