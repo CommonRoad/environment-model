@@ -114,7 +114,7 @@ std::map<std::string, PredicateParam> paramMap = {
     {"standstillError",
      PredicateParam("standstillError",
                     "velocity deviation from zero which is still classified to be standstill [m/s^2]", 0.5, 0.0,
-                    {"in_standstill", "reverses"}, "acceleration", "both", "float", "m/s^2", 0.1)},
+                    {"in_standstill", "reverses"}, "acceleration", "both", "float", "m/s^2", 0.001)},
     {"stopLineDistance",
      PredicateParam("stopLineDistance", "maximum distance vehicle is seen as in front of stop line [m]", 10.0, 0.0,
                     {"stop_line_in_front"}, "distance", "greater", "float", "m", 5.0)},
