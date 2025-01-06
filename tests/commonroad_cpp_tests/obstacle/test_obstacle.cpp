@@ -566,3 +566,14 @@ TEST_F(ObstacleTest, testGetLateralDistanceToObstacle) {
     EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(2, obstacleSeven, roadNetwork), 10);
     EXPECT_EQ(obstacleThree->getLateralDistanceToObstacle(3, obstacleSeven, roadNetwork), 8.5);
 }
+
+TEST_F(ObstacleTest, resetTimeVariables) {
+    auto timeSteps{obstacleOne->getTimeSteps()};
+    for (const auto time : timeSteps)
+        obstacleOne->getOccupiedLaneletsByShape(roadNetwork, time);
+    obstacleOne->setTrajectoryPrediction({});
+    for (const auto time : timeSteps) {
+        if (time != obstacleOne->getCurrentState()->getTimeStep())
+            EXPECT_THROW(obstacleOne->getOccupiedLaneletsByShape(roadNetwork, time), std::logic_error);
+    }
+}
