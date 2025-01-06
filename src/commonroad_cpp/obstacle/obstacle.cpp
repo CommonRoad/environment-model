@@ -179,7 +179,7 @@ std::shared_ptr<State> Obstacle::getStateByTimeStep(size_t timeStep) const {
         return trajectoryHistory.at(timeStep);
     else
         throw std::logic_error("Time step does not exist. Obstacle ID: " + std::to_string(this->getId()) +
-                               " - Time step: " + std::to_string(timeStep));
+                               " - Time step: " + std::to_string(timeStep) + " - First time step: " + std::to_string(firstTimeStep) + " - Final time step: " + std::to_string(finalTimeStep);
 }
 
 std::shared_ptr<SignalState> Obstacle::getSignalStateByTimeStep(size_t timeStep) const {
