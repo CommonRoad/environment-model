@@ -112,9 +112,13 @@ void Obstacle::updateHistory() {
 }
 
 void Obstacle::updateCurrentState(const std::shared_ptr<State> &state) {
-    updateHistory();
-    currentState = state;
-    setFirstLastTimeStep();
+    if (timeParameters.getRelevantHistorySize() == 0)
+        setCurrentState(state);
+    else {
+        updateHistory();
+        currentState = state;
+        setFirstLastTimeStep();
+    }
 }
 
 void Obstacle::setFov(const std::vector<vertex> &fovVertices) { sensorParameters.setFov(fovVertices); }
