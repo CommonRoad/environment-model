@@ -103,7 +103,8 @@ void Obstacle::setCurrentState(const std::shared_ptr<State> &state) {
 }
 
 void Obstacle::updateHistory() {
-    trajectoryHistory[currentState->getTimeStep()] = currentState;
+    if (timeParameters.getRelevantHistorySize() > 0)
+        trajectoryHistory[currentState->getTimeStep()] = currentState;
     if (trajectoryHistory.size() > timeParameters.getRelevantHistorySize()) {
         trajectoryHistory.erase(firstTimeStep);
         removeTimeStepFromMappingVariables(firstTimeStep);
@@ -129,15 +130,17 @@ void Obstacle::setTimeParameters(TimeParameters params) { timeParameters = param
 void Obstacle::setRoadNetworkParameters(RoadNetworkParameters params) { roadNetworkParameters = params; };
 
 void Obstacle::setTrajectoryPrediction(const Obstacle::state_map_t &trajPrediction) {
+    for (const auto &[time, state] : trajectoryPrediction)
+        removeTimeStepFromMappingVariables(time);
     trajectoryPrediction = trajPrediction;
     setFirstLastTimeStep();
-    resetTimeMappingVariables();
 }
 
 void Obstacle::setTrajectoryHistory(const Obstacle::state_map_t &trajHistory) {
+    for (const auto &[time, state] : trajectoryHistory)
+        removeTimeStepFromMappingVariables(time);
     trajectoryHistory = trajHistory;
     setFirstLastTimeStep();
-    resetTimeMappingVariables();
 }
 
 void Obstacle::setRectangleShape(double length, double width) { geoShape = std::make_unique<Rectangle>(length, width); }
@@ -886,31 +889,15 @@ double Obstacle::getLateralDistanceToObstacle(time_step_t timeStep, const std::s
 }
 
 void Obstacle::resetTimeMappingVariables() {
-    occupiedLanelets.clear();
-    occupiedLaneletsState.clear();
-    occupiedLaneletsFront.clear();
-    occupiedLaneletsBack.clear();
-    occupiedLanesDrivingDir.clear();
-    occupiedLanesDrivingDir.clear();
-    occupiedLaneletsDrivingDir.clear();
-    occupiedLaneletsNotDrivingDir.clear();
-    referenceLane.clear();
-    occupiedLanes.clear();
-    frontXYPositions.clear();
-    backXYPositions.clear();
-    leftLatPosition.clear();
-    rightLatPosition.clear();
-    lateralDistanceToObjects.clear();
-    convertedPositions.clear();
-    shapeAtTimeStep.clear();
+    for (auto &timeStep : trajectoryPrediction)
+        removeTimeStepFromMappingVariables(timeStep.first);
 }
 
 void Obstacle::removeTimeStepFromMappingVariables(size_t timeStep) {
     occupiedLanelets.erase(timeStep);
-    occupiedLaneletsState.clear();
+    occupiedLaneletsState.erase(timeStep);
     occupiedLaneletsFront.erase(timeStep);
     occupiedLaneletsBack.erase(timeStep);
-    occupiedLanesDrivingDir.erase(timeStep);
     occupiedLanesDrivingDir.erase(timeStep);
     occupiedLaneletsDrivingDir.erase(timeStep);
     occupiedLaneletsNotDrivingDir.erase(timeStep);
