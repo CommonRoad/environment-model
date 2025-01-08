@@ -29,6 +29,8 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/geometry/circle.cpp
         commonroad_cpp/geometry/geometric_operations.cpp
         commonroad_cpp/geometry/rectangle.cpp
+        commonroad_cpp/geometry/shape_group.cpp
+        commonroad_cpp/geometry/polygon.cpp
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2018b.cpp
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2020a.cpp
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
@@ -50,6 +52,8 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/geometry/geometric_operations.h
         commonroad_cpp/geometry/rectangle.h
         commonroad_cpp/geometry/shape.h
+        commonroad_cpp/geometry/shape_group.h
+        commonroad_cpp/geometry/polygon.h
         commonroad_cpp/geometry/types.h
         commonroad_cpp/interfaces/commonroad/input_utils.h
         commonroad_cpp/interfaces/commonroad/xml_reader.h

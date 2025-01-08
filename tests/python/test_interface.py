@@ -414,6 +414,35 @@ class TestPythonInterface(unittest.TestCase):
         self.assertEqual(obs.current_state.velocity, scenario.obstacles[0].initial_state.velocity)
         self.assertEqual(obs.get_state_by_time_step(2).velocity, scenario.obstacles[0].state_at_time(2).velocity)
 
+    def test_shapes(self):
+        rec = crcpp.Rectangle(1, 2)
+        circ = crcpp.Circle(3)
+        vert1 = crcpp.Vertex()
+        vert1.x = 0
+        vert1.y = 1
+        vert2 = crcpp.Vertex()
+        vert2.x = 1
+        vert2.y = 0
+        vert3 = crcpp.Vertex()
+        vert3.x = 1
+        vert3.y = 4
+        poly = crcpp.Polygon([vert1, vert2, vert3])
+        sgroup = crcpp.ShapeGroup([rec, circ, poly])
+
+        self.assertEqual(len(sgroup.shapes), 3)
+        self.assertEqual(circ.radius, 3)
+        circ.radius = 2
+        self.assertEqual(circ.radius, 2)
+        self.assertEqual(rec.width, 2)
+        rec.width = 3
+        self.assertEqual(rec.width, 3)
+        self.assertEqual(rec.length, 1)
+        rec.length = 4
+        self.assertEqual(rec.length, 4)
+        self.assertEqual(poly.vertices[0].x, 0)
+        self.assertEqual(poly.vertices[2].y, 4)
+        self.assertEqual(sgroup.shapes[0].width, 3)
+
 
 if __name__ == "__main__":
     unittest.main()
