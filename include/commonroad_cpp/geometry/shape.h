@@ -1,7 +1,6 @@
 #pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include <string>
 
 /**
  * Class representing a shape.

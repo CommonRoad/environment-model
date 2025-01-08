@@ -1,9 +1,4 @@
-//
-// Created by sebastian on 26.12.20.
-//
-
-#ifndef ENV_MODEL_TEST_RECTANGLE_H
-#define ENV_MODEL_TEST_RECTANGLE_H
+#pragma once
 
 #include "commonroad_cpp/geometry/rectangle.h"
 #include <gtest/gtest.h>
@@ -24,8 +19,5 @@ class RectangleTestInitialization {
 };
 
 class RectangleTest : public testing::Test, public RectangleTestInitialization {
-  private:
     void SetUp() override;
 };
-
-#endif // ENV_MODEL_TEST_RECTANGLE_H

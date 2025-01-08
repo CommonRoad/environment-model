@@ -115,7 +115,7 @@ enum class TrafficLightState { red, green, yellow, red_yellow, inactive };
 
 enum class Direction { left, straight, right, leftStraight, straightRight, leftRight, all };
 
-enum class ShapeType { rectangle, circle };
+enum class ShapeType { rectangle, circle, polygon, shapeGroup };
 
 enum class ContainmentType { PARTIALLY_CONTAINED, COMPLETELY_CONTAINED };
 

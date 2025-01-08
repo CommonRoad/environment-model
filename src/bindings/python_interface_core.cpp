@@ -11,6 +11,10 @@
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
+#include "commonroad_cpp/geometry/circle.h"
+#include "commonroad_cpp/geometry/polygon.h"
+#include "commonroad_cpp/geometry/rectangle.h"
+#include "commonroad_cpp/geometry/shape_group.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h"
 #include "python_interface_core.h"
 #include "python_interface_predicates.h"
@@ -150,8 +154,25 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_rw("points", &StopLine::getPoints, &StopLine::setPoints)
         .def_prop_rw("line_marking", &StopLine::getLineMarking, &StopLine::setLineMarking);
 
-    // TODO: Extend Shape definition
     nb::class_<Shape>(m, "Shape");
+
+    nb::class_<Circle, Shape>(m, "Circle")
+        .def(nb::init<double>())
+        .def_prop_rw("radius", &Circle::getRadius, &Circle::setRadius);
+
+    nb::class_<Rectangle, Shape>(m, "Rectangle")
+        .def(nb::init<double, double>())
+        .def_prop_rw("width", &Rectangle::getWidth, &Rectangle::setWidth)
+        .def_prop_rw("length", &Rectangle::getLength, &Rectangle::setLength);
+
+    nb::class_<Polygon, Shape>(m, "Polygon")
+        .def(nb::init<std::vector<vertex>>())
+        .def_prop_ro("vertices", &Polygon::getPolygonVertices);
+
+    nb::class_<ShapeGroup, Shape>(m, "ShapeGroup")
+        .def(nb::init<>())
+        .def(nb::init<std::vector<std::shared_ptr<Shape>>>())
+        .def_prop_ro("shapes", &ShapeGroup::getShapes);
 
     nb::class_<State>(m, "State")
         .def_prop_rw("time_step", &State::getTimeStep, &State::setTimeStep)
@@ -212,7 +233,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("actuator_params_obstacles", &WorldParameters::getActuatorParamsObstacles)
         .def_prop_ro("time_params", &WorldParameters::getTimeParams);
 
-    nb::class_<vertex>(m, "Vertex").def_rw("x", &vertex::x).def_rw("y", &vertex::y);
+    nb::class_<vertex>(m, "Vertex").def(nb::init<>()).def_rw("x", &vertex::x).def_rw("y", &vertex::y);
 
     nb::class_<Obstacle>(m, "Obstacle")
         .def(
