@@ -19,6 +19,8 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/obstacle/test_obstacle_operations.cpp
         commonroad_cpp_tests/geometry/test_rectangle.cpp
         commonroad_cpp_tests/geometry/test_circle.cpp
+        commonroad_cpp_tests/geometry/test_polygon.cpp
+        commonroad_cpp_tests/geometry/test_shape_group.cpp
         commonroad_cpp_tests/geometry/test_geometric_operations.cpp
         commonroad_cpp_tests/interfaces/test_interfaces.cpp
         commonroad_cpp_tests/auxiliaryDefs/test_timer.cpp
