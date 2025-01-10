@@ -25,6 +25,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/obstacle/time_parameters.cpp
         commonroad_cpp/obstacle/signal_state.cpp
         commonroad_cpp/obstacle/state.cpp
+        commonroad_cpp/obstacle/occupancy.cpp
         commonroad_cpp/obstacle/state_meta_info.cpp
         commonroad_cpp/geometry/circle.cpp
         commonroad_cpp/geometry/geometric_operations.cpp
@@ -65,6 +66,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/obstacle/sensor_parameters.h
         commonroad_cpp/obstacle/time_parameters.h
         commonroad_cpp/obstacle/state.h
+        commonroad_cpp/obstacle/occupancy.h
         commonroad_cpp/obstacle/signal_state.h
         commonroad_cpp/obstacle/state_meta_info.h
         commonroad_cpp/roadNetwork/intersection/incoming_group.h

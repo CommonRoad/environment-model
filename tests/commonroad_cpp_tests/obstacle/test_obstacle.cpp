@@ -50,7 +50,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     obstacleOne->setSensorParameters(sensorParamsObstacleOne);
     obstacleOne->appendStateToHistory(stateOne);
     obstacleOne->setTrajectoryPrediction(trajectoryPredictionObstacleOne);
-    obstacleOne->setRectangleShape(lengthObstacleOne, widthObstacleOne);
+    obstacleOne->setGeoShape(std::make_unique<Rectangle>(lengthObstacleOne, widthObstacleOne));
     obstacleOne->computeLanes(roadNetwork, true);
 
     idObstacleTwo = 2;
