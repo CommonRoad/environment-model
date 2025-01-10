@@ -3,6 +3,7 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/obstacle/occupancy.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
@@ -101,6 +102,14 @@ nb::dict getTrajectoryPrediction(Obstacle *t) {
     return trajDict;
 }
 
+nb::dict getSetBasedPrediction(Obstacle *t) {
+    nb::dict predDict;
+    for (const auto &item : t->getSetBasedPrediction()) {
+        predDict[nb::cast(item.first)] = nb::cast(item.second);
+    }
+    return predDict;
+}
+
 nb::dict getTrajectoryHistory(Obstacle *t) {
     nb::dict trajDict;
     for (const auto &item : t->getTrajectoryHistory()) {
@@ -173,6 +182,12 @@ void init_python_interface_core(nb::module_ &m) {
         .def(nb::init<>())
         .def(nb::init<std::vector<std::shared_ptr<Shape>>>())
         .def_prop_ro("shapes", &ShapeGroup::getShapes);
+
+    nb::class_<Occupancy>(m, "Occupancy")
+        .def(nb::init<>())
+        .def(nb::init<size_t, std::shared_ptr<Shape>>())
+        .def_prop_rw("time_step", &Occupancy::getTimeStep, &Occupancy::setTimeStep)
+        .def_prop_rw("shape", &Occupancy::getShape, &Occupancy::setShape);
 
     nb::class_<State>(m, "State")
         .def_prop_rw("time_step", &State::getTimeStep, &State::setTimeStep)
@@ -258,6 +273,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_ro("current_signal_state", &Obstacle::getCurrentSignalState)
         .def_prop_ro("trajectory_prediction", &getTrajectoryPrediction)
         .def_prop_ro("history", &getTrajectoryHistory)
+        .def_prop_ro("set_based_prediction", &getSetBasedPrediction)
         .def("shape", &Obstacle::getGeoShape)
         .def("occupied_lanes", &Obstacle::getOccupiedLanes)
         .def("occupied_lanelets", &Obstacle::getOccupiedLaneletsByShape)

@@ -22,9 +22,11 @@
 
 #include <tsl/robin_map.h>
 
+class ShapeGroup;
 class Lanelet;
 class Lane;
 class RoadNetwork;
+class Occupancy;
 namespace geometry {
 class CurvilinearCoordinateSystem;
 }
@@ -37,6 +39,8 @@ class Obstacle {
     template <typename Value> using time_step_map_t = tsl::robin_map<time_step_t, Value>;
     //** type of history/trajectory prediction maps for physical states */
     using state_map_t = time_step_map_t<std::shared_ptr<State>>;
+    //** type of prediction maps for occupancies */
+    using occupancy_map_t = time_step_map_t<std::shared_ptr<Occupancy>>;
     //** type of history/trajectory prediction maps for signal states*/
     using signal_state_map_t = time_step_map_t<std::shared_ptr<SignalState>>;
 
@@ -177,22 +181,6 @@ class Obstacle {
     void setTrajectoryHistory(const state_map_t &trajHistory);
 
     /**
-     * Setter for obstacle shape of type rectangle.
-     *
-     * @param length Length of the obstacle [m].
-     * @param width Width of the obstacle [m].
-     */
-    void setRectangleShape(double length, double width);
-
-    /**
-     * Setter for obstacle of shape type circle.
-     *
-     * @param radius Radius of obstacle [m].
-     * @param center Center of circle as vertex.
-     */
-    void setCircleShape(double radius, vertex center = {});
-
-    /**
      * Setter for obstacle shape
      * @param shape Shape
      */
@@ -204,6 +192,13 @@ class Obstacle {
      * @param state Pointer to state object.
      */
     void appendStateToTrajectoryPrediction(const std::shared_ptr<State> &state);
+
+    /**
+     * Appends an occupancy to the set based prediction.
+     *
+     * @param occ Occupancy object.
+     */
+    void appendOccupancyToSetBasedPrediction(const std::shared_ptr<Occupancy> &occ);
 
     /**
      * Appends a state to the history.
@@ -839,6 +834,13 @@ class Obstacle {
      */
     void propagate();
 
+    /**
+     * Getter for set-based prediction.
+     *
+     * @return Set-based prediction of the obstacle.
+     */
+    occupancy_map_t getSetBasedPrediction() const;
+
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     ObstacleRole obstacleRole{ObstacleRole::DYNAMIC}; //**< CommonRoad obstacle role */
@@ -857,6 +859,7 @@ class Obstacle {
     TimeParameters timeParameters{TimeParameters::dynamicDefaults()};
 
     state_map_t trajectoryPrediction{};       //**< trajectory prediction of the obstacle */
+    occupancy_map_t setBasedPrediction{};     //**< set-based prediction of the obstacle */
     signal_state_map_t signalSeries{};        //**< signal series of the obstacle */
     state_map_t trajectoryHistory{};          //**< previous states of the obstacle */
     signal_state_map_t signalSeriesHistory{}; //**< previous signal states of the obstacle */

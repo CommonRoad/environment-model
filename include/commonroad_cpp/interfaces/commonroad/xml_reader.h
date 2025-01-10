@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include <memory>
@@ -21,6 +14,7 @@ class World;
 class Lanelet;
 class TrafficSign;
 class TrafficLight;
+class Occupancy;
 
 namespace pugi {
 class xml_node;
@@ -112,20 +106,22 @@ std::shared_ptr<State> extractInitialState(const pugi::xml_node &child);
 std::shared_ptr<SignalState> extractSignalState(const pugi::xml_node &child);
 
 /**
- * Extracts an state from a XML node element.
+ * Extracts a state from an XML node element.
  *
- * @param child XML node element.
+ * @param states XML node element.
  * @return Pointer to state.
  */
 std::shared_ptr<State> extractState(const pugi::xml_node &states);
 
+std::shared_ptr<Occupancy> extractOccupancy(const pugi::xml_node &child);
+
 /**
- * Extracts shape from a XML node and assigns it to obstacle.
+ * Extracts shape from an XML node and assigns it to obstacle.
  *
  * @param obstacle Obstacle for which state should be set.
  * @param child XML node element
  */
-void extractShape(const std::shared_ptr<Obstacle> &obstacle, pugi::xml_node child);
+void extractObstacleShape(const std::shared_ptr<Obstacle> &obstacle, pugi::xml_node child);
 
 /**
  * Creates a dynamic obstacle from a XML node element and adds the obstacle to provided vector.

@@ -443,6 +443,73 @@ class TestPythonInterface(unittest.TestCase):
         self.assertEqual(poly.vertices[2].y, 4)
         self.assertEqual(sgroup.shapes[0].width, 3)
 
+    def test_occupancy(self):
+        rec = crcpp.Rectangle(1, 2)
+        circ = crcpp.Circle(3)
+        vert1 = crcpp.Vertex()
+        vert1.x = 0
+        vert1.y = 1
+        vert2 = crcpp.Vertex()
+        vert2.x = 1
+        vert2.y = 0
+        vert3 = crcpp.Vertex()
+        vert3.x = 1
+        vert3.y = 4
+        poly = crcpp.Polygon([vert1, vert2, vert3])
+        sgroup = crcpp.ShapeGroup([rec, circ, poly])
+
+        occ1 = crcpp.Occupancy(1, rec)
+        occ2 = crcpp.Occupancy(2, sgroup)
+
+        self.assertEqual(occ1.time_step, 1)
+        self.assertEqual(occ2.time_step, 2)
+
+        self.assertEqual(occ1.shape.width, 2)
+        self.assertEqual(len(occ2.shape.shapes), 3)
+
+    def test_set_based_prediction(self):
+        file_path1 = Path(__file__).parent.parent.parent / "tests/scenarios/USA_Lanker-1_1_S-1.xml"
+        scenario1, _ = CommonRoadFileReader(filename_2020a=file_path1).open()
+        world1 = crcpp.World(
+            str(scenario1.scenario_id),
+            2,
+            0.1,
+            "DEU",
+            scenario1.lanelet_network,
+            [],
+            scenario1.obstacles,
+        )
+
+        for obs in world1.obstacles:
+            sp = obs.set_based_prediction
+            self.assertEqual(len(sp), len(scenario1.obstacle_by_id(obs.id).prediction.occupancy_set))
+            idx = 0
+            for time_step, occ in sp.items():
+                self.assertEqual(time_step, scenario1.obstacle_by_id(obs.id).prediction.occupancy_set[idx].time_step)
+                idx += 1
+
+        sp = world1.obstacles[0].set_based_prediction
+        idx = 0
+        self.assertEqual(
+            len(list(sp.values())[0].shape.vertices),
+            len(scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancy_set[0].shape.vertices),
+        )
+        for vert in list(sp.values())[0].shape.vertices:
+            self.assertEqual(
+                vert.x,
+                scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancy_set[0].shape.vertices[idx][0],
+            )
+            self.assertEqual(
+                vert.y,
+                scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancy_set[0].shape.vertices[idx][1],
+            )
+            idx += 1
+
+        self.assertEqual(
+            len(list(sp.values())[1].shape.shapes),
+            len(scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancy_set[1].shape.shapes),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

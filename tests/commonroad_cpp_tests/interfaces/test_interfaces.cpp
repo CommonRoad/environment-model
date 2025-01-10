@@ -3,6 +3,8 @@
 #include <boost/algorithm/string/split.hpp>
 #include <tuple>
 
+#include "commonroad_cpp/obstacle/occupancy.h"
+
 TEST_F(InterfacesTest, Read2018bFileSingleThread) {
     std::string xmlFilePath{TestUtils::getTestScenarioDirectory() + "/DEU_Muc-2_1_T-1.xml"};
 
@@ -135,6 +137,25 @@ TEST_F(InterfacesTest, SameObstacles) {
         EXPECT_EQ(obstacleXml->getId(), obstaclePb->getId());
         EXPECT_EQ(obstacleXml->isStatic(), obstaclePb->isStatic());
         EXPECT_EQ(obstacleXml->getObstacleType(), obstaclePb->getObstacleType());
+    }
+}
+
+TEST_F(InterfacesTest, SetBasedPrediction) {
+    std::string scenarioName = "USA_Lanker-1_1_S-1";
+    std::vector<std::string> pathSplit;
+    boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
+    auto dirName{pathSplit[0] + "_" + pathSplit[1]};
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/" + scenarioName + ".xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+
+    const std::vector<std::shared_ptr<Obstacle>> obstaclesXml = std::get<0>(scenarioXml);
+
+    for (const auto &obstacleXml : obstaclesXml) {
+        EXPECT_GT(obstacleXml->getSetBasedPrediction().size(), 0);
+        if (obstacleXml->getId() == 1213) {
+            EXPECT_EQ(obstacleXml->getSetBasedPrediction().at(1)->getShape()->getType(), ShapeType::polygon);
+            EXPECT_EQ(obstacleXml->getSetBasedPrediction().at(2)->getShape()->getType(), ShapeType::shapeGroup);
+        }
     }
 }
 
