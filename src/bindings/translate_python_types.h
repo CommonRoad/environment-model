@@ -44,6 +44,13 @@ std::vector<std::shared_ptr<Obstacle>> convertObstacles(const nb::list &py_obsta
 std::shared_ptr<State> extractState(nb::handle py_state);
 
 /**
+* Converts Python Occupancy.
+ @param py_occupancy Python occupancy object.
+    @return C++ Occupancy.
+*/
+std::shared_ptr<Occupancy> extractOccupancy(nb::handle py_occupancy);
+
+/**
  * Create dynamic obstacle.
  * @param py_singleObstacle Python dynamic obstacle.
  * @return C++ dynamic obstacle.

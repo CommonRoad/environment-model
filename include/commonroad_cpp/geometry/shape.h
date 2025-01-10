@@ -85,7 +85,7 @@ class Shape {
      *
      * @param factor Scaling factor.
      */
-    virtual void scaleShape(double) {}
+    virtual void scaleShape(double factor) {}
 
     /**
      * Virtual print function. Prints general information about shape.
