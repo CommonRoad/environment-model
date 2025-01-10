@@ -1,6 +1,8 @@
 #include <cstring>
 #include <utility>
 
+#include <commonroad_cpp/geometry/polygon.h>
+#include <commonroad_cpp/geometry/rectangle.h>
 #include <pugixml.hpp>
 
 #include "commonroad_cpp/obstacle/obstacle.h"
@@ -16,6 +18,9 @@
 #include "commonroad_factory_2020a.h"
 
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
+
+#include "commonroad_cpp/geometry/shape_group.h"
+#include "commonroad_cpp/obstacle/occupancy.h"
 
 double XMLReader::extractTimeStepSize(const std::string &xmlFile) {
     std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
@@ -128,6 +133,38 @@ std::shared_ptr<SignalState> XMLReader::extractSignalState(const pugi::xml_node 
     return std::make_shared<SignalState>(initialSignalState);
 }
 
+std::shared_ptr<Occupancy> XMLReader::extractOccupancy(const pugi::xml_node &child) {
+    Occupancy occ;
+    occ.setTimeStep(child.child("time").child("exact").text().as_ullong());
+    std::vector<std::shared_ptr<Shape>> shapes;
+    for (pugi::xml_node shape = child.first_child(); shape != nullptr; shape = shape.next_sibling()) {
+        for (pugi::xml_node xmlShape = shape.first_child(); xmlShape != nullptr; xmlShape = xmlShape.next_sibling()) {
+            if ((strcmp(xmlShape.name(), "rectangle")) == 0)
+                shapes.push_back(std::make_shared<Rectangle>(xmlShape.child("length").text().as_double(),
+                                                             xmlShape.child("width").text().as_double()));
+            else if ((strcmp(xmlShape.name(), "circle")) == 0) {
+                vertex vert{xmlShape.child("center").child("x").text().as_double(),
+                            xmlShape.child("center").child("y").text().as_double()};
+                shapes.push_back(std::make_shared<Circle>(xmlShape.child("radius").text().as_double(), vert));
+            } else if ((strcmp(xmlShape.name(), "polygon")) == 0) {
+                std::vector<vertex> vertices;
+                for (pugi::xml_node points = xmlShape.first_child(); points != nullptr;
+                     points = points.next_sibling()) {
+                    if ((strcmp(points.name(), "point")) == 0)
+                        vertices.push_back(
+                            {points.child("x").text().as_double(), points.child("y").text().as_double()});
+                }
+                shapes.push_back(std::make_shared<Polygon>(vertices));
+            }
+        }
+    }
+    if (shapes.size() == 1)
+        occ.setShape(shapes.front());
+    else
+        occ.setShape(std::make_shared<ShapeGroup>(shapes));
+    return std::make_shared<Occupancy>(occ);
+}
+
 std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
     State sta;
     sta.setTimeStep(states.child("time").child("exact").text().as_ullong());
@@ -140,14 +177,23 @@ std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
     return std::make_shared<State>(sta);
 }
 
-void XMLReader::extractShape(const std::shared_ptr<Obstacle> &obstacle, pugi::xml_node child) {
-    if ((strcmp(child.first_child().name(), "rectangle")) == 0) { // TODO: other shape types
-        obstacle->setRectangleShape(child.first_child().child("length").text().as_double(),
-                                    child.first_child().child("width").text().as_double());
-    } else if ((strcmp(child.first_child().name(), "circle")) == 0)
-        obstacle->setCircleShape(child.first_child().child("radius").text().as_double(),
-                                 {child.first_child().child("center").child("x").text().as_double(),
-                                  child.first_child().child("center").child("y").text().as_double()});
+void XMLReader::extractObstacleShape(const std::shared_ptr<Obstacle> &obstacle, pugi::xml_node child) {
+    std::vector<Shape> shapes;
+    if ((strcmp(child.first_child().name(), "rectangle")) == 0)
+        obstacle->setGeoShape(std::make_unique<Rectangle>(child.first_child().child("length").text().as_double(),
+                                                          child.first_child().child("width").text().as_double()));
+    else if ((strcmp(child.first_child().name(), "circle")) == 0) {
+        vertex vert{child.first_child().child("center").child("x").text().as_double(),
+                    child.first_child().child("center").child("y").text().as_double()};
+        obstacle->setGeoShape(std::make_unique<Circle>(child.first_child().child("radius").text().as_double(), vert));
+    } else if ((strcmp(child.first_child().name(), "polygon")) == 0) {
+        std::vector<vertex> vertices;
+        for (pugi::xml_node points = child.first_child(); points != nullptr; points = points.next_sibling()) {
+            if ((strcmp(points.name(), "point")) == 0)
+                vertices.push_back({points.child("x").text().as_double(), points.child("y").text().as_double()});
+        }
+        obstacle->setGeoShape(std::make_unique<Polygon>(vertices));
+    }
 }
 
 void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
@@ -164,7 +210,7 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
         if ((strcmp(child.name(), "type")) == 0)
             tempObstacle->setObstacleType(obstacle_operations::matchStringToObstacleType(child.text().as_string()));
         if ((strcmp(child.name(), "shape")) == 0) {
-            extractShape(tempObstacle, child);
+            extractObstacleShape(tempObstacle, child);
             continue;
         }
         if ((strcmp(child.name(), "initialState")) == 0) {
@@ -174,12 +220,14 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
             std::shared_ptr<SignalState> initialSignalState{XMLReader::extractSignalState(child)};
             tempObstacle->setCurrentSignalState(initialSignalState);
         } else if ((strcmp(child.name(), "trajectory")) == 0) {
-            for (pugi::xml_node states = child.first_child(); states != nullptr; states = states.next_sibling()) {
+            for (pugi::xml_node states = child.first_child(); states != nullptr; states = states.next_sibling())
                 tempObstacle->appendStateToTrajectoryPrediction(XMLReader::extractState(states));
-            }
         } else if ((strcmp(child.name(), "signalSeries")) == 0) {
-            for (pugi::xml_node states = child.first_child(); states != nullptr; states = states.next_sibling()) {
+            for (pugi::xml_node states = child.first_child(); states != nullptr; states = states.next_sibling())
                 tempObstacle->appendSignalStateToSeries(XMLReader::extractSignalState(states));
+        } else if ((strcmp(child.name(), "occupancySet")) == 0) {
+            for (pugi::xml_node occ = child.first_child(); occ != nullptr; occ = occ.next_sibling()) {
+                tempObstacle->appendOccupancyToSetBasedPrediction(XMLReader::extractOccupancy(occ));
             }
         }
     }
@@ -200,7 +248,7 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
         if ((strcmp(child.name(), "type")) == 0)
             tempObstacle->setObstacleType(obstacle_operations::matchStringToObstacleType(child.text().as_string()));
         if ((strcmp(child.name(), "shape")) == 0) {
-            extractShape(tempObstacle, child);
+            extractObstacleShape(tempObstacle, child);
             continue;
         } else if ((strcmp(child.name(), "initialState")) == 0) {
             std::shared_ptr<State> initialState{XMLReader::extractInitialState(child)};

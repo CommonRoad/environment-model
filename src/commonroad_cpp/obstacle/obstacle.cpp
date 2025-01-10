@@ -19,6 +19,7 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/obstacle/obstacle_reference.h>
+#include <commonroad_cpp/obstacle/occupancy.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <spdlog/spdlog.h>
@@ -147,20 +148,22 @@ void Obstacle::setTrajectoryHistory(const Obstacle::state_map_t &trajHistory) {
     setFirstLastTimeStep();
 }
 
-void Obstacle::setRectangleShape(double length, double width) { geoShape = std::make_unique<Rectangle>(length, width); }
-
-void Obstacle::setCircleShape(double radius, vertex center) { geoShape = std::make_unique<Circle>(radius, center); }
-
 void Obstacle::setGeoShape(std::unique_ptr<Shape> shape) { geoShape = std::move(shape); }
 
 void Obstacle::appendStateToTrajectoryPrediction(const std::shared_ptr<State> &state) {
-    trajectoryPrediction.insert(std::pair<size_t, std::shared_ptr<State>>(state->getTimeStep(), state));
+    trajectoryPrediction.insert({state->getTimeStep(), state});
     if (state->getTimeStep() > finalTimeStep)
         finalTimeStep = state->getTimeStep();
 }
 
+void Obstacle::appendOccupancyToSetBasedPrediction(const std::shared_ptr<Occupancy> &occ) {
+    setBasedPrediction.insert({occ->getTimeStep(), occ});
+    if (occ->getTimeStep() > finalTimeStep)
+        finalTimeStep = occ->getTimeStep();
+}
+
 void Obstacle::appendStateToHistory(const std::shared_ptr<State> &state) {
-    trajectoryHistory.insert(std::pair<size_t, std::shared_ptr<State>>(state->getTimeStep(), state));
+    trajectoryHistory.insert({state->getTimeStep(), state});
     if (state->getTimeStep() < firstTimeStep)
         firstTimeStep = state->getTimeStep();
 }
@@ -941,3 +944,5 @@ void Obstacle::propagate() {
         trajectoryPrediction.erase(trajectoryPrediction.find(newCur));
     }
 }
+
+Obstacle::occupancy_map_t Obstacle::getSetBasedPrediction() const { return setBasedPrediction; }

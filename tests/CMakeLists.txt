@@ -6,15 +6,16 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/roadNetwork/lanelet/test_lanelet_operations.cpp
         commonroad_cpp_tests/roadNetwork/lanelet/test_lane.cpp
         commonroad_cpp_tests/roadNetwork/lanelet/test_lanelet.cpp
-        commonroad_cpp_tests/roadNetwork/regulartoryElements/test_stop_line.cpp
-        commonroad_cpp_tests/roadNetwork/regulartoryElements/test_traffic_sign.cpp
-        commonroad_cpp_tests/roadNetwork/regulartoryElements/test_traffic_sign_element.cpp
-        commonroad_cpp_tests/roadNetwork/regulartoryElements/test_traffic_light.cpp
-        commonroad_cpp_tests/roadNetwork/regulartoryElements/test_regulatory_elements_utils.cpp
+        commonroad_cpp_tests/roadNetwork/regulatoryElements/test_stop_line.cpp
+        commonroad_cpp_tests/roadNetwork/regulatoryElements/test_traffic_sign.cpp
+        commonroad_cpp_tests/roadNetwork/regulatoryElements/test_traffic_sign_element.cpp
+        commonroad_cpp_tests/roadNetwork/regulatoryElements/test_traffic_light.cpp
+        commonroad_cpp_tests/roadNetwork/regulatoryElements/test_regulatory_elements_utils.cpp
         commonroad_cpp_tests/roadNetwork/intersection/test_incoming.cpp
         commonroad_cpp_tests/roadNetwork/intersection/test_intersection.cpp
         commonroad_cpp_tests/obstacle/test_obstacle.cpp
         commonroad_cpp_tests/obstacle/test_state.cpp
+        commonroad_cpp_tests/obstacle/test_occupancy.cpp
         commonroad_cpp_tests/obstacle/test_signal_state.cpp
         commonroad_cpp_tests/obstacle/test_obstacle_operations.cpp
         commonroad_cpp_tests/geometry/test_rectangle.cpp
