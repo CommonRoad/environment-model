@@ -9,9 +9,10 @@
 
 bool OnSimilarOrientedLaneletWithTypePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
 
-    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
+    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep, setBased)};
     return std::any_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
                            return lanelet->hasLaneletType(
@@ -21,13 +22,15 @@ bool OnSimilarOrientedLaneletWithTypePredicate::booleanEvaluation(
 
 double OnSimilarOrientedLaneletWithTypePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("OnSimilarOrientedLaneletWithTypePredicate does not support robust evaluation!");
 }
 
 Constraint OnSimilarOrientedLaneletWithTypePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("OnSimilarOrientedLaneletWithTypePredicate does not support constraint evaluation!");
 }
 OnSimilarOrientedLaneletWithTypePredicate::OnSimilarOrientedLaneletWithTypePredicate() : CommonRoadPredicate(false) {}

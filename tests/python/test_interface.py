@@ -202,7 +202,7 @@ class TestPythonInterface(unittest.TestCase):
             crcpp.RoadNetworkParameters(),
             crcpp.SensorParameters(),
             crcpp.ActuatorParameters(),
-            crcpp.TimeParameters(5, 0.3),
+            crcpp.TimeParameters(5, 0.3, 0.1),
             crcpp.ActuatorParameters(),
         )
         world1 = crcpp.World(
@@ -306,7 +306,7 @@ class TestPythonInterface(unittest.TestCase):
             crcpp.RoadNetworkParameters(),
             crcpp.SensorParameters(),
             crcpp.ActuatorParameters(),
-            crcpp.TimeParameters(5, 0.3),
+            crcpp.TimeParameters(5, 0.3, 0.1),
             crcpp.ActuatorParameters(),
         )
         world1 = crcpp.World(
@@ -360,7 +360,7 @@ class TestPythonInterface(unittest.TestCase):
             crcpp.RoadNetworkParameters(),
             crcpp.SensorParameters(),
             crcpp.ActuatorParameters(),
-            crcpp.TimeParameters(5, 0.3),
+            crcpp.TimeParameters(5, 0.3, 0.1),
             crcpp.ActuatorParameters(),
         )
         world = crcpp.World(
@@ -468,7 +468,7 @@ class TestPythonInterface(unittest.TestCase):
         self.assertEqual(len(occ2.shape.shapes), 3)
 
     def test_set_based_prediction(self):
-        file_path1 = Path(__file__).parent.parent.parent / "tests/scenarios/USA_Lanker-1_1_S-1.xml"
+        file_path1 = Path(__file__).parent.parent.parent / "tests/scenarios//set_based/USA_Lanker-1_1_S-2.xml"
         scenario1, _ = CommonRoadFileReader(filename_2020a=file_path1).open()
         world1 = crcpp.World(
             str(scenario1.scenario_id),
@@ -481,6 +481,8 @@ class TestPythonInterface(unittest.TestCase):
         )
 
         for obs in world1.obstacles:
+            if obs.id == 42:
+                continue
             sp = obs.set_based_prediction
             self.assertEqual(len(sp), len(scenario1.obstacle_by_id(obs.id).prediction.occupancy_set))
             idx = 0

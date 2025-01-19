@@ -216,19 +216,17 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
     std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 10, 40, 10, 0, M_PI / 2);
     std::shared_ptr<State> stateFourObstacleTwo = std::make_shared<State>(4, 10, 50, 10, 0, M_PI / 2);
 
-    Obstacle::state_map_t trajectoryPredictionOneVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
+    state_map_t trajectoryPredictionOneVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
 
-    Obstacle::state_map_t trajectoryPredictionTwoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleTwo)};
+    state_map_t trajectoryPredictionTwoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleTwo)};
 
     std::shared_ptr<Obstacle> obstacleOne =
         std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
@@ -271,12 +269,11 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 7, 17, 10, 0, M_PI * 3 / 4);
     std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 0, 20, 10, 0, M_PI);
 
-    Obstacle::state_map_t trajectoryPredictionOneVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
+    state_map_t trajectoryPredictionOneVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
     const double obstacle_length = 5.0;
 
     std::shared_ptr<Obstacle> obstacleOne =

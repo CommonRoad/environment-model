@@ -1,10 +1,13 @@
 #include "test_lateral_distance_to_obstacle_above_threshold_predicate.h"
+#include "../../interfaces/utility_functions.h"
 #include "../utils_predicate_test.h"
-
 #include <commonroad_cpp/world.h>
 
 #include <gtest/gtest.h>
 
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <set>
 #include <stdexcept>
@@ -26,23 +29,21 @@ void TestLateralDistanceToObstacleAboveThresholdPredicate::SetUp() {
     std::shared_ptr<State> stateFiveEgoVehicle = std::make_shared<State>(5, 50, 5.5, 25, 0, 0);
     std::shared_ptr<State> stateSixEgoVehicle = std::make_shared<State>(6, 47.01, 4, 25, 0, 0);
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleOne)};
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle)};
+    state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(5, stateFiveEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle)};
 
     obstacleOne =
         std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::bicycle, 50,
@@ -91,17 +92,15 @@ void TestLateralDistanceToObstacleAboveThresholdPredicate::setUpLeft() {
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 7, 10, 0, 0);
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 7, 10, 0, 0);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle)};
+    state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
     egoVehicle2 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
@@ -127,17 +126,15 @@ void TestLateralDistanceToObstacleAboveThresholdPredicate::setUpRight() {
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 1, 10, 0, 0);
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 1, 10, 0, 0);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle)};
+    state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
     egoVehicle2 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));

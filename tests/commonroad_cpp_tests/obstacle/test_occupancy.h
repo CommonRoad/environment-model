@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 
+#include "commonroad_cpp/geometry/circle.h"
 #include "commonroad_cpp/geometry/polygon.h"
 #include "commonroad_cpp/geometry/rectangle.h"
 #include "commonroad_cpp/geometry/shape_group.h"

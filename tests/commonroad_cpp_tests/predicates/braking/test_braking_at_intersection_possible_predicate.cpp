@@ -1,13 +1,9 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_braking_at_intersection_possible_predicate.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void BrakingWithAccelerationPossibleAtIntersectionPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 30, 4.5, 0, -2, 0);
@@ -18,12 +14,11 @@ void BrakingWithAccelerationPossibleAtIntersectionPredicateTest::SetUp() {
     std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 170, 2, 10, 2, 0);
     std::shared_ptr<State> stateFiveObstacleOne = std::make_shared<State>(5, 180, 2, 10, 2, 0);
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne)};
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));

@@ -122,7 +122,7 @@ class RoadNetwork {
      * @param polygonShape boost polygon
      * @return list of lanelet pointers
      */
-    std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(const polygon_type &polygonShape);
+    std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(const multi_polygon_type &polygonShape);
 
     /**
      * Given a position, finds the list of lanelets within the road network which contain the point.

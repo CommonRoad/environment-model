@@ -7,7 +7,8 @@
 bool AtSameIntersectionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                                    const std::vector<std::string> &additionalFunctionParameters) {
+                                                    const std::vector<std::string> &additionalFunctionParameters,
+                                                    bool setBased) {
 
     auto currentIntersection_k = intersection_operations::currentIntersection(timeStep, world, obstacleK);
     auto currentIntersection_p = intersection_operations::currentIntersection(timeStep, world, obstacleP);
@@ -20,12 +21,14 @@ bool AtSameIntersectionPredicate::booleanEvaluation(size_t timeStep, const std::
 double AtSameIntersectionPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                                     const std::vector<std::string> &additionalFunctionParameters) {
+                                                     const std::vector<std::string> &additionalFunctionParameters,
+                                                     bool setBased) {
     throw std::runtime_error("AtSameIntersectionPredicate does not support robust evaluation!");
 }
 Constraint AtSameIntersectionPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("AtSameIntersectionPredicate does not support constraint evaluation!");
 }
 AtSameIntersectionPredicate::AtSameIntersectionPredicate() : CommonRoadPredicate(true) {}

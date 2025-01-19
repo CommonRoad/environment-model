@@ -8,7 +8,8 @@
 bool AtIntersectionTypePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                                    const std::vector<std::string> &additionalFunctionParameters) {
+                                                    const std::vector<std::string> &additionalFunctionParameters,
+                                                    bool setBased) {
     // get current Intersection
     auto currentIntersection = intersection_operations::currentIntersection(timeStep, world, obstacleK);
     if (currentIntersection == nullptr)
@@ -20,12 +21,14 @@ bool AtIntersectionTypePredicate::booleanEvaluation(size_t timeStep, const std::
 double AtIntersectionTypePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                                     const std::vector<std::string> &additionalFunctionParameters) {
+                                                     const std::vector<std::string> &additionalFunctionParameters,
+                                                     bool setBased) {
     throw std::runtime_error("AtIntersectionTypePredicate does not support robust evaluation!");
 }
 Constraint AtIntersectionTypePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("AtIntersectionTypePredicate does not support constraint evaluation!");
 }
 AtIntersectionTypePredicate::AtIntersectionTypePredicate() : CommonRoadPredicate(false) {}

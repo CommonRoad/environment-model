@@ -1,12 +1,9 @@
 #include "test_obstacle.h"
 #include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
-#include <cmath>
+#include <commonroad_cpp/geometry/circle.h>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/world.h>
-#include <map>
-#include <memory>
-#include <unordered_set>
 
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 
@@ -115,42 +112,38 @@ void ObstacleTestInitialization::setUpObstacles() {
     std::shared_ptr<State> stateTenObstacleThree = std::make_shared<State>(10, 100, 2, 10, 0, 0);
     std::shared_ptr<State> stateTenObstacleFive = std::make_shared<State>(10, 100, -2, 10, 0, 0);
 
-    Obstacle::state_map_t trajectoryPredictionObstacleThree{
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleThree),
-        std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleThree)};
+    state_map_t trajectoryPredictionObstacleThree{std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleThree),
+                                                  std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleThree),
+                                                  std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree),
+                                                  std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleThree),
+                                                  std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleThree),
+                                                  std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleThree),
+                                                  std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleThree),
+                                                  std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleThree),
+                                                  std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleThree),
+                                                  std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleThree)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleFour{
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleFour),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleFour),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleFour),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleFour),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFour),
-        std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleFour),
-        std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFour),
-        std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleFour),
-        std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleFour)};
+    state_map_t trajectoryPredictionObstacleFour{std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleFour),
+                                                 std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleFour),
+                                                 std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleFour),
+                                                 std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleFour),
+                                                 std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFour),
+                                                 std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleFour),
+                                                 std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFour),
+                                                 std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleFour),
+                                                 std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleFour)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleFive{
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFive),
-        std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleFive),
-        std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFive),
-        std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleFive),
-        std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleFive),
-        std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleFive)};
+    state_map_t trajectoryPredictionObstacleFive{std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFive),
+                                                 std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleFive),
+                                                 std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleFive),
+                                                 std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleFive),
+                                                 std::pair<int, std::shared_ptr<State>>(9, stateNineObstacleFive),
+                                                 std::pair<int, std::shared_ptr<State>>(10, stateTenObstacleFive)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleSeven{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleSeven),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleSeven),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleSeven),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleSeven)};
+    state_map_t trajectoryPredictionObstacleSeven{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleSeven),
+                                                  std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleSeven),
+                                                  std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleSeven),
+                                                  std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleSeven)};
 
     obstacleThree =
         std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50, 10,
@@ -250,12 +243,12 @@ TEST_F(ObstacleTest, AppendStateToPrediction) {
 }
 
 TEST_F(ObstacleTest, GetOccupancyPolygonShape) {
-    EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(0).outer().at(0).x(), 0.5);
-    EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(0).outer().at(0).y(), 2);
-    EXPECT_DOUBLE_EQ(obstacleOne->getOccupancyPolygonShape(1).outer().at(0).x(), 2);
-    EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(1).outer().at(0).y(), 0.0);
-    EXPECT_EQ(obstacleSix->getOccupancyPolygonShape(7).outer().at(3).x(), 69.0);
-    EXPECT_EQ(obstacleSix->getOccupancyPolygonShape(7).outer().at(1).y(), -4.0);
+    EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(0).at(0).outer().at(0).x(), 0.5);
+    EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(0).at(0).outer().at(0).y(), 2);
+    EXPECT_DOUBLE_EQ(obstacleOne->getOccupancyPolygonShape(1).at(0).outer().at(0).x(), 2);
+    EXPECT_EQ(obstacleOne->getOccupancyPolygonShape(1).at(0).outer().at(0).y(), 0.0);
+    EXPECT_EQ(obstacleSix->getOccupancyPolygonShape(7).at(0).outer().at(3).x(), 69.0);
+    EXPECT_EQ(obstacleSix->getOccupancyPolygonShape(7).at(0).outer().at(1).y(), -4.0);
 }
 
 TEST_F(ObstacleTest, GetOccupiedLanelets) {

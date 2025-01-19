@@ -12,7 +12,8 @@ CompletelyOnLaneletTypePredicate::CompletelyOnLaneletTypePredicate() : CommonRoa
 bool CompletelyOnLaneletTypePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
                                                          const std::shared_ptr<Obstacle> &obstacleP,
-                                                         const std::vector<std::string> &additionalFunctionParameters) {
+                                                         const std::vector<std::string> &additionalFunctionParameters,
+                                                         bool setBased) {
     // does not check lanelet driving direction
     // current implementation depends on obstacle shape
     auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
@@ -22,29 +23,34 @@ bool CompletelyOnLaneletTypePredicate::booleanEvaluation(size_t timeStep, const 
                             lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0)));
                     }))
         return true;
-    auto vertices = obstacleK->getOccupancyPolygonShape(timeStep).outer();
-    for (auto vertice : vertices) {
-        polygon_type polygonPos;
-        bg::append(polygonPos, point_type{vertice.x(), vertice.y()});
-        if (!std::any_of(lanelets.begin(), lanelets.end(),
-                         [additionalFunctionParameters, polygonPos](const std::shared_ptr<Lanelet> &lanelet) {
-                             return lanelet->hasLaneletType(lanelet_operations::matchStringToLaneletType(
-                                        additionalFunctionParameters.at(0))) and
-                                    lanelet->applyIntersectionTesting(polygonPos);
-                         }))
-            return false;
+    for (const auto &shape : obstacleK->getOccupancyPolygonShape(timeStep)) {
+        auto vertices = shape.outer();
+        for (auto vertice : vertices) {
+            polygon_type polygonPos;
+            bg::append(polygonPos, point_type{vertice.x(), vertice.y()});
+            if (!std::any_of(lanelets.begin(), lanelets.end(),
+                             [additionalFunctionParameters, polygonPos](const std::shared_ptr<Lanelet> &lanelet) {
+                                 return lanelet->hasLaneletType(lanelet_operations::matchStringToLaneletType(
+                                            additionalFunctionParameters.at(0))) and
+                                        lanelet->applyIntersectionTesting(polygonPos);
+                             }))
+                return false;
+        }
     }
     return true;
 }
 
-double CompletelyOnLaneletTypePredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+double CompletelyOnLaneletTypePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                          const std::shared_ptr<Obstacle> &obstacleK,
+                                                          const std::shared_ptr<Obstacle> &obstacleP,
+                                                          const std::vector<std::string> &additionalFunctionParameters,
+                                                          bool setBased) {
     throw std::runtime_error("CompletelyOnOneLaneletTypePredicate does not support robust evaluation!");
 }
 
 Constraint CompletelyOnLaneletTypePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("CompletelyOnOneLaneletTypePredicate does not support constraint evaluation!");
 }

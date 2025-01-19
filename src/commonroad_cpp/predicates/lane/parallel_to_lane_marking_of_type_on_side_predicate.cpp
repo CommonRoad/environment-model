@@ -7,7 +7,8 @@
 
 bool ParallelToLaneMarkingOfTypeOnSidePredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     // get relevant line marking types
     std::vector<LineMarking> lineMarkingTypes{
         lanelet_operations::matchStringToLineMarkingOptions(additionalFunctionParameters.at(1))};
@@ -32,13 +33,15 @@ bool ParallelToLaneMarkingOfTypeOnSidePredicate::booleanEvaluation(
 
 double ParallelToLaneMarkingOfTypeOnSidePredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("ParallelToLaneMarkingOfTypeOnSidePredicate does not support robust evaluation!");
 }
 
 Constraint ParallelToLaneMarkingOfTypeOnSidePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("ParallelToLaneMarkingOfTypeOnSidePredicate does not support constraint evaluation!");
 }
 

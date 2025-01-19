@@ -1,5 +1,4 @@
 #pragma once
-#include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_with_type_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"

@@ -34,7 +34,8 @@ class InFrontOfPredicate : public CommonRoadPredicate {
      */
     bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                            const std::shared_ptr<Obstacle> &obstacleP, const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::vector<std::string> &additionalFunctionParameters = {}) override;
+                           const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
+                           bool setBased = false) override;
 
     /**
      * Constraint evaluation of predicate using objects.
@@ -48,7 +49,8 @@ class InFrontOfPredicate : public CommonRoadPredicate {
     Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleP,
                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                    const std::vector<std::string> &additionalFunctionParameters = {}) override;
+                                    const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
+                                    bool setBased = false) override;
 
     /**
      * Constraint evaluation of predicate using parameter values.
@@ -71,7 +73,8 @@ class InFrontOfPredicate : public CommonRoadPredicate {
      */
     double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                             const std::shared_ptr<Obstacle> &obstacleP, const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::vector<std::string> &additionalFunctionParameters = {}) override;
+                            const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
+                            bool setBased = false) override;
 
     /**
      * Robustness evaluation of predicate using parameter values.

@@ -7,7 +7,8 @@
 bool InSingleLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                               const std::shared_ptr<Obstacle> &obstacleK,
                                               const std::shared_ptr<Obstacle> &obstacleP,
-                                              const std::vector<std::string> &additionalFunctionParameters) {
+                                              const std::vector<std::string> &additionalFunctionParameters,
+                                              bool setBased) {
     auto occLanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
 
     auto comparePreSuc = [](const std::vector<std::shared_ptr<Lanelet>> &lanelets1,
@@ -25,14 +26,16 @@ bool InSingleLanePredicate::booleanEvaluation(size_t timeStep, const std::shared
 double InSingleLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                const std::shared_ptr<Obstacle> &obstacleK,
                                                const std::shared_ptr<Obstacle> &obstacleP,
-                                               const std::vector<std::string> &additionalFunctionParameters) {
+                                               const std::vector<std::string> &additionalFunctionParameters,
+                                               bool setBased) {
     throw std::runtime_error("InSingleLanePredicate does not support robust evaluation!");
 }
 
 Constraint InSingleLanePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP,
-                                                       const std::vector<std::string> &additionalFunctionParameters) {
+                                                       const std::vector<std::string> &additionalFunctionParameters,
+                                                       bool setBased) {
     throw std::runtime_error("InSingleLanePredicate does not support constraint evaluation!");
 }
 InSingleLanePredicate::InSingleLanePredicate() : CommonRoadPredicate(false) {}

@@ -4,20 +4,23 @@
 bool VelocityBelowThresholdPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP,
-                                                        const std::vector<std::string> &additionalFunctionParameters) {
-    return obstacleK->getStateByTimeStep(timeStep)->getVelocity() <= stod(additionalFunctionParameters.at(0));
+                                                        const std::vector<std::string> &additionalFunctionParameters,
+                                                        bool setBased) {
+    return obstacleK->getVelocity(timeStep, setBased, true) <= stod(additionalFunctionParameters.at(0));
 }
 
 Constraint VelocityBelowThresholdPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("VelocityBelowThresholdPredicate does not support constraint evaluation!");
 }
 
 double VelocityBelowThresholdPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
                                                          const std::shared_ptr<Obstacle> &obstacleP,
-                                                         const std::vector<std::string> &additionalFunctionParameters) {
+                                                         const std::vector<std::string> &additionalFunctionParameters,
+                                                         bool setBased) {
     throw std::runtime_error("VelocityBelowThresholdPredicate does not support robust evaluation!");
 }
 

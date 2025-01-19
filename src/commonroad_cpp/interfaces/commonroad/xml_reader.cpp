@@ -1,6 +1,7 @@
 #include <cstring>
 #include <utility>
 
+#include <commonroad_cpp/geometry/circle.h>
 #include <commonroad_cpp/geometry/polygon.h>
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <pugixml.hpp>

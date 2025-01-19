@@ -8,7 +8,8 @@
 bool InNeighboringLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                    const std::shared_ptr<Obstacle> &obstacleK,
                                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                                   const std::vector<std::string> &additionalFunctionParameters) {
+                                                   const std::vector<std::string> &additionalFunctionParameters,
+                                                   bool setBased) {
     std::unordered_set<unsigned long> relevantIDs;
     auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     for (const auto &laneK : obstacleK->getOccupiedRoadLanes(world->getRoadNetwork(), timeStep)) {
@@ -30,13 +31,15 @@ bool InNeighboringLanePredicate::booleanEvaluation(size_t timeStep, const std::s
 double InNeighboringLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                                    const std::vector<std::string> &additionalFunctionParameters) {
+                                                    const std::vector<std::string> &additionalFunctionParameters,
+                                                    bool setBased) {
     throw std::runtime_error("InNeighboringLanePredicate does not support robust evaluation!");
 }
 
 Constraint InNeighboringLanePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("InNeighboringLanePredicate does not support constraint evaluation!");
 }
 InNeighboringLanePredicate::InNeighboringLanePredicate() : CommonRoadPredicate(true) {}
