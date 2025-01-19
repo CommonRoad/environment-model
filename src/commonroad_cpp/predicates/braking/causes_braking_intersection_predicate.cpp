@@ -6,18 +6,16 @@
 
 #include <commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h>
 
-bool CausesBrakingIntersectionPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                           const std::shared_ptr<Obstacle> &obstacleK,
+                                                           const std::shared_ptr<Obstacle> &obstacleP,
+                                                           const std::vector<std::string> &additionalFunctionParameters,
+                                                           bool setBased) {
 
-    // check whether kth obstacle is in the projection domain of the reference of the pth vehicle -> otherwise ccs fails
-    if (!obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
-             ->getCurvilinearCoordinateSystem()
-             ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                                obstacleK->getStateByTimeStep(timeStep)->getYPosition()))
-        return false;
-    auto distance{obstacleK->rearS(timeStep, obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
-                                                 ->getCurvilinearCoordinateSystem()) -
+    auto distance{obstacleK->rearS(
+                      timeStep,
+                      obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
+                      setBased) -
                   obstacleP->frontS(world->getRoadNetwork(), timeStep)};
     return parameters.getParam("dCauseBrakingIntersection") <= distance and
            distance <= parameters.getParam("dBrakingIntersection") and
@@ -26,13 +24,15 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(
 
 Constraint CausesBrakingIntersectionPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("CausesBrakingIntersectionPredicate does not support robust evaluation!");
 }
 
 double CausesBrakingIntersectionPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("CausesBrakingIntersectionPredicate does not support robust evaluation!");
 }
 

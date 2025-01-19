@@ -1,4 +1,9 @@
 #include "test_is_of_type_predicate.h"
+#include "../../interfaces/utility_functions.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include "commonroad_cpp/world.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void TestIsOfTypePredicate::SetUp() {
     std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0, 0, 0, 0, 0);

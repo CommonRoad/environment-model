@@ -9,7 +9,8 @@ OvertakingAllowedPredicate::OvertakingAllowedPredicate() : CommonRoadPredicate(f
 bool OvertakingAllowedPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                    const std::shared_ptr<Obstacle> &obstacleK,
                                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                                   const std::vector<std::string> &additionalFunctionParameters) {
+                                                   const std::vector<std::string> &additionalFunctionParameters,
+                                                   bool setBased) {
 
     // checking if line-marking or traffic sign of occupied lanelet prohibits overtaking
     auto occLanelets = obstacleK->getOccupiedLaneletsByBack(world->getRoadNetwork(), timeStep);
@@ -50,12 +51,14 @@ bool OvertakingAllowedPredicate::booleanEvaluation(size_t timeStep, const std::s
 double OvertakingAllowedPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                                    const std::vector<std::string> &additionalFunctionParameters) {
+                                                    const std::vector<std::string> &additionalFunctionParameters,
+                                                    bool setBased) {
     throw std::runtime_error("OvertakingAllowedPredicate does not support robust evaluation!");
 }
 
 Constraint OvertakingAllowedPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("OvertakingAllowedPredicate does not support constraint evaluation!");
 }

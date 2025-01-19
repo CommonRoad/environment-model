@@ -1,6 +1,9 @@
 #include "test_in_intersection_conflict_area_predicate.h"
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/geometry/geometric_operations.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void InIntersectionConflictAreaPredicateTest::SetUp() {
@@ -14,9 +17,9 @@ void InIntersectionConflictAreaPredicateTest::SetUp() {
     std::shared_ptr<State> stateTwoEgoVehicle = std::make_shared<State>(2, 1009.5, 995, 10, 0, 1.5708);
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 1007.5, 1007.5, 10, 0, 3.14);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
-                                                         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle)};
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
+    state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle)};
+    state_map_t trajectoryPredictionObstacleOne{
         std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
     };

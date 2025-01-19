@@ -7,7 +7,8 @@
 bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP,
-                                                       const std::vector<std::string> &additionalFunctionParameters) {
+                                                       const std::vector<std::string> &additionalFunctionParameters,
+                                                       bool setBased) {
     double obsK_x = obstacleK->getStateByTimeStep(timeStep)->getXPosition();
     double obsK_y = obstacleK->getStateByTimeStep(timeStep)->getYPosition();
     auto occupied_lanelets = world->getRoadNetwork()->findLaneletsByPosition(obsK_x, obsK_y);
@@ -20,14 +21,16 @@ bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const st
 
 Constraint InterstateBroadEnoughPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("Interstate Broad Enough Predicate does not support constraint evaluation!");
 }
 
 double InterstateBroadEnoughPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP,
-                                                        const std::vector<std::string> &additionalFunctionParameters) {
+                                                        const std::vector<std::string> &additionalFunctionParameters,
+                                                        bool setBased) {
     throw std::runtime_error("Interstate Broad Enough Traffic Predicate does not support robust evaluation!");
 }
 

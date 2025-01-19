@@ -13,7 +13,8 @@
 bool StopLineInFrontPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
                                                  const std::shared_ptr<Obstacle> &obstacleP,
-                                                 const std::vector<std::string> &additionalFunctionParameters) {
+                                                 const std::vector<std::string> &additionalFunctionParameters,
+                                                 bool setBased) {
     auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
     return std::any_of(lanelets.begin(), lanelets.end(), [&](const std::shared_ptr<Lanelet> &lanelet) {
         std::shared_ptr<StopLine> stopLine{lanelet->getStopLine()};
@@ -32,13 +33,16 @@ bool StopLineInFrontPredicate::booleanEvaluation(size_t timeStep, const std::sha
 double StopLineInFrontPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                   const std::shared_ptr<Obstacle> &obstacleK,
                                                   const std::shared_ptr<Obstacle> &obstacleP,
-                                                  const std::vector<std::string> &additionalFunctionParameters) {
+                                                  const std::vector<std::string> &additionalFunctionParameters,
+                                                  bool setBased) {
     throw std::runtime_error("StopLineInFrontPredicate does not support robust evaluation!");
 }
 
-Constraint StopLineInFrontPredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+Constraint StopLineInFrontPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                          const std::shared_ptr<Obstacle> &obstacleK,
+                                                          const std::shared_ptr<Obstacle> &obstacleP,
+                                                          const std::vector<std::string> &additionalFunctionParameters,
+                                                          bool setBased) {
     throw std::runtime_error("StopLineInFrontPredicate does not support constraint evaluation!");
 }
 StopLineInFrontPredicate::StopLineInFrontPredicate() : CommonRoadPredicate(false) {}

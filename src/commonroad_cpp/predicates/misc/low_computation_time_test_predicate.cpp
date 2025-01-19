@@ -6,7 +6,8 @@ LowComputationTimeTestPredicate::LowComputationTimeTestPredicate() : CommonRoadP
 bool LowComputationTimeTestPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP,
-                                                        const std::vector<std::string> &additionalFunctionParameters) {
+                                                        const std::vector<std::string> &additionalFunctionParameters,
+                                                        bool setBased) {
     std::this_thread::sleep_for(std::chrono::milliseconds(2));
     return true;
 }
@@ -14,12 +15,14 @@ bool LowComputationTimeTestPredicate::booleanEvaluation(size_t timeStep, const s
 double LowComputationTimeTestPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
                                                          const std::shared_ptr<Obstacle> &obstacleP,
-                                                         const std::vector<std::string> &additionalFunctionParameters) {
+                                                         const std::vector<std::string> &additionalFunctionParameters,
+                                                         bool setBased) {
     return 0;
 }
 
 Constraint LowComputationTimeTestPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     return Constraint();
 }

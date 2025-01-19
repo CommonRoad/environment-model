@@ -2,6 +2,8 @@
 #include <cstddef>
 #include <memory>
 
+#include "commonroad_cpp/geometry/types.h"
+
 class Shape;
 
 /**
@@ -42,6 +44,13 @@ class Occupancy {
      * @param shape CommonRoad shape.
      */
     void setShape(std::shared_ptr<Shape> shape);
+
+    /**
+     * Getter for occupancy as polygon shape.
+     *
+     * @return Occupancies as polygon shape.
+     */
+    multi_polygon_type getOccupancyPolygonShape();
 
     /**
      * Setter for time step.

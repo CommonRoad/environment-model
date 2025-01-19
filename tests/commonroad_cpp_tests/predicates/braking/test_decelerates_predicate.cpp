@@ -1,6 +1,9 @@
 #include "test_decelerates_predicate.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void TestDeceleratePredicate::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 10, 0, 0);
@@ -17,19 +20,17 @@ void TestDeceleratePredicate::SetUp() {
     std::shared_ptr<State> stateFourObstacleTwo = std::make_shared<State>(3, 32, 2, 7, 0, 0);
     std::shared_ptr<State> stateFiveObstacleTwo = std::make_shared<State>(3, 39, 2, 7, 0, 0);
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleTwo)};
+    state_map_t trajectoryPredictionObstacleTwo{std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleTwo)};
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
@@ -77,4 +78,21 @@ TEST_F(TestDeceleratePredicate, RobustEvaluation) {
     EXPECT_EQ(pred.robustEvaluation(3, world, obstacleTwo), 1);
     EXPECT_EQ(pred.robustEvaluation(4, world, obstacleTwo), 0);
     EXPECT_EQ(pred.robustEvaluation(5, world, obstacleTwo), 0);
+}
+
+TEST_F(TestDeceleratePredicate, SetBasedPrediction) {
+    std::string scenarioName = "ZAM_Augmentation-1_1_S-3";
+    std::vector<std::string> pathSplit;
+    boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
+    auto dirName{pathSplit[0] + "_" + pathSplit[1]};
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+
+    auto worldTmp{
+        std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), std::get<0>(scenarioXml), {}, 0.1))};
+    auto obs1{worldTmp->findObstacle(100)};
+
+    EXPECT_FALSE(pred.booleanEvaluation(0, worldTmp, obs1, {}, {"0.0"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, worldTmp, obs1, {}, {"0.0"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(30, worldTmp, obs1, {}, {"0.0"}, true));
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/geometry/geometries/multi_polygon.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/geometries/register/box.hpp>
@@ -17,6 +18,8 @@
 using point_type_alias = boost::geometry::model::d2::point_xy<double>;
 
 using polygon_type = boost::geometry::model::polygon<point_type_alias>;
+
+using multi_polygon_type = boost::geometry::model::multi_polygon<polygon_type>;
 
 /**
  * Box type (used for bounding boxes)

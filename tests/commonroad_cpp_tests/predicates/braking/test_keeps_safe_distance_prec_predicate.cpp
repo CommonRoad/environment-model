@@ -1,5 +1,9 @@
 #include "test_keeps_safe_distance_prec_predicate.h"
+#include "../../interfaces/utility_functions.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void KeepsSafeDistancePrecPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 20, 0, 0);
@@ -9,12 +13,10 @@ void KeepsSafeDistancePrecPredicateTest::SetUp() {
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 20, 0, 20, 0, 0);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 30, 0, 0, 0, 0);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
-    Obstacle::state_map_t trajectoryPredictionOtherVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
+    state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
+    state_map_t trajectoryPredictionOtherVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+                                                 std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
@@ -116,3 +118,39 @@ TEST_F(KeepsSafeDistancePrecPredicateTest, GetEvaluationTimer) {
 }
 
 TEST_F(KeepsSafeDistancePrecPredicateTest, IsVehicleDependent) { EXPECT_TRUE(pred.isVehicleDependent()); }
+
+TEST_F(KeepsSafeDistancePrecPredicateTest, SetBasedPrediction) {
+    std::string scenarioName = "ZAM_Augmentation-1_1_S-3";
+    std::vector<std::string> pathSplit;
+    boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
+    auto dirName{pathSplit[0] + "_" + pathSplit[1]};
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+
+    std::shared_ptr<State> currentState = std::make_shared<State>(0, 100, 0, 10, 0, 0);
+    std::shared_ptr<State> firstState = std::make_shared<State>(1, 40, 0, 50, 0, 0);
+    state_map_t trajectoryPrediction{std::pair<size_t, std::shared_ptr<State>>(1, firstState)};
+    std::shared_ptr<Obstacle> dynamicObstacle = std::make_shared<Obstacle>(Obstacle(
+        1, ObstacleRole::DYNAMIC, currentState, ObstacleType::car, 50, 10, 3, -10, 0.3, trajectoryPrediction, 5, 2));
+
+    auto obstacles{std::get<0>(scenarioXml)};
+    obstacles.push_back(dynamicObstacle);
+
+    auto world{std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), obstacles, {}, 0.1))};
+
+    auto ego{world->findObstacle(42)};
+    auto obs1{world->findObstacle(100)};
+    auto obs2{world->findObstacle(101)};
+    auto obs3{world->findObstacle(102)};
+
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs1, {"0.0"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs2, {"0.0"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(21, world, ego, obs1, {"0.0"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(25, world, ego, obs1, {"0.0"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs2, {"0.0"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs3, {"0.0"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(27, world, ego, obs1, {"0.0"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(30, world, ego, obs1, {"0.0"}, true)); // collision must be checked separately
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, dynamicObstacle, obs1, {"0.0"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, dynamicObstacle, obs1, {"0.0"}, true));
+}

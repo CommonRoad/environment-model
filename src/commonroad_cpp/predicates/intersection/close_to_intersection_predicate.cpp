@@ -8,7 +8,8 @@ CloseToIntersectionPredicate::CloseToIntersectionPredicate() : CommonRoadPredica
 bool CloseToIntersectionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                                     const std::vector<std::string> &additionalFunctionParameters) {
+                                                     const std::vector<std::string> &additionalFunctionParameters,
+                                                     bool setBased) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets =
         obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
     auto closeToIntersectionMaxDistance{std::stod(additionalFunctionParameters.at(0))};
@@ -52,12 +53,14 @@ bool CloseToIntersectionPredicate::booleanEvaluation(size_t timeStep, const std:
 double CloseToIntersectionPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                       const std::shared_ptr<Obstacle> &obstacleK,
                                                       const std::shared_ptr<Obstacle> &obstacleP,
-                                                      const std::vector<std::string> &additionalFunctionParameters) {
+                                                      const std::vector<std::string> &additionalFunctionParameters,
+                                                      bool setBased) {
     throw std::runtime_error("Close To intersection Predicate does not support robust evaluation!");
 }
 
 Constraint CloseToIntersectionPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("Close To intersection Predicate does not support constraint evaluation!");
 }

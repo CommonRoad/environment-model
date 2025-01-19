@@ -6,7 +6,8 @@
 bool NarrowRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP,
-                                            const std::vector<std::string> &additionalFunctionParameters) {
+                                            const std::vector<std::string> &additionalFunctionParameters,
+                                            bool setBased) {
     auto occLaneletsFront{obstacleK->getOccupiedLaneletsByFront(world->getRoadNetwork(), timeStep)};
     auto occLaneletsRear{obstacleK->getOccupiedLaneletsByFront(world->getRoadNetwork(), timeStep)};
     if (std::all_of(occLaneletsFront.begin(), occLaneletsFront.end(),
@@ -36,14 +37,16 @@ bool NarrowRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
 Constraint NarrowRoadPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                                     const std::vector<std::string> &additionalFunctionParameters) {
+                                                     const std::vector<std::string> &additionalFunctionParameters,
+                                                     bool setBased) {
     throw std::runtime_error("Narrow Road Predicate does not support constraint evaluation!");
 }
 
 double NarrowRoadPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                              const std::shared_ptr<Obstacle> &obstacleK,
                                              const std::shared_ptr<Obstacle> &obstacleP,
-                                             const std::vector<std::string> &additionalFunctionParameters) {
+                                             const std::vector<std::string> &additionalFunctionParameters,
+                                             bool setBased) {
     throw std::runtime_error("Narrow Road Predicate does not support robust evaluation!");
 }
 

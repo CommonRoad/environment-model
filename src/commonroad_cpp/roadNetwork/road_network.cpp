@@ -64,11 +64,12 @@ std::vector<std::shared_ptr<Lane>> RoadNetwork::getLanes() {
 
 const std::vector<std::shared_ptr<Intersection>> &RoadNetwork::getIntersections() const { return intersections; }
 
-std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const polygon_type &polygonShape) {
+std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(const multi_polygon_type &polygonShape) {
     // find all relevant lanelets by making use of the rtree
     std::vector<value> relevantLanelets;
-    pImpl->rtree.query(bgi::intersects(bg::return_envelope<box>(polygonShape.outer())),
-                       std::back_inserter(relevantLanelets));
+    for (const auto &polygon : polygonShape)
+        pImpl->rtree.query(bgi::intersects(bg::return_envelope<box>(polygon.outer())),
+                           std::back_inserter(relevantLanelets));
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     lanelets.reserve(relevantLanelets.size());
     for (auto let : relevantLanelets)
@@ -77,8 +78,11 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findOccupiedLaneletsByShape(c
     // check intersection with relevant lanelets
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets;
     for (const auto &let : lanelets) {
-        if (let->checkIntersection(polygonShape, ContainmentType::PARTIALLY_CONTAINED)) {
-            occupiedLanelets.push_back(let);
+        for (const auto &polygon : polygonShape) {
+            if (let->checkIntersection(polygon, ContainmentType::PARTIALLY_CONTAINED)) {
+                occupiedLanelets.push_back(let);
+                break;
+            }
         }
     }
     return occupiedLanelets;
@@ -89,7 +93,7 @@ std::vector<std::shared_ptr<Lanelet>> RoadNetwork::findLaneletsByPosition(double
     polygon_type polygonPos;
     bg::append(polygonPos, point_type{xPos, yPos});
 
-    return RoadNetwork::findOccupiedLaneletsByShape(polygonPos);
+    return RoadNetwork::findOccupiedLaneletsByShape({polygonPos});
 }
 
 std::shared_ptr<Lanelet> RoadNetwork::findLaneletById(size_t laneletId) {

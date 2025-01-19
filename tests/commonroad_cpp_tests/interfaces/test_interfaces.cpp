@@ -3,6 +3,8 @@
 #include <boost/algorithm/string/split.hpp>
 #include <tuple>
 
+#include "commonroad_cpp/geometry/polygon.h"
+#include "commonroad_cpp/geometry/shape_group.h"
 #include "commonroad_cpp/obstacle/occupancy.h"
 
 TEST_F(InterfacesTest, Read2018bFileSingleThread) {
@@ -141,20 +143,29 @@ TEST_F(InterfacesTest, SameObstacles) {
 }
 
 TEST_F(InterfacesTest, SetBasedPrediction) {
-    std::string scenarioName = "USA_Lanker-1_1_S-1";
+    std::string scenarioName = "USA_Lanker-1_1_S-2";
     std::vector<std::string> pathSplit;
     boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
     auto dirName{pathSplit[0] + "_" + pathSplit[1]};
-    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/" + scenarioName + ".xml";
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
 
     const std::vector<std::shared_ptr<Obstacle>> obstaclesXml = std::get<0>(scenarioXml);
 
     for (const auto &obstacleXml : obstaclesXml) {
-        EXPECT_GT(obstacleXml->getSetBasedPrediction().size(), 0);
+        if (obstacleXml->getId() != 42)
+            EXPECT_GT(obstacleXml->getSetBasedPrediction().size(), 0);
+        else
+            EXPECT_EQ(obstacleXml->getSetBasedPrediction().size(), 0);
+
         if (obstacleXml->getId() == 1213) {
             EXPECT_EQ(obstacleXml->getSetBasedPrediction().at(1)->getShape()->getType(), ShapeType::polygon);
             EXPECT_EQ(obstacleXml->getSetBasedPrediction().at(2)->getShape()->getType(), ShapeType::shapeGroup);
+            auto shapeGroup =
+                std::dynamic_pointer_cast<ShapeGroup>(obstacleXml->getSetBasedPrediction().at(6)->getShape());
+            auto poly{std::dynamic_pointer_cast<Polygon>(shapeGroup->getShapes().at(0))};
+            EXPECT_NO_THROW(poly->getPolygon());
+            EXPECT_NO_THROW(obstacleXml->getSetBasedPrediction().at(6)->getOccupancyPolygonShape());
         }
     }
 }

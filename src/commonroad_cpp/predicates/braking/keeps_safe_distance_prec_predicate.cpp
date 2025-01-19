@@ -1,6 +1,3 @@
-#include <cmath>
-#include <stdexcept>
-
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h>
@@ -18,8 +15,9 @@ double KeepsSafeDistancePrecPredicate::computeSafeDistance(double velocityK, dou
 bool KeepsSafeDistancePrecPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP,
-                                                       const std::vector<std::string> &additionalFunctionParameters) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters) > 0;
+                                                       const std::vector<std::string> &additionalFunctionParameters,
+                                                       bool setBased) {
+    return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters, setBased) > 0;
 }
 
 bool KeepsSafeDistancePrecPredicate::booleanEvaluation(double lonPosK, double lonPosP, double velocityK,
@@ -32,16 +30,18 @@ bool KeepsSafeDistancePrecPredicate::booleanEvaluation(double lonPosK, double lo
 
 Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
 
     return {obstacleP->rearS(
                 timeStep,
-                obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()) -
+                obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
+                setBased) -
             0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength() -
-            computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
-                                obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP,
+            computeSafeDistance(obstacleK->getVelocity(timeStep, setBased, true),
+                                obstacleP->getVelocity(timeStep, setBased, true), aMinK, aMinP,
                                 obstacleK->getReactionTime())};
 }
 
@@ -55,25 +55,28 @@ Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(double lonPosP, 
 double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                         const std::shared_ptr<Obstacle> &obstacleK,
                                                         const std::shared_ptr<Obstacle> &obstacleP,
-                                                        const std::vector<std::string> &additionalFunctionParameters) {
+                                                        const std::vector<std::string> &additionalFunctionParameters,
+                                                        bool setBased) {
     double aMinK{obstacleK->getAminLong()};
     double aMinP{obstacleP->getAminLong()};
 
-    double dSafe{computeSafeDistance(obstacleK->getStateByTimeStep(timeStep)->getVelocity(),
-                                     obstacleP->getStateByTimeStep(timeStep)->getVelocity(), aMinK, aMinP,
+    double dSafe{computeSafeDistance(obstacleK->getVelocity(timeStep, false),
+                                     obstacleP->getVelocity(timeStep, setBased, true), aMinK, aMinP,
                                      obstacleK->getReactionTime())};
-    double deltaS{obstacleP->rearS(timeStep, obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)
-                                                 ->getCurvilinearCoordinateSystem()) -
-                  obstacleK->frontS(world->getRoadNetwork(), timeStep)};
+    double deltaS{
+        obstacleP->rearS(
+            timeStep,
+            obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep, setBased)->getCurvilinearCoordinateSystem(),
+            setBased) -
+        obstacleK->frontS(world->getRoadNetwork(), timeStep)};
 
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
-    // robustness
+    // robustness; collision must be checked separately
     if (deltaS < 0)
         return std::abs(deltaS);
-    else if (deltaS - stod(additionalFunctionParameters.at(0)) < 0)
+    if (deltaS - stod(additionalFunctionParameters.at(0)) < 0)
         return std::min(deltaS - stod(additionalFunctionParameters.at(0)), deltaS - dSafe);
-    else
-        return (deltaS - dSafe);
+    return (deltaS - dSafe);
 }
 
 double KeepsSafeDistancePrecPredicate::robustEvaluation(double lonPosK, double lonPosP, double velocityK,
@@ -85,8 +88,7 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(double lonPosK, double l
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive robustness
     if (deltaS < 0)
         return std::abs(deltaS);
-    else
-        return (deltaS - dSafe);
+    return (deltaS - dSafe);
 }
 
 KeepsSafeDistancePrecPredicate::KeepsSafeDistancePrecPredicate() : CommonRoadPredicate(true) {}

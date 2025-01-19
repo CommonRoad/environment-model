@@ -11,9 +11,10 @@
 bool OnLaneletWithTypePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                    const std::shared_ptr<Obstacle> &obstacleK,
                                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                                   const std::vector<std::string> &additionalFunctionParameters) {
+                                                   const std::vector<std::string> &additionalFunctionParameters,
+                                                   bool setBased) {
     std::vector<std::shared_ptr<Lanelet>> lanelets =
-        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
     return std::any_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
                            return lanelet->hasLaneletType(
@@ -24,13 +25,15 @@ bool OnLaneletWithTypePredicate::booleanEvaluation(size_t timeStep, const std::s
 double OnLaneletWithTypePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                                    const std::vector<std::string> &additionalFunctionParameters) {
+                                                    const std::vector<std::string> &additionalFunctionParameters,
+                                                    bool setBased) {
     throw std::runtime_error("OnLaneletWithTypePredicate does not support robust evaluation!");
 }
 
 Constraint OnLaneletWithTypePredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("OnLaneletWithTypePredicate does not support constraint evaluation!");
 }
 OnLaneletWithTypePredicate::OnLaneletWithTypePredicate() : CommonRoadPredicate(false) {}

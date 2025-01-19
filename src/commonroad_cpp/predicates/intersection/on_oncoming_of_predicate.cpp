@@ -8,7 +8,8 @@
 bool OnOncomingOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                               const std::shared_ptr<Obstacle> &obstacleK,
                                               const std::shared_ptr<Obstacle> &obstacleP,
-                                              const std::vector<std::string> &additionalFunctionParameters) {
+                                              const std::vector<std::string> &additionalFunctionParameters,
+                                              bool setBased) {
 
     auto intersections{obstacle_operations::getIntersections(timeStep, world->getRoadNetwork(), obstacleP)};
     std::vector<std::shared_ptr<IncomingGroup>> incomings;
@@ -38,14 +39,16 @@ bool OnOncomingOfPredicate::booleanEvaluation(size_t timeStep, const std::shared
 double OnOncomingOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                const std::shared_ptr<Obstacle> &obstacleK,
                                                const std::shared_ptr<Obstacle> &obstacleP,
-                                               const std::vector<std::string> &additionalFunctionParameters) {
+                                               const std::vector<std::string> &additionalFunctionParameters,
+                                               bool setBased) {
     throw std::runtime_error("OnOncomingOfPredicate does not support robust evaluation!");
 }
 
 Constraint OnOncomingOfPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP,
-                                                       const std::vector<std::string> &additionalFunctionParameters) {
+                                                       const std::vector<std::string> &additionalFunctionParameters,
+                                                       bool setBased) {
     throw std::runtime_error("OnOncomingOfPredicate does not support constraint evaluation!");
 }
 OnOncomingOfPredicate::OnOncomingOfPredicate() : CommonRoadPredicate(true) {}

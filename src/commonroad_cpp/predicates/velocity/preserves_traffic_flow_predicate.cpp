@@ -9,7 +9,8 @@
 bool PreservesTrafficFlowPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                       const std::shared_ptr<Obstacle> &obstacleK,
                                                       const std::shared_ptr<Obstacle> &obstacleP,
-                                                      const std::vector<std::string> &additionalFunctionParameters) {
+                                                      const std::vector<std::string> &additionalFunctionParameters,
+                                                      bool setBased) {
     double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
                               obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
                               TrafficSignTypes::MAX_SPEED, parameters.getParam("desiredInterstateVelocity")),
@@ -22,13 +23,15 @@ bool PreservesTrafficFlowPredicate::booleanEvaluation(size_t timeStep, const std
 double PreservesTrafficFlowPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                        const std::shared_ptr<Obstacle> &obstacleK,
                                                        const std::shared_ptr<Obstacle> &obstacleP,
-                                                       const std::vector<std::string> &additionalFunctionParameters) {
+                                                       const std::vector<std::string> &additionalFunctionParameters,
+                                                       bool setBased) {
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support robust evaluation!");
 }
 
 Constraint PreservesTrafficFlowPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("PreservesTrafficFlowPredicate does not support constraint evaluation!");
 }
 PreservesTrafficFlowPredicate::PreservesTrafficFlowPredicate() : CommonRoadPredicate(false) {}

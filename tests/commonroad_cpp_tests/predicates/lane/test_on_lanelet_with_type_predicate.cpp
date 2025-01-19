@@ -1,7 +1,10 @@
 #include "test_on_lanelet_with_type_predicate.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/state.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void OnLaneletWithTypePredicateTest::SetUp() {
@@ -12,7 +15,7 @@ void OnLaneletWithTypePredicateTest::SetUp() {
     std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 6, 10, 0, 0, 0, 30, 0);
     std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 8, 10, 0, 0, 0, 40, 0);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
+    state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
@@ -90,13 +93,11 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationIntersection) {
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(0, 26.5, -3.5, 0, 0, M_PI / 2, 0, 20, 0);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(0, 7.0, 3, 0, 0, M_PI, 0, 43, 0);
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
+    state_map_t trajectoryPredictionObstacleTwo{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo)};
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
@@ -121,4 +122,26 @@ TEST_F(OnLaneletWithTypePredicateTest, RobustEvaluation) {
 
 TEST_F(OnLaneletWithTypePredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, egoVehicle), std::runtime_error);
+}
+
+TEST_F(OnLaneletWithTypePredicateTest, SetBasedPrediction) {
+    std::string scenarioName = "ZAM_Augmentation-1_1_S-3";
+    std::vector<std::string> pathSplit;
+    boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
+    auto dirName{pathSplit[0] + "_" + pathSplit[1]};
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+
+    auto world{
+        std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), std::get<0>(scenarioXml), {}, 0.1))};
+    auto obs1{world->findObstacle(100)};
+    auto obs2{world->findObstacle(101)};
+
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs1, {}, {"intersection"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs1, {}, {"interstate"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(30, world, obs1, {}, {"intersection"}, true));
+
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs2, {}, {"intersection"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs2, {}, {"intersection"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(30, world, obs2, {}, {"interstate"}, true));
 }

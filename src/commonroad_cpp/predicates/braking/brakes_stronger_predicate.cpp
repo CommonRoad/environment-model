@@ -5,14 +5,16 @@
 bool BrakesStrongerPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                 const std::shared_ptr<Obstacle> &obstacleK,
                                                 const std::shared_ptr<Obstacle> &obstacleP,
-                                                const std::vector<std::string> &additionalFunctionParameters) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters) > 0;
+                                                const std::vector<std::string> &additionalFunctionParameters,
+                                                bool setBased) {
+    return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters, setBased) > 0;
 }
 
 Constraint BrakesStrongerPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                          const std::shared_ptr<Obstacle> &obstacleK,
                                                          const std::shared_ptr<Obstacle> &obstacleP,
-                                                         const std::vector<std::string> &additionalFunctionParameters) {
+                                                         const std::vector<std::string> &additionalFunctionParameters,
+                                                         bool setBased) {
     return {
         std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(), stod(additionalFunctionParameters.at(0)))};
 }
@@ -20,10 +22,10 @@ Constraint BrakesStrongerPredicate::constraintEvaluation(size_t timeStep, const 
 double BrakesStrongerPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
                                                  const std::shared_ptr<Obstacle> &obstacleP,
-                                                 const std::vector<std::string> &additionalFunctionParameters) {
-    return std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(),
-                    stod(additionalFunctionParameters.at(0))) -
-           obstacleK->getStateByTimeStep(timeStep)->getAcceleration();
+                                                 const std::vector<std::string> &additionalFunctionParameters,
+                                                 bool setBased) {
+    return std::min(obstacleP->getAcceleration(timeStep, setBased, true), stod(additionalFunctionParameters.at(0))) -
+           obstacleK->getAcceleration(timeStep, setBased, true);
 }
 
 BrakesStrongerPredicate::BrakesStrongerPredicate() : CommonRoadPredicate(true) {}
