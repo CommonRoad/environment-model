@@ -8,21 +8,20 @@
 bool OnIncomingLeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                   const std::shared_ptr<Obstacle> &obstacleK,
                                                   const std::shared_ptr<Obstacle> &obstacleP,
-                                                  const std::vector<std::string> &additionalFunctionParameters) {
+                                                  const std::vector<std::string> &additionalFunctionParameters,
+                                                  bool setBased) {
     // check whether obstacles are on incoming lanelet
     std::vector<std::shared_ptr<Lanelet>> laneletsK =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    if (!std::any_of(laneletsK.begin(), laneletsK.end(),
-                     [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                         return lanelet->hasLaneletType(LaneletType::incoming);
-                     }))
+    if (!std::any_of(laneletsK.begin(), laneletsK.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
+            return lanelet->hasLaneletType(LaneletType::incoming);
+        }))
         return false;
     std::vector<std::shared_ptr<Lanelet>> laneletsP =
         obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    if (!std::any_of(laneletsP.begin(), laneletsP.end(),
-                     [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                         return lanelet->hasLaneletType(LaneletType::incoming);
-                     }))
+    if (!std::any_of(laneletsP.begin(), laneletsP.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
+            return lanelet->hasLaneletType(LaneletType::incoming);
+        }))
         return false;
 
     auto laneK = obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep);
@@ -47,13 +46,16 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(size_t timeStep, const std::sh
 double OnIncomingLeftOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                    const std::shared_ptr<Obstacle> &obstacleK,
                                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                                   const std::vector<std::string> &additionalFunctionParameters) {
+                                                   const std::vector<std::string> &additionalFunctionParameters,
+                                                   bool setBased) {
     throw std::runtime_error("OnIncomingLeftOfPredicate does not support robust evaluation!");
 }
 
-Constraint OnIncomingLeftOfPredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+Constraint OnIncomingLeftOfPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                           const std::shared_ptr<Obstacle> &obstacleK,
+                                                           const std::shared_ptr<Obstacle> &obstacleP,
+                                                           const std::vector<std::string> &additionalFunctionParameters,
+                                                           bool setBased) {
     throw std::runtime_error("OnIncomingLeftOfPredicate does not support constraint evaluation!");
 }
 OnIncomingLeftOfPredicate::OnIncomingLeftOfPredicate() : CommonRoadPredicate(true) {}

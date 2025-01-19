@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "circle.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 
@@ -20,7 +19,7 @@ namespace geometric_operations {
 std::vector<vertex> addObjectDimensionsRectangle(std::vector<vertex> qVertex, double length, double width);
 
 /**
- * Add the dimensions of the object (rectangle with radius) to the polygon vertices q in the object's coordinate frame.
+ * Add the dimensions of the object (circle with radius) to the polygon vertices q in the object's coordinate frame.
  * Note the polygon representation is just an approximation of the circle.
  *
  * @param qVertex Center vertex.

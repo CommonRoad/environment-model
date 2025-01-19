@@ -19,8 +19,8 @@ class ObstacleTestInitialization : public StateTestInitialization, public Signal
     double lengthObstacleOne;
     double widthObstacleOne;
     std::map<size_t, std::shared_ptr<Lane>> occupiedLaneObstacleOne{};
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{};
-    Obstacle::state_map_t historyObstacleOne{};
+    state_map_t trajectoryPredictionObstacleOne{};
+    state_map_t historyObstacleOne{};
     Rectangle geoShapeObstacleOne;
     std::map<size_t, std::vector<std::shared_ptr<Lanelet>>> occupiedLaneletsObstacleOne{};
     std::shared_ptr<Obstacle> obstacleOne;
@@ -35,7 +35,7 @@ class ObstacleTestInitialization : public StateTestInitialization, public Signal
     double reactionTimeObstacleTwo;
     double lengthObstacleTwo;
     double widthObstacleTwo;
-    Obstacle::state_map_t trajectoryPredictionObstacleTwo{};
+    state_map_t trajectoryPredictionObstacleTwo{};
     std::shared_ptr<Obstacle> obstacleTwo;
 
     std::shared_ptr<Obstacle> obstacleThree;

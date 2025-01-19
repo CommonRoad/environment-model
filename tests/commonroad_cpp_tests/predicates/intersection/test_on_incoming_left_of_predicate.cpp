@@ -1,5 +1,7 @@
 #include "test_on_incoming_left_of_predicate.h"
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void OnIncomingLeftOfPredicateTest::SetUp() {}
 
@@ -30,8 +32,7 @@ TEST_F(OnIncomingLeftOfPredicateTest, BooleanEvaluationObjectsTIntersection) {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -14.0, 0, 0, M_PI / 2);
     std::shared_ptr<State> state15ObstacleOne = std::make_shared<State>(1, 26.5, 15.0, 0, 0, M_PI / 2);
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(1, state15ObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(1, state15ObstacleOne)};
 
     obstacles.push_back(obstaclesTmp.at(0));
     obstacles.push_back(obstaclesTmp.at(1));

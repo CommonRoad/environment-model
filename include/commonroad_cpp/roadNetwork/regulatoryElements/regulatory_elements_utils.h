@@ -1,9 +1,21 @@
 #pragma once
 
+#include <commonroad_cpp/geometry/types.h>
+#include <memory>
 #include <set>
+#include <vector>
 
-#include "../../obstacle/obstacle.h"
-#include "../road_network.h"
+class Obstacle;
+class RoadNetwork;
+class TrafficLight;
+class Lanelet;
+class TrafficSignElement;
+enum class Direction;
+enum class TrafficLightState;
+enum class TrafficSignTypes;
+enum class SupportedTrafficSignCountry;
+enum class ObstacleType;
+struct vertex;
 
 namespace regulatory_elements_utils {
 

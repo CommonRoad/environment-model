@@ -1,15 +1,20 @@
 #pragma once
 
-#include "commonroad_cpp/world.h"
-#include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
-
+#include <memory>
 #include <nanobind/nanobind.h>
+#include <vector>
 
 namespace nb = nanobind;
+
+class WorldParameters;
+class Lanelet;
+class Obstacle;
+class State;
+class Occupancy;
+class TrafficSign;
+class TrafficLight;
+class Intersection;
+class StopLine;
 
 namespace TranslatePythonTypes {
 /**

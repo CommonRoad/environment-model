@@ -1,6 +1,9 @@
 #include "test_on_lanelet_with_successor_type_predicate.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void OnLaneletWithSuccessorTypePredicateTest::SetUp() {
 
@@ -10,7 +13,7 @@ void OnLaneletWithSuccessorTypePredicateTest::SetUp() {
     std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 30, 6, 10, 0, 0);
     std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 40, 8, 10, 0, 0);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
+    state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),

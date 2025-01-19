@@ -8,7 +8,7 @@
 bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                         const std::shared_ptr<Obstacle> &obstacleK,
                                         const std::shared_ptr<Obstacle> &obstacleP,
-                                        const std::vector<std::string> &additionalFunctionParameters) {
+                                        const std::vector<std::string> &additionalFunctionParameters, bool setBased) {
     auto leftObstacles{obstacle_operations::obstaclesLeft(timeStep, {obstacleK}, obstacleP, world->getRoadNetwork())};
     return !leftObstacles.empty();
 }
@@ -16,14 +16,15 @@ bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<W
 double LeftOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                          const std::shared_ptr<Obstacle> &obstacleK,
                                          const std::shared_ptr<Obstacle> &obstacleP,
-                                         const std::vector<std::string> &additionalFunctionParameters) {
+                                         const std::vector<std::string> &additionalFunctionParameters, bool setBased) {
     throw std::runtime_error("LeftOfPredicate does not support robust evaluation!");
 }
 
 Constraint LeftOfPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
                                                  const std::shared_ptr<Obstacle> &obstacleP,
-                                                 const std::vector<std::string> &additionalFunctionParameters) {
+                                                 const std::vector<std::string> &additionalFunctionParameters,
+                                                 bool setBased) {
     throw std::runtime_error("LeftOfPredicate does not support constraint evaluation!");
 }
 

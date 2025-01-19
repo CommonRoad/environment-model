@@ -1,6 +1,8 @@
 #include "test_approach_intersection_predicate.h"
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/state.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void ApproachIntersectionPredicateTest::SetUp() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
@@ -16,15 +18,13 @@ void ApproachIntersectionPredicateTest::SetUp() {
     std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 21, 0, 0, 0, M_PI / 2, 0, 21.0, 2);
     std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 26.5, -10.0, 0, 0, M_PI / 2, 0, 26, -10.0);
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo)};
+    state_map_t trajectoryPredictionObstacleTwo{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo)};
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
@@ -54,4 +54,25 @@ TEST_F(ApproachIntersectionPredicateTest, RobustEvaluation) {
 
 TEST_F(ApproachIntersectionPredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(ApproachIntersectionPredicateTest, SetBasedPrediction) {
+    std::string scenarioName = "USA_Lanker-1_1_S-2";
+    std::vector<std::string> pathSplit;
+    boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
+    auto dirName{pathSplit[0] + "_" + pathSplit[1]};
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+
+    auto world{
+        std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), std::get<0>(scenarioXml), {}, 0.1))};
+
+    auto obs1{world->findObstacle(1213)};
+    auto obs2{world->findObstacle(1219)};
+
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs1, {}, {}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs1, {}, {}, true));
+
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs2, {}, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs2, {}, {}, true));
 }

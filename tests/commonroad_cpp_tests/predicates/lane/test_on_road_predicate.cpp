@@ -1,5 +1,8 @@
 #include "test_on_road_predicate.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void OnRoadPredicateTest::SetUp() {
 
@@ -10,7 +13,7 @@ void OnRoadPredicateTest::SetUp() {
     std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 190, 2, 10, 0, 0);
     std::shared_ptr<State> stateFiveEgoVehicle = std::make_shared<State>(5, 100, 6, 10, 0, 0);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
+    state_map_t trajectoryPredictionEgoVehicle{
         std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
         std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
@@ -80,4 +83,22 @@ TEST_F(OnRoadPredicateTest, OnBikelaneSeperatedFromRoadRight) {
 TEST_F(OnRoadPredicateTest, OnBikelaneNotSeperatedFromRoadRight) {
     initializeTestData(LaneletType::bicycleLane, LaneletType::urban, LaneletType::bicycleLane, LaneletType::urban);
     EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle));
+}
+
+TEST_F(OnRoadPredicateTest, SetBasedPrediction) {
+    std::string scenarioName = "ZAM_Augmentation-1_1_S-3";
+    std::vector<std::string> pathSplit;
+    boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
+    auto dirName{pathSplit[0] + "_" + pathSplit[1]};
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+
+    auto world{
+        std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), std::get<0>(scenarioXml), {}, 0.1))};
+
+    auto obs1{world->findObstacle(100)};
+
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs1, {}, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs1, {}, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(30, world, obs1, {}, {}, true));
 }

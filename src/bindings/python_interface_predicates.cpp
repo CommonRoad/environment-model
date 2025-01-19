@@ -27,9 +27,15 @@ void init_python_interface_predicates(nb::module_ &m) {
     nb::class_<Constraint>(m, "Constraint").def_rw("real_valued_constraint", &Constraint::realValuedConstraint);
 
     nb::class_<CommonRoadPredicate>(m, "CommonRoadPredicate")
-        .def("boolean_evaluation", &CommonRoadPredicate::simpleBooleanEvaluation)
-        .def("robust_evaluation", &CommonRoadPredicate::robustEvaluation)
-        .def("constraint_evaluation", &CommonRoadPredicate::constraintEvaluation);
+        .def("boolean_evaluation", &CommonRoadPredicate::simpleBooleanEvaluation, nb::arg("timeStep"), nb::arg("world"),
+             nb::arg("obstacleK"), nb::arg("obstacleP"),
+             nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false)
+        .def("robust_evaluation", &CommonRoadPredicate::robustEvaluation, nb::arg("timeStep"), nb::arg("world"),
+             nb::arg("obstacleK"), nb::arg("obstacleP"),
+             nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false)
+        .def("constraint_evaluation", &CommonRoadPredicate::constraintEvaluation, nb::arg("timeStep"), nb::arg("world"),
+             nb::arg("obstacleK"), nb::arg("obstacleP"),
+             nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false);
 
     instantiate_predicates(m);
 

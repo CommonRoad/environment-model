@@ -17,7 +17,7 @@ TEST_F(WorldTest, TestScenariosValid) {
                                       "/" + scen + ".pb"};
         const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
             InputUtils::getDataFromCommonRoad(pathToTestFileOne);
-        EXPECT_NO_THROW(auto world{World(scen, 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne)});
+        EXPECT_NO_THROW(auto world{World(scen, 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, 0.02)});
     }
 }
 
@@ -180,7 +180,7 @@ TEST_F(WorldTest, UpdateObstacles) {
     auto obsManip{obstaclesScenarioOne.at(0)};
     auto initialTimeStepTraj{obsManip->getTrajectoryPrediction().begin()->second->getTimeStep()};
     auto wp{WorldParameters(RoadNetworkParameters(), SensorParameters(), ActuatorParameters::egoDefaults(),
-                            TimeParameters(5, 0.3), ActuatorParameters::vehicleDefaults())};
+                            TimeParameters(5, 0.3, 0.1), ActuatorParameters::vehicleDefaults())};
 
     auto world1{World("DEU_TestSafeDistance-1_1_T-1", 0, roadNetworkScenarioOne, {}, {obstaclesScenarioOne.at(0)},
                       timeStepSizeOne, wp)};
@@ -259,7 +259,7 @@ TEST_F(WorldTest, UpdateObstaclesTraj) {
     auto obsManip{obstaclesScenarioOne.at(0)};
     auto initialTimeStepTraj{obsManip->getTrajectoryPrediction().begin()->second->getTimeStep()};
     auto wp{WorldParameters(RoadNetworkParameters(), SensorParameters(), ActuatorParameters::egoDefaults(),
-                            TimeParameters(5, 0.3), ActuatorParameters::vehicleDefaults())};
+                            TimeParameters(5, 0.3, 0.1), ActuatorParameters::vehicleDefaults())};
 
     auto world1{World("DEU_TestSafeDistance-1_1_T-1", 0, roadNetworkScenarioOne, {}, {obstaclesScenarioOne.at(0)},
                       timeStepSizeOne, wp)};
@@ -306,7 +306,7 @@ TEST_F(WorldTest, Propagate) {
     const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto wp{WorldParameters(RoadNetworkParameters(), SensorParameters(), ActuatorParameters::egoDefaults(),
-                            TimeParameters(5, 0.3), ActuatorParameters::vehicleDefaults())};
+                            TimeParameters(5, 0.3, 0.1), ActuatorParameters::vehicleDefaults())};
     auto world{World("DEU_TestSafeDistance-1_1_T-1", 0, roadNetworkScenarioOne, {obstaclesScenarioOne.at(1)},
                      {obstaclesScenarioOne.at(0)}, timeStepSizeOne, wp)};
     size_t t1obs{obstaclesScenarioOne.at(0)->getCurrentState()->getTimeStep()};

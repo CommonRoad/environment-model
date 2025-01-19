@@ -1,6 +1,9 @@
 #include "test_parallel_of_lane_marking_of_type_on_side_predicate.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/state.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void ParallelOfLaneMarkingOfTypeOnSidePredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0, 0, 0, 0, 0);
@@ -11,14 +14,13 @@ void ParallelOfLaneMarkingOfTypeOnSidePredicateTest::SetUp() {
     std::shared_ptr<State> stateFiveEgoVehicle = std::make_shared<State>(5, 50, 22, 10, 0, 0, 0, 50, 22);
     std::shared_ptr<State> stateSixEgoVehicle = std::make_shared<State>(6, 60, 24, 10, 0, 0, 0, 60, 24);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle)};
+    state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(5, stateFiveEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle)};
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
@@ -50,14 +52,13 @@ void ParallelOfLaneMarkingOfTypeOnSidePredicateTest::SetUpRightSide() {
     std::shared_ptr<State> stateFiveEgoVehicle = std::make_shared<State>(5, 50, 22, 10, 0, 0, 0, 50, 22);
     std::shared_ptr<State> stateSixEgoVehicle = std::make_shared<State>(6, 60, 24, 10, 0, 0, 0, 60, 24);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(5, stateFiveEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle)};
+    state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(5, stateFiveEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle)};
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
+#include "commonroad_cpp/world.h"
 #include "nanobind/ndarray.h"
 #include "translate_python_types.h"
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
@@ -8,9 +9,14 @@
 #include <commonroad_cpp/geometry/polygon.h>
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <commonroad_cpp/geometry/shape_group.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/obstacle/occupancy.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 #include <nanobind/stl/list.h>
 #include <nanobind/stl/set.h>
 #include <nanobind/stl/string.h>

@@ -28,9 +28,9 @@ TEST_F(RoadNetworkTest, InitializationComplete) {
 }
 
 TEST_F(RoadNetworkTest, FindOccupiedLaneletsByShape) {
-    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonOne).size(), 3); // order can be random
-    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonTwo).at(0)->getId(), 1);
-    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonThree).size(), 0);
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape({polygonOne}).size(), 3); // order can be random
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape({polygonTwo}).at(0)->getId(), 1);
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape({polygonThree}).size(), 0);
 }
 
 TEST_F(RoadNetworkTest, FindLaneletsByPosition) {

@@ -7,7 +7,8 @@
 bool InProjectionDomainPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
                                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                                    const std::vector<std::string> &additionalFunctionParameters) {
+                                                    const std::vector<std::string> &additionalFunctionParameters,
+                                                    bool setBased) {
     auto referenceLaneP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
 
     return obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
@@ -19,13 +20,15 @@ bool InProjectionDomainPredicate::booleanEvaluation(size_t timeStep, const std::
 double InProjectionDomainPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                                     const std::vector<std::string> &additionalFunctionParameters) {
+                                                     const std::vector<std::string> &additionalFunctionParameters,
+                                                     bool setBased) {
     throw std::runtime_error("InProjectionDomainPredicate does not support robust evaluation!");
 }
 
 Constraint InProjectionDomainPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("InProjectionDomainPredicate does not support constraint evaluation!");
 }
 InProjectionDomainPredicate::InProjectionDomainPredicate() : CommonRoadPredicate(true) {}

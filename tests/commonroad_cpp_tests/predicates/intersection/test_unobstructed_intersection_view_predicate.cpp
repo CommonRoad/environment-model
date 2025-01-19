@@ -1,5 +1,9 @@
 #include "test_unobstructed_intersection_view_predicate.h"
+#include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/geometry/geometric_operations.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 void UnobstructedIntersectionViewPredicateTest::SetUp() {
 
@@ -9,12 +13,11 @@ void UnobstructedIntersectionViewPredicateTest::SetUp() {
     std::shared_ptr<State> stateThreeEgoVehicle = std::make_shared<State>(3, 1030, 1004, 10, 0, 0);
     std::shared_ptr<State> stateFourEgoVehicle = std::make_shared<State>(4, 1040, 1006, 10, 0, 0);
 
-    Obstacle::state_map_t trajectoryPredictionEgoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle)};
+    state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle)};
 
     egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
