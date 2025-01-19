@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <mutex>
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/auxiliaryDefs/timer.h"
@@ -40,7 +39,8 @@ class CommonRoadPredicate {
     virtual bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                    const std::shared_ptr<Obstacle> &obstacleK,
                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                   const std::vector<std::string> &additionalFunctionParameters = {"0.0"}) = 0;
+                                   const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
+                                   bool setBased = false) = 0;
 
     // FIXME: Make this internal if possible (friend function?)
     /**
@@ -51,11 +51,14 @@ class CommonRoadPredicate {
      * @param world Contains road network, ego vehicle, and obstacle list.
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
+     * @param additionalFunctionParameters Additional parameters.
+     * @param setBased Boolean indicating whether set-based evaluation should be used.
      * @return Boolean indicating satisfaction of the predicate.
      */
     bool simpleBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                 const std::shared_ptr<Obstacle> &obstacleK,
-                                 const std::shared_ptr<Obstacle> &obstacleP);
+                                 const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<Obstacle> &obstacleP,
+                                 const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
+                                 bool setBased = false);
 
     /**
      * Virtual function for the robustness evaluation of a predicate.
@@ -65,12 +68,14 @@ class CommonRoadPredicate {
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      * @param additionalFunctionParameters Additional parameters.
+     * @param setBased Boolean indicating whether set-based evaluation should be used.
      * @return Real value indicating robustness of the predicate.
      */
     virtual double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                     const std::shared_ptr<Obstacle> &obstacleK,
                                     const std::shared_ptr<Obstacle> &obstacleP,
-                                    const std::vector<std::string> &additionalFunctionParameters = {"0.0"}) = 0;
+                                    const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
+                                    bool setBased = false) = 0;
 
     /**
      * Virtual function for the constraint evaluation of a predicate.
@@ -79,12 +84,15 @@ class CommonRoadPredicate {
      * @param world Contains road network, ego vehicle, and obstacle list.
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
+     * @param additionalFunctionParameters Additional parameters.
+     * @param setBased Boolean indicating whether set-based evaluation should be used.
      * @return Constraints defined by the predicate.
      */
     virtual Constraint constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP,
-                                            const std::vector<std::string> &additionalFunctionParameters = {"0.0"}) = 0;
+                                            const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
+                                            bool setBased = false) = 0;
 
     /**
      * Function for the statistical evaluation of a predicate.
@@ -95,7 +103,8 @@ class CommonRoadPredicate {
      * @param evaluationTimer Timer which measures computation time.
      * @param statistics Statistic of predicates.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
-     * @param additionalFunctionParameters List of additional parameters as string.
+     * @param additionalFunctionParameters Additional parameters.
+     * @param setBased Boolean indicating whether set-based evaluation should be used.
      * @return Boolean indicating satisfaction
      */
     bool statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -103,7 +112,8 @@ class CommonRoadPredicate {
                                     const std::shared_ptr<Timer> &evaluationTimer,
                                     const std::shared_ptr<PredicateStatistics> &statistics,
                                     const std::shared_ptr<Obstacle> &obstacleP = {},
-                                    const std::vector<std::string> &additionalFunctionParameters = {"0.0"});
+                                    const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
+                                    bool setBased = false);
 
     /**
      * Getter for parameters.

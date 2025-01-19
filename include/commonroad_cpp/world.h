@@ -1,9 +1,11 @@
 #pragma once
 
+#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 #include "commonroad_cpp/obstacle/actuator_parameters.h"
 #include "commonroad_cpp/obstacle/sensor_parameters.h"
 #include "commonroad_cpp/obstacle/time_parameters.h"
 #include "commonroad_cpp/roadNetwork/road_network_config.h"
+#include <map>
 #include <memory>
 #include <string>
 #include <tsl/robin_map.h>
@@ -49,6 +51,12 @@ class WorldParameters {
      * @return Sensor parameters.
      */
     [[nodiscard]] SensorParameters getSensorParams() const { return sensorParams; }
+
+    /**
+     * Setter for time step size.
+     * @param timeStepSize Time step size [s].
+     */
+    void setTimeStepSize(double timeStepSize) { timeParams.setTimeStepSize(timeStepSize); }
 
     /**
      * Getter for actuator parameters.
@@ -139,9 +147,10 @@ class World {
     void setEgoVehicles(std::vector<std::shared_ptr<Obstacle>> &egos);
 
     /**
-     * Sets ego vehicles for scenario by ids and moves the respective obstacles from obstacles to egoVehicles
+     * Sets ego vehicles for scenario by ids and moves the respective obstacles from obstacles to egoVehicles. Existing
+     * ego vehicles are moved to obstacles.
      *
-     * @param egos
+     * @param egos List of ego vehicle IDs
      */
     void setEgoVehicles(std::vector<size_t> &egos);
 

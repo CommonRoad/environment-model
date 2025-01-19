@@ -7,8 +7,9 @@
 bool InFrontOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                            const std::shared_ptr<Obstacle> &obstacleP,
                                            const std::shared_ptr<Obstacle> &obstacleK,
-                                           const std::vector<std::string> &additionalFunctionParameters) {
-    return robustEvaluation(timeStep, world, obstacleP, obstacleK) > 0;
+                                           const std::vector<std::string> &additionalFunctionParameters,
+                                           bool setBased) {
+    return robustEvaluation(timeStep, world, obstacleP, obstacleK, additionalFunctionParameters, setBased) > 0;
 }
 
 bool InFrontOfPredicate::booleanEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {
@@ -18,7 +19,8 @@ bool InFrontOfPredicate::booleanEvaluation(double lonPositionP, double lonPositi
 Constraint InFrontOfPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                     const std::shared_ptr<Obstacle> &obstacleP,
                                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                                    const std::vector<std::string> &additionalFunctionParameters) {
+                                                    const std::vector<std::string> &additionalFunctionParameters,
+                                                    bool setBased) {
     return {obstacleP->frontS(world->getRoadNetwork(), timeStep) +
             0.5 * dynamic_cast<Rectangle &>(obstacleK->getGeoShape()).getLength()};
 }
@@ -30,10 +32,12 @@ Constraint InFrontOfPredicate::constraintEvaluation(double lonPositionP, double 
 double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::shared_ptr<Obstacle> &obstacleK,
-                                            const std::vector<std::string> &additionalFunctionParameters) {
+                                            const std::vector<std::string> &additionalFunctionParameters,
+                                            bool setBased) {
     return obstacleK->rearS(
                timeStep,
-               obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()) -
+               obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
+               setBased) -
            obstacleP->frontS(world->getRoadNetwork(), timeStep);
 }
 

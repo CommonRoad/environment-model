@@ -240,21 +240,22 @@ bool regulatory_elements_utils::lineInFront(const std::vector<vertex> &line, con
     if (!ccs->cartesianPointInProjectionDomain(line.at(1).x, line.at(1).y))
         return false;
     auto b{ccs->convertToCurvilinearCoords(line.at(1).x, line.at(1).y)};
-    polygon_type shape{obs->getOccupancyPolygonShape(timeStep)};
-    for (size_t idx{0}; idx < shape.outer().size(); ++idx) {
-        auto point{shape.outer().at(idx)};
-        if (!ccs->cartesianPointInProjectionDomain(point.x(), point.y()))
-            return false;
-        auto c{ccs->convertToCurvilinearCoords(point.x(), point.y())};
-        // ((b.X - a.X)*(c.Y - a.Y) > (b.Y - a.Y)*(c.X - a.X)) -> left of line a.y < b.y
-        if (a.y() < 0) {
-            if ((b.x() - a.x()) * (c.y() - a.y()) < (b.y() - a.y()) * (c.x() - a.x()))
+    multi_polygon_type shapes{obs->getOccupancyPolygonShape(timeStep)};
+    for (const auto &shape : shapes)
+        for (size_t idx{0}; idx < shape.outer().size(); ++idx) {
+            auto point{shape.outer().at(idx)};
+            if (!ccs->cartesianPointInProjectionDomain(point.x(), point.y()))
                 return false;
-        } else {
-            if ((b.x() - a.x()) * (c.y() - a.y()) > (b.y() - a.y()) * (c.x() - a.x()))
-                return false;
+            auto c{ccs->convertToCurvilinearCoords(point.x(), point.y())};
+            // ((b.X - a.X)*(c.Y - a.Y) > (b.Y - a.Y)*(c.X - a.X)) -> left of line a.y < b.y
+            if (a.y() < 0) {
+                if ((b.x() - a.x()) * (c.y() - a.y()) < (b.y() - a.y()) * (c.x() - a.x()))
+                    return false;
+            } else {
+                if ((b.x() - a.x()) * (c.y() - a.y()) > (b.y() - a.y()) * (c.x() - a.x()))
+                    return false;
+            }
         }
-    }
     return true;
 }
 

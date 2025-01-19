@@ -7,12 +7,15 @@
 bool OnSameRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP,
-                                            const std::vector<std::string> &additionalFunctionParameters) {
+                                            const std::vector<std::string> &additionalFunctionParameters,
+                                            bool setBased) {
     std::unordered_set<unsigned long> relevantIDs;
-    // we check here for state as it larger scenarios/maps, obstacle might be at end of road and if state is not
-    // part of road ccs computations might fail (shape alone state might not be part of road)
-    auto laneletsP = obstacleP->getOccupiedLaneletsByState(world->getRoadNetwork(), timeStep);
-    auto refK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
+    // temporarily, we checked here for state as in larger scenarios/maps, obstacle might be at end of road and if state
+    // is not part of road ccs computations might fail (when using shape alone, state might not be on road) we changed
+    // it to shape again since this simplifies set-based eval and assume we perform pre-checks to prevent failing ccs in
+    // trajectory eval
+    auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
+    auto refK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep, setBased)};
     for (const auto &la : refK->getContainedLanelets()) {
         for (const auto &la2 : lanelet_operations::adjacentLanelets(la, false)) {
             if (std::any_of(laneletsP.begin(), laneletsP.end(),
@@ -26,14 +29,16 @@ bool OnSameRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
 double OnSameRoadPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                              const std::shared_ptr<Obstacle> &obstacleK,
                                              const std::shared_ptr<Obstacle> &obstacleP,
-                                             const std::vector<std::string> &additionalFunctionParameters) {
+                                             const std::vector<std::string> &additionalFunctionParameters,
+                                             bool setBased) {
     throw std::runtime_error("OnSameRoadPredicate does not support robust evaluation!");
 }
 
 Constraint OnSameRoadPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                                     const std::vector<std::string> &additionalFunctionParameters) {
+                                                     const std::vector<std::string> &additionalFunctionParameters,
+                                                     bool setBased) {
     throw std::runtime_error("OnSameRoadPredicate does not support constraint evaluation!");
 }
 OnSameRoadPredicate::OnSameRoadPredicate() : CommonRoadPredicate(true) {}

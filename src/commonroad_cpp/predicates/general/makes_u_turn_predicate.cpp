@@ -7,7 +7,8 @@
 bool MakesUTurnPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::shared_ptr<Obstacle> &obstacleP,
-                                            const std::vector<std::string> &additionalFunctionParameters) {
+                                            const std::vector<std::string> &additionalFunctionParameters,
+                                            bool setBased) {
     auto orientationCcs{obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep)};
     return parameters.getParam("uTurnLower") <= abs(orientationCcs) and
            abs(orientationCcs) <= parameters.getParam("uTurnUpper");
@@ -16,14 +17,16 @@ bool MakesUTurnPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
 Constraint MakesUTurnPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                                     const std::vector<std::string> &additionalFunctionParameters) {
+                                                     const std::vector<std::string> &additionalFunctionParameters,
+                                                     bool setBased) {
     throw std::runtime_error("Makes U Turn Predicate does not support constraint evaluation!");
 }
 
 double MakesUTurnPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                              const std::shared_ptr<Obstacle> &obstacleK,
                                              const std::shared_ptr<Obstacle> &obstacleP,
-                                             const std::vector<std::string> &additionalFunctionParameters) {
+                                             const std::vector<std::string> &additionalFunctionParameters,
+                                             bool setBased) {
     throw std::runtime_error("Makes U Turn Predicate does not support robust evaluation!");
 }
 

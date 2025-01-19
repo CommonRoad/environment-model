@@ -7,7 +7,8 @@
 
 bool InIntersectionConflictAreaPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
 
     auto simLaneletsK{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
     std::shared_ptr<Lane> lane{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
@@ -37,13 +38,15 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
 
 double InIntersectionConflictAreaPredicate::robustEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("InIntersectionConflictAreaPredicate does not support robust evaluation!");
 }
 
 Constraint InIntersectionConflictAreaPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
+    bool setBased) {
     throw std::runtime_error("InIntersectionConflictAreaPredicate does not support constraint evaluation!");
 }
 

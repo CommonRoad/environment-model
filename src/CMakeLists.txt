@@ -66,6 +66,7 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/obstacle/sensor_parameters.h
         commonroad_cpp/obstacle/time_parameters.h
         commonroad_cpp/obstacle/state.h
+        commonroad_cpp/obstacle/obstacle_cache.h
         commonroad_cpp/obstacle/occupancy.h
         commonroad_cpp/obstacle/signal_state.h
         commonroad_cpp/obstacle/state_meta_info.h

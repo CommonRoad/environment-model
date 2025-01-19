@@ -1,3 +1,4 @@
+#include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <memory>
@@ -21,6 +22,7 @@ World::World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwor
         idCounter = std::max(idCounter, obs->getId());
     for (const auto &obs : obstacles)
         idCounter = std::max(idCounter, obs->getId());
+    worldParameters.setTimeStepSize(timeStepSize);
     if (!worldParams.hasDefaultParams()) {
         for (const auto &obs : obstacles) {
             obs->setActuatorParameters(worldParams.getActuatorParamsObstacles());
@@ -118,6 +120,21 @@ void World::setEgoVehicles(std::vector<size_t> &egos) {
             obstacles.erase(itr);
         } else
             throw std::runtime_error("PythonInterface::createScenario: Unknown ego ID.");
+    }
+    // obstacles not in ego list but currently ego are moved to obstacles
+    std::vector<size_t> idsToRemove;
+    for (const auto &egoTmp : egoVehicles) {
+        if (std::find_if(egos.begin(), egos.end(), [egoTmp](size_t eID) { return egoTmp->getId() == eID; }) ==
+            egos.end())
+            idsToRemove.push_back(egoTmp->getId());
+    }
+    for (const auto &eID : idsToRemove) {
+        auto egoRef{std::find_if(egoVehicles.begin(), egoVehicles.end(),
+                                 [eID](const std::shared_ptr<Obstacle> &egoTmp) { return egoTmp->getId() == eID; })};
+        if (egoRef != egoVehicles.end()) {
+            obstacles.push_back(*egoRef);
+            egoVehicles.erase(egoRef);
+        }
     }
 }
 

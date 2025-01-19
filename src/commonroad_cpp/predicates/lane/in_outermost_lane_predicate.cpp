@@ -7,7 +7,8 @@
 bool InOutermostLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
                                                  const std::shared_ptr<Obstacle> &obstacleP,
-                                                 const std::vector<std::string> &additionalFunctionParameters) {
+                                                 const std::vector<std::string> &additionalFunctionParameters,
+                                                 bool setBased) {
     std::vector<std::shared_ptr<Lanelet>> lanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     return std::any_of(
@@ -21,13 +22,16 @@ bool InOutermostLanePredicate::booleanEvaluation(size_t timeStep, const std::sha
 double InOutermostLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                   const std::shared_ptr<Obstacle> &obstacleK,
                                                   const std::shared_ptr<Obstacle> &obstacleP,
-                                                  const std::vector<std::string> &additionalFunctionParameters) {
+                                                  const std::vector<std::string> &additionalFunctionParameters,
+                                                  bool setBased) {
     throw std::runtime_error("InOutermostLanePredicate does not support robust evaluation!");
 }
 
-Constraint InOutermostLanePredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters) {
+Constraint InOutermostLanePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                          const std::shared_ptr<Obstacle> &obstacleK,
+                                                          const std::shared_ptr<Obstacle> &obstacleP,
+                                                          const std::vector<std::string> &additionalFunctionParameters,
+                                                          bool setBased) {
     throw std::runtime_error("InOutermostLanePredicate does not support constraint evaluation!");
 }
 

@@ -1,18 +1,17 @@
 #pragma once
 
 #include <cstddef>
-#include <map>
 #include <memory>
 #include <vector>
 
 #include "state.h"
 
+#include "commonroad_cpp/obstacle/obstacle_cache.h"
+#include <boost/container_hash/hash.hpp>
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/shape.h>
 #include <commonroad_cpp/geometry/types.h>
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
-
-#include <boost/container_hash/hash.hpp>
 
 #include "actuator_parameters.h"
 #include "sensor_parameters.h"
@@ -31,19 +30,78 @@ namespace geometry {
 class CurvilinearCoordinateSystem;
 }
 
+template <typename Value> using time_step_map_t = tsl::robin_map<time_step_t, Value>;
+//** type of history/trajectory prediction maps for physical states */
+using state_map_t = time_step_map_t<std::shared_ptr<State>>;
+//** type of prediction maps for occupancies */
+using occupancy_map_t = time_step_map_t<std::shared_ptr<Occupancy>>;
+//** type of history/trajectory prediction maps for signal states*/
+using signal_state_map_t = time_step_map_t<std::shared_ptr<SignalState>>;
+
+/**
+ * Struct representing set-based prediction.
+ */
+struct SetBasedPrediction {
+    occupancy_map_t setBasedPrediction{}; //**< set-based prediction of the obstacle */
+    ObstacleCache obstacleCache{};        //**< cache for set-based prediction */
+
+    /**
+     * Resets helper mappings for obstacle time steps.
+     */
+    void removeTimeStepFromMappingVariables(size_t timeStep) {
+        obstacleCache.removeTimeStepFromMappingVariables(timeStep);
+    }
+};
+
+/**
+ * Struct representing trajectory prediction.
+ */
+struct TrajectoryPrediction {
+    signal_state_map_t signalSeries{};  //**< signal series of the obstacle */
+    state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
+    ObstacleCache obstacleCache{};      //**< cache for trajectory prediction */
+
+    /**
+     * Resets helper mappings for obstacle time steps.
+     */
+    void removeTimeStepFromMappingVariables(size_t timeStep) {
+        obstacleCache.removeTimeStepFromMappingVariables(timeStep);
+    }
+
+    /**
+     * Clears the cache for trajectory prediction.
+     */
+    void clearCache() { obstacleCache.clear(); }
+};
+
+/**
+ * Struct representing recorded states.
+ */
+struct RecordedStates {
+    std::shared_ptr<State> currentState;             //**< pointer to current state of obstacle */
+    std::shared_ptr<SignalState> currentSignalState; //**< pointer to current signal state of obstacle */
+    state_map_t trajectoryHistory{};                 //**< previous states of the obstacle */
+    signal_state_map_t signalSeriesHistory{};        //**< previous signal states of the obstacle */
+    ObstacleCache occupancyRecorded;                 //**< cache for recorded occupancy (history + current time step) */
+
+    /**
+     * Resets helper mappings for obstacle time steps.
+     */
+    void removeTimeStepFromMappingVariables(size_t timeStep) {
+        occupancyRecorded.removeTimeStepFromMappingVariables(timeStep);
+    }
+
+    /**
+     * Clears the cache for trajectory prediction.
+     */
+    void clearCache() { occupancyRecorded.clear(); }
+};
+
 /**
  * Class representing an obstacle.
  */
 class Obstacle {
   public:
-    template <typename Value> using time_step_map_t = tsl::robin_map<time_step_t, Value>;
-    //** type of history/trajectory prediction maps for physical states */
-    using state_map_t = time_step_map_t<std::shared_ptr<State>>;
-    //** type of prediction maps for occupancies */
-    using occupancy_map_t = time_step_map_t<std::shared_ptr<Occupancy>>;
-    //** type of history/trajectory prediction maps for signal states*/
-    using signal_state_map_t = time_step_map_t<std::shared_ptr<SignalState>>;
-
     /**
      * Default constructor without parameters for an obstacle.
      */
@@ -324,10 +382,11 @@ class Obstacle {
      *
      * @param timeStep Time step of interest.
      * @param roadNetwork Pointer to road network
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Pointer to lane object.
      */
     [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                         time_step_t timeStep);
+                                                         time_step_t timeStep, bool setBased = false);
 
     /**
      * Getter for trajectory prediction.
@@ -347,9 +406,10 @@ class Obstacle {
      * Getter for polygon shape of obstacle at given time step.
      *
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Boost polygon.
      */
-    [[nodiscard]] polygon_type getOccupancyPolygonShape(time_step_t timeStep);
+    [[nodiscard]] multi_polygon_type getOccupancyPolygonShape(time_step_t timeStep, bool setBased = false);
 
     /**
      * Getter for obstacle shape.
@@ -363,10 +423,12 @@ class Obstacle {
      *
      * @param roadNetwork Road network object.
      * @param timeStep Time step of interest
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of pointers to occupied lanelets.
      */
     [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
-    getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+    getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep,
+                               bool setBased = false);
 
     /**
      * Extracts occupied lanes and adjacent lanes of them for given time step.
@@ -384,10 +446,12 @@ class Obstacle {
      *
      * @param roadNetwork CommonRoad road network.
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of occupied lanelets.
      */
     [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
-    getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+    getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep,
+                                               bool setBased = false);
 
     /**
      * Extracts the occupied lanelets of road for given time step. Lanelets in opposite driving direction are
@@ -417,40 +481,46 @@ class Obstacle {
      *
      * @param roadNetwork CommonRoad road network.
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of pointers to occupied lanelets.
      */
     [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
-    setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+    setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                               bool setBased = false);
 
     /**
      * Sets the occupied lanelets not in driving direction for given time step.
      *
      * @param roadNetwork CommonRoad road network.
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of pointers to occupied lanelets.
      */
     [[nodiscard]] std::vector<std::shared_ptr<Lanelet>>
-    getOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep);
+    getOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                                  bool setBased);
 
     /**
      * Getter for occupied lanelets by the front of the car at a time steps within a road network.
      *
      * @param roadNetwork Road network object.
      * @param timeStep Time step of interest
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of pointers to occupied lanelets by front of the car.
      */
     std::vector<std::shared_ptr<Lanelet>> getOccupiedLaneletsByFront(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                                     size_t timeStep);
+                                                                     size_t timeStep, bool setBased = false);
 
     /**
      * Getter for occupied lanelets by the back of the car at a time steps within a road network.
      *
      * @param roadNetwork Road network object.
      * @param timeStep Time step of interest
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of pointers to occupied lanelets by back of the car.
      */
     std::vector<std::shared_ptr<Lanelet>> getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                                    size_t timeStep);
+                                                                    size_t timeStep, bool setBased = false);
 
     /**
      * Provides state given a time step. The time step can belong to the current state, history, or prediction.
@@ -479,17 +549,19 @@ class Obstacle {
      * Computes the global coordinates of the front of the car.
      *
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Vector of double with X- and Y-Coordinate-Point.
      */
-    std::vector<double> getFrontXYCoordinates(time_step_t timeStep);
+    std::vector<double> getFrontXYCoordinates(time_step_t timeStep, bool setBased = false);
 
     /**
      * Computes the global coordinates of the back of the car.
      *
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Vector of double with X- and Y-Coordinate-Point.
      */
-    std::vector<double> getBackXYCoordinates(time_step_t timeStep);
+    std::vector<double> getBackXYCoordinates(time_step_t timeStep, bool setBased = false);
 
     /**
      * Computes the maximum longitudinal front position of obstacle (for rectangle shapes)
@@ -506,9 +578,11 @@ class Obstacle {
      *
      * @param timeStep Time step of interest.
      * @param ccs Pointer to reference CCS which should be used.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Longitudinal position of obstacle front
      */
-    double frontS(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
+    double frontS(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                  bool setBased = false);
 
     /**
      * Computes the minimum longitudinal rear position of obstacle (for rectangle shapes)
@@ -525,45 +599,53 @@ class Obstacle {
      *
      * @param timeStep Time step of interest.
      * @param ccs Pointer to reference CCS which should be used.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Longitudinal position.
      */
-    double rearS(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
+    double rearS(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                 bool setBased = false);
 
     /**
      * Calculates right d-coordinate of vehicle
      *
      * @param roadNetwork Pointer to road network
      * @param timeStep time step to consider
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return right d-coordinate [m]
      */
-    double rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+    double rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep, bool setBased = false);
 
     /**
      * Calculates right lateral position of obstacle based on given reference curvilinear coordinate system
      *
      * @param timeStep time step to consider
      * @param ccs Pointer to reference CCS which should be used.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return lateral position [m]
      */
-    double rightD(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
+    double rightD(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                  bool setBased = false);
 
     /**
      * Calculates left d-coordinate of vehicle
      *
      * @param roadNetwork Pointer to road network
      * @param timeStep time step to consider
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return left d-coordinate [m]
      */
-    double leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+    double leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep, bool setBased = false);
 
     /**
      * Calculates left lateral position of obstacle based on given reference curvilinear coordinate system
      *
      * @param timeStep time step to consider
      * @param ccs Pointer to reference CCS which should be used.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return lateral position [m]
      */
-    double leftD(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
+    double leftD(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                 bool setBased = false);
 
     /**
      * Computes the longitudinal position of obstacle based on Cartesian state and assigned reference lane
@@ -579,10 +661,12 @@ class Obstacle {
      *
      * @param timeStep Time Step of interest.
      * @param ccs Pointer to reference CCS which should be used.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return longitudinal position of obstacle state
      */
     [[nodiscard]] double getLonPosition(time_step_t timeStep,
-                                        const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
+                                        const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                                        bool setBased = false);
 
     /**
      * Computes the lateral position of obstacle based on Cartesian state and assigned reference lane
@@ -598,10 +682,12 @@ class Obstacle {
      *
      * @param timeStep Time step of interest.
      * @param ccs Pointer to reference CCS which should be used.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return lateral position of obstacle state
      */
     [[nodiscard]] double getLatPosition(time_step_t timeStep,
-                                        const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
+                                        const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                                        bool setBased = false);
 
     /**
      * Computes the curvilinear orientation of obstacle based on Cartesian state and assigned lane
@@ -619,29 +705,32 @@ class Obstacle {
      *
      * @param timeStep Time step of interest.
      * @param ccs Pointer to reference CCS which should be used.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return curvilinear orientation of obstacle state
      */
     [[nodiscard]] double getCurvilinearOrientation(time_step_t timeStep,
-                                                   const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
+                                                   const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                                                   bool setBased = false);
 
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
      *
      * @param lanes List of existing lanes.
      * @param timeStep time step of interest
-     * @return list of pointers to occupied lanes
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      */
-    void setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes,
-                          time_step_t timeStep); // TODO create test case
+    void setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes, time_step_t timeStep,
+                          bool setBased = false); // TODO create test case
 
     /**
      * Computes occupied lanes at a time step.
      *
      * @param roadNetwork Pointer to road network.
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      */
-    void setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                          time_step_t timeStep); // TODO create test case
+    void setOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep,
+                          bool setBased = false); // TODO create test case
 
     /**
      * Extracts first time step of trajectory
@@ -655,10 +744,12 @@ class Obstacle {
      *
      * @param roadNetwork Pointer to road network.
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of pointers to occupied lanes.
      */
     std::vector<std::shared_ptr<Lane>> getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                        time_step_t timeStep); // TODO create test case
+                                                        time_step_t timeStep,
+                                                        bool setBased = false); // TODO create test case
 
     /**
      * Extracts the occupied lanes of road for given time step. Lanes in opposite driving direction are considered.
@@ -673,9 +764,11 @@ class Obstacle {
      * Converts the x- and y-coordinate into the Curvilinear domain given own reference lane.
      *
      * @param roadNetwork Pointer to road network
-     * @param timeStep Time step for which the coordinates should me transformed.
+     * @param timeStep Time step for which the coordinates should be transformed.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      */
-    void convertPointToCurvilinear(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+    void convertPointToCurvilinear(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep,
+                                   bool setBased = false);
 
     /**
      * Checks whether time steps exists in trajectory prediction or current state.
@@ -735,15 +828,17 @@ class Obstacle {
      *
      * @param timeStep time step of interest
      * @param ccs Reference curvilinear coordinate system (CCS) which should be used.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      */
-    void convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs);
+    void convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                                   bool setBased = false);
 
     /**
      * Getter for field of view area.
      *
      * @return Field of view area as polygon.
      */
-    const polygon_type &getFov();
+    const polygon_type getFov();
 
     /**
      * Setter for field of view area.
@@ -785,10 +880,11 @@ class Obstacle {
      * @param timeStep time step of interest
      * @param obs Obstacle of interest
      * @param roadnetwork Road network.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Distance [m]
      */
     double getLateralDistanceToObstacle(time_step_t timeStep, const std::shared_ptr<Obstacle> &obs,
-                                        const std::shared_ptr<RoadNetwork> &roadnetwork);
+                                        const std::shared_ptr<RoadNetwork> &roadnetwork, bool setBased = false);
 
     /**
      * Returns trajectory as vector (by default it is a map).
@@ -816,10 +912,11 @@ class Obstacle {
      *
      * @param roadNetwork Road network object.
      * @param timeStep Relevant time step.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of lanelets.
      */
     std::vector<std::shared_ptr<Lanelet>> getOccupiedLaneletsByState(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                                     size_t timeStep);
+                                                                     size_t timeStep, bool setBased = false);
 
     /**
      * Checks whether history contains relevant time steps.
@@ -841,11 +938,33 @@ class Obstacle {
      */
     occupancy_map_t getSetBasedPrediction() const;
 
+    /**
+     * Getter for velocity at a specific time step.
+     * Function can consider set-based predictions and returns corresponding possible min/max velocity.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
+     * @param min Boolean indicating whether minimum or maximum velocity should be returned.
+     *
+     * @return Velocity [m/s].
+     */
+    double getVelocity(size_t timeStep, bool setBased = false, bool min = true) const;
+
+    /**
+     * Getter for acceleration at a specific time step.
+     * Function can consider set-based predictions and returns corresponding possible min/max acceleration.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
+     * @param min Boolean indicating whether minimum or maximum acceleration should be returned.
+     *
+     * @return acceleration [m/s^2].
+     */
+    double getAcceleration(size_t timeStep, bool setBased = false, bool min = true) const;
+
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     ObstacleRole obstacleRole{ObstacleRole::DYNAMIC}; //**< CommonRoad obstacle role */
-    std::shared_ptr<State> currentState;              //**< pointer to current state of obstacle */
-    std::shared_ptr<SignalState> currentSignalState;  //**< pointer to current signal state of obstacle */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
     size_t firstTimeStep;                             //**< first time step (current state or in history */
     size_t finalTimeStep;                             //**< final time step (current state or in prediction */
@@ -858,70 +977,12 @@ class Obstacle {
         roadNetworkParameters; //**< road network parameters, e.g., required to create reference lane */
     TimeParameters timeParameters{TimeParameters::dynamicDefaults()};
 
-    state_map_t trajectoryPrediction{};       //**< trajectory prediction of the obstacle */
-    occupancy_map_t setBasedPrediction{};     //**< set-based prediction of the obstacle */
-    signal_state_map_t signalSeries{};        //**< signal series of the obstacle */
-    state_map_t trajectoryHistory{};          //**< previous states of the obstacle */
-    signal_state_map_t signalSeriesHistory{}; //**< previous signal states of the obstacle */
-    StateMetaInfo stateMetaInfo{};            //**< meta information relevant for obstacle */
-
+    StateMetaInfo stateMetaInfo{};   //**< meta information relevant for obstacle */
     std::unique_ptr<Shape> geoShape; //**< shape of the obstacle */
 
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLanelets{}; //**< map of time steps to lanelets occupied by the obstacle shape */
-
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLaneletsState{}; //**< map of time steps to lanelets occupied by the obstacle states (no shape
-                                 // considered) */
-
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLaneletsFront{}; //**< map of time steps to lanelets in driving direction occupied by the obstacles
-                                 // front
-                                 //*/
-
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLaneletsBack{}; //**< map of time steps to lanelets in driving direction occupied by the obstacles back
-                                //*/
-
-    mutable time_step_map_t<std::vector<std::shared_ptr<Lane>>>
-        occupiedLanesDrivingDir{}; //**< map of time steps to lanelets occupied by the obstacle */
-
-    mutable time_step_map_t<std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLaneletsDrivingDir{}; //**< map of time steps to lanelets in driving direction occupied by the obstacle
-                                      //*/
-
-    mutable time_step_map_t<std::vector<std::shared_ptr<Lanelet>>>
-        occupiedLaneletsNotDrivingDir{}; //**< map of time steps to lanelets in not driving direction occupied by the
-                                         // obstacle */
-
-    mutable time_step_map_t<std::shared_ptr<Lane>>
-        referenceLane{}; //**< lane which is used as reference for curvilinear projection */
-
-    mutable time_step_map_t<std::vector<std::shared_ptr<Lane>>>
-        occupiedLanes{}; //**< map of time steps to lanes occupied by the obstacle */
-
-    mutable time_step_map_t<std::vector<double>>
-        frontXYPositions{}; //**< map of time steps to frontXY position of the obstacle */
-
-    mutable time_step_map_t<std::vector<double>>
-        backXYPositions{}; //**< map of time steps to backXY position of the obstacle */
-
-    mutable time_step_map_t<double> leftLatPosition{}; //**< map of time step to left lat position */
-
-    mutable time_step_map_t<double> rightLatPosition{}; //**< map of time step to right lat position */
-
-    mutable time_step_map_t<std::map<size_t, double>>
-        lateralDistanceToObjects{}; //**< map of time steps to map of other obstacles and the regarding distance to the
-                                    // obstacle */
-
-    using curvilinear_position_t = std::array<double, 3>; //**< curvilinear position of an obstacle */
-    using curvilinear_position_map_t =
-        tsl::robin_pg_map<std::shared_ptr<geometry::CurvilinearCoordinateSystem>,
-                          curvilinear_position_t>; //**< map from CCS to curvilinear positions */
-    mutable time_step_map_t<curvilinear_position_map_t>
-        convertedPositions{}; //**< map of time steps to CCS to curvilinear positions */
-
-    mutable time_step_map_t<polygon_type> shapeAtTimeStep{}; //**< occupied polygon shape at time steps */
+    RecordedStates recordedStates{}; //**< recorded states of the obstacle consisting of history and current state*/
+    TrajectoryPrediction trajectoryPrediction{}; //**< predicted states of the obstacle */
+    SetBasedPrediction setBasedPrediction{};     //**< set-based prediction of the obstacle */
 
     /**
      * Private setter for occupied lanelets at a time steps within a road network.
@@ -929,30 +990,33 @@ class Obstacle {
      *
      * @param roadNetwork Road network object.
      * @param timeStep Time step of interest
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of pointers to occupied lanelets.
      */
     std::vector<std::shared_ptr<Lanelet>> setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                                     time_step_t timeStep);
+                                                                     time_step_t timeStep, bool setBased = false);
 
     /**
      * Sets the occupied lanelets not in driving direction for a time step.
      *
      * @param roadNetwork Road network.
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return List of occupied lanelets in driving direction.
      */
     std::vector<std::shared_ptr<Lanelet>>
-    setOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                  time_step_t timeStep);
+    setOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep,
+                                                  bool setBased = false);
 
     /**
      * Private setter for polygon shape of obstacle at given time step.
      * Used to define critical section around it.
      *
      * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Boost polygon.
      */
-    polygon_type setOccupancyPolygonShape(time_step_t timeStep);
+    multi_polygon_type setOccupancyPolygonShape(time_step_t timeStep, bool setBased = false);
 
     /**
      * Private setter for reference lane.
@@ -960,9 +1024,11 @@ class Obstacle {
      *
      * @param timeStep Time step of interest.
      * @param roadNetwork Pointer to road network
+     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Pointer to lane object.
      */
-    std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
+    std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep,
+                                           bool setBased);
 
     /**
      * Creates logging message in case of ccs conversion errors.
@@ -981,19 +1047,149 @@ class Obstacle {
     void setFirstLastTimeStep();
 
     /**
-     * Resets helper mappings for obstacle time steps.
-     */
-    void resetTimeMappingVariables();
-
-    /**
-     * Resets helper mappings for specific obstacle time step
-     *
-     * @param timeStep Relevant time step.
-     */
-    void removeTimeStepFromMappingVariables(size_t timeStep);
-
-    /**
      * Updates history of obstacle.
      */
     void updateHistory();
+
+    /**
+     * Getter for occupied lanes cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of lanes per time step.
+     */
+    time_step_map_t<std::vector<std::shared_ptr<Lane>>> &getOccupiedLanesCache(size_t timeStep, bool setBased) const;
+
+    /**
+     * Getter for lateral distance to other obstacles cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of distance per time step.
+     */
+    time_step_map_t<std::map<size_t, double>> &getLateralDistanceToObjectCache(size_t timeStep, bool setBased) const;
+
+    /**
+     * Getter for rear position cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of position per time step.
+     */
+    time_step_map_t<std::vector<double>> &getBackXYCoordinatesCache(time_step_t timeStep, bool setBased) const;
+
+    /**
+     * Getter for front position cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of position per time step.
+     */
+    time_step_map_t<std::vector<double>> &getFrontXYCoordinatesCache(time_step_t timeStep, bool setBased) const;
+
+    /**
+     * Getter for occupied lanelets not in driving direction cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of occupied lanelets per time step.
+     */
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>> &getOccupiedLaneletsNotDrivingDirCache(size_t timeStep,
+                                                                                                  bool setBased) const;
+
+    /**
+     * Getter for occupied lanelets in driving direction cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of occupied lanelets per time step.
+     */
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>> &getOccupiedLaneletsDrivingDirCache(size_t timeStep,
+                                                                                               bool setBased) const;
+
+    /**
+     * Getter for converted curvilienar state position cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of converted curvilinear position per time step.
+     */
+    time_step_map_t<ObstacleCache::curvilinear_position_map_t> &convertedPositionsCache(size_t timeStep,
+                                                                                        bool setBased) const;
+
+    /**
+     * Getter for reference lane cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of reference lane per time step.
+     */
+    time_step_map_t<std::shared_ptr<Lane>> &getReferenceLaneCache(size_t timeStep, bool setBased) const;
+
+    /**
+     * Getter for rigtht lateral position cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of right lateral position per time step.
+     */
+    time_step_map_t<double> &getRightLatPositionCache(size_t timeStep, bool setBased) const;
+
+    /**
+     * Getter for left lateral position cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of left lateral position per time step.
+     */
+    time_step_map_t<double> &getLeftLatPositionCache(size_t timeStep, bool setBased) const;
+
+    /**
+     * Getter for occupied lanelets cache (rear position).
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of occupied lanelets per time step.
+     */
+    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
+    getOccupiedLaneletsBackCache(size_t timeStep, bool setBased);
+
+    /**
+     * Getter for occupied lanelets cache (front position).
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of occupied lanelets per time step.
+     */
+    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
+    getOccupiedLaneletsFrontCache(size_t timeStep, bool setBased);
+
+    /**
+     * Getter for occupied lanelets cache (state occupancy).
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of occupied lanelets per time step.
+     */
+    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
+    getOccupiedLaneletsStateCache(size_t timeStep, bool setBased);
+
+    /**
+     * Getter for occupied lanelets cache (shape occupancy).
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Map of occupied lanelets per time step.
+     */
+    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &getOccupiedLaneletsCache(size_t timeStep,
+                                                                                                     bool setBased);
+
+    /**
+     * Getter for occupancy polygon shape cache.
+     *
+     * @param timeStep Time step of interest.
+     * @param setBased Boolean indicating whether set-based prediction should be considered.
+     * @return Mao of occupancy polygon shape as boost multi-polygon per time step.
+     */
+    time_step_map_t<multi_polygon_type> &getOccupancyPolygonShapeCache(size_t timeStep, bool setBased);
 };

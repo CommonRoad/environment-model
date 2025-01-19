@@ -1,8 +1,11 @@
 #include "test_in_same_lane_predicate.h"
 #include "../../interfaces/utility_functions.h"
 #include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/obstacle/state.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 void TestInSameLanePredicate::SetUp() {
@@ -21,21 +24,18 @@ void TestInSameLanePredicate::SetUp() {
     std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 40, 2, 10, 0, 0, 0, 40, 0);
     std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(4, 20, 2, 10, 0, 0, 0, 20, 0);
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
+    state_map_t trajectoryPredictionObstacleTwo{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleThree{
-        std::pair<int, std::shared_ptr<State>>(4, stateZeroObstacleThree)};
+    state_map_t trajectoryPredictionObstacleThree{std::pair<int, std::shared_ptr<State>>(4, stateZeroObstacleThree)};
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
@@ -100,4 +100,31 @@ TEST_F(TestInSameLanePredicate, RobustEvaluation) {
 
 TEST_F(TestInSameLanePredicate, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(TestInSameLanePredicate, SetBasedPrediction) {
+    std::string scenarioName = "ZAM_Augmentation-1_1_S-3";
+    std::vector<std::string> pathSplit;
+    boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
+    auto dirName{pathSplit[0] + "_" + pathSplit[1]};
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+
+    auto world{
+        std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), std::get<0>(scenarioXml), {}, 0.1))};
+
+    auto ego{world->findObstacle(42)};
+    auto obs1{world->findObstacle(100)};
+    auto obs2{world->findObstacle(101)};
+    auto obs3{world->findObstacle(102)};
+
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs2, {}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, ego, obs3, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, ego, obs2, {}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, ego, obs3, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs2, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs3, {}, true));
 }

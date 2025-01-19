@@ -7,7 +7,7 @@ IsOfTypePredicate::IsOfTypePredicate() : CommonRoadPredicate(false) {}
 bool IsOfTypePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                           const std::shared_ptr<Obstacle> &obstacleK,
                                           const std::shared_ptr<Obstacle> &obstacleP,
-                                          const std::vector<std::string> &additionalFunctionParameters) {
+                                          const std::vector<std::string> &additionalFunctionParameters, bool setBased) {
     std::string type{additionalFunctionParameters.at(0)};
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
     if (type == "static")
@@ -39,13 +39,15 @@ bool IsOfTypePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr
 double IsOfTypePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                            const std::shared_ptr<Obstacle> &obstacleK,
                                            const std::shared_ptr<Obstacle> &obstacleP,
-                                           const std::vector<std::string> &additionalFunctionParameters) {
+                                           const std::vector<std::string> &additionalFunctionParameters,
+                                           bool setBased) {
     throw std::runtime_error("IsOfTypePredicate does not support robust evaluation!");
 }
 
 Constraint IsOfTypePredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                    const std::shared_ptr<Obstacle> &obstacleK,
                                                    const std::shared_ptr<Obstacle> &obstacleP,
-                                                   const std::vector<std::string> &additionalFunctionParameters) {
+                                                   const std::vector<std::string> &additionalFunctionParameters,
+                                                   bool setBased) {
     throw std::runtime_error("IsOfTypePredicate does not support constraint evaluation!");
 }

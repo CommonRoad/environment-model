@@ -5,9 +5,10 @@ bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std:
                                                      const std::shared_ptr<Timer> &evaluationTimer,
                                                      const std::shared_ptr<PredicateStatistics> &statistics,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
-                                                     const std::vector<std::string> &additionalFunctionParameters) {
+                                                     const std::vector<std::string> &additionalFunctionParameters,
+                                                     bool setBased) {
     auto startTime{Timer::start()};
-    bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters)};
+    bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters, setBased)};
     long compTime{evaluationTimer->stop(startTime)};
 
     statistics->numExecutions++;
@@ -27,8 +28,10 @@ CommonRoadPredicate::CommonRoadPredicate(bool vehicleDependent) : vehicleDepende
 
 bool CommonRoadPredicate::simpleBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                   const std::shared_ptr<Obstacle> &obstacleK,
-                                                  const std::shared_ptr<Obstacle> &obstacleP) {
-    return this->booleanEvaluation(timeStep, world, obstacleK, obstacleP);
+                                                  const std::shared_ptr<Obstacle> &obstacleP,
+                                                  const std::vector<std::string> &additionalFunctionParameters,
+                                                  bool setBased) {
+    return this->booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters, setBased);
 }
 
 CommonRoadPredicate::~CommonRoadPredicate() {}
