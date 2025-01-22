@@ -11,7 +11,8 @@ void OnOncomingOfPredicateTest::SetUp() {}
 TEST_F(OnOncomingOfPredicateTest, BooleanEvaluationOncoming) {
     auto pathToTestFile =
         TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_2_T-1.pb";
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
     world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
                                           std::vector<std::shared_ptr<Obstacle>>{obstacles.at(0), obstacles.at(1)}, {},
                                           timeStepSize));
@@ -30,7 +31,8 @@ TEST_F(OnOncomingOfPredicateTest, BooleanEvaluationOncoming) {
 TEST_F(OnOncomingOfPredicateTest, BooleanEvaluationNotOncoming) {
     auto pathToTestFile = TestUtils::getTestScenarioDirectory() +
                           "/predicates/DEU_TestRightBeforeLeft-1/DEU_TestRightBeforeLeft-1_2_T-1.pb";
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
     world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
                                           std::vector<std::shared_ptr<Obstacle>>{obstacles.at(0), obstacles.at(1)}, {},
                                           timeStepSize));

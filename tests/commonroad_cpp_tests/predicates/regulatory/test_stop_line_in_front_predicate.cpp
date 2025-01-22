@@ -57,7 +57,7 @@ TEST_F(StopLineInFrontPredicateTest, TestScenario1) {
     std::array<std::string, 1> scenarios{"DEU_testStopLine-1"};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
                                   "/predicates/DEU_TestStopLine-1/DEU_TestStopLine-1_1_T-1.pb"};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world{std::make_shared<World>(
         World("testWorld", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};

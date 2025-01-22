@@ -9,8 +9,10 @@ void AtIntersectionTypePredicateTest::SetUp() {
     std::string pathToTestFile2{
         TestUtils::getTestScenarioDirectory() +
         "/predicates/DEU_TrafficLightTest-1/DEU_TrafficLightTest-1_1_T-1.pb"}; // this has no STOP signs
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
-    const auto &[obstacles2, roadNetwork2, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile2);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles2, roadNetwork2, timeStepSize2, planningProblems2] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile2);
 
     std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 10, 0, 10, 0, 0, 0, 10, 0);
     std::shared_ptr<State> stateOneEgoVehicle = std::make_shared<State>(1, 25, 3, 10, 0, -M_PI / 2, 0, 25, 3);
@@ -43,8 +45,10 @@ TEST_F(AtIntersectionTypePredicateTest, TestFourWayStop) {
 void AtIntersectionTypePredicateTest::SetUpTIntersection() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/T_intersection.xml"};
     std::string pathToTestFile_2{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_Intersection.xml"};
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
-    const auto &[obstacles_2, roadNetwork_2, timeStepSize_2] = InputUtils::getDataFromCommonRoad(pathToTestFile_2);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles_2, roadNetwork_2, timeStepSize_2, planningProblems_2] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile_2);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 17, 0.0, 0, 0, 0, 0, 17, 0.0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 25, 0, 0, 0, 0, 0, 25, 0);
@@ -95,10 +99,12 @@ TEST_F(AtIntersectionTypePredicateTest, TestTIntersection) {
 void AtIntersectionTypePredicateTest::SetUpUncontrolledIntersection() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
                                "/predicates/DEU_Intersection.xml"}; // not an uncontrolled intersection
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::string pathToTestFile_2{TestUtils::getTestScenarioDirectory() + "/predicates/uncontrolled_intersection.xml"};
-    const auto &[obstacles_2, roadNetwork_2, timeStepSize_2] = InputUtils::getDataFromCommonRoad(pathToTestFile_2);
+    const auto &[obstacles_2, roadNetwork_2, timeStepSize_2, planningProblem_2] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile_2);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 17.0, 0.0, 0, 0, 0, 0, 17, 0.0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 15, 0, 0, 0, 0, 0, 15, 0.0);
@@ -161,8 +167,7 @@ TEST_F(AtIntersectionTypePredicateTest, SetBasedPrediction) {
     std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
 
-    auto world{
-        std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), std::get<0>(scenarioXml), {}, 0.1))};
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
 
     auto obs1{world->findObstacle(1213)};
     auto obs2{world->findObstacle(1219)};

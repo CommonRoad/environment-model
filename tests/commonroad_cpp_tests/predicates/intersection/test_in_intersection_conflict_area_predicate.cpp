@@ -40,7 +40,7 @@ void InIntersectionConflictAreaPredicateTest::SetUp() {
 TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario1) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
                                   "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_2_T-1.pb"};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne, planningProblemsOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world{std::make_shared<World>(
         World("testWorld", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
@@ -68,7 +68,7 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario1) {
 TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario2) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
                                   "/predicates/DEU_TestRightBeforeLeft-1/DEU_TestRightBeforeLeft-1_2_T-1.pb"};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne, planningProblemsOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world{std::make_shared<World>(
         World("testWorld", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};
@@ -98,7 +98,7 @@ TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario2) {
 TEST_F(InIntersectionConflictAreaPredicateTest, TestScenario3) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
                                   "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_8_T-1.pb"};
-    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne] =
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne, planningProblemsOne] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     auto world{std::make_shared<World>(
         World("testWorld", 0, roadNetworkScenarioOne, obstaclesScenarioOne, {}, timeStepSizeOne))};

@@ -2,6 +2,7 @@
 
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/planning_problem.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include "commonroad_factory_2020a.h"
@@ -376,3 +377,18 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
 }
 
 std::string CommonRoadFactory2020a::benchmarkID() { return doc->child("commonRoad").attribute("benchmarkID").value(); }
+
+std::vector<std::shared_ptr<PlanningProblem>> CommonRoadFactory2020a::createPlanningProblems() {
+    std::vector<std::shared_ptr<PlanningProblem>> planningProblemList{};
+    pugi::xml_node commonRoad = doc->child("commonRoad");
+
+    // iterate over all nodes and continue working with planning problems
+    for (pugi::xml_node roadElements = commonRoad.first_child(); roadElements != nullptr;
+         roadElements = roadElements.next_sibling()) {
+        if ((strcmp(roadElements.name(), "planningProblem")) == 0) {
+            XMLReader::extractPlanningProblem(planningProblemList, roadElements);
+        }
+    }
+
+    return planningProblemList;
+}

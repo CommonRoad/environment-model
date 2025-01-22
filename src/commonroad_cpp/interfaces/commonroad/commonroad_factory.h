@@ -1,6 +1,7 @@
 #pragma once
 
 #include "commonroad_cpp/obstacle/obstacle.h"
+#include "commonroad_cpp/planning_problem.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include <pugixml.hpp>
@@ -62,6 +63,13 @@ class CommonRoadFactory {
      */
     virtual std::vector<std::shared_ptr<Intersection>>
     createIntersections(const std::vector<std::shared_ptr<Lanelet>> &lanelets) = 0;
+
+    /**
+     * Function for creating planning problems.
+     *
+     * @return List of pointers to created planning problems.
+     */
+    virtual std::vector<std::shared_ptr<PlanningProblem>> createPlanningProblems() = 0;
 
     /**
      * Virtual function for extracting the time step size.

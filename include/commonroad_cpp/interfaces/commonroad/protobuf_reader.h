@@ -11,18 +11,23 @@
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/bound.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
+#include "commonroad_cpp/scenario.h"
+#include <commonroad_cpp/auxiliaryDefs/interval.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_dynamic.pb.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_map.pb.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_scenario.pb.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/environment_obstacle.pb.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/planning_problem.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+
 #include <google/protobuf/message_lite.h>
 
 namespace ProtobufReader {
 
-using IntegerInterval = std::pair<int, int>;
-using FloatInterval = std::pair<double, double>;
+using IntegerInterval = ::IntegerInterval;
+using FloatInterval = ::FloatInterval;
 
 using IntegerExactOrInterval = std::variant<int, IntegerInterval>;
 using FloatExactOrInterval = std::variant<double, FloatInterval>;
@@ -149,10 +154,10 @@ std::shared_ptr<TrafficLight> getTrafficLightFromContainer(size_t trafficLightId
  * @param commonRoadMapMsg Protobuf message for scenario information
  * @return List of obstacles, road network, and time step
  */
-std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
-createCommonRoadFromMessage(const commonroad_dynamic::CommonRoadDynamic &commonRoadDynamicMsg,
-                            const commonroad_map::CommonRoadMap &commonRoadMapMsg,
-                            const commonroad_scenario::CommonRoadScenario &commonRoadScenarioMsg, int fileGiven);
+Scenario createCommonRoadFromMessage(const commonroad_dynamic::CommonRoadDynamic &commonRoadDynamicMsg,
+                                     const commonroad_map::CommonRoadMap &commonRoadMapMsg,
+                                     const commonroad_scenario::CommonRoadScenario &commonRoadScenarioMsg,
+                                     int fileGiven);
 
 /**
  * Creates scenario information from protobuf message "ScenarioMetaInformation".
@@ -364,6 +369,14 @@ std::string createMapIDFromMessage(const commonroad_common::MapID &mapIdMsg);
 std::shared_ptr<State> createStateFromMessage(const commonroad_common::State &stateMsg);
 
 /**
+ * Creates initial state from protobuf message "State".
+ *
+ * @param stateMsg Protobuf message
+ * @return InitialState
+ */
+std::shared_ptr<InitialState> createInitialStateFromMessage(const commonroad_common::State &stateMsg);
+
+/**
  * Creates signal state from protobuf message "SignalState".
  * @param stateMsg Protobuf message
  * @return State
@@ -434,5 +447,7 @@ createIntegerExactOrInterval(const commonroad_common::IntegerExactOrInterval &in
  * @return Float or float interval
  */
 FloatExactOrInterval createFloatExactOrInterval(const commonroad_common::FloatExactOrInterval &floatExactOrIntervalMsg);
+
+std::shared_ptr<PlanningProblem> createPlanningProblem(const commonroad_scenario::PlanningProblem &planningProblemMsg);
 
 } // namespace ProtobufReader

@@ -57,6 +57,13 @@ class CommonRoadFactory2018b : public CommonRoadFactory {
     createIntersections(const std::vector<std::shared_ptr<Lanelet>> &lanelets) override;
 
     /**
+     * Function for creating planning problems.
+     *
+     * @return List of pointers to created planning problems.
+     */
+    std::vector<std::shared_ptr<PlanningProblem>> createPlanningProblems() override;
+
+    /**
      * Function for extracting the time step size.
      *
      * @return Time step size.

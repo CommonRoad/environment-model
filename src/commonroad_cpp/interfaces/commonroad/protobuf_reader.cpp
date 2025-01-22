@@ -1,7 +1,11 @@
 #include "commonroad_cpp/interfaces/commonroad/protobuf_reader.h"
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
+#include "commonroad_cpp/goal_state.h"
+#include "commonroad_cpp/planning_problem.h"
+#include "commonroad_cpp/scenario.h"
 #include <boost/algorithm/string/case_conv.hpp> // for to_lower_copy
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
+#include <memory>
 #include <stdexcept>
 #include <utility>
 
@@ -116,7 +120,7 @@ ProtobufReader::getTrafficLightFromContainer(size_t trafficLightId,
     return nullptr;
 }
 
-std::tuple<std::vector<std::shared_ptr<Obstacle>>, std::shared_ptr<RoadNetwork>, double>
+Scenario
 ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoadDynamic &commonRoadDynamicMsg,
                                             const commonroad_map::CommonRoadMap &commonRoadMapMsg,
                                             const commonroad_scenario::CommonRoadScenario &commonRoadScenarioMsg,
@@ -208,7 +212,13 @@ ProtobufReader::createCommonRoadFromMessage(const commonroad_dynamic::CommonRoad
         intersection->computeMemberLanelets(roadNetwork);
     }
 
-    return std::make_tuple(obstacles, roadNetwork, timeStepSize);
+    std::vector<std::shared_ptr<PlanningProblem>> planningProblems;
+    for (const auto &planningProblemMsg : commonRoadScenarioMsg.planning_problems()) {
+        auto planningProblem = ProtobufReader::createPlanningProblem(planningProblemMsg);
+        planningProblems.push_back(planningProblem);
+    }
+
+    return Scenario{obstacles, roadNetwork, timeStepSize, planningProblems};
 }
 
 std::tuple<std::string, double> ProtobufReader::createScenarioMetaInformationFromMessage(
@@ -679,6 +689,50 @@ std::shared_ptr<State> ProtobufReader::createStateFromMessage(const commonroad_c
     return state;
 }
 
+std::shared_ptr<InitialState> ProtobufReader::createInitialStateFromMessage(const commonroad_common::State &stateMsg) {
+    if (!stateMsg.has_time_step() || !stateMsg.time_step().has_exact()) {
+        throw std::runtime_error{"initial state requires exact time step"};
+    }
+    auto timeStep = stateMsg.time_step().exact();
+
+    if (!stateMsg.has_point()) {
+        throw std::runtime_error{"initial state requires position"};
+    }
+    auto xPosition = stateMsg.point().x();
+    auto yPosition = stateMsg.point().y();
+
+    if (!stateMsg.has_orientation() || !stateMsg.orientation().has_exact()) {
+        throw std::runtime_error{"initial state requires exact orientation"};
+    }
+    auto orientation = stateMsg.orientation().exact();
+
+    if (!stateMsg.has_velocity() || !stateMsg.velocity().has_exact()) {
+        throw std::runtime_error{"initial state requires exact velocity"};
+    }
+    auto velocity = stateMsg.velocity().exact();
+
+    // FIXME: Not required in XML
+    if (!stateMsg.has_acceleration() || !stateMsg.acceleration().has_exact()) {
+        throw std::runtime_error{"initial state requires exact acceleration"};
+    }
+    auto acceleration = stateMsg.acceleration().exact();
+
+    if (!stateMsg.has_yaw_rate() || !stateMsg.yaw_rate().has_exact()) {
+        throw std::runtime_error{"initial state requires exact yaw rate"};
+    }
+    auto yawRate = stateMsg.yaw_rate().exact();
+
+    if (!stateMsg.has_slip_angle() || !stateMsg.slip_angle().has_exact()) {
+        throw std::runtime_error{"initial state requires exact slip angle"};
+    }
+    auto slipAngle = stateMsg.slip_angle().exact();
+
+    std::shared_ptr<InitialState> state = std::make_shared<InitialState>(timeStep, xPosition, yPosition, orientation,
+                                                                         velocity, acceleration, yawRate, slipAngle);
+
+    return state;
+}
+
 std::shared_ptr<SignalState>
 ProtobufReader::createSignalStateFromMessage(const commonroad_common::SignalState &stateMsg) {
     std::shared_ptr<SignalState> state = std::make_shared<SignalState>();
@@ -786,4 +840,51 @@ ProtobufReader::createFloatExactOrInterval(const commonroad_common::FloatExactOr
         floatExactOrInterval = ProtobufReader::createFloatIntervalFromMessage(floatExactOrIntervalMsg.interval());
 
     return floatExactOrInterval;
+}
+
+std::shared_ptr<PlanningProblem>
+ProtobufReader::createPlanningProblem(const commonroad_scenario::PlanningProblem &planningProblemMsg) {
+    auto id = planningProblemMsg.planning_problem_id();
+
+    // TODO: Read scenario tags
+    // auto tags = planningProblemMsg.scenario_tags();
+
+    auto initial_state_msg = planningProblemMsg.initial_state();
+    auto initial_state = ProtobufReader::createInitialStateFromMessage(initial_state_msg);
+
+    std::vector<GoalState> goal_states;
+    auto goal_states_container = planningProblemMsg.goal_states();
+    for (const auto &goal_state_msg : goal_states_container) {
+        auto state = goal_state_msg.state();
+
+        // Mirror the XML format: Goal state time is always required (velocity and orientation are optional)
+        if (!state.has_time_step() || !state.time_step().has_interval()) {
+            throw std::runtime_error{"goal state needs to have a time interval"};
+        }
+        auto time = ProtobufReader::createIntegerIntervalFromMessage(state.time_step().interval());
+
+        std::optional<FloatInterval> velocity = std::nullopt;
+        if (!state.has_velocity() || !state.velocity().has_interval()) {
+            velocity = ProtobufReader::createFloatIntervalFromMessage(state.velocity().interval());
+        }
+
+        std::optional<FloatInterval> orientation = std::nullopt;
+        if (!state.has_orientation() || !state.orientation().has_interval()) {
+            orientation = ProtobufReader::createFloatIntervalFromMessage(state.orientation().interval());
+        }
+
+        std::vector<GoalPosition> goal_positions;
+        for (auto lanelet : goal_state_msg.goal_position_lanelets()) {
+            goal_positions.push_back(lanelet);
+        }
+        // TODO: Supports goal shape (instead of lanelet)
+        if (goal_positions.empty()) {
+            // FIXME: Should a GoalState without lanelets be allowed?
+            // throw std::runtime_error{"goal state needs to have at least one goal position lanelet"};
+        }
+
+        goal_states.emplace_back(time, velocity, orientation, goal_positions);
+    }
+
+    return std::make_shared<PlanningProblem>(id, initial_state, goal_states);
 }
