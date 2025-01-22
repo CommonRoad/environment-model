@@ -7,7 +7,7 @@
 void AtRedTrafficLightPredicateTest::SetUp() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
                                "/predicates/DEU_TrafficLightTest-1/DEU_TrafficLightTest-1_1_T-1.pb"};
-    const auto &[obs, rn, ts] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obs, rn, ts, pp] = InputUtils::getDataFromCommonRoad(pathToTestFile);
     obstacles = obs;
     roadNetwork = rn;
     timeStepSize = ts;

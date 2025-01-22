@@ -55,8 +55,8 @@ TEST_F(InterfacesTest, SamePredecessors) {
     std::string scenarioName = "ARG_Carcarana-6_5_T-1";
     const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
 
-    const std::vector<std::shared_ptr<Lanelet>> laneletNetworkXml = std::get<1>(scenarioXml)->getLaneletNetwork();
-    const std::vector<std::shared_ptr<Lanelet>> laneletNetworkPb = std::get<1>(scenarioPb)->getLaneletNetwork();
+    const std::vector<std::shared_ptr<Lanelet>> laneletNetworkXml = scenarioXml.roadNetwork->getLaneletNetwork();
+    const std::vector<std::shared_ptr<Lanelet>> laneletNetworkPb = scenarioPb.roadNetwork->getLaneletNetwork();
     EXPECT_EQ(laneletNetworkXml.size(), laneletNetworkPb.size());
 
     for (size_t laneletI = 0; laneletI < laneletNetworkXml.size(); laneletI++) {
@@ -72,8 +72,8 @@ TEST_F(InterfacesTest, SameRefTrafficSigns) {
     std::string scenarioName = "USA_Peach-2_1_T-1";
     const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
 
-    const std::vector<std::shared_ptr<Lanelet>> laneletNetworkXml = std::get<1>(scenarioXml)->getLaneletNetwork();
-    const std::vector<std::shared_ptr<Lanelet>> laneletNetworkPb = std::get<1>(scenarioPb)->getLaneletNetwork();
+    const std::vector<std::shared_ptr<Lanelet>> laneletNetworkXml = scenarioXml.roadNetwork->getLaneletNetwork();
+    const std::vector<std::shared_ptr<Lanelet>> laneletNetworkPb = scenarioPb.roadNetwork->getLaneletNetwork();
     EXPECT_EQ(laneletNetworkXml.size(), laneletNetworkPb.size());
     for (size_t laneletI = 0; laneletI < laneletNetworkXml.size(); laneletI++) {
         const std::vector<std::shared_ptr<TrafficSign>> trafficSignsXml =
@@ -87,8 +87,8 @@ TEST_F(InterfacesTest, SameRefTrafficSigns) {
 TEST_F(InterfacesTest, SameRoadNetwork) {
     std::string scenarioName = "USA_Lanker-1_1_T-1";
     const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
-    const std::shared_ptr<RoadNetwork> roadNetworkXml = std::get<1>(scenarioXml);
-    const std::shared_ptr<RoadNetwork> roadNetworkPb = std::get<1>(scenarioPb);
+    const std::shared_ptr<RoadNetwork> roadNetworkXml = scenarioXml.roadNetwork;
+    const std::shared_ptr<RoadNetwork> roadNetworkPb = scenarioPb.roadNetwork;
 
     const std::vector<std::shared_ptr<Lanelet>> laneletNetworkXml = roadNetworkXml->getLaneletNetwork();
     const std::vector<std::shared_ptr<Lanelet>> laneletNetworkPb = roadNetworkPb->getLaneletNetwork();
@@ -119,8 +119,8 @@ TEST_F(InterfacesTest, SameStepSize) {
     std::string scenarioName = "DEU_Guetersloh-25_4_T-1";
     const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
 
-    const double stepSizeXml = std::get<2>(scenarioXml);
-    const double stepSizePb = std::get<2>(scenarioPb);
+    const double stepSizeXml = scenarioXml.timeStepSize;
+    const double stepSizePb = scenarioPb.timeStepSize;
     EXPECT_TRUE(geometric_operations::equalValues(stepSizeXml, stepSizePb));
 }
 
@@ -128,8 +128,8 @@ TEST_F(InterfacesTest, SameObstacles) {
     std::string scenarioName = "DEU_Muc-2_1_T-1";
     const auto &[scenarioXml, scenarioPb] = InterfacesTest::loadXmlAndPbScenarios(scenarioName);
 
-    const std::vector<std::shared_ptr<Obstacle>> obstaclesXml = std::get<0>(scenarioXml);
-    const std::vector<std::shared_ptr<Obstacle>> obstaclesPb = std::get<0>(scenarioPb);
+    const std::vector<std::shared_ptr<Obstacle>> obstaclesXml = scenarioXml.obstacles;
+    const std::vector<std::shared_ptr<Obstacle>> obstaclesPb = scenarioPb.obstacles;
     EXPECT_EQ(obstaclesXml.size(), obstaclesPb.size());
 
     for (size_t obstacleI = 0; obstacleI < obstaclesXml.size(); obstacleI++) {
@@ -150,7 +150,7 @@ TEST_F(InterfacesTest, SetBasedPrediction) {
     std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
 
-    const std::vector<std::shared_ptr<Obstacle>> obstaclesXml = std::get<0>(scenarioXml);
+    const std::vector<std::shared_ptr<Obstacle>> obstaclesXml = scenarioXml.obstacles;
 
     for (const auto &obstacleXml : obstaclesXml) {
         if (obstacleXml->getId() != 42)
@@ -193,7 +193,7 @@ std::tuple<Scenario, Scenario> InterfacesTest::loadXmlAndPbScenarios(const std::
 TEST_F(InterfacesTest, ReadingIntersectionWithCrossing) {
     std::string pathToTestPbFile =
         TestUtils::getTestScenarioDirectory() + "/DEU_BicycleBothRight-1/DEU_BicycleBothRight-1_1_T-1.pb";
-    std::shared_ptr<RoadNetwork> rn{std::get<1>(InputUtils::getDataFromCommonRoad(pathToTestPbFile))};
+    std::shared_ptr<RoadNetwork> rn{InputUtils::getDataFromCommonRoad(pathToTestPbFile).roadNetwork};
     EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().size(), 4);
     EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().at(0)->getCrossingGroupLanelets().size(), 1);
     EXPECT_EQ(rn->getIntersections().at(0)->getCrossingGroups().at(1)->getIncomingGroupID(), 501);

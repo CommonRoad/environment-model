@@ -17,6 +17,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/intersection/outgoing_group.cpp
         commonroad_cpp/roadNetwork/intersection/crossing_group.cpp
         commonroad_cpp/roadNetwork/road_network_config.cpp
+        commonroad_cpp/obstacle/initial_state.cpp
         commonroad_cpp/obstacle/obstacle.cpp
         commonroad_cpp/obstacle/obstacle_operations.cpp
         commonroad_cpp/obstacle/obstacle_reference.cpp
@@ -36,7 +37,9 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/commonroad_factory_2020a.cpp
         commonroad_cpp/interfaces/commonroad/xml_reader.cpp
         commonroad_cpp/interfaces/commonroad/input_utils.cpp
+        commonroad_cpp/goal_state.cpp
         commonroad_cpp/world.cpp
+        commonroad_cpp/planning_problem.cpp
         commonroad_cpp/auxiliaryDefs/timer.cpp
         commonroad_cpp/roadNetwork/lanelet/lanelet_graph.cpp
         commonroad_cpp/roadNetwork/environment/environment.cpp
@@ -45,6 +48,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/interfaces/commonroad/protobuf_reader.cpp)
 
 set(ENV_MODEL_HDR_FILES
+        commonroad_cpp/auxiliaryDefs/interval.h
         commonroad_cpp/auxiliaryDefs/regulatory_elements.h
         commonroad_cpp/auxiliaryDefs/structs.h
         commonroad_cpp/auxiliaryDefs/timer.h
@@ -59,10 +63,11 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/interfaces/commonroad/input_utils.h
         commonroad_cpp/interfaces/commonroad/xml_reader.h
         commonroad_cpp/interfaces/commonroad/protobuf_reader.h
+        commonroad_cpp/obstacle/actuator_parameters.h
+        commonroad_cpp/obstacle/initial_state.h
         commonroad_cpp/obstacle/obstacle.h
         commonroad_cpp/obstacle/obstacle_reference.h
         commonroad_cpp/obstacle/obstacle_operations.h
-        commonroad_cpp/obstacle/actuator_parameters.h
         commonroad_cpp/obstacle/sensor_parameters.h
         commonroad_cpp/obstacle/time_parameters.h
         commonroad_cpp/obstacle/state.h
@@ -94,6 +99,9 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/roadNetwork/road_network.h
         commonroad_cpp/roadNetwork/types.h
         commonroad_cpp/roadNetwork/road_network_config.h
+        commonroad_cpp/goal_state.h
+        commonroad_cpp/planning_problem.h
+        commonroad_cpp/scenario.h
         commonroad_cpp/world.h
 )
 

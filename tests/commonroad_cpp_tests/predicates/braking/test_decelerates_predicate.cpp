@@ -89,7 +89,7 @@ TEST_F(TestDeceleratePredicate, SetBasedPrediction) {
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
 
     auto worldTmp{
-        std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), std::get<0>(scenarioXml), {}, 0.1))};
+        std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
     auto obs1{worldTmp->findObstacle(100)};
 
     EXPECT_FALSE(pred.booleanEvaluation(0, worldTmp, obs1, {}, {"0.0"}, true));

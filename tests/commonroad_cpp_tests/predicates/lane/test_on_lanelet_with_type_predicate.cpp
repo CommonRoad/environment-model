@@ -85,7 +85,8 @@ TEST_F(OnLaneletWithTypePredicateTest, BooleanEvaluationIntersection) {
     initializeTestData("INTERSECTION", "URBAN");
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
                                "/predicates/DEU_TrafficLightTest-1/DEU_TrafficLightTest-1_1_T-1.pb"};
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -7.5, 0, 0, M_PI / 2, 0, 15, 0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 26., 3, 0, 0, M_PI, 0, 25, 0);
@@ -132,8 +133,7 @@ TEST_F(OnLaneletWithTypePredicateTest, SetBasedPrediction) {
     std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
 
-    auto world{
-        std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), std::get<0>(scenarioXml), {}, 0.1))};
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
     auto obs1{world->findObstacle(100)};
     auto obs2{world->findObstacle(101)};
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstddef>
-#include <unordered_set>
+#include <set>
 
 using lanelet_id_t = size_t;
 

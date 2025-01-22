@@ -49,7 +49,8 @@ void TestNeighboringLaneOppDrivingDirPredicate::initObstacles() {
 
 TEST_F(TestNeighboringLaneOppDrivingDirPredicate, BooleanEvaluationObjectsMultilane) {
     initObstacles();
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
     std::shared_ptr<World> world =
         std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
 
@@ -73,7 +74,7 @@ TEST_F(TestNeighboringLaneOppDrivingDirPredicate, BooleanEvaluationObjectsNoOnco
     // obstacleEgo on right lane
     // obstacleOne on right lane in front of obstacleEgo
     initObstacles();
-    const auto &[obstaclesOncoming, roadNetworkOncoming, timeStepSizeOncoming] =
+    const auto &[obstaclesOncoming, roadNetworkOncoming, timeStepSizeOncoming, planningProblemsOncoming] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOncoming);
     std::shared_ptr<World> worldOncoming =
         std::make_shared<World>(World("testWorld", 0, roadNetworkOncoming, {obstacleEgo}, {obstacleOne}, 0.1));
@@ -107,14 +108,16 @@ TEST_F(TestNeighboringLaneOppDrivingDirPredicate, BooleanEvaluationObjectsNoOnco
 }
 
 TEST_F(TestNeighboringLaneOppDrivingDirPredicate, RobustEvaluation) {
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
     std::shared_ptr<World> world =
         std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne), std::runtime_error);
 }
 
 TEST_F(TestNeighboringLaneOppDrivingDirPredicate, ConstraintEvaluation) {
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
     std::shared_ptr<World> world =
         std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo}, {obstacleOne}, 0.1));
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne), std::runtime_error);

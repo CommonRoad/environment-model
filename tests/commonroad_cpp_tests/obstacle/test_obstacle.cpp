@@ -311,7 +311,7 @@ TEST_F(ObstacleTest, SetOccupiedLaneletsDrivingDirectionByShape) {
 TEST_F(ObstacleTest, SetReferenceGeneralScenario1) {
     size_t timeStep{0};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1/USA_Lanker-1_1_T-1.pb"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
@@ -332,7 +332,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario2) {
     size_t timeStep{0};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
                                   "/DEU_Guetersloh-25/DEU_Guetersloh-25_4_T-1.pb"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
@@ -345,7 +345,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario2) {
 TEST_F(ObstacleTest, SetReferenceGeneralScenario3) {
     size_t timeStep{0};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Peach-2/USA_Peach-2_1_T-1.pb"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
@@ -366,7 +366,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario3) {
 TEST_F(ObstacleTest, SetReferenceGeneralScenario4) {
     size_t timeStep{0};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4/USA_Peach-4_1_T-1.pb"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
@@ -386,7 +386,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario4) {
 TEST_F(ObstacleTest, GetOccupiedLaneletsDrivingDirectionScenario4) {
     size_t timeStep{0};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Peach-4/USA_Peach-4_1_T-1.pb"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
@@ -404,7 +404,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
     size_t timeStep{37};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
                                   "/predicates/DEU_TestTurnLeft-1/DEU_TestTurnLeft-1_8_T-1.pb"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
@@ -429,7 +429,7 @@ TEST_F(ObstacleTest, SetReferenceGeneralScenario5) {
 TEST_F(ObstacleTest, SetReferenceGeneralScenario6) {
     size_t timeStep{0};
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/ZAM_CARLA-10/ZAM_CARLA-10_1_T-1.pb"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFileOne);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};

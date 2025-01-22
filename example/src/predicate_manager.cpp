@@ -31,7 +31,7 @@ void PredicateManager::extractPredicateSatisfaction() {
     firstprivate(scenarios, relevantPredicates) default(none)
     for (const auto &scen : scenarios) {
         std::string benchmarkId{extractBenchmarkIdFromPath(scen)};
-        const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(scen);
+        const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] = InputUtils::getDataFromCommonRoad(scen);
         // evaluate all obstacles
         for (const auto &ego : obstacles) {
             if (ego->isStatic())

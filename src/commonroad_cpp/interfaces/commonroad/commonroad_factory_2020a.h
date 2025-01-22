@@ -1,5 +1,6 @@
 #pragma once
 
+#include "commonroad_cpp/planning_problem.h"
 #include "commonroad_factory.h"
 
 /**
@@ -56,6 +57,13 @@ class CommonRoadFactory2020a : public CommonRoadFactory {
      */
     std::vector<std::shared_ptr<Intersection>>
     createIntersections(const std::vector<std::shared_ptr<Lanelet>> &lanelets) override;
+
+    /**
+     * Function for creating planning problems.
+     *
+     * @return List of pointers to created planning problems.
+     */
+    std::vector<std::shared_ptr<PlanningProblem>> createPlanningProblems() override;
 
     /**
      * Function for extracting the time step size.

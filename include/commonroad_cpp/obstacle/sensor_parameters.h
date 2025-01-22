@@ -1,8 +1,8 @@
 #pragma once
-#include <commonroad_cpp/geometry/types.h>
 #include <optional>
 
-class vertex;
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
+#include <commonroad_cpp/geometry/types.h>
 
 /**
  * SensorParameters includes information regarding obstacle sensors

@@ -61,7 +61,8 @@ TEST_F(CloseToIntersectionPredicateTest, TwoIncomingsInARow) {
 
 TEST_F(CloseToIntersectionPredicateTest, InFrontOfIntersection) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_Intersection.xml"};
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 4.0, 0.0, 0, 0, 0, 0, 4, 0.0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 16.0, 0, 0, 0, 0, 0, 16, 0.0);

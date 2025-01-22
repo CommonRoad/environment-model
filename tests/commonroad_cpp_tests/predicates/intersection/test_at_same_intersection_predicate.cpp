@@ -6,7 +6,8 @@
 
 void AtSameIntersectionPredicateTest::SetUp() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_Intersection.xml"};
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -6.0, 0, 0, M_PI / 2, 0, 26.5, -6.0);
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 22.5, 0, 0, 0, 0, 0, 25, 0.0);
