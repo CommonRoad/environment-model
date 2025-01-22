@@ -188,11 +188,13 @@ template <class V, class E> class graph {
 
     // Operators ///////////////////////////////////////////////////////////////
 
+    /*
     friend std::ostream &operator<<(std::ostream &os, const graph &object) {
         os << object.to_json().dump(4);
 
         return os;
     }
+    */
 
     // Nested classes //////////////////////////////////////////////////////////
 

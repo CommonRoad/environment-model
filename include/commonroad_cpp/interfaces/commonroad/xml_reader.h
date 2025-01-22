@@ -6,6 +6,7 @@
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/obstacle/signal_state.h"
+#include "commonroad_cpp/planning_problem.h"
 
 class Intersection;
 class Obstacle;
@@ -88,6 +89,14 @@ std::vector<std::shared_ptr<TrafficLight>> createTrafficLightFromXML(const std::
  */
 std::vector<std::shared_ptr<Intersection>>
 createIntersectionFromXML(const std::string &xmlFile, const std::vector<std::shared_ptr<Lanelet>> &lanelets);
+
+/**
+ * Function for creating planning problems.
+ *
+ * @param xmlFile Loaded CommonRoad XML file.
+ * @return List of pointers to created planning problems.
+ */
+std::vector<std::shared_ptr<PlanningProblem>> createPlanningProblemFromXML(const std::string &xmlFile);
 
 /**
  * Extracts an initial state from a XML node element.
@@ -182,4 +191,6 @@ void extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLanel
 void extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, size_t arrayIndex,
                              const pugi::xml_node &child, const char *type);
 
+void extractPlanningProblem(std::vector<std::shared_ptr<PlanningProblem>> &planningProblemList,
+                            const pugi::xml_node &roadElements);
 } // namespace XMLReader

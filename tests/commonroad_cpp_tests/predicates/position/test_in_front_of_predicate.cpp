@@ -122,10 +122,10 @@ TEST_F(TestInFrontOfPredicate, SetBasedPrediction) {
     std::shared_ptr<Obstacle> dynamicObstacle = std::make_shared<Obstacle>(Obstacle(
         1, ObstacleRole::DYNAMIC, currentState, ObstacleType::car, 50, 10, 3, -10, 0.3, trajectoryPrediction, 5, 2));
 
-    auto obstacles{std::get<0>(scenarioXml)};
+    auto obstacles{scenarioXml.obstacles};
     obstacles.push_back(dynamicObstacle);
 
-    auto world{std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), obstacles, {}, 0.1))};
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, obstacles, {}, 0.1))};
 
     auto ego{world->findObstacle(42)};
     auto obs1{world->findObstacle(100)};

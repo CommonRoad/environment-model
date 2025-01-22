@@ -2,6 +2,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/interfaces/utility_functions.cpp
         allTests.cpp
         commonroad_cpp_tests/test_world.cpp
+        commonroad_cpp_tests/test_planning_problem.cpp
         commonroad_cpp_tests/roadNetwork/test_road_network.cpp
         commonroad_cpp_tests/roadNetwork/lanelet/test_lanelet_operations.cpp
         commonroad_cpp_tests/roadNetwork/lanelet/test_lane.cpp

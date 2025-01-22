@@ -8,7 +8,8 @@ void OnIncomingLeftOfPredicateTest::SetUp() {}
 TEST_F(OnIncomingLeftOfPredicateTest, BooleanEvaluationObjectsOneIncoming) {
     auto pathToTestFile =
         TestUtils::getTestScenarioDirectory() + "/DEU_TestInRightLane-1/DEU_TestInRightLane-1_1_T-1.pb";
-    const auto &[obstacles, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
     world = std::make_shared<World>(World("testWorld", 0, roadNetwork,
                                           std::vector<std::shared_ptr<Obstacle>>{obstacles.at(0), obstacles.at(1)}, {},
                                           timeStepSize));
@@ -27,7 +28,8 @@ TEST_F(OnIncomingLeftOfPredicateTest, BooleanEvaluationObjectsOneIncoming) {
 TEST_F(OnIncomingLeftOfPredicateTest, BooleanEvaluationObjectsTIntersection) {
     auto pathToTestFile = TestUtils::getTestScenarioDirectory() + "/USA_TIntersection-1/USA_TIntersection-1_1_T-1.pb";
     std::vector<std::shared_ptr<Obstacle>> obstacles;
-    const auto &[obstaclesTmp, roadNetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstaclesTmp, roadNetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 26.5, -14.0, 0, 0, M_PI / 2);
     std::shared_ptr<State> state15ObstacleOne = std::make_shared<State>(1, 26.5, 15.0, 0, 0, M_PI / 2);

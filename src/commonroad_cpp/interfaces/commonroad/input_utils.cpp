@@ -1,6 +1,8 @@
 #include <boost/algorithm/string.hpp>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
+#include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
+#include <commonroad_cpp/planning_problem.h>
 #include <filesystem>
 #include <spdlog/spdlog.h>
 
@@ -29,7 +31,10 @@ Scenario readFromXMLFile(const std::string &xmlFilePath) {
 
     auto timeStepSize{XMLReader::extractTimeStepSize(xmlFilePath)};
 
-    return std::make_tuple(obstacles, roadNetwork, timeStepSize);
+    std::vector<std::shared_ptr<PlanningProblem>> planningProblems{
+        XMLReader::createPlanningProblemFromXML(xmlFilePath)};
+
+    return Scenario{obstacles, roadNetwork, timeStepSize, planningProblems};
 }
 
 /**

@@ -24,8 +24,8 @@ class TestPythonInterface(unittest.TestCase):
     def test_predicates(self):
         for scenario in self.filenames:
             full_path = Path(self.path + scenario)
-            (obstacles, road_network, tss) = crcpp.read_scenario(str(full_path))
-            world = crcpp.World("foo", 0, road_network, [], obstacles, tss)
+            scenario = crcpp.read_scenario(str(full_path))
+            world = crcpp.World("foo", 0, scenario.road_network, [], scenario.obstacles, scenario.time_step_size)
 
             predicate = crcpp.OnSameRoadPredicate()
             for obs_a, obs_b in [(a, b) for a in world.obstacles for b in world.obstacles]:

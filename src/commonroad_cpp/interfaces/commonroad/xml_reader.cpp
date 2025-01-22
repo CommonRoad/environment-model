@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <cstring>
 #include <utility>
 
@@ -6,8 +7,12 @@
 #include <commonroad_cpp/geometry/rectangle.h>
 #include <pugixml.hpp>
 
+#include "commonroad_cpp/auxiliaryDefs/interval.h"
+#include "commonroad_cpp/geometry/rectangle.h"
+#include "commonroad_cpp/goal_state.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/planning_problem.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
@@ -339,4 +344,107 @@ void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanele
             break;
         }
     }
+}
+
+// TODO: Merge with extractInitialState
+static std::shared_ptr<InitialState> extractInitialStateForPlanningProblem(const pugi::xml_node &child) {
+    pugi::xml_node states = child;
+
+    auto timeStep = states.child("time").child("exact").text().as_ullong();
+    auto xPosition = states.child("position").child("point").child("x").text().as_double();
+    auto yPosition = states.child("position").child("point").child("y").text().as_double();
+    auto orientation = states.child("orientation").child("exact").text().as_double();
+    auto velocity = states.child("velocity").child("exact").text().as_double();
+    auto yawRate = states.child("yawRate").child("exact").text().as_double();
+    auto slipAngle = states.child("slipAngle").child("exact").text().as_double();
+
+    std::optional<double> acceleration;
+    if (states.child("acceleration").child("exact").text() != nullptr) {
+        acceleration = states.child("acceleration").child("exact").text().as_double();
+    }
+
+    // FIXME: InitialState should use optional for acceleration
+    auto acceleration_value = acceleration.value_or(0.0);
+
+    return std::make_shared<InitialState>(timeStep, xPosition, yPosition, orientation, velocity, acceleration_value,
+                                          yawRate, slipAngle);
+}
+
+void XMLReader::extractPlanningProblem(std::vector<std::shared_ptr<PlanningProblem>> &planningProblemList,
+                                       const pugi::xml_node &roadElements) {
+    auto id = roadElements.first_attribute().as_ullong();
+
+    auto initial_state = extractInitialStateForPlanningProblem(roadElements.child("initialState"));
+
+    std::vector<GoalState> goal_states;
+    for (pugi::xml_node child = roadElements.first_child(); child != nullptr; child = child.next_sibling()) {
+        if ((strcmp(child.name(), "goalState")) != 0) {
+            continue;
+        }
+
+        auto time_node = child.child("time");
+        if (time_node == nullptr) {
+            throw std::runtime_error{"goal state needs to have a time interval"};
+        }
+        auto time = std::make_pair(time_node.child("intervalStart").text().as_ullong(),
+                                   time_node.child("intervalEnd").text().as_ullong());
+
+        auto velocity_node = child.child("velocity");
+        std::optional<FloatInterval> velocity;
+        if (velocity_node != nullptr) {
+            auto start_node = velocity_node.child("intervalStart");
+            auto end_node = velocity_node.child("intervalEnd");
+            if (start_node == nullptr || end_node == nullptr) {
+                throw std::runtime_error{"invalid interval node"};
+            }
+            velocity = std::make_pair(start_node.text().as_double(), end_node.text().as_double());
+        }
+
+        auto orientation_node = child.child("orientation");
+        std::optional<FloatInterval> orientation;
+        if (orientation_node != nullptr) {
+            auto start_node = orientation_node.child("intervalStart");
+            auto end_node = orientation_node.child("intervalEnd");
+            if (start_node == nullptr || end_node == nullptr) {
+                throw std::runtime_error{"invalid interval node"};
+            }
+            orientation = std::make_pair(start_node.text().as_double(), end_node.text().as_double());
+        }
+
+        auto position_node = child.child("position");
+        // TODO: Support other goal position types
+        std::vector<GoalPosition> goal_positions;
+        if (position_node != nullptr) {
+            for (pugi::xml_node position_ref = roadElements.first_child(); position_ref != nullptr;
+                 position_ref = position_ref.next_sibling()) {
+                if (strcmp(position_ref.name(), "lanelet") == 0) {
+                    auto lanelet_id = static_cast<uint32_t>(position_ref.attribute("ref").as_ullong());
+                    goal_positions.emplace_back(lanelet_id);
+                } else if (strcmp(position_ref.name(), "rectangle") == 0) {
+                    std::shared_ptr<Shape> shape =
+                        std::make_shared<Rectangle>(position_ref.child("length").text().as_double(),
+                                                    position_ref.child("width").text().as_double());
+                    goal_positions.emplace_back(shape);
+                } else if (strcmp(position_ref.name(), "circle") == 0) {
+                    std::shared_ptr<Shape> shape =
+                        std::make_shared<Circle>(position_ref.child("radius").text().as_double(),
+                                                 vertex{
+                                                     position_ref.child("center").child("x").text().as_double(),
+                                                     position_ref.child("center").child("y").text().as_double(),
+                                                 });
+                    goal_positions.emplace_back(shape);
+                }
+            }
+        }
+
+        goal_states.emplace_back(time, velocity, orientation, goal_positions);
+    }
+
+    auto planningProblem = std::make_shared<PlanningProblem>(id, initial_state, goal_states);
+    planningProblemList.push_back(planningProblem);
+}
+
+std::vector<std::shared_ptr<PlanningProblem>> XMLReader::createPlanningProblemFromXML(const std::string &xmlFile) {
+    const auto factory = createCommonRoadFactory(xmlFile);
+    return factory->createPlanningProblems();
 }

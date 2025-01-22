@@ -1,15 +1,17 @@
 #pragma once
 
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include <tsl/robin_map.h>
+
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 #include "commonroad_cpp/obstacle/actuator_parameters.h"
 #include "commonroad_cpp/obstacle/sensor_parameters.h"
 #include "commonroad_cpp/obstacle/time_parameters.h"
 #include "commonroad_cpp/roadNetwork/road_network_config.h"
-#include <map>
-#include <memory>
-#include <string>
-#include <tsl/robin_map.h>
-#include <vector>
 
 class RoadNetwork;
 class Obstacle;
