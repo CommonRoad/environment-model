@@ -45,7 +45,7 @@ TEST_F(RoadNetworkTest, FindLaneletById) {
 
 TEST_F(RoadNetworkTest, AddLanes) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/ZAM_Test-2/ZAM_Test-2_1_T-1.pb"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};

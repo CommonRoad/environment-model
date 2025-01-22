@@ -48,7 +48,8 @@ void CompletelyOnLaneletTypePredicateTest::SetUp() {
     auto pathToTestFileAccessRamp = TestUtils::getTestScenarioDirectory() +
                                     "/predicates/DEU_TestOnFollowingLaneletsAndAccessRampFalse-1/"
                                     "DEU_TestOnFollowingLaneletsAndAccessRampFalse-1_1_T-1.pb";
-    const auto &[obstacles, roadNetwork2, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFileAccessRamp);
+    const auto &[obstacles, roadNetwork2, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileAccessRamp);
     world2 = std::make_shared<World>(World("testWorld", 0, roadNetwork2, {}, {}, 0.1));
 }
 
@@ -94,8 +95,7 @@ TEST_F(CompletelyOnLaneletTypePredicateTest, SetBasedPrediction) {
     std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
 
-    auto world{
-        std::make_shared<World>(World("testWorld", 0, std::get<1>(scenarioXml), std::get<0>(scenarioXml), {}, 0.1))};
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
 
     auto ego{world->findObstacle(42)};
     auto obs1{world->findObstacle(100)};

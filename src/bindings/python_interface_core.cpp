@@ -18,6 +18,7 @@
 #include "commonroad_cpp/geometry/rectangle.h"
 #include "commonroad_cpp/geometry/shape_group.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h"
+#include "commonroad_cpp/scenario.h"
 #include "python_interface_core.h"
 #include "python_interface_predicates.h"
 #include "translate_python_types.h"
@@ -429,6 +430,12 @@ void init_python_interface_core(nb::module_ &m) {
         .def("update_obstacles", &World::updateObstacles)
         .def("update_obstacles", &updateObstacles)
         .def("update_obstacles_traj", &updateObstaclesTraj);
+
+    nb::class_<Scenario>(m, "Scenario")
+        .def_ro("obstacles", &Scenario::obstacles)
+        .def_ro("road_network", &Scenario::roadNetwork)
+        .def_ro("time_step_size", &Scenario::timeStepSize)
+        .def_ro("planning_problems", &Scenario::planningProblems);
 
     m.def("create_world", &XMLReader::createWorldFromXML);
 

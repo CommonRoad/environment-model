@@ -4,9 +4,11 @@
 
 void IntersectionTestInitialization::setUpIncoming() {
     auto pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_IncomingTest-1/DEU_IncomingTest-1_1_T-1.pb";
-    const auto &[obstacles, roadnetwork, timeStepSize] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    const auto &[obstacles, roadnetwork, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
     auto pathToCrosswalkFile = TestUtils::getTestScenarioDirectory() + "/DEU_Crosswalk-1/DEU_Crosswalk-1_1_T-1.pb";
-    const auto &[obstacles2, roadnetwork2, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToCrosswalkFile);
+    const auto &[obstacles2, roadnetwork2, timeStepSize2, planningProblems2] =
+        InputUtils::getDataFromCommonRoad(pathToCrosswalkFile);
     intersection1 = roadnetwork->getIntersections()[0];
     intersection2 = roadnetwork2->getIntersections()[0];
     incomingOne = roadnetwork->getIntersections()[0]->getIncomingGroups()[0];

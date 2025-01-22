@@ -32,7 +32,7 @@ class Circle : public Shape {
      * @param rad Radius of circle [m].
      * @param vert Center vertex.
      */
-    Circle(double rad, vertex &vert) {
+    Circle(double rad, vertex vert) {
         radius = rad;
         center = vert;
     }
