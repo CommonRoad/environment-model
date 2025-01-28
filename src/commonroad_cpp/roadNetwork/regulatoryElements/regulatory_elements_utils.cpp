@@ -1,6 +1,7 @@
 #include <algorithm>
 
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/predicate_parameter_collection.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
