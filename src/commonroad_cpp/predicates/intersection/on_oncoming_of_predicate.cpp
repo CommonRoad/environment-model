@@ -21,7 +21,7 @@ bool OnOncomingOfPredicate::booleanEvaluation(size_t timeStep, const std::shared
             if (std::abs(angleDif) < std::stod(additionalFunctionParameters.at(0)))
                 incomings.push_back(incom);
         }
-    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep)};
+    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep, setBased)};
     for (const auto &let : lanelets)
         for (const auto &incom : incomings) {
             auto straightSuccessors{incom->getAllStraightGoingLanelets()};
