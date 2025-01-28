@@ -263,9 +263,7 @@ state_map_t Obstacle::getTrajectoryHistory() const { return recordedStates.traje
 
 size_t Obstacle::getTrajectoryLength() const { return trajectoryPrediction.trajectoryPrediction.size(); }
 
-multi_polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep, bool setBased) {
-    return setOccupancyPolygonShape(timeStep);
-}
+multi_polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) { return setOccupancyPolygonShape(timeStep); }
 
 time_step_map_t<multi_polygon_type> &Obstacle::getOccupancyPolygonShapeCache(size_t timeStep, bool setBased) {
     if (timeStep <= recordedStates.currentState->getTimeStep())
@@ -339,7 +337,7 @@ Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNet
     auto &occupiedLanelets{getOccupiedLaneletsCache(timeStep, setBased)};
     if (occupiedLanelets.find(timeStep) != occupiedLanelets.end())
         return occupiedLanelets.at(timeStep);
-    multi_polygon_type polygonShape{getOccupancyPolygonShape(timeStep, setBased)};
+    multi_polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
     auto occupied{roadNetwork->findOccupiedLaneletsByShape(polygonShape)};
     occupiedLanelets.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occupied));
     return occupied;
@@ -413,6 +411,8 @@ Obstacle::getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetw
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
                                                      bool setBased) {
+    if (setBased and !setBasedPrediction.setBasedPrediction.empty())
+        return setOccupiedLaneletsByShape(roadNetwork, timeStep, setBased);
     return setOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep, setBased);
 }
 

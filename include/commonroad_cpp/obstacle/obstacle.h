@@ -407,10 +407,9 @@ class Obstacle {
      * Getter for polygon shape of obstacle at given time step.
      *
      * @param timeStep Time step of interest.
-     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Boost polygon.
      */
-    [[nodiscard]] multi_polygon_type getOccupancyPolygonShape(time_step_t timeStep, bool setBased = false);
+    [[nodiscard]] multi_polygon_type getOccupancyPolygonShape(time_step_t timeStep);
 
     /**
      * Getter for obstacle shape.
