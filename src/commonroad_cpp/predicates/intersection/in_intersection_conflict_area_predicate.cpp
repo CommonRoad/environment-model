@@ -1,9 +1,9 @@
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/obstacle/obstacle_operations.h>
 #include <commonroad_cpp/predicates/intersection/in_intersection_conflict_area_predicate.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/world.h>
 
 bool InIntersectionConflictAreaPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,

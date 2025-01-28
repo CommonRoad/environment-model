@@ -950,7 +950,7 @@ Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
     auto occLanelets{getOccupiedLaneletsByShape(roadNetwork, timeStep)};
 
     for (const auto &la : occLanelets)
-        if (!setBased)
+        if (!setBased or setBasedPrediction.setBasedPrediction.empty())
             if (std::abs(geometric_operations::subtractOrientations(
                     la->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
                                                  getStateByTimeStep(timeStep)->getYPosition()),

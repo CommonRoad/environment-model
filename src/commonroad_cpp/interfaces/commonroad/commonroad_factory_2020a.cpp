@@ -1,6 +1,5 @@
 #include <cstring>
 
-#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/planning_problem.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
@@ -340,6 +339,27 @@ CommonRoadFactory2020a::createIntersections(const std::vector<std::shared_ptr<La
                             inc->setStraightOutgoings(outgoingsStraight);
                         }
                         if ((strcmp(incomingChildElementChild.name(), "outgoingLeft")) == 0) {
+                            for (const auto &let : lanelets) {
+                                if (incomingChildElementChild.attribute("ref").as_ullong() == let->getId())
+                                    outgoingsLeft.push_back(let);
+                            }
+                            inc->setLeftOutgoings(outgoingsLeft);
+                        }
+                        if ((strcmp(incomingChildElementChild.name(), "successorsRight")) == 0) {
+                            for (const auto &let : lanelets) {
+                                if (incomingChildElementChild.attribute("ref").as_ullong() == let->getId())
+                                    outgoingsRight.push_back(let);
+                            }
+                            inc->setRightOutgoings(outgoingsRight);
+                        }
+                        if ((strcmp(incomingChildElementChild.name(), "successorsStraight")) == 0) {
+                            for (const auto &let : lanelets) {
+                                if (incomingChildElementChild.attribute("ref").as_ullong() == let->getId())
+                                    outgoingsStraight.push_back(let);
+                            }
+                            inc->setStraightOutgoings(outgoingsStraight);
+                        }
+                        if ((strcmp(incomingChildElementChild.name(), "successorsLeft")) == 0) {
                             for (const auto &let : lanelets) {
                                 if (incomingChildElementChild.attribute("ref").as_ullong() == let->getId())
                                     outgoingsLeft.push_back(let);
