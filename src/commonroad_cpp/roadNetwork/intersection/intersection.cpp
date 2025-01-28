@@ -117,6 +117,7 @@ void Intersection::determineIntersectionType() {
     bool hasTIntersection{false};
     bool hasFourWayStop{false};
     if (incomings.size() == 4) {
+        intersectionTypes.insert(IntersectionType::FOUR_WAY_INTERSECTION);
         // if lanelet from each incoming references a STOP sign, it is 4 way stop
         if (std::all_of(incomings.begin(), incomings.end(), [](const std::shared_ptr<IncomingGroup> &incoming) {
                 return std::any_of(incoming->getIncomingLanelets().begin(), incoming->getIncomingLanelets().end(),
@@ -173,6 +174,7 @@ void Intersection::determineIntersectionType() {
             })) {
             intersectionTypes.insert(IntersectionType::UNCONTROLLED_INTERSECTION);
         }
-        intersectionTypes.insert(IntersectionType::UNKNOWN);
     }
+    if (intersectionTypes.empty())
+        intersectionTypes.insert(IntersectionType::UNKNOWN);
 }
