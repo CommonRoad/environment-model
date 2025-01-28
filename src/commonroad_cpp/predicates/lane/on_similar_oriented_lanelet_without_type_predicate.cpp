@@ -11,11 +11,7 @@ bool OnSimilarOrientedLaneletWithoutTypePredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
     bool setBased) {
 
-    std::vector<std::shared_ptr<Lanelet>> lanelets;
-    if (!setBased)
-        lanelets = obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep, setBased);
-    else
-        lanelets = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
+    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep, setBased)};
     return std::all_of(lanelets.begin(), lanelets.end(),
                        [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
                            return !lanelet->hasLaneletType(

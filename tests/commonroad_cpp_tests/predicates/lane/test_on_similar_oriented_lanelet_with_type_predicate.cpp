@@ -144,7 +144,7 @@ TEST_F(OnSimilarOrientedLaneletWithTypePredicateTest, SetBasedPredictionIntersec
     EXPECT_TRUE(pred.booleanEvaluation(40, world, ego, {}, {"left"}, true));
     EXPECT_TRUE(pred.booleanEvaluation(40, world, obs1, {}, {"left"}, true));
     EXPECT_TRUE(pred.booleanEvaluation(40, world, obs1, {}, {"straight"}, true));
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, {}, {"right"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, ego, {}, {"right"}, true));
     EXPECT_FALSE(pred.booleanEvaluation(40, world, ego, {}, {"right"}, true));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obs1, {}, {"left"}, true));
     EXPECT_TRUE(pred.booleanEvaluation(40, world, obs1, {}, {"right"}, true));
