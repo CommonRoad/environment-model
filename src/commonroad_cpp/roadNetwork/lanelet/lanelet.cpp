@@ -1,6 +1,6 @@
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
-
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 #include <utility>
 
 #include <limits>
@@ -10,6 +10,7 @@
 #include <boost/geometry/algorithms/unique.hpp>
 #include <boost/geometry/algorithms/within.hpp>
 
+#include <boost/geometry.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
 
 namespace bg = boost::geometry;
@@ -133,6 +134,23 @@ bool Lanelet::checkIntersection(const polygon_type &polygon_shape, ContainmentTy
     default:
         return false;
     }
+}
+
+std::vector<vertex> Lanelet::computeIntersectionPointsWithShape(const multi_polygon_type &shape) const {
+    std::vector<vertex> intersectionPoints;
+    multi_polygon_type output;
+
+    // Compute the intersection between the lanelet polygon and the shape
+    boost::geometry::intersection(outerPolygon, shape, output);
+
+    // Extract intersection points from the resulting polygons
+    for (const auto &polygon : output) {
+        for (const auto &point : polygon.outer()) {
+            vertex vert{point.x(), point.y()};
+            intersectionPoints.emplace_back(vert);
+        }
+    }
+    return intersectionPoints;
 }
 
 void Lanelet::constructOuterPolygon() {

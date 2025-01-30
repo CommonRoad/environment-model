@@ -5,6 +5,9 @@
 
 #include "utils_predicate_test.h"
 
+#include "commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h"
+
 namespace utils_predicate_test {
 std::shared_ptr<RoadNetwork> create_road_network(const std::set<LaneletType> &laneletTypeLaneletOne,
                                                  const std::set<LaneletType> &laneletTypeLaneletTwo) {

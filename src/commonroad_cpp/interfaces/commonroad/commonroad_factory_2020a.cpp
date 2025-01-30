@@ -4,6 +4,9 @@
 #include "commonroad_cpp/planning_problem.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h"
 #include "commonroad_factory_2020a.h"
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 

@@ -63,12 +63,11 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const s
     double dSafe{computeSafeDistance(obstacleK->getVelocity(timeStep, false),
                                      obstacleP->getVelocity(timeStep, setBased, true), aMinK, aMinP,
                                      obstacleK->getReactionTime())};
-    double deltaS{
-        obstacleP->rearS(
-            timeStep,
-            obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep, setBased)->getCurvilinearCoordinateSystem(),
-            setBased) -
-        obstacleK->frontS(world->getRoadNetwork(), timeStep)};
+    double deltaS{obstacleP->rearS(
+                      timeStep,
+                      obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
+                      setBased) -
+                  obstacleK->frontS(world->getRoadNetwork(), timeStep)};
 
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
     // robustness; collision must be checked separately

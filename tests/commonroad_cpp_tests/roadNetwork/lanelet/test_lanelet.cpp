@@ -1,11 +1,8 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_lanelet.h"
+#include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
 namespace bg = boost::geometry;
 typedef boost::geometry::model::d2::point_xy<double> point_type;

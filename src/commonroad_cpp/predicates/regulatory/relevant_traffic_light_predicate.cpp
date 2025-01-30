@@ -1,10 +1,10 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
-
-#include <commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 
 bool RelevantTrafficLightPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                       const std::shared_ptr<Obstacle> &obstacleK,
