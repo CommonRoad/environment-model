@@ -2,6 +2,7 @@
 
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include <deque>
+#include <optional>
 
 /**
  * Class representing an incoming of an intersection.

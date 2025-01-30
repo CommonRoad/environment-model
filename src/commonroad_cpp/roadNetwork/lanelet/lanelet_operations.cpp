@@ -1,6 +1,8 @@
 #include <algorithm>
-#include <commonroad_cpp/obstacle/state.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <utility>
 
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
@@ -8,70 +10,67 @@
 
 LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type) {
     std::string str{type};
-    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    std::transform(str.begin(), str.end(), str.begin(), toupper);
     str.erase(std::remove_if(str.begin(), str.end(), [](char elem) { return elem == '_'; }), str.end());
     if (LaneletTypeNames.count(str) == 1)
         return LaneletTypeNames.at(str);
-    else
-        throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type '" + str + "'!");
+    throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type '" + str + "'!");
 }
 
 LineMarking lanelet_operations::matchStringToLineMarking(const std::string &type) {
     if (type == "solid")
         return LineMarking::solid;
-    else if (type == "dashed")
+    if (type == "dashed")
         return LineMarking::dashed;
-    else if (type == "solid_solid")
+    if (type == "solid_solid")
         return LineMarking::solid_solid;
-    else if (type == "dashed_dashed")
+    if (type == "dashed_dashed")
         return LineMarking::dashed_dashed;
-    else if (type == "solid_dashed")
+    if (type == "solid_dashed")
         return LineMarking::solid_dashed;
-    else if (type == "dashed_solid")
+    if (type == "dashed_solid")
         return LineMarking::dashed_solid;
-    else if (type == "curb")
+    if (type == "curb")
         return LineMarking::curb;
-    else if (type == "lowered_curb")
+    if (type == "lowered_curb")
         return LineMarking::lowered_curb;
-    else if (type == "broad_solid")
+    if (type == "broad_solid")
         return LineMarking::broad_solid;
-    else if (type == "broad_dashed")
+    if (type == "broad_dashed")
         return LineMarking::broad_dashed;
-    else if (type == "no_marking")
+    if (type == "no_marking")
         return LineMarking::no_marking;
-    else
-        return LineMarking::unknown;
+    return LineMarking::unknown;
 }
 
 std::vector<LineMarking> lanelet_operations::matchStringToLineMarkingOptions(const std::string &type) {
     std::string str{type};
-    std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+    std::transform(str.begin(), str.end(), str.begin(), tolower);
     if (str == "solid")
         return {LineMarking::solid, LineMarking::solid_solid, LineMarking::solid_dashed, LineMarking::broad_solid};
-    else if (str == "dashed")
+    if (str == "dashed")
         return {LineMarking::dashed, LineMarking::dashed_dashed, LineMarking::dashed_solid, LineMarking::broad_dashed};
-    else if (str == "broad")
+    if (str == "broad")
         return {LineMarking::broad_solid, LineMarking::broad_dashed};
-    else if (str == "solid_solid")
+    if (str == "solid_solid")
         return {LineMarking::solid_solid};
-    else if (str == "dashed_dashed")
+    if (str == "dashed_dashed")
         return {LineMarking::dashed_dashed};
-    else if (str == "solid_dashed")
+    if (str == "solid_dashed")
         return {LineMarking::solid_dashed};
-    else if (str == "dashed_solid")
+    if (str == "dashed_solid")
         return {LineMarking::dashed_solid};
-    else if (str == "curb")
+    if (str == "curb")
         return {LineMarking::curb};
-    else if (str == "lowered_curb")
+    if (str == "lowered_curb")
         return {LineMarking::lowered_curb};
-    else if (str == "broad_solid")
+    if (str == "broad_solid")
         return {LineMarking::broad_solid};
-    else if (str == "broad_dashed")
+    if (str == "broad_dashed")
         return {LineMarking::broad_dashed};
-    else if (str == "no_marking")
+    if (str == "no_marking")
         return {LineMarking::no_marking};
-    else
-        return {LineMarking::unknown};
+    return {LineMarking::unknown};
 }
 
 std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet,
@@ -167,8 +166,8 @@ lanelet_operations::activeTlsByLanelet(size_t timeStep, const std::shared_ptr<La
 }
 
 bool lanelet_operations::bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &lanelet) {
-    auto is_road = [](const std::shared_ptr<Lanelet> &lanelet) {
-        return !lanelet->hasLaneletType(LaneletType::bicycleLane) and !lanelet->hasLaneletType(LaneletType::sidewalk);
+    auto is_road = [](const std::shared_ptr<Lanelet> &la) {
+        return !la->hasLaneletType(LaneletType::bicycleLane) and !la->hasLaneletType(LaneletType::sidewalk);
     };
 
     if (!lanelet->hasLaneletType(LaneletType::bicycleLane))
@@ -194,8 +193,8 @@ bool lanelet_operations::anyLaneletsContainLineMarkingType(const std::vector<std
                                                            const std::string &direction) {
     return std::any_of(
         lanelets.begin(), lanelets.end(), [lineMarkingTypes, direction](const std::shared_ptr<Lanelet> &lanelet) {
-            return (std::find(lineMarkingTypes.begin(), lineMarkingTypes.end(),
-                              lanelet->getLineMarking(regulatory_elements_utils::matchDirections(direction))) !=
-                    lineMarkingTypes.end());
+            return std::find(lineMarkingTypes.begin(), lineMarkingTypes.end(),
+                             lanelet->getLineMarking(regulatory_elements_utils::matchDirections(direction))) !=
+                   lineMarkingTypes.end();
         });
 }

@@ -11,15 +11,59 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, cons
                                                            const std::shared_ptr<Obstacle> &obstacleP,
                                                            const std::vector<std::string> &additionalFunctionParameters,
                                                            bool setBased) {
+    if (obstacleP->getAcceleration(timeStep, setBased, true) >= parameters.getParam("aBrakingIntersection"))
+        return false;
+    std::vector<std::shared_ptr<Lane>> lanesP;
+    std::vector<std::shared_ptr<Lane>> lanesK;
 
-    auto distance{obstacleK->rearS(
-                      timeStep,
-                      obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
-                      setBased) -
-                  obstacleP->frontS(world->getRoadNetwork(), timeStep)};
-    return parameters.getParam("dCauseBrakingIntersection") <= distance and
-           distance <= parameters.getParam("dBrakingIntersection") and
-           obstacleP->getStateByTimeStep(timeStep)->getAcceleration() < parameters.getParam("aBrakingIntersection");
+    // get all relevant lanes
+    if (setBased and !obstacleP->getSetBasedPrediction().empty() and
+        obstacleP->getCurrentState()->getTimeStep() < timeStep) {
+        lanesP = obstacleP->getOccupiedLanes(world->getRoadNetwork(), timeStep, setBased);
+        lanesK = {obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
+    } else if (setBased and !obstacleK->getSetBasedPrediction().empty() and
+               obstacleK->getCurrentState()->getTimeStep() < timeStep) {
+        lanesK = obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep, setBased);
+        lanesP = {obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
+    } else {
+        lanesK = {obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
+        lanesP = {obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
+    }
+
+    // iterate over all lane pairs and compute intersection points; if between any intersection points and any obstacle
+    // front position is below threshold return true
+    for (const auto &laneP : lanesP) {
+        std::vector<vertex> points;
+        for (const auto &laneK : lanesK) {
+            auto intersectionPoints{laneP->computeIntersectionPointsWithShape({laneK->getOuterPolygon()})};
+            if (intersectionPoints.empty())
+                continue;
+            for (const auto &point : intersectionPoints) {
+                double distance;
+                auto pointCCSLon{
+                    laneP->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(point.x, point.y).x()};
+                if (setBased and !obstacleP->getSetBasedPrediction().empty() and
+                    obstacleP->getCurrentState()->getTimeStep() < timeStep) {
+                    for (const auto &obsShape : obstacleP->getOccupancyPolygonShape(timeStep))
+                        for (const auto obsPoint : obsShape.outer()) {
+                            polygon_type polygonPos;
+                            boost::geometry::append(polygonPos, point_type{obsPoint.x(), obsPoint.y()});
+                            if (!laneP->applyIntersectionTesting(polygonPos))
+                                continue;
+                            auto pointCCSLonObs{laneP->getCurvilinearCoordinateSystem()
+                                                    ->convertToCurvilinearCoords(obsPoint.x(), obsPoint.y())
+                                                    .x()};
+                            distance = std::min(distance, pointCCSLon - pointCCSLonObs);
+                        }
+                } else
+                    distance = pointCCSLon - obstacleP->frontS(timeStep, laneP->getCurvilinearCoordinateSystem());
+                if (parameters.getParam("dCauseBrakingIntersection") <= distance and
+                    distance <= parameters.getParam("dBrakingIntersection"))
+                    return true;
+            }
+        }
+    }
+    return false;
 }
 
 Constraint CausesBrakingIntersectionPredicate::constraintEvaluation(

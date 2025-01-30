@@ -1,9 +1,14 @@
 #pragma once
 
-#include "../road_network.h"
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
-#include "lane.h"
-#include "lanelet.h"
+#include <memory>
+#include <vector>
+class Lanelet;
+class Lane;
+class TrafficLight;
+enum class LaneletType;
+enum class LineMarking;
+class Obstacle;
 
 namespace lanelet_operations {
 /**
@@ -85,6 +90,7 @@ double roadWidth(const std::shared_ptr<Lanelet> &lanelet, double xPosition, doub
 /**
  * Extracts all active traffic lights from lanelet.
  *
+ * @param timeStep Time step of interest.
  * @param lanelet Lanelet of interest.
  * @return List of traffic lights.
  */
@@ -92,7 +98,7 @@ std::vector<std::shared_ptr<TrafficLight>> activeTlsByLanelet(size_t timeStep, c
 
 /**
  * Checks whether a bicycleLane is next to a road without a gap inbetween.
- * @param lanlet Lanelet of interest
+ * @param lanelet Lanelet of interest
  * @return bool
  */
 bool bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &lanelet);

@@ -3,6 +3,9 @@
 #include <commonroad_cpp/interfaces/commonroad/protobuf_reader.h>
 #include <commonroad_cpp/interfaces/commonroad/xml_reader.h>
 #include <commonroad_cpp/planning_problem.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
 #include <filesystem>
 #include <spdlog/spdlog.h>
 

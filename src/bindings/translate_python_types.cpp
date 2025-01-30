@@ -15,6 +15,7 @@
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 #include <nanobind/stl/list.h>

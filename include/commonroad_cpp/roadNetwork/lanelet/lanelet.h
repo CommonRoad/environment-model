@@ -3,21 +3,19 @@
 #include <cstddef>
 #include <memory>
 #include <set>
-#include <unordered_set>
 #include <vector>
 
-#include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
-
-#include <commonroad_cpp/auxiliaryDefs/structs.h>
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/types.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
-#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
-
-#include "commonroad_cpp/roadNetwork/environment/area.h"
 #include <commonroad_cpp/roadNetwork/types.h>
+
+class Area;
+class TrafficLight;
+class TrafficSign;
+class StopLine;
+class Polygon;
+struct vertex;
+enum class ObstacleType;
 
 /**
  * Class representing a lanelet.
@@ -33,6 +31,7 @@ class Lanelet {
      * Constructor initializing borders, lanelet typ, and road users.
      * Creates automatically center vertices and polygon shape.
      *
+     * @param laneletId ID of lanelet.
      * @param leftBorder Vector of vertices of left lanelet border.
      * @param rightBorder Vector of vertices of right lanelet border.
      * @param types List of types classifying lanelet.
@@ -47,11 +46,12 @@ class Lanelet {
      * Constructor initializing borders, lanelet typ, road users, predecessor lanelets, and successor lanelets.
      * Creates automatically center vertices and polygon shape.
      *
+     * @param laneletId ID of lanelet.
      * @param leftBorder Vector of vertices of left lanelet border.
      * @param rightBorder Vector of vertices of right lanelet border.
      * @param predecessorLanelets List of pointers to predecessor lanelets.
      * @param successorLanelets List of pointers to successor lanelets.
-     * @param types List of types classifying lanelet.
+     * @param laneletTypes List of types classifying lanelet.
      * @param usersOneWay List of road users one way.
      * @param usersBidirectional List of road users bidirectional.
      */
@@ -71,7 +71,7 @@ class Lanelet {
     /**
      * Setter for ID of lanelet.
      *
-     * @param laneletId ID of lanelet.
+     * @param lid ID of lanelet.
      */
     void setId(size_t lid);
 
@@ -79,7 +79,7 @@ class Lanelet {
      * Setter for adjacent left lanelet.
      *
      * @param left pointer to left lanelet.
-     * @param dir driving direction of adjacent left lanelet.
+     * @param oppositeDir driving direction of adjacent left lanelet.
      */
     void setLeftAdjacent(const std::shared_ptr<Lanelet> &left, bool oppositeDir);
 
@@ -87,7 +87,7 @@ class Lanelet {
      * Setter for adjacent right lanelet.
      *
      * @param right pointer to right lanelet.
-     * @param dir driving direction of adjacent right lanelet.
+     * @param oppositeDir driving direction of adjacent right lanelet.
      */
     void setRightAdjacent(const std::shared_ptr<Lanelet> &right, bool oppositeDir);
 
@@ -129,7 +129,7 @@ class Lanelet {
     /**
      * Setter for stop line.
      *
-     * @param sl Stop line belonging to lanelet.
+     * @param line Stop line belonging to lanelet.
      */
     void setStopLine(const std::shared_ptr<StopLine> &line);
 
@@ -157,7 +157,7 @@ class Lanelet {
     /**
      * Appends a vertex to the left border.
      *
-     * @param right Vertex which should be appended.
+     * @param left Vertex which should be appended.
      */
     void addLeftVertex(vertex left);
 
@@ -394,7 +394,7 @@ class Lanelet {
     /**
      * Evaluates whether a lanelet has a specific traffic sign.
      *
-     * @param tsType trafficSign type which existence should be checked.
+     * @param trafficSignType trafficSign type which existence should be checked.
      * @return Boolean indicating whether the traffic sign exists.
      */
     bool hasTrafficSign(TrafficSignTypes trafficSignType) const;
@@ -447,7 +447,20 @@ class Lanelet {
      */
     size_t findClosestIndex(double positionX, double positionY, bool considerLastIndex = false) const;
 
+    /**
+     * Computes minimum width of lanelet.
+     *
+     * @return Minimum width of lanelet.
+     */
     double getMinWidth() const;
+
+    /**
+     * Computes intersection points of shape with lanelet.
+     *
+     * @param shape Multi polygon shape.
+     * @return List of intersection vertices.
+     */
+    std::vector<vertex> computeIntersectionPointsWithShape(const multi_polygon_type &shape) const;
 
   private:
     lanelet_id_t laneletId{};                                  //**< unique ID of lanelet */

@@ -1,5 +1,6 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/lane/on_road_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/world.h>
 
@@ -13,7 +14,7 @@ bool OnRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<W
     return std::any_of(occ.begin(), occ.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
         return (!lanelet->hasLaneletType(LaneletType::sidewalk) and
                 !lanelet->hasLaneletType(LaneletType::bicycleLane)) or
-               (lanelet_operations::bicycleLaneNextToRoad(lanelet));
+               lanelet_operations::bicycleLaneNextToRoad(lanelet);
     });
 }
 

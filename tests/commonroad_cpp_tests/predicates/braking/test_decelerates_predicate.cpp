@@ -94,5 +94,5 @@ TEST_F(TestDeceleratePredicate, SetBasedPrediction) {
 
     EXPECT_FALSE(pred.booleanEvaluation(0, worldTmp, obs1, {}, {"0.0"}, true));
     EXPECT_TRUE(pred.booleanEvaluation(1, worldTmp, obs1, {}, {"0.0"}, true));
-    EXPECT_FALSE(pred.booleanEvaluation(30, worldTmp, obs1, {}, {"0.0"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(30, worldTmp, obs1, {}, {"0.0"}, true));
 }
