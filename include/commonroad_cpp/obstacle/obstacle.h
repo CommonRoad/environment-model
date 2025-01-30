@@ -383,11 +383,10 @@ class Obstacle {
      *
      * @param timeStep Time step of interest.
      * @param roadNetwork Pointer to road network
-     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Pointer to lane object.
      */
     [[nodiscard]] std::shared_ptr<Lane> getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                         time_step_t timeStep, bool setBased = false);
+                                                         time_step_t timeStep);
 
     /**
      * Getter for trajectory prediction.
@@ -1024,11 +1023,9 @@ class Obstacle {
      *
      * @param timeStep Time step of interest.
      * @param roadNetwork Pointer to road network
-     * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Pointer to lane object.
      */
-    std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep,
-                                           bool setBased);
+    std::shared_ptr<Lane> setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, time_step_t timeStep);
 
     /**
      * Creates logging message in case of ccs conversion errors.

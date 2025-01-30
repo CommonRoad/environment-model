@@ -2,6 +2,8 @@
 
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 

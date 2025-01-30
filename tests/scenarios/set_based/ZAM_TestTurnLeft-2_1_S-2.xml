@@ -4913,6 +4913,7 @@
       </point>
     </rightBound>
     <successor ref="402"/>
+    <predecessor ref="3"/>
     <adjacentLeft ref="300" drivingDir="opposite"/>
     <laneletType>urban</laneletType>
   </lanelet>
@@ -5493,6 +5494,7 @@
     </rightBound>
     <successor ref="103"/>
     <successor ref="303"/>
+    <successor ref="203"/>
     <adjacentLeft ref="401" drivingDir="opposite"/>
     <laneletType>urban</laneletType>
   </lanelet>

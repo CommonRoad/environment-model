@@ -1,7 +1,15 @@
 #pragma once
 
-#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
-#include "obstacle.h"
+#include <memory>
+#include <set>
+#include <vector>
+class Obstacle;
+class Intersection;
+class RoadNetwork;
+class Lanelet;
+struct vertex;
+enum class ObstacleType;
+enum class Direction;
 
 namespace obstacle_operations {
 

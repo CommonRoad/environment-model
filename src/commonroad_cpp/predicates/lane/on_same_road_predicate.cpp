@@ -3,6 +3,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/world.h>
+#include <unordered_set>
 
 bool OnSameRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                             const std::shared_ptr<Obstacle> &obstacleK,
@@ -15,7 +16,7 @@ bool OnSameRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
     // it to shape again since this simplifies set-based eval and assume we perform pre-checks to prevent failing ccs in
     // trajectory eval
     auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
-    auto refK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep, setBased)};
+    auto refK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
     for (const auto &la : refK->getContainedLanelets()) {
         for (const auto &la2 : lanelet_operations::adjacentLanelets(la, false)) {
             if (std::any_of(laneletsP.begin(), laneletsP.end(),
