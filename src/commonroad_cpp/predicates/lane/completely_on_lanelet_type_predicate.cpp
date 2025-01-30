@@ -1,5 +1,6 @@
 #include "commonroad_cpp/predicates/lane/completely_on_lanelet_type_predicate.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
 #include "commonroad_cpp/world.h"
 #include <algorithm>

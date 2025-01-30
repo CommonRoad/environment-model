@@ -5,13 +5,7 @@
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
 #endif
-#include <math.h>
-
-#include <array>
-#include <commonroad_cpp/auxiliaryDefs/structs.h>
 #include <commonroad_cpp/predicates/predicate_parameter.h>
-#include <cstdint>
-#include <limits>
 #include <map>
 #include <string>
 

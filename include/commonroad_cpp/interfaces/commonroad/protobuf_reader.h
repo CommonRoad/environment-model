@@ -7,22 +7,25 @@
 #include <variant>
 #include <vector>
 
-#include "commonroad_cpp/geometry/circle.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/lanelet/bound.h"
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
-#include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h"
 #include "commonroad_cpp/scenario.h"
 #include <commonroad_cpp/auxiliaryDefs/interval.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_dynamic.pb.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_map.pb.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/commonroad_scenario.pb.h>
 #include <commonroad_cpp/interfaces/commonroad/protobufFormat/generated/environment_obstacle.pb.h>
-#include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/planning_problem.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 
 #include <google/protobuf/message_lite.h>
+
+class Obstacle;
+class PlanningProblem;
+class Lanelet;
+class IncomingGroup;
+class OutgoingGroup;
+class CrossingGroup;
+class Circle;
 
 namespace ProtobufReader {
 

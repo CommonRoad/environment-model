@@ -411,8 +411,6 @@ Obstacle::getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetw
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
                                                      bool setBased) {
-    if (setBased and !setBasedPrediction.setBasedPrediction.empty())
-        return setOccupiedLaneletsByShape(roadNetwork, timeStep, setBased);
     return setOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep, setBased);
 }
 
@@ -511,7 +509,7 @@ double Obstacle::rearS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t t
 double Obstacle::rearS(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
                        bool setBased) {
     double rearS{std::numeric_limits<double>::max()};
-    if (setBased and timeStep > recordedStates.currentState->getTimeStep()) {
+    if (setBased and !setBasedPrediction.setBasedPrediction.empty() and timeStep > getCurrentState()->getTimeStep()) {
         std::vector<vertex> vertices;
         if (setBasedPrediction.setBasedPrediction.at(timeStep)->getShape()->getType() == ShapeType::polygon)
             vertices = dynamic_cast<const Polygon &>(*setBasedPrediction.setBasedPrediction.at(timeStep)->getShape())
@@ -694,9 +692,8 @@ size_t Obstacle::getFirstTrajectoryTimeStep() const {
                              " has not trajectoryPrediction");
 }
 
-std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                                                 bool setBased) {
-    return setReferenceLane(roadNetwork, timeStep, setBased);
+std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+    return setReferenceLane(roadNetwork, timeStep);
 }
 
 time_step_map_t<std::shared_ptr<Lane>> &Obstacle::getReferenceLaneCache(size_t timeStep, bool setBased) const {
@@ -707,9 +704,8 @@ time_step_map_t<std::shared_ptr<Lane>> &Obstacle::getReferenceLaneCache(size_t t
     return trajectoryPrediction.obstacleCache.referenceLane;
 }
 
-std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                                                 bool setBased) {
-    auto &referenceLane{getReferenceLaneCache(timeStep, setBased)};
+std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+    auto &referenceLane{getReferenceLaneCache(timeStep, false)};
     if (referenceLane.count(timeStep) == 1 and referenceLane.at(timeStep) != nullptr)
         return referenceLane.at(timeStep);
 
@@ -872,6 +868,8 @@ time_step_map_t<std::vector<std::shared_ptr<Lane>>> &Obstacle::getOccupiedLanesC
 
 std::vector<std::shared_ptr<Lane>> Obstacle::getOccupiedLanes(const std::shared_ptr<RoadNetwork> &roadNetwork,
                                                               size_t timeStep, bool setBased) {
+    if (setBased and !setBasedPrediction.setBasedPrediction.empty())
+        timeStep = getCurrentState()->getTimeStep(); // only valid state for set-based prediction
     auto &occupiedLanes{getOccupiedLanesCache(timeStep, setBased)};
     if (occupiedLanes[timeStep].empty())
         setOccupiedLanes(roadNetwork, timeStep);
@@ -893,7 +891,7 @@ Obstacle::getOccupiedLanesAndAdjacent(const std::shared_ptr<RoadNetwork> &roadNe
     for (const auto &id : relevantLanelets)
         lanelets.push_back(roadNetwork->findLaneletById(id));
 
-    std::vector<std::shared_ptr<Lane>> occLanes{lane_operations::createLanesBySingleLanelets(
+    auto occLanes{lane_operations::createLanesBySingleLanelets(
         lanelets, roadNetwork, sensorParameters.getFieldOfViewRear(), sensorParameters.getFieldOfViewFront(),
         roadNetworkParameters.numIntersectionsPerDirectionLaneGeneration,
         {getStateByTimeStep(timeStep)->getXPosition(), getStateByTimeStep(timeStep)->getYPosition()})};
@@ -944,20 +942,34 @@ Obstacle::setOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadN
     if (occupiedLaneletsDrivingDir.find(timeStep) != occupiedLaneletsDrivingDir.end())
         return occupiedLaneletsDrivingDir[timeStep];
 
+    if (setBased and !setBasedPrediction.setBasedPrediction.empty() and timeStep > getCurrentState()->getTimeStep()) {
+        // use only lanelets which are part of the lane of the current time step
+        std::set<size_t> ids;
+        std::vector<std::shared_ptr<Lanelet>> lanelets;
+        auto lanes{getOccupiedLanes(roadNetwork, getCurrentState()->getTimeStep(), setBased)};
+        for (const auto &la : setOccupiedLaneletsByShape(roadNetwork, timeStep, setBased)) {
+            for (const auto &lane : lanes) {
+                if (lane->containsLanelet({la->getId()}) and ids.find(la->getId()) == ids.end()) {
+                    lanelets.push_back(la);
+                    ids.insert(la->getId());
+                }
+            }
+        }
+        occupiedLaneletsDrivingDir[timeStep] = lanelets;
+        return occupiedLaneletsDrivingDir[timeStep];
+    }
+
     std::set<size_t> relevantLanelets1;
     std::set<size_t> relevantLanelets2;
-
     auto occLanelets{getOccupiedLaneletsByShape(roadNetwork, timeStep)};
-
     for (const auto &la : occLanelets)
-        if (!setBased or setBasedPrediction.setBasedPrediction.empty())
-            if (std::abs(geometric_operations::subtractOrientations(
-                    la->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
-                                                 getStateByTimeStep(timeStep)->getYPosition()),
-                    getStateByTimeStep(timeStep)->getGlobalOrientation())) < 0.785)
-                relevantLanelets1.insert(la->getId());
-            else
-                relevantLanelets1.insert(la->getId());
+        if (std::abs(geometric_operations::subtractOrientations(
+                la->getOrientationAtPosition(getStateByTimeStep(timeStep)->getXPosition(),
+                                             getStateByTimeStep(timeStep)->getYPosition()),
+                getStateByTimeStep(timeStep)->getGlobalOrientation())) < 0.785)
+            relevantLanelets1.insert(la->getId());
+        else
+            relevantLanelets1.insert(la->getId());
 
     // special case where obstacle drives mostly on lanelets in other driving direction (see
     // SetReferenceGeneralScenario4 test case)
@@ -1150,10 +1162,9 @@ double Obstacle::getVelocity(size_t timeStep, bool setBased, bool min) const {
 }
 
 double Obstacle::getAcceleration(size_t timeStep, bool setBased, bool min) const {
-    if (setBased and timeStep > recordedStates.currentState->getTimeStep() and
-        !setBasedPrediction.setBasedPrediction.empty()) {
+    if (setBased and !setBasedPrediction.setBasedPrediction.empty() and timeStep > getCurrentState()->getTimeStep()) {
         if (min) {
-            if (getVelocity(timeStep, setBased, min) == 0)
+            if (getVelocity(timeStep, setBased, false) == 0)
                 return 0;
             return actuatorParameters.getAminLong();
         }

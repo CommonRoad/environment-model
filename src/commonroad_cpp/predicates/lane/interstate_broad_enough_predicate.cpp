@@ -1,7 +1,7 @@
 #include "commonroad_cpp/obstacle/obstacle.h"
-#include "commonroad_cpp/predicates/position/in_front_of_predicate.h"
 #include <commonroad_cpp/predicates/lane/interstate_broad_enough_predicate.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
+#include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
 bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

@@ -1,7 +1,9 @@
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include <cmath>
 #include <commonroad_cpp/geometry/geometric_operations.h>
+#include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/intersection/on_oncoming_of_predicate.h>
+#include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
@@ -30,6 +32,10 @@ bool OnOncomingOfPredicate::booleanEvaluation(size_t timeStep, const std::shared
                 return true;
             auto rightSuccessors{incom->getAllRightTurningLanelets()};
             if (std::any_of(rightSuccessors.begin(), rightSuccessors.end(),
+                            [let](const std::shared_ptr<Lanelet> &letSuc) { return let->getId() == letSuc->getId(); }))
+                return true;
+            auto incomingLanelets{incom->getIncomingLanelets()};
+            if (std::any_of(incomingLanelets.begin(), incomingLanelets.end(),
                             [let](const std::shared_ptr<Lanelet> &letSuc) { return let->getId() == letSuc->getId(); }))
                 return true;
         }

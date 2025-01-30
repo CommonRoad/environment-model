@@ -9,9 +9,8 @@ bool MakesUTurnPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::vector<std::string> &additionalFunctionParameters,
                                             bool setBased) {
-    auto orientationCcs{obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep)};
-    return parameters.getParam("uTurnLower") <= abs(orientationCcs) and
-           abs(orientationCcs) <= parameters.getParam("uTurnUpper");
+    auto orientationCcs{std::fabs(obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep))};
+    return parameters.getParam("uTurnLower") <= orientationCcs and orientationCcs <= parameters.getParam("uTurnUpper");
 }
 
 Constraint MakesUTurnPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
