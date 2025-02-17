@@ -232,7 +232,7 @@ void init_python_interface_core(nb::module_ &m) {
 
     nb::class_<TimeParameters>(m, "TimeParameters")
         .def(nb::init<>())
-        .def(nb::init<double, double, double>())
+        .def(nb::init<size_t, double, double>())
         .def_prop_ro("relevant_history_size", &TimeParameters::getRelevantHistorySize)
         .def_prop_ro("time_step_size", &TimeParameters::getTimeStepSize)
         .def_prop_ro("reaction_time", &TimeParameters::getReactionTime);
