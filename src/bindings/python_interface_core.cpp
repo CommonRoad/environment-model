@@ -431,6 +431,8 @@ void init_python_interface_core(nb::module_ &m) {
         .def("update_obstacles", &updateObstacles)
         .def("update_obstacles_traj", &updateObstaclesTraj);
 
+    nb::class_<PlanningProblem>(m, "PlanningProblem");
+
     nb::class_<Scenario>(m, "Scenario")
         .def_ro("obstacles", &Scenario::obstacles)
         .def_ro("road_network", &Scenario::roadNetwork)
