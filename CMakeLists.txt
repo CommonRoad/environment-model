@@ -6,7 +6,7 @@
 # The cmake_minimum_required(VERSION) command implicitly invokes the cmake_policy(VERSION)
 # command to specify that the current project code is written for the given range of CMake versions.
 # Source: https://cmake.org/cmake/help/v3.25/command/cmake_minimum_required.html
-cmake_minimum_required(VERSION 3.20..3.29)
+cmake_minimum_required(VERSION 3.20..3.31)
 
 project(EnvironmentModel
     LANGUAGES C CXX
@@ -26,6 +26,11 @@ endif()
 # CMP0135 - URL download timestamp
 if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
+endif()
+
+# CMP0135 - FindBoost removed
+if(POLICY CMP0167)
+    cmake_policy(SET CMP0167 NEW)
 endif()
 
 # Adapted from Eigen3 - snippet to get a value for PROJECT_IS_TOP_LEVEL
