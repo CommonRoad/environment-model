@@ -29,6 +29,8 @@ if(COMMONROAD_SYSTEM_PROTOBUF AND Protobuf_FOUND)
     # Fix mismatch between version systems in newer Protobuf versions
     if(Protobuf_VERSION VERSION_GREATER_EQUAL "4.0.0" AND Protobuf_VERSION VERSION_LESS "5.0.0")
         set(_protoc_version "4.${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
+    elseif(Protobuf_VERSION VERSION_GREATER_EQUAL "5.0.0" AND Protobuf_VERSION VERSION_LESS "6.0.0")
+        set(_protoc_version "5.${_PROTOBUF_PROTOC_EXECUTABLE_VERSION}")
     else()
         set(_protoc_version ${_PROTOBUF_PROTOC_EXECUTABLE_VERSION})
     endif()

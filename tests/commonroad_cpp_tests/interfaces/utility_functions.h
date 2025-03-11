@@ -9,14 +9,6 @@
 namespace TestUtils {
 
 /**
- * Checks whether a given directory exists.
- *
- * @param path Directory path.
- * @return Boolean value indicating that directory path exists.
- */
-bool existsDirectory(const std::string &path);
-
-/**
  * Searches for path to directory where test scenarios are located.
  *
  * @return Path.
