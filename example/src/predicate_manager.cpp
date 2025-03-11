@@ -27,8 +27,7 @@ void PredicateManager::extractPredicateSatisfaction() {
     auto rng = std::default_random_engine{};
     // evaluate scenarios
     omp_set_num_threads(numThreads);
-#pragma omp parallel for schedule(guided) shared(predicates, rng)                                                      \
-    firstprivate(scenarios, relevantPredicates) default(none)
+#pragma omp parallel for schedule(guided) shared(predicates, rng) firstprivate(scenarios, relevantPredicates)
     for (const auto &scen : scenarios) {
         std::string benchmarkId{extractBenchmarkIdFromPath(scen)};
         const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] = InputUtils::getDataFromCommonRoad(scen);
