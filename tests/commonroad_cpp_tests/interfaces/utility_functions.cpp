@@ -13,20 +13,17 @@
 #include <tuple>
 
 std::string TestUtils::getTestScenarioDirectory() {
-    std::string curDir{std::filesystem::current_path()};
-    std::string srcDir{curDir + "/tests/scenarios"};
-    if (!existsDirectory(srcDir) && existsDirectory(curDir + "/../tests/scenarios"))
-        srcDir = curDir + "/../tests/scenarios";
-    else if (!existsDirectory(srcDir) && existsDirectory(curDir + "/../../tests/scenarios"))
-        srcDir = curDir + "/../../tests/scenarios";
-    return srcDir;
-}
+    auto curDir{std::filesystem::current_path()};
+    auto parent{curDir.parent_path()};
 
-bool TestUtils::existsDirectory(const std::string &path) {
-    struct stat info {};
-    if (stat(path.c_str(), &info) != 0)
-        return false;
-    return (info.st_mode & S_IFDIR) != 0u;
+    for (const auto &candidate : {curDir, parent, parent.parent_path()}) {
+        auto candidateScenarioDir{candidate / "tests" / "scenarios"};
+        if (std::filesystem::is_directory(candidateScenarioDir)) {
+            return candidateScenarioDir.string();
+        }
+    }
+
+    throw std::runtime_error{"could not find test scenario directory"};
 }
 
 void TestUtils::copyAndReplaceContentInFile(const std::string &orgFileName, const std::string &newFileName,

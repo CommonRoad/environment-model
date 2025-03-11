@@ -19,8 +19,8 @@ Lanelet::Lanelet(size_t laneletId, std::vector<vertex> leftBorder, std::vector<v
                  std::set<LaneletType> type, std::set<ObstacleType> oneWayUsers,
                  std::set<ObstacleType> bidirectionalUsers)
     : laneletId{laneletId}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)},
-      laneletTypes{std::move(type)}, usersOneWay{std::move(oneWayUsers)}, usersBidirectional{
-                                                                              std::move(bidirectionalUsers)} {
+      laneletTypes{std::move(type)}, usersOneWay{std::move(oneWayUsers)},
+      usersBidirectional{std::move(bidirectionalUsers)} {
     createCenterVertices();
     constructOuterPolygon();
 }
@@ -31,8 +31,8 @@ Lanelet::Lanelet(size_t laneletId, std::vector<vertex> leftBorder, std::vector<v
                  std::set<ObstacleType> oneWayUsers = {}, std::set<ObstacleType> bidirectionalUsers = {})
     : laneletId{laneletId}, leftBorder{std::move(leftBorder)}, rightBorder{std::move(rightBorder)},
       predecessorLanelets{std::move(predecessorLanelets)}, successorLanelets{std::move(successorLanelets)},
-      laneletTypes{std::move(type)}, usersOneWay{std::move(oneWayUsers)}, usersBidirectional{
-                                                                              std::move(bidirectionalUsers)} {
+      laneletTypes{std::move(type)}, usersOneWay{std::move(oneWayUsers)},
+      usersBidirectional{std::move(bidirectionalUsers)} {
     createCenterVertices();
     constructOuterPolygon();
 }

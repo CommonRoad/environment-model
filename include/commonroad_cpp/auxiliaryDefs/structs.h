@@ -88,7 +88,7 @@ struct SimulationParameters {
         : directoryPaths(std::move(directoryPaths)), egoVehicleId(egoVehicleId), benchmarkId(std::move(benchmarkId)),
           evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement),
           checkObstacleValid(checkObstacleValid), removeVRU(removeVRU), checkEgoValid(checkEgoValid),
-          outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)){};
+          outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)) {};
     SimulationParameters() = default;
 
     std::vector<std::string> directoryPaths{}; //**< List of directories in which all scenarios should be evaluated */

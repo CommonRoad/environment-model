@@ -5,7 +5,7 @@ stages:
   - static-test
   - publish
 
-image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci-lite:1.0
+image: $CI_REGISTRY/tum-cps/commonroad-docker/ci-base:2025.2
 
 before_script:
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
@@ -13,13 +13,11 @@ before_script:
 
 ### static test ###
 clang-format:
-  image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci:1.4
   stage: static-test
   script: ./ci/clang-format.sh
   needs: []
 
 clang-tidy:
-  image: $CI_REGISTRY/cps/rapid-prototyping-setup/ci:1.4
   stage: static-test
   script: ./ci/clang-tidy.sh
   needs:
@@ -66,22 +64,37 @@ build-compile-commands:
   stage: compile
   script:
     # run CMake in order to get compile_commands.json
-    - mkdir build && cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=/commonroad/dist -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
-    - cd ..
+    - cmake -G "Ninja Multi-Config" -S . -B build
+      -DCMAKE_INSTALL_PREFIX=/commonroad/dist
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    - cmake --build build --target commonroad_protobuf
   needs: []
   artifacts:
     paths:
-      - ./build/compile_commands.json
+      - ./build
     expire_in: 20 minutes
+
+build-ubuntu2204:
+  stage: compile
+  cache:
+    <<: *cache_dependency_archives
+  image: $CI_REGISTRY/tum-cps/commonroad-docker/ci-ubuntu2204:2025.2
+  script:
+    - cmake -G "Ninja Multi-Config" -S . -B build
+    - cmake --build build --config Release
+  needs: []
 
 build-clang:
   stage: compile
   cache:
     <<: *cache_dependency_archives
+  image: $CI_REGISTRY/tum-cps/commonroad-docker/ci-clang:2025.2
+  parallel:
+    matrix:
+      - CLANG_VERSION: [15, 16, 17, 18, 19]
   variables:
-    CC: clang
-    CXX: clang++
+    CC: clang-$CLANG_VERSION
+    CXX: clang++-$CLANG_VERSION
   script:
     - cmake -G "Ninja Multi-Config" -S . -B build
     - cmake --build build --config Release
@@ -91,9 +104,13 @@ build-gcc:
   stage: compile
   cache:
     <<: *cache_dependency_archives
+  image: $CI_REGISTRY/tum-cps/commonroad-docker/ci-gcc:2025.2
+  parallel:
+    matrix:
+      - GCC_VERSION: [10, 11, 12, 13, 14]
   variables:
-    CC: gcc
-    CXX: g++
+    CC: x86_64-linux-gnu-gcc-$GCC_VERSION
+    CXX: x86_64-linux-gnu-g++-$GCC_VERSION
   script:
     - cmake -G "Ninja Multi-Config" -S . -B build
     - cmake --build build --config Release
@@ -144,7 +161,7 @@ build-coverage:
 
 build-sdist:
   stage: compile
-  image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
+  image: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
   script:
     - python3 --version
     - git describe
@@ -163,7 +180,7 @@ build-wheel:
   stage: python
   tags:
     - dind
-  image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
+  image: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
   # make a docker daemon available for cibuildwheel to use
   services:
     - name: docker:20.10-dind
@@ -199,7 +216,7 @@ build-wheel:
 
 upload-wheel:
   stage: publish
-  image: $CI_REGISTRY/cps/rapid-prototyping-setup/wheelenv:1.0
+  image: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
   variables:
     TWINE_USERNAME: gitlab-ci-token
     TWINE_PASSWORD: ${CI_JOB_TOKEN}

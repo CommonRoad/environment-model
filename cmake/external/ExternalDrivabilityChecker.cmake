@@ -9,7 +9,7 @@ add_library(pthread ALIAS Threads::Threads)
 option(LOCAL_CRDC "Use bundled version of Drivability Checker/crccosy" OFF)
 option(EXTERNAL_CRDC_FORCE "Force using the external version of Drivability Checker/crccosy" OFF)
 
-if(NOT EXTERNAL_CRDC_FORCE AND (LOCAL_CRDC OR DEFINED ENV{CIBUILDWHEEL}))
+if(NOT EXTERNAL_CRDC_FORCE AND (LOCAL_CRDC OR DEFINED ENV{CIBUILDWHEEL} OR DEFINED ENV{CI}))
     set(ENV_MODEL_USE_LOCAL_CRDC ON)
     message(STATUS "Using local version of Drivability Checker/crccosy")
 else()
