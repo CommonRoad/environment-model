@@ -23,4 +23,4 @@ bool CommonRoadLanePredicate::statisticBooleanEvaluation(size_t timeStep, const 
 PredicateParameters &CommonRoadLanePredicate::getParameters() { return parameters; }
 
 std::map<std::string, std::shared_ptr<CommonRoadLanePredicate>> lanePredicates{
-    {"is_same_lane", std::make_shared<IsSameLanePredicate>()}};
+    {"is_same_lane_predicate", std::make_shared<IsSameLanePredicate>()}};
