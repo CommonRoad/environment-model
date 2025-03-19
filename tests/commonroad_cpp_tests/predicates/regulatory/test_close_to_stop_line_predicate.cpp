@@ -1,4 +1,5 @@
 #include "test_close_to_stop_line_predicate.h"
+#include "../../interfaces/utility_functions.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include <boost/algorithm/string/classification.hpp>

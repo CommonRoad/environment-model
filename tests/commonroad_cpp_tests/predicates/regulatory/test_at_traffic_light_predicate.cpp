@@ -1,4 +1,5 @@
 #include "test_at_traffic_light_predicate.h"
+#include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
