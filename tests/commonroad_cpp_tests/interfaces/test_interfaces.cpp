@@ -1,4 +1,5 @@
 #include "test_interfaces.h"
+#include "utility_functions.h"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <tuple>
@@ -6,8 +7,10 @@
 #include "commonroad_cpp/geometry/polygon.h"
 #include "commonroad_cpp/geometry/shape_group.h"
 #include "commonroad_cpp/obstacle/occupancy.h"
+#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 
 TEST_F(InterfacesTest, Read2018bFileSingleThread) {
     std::string xmlFilePath{TestUtils::getTestScenarioDirectory() + "/DEU_Muc-2_1_T-1.xml"};
