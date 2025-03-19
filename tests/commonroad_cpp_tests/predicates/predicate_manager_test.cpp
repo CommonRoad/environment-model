@@ -1,15 +1,4 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "predicate_manager_test.h"
-#include "../interfaces/utility_functions.h"
-#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
-// #include <commonroad_cpp/predicates/predicate_manager.h>
-#include <filesystem>
 
 #if 0
 
