@@ -6,7 +6,7 @@
 # The cmake_minimum_required(VERSION) command implicitly invokes the cmake_policy(VERSION)
 # command to specify that the current project code is written for the given range of CMake versions.
 # Source: https://cmake.org/cmake/help/v3.25/command/cmake_minimum_required.html
-cmake_minimum_required(VERSION 3.20..3.31)
+cmake_minimum_required(VERSION 3.20..4.0)
 
 project(EnvironmentModel
     LANGUAGES C CXX
@@ -17,6 +17,9 @@ project(EnvironmentModel
 # CMP0077 (3.13) - option() honors normal variables.
 # Relevant for Eigen3
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+
+# Set the minimum CMake policy version to 3.5 - required for cmake >= 4.0
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 # CMP0126 (3.21) - Removal of normal variables by set(CACHE)
 if(POLICY CMP0126)
