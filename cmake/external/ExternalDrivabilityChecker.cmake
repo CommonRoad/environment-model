@@ -6,7 +6,11 @@ find_package(Threads REQUIRED)
 # Required for LINK_LIBRARIES_ONLY_TARGETS (gtest links directly to pthread)
 add_library(pthread ALIAS Threads::Threads)
 
-option(LOCAL_CRDC "Use bundled version of Drivability Checker/crccosy" OFF)
+# NOTE: External CRDC is incompatible with recent module-less Boost CMake support
+# (it does not correctly export the Boost::geometry target)
+# Default to local CRDC
+
+option(LOCAL_CRDC "Use bundled version of Drivability Checker/crccosy" ON)
 option(EXTERNAL_CRDC_FORCE "Force using the external version of Drivability Checker/crccosy" OFF)
 
 if(NOT EXTERNAL_CRDC_FORCE AND (LOCAL_CRDC OR DEFINED ENV{CIBUILDWHEEL} OR DEFINED ENV{CI}))
@@ -28,12 +32,14 @@ else()
         GIT_TAG f0905d3aeeb1d62584d67a73604601f5c948f3f2
         #GIT_TAG        development
 
+        EXCLUDE_FROM_ALL
+
         SYSTEM
     )
 
     FetchContent_MakeAvailable(crdc)
 
-    set_property(DIRECTORY ${crdc_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL ON)
+    target_link_libraries(crccosy PUBLIC Boost::geometry)
 endif()
 
 mark_as_advanced(

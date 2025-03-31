@@ -308,7 +308,7 @@ target_link_libraries(env_model_core
 target_link_libraries(env_model_core
         PUBLIC
         Eigen3::Eigen
-        Boost::headers
+        Boost::geometry
         range-v3::range-v3
         commonroad_protobuf
         tsl::robin_map

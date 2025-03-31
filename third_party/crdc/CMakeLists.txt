@@ -25,7 +25,7 @@ target_link_libraries(crccosy
         # OpenMP::OpenMP_CXX
 )
 
-target_link_libraries(crccosy PUBLIC Boost::headers)
+target_link_libraries(crccosy PUBLIC Boost::geometry)
 
 target_compile_features(crccosy
     PUBLIC
