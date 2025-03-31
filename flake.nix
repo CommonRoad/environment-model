@@ -41,7 +41,7 @@
 
         environment-model = pkgs.callPackage ./default.nix {
           inherit (inputs) commonroad-cmake;
-          boost = pkgs.boost180;
+          boost = pkgs.boost187;
           # enableSanitizers = true;
 
           inherit commonroad_io;

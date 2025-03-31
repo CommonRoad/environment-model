@@ -151,15 +151,7 @@ endif ()
 # Code coverage
 # NOTE: The CodeCoverage module will already warn if the build type is not Debug
 if (ENV_MODEL_BUILD_CODE_COVERAGE)
-    include(FetchContent)
-    FetchContent_Declare(
-        bilke_cmake_modules
-
-        GIT_REPOSITORY https://github.com/bilke/cmake-modules.git
-        GIT_TAG        1fcf7f4a2179a7b649be15473906882871ef5f0b
-    )
-    FetchContent_MakeAvailable(bilke_cmake_modules)
-    include(${bilke_cmake_modules_SOURCE_DIR}/CodeCoverage.cmake)
+    include(../cmake/CodeCoverage.cmake)
 
     # Add definition for toolchain::gcov
     include(toolchain/ToolchainLibraries)

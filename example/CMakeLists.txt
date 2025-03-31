@@ -14,6 +14,7 @@ target_link_libraries(env_model_example_node
         env_model
         Boost::program_options
         Boost::filesystem
+        Boost::stacktrace
         spdlog::spdlog
         yaml-cpp::yaml-cpp
         Threads::Threads

@@ -290,6 +290,18 @@ list(APPEND CMAKE_MODULE_PATH ${commonroad_cmake_SOURCE_DIR})
 include(toolchain/DiscoverLLD OPTIONAL)
 include(toolchain/DiscoverSanitizers OPTIONAL)
 
+# Required for boost::stacktrace and LINK_LIBRARIES_ONLY_TARGETS
+include(toolchain/ToolchainLibraries)
+add_library(${CMAKE_DL_LIBS} ALIAS toolchain::dl)
+find_library(_backtrace_lib backtrace)
+if(NOT _backtrace_lib STREQUAL "_backtrace_lib-NOTFOUND")
+    message(STATUS "found backtrace: ${_backtrace_lib}")
+    add_library(toolchain::backtrace INTERFACE IMPORTED)
+    set_property(TARGET toolchain::backtrace PROPERTY IMPORTED_LIBNAME backtrace)
+
+    add_library(backtrace ALIAS toolchain::backtrace)
+endif()
+
 # This is a helper script that will automatically add a .gitignore file to the
 # binary directory (build directory) so you don't have to do add every build folder
 # to your .gitignore.
