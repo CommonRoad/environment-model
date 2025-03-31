@@ -15,10 +15,10 @@ FetchContent_Declare_Fallback(
     # or via commit:
     #GIT_TAG        4ae4cb7309c07b2d8623d7e4f01efa6321441366
 
-    URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz
-    URL_HASH SHA256=43e6a9fcb146ad871515f0d0873947e5d497a1c9c60c58cb102a97b47208b7c3
+    URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/0.8.0.tar.gz
+    URL_HASH SHA256=fbe74bbdcee21d656715688706da3c8becfd946d92cd44705cc6098bb23b3a16
 
-    FIND_PACKAGE_ARGS 0.6.0
+    FIND_PACKAGE_ARGS 0.8.0
 )
 
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
