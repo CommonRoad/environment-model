@@ -13,11 +13,11 @@ FetchContent_Declare_Fallback(
     # GIT_REPOSITORY https://github.com/zeux/pugixml.git
     # GIT_TAG        v1.13
 
-    URL http://github.com/zeux/pugixml/releases/download/v1.13/pugixml-1.13.tar.gz
-    URL_HASH SHA256=40c0b3914ec131485640fa57e55bf1136446026b41db91c1bef678186a12abbe
+    URL http://github.com/zeux/pugixml/releases/download/v1.15/pugixml-1.15.tar.gz
+    URL_HASH SHA256=655ade57fa703fb421c2eb9a0113b5064bddb145d415dd1f88c79353d90d511a
 
-    FIND_PACKAGE_ARGS 1.11
-    )
+    FIND_PACKAGE_ARGS 1.15
+)
 
 # Install rule for pugixml headers
 # install(
