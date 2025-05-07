@@ -292,15 +292,6 @@ include(toolchain/DiscoverSanitizers OPTIONAL)
 
 # Required for boost::stacktrace and LINK_LIBRARIES_ONLY_TARGETS
 include(toolchain/ToolchainLibraries)
-add_library(${CMAKE_DL_LIBS} ALIAS toolchain::dl)
-find_library(_backtrace_lib backtrace)
-if(NOT _backtrace_lib STREQUAL "_backtrace_lib-NOTFOUND")
-    message(STATUS "found backtrace: ${_backtrace_lib}")
-    add_library(toolchain::backtrace INTERFACE IMPORTED)
-    set_property(TARGET toolchain::backtrace PROPERTY IMPORTED_LIBNAME backtrace)
-
-    add_library(backtrace ALIAS toolchain::backtrace)
-endif()
 
 # This is a helper script that will automatically add a .gitignore file to the
 # binary directory (build directory) so you don't have to do add every build folder
@@ -322,9 +313,9 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/external)
 
 # We have custom logic to check for system Boost/Protobuf, therefore we include
 # ExternalBoost and ExternalProtobuf unconditionally
-include(ExternalBoost)
+include(external/ExternalBoost)
 
-include(ExternalProtobuf)
+include(external/ExternalProtobuf)
 
 if(CMAKE_SUPPORTS_TRY_FIND_PACKAGE)
     if(SKBUILD_SELF_CONTAINED)
@@ -364,15 +355,15 @@ else()
     # Normal path: We try to use find_package via FetchContent, otherwise we fall
     # back to normal FetchContent
 
-    include(ExternalEigen)
-    include(ExternalPugixml)
-    include(ExternalSpdlog)
-    include(ExternalGoogleTest)
-    include(ExternalYamlCpp)
-    include(ExternalRange)
+    include(external/ExternalEigen)
+    include(external/ExternalPugixml)
+    include(external/ExternalSpdlog)
+    include(external/ExternalGoogleTest)
+    include(external/ExternalYamlCpp)
+    include(external/ExternalRange)
 endif()
 
-include(ExternalTslRobinMap)
+include(external/ExternalTslRobinMap)
 
 include(ExternalDrivabilityChecker)
 
