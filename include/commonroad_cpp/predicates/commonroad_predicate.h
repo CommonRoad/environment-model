@@ -34,6 +34,7 @@ class CommonRoadPredicate {
      * @param obstacleK Pointer to the kth obstacle.
      * @param obstacleP Pointer to the pth obstacle. This is an optional parameter.
      * @param additionalFunctionParameters Additional parameters.
+     * @param setBased Boolean indicating whether set-based evaluation should be used.
      * @return Boolean indicating satisfaction of the predicate.
      */
     virtual bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

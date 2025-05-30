@@ -48,9 +48,11 @@ struct SetBasedPrediction {
 
     /**
      * Resets helper mappings for obstacle time steps.
+     *
+     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
      */
-    void removeTimeStepFromMappingVariables(size_t timeStep) {
-        obstacleCache.removeTimeStepFromMappingVariables(timeStep);
+    void removeTimeStepFromMappingVariables(size_t timeStep, bool clearReferenceLane) {
+        obstacleCache.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
     }
 };
 
@@ -64,9 +66,11 @@ struct TrajectoryPrediction {
 
     /**
      * Resets helper mappings for obstacle time steps.
+     *
+     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
      */
-    void removeTimeStepFromMappingVariables(size_t timeStep) {
-        obstacleCache.removeTimeStepFromMappingVariables(timeStep);
+    void removeTimeStepFromMappingVariables(size_t timeStep, bool clearReferenceLane) {
+        obstacleCache.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
     }
 
     /**
@@ -87,9 +91,11 @@ struct RecordedStates {
 
     /**
      * Resets helper mappings for obstacle time steps.
+     *
+     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
      */
-    void removeTimeStepFromMappingVariables(size_t timeStep) {
-        occupancyRecorded.removeTimeStepFromMappingVariables(timeStep);
+    void removeTimeStepFromMappingVariables(const size_t timeStep, bool clearReferenceLane) {
+        occupancyRecorded.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
     }
 
     /**
@@ -144,9 +150,8 @@ class Obstacle {
      * @param shape Obstacle shape. (only rectangles are currently supported!)
      */
     Obstacle(size_t obstacleId, ObstacleRole obstacleRole, std::shared_ptr<State> currentState,
-             ObstacleType obstacleType, const ActuatorParameters &actuatorParameters,
-             const SensorParameters &sensorParameters, const TimeParameters &timeParameters,
-             state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape);
+             ObstacleType obstacleType, const ActuatorParameters &actuatorParameters, SensorParameters sensorParameters,
+             const TimeParameters &timeParameters, state_map_t trajectoryPrediction, std::unique_ptr<Shape> shape);
 
     /**
      * Setter for ID of obstacle.
@@ -202,7 +207,7 @@ class Obstacle {
      *
      * @param actuatorParameters Actuator parameters
      */
-    void setActuatorParameters(ActuatorParameters actuatorParameters);
+    void setActuatorParameters(const ActuatorParameters &actuatorParameters);
 
     /**
      * Setter for time parameters.
@@ -415,7 +420,7 @@ class Obstacle {
      *
      * @return Shape object.
      */
-    [[nodiscard]] Shape &getGeoShape();
+    [[nodiscard]] Shape &getGeoShape() const;
 
     /**
      * Getter for occupied lanelets at a time steps within a road network.
@@ -790,21 +795,21 @@ class Obstacle {
      *
      * @return List of time steps of prediction.
      */
-    std::vector<size_t> getPredictionTimeSteps();
+    std::vector<size_t> getPredictionTimeSteps() const;
 
     /**
      * Getter for all history time steps.
      *
      * @return List of time steps of prediction.
      */
-    std::vector<size_t> getHistoryTimeSteps();
+    std::vector<size_t> getHistoryTimeSteps() const;
 
     /**
      * Getter for list of time steps containing current time step and prediction time steps.
      *
      * @return List of time steps.
      */
-    std::vector<size_t> getTimeSteps();
+    std::vector<size_t> getTimeSteps() const;
 
     /**
      * Computes occupied lanes for each time step of obstacle and sets reference lane.
@@ -961,12 +966,27 @@ class Obstacle {
      */
     double getAcceleration(size_t timeStep, bool setBased = false, bool min = true) const;
 
+    /**
+     * Getter for shape as pointer.
+     *
+     * @return Shape as pointer.
+     */
+    std::unique_ptr<Shape> getShapePtr() const;
+
+    /**
+     * Manually sets reference lane. Internal variable for dynamic lane computation is set to false.
+     *
+     * @param refLane New reference lane.
+     */
+    void setReferenceLane(const std::shared_ptr<Lane> &refLane);
+
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
     ObstacleRole obstacleRole{ObstacleRole::DYNAMIC}; //**< CommonRoad obstacle role */
     ObstacleType obstacleType{ObstacleType::unknown}; //**< CommonRoad obstacle type */
     size_t firstTimeStep;                             //**< first time step (current state or in history */
     size_t finalTimeStep;                             //**< final time step (current state or in prediction */
+    bool dynamicRef{true};                            //**< base reference is set manually */
 
     ActuatorParameters actuatorParameters{
         ActuatorParameters::vehicleDefaults()}; //**< actuator parameters, e.g., maximum velocity */
@@ -1188,5 +1208,5 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered.
      * @return Mao of occupancy polygon shape as boost multi-polygon per time step.
      */
-    time_step_map_t<multi_polygon_type> &getOccupancyPolygonShapeCache(size_t timeStep, bool setBased);
+    time_step_map_t<multi_polygon_type> &getOccupancyPolygonShapeCache(size_t timeStep, bool setBased) const;
 };

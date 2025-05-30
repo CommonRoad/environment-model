@@ -2,6 +2,8 @@ import os
 import unittest
 from pathlib import Path
 
+from commonroad.scenario.traffic_light import TrafficLightCycle, TrafficLightCycleElement, TrafficLightState
+
 import crcpp
 import numpy as np
 from commonroad.common.file_reader import CommonRoadFileReader
@@ -511,6 +513,80 @@ class TestPythonInterface(unittest.TestCase):
             len(list(sp.values())[1].shape.shapes),
             len(scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancy_set[1].shape.shapes),
         )
+
+    def test_set_reference_lane_by_line(self):
+        full_path = Path(__file__).parent.parent.parent / "tests/scenarios/USA_Lanker-1/USA_Lanker-1_1_T-1.pb"
+        scenario_path_tmp = Path(full_path)
+        map_path = (
+            scenario_path_tmp.parent
+            / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
+        )
+        scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
+        world = crcpp.World(
+            str(scenario.scenario_id),
+            2,
+            0.1,
+            "DEU",
+            scenario.lanelet_network,
+            [],
+            scenario.obstacles,
+        )
+
+        world.obstacles[0].set_reference_lane_by_line(
+            np.array([28.0, 3.75]), np.array([-15.5, -2.5]), world.road_network
+        )
+        self.assertEqual(
+            len(world.obstacles[0].reference_lane_by_time_step(world.road_network, 0).contained_lanelets), 4
+        )
+
+        world.obstacles[0].set_reference_lane_by_line(
+            np.array([41.0, 2.0]), np.array([-15.5, -2.5]), world.road_network
+        )
+        self.assertEqual(
+            len(world.obstacles[0].reference_lane_by_time_step(world.road_network, 0).contained_lanelets), 5
+        )
+
+        world.obstacles[0].set_reference_lane_by_line(
+            np.array([56.0, 2.0]), np.array([-15.5, -2.5]), world.road_network
+        )
+        self.assertEqual(world.obstacles[0].reference_lane_by_time_step(world.road_network, 0), None)
+
+    def test_update_traffic_lights(self):
+        full_path = Path(__file__).parent.parent.parent / "tests/scenarios/USA_Lanker-1/USA_Lanker-1_1_T-1.pb"
+        scenario_path_tmp = Path(full_path)
+        map_path = (
+            scenario_path_tmp.parent
+            / f"{scenario_path_tmp.stem.split('_')[0]}_{scenario_path_tmp.stem.split('_')[1]}.pb"
+        )
+        scenario = CommonRoadFileReader(filename_dynamic=full_path, filename_map=map_path).open_map_dynamic()
+        world = crcpp.World(
+            str(scenario.scenario_id),
+            2,
+            0.1,
+            "DEU",
+            scenario.lanelet_network,
+            [],
+            scenario.obstacles,
+        )
+        scenario.lanelet_network.traffic_lights[0].traffic_light_cycle = TrafficLightCycle(
+            cycle_elements=[
+                TrafficLightCycleElement(TrafficLightState.RED_YELLOW, duration=42),
+                TrafficLightCycleElement(TrafficLightState.YELLOW, duration=2),
+            ],
+            time_offset=12,
+        )
+        world.road_network.update_traffic_lights(
+            {
+                scenario.lanelet_network.traffic_lights[0].traffic_light_id: scenario.lanelet_network.traffic_lights[
+                    0
+                ].traffic_light_cycle,
+            }
+        )
+        light = world.road_network.find_traffic_light_by_id(scenario.lanelet_network.traffic_lights[0].traffic_light_id)
+        self.assertEqual(light.cycle[0].duration, 42)
+        self.assertEqual(light.cycle[0].color, crcpp.TrafficLightState.red_yellow)
+        self.assertEqual(light.cycle[1].duration, 2)
+        self.assertEqual(light.cycle[1].color, crcpp.TrafficLightState.yellow)
 
 
 if __name__ == "__main__":

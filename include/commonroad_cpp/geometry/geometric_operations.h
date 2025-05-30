@@ -49,7 +49,7 @@ std::vector<vertex> discretizeEllipse(double xPos, double yPos, double aParam, d
  * @param refOrientation Rotation factor.
  * @return Vertices of shape.
  */
-std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
+std::vector<vertex> rotateAndTranslateVertices(const std::vector<vertex> &vertices, vertex refPosition,
                                                double refOrientation);
 
 /**
@@ -58,7 +58,7 @@ std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, ve
  * @param polyline Polyline for which orientation should be calculated.
  * @return List of orientations along polyline.
  */
-std::vector<double> computeOrientationFromPolyline(std::vector<vertex> polyline);
+std::vector<double> computeOrientationFromPolyline(const std::vector<vertex> &polyline);
 
 /**
  * Computes path length along polyline.

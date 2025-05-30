@@ -96,6 +96,9 @@ build-clang:
     CC: clang-$CLANG_VERSION
     CXX: clang++-$CLANG_VERSION
   script:
+    - apt-get remove -y libomp-dev &&
+      apt-get update &&
+      apt-get install -y --no-install-recommends libomp-$CLANG_VERSION-dev
     - cmake -G "Ninja Multi-Config" -S . -B build
     - cmake --build build --config Release
   needs: []

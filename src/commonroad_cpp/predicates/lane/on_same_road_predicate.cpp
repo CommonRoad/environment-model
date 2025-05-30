@@ -10,17 +10,16 @@ bool OnSameRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::vector<std::string> &additionalFunctionParameters,
                                             bool setBased) {
-    std::unordered_set<unsigned long> relevantIDs;
     // temporarily, we checked here for state as in larger scenarios/maps, obstacle might be at end of road and if state
     // is not part of road ccs computations might fail (when using shape alone, state might not be on road) we changed
     // it to shape again since this simplifies set-based eval and assume we perform pre-checks to prevent failing ccs in
     // trajectory eval
-    auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
-    auto refK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
+    const auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
+    const auto refK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
     for (const auto &la : refK->getContainedLanelets()) {
-        for (const auto &la2 : lanelet_operations::adjacentLanelets(la, false)) {
+        for (const auto &la2 : la->getAdjacentBothDir()) {
             if (std::any_of(laneletsP.begin(), laneletsP.end(),
-                            [la2](const std::shared_ptr<Lanelet> &la) { return la->getId() == la2->getId(); }))
+                            [la2](const std::shared_ptr<Lanelet> &la3) { return la3->getId() == la2->getId(); }))
                 return true;
         }
     }

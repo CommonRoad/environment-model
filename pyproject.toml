@@ -9,7 +9,7 @@ authors = [
   {name = "Sebastian Maierhofer"}
 ]
 description = "CommonRoad C++ Environment Model"
-dependencies = [ "commonroad-io @ git+https://github.com/commonroad/commonroad-io@release-2024-3"]
+dependencies = [ "commonroad-io @ git+https://github.com/commonroad/commonroad-io@feature/new-format"]
 
 [project.optional-dependencies]
 test = [

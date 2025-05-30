@@ -99,6 +99,7 @@ set(foreign_targets_base
     yaml-cpp::yaml-cpp
     protobuf::libprotobuf
     Eigen3::Eigen
+    boost_headers
     Boost::geometry
     Boost::program_options
     Boost::filesystem

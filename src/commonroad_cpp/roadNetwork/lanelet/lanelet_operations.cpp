@@ -11,7 +11,7 @@
 LaneletType lanelet_operations::matchStringToLaneletType(const std::string &type) {
     std::string str{type};
     std::transform(str.begin(), str.end(), str.begin(), toupper);
-    str.erase(std::remove_if(str.begin(), str.end(), [](char elem) { return elem == '_'; }), str.end());
+    str.erase(std::remove_if(str.begin(), str.end(), [](const char elem) { return elem == '_'; }), str.end());
     if (LaneletTypeNames.count(str) == 1)
         return LaneletTypeNames.at(str);
     throw std::logic_error("lanelet_operations::matchStringToLaneletType: Invalid lanelet type '" + str + "'!");
@@ -74,7 +74,7 @@ std::vector<LineMarking> lanelet_operations::matchStringToLineMarkingOptions(con
 }
 
 std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet,
-                                                                                 bool sameDirection) {
+                                                                                 const bool sameDirection) {
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
     auto curLanelet{std::move(lanelet)};
 
@@ -91,7 +91,7 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet
 }
 
 std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet,
-                                                                                bool sameDirection) {
+                                                                                const bool sameDirection) {
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
     auto curLanelet{std::move(lanelet)};
 
@@ -107,10 +107,10 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(
     return adjacentLanelets;
 }
 
-std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet,
-                                                                           bool sameDirection) {
-    auto leftLanelets{laneletsLeftOfLanelet(lanelet, sameDirection)};
-    auto rightLanelets{laneletsRightOfLanelet(lanelet, sameDirection)};
+std::vector<std::shared_ptr<Lanelet>>
+lanelet_operations::removeDuplicateLanelets(const std::shared_ptr<Lanelet> &lanelet,
+                                            const std::vector<std::shared_ptr<Lanelet>> &leftLanelets,
+                                            const std::vector<std::shared_ptr<Lanelet>> &rightLanelets) {
     std::initializer_list<std::shared_ptr<Lanelet>> initial_lanelet{lanelet};
 
     // remove duplicates
@@ -119,6 +119,13 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const
     sort(adjLanelets.begin(), adjLanelets.end());
     adjLanelets.erase(unique(adjLanelets.begin(), adjLanelets.end()), adjLanelets.end());
     return adjLanelets;
+}
+
+std::vector<std::shared_ptr<Lanelet>> lanelet_operations::adjacentLanelets(const std::shared_ptr<Lanelet> &lanelet,
+                                                                           const bool sameDirection) {
+    const auto leftLanelets{laneletsLeftOfLanelet(lanelet, sameDirection)};
+    const auto rightLanelets{laneletsRightOfLanelet(lanelet, sameDirection)};
+    return removeDuplicateLanelets(lanelet, leftLanelets, rightLanelets);
 }
 
 bool lanelet_operations::areLaneletsAdjacent(const std::shared_ptr<Lanelet> &laneletOne,
