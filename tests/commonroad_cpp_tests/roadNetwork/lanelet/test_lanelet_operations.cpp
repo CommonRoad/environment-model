@@ -38,6 +38,27 @@ TEST_F(LaneletOperationsTest, MatchStringToLineMarking) {
     EXPECT_EQ(lanelet_operations::matchStringToLineMarking("test"), LineMarking::unknown);
 }
 
+TEST_F(LaneletOperationsTest, ComputeLaneFromTwoPoints) {
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1/USA_Lanker-1_1_T-1.pb"};
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    size_t globalID{123456789};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    roadNetworkScenario->setIdCounterRef(globalIdRef);
+    auto lane{lane_operations::computeLaneFromTwoPoints({28.0, 3.75}, {-15.5, -2.5}, roadNetworkScenario)};
+    EXPECT_EQ(lane->getContainedLaneletIDs().size(), 4);
+    EXPECT_EQ(lane->getContainedLanelets().at(0)->getId(), 3524);
+    EXPECT_EQ(lane->getContainedLanelets().back()->getId(), 3536);
+
+    lane = {lane_operations::computeLaneFromTwoPoints({41.0, 2.0}, {-15.5, -2.5}, roadNetworkScenario)};
+    EXPECT_EQ(lane->getContainedLaneletIDs().size(), 5);
+    EXPECT_EQ(lane->getContainedLanelets().at(0)->getId(), 3499);
+    EXPECT_EQ(lane->getContainedLanelets().back()->getId(), 3536);
+
+    EXPECT_EQ(lane_operations::computeLaneFromTwoPoints({56.0, 2.0}, {-15.5, -2.5}, roadNetworkScenario), nullptr);
+    EXPECT_EQ(lane_operations::computeLaneFromTwoPoints({28.0, 3.75}, {40.5, 10.5}, roadNetworkScenario), nullptr);
+}
+
 TEST_F(LaneletOperationsTest, CreateInterstateLanes) {
     std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() +
                                   "/predicates/DEU_TestOvertakingExitRamp-1/DEU_TestOvertakingExitRamp-1_1_T-1.pb"};

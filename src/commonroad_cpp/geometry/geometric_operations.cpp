@@ -19,14 +19,14 @@ std::vector<vertex> geometric_operations::addObjectDimensionsRectangle(std::vect
         pVertex.resize(4);
         // add the dimension around the point qVertex
         vertex p1Vertex{}, p2Vertex{}, p3Vertex{}, p4Vertex{};
-        p1Vertex.x = qVertex.front().x + (-0.5 * length);
-        p1Vertex.y = qVertex.front().y + (0.5 * width);
-        p2Vertex.x = qVertex.front().x + (0.5 * length);
-        p2Vertex.y = qVertex.front().y + (0.5 * width);
-        p3Vertex.x = qVertex.front().x + (0.5 * length);
-        p3Vertex.y = qVertex.front().y + (-0.5 * width);
-        p4Vertex.x = qVertex.front().x + (-0.5 * length);
-        p4Vertex.y = qVertex.front().y + (-0.5 * width);
+        p1Vertex.x = qVertex.front().x + -0.5 * length;
+        p1Vertex.y = qVertex.front().y + 0.5 * width;
+        p2Vertex.x = qVertex.front().x + 0.5 * length;
+        p2Vertex.y = qVertex.front().y + 0.5 * width;
+        p3Vertex.x = qVertex.front().x + 0.5 * length;
+        p3Vertex.y = qVertex.front().y + -0.5 * width;
+        p4Vertex.x = qVertex.front().x + -0.5 * length;
+        p4Vertex.y = qVertex.front().y + -0.5 * width;
         pVertex[0] = p1Vertex;
         pVertex[1] = p2Vertex;
         pVertex[2] = p3Vertex;
@@ -35,14 +35,14 @@ std::vector<vertex> geometric_operations::addObjectDimensionsRectangle(std::vect
     {
         pVertex.resize(4);
         vertex p1Vertex{}, p2Vertex{}, p3Vertex{}, p4Vertex{};
-        p1Vertex.x = qVertex[0].x + (-0.5 * length);
-        p1Vertex.y = qVertex[0].y + (0.5 * width);
-        p2Vertex.x = qVertex[1].x + (0.5 * length);
-        p2Vertex.y = qVertex[1].y + (0.5 * width);
-        p3Vertex.x = qVertex[2].x + (0.5 * length);
-        p3Vertex.y = qVertex[2].y + (-0.5 * width);
-        p4Vertex.x = qVertex[3].x + (-0.5 * length);
-        p4Vertex.y = qVertex[3].y + (-0.5 * width);
+        p1Vertex.x = qVertex[0].x + -0.5 * length;
+        p1Vertex.y = qVertex[0].y + 0.5 * width;
+        p2Vertex.x = qVertex[1].x + 0.5 * length;
+        p2Vertex.y = qVertex[1].y + 0.5 * width;
+        p3Vertex.x = qVertex[2].x + 0.5 * length;
+        p3Vertex.y = qVertex[2].y + -0.5 * width;
+        p4Vertex.x = qVertex[3].x + -0.5 * length;
+        p4Vertex.y = qVertex[3].y + -0.5 * width;
         pVertex[0] = p1Vertex;
         pVertex[1] = p2Vertex;
         pVertex[2] = p3Vertex;
@@ -52,18 +52,18 @@ std::vector<vertex> geometric_operations::addObjectDimensionsRectangle(std::vect
         pVertex.resize(6);
         // add the dimensions to all six vertices qVertex (Theorem 1)
         vertex p1Vertex{}, p2Vertex{}, p3Vertex{}, p4Vertex{}, p5Vertex{}, p6Vertex{};
-        p1Vertex.x = qVertex[0].x + (-0.5 * length);
-        p1Vertex.y = qVertex[0].y + (0.5 * width);
-        p2Vertex.x = qVertex[1].x + (-0.5 * length);
-        p2Vertex.y = qVertex[1].y + (0.5 * width);
-        p3Vertex.x = qVertex[2].x + (0.5 * length);
-        p3Vertex.y = qVertex[2].y + (0.5 * width);
-        p4Vertex.x = qVertex[3].x + (0.5 * length);
-        p4Vertex.y = qVertex[3].y + (-0.5 * width);
-        p5Vertex.x = qVertex[4].x + (-0.5 * length);
-        p5Vertex.y = qVertex[4].y + (-0.5 * width);
-        p6Vertex.x = qVertex[5].x + (-0.5 * length);
-        p6Vertex.y = qVertex[5].y + (-0.5 * width);
+        p1Vertex.x = qVertex[0].x + -0.5 * length;
+        p1Vertex.y = qVertex[0].y + 0.5 * width;
+        p2Vertex.x = qVertex[1].x + -0.5 * length;
+        p2Vertex.y = qVertex[1].y + 0.5 * width;
+        p3Vertex.x = qVertex[2].x + 0.5 * length;
+        p3Vertex.y = qVertex[2].y + 0.5 * width;
+        p4Vertex.x = qVertex[3].x + 0.5 * length;
+        p4Vertex.y = qVertex[3].y + -0.5 * width;
+        p5Vertex.x = qVertex[4].x + -0.5 * length;
+        p5Vertex.y = qVertex[4].y + -0.5 * width;
+        p6Vertex.x = qVertex[5].x + -0.5 * length;
+        p6Vertex.y = qVertex[5].y + -0.5 * width;
         pVertex[0] = p1Vertex;
         pVertex[1] = p2Vertex;
         pVertex[2] = p3Vertex;
@@ -124,7 +124,7 @@ std::vector<vertex> geometric_operations::addObjectDimensionsRectangle(std::vect
         std::vector<point_type> const &points = hull.outer();
         pVertex.resize(points.size());
         for (std::vector<point_type>::size_type i = 0; i < points.size(); ++i)
-            pVertex[i] = vertex{double(get<0>(points[i])), double(get<1>(points[i]))};
+            pVertex[i] = vertex{(get<0>(points[i])), (get<1>(points[i]))};
 
     } else {
         throw std::runtime_error("Input vector is not a 2D row of vertices.");
@@ -132,14 +132,14 @@ std::vector<vertex> geometric_operations::addObjectDimensionsRectangle(std::vect
     return pVertex;
 }
 
-std::vector<vertex> geometric_operations::discretizeEllipse(double xPos, double yPos, double aParam, double bParam,
-                                                            size_t resolution) {
+std::vector<vertex> geometric_operations::discretizeEllipse(const double xPos, const double yPos, const double aParam,
+                                                            const double bParam, const size_t resolution) {
     // adapted from https://www.geeksforgeeks.org/how-to-discretize-an-ellipse-or-circle-to-a-polygon-using-c-graphics/
     int segments{std::max((int)floor(sqrt(((aParam + bParam) / 2) * resolution)),
                           8)}; // at least eight vertices in circle polygon
     constexpr double twoPi{2 * 3.14159265358979323846};
 
-    double angleShift{twoPi / segments};
+    const double angleShift{twoPi / segments};
     double phi{0};
     std::vector<vertex> vertices;
     for (int i = 0; i < segments; ++i) {
@@ -149,14 +149,15 @@ std::vector<vertex> geometric_operations::discretizeEllipse(double xPos, double 
     return vertices;
 }
 
-std::vector<vertex> geometric_operations::addObjectDimensionsCircle(vertex qVertex, double radius) {
+std::vector<vertex> geometric_operations::addObjectDimensionsCircle(const vertex qVertex, const double radius) {
     return discretizeEllipse(qVertex.x, qVertex.y, radius, radius);
 }
 
-std::vector<vertex> geometric_operations::rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
-                                                                     double refOrientation) {
-    double cosine = cos(refOrientation);
-    double sinus = sin(refOrientation);
+std::vector<vertex> geometric_operations::rotateAndTranslateVertices(const std::vector<vertex> &vertices,
+                                                                     const vertex refPosition,
+                                                                     const double refOrientation) {
+    const double cosine = cos(refOrientation);
+    const double sinus = sin(refOrientation);
     std::vector<vertex> transVertices(vertices.size());
     // rotation
     for (size_t i = 0; i < vertices.size(); i++) {
@@ -173,7 +174,7 @@ std::vector<vertex> geometric_operations::rotateAndTranslateVertices(std::vector
     return transVertices;
 }
 
-std::vector<double> geometric_operations::computeOrientationFromPolyline(std::vector<vertex> polyline) {
+std::vector<double> geometric_operations::computeOrientationFromPolyline(const std::vector<vertex> &polyline) {
     if (polyline.size() < 2)
         throw std::logic_error("geometric_operations computeOrientationFromPolyline: "
                                "Cannot create orientation from polyline of length < 2");
@@ -194,7 +195,7 @@ std::vector<double> geometric_operations::computePathLengthFromPolyline(const st
     for (size_t idx{1}; idx < polyline.size(); ++idx) {
         double xDistance{polyline[idx].x - polyline[idx - 1].x};
         double yDistance{polyline[idx].y - polyline[idx - 1].y};
-        distance[idx] = distance[idx - 1] + std::sqrt((xDistance * xDistance + yDistance * yDistance));
+        distance[idx] = distance[idx - 1] + std::sqrt(xDistance * xDistance + yDistance * yDistance);
     }
     return distance;
 }
@@ -205,28 +206,27 @@ double geometric_operations::interpolate(double xDistance, const std::vector<dou
 
     // Ensure that no 2 adjacent x values are equal,
     // lest we try to divide by zero when we interpolate.
-    const double EPSILON{1.0E-8};
+    constexpr double EPSILON{1.0E-8};
     for (size_t i{1}; i < polyline1.size(); ++i) {
-        double deltaX{std::abs(polyline1[i] - polyline1[i - 1])};
-        if (deltaX < EPSILON) {
-            std::string err{"Potential Divide By Zero: Points " + std::to_string(i - 1) + " And " + std::to_string(i) +
-                            " Are Too Close In Value"};
+        if (const double deltaX{std::abs(polyline1[i] - polyline1[i - 1])}; deltaX < EPSILON) {
+            const std::string err{"Potential Divide By Zero: Points " + std::to_string(i - 1) + " And " +
+                                  std::to_string(i) + " Are Too Close In Value"};
             throw std::range_error(err);
         }
     }
 
     // Define a lambda that returns true if the xDistance value
     // of a point pair is < the caller's xDistance value
-    auto lessThan = [](const double value, double xDistance) { return value < xDistance; };
+    auto lessThan = [](const double value, const double xDistance) { return value < xDistance; };
 
     // Find the first table entry whose value is >= caller's xDistance value
-    auto index{static_cast<size_t>(
+    const auto index{static_cast<size_t>(
         std::distance(polyline1.begin(), std::lower_bound(polyline1.begin(), polyline1.end(), xDistance, lessThan)))};
 
     // If the caller's X value is greater than the largest
     // X value in the table, we can't interpolate.
     if (index == polyline1.size() - 1)
-        return (polyline2[polyline2.size() - 1]);
+        return polyline2[polyline2.size() - 1];
 
     // If the caller's X value is less than the smallest X value in the table,
     // we can't interpolate.
@@ -235,19 +235,19 @@ double geometric_operations::interpolate(double xDistance, const std::vector<dou
     }
 
     // We can interpolate!
-    double upperX{polyline1[index]};
-    double upperY{polyline2[index]};
-    double lowerX{polyline1[index - 1]};
-    double lowerY{polyline2[index - 1]};
+    const double upperX{polyline1[index]};
+    const double upperY{polyline2[index]};
+    const double lowerX{polyline1[index - 1]};
+    const double lowerY{polyline2[index - 1]};
 
-    double deltaY{upperY - lowerY};
-    double deltaX{upperX - lowerX};
+    const double deltaY{upperY - lowerY};
+    const double deltaX{upperX - lowerX};
 
-    return lowerY + ((xDistance - lowerX) / deltaX) * deltaY;
+    return lowerY + (xDistance - lowerX) / deltaX * deltaY;
 }
 
 double geometric_operations::constrainAngle(double angle) {
-    const double TWO_PI = 2.0 * M_PI;
+    constexpr double TWO_PI = 2.0 * M_PI;
     angle = fmod(angle, TWO_PI);
     if (angle < -M_PI) {
         angle += TWO_PI;
@@ -257,13 +257,13 @@ double geometric_operations::constrainAngle(double angle) {
     return angle;
 }
 
-double geometric_operations::subtractOrientations(double lhs, double rhs) {
-    return std::fmod((lhs - rhs) + M_PI * 3, 2 * M_PI) - M_PI;
+double geometric_operations::subtractOrientations(const double lhs, const double rhs) {
+    return std::fmod(lhs - rhs + M_PI * 3, 2 * M_PI) - M_PI;
 }
 
 double geometric_operations::euclideanDistance2Dim(const vertex &pointA, const vertex &pointB) {
-    double xDifference{pointA.x - pointB.x};
-    double yDifference{pointA.y - pointB.y};
+    const double xDifference{pointA.x - pointB.x};
+    const double yDifference{pointA.y - pointB.y};
     return sqrt(pow(xDifference, 2) + pow(yDifference, 2));
 }
 
@@ -292,7 +292,7 @@ double geometric_operations::scalarProduct(const vertex &vertA, const vertex &ve
     return vertA.x * vertB.x + vertA.y * vertB.y;
 }
 
-bool geometric_operations::equalValues(double fstValue, double sndValue, double thresh) {
+bool geometric_operations::equalValues(const double fstValue, const double sndValue, const double thresh) {
     return fabs(fstValue - sndValue) < thresh;
 }
 
@@ -302,15 +302,15 @@ double geometric_operations::getOrientationInDeg(std::shared_ptr<Lanelet> lanele
 
     const auto rad = atan2(last_vertex.y - second_last_vertex.y, last_vertex.x - second_last_vertex.x);
 
-    return (rad / M_PI) * 180;
+    return rad / M_PI * 180;
 }
 
-bool geometric_operations::is90Deg(double degree1, double degree2) {
+bool geometric_operations::is90Deg(const double degree1, const double degree2) {
     return std::abs(std::abs(degree1) - std::abs(degree2)) <= 95 &&
            std::abs(std::abs(degree1) - std::abs(degree2)) >= 85;
 }
 
-bool geometric_operations::is180Deg(double degree1, double degree2) {
+bool geometric_operations::is180Deg(const double degree1, const double degree2) {
     return (std::abs(std::abs(degree1) - std::abs(degree2)) >= 175 &&
             std::abs(std::abs(degree1) - std::abs(degree2)) <= 185) ||
            (std::abs(std::abs(degree1) - std::abs(degree2)) >= -5 &&

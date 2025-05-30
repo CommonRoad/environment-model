@@ -1,10 +1,12 @@
 #pragma once
 
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
-#include "crossing_group.h"
-#include "incoming_group.h"
-#include "outgoing_group.h"
+#include <set>
+
+class CrossingGroup;
+class IncomingGroup;
+class OutgoingGroup;
+class RoadNetwork;
+class Lanelet;
 
 enum class IntersectionType {
     UNKNOWN,
@@ -101,7 +103,7 @@ class Intersection {
     /**
      * Adds an outgoingGroup to the intersection.
      *
-     * @param incoming Pointer to OutgoingGroup.
+     * @param outgoing Pointer to OutgoingGroup.
      */
     void addOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoing);
 

@@ -1,11 +1,11 @@
 #include "test_obstacle.h"
 #include "../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/geometry/circle.h>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
-#include <commonroad_cpp/world.h>
-
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/world.h>
 
 void ObstacleTestInitialization::setUpObstacles() {
     size_t globalID{1234};

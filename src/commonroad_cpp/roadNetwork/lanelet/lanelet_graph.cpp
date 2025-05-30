@@ -1,8 +1,11 @@
+#include "commonroad_cpp/roadNetwork/lanelet/dijkstra.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+
 #include <array>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_graph.h>
 #include <vector>
 
-std::vector<size_t> LaneletGraph::findPaths(size_t src, size_t dst, bool considerAdjacency) {
+std::vector<size_t> LaneletGraph::findPaths(size_t src, const size_t dst, bool considerAdjacency) {
     if (queries.find({src, dst}) != queries.end())
         return queries[{src, dst}];
 
@@ -15,14 +18,13 @@ std::vector<size_t> LaneletGraph::findPaths(size_t src, size_t dst, bool conside
         const auto dstId = static_cast<ptrdiff_t>(verticesAdjSuc.at(dst));
 
         const auto &graph = considerAdjacency ? graphAdjSuc : graphSuc;
-        auto &vertices = considerAdjacency ? verticesAdjSucRes : verticesSucRes;
+        const auto &vertices = considerAdjacency ? verticesAdjSucRes : verticesSucRes;
 
-        dijkstra<size_t, size_t> searcher{graph, srcId};
+        const dijkstra<size_t, size_t> searcher{graph, srcId};
 
         using result_type = std::optional<std::pair<std::vector<std::ptrdiff_t>, std::ptrdiff_t>>;
-        result_type result = searcher.search_path(dstId);
 
-        if (result.has_value()) {
+        if (result_type result = searcher.search_path(dstId); result.has_value()) {
             for (const auto &res : result.value().first)
                 path.push_back(vertices.at(static_cast<const unsigned long>(res)));
         }

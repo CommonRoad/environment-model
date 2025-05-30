@@ -365,7 +365,7 @@ endif()
 
 include(external/ExternalTslRobinMap)
 
-include(ExternalDrivabilityChecker)
+include(ExternalCLCS)
 
 add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 

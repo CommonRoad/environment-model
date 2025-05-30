@@ -9,7 +9,7 @@ bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<W
                                         const std::shared_ptr<Obstacle> &obstacleK,
                                         const std::shared_ptr<Obstacle> &obstacleP,
                                         const std::vector<std::string> &additionalFunctionParameters, bool setBased) {
-    auto leftObstacles{obstacle_operations::obstaclesLeft(timeStep, {obstacleK}, obstacleP, world->getRoadNetwork())};
+    auto leftObstacles{obstacle_operations::obstaclesLeft(timeStep, {obstacleK}, obstacleP)};
     return !leftObstacles.empty();
 }
 

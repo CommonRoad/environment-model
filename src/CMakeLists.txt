@@ -312,7 +312,7 @@ target_link_libraries(env_model_core
         range-v3::range-v3
         commonroad_protobuf
         tsl::robin_map
-        crccosy
+        CommonRoadCLCS::crccosy
         )
 
 target_precompile_headers(env_model_core
@@ -448,13 +448,15 @@ foreach(target IN ITEMS env_model_core env_model_predicates)
         target_compile_definitions(${target} PRIVATE _USE_MATH_DEFINES)
     endif()
 
-    # this adds many warnings to the build. They usually help to find some bugs
-    # TODO: Check whether each warning flag is actually supported by the compiler before adding it
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-        target_compile_options(${target} PRIVATE -Wall -Wextra -Wconversion
-            -pedantic -Wfatal-errors -Wno-unused-parameter)
-    endif()
-    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-        target_compile_options(${target} PRIVATE /W3)
+    if (${PROJECT_NAME}_IS_TOP_LEVEL)
+        # this adds many warnings to the build. They usually help to find some bugs
+        # TODO: Check whether each warning flag is actually supported by the compiler before adding it
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+            target_compile_options(${target} PRIVATE -Wall -Wextra -Wconversion
+                -pedantic -Wfatal-errors -Wno-unused-parameter)
+        endif()
+        if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+            target_compile_options(${target} PRIVATE /W3)
+        endif()
     endif()
 endforeach()

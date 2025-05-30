@@ -2,7 +2,6 @@
 #include <commonroad_cpp/roadNetwork/road_network.h>
 #include <commonroad_cpp/world.h>
 
-#include <commonroad_cpp/predicates/velocity/keeps_lane_speed_limit_predicate.h>
 #include <commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h>
 
@@ -13,7 +12,8 @@ bool PreservesTrafficFlowPredicate::booleanEvaluation(size_t timeStep, const std
                                                       bool setBased) {
     double vMax{std::min({regulatory_elements_utils::speedLimitSuggested(
                               obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep),
-                              TrafficSignTypes::MAX_SPEED, parameters.getParam("desiredInterstateVelocity")),
+                              TrafficSignTypes::MAX_SPEED, parameters.getParam("desiredInterstateVelocity"),
+                              parameters.getParam("desiredUrbanVelocity")),
                           regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
                           parameters.getParam("brakingSpeedLimit"), parameters.getParam("fovSpeedLimit"),
                           parameters.getParam("roadConditionSpeedLimit")})};

@@ -1,6 +1,8 @@
 #include "test_incoming.h"
 #include "../../interfaces/utility_functions.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 
 void IntersectionTestInitialization::setUpIncoming() {
     auto pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_IncomingTest-1/DEU_IncomingTest-1_1_T-1.pb";

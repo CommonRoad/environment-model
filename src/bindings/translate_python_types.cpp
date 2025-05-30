@@ -1,8 +1,10 @@
 #include <iostream>
 
+#include "commonroad_cpp/roadNetwork/intersection/crossing_group.h"
+#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
+#include "commonroad_cpp/roadNetwork/intersection/outgoing_group.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
 #include "commonroad_cpp/world.h"
-#include "nanobind/ndarray.h"
 #include "translate_python_types.h"
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/geometry/circle.h>
@@ -23,7 +25,6 @@
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
 #include <spdlog/spdlog.h>
-
 namespace nb = nanobind;
 
 std::vector<std::shared_ptr<TrafficSign>>
@@ -55,6 +56,17 @@ TranslatePythonTypes::convertTrafficSigns(const nb::handle &py_laneletNetwork) {
     return trafficSignContainer;
 }
 
+std::vector<TrafficLightCycleElement>
+TranslatePythonTypes::convertTrafficLightCycleElements(const nb::handle &py_trafficLightCycle) {
+    std::vector<TrafficLightCycleElement> cycle;
+    for (const nb::handle &py_cycleElement : py_trafficLightCycle) {
+        cycle.push_back(
+            {TrafficLight::matchTrafficLightState(nb::cast<std::string>(py_cycleElement.attr("state").attr("value"))),
+             nb::cast<size_t>(py_cycleElement.attr("duration"))});
+    }
+    return cycle;
+}
+
 std::vector<std::shared_ptr<TrafficLight>>
 TranslatePythonTypes::convertTrafficLights(const nb::handle &py_laneletNetwork) {
     std::vector<std::shared_ptr<TrafficLight>> trafficLightContainer;
@@ -66,12 +78,7 @@ TranslatePythonTypes::convertTrafficLights(const nb::handle &py_laneletNetwork) 
         tempTrafficLight->setId(nb::cast<size_t>(py_trafficLight.attr("traffic_light_id")));
         tempTrafficLight->setOffset(nb::cast<size_t>(py_trafficLight.attr("traffic_light_cycle").attr("time_offset")));
         const nb::list &py_trafficLightCycle = py_trafficLight.attr("traffic_light_cycle").attr("cycle_elements");
-        std::vector<TrafficLightCycleElement> cycle;
-        for (const nb::handle &py_cycleElement : py_trafficLightCycle) {
-            cycle.push_back({TrafficLight::matchTrafficLightState(
-                                 nb::cast<std::string>(py_cycleElement.attr("state").attr("value"))),
-                             nb::cast<size_t>(py_cycleElement.attr("duration"))});
-        }
+        std::vector<TrafficLightCycleElement> cycle{convertTrafficLightCycleElements(py_trafficLightCycle)};
         tempTrafficLight->setCycle(cycle);
         tempTrafficLight->setActive(nb::cast<bool>(py_trafficLight.attr("active")));
         auto py_trafficLightPosition = nb::cast<std::vector<double>>(nb::getattr(py_trafficLight, "position"));
@@ -376,6 +383,7 @@ TranslatePythonTypes::convertIntersections(const nb::handle &py_laneletNetwork,
             crossingIndex++;
         }
         tempIntersectionContainer[intersectionIndex]->setCrossingGroups(crossings);
+        intersectionIndex++;
     }
     return tempIntersectionContainer;
 }
@@ -435,7 +443,7 @@ std::unique_ptr<Shape> extractObstacleShape(nb::handle py_obstacleShape) {
     } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "Polygon") {
         std::vector<vertex> vertices;
         for (const auto &vertex : py_obstacleShape.attr("vertices"))
-            vertices.push_back({nb::cast<double>(vertex.attr("x")), nb::cast<double>(vertex.attr("y"))});
+            vertices.push_back({nb::cast<double>(vertex[0]), nb::cast<double>(vertex[1])});
         return std::make_unique<Polygon>(vertices);
     } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "ShapeGroup") {
         std::vector<std::shared_ptr<Shape>> shapes;
@@ -506,7 +514,9 @@ std::shared_ptr<Obstacle> TranslatePythonTypes::createDynamicObstacle(nb::handle
         for (const auto &py_occupancy : py_singleObstacle.attr("prediction").attr("occupancy_set"))
             tempObstacle->appendOccupancyToSetBasedPrediction(extractOccupancy(py_occupancy));
     else
-        spdlog::error("TranslatePythonTypes::createDynamicObstacle: Unknown prediction type.");
+        spdlog::error(
+            "TranslatePythonTypes::createDynamicObstacle: Unknown prediction type or no prediction. Obstacle ID: " +
+            std::to_string(tempObstacle->getId()));
     if (nb::hasattr(py_singleObstacle, "initial_signal_state") and
         !py_singleObstacle.attr("initial_signal_state").is_none())
         tempObstacle->setCurrentSignalState(extractSignalState(py_singleObstacle.attr("initial_signal_state")));

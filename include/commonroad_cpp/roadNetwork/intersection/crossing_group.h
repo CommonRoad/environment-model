@@ -1,7 +1,10 @@
 #pragma once
 
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+#include <memory>
 #include <optional>
+#include <vector>
+
+class Lanelet;
 
 /**
  * Class representing an incoming of an intersection.

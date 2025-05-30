@@ -71,13 +71,11 @@ std::shared_ptr<Obstacle> obstacleDirectlyLeft(size_t timeStep, const std::vecto
  * @param timeStep Time step of interest.
  * @param obstacles List of relevant obstacles.
  * @param obstacleK Obstacle based on which left obstacles are computed.
- * @param roadNetwork Relevant road network
  * @return List of obstacles located left of given obstacle.
  */
 std::vector<std::shared_ptr<Obstacle>> obstaclesLeft(size_t timeStep,
                                                      const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                                     const std::shared_ptr<Obstacle> &obstacleK,
-                                                     const std::shared_ptr<RoadNetwork> &roadNetwork);
+                                                     const std::shared_ptr<Obstacle> &obstacleK);
 
 /**
  * Computes all obstacle which are left or right adjacent to a given obstacle k based on kth reference path.
@@ -85,13 +83,11 @@ std::vector<std::shared_ptr<Obstacle>> obstaclesLeft(size_t timeStep,
  * @param timeStep Time step of interest.
  * @param obstacles List of relevant obstacles.
  * @param obstacleK Obstacle based on which adjacent obstacles are computed.
- * @param roadNetwork Relevant road network
  * @return List of adjacent obstacles.
  */
 std::vector<std::shared_ptr<Obstacle>> obstaclesAdjacent(size_t timeStep,
                                                          const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                                         const std::shared_ptr<Obstacle> &obstacleK,
-                                                         const std::shared_ptr<RoadNetwork> &roadNetwork);
+                                                         const std::shared_ptr<Obstacle> &obstacleK);
 
 /**
  * Computes obstacle which is directly right of a given obstacle.

@@ -1,8 +1,10 @@
 #pragma once
 
+#include <memory>
 #include <optional>
+#include <vector>
 
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+class Lanelet;
 
 class OutgoingGroup {
   public:

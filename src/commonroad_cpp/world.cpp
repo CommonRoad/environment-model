@@ -1,6 +1,6 @@
-#include <boost/fusion/sequence/intrinsic/size.hpp>
+#include "commonroad_cpp/geometry/rectangle.h"
+
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -9,9 +9,9 @@
 #include <commonroad_cpp/world.h>
 #include <spdlog/spdlog.h>
 
-World::World(std::string name, size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+World::World(std::string name, const size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
              std::vector<std::shared_ptr<Obstacle>> egos, std::vector<std::shared_ptr<Obstacle>> otherObstacles,
-             double timeStepSize, const WorldParameters &worldParams)
+             const double timeStepSize, const WorldParameters &worldParams)
     : name(std::move(name)), timeStep(timeStep), roadNetwork(roadNetwork), egoVehicles(std::move(egos)),
       obstacles(std::move(otherObstacles)), dt(timeStepSize), worldParameters(worldParams) {
     for (const auto &lane : roadNetwork->getLanes())
@@ -67,7 +67,7 @@ std::vector<std::shared_ptr<Obstacle>> World::findObstacles(const std::vector<si
     return obstacleList;
 }
 
-std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
+std::shared_ptr<Obstacle> World::findObstacle(const size_t obstacleId) const {
     for (const auto &obs : obstacles)
         if (obstacleId == obs->getId())
             return obs;
@@ -79,14 +79,16 @@ std::shared_ptr<Obstacle> World::findObstacle(size_t obstacleId) const {
 
 void World::setInitialLanes() {
     // create lanes occupied by ego vehicle
-    for (auto &obs : egoVehicles)
+    for (const auto &obs : egoVehicles)
         obs->computeLanes(roadNetwork);
     // create lanes for each lanelet as initial lanelet
-    for (const auto &la : roadNetwork->getLaneletNetwork())
+    for (const auto &la : roadNetwork->getLaneletNetwork()) {
+        la->initAdjacentRoadLanes();
         auto lanes{lane_operations::createLanesBySingleLanelets(
             {la}, roadNetwork, worldParameters.getSensorParams().getFieldOfViewFront(),
             worldParameters.getSensorParams().getFieldOfViewRear(),
-            worldParameters.getRoadNetworkParams().numIntersectionsPerDirectionLaneGeneration, {})};
+            static_cast<int>(worldParameters.getRoadNetworkParams().numIntersectionsPerDirectionLaneGeneration), {})};
+    }
     // initialize curvilinear coordinate system for each lane
     for (const auto &lane : roadNetwork->getLanes())
         try {
@@ -104,12 +106,12 @@ std::shared_ptr<size_t> World::getIdCounterRef() const { return std::make_shared
 double World::getDt() const { return dt; }
 
 void World::setCurvilinearStates() {
-    for (auto &obs : egoVehicles)
+    for (const auto &obs : egoVehicles)
         if (!obs->isStatic())
             obs->setCurvilinearStates(roadNetwork);
 }
 
-void World::setEgoVehicles(std::vector<std::shared_ptr<Obstacle>> &egos) { egoVehicles = egos; }
+void World::setEgoVehicles(const std::vector<std::shared_ptr<Obstacle>> &egos) { egoVehicles = egos; }
 
 void World::setEgoVehicles(std::vector<size_t> &egos) {
     for (const auto &eID : egos) {
@@ -124,7 +126,7 @@ void World::setEgoVehicles(std::vector<size_t> &egos) {
     // obstacles not in ego list but currently ego are moved to obstacles
     std::vector<size_t> idsToRemove;
     for (const auto &egoTmp : egoVehicles) {
-        if (std::find_if(egos.begin(), egos.end(), [egoTmp](size_t eID) { return egoTmp->getId() == eID; }) ==
+        if (std::find_if(egos.begin(), egos.end(), [egoTmp](const size_t eID) { return egoTmp->getId() == eID; }) ==
             egos.end())
             idsToRemove.push_back(egoTmp->getId());
     }
@@ -180,6 +182,8 @@ void World::updateObstacles(std::vector<std::shared_ptr<Obstacle>> &obstacleList
         }
         (*existingObs)->updateCurrentState(obs->getCurrentState());
         (*existingObs)->setTrajectoryPrediction(obs->getTrajectoryPrediction());
+        (*existingObs)->setGeoShape(obs->getShapePtr()); // set shape as it might change in real-world
+                                                         // simulations due to sensor inaccuracies
         newObstacles.push_back(*existingObs);
     }
 
@@ -187,7 +191,7 @@ void World::updateObstacles(std::vector<std::shared_ptr<Obstacle>> &obstacleList
     for (const auto &obs : obstacles) {
         if (newObstacleIds.find(obs->getId()) == newObstacleIds.end()) {
             // if obs history passed -> continue
-            if (obs->historyPassed(newObstacles.front()->getCurrentState()->getTimeStep()))
+            if (!newObstacles.empty() and obs->historyPassed(newObstacles.front()->getCurrentState()->getTimeStep()))
                 continue;
             newObstacles.push_back(obs);
         }
@@ -196,7 +200,7 @@ void World::updateObstacles(std::vector<std::shared_ptr<Obstacle>> &obstacleList
 }
 
 void World::updateObstaclesTraj(
-    std::vector<std::shared_ptr<Obstacle>> &obstacleList, std::map<size_t, std::shared_ptr<State>> &currentStates,
+    const std::vector<std::shared_ptr<Obstacle>> &obstacleList, std::map<size_t, std::shared_ptr<State>> &currentStates,
     std::map<size_t, tsl::robin_map<time_step_t, std::shared_ptr<State>>> &trajectoryPredictions) {
     std::vector<std::shared_ptr<Obstacle>> newObstacles{obstacleList};
 
@@ -213,7 +217,7 @@ void World::updateObstaclesTraj(
                 return o->getId() == obs->getId();
             }) == newObstacles.end()) {
             // if obs history passed -> continue
-            if (obs->historyPassed(newObstacles.front()->getCurrentState()->getTimeStep()))
+            if (!newObstacles.empty() and obs->historyPassed(newObstacles.front()->getCurrentState()->getTimeStep()))
                 continue;
             newObstacles.push_back(obs);
         }
@@ -223,7 +227,7 @@ void World::updateObstaclesTraj(
 
 WorldParameters World::getWorldParameters() const { return worldParameters; }
 
-void World::propagate(bool ego) {
+void World::propagate(const bool ego) {
     for (const auto &obs : obstacles)
         obs->propagate();
     if (ego)

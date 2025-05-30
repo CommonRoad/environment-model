@@ -2,6 +2,8 @@
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include "commonroad_cpp/goal_state.h"
 #include "commonroad_cpp/planning_problem.h"
+#include "commonroad_cpp/roadNetwork/intersection/crossing_group.h"
+#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
 #include "commonroad_cpp/scenario.h"
 #include <boost/algorithm/string/case_conv.hpp> // for to_lower_copy
 #include <commonroad_cpp/geometry/circle.h>
@@ -385,7 +387,7 @@ ProtobufReader::createTrafficSignFromMessage(const commonroad_map::TrafficSign &
     for (const auto &trafficSignElementMsg : trafficSignMsg.traffic_sign_elements())
         trafficSignElements.push_back(
             ProtobufReader::createTrafficSignElementFromMessage(trafficSignElementMsg, country));
-    trafficSign->setTrafficSignElement(trafficSignElements);
+    trafficSign->setTrafficSignElements(trafficSignElements);
 
     if (trafficSignMsg.has_position())
         trafficSign->setPosition(ProtobufReader::createPointFromMessage(trafficSignMsg.position()));

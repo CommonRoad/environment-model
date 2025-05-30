@@ -26,16 +26,31 @@ void init_python_interface_predicates(nb::module_ &m) {
 
     nb::class_<Constraint>(m, "Constraint").def_rw("real_valued_constraint", &Constraint::realValuedConstraint);
 
+    nb::class_<Timer>(m, "Timer").def(nb::init<>());
+
+    nb::class_<PredicateStatistics>(m, "PredicateStatistics")
+        .def(nb::init<>())
+        .def_ro("computation_time", &PredicateStatistics::computationTime)
+        .def_ro("total_computation_time", &PredicateStatistics::totalComputationTime)
+        .def_ro("num_executions", &PredicateStatistics::numExecutions)
+        .def_ro("num_satisfaction", &PredicateStatistics::numSatisfaction)
+        .def("reset", &PredicateStatistics::reset);
+
     nb::class_<CommonRoadPredicate>(m, "CommonRoadPredicate")
         .def("boolean_evaluation", &CommonRoadPredicate::simpleBooleanEvaluation, nb::arg("timeStep"), nb::arg("world"),
              nb::arg("obstacleK"), nb::arg("obstacleP"),
              nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false)
+        .def("statistic_boolean_evaluation", &CommonRoadPredicate::statisticBooleanEvaluation, nb::arg("timeStep"),
+             nb::arg("world"), nb::arg("obstacleK"), nb::arg("evaluationTimer"), nb::arg("statistics"),
+             nb::arg("obstacleP"), nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"},
+             nb::arg("setBased") = false)
         .def("robust_evaluation", &CommonRoadPredicate::robustEvaluation, nb::arg("timeStep"), nb::arg("world"),
              nb::arg("obstacleK"), nb::arg("obstacleP"),
              nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false)
         .def("constraint_evaluation", &CommonRoadPredicate::constraintEvaluation, nb::arg("timeStep"), nb::arg("world"),
              nb::arg("obstacleK"), nb::arg("obstacleP"),
-             nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false);
+             nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false)
+        .def_prop_ro("is_vehicle_dependent", &CommonRoadPredicate::isVehicleDependent);
 
     instantiate_predicates(m);
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../road_network.h"
-#include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
 #include "lane.h"
 
 namespace lane_operations {
@@ -20,6 +19,9 @@ std::vector<std::vector<std::shared_ptr<Lanelet>>>
 combineLaneletAndSuccessorsToLane(const std::shared_ptr<Lanelet> &curLanelet, double fov, int numIntersections,
                                   const std::vector<std::shared_ptr<Lanelet>> &containedLanelets = {},
                                   double offset = 0.0);
+
+std::shared_ptr<Lane> computeLaneFromTwoPoints(const vertex &start, const vertex &end,
+                                               const std::shared_ptr<RoadNetwork> &road_network);
 
 /**
  * Combines a lanelet and all its predecessors to lanes. For each predecessor lanelet a new lane is created. The

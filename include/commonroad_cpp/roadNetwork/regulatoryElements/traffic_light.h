@@ -1,10 +1,9 @@
 #pragma once
 
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
 #include <cstddef>
 #include <string>
 #include <vector>
-
-#include <commonroad_cpp/auxiliaryDefs/structs.h>
 
 /**
  * Class representing a CommonRoad traffic light.
@@ -39,9 +38,9 @@ class TrafficLight {
     /**
      * Setter for traffic light cycle.
      *
-     * @param light_cycle List of traffic light cycle elements.
+     * @param lightCycle List of traffic light cycle elements.
      */
-    void setCycle(const std::vector<TrafficLightCycleElement> &light_cycle);
+    void setCycle(const std::vector<TrafficLightCycleElement> &lightCycle);
 
     /**
      * Setter for traffic light offset.
@@ -126,7 +125,7 @@ class TrafficLight {
      * @param time Time step of interest.
      * @return Traffic light cycle element which is active at the provided time step.
      */
-    TrafficLightCycleElement getElementAtTime(size_t time);
+    [[nodiscard]] TrafficLightCycleElement getElementAtTime(size_t time) const;
 
     /**
      * Matches a traffic light state given as string to the corresponding enum value.

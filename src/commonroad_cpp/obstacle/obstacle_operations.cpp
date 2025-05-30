@@ -8,7 +8,8 @@
 #include <geometry/curvilinear_coordinate_system.h>
 
 std::shared_ptr<Obstacle>
-obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList, size_t obstacleId) {
+obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>> &obstacleList,
+                                     const size_t obstacleId) {
     std::shared_ptr<Obstacle> temp{nullptr};
     for (const auto &obs : obstacleList) {
         if (obs->getId() == obstacleId) {
@@ -20,7 +21,7 @@ obstacle_operations::getObstacleById(const std::vector<std::shared_ptr<Obstacle>
 }
 
 bool obstacle_operations::lineInFrontOfObstacle(const std::pair<vertex, vertex> &line,
-                                                const std::shared_ptr<Obstacle> &obs, size_t timeStep,
+                                                const std::shared_ptr<Obstacle> &obs, const size_t timeStep,
                                                 const std::shared_ptr<RoadNetwork> &roadNetwork) {
     auto ccs{obs->getReferenceLane(roadNetwork, timeStep)->getCurvilinearCoordinateSystem()};
     if (!ccs->cartesianPointInProjectionDomain(line.first.x, line.first.y))
@@ -58,7 +59,7 @@ ObstacleType obstacle_operations::matchStringToObstacleType(const std::string &t
         throw std::logic_error("obstacle_operations::matchStringToObstacleType: Invalid obstacle type '" + str + "'!");
 }
 
-double obstacle_operations::minDistanceToPoint(size_t timeStep, const std::pair<vertex, vertex> &line,
+double obstacle_operations::minDistanceToPoint(const size_t timeStep, const std::pair<vertex, vertex> &line,
                                                const std::shared_ptr<Obstacle> &obstacleK) {
     auto pointA{(line.first.y - line.second.y)};
     auto pointB{line.second.x - line.first.x};
@@ -73,11 +74,10 @@ double obstacle_operations::minDistanceToPoint(size_t timeStep, const std::pair<
     return *std::min_element(distances.begin(), distances.end());
 }
 
-std::shared_ptr<Obstacle>
-obstacle_operations::obstacleDirectlyLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                          const std::shared_ptr<Obstacle> &obstacleK,
-                                          const std::shared_ptr<RoadNetwork> &roadNetwork) {
-    std::vector<std::shared_ptr<Obstacle>> vehicles_left = obstaclesLeft(timeStep, obstacles, obstacleK, roadNetwork);
+std::shared_ptr<Obstacle> obstacle_operations::obstacleDirectlyLeft(
+    const size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+    const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<RoadNetwork> &roadNetwork) {
+    std::vector<std::shared_ptr<Obstacle>> vehicles_left = obstaclesLeft(timeStep, obstacles, obstacleK);
     if (vehicles_left.empty())
         return nullptr;
     else if (vehicles_left.size() == 1)
@@ -97,15 +97,13 @@ obstacle_operations::obstacleDirectlyLeft(size_t timeStep, const std::vector<std
 }
 
 std::vector<std::shared_ptr<Obstacle>>
-obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                   const std::shared_ptr<Obstacle> &obstacleK,
-                                   const std::shared_ptr<RoadNetwork> &roadNetwork) {
+obstacle_operations::obstaclesLeft(const size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+                                   const std::shared_ptr<Obstacle> &obstacleK) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_left;
-    std::vector<std::shared_ptr<Obstacle>> vehicles_adj =
-        obstaclesAdjacent(timeStep, obstacles, obstacleK, roadNetwork);
+    std::vector<std::shared_ptr<Obstacle>> vehicles_adj = obstaclesAdjacent(timeStep, obstacles, obstacleK);
     // use cross product between a line and a point to evaluate whether obstacle is left
     const auto &obstacleKShapes = obstacleK->getOccupancyPolygonShape(timeStep);
-    for (const auto obstacleKShape : obstacleKShapes) {
+    for (const auto &obstacleKShape : obstacleKShapes) {
         assert(obstacleKShape.outer().size() >= 2);
         vertex vertA{obstacleKShape.outer()[1].x(), obstacleKShape.outer()[1].y()};
         vertex vertC{obstacleKShape.outer()[0].x(), obstacleKShape.outer()[0].y()};
@@ -115,15 +113,15 @@ obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::share
             const auto &obsShapes = obs->getOccupancyPolygonShape(timeStep);
             for (const auto &obsShape : obsShapes) {
                 assert(obsShape.outer().size() >= 4);
-                vertex vertP0{obsShape.outer()[0].x(), obsShape.outer()[0].y()};
-                vertex vertP1{obsShape.outer()[1].x(), obsShape.outer()[1].y()};
-                vertex vertP2{obsShape.outer()[2].x(), obsShape.outer()[2].y()};
-                vertex vertP3{obsShape.outer()[3].x(), obsShape.outer()[3].y()};
-                auto crossProductF0{vertC.x * (vertP0.y - vertA.y) - vertC.y * (vertP0.x - vertA.x)};
-                auto crossProductF1{vertC.x * (vertP1.y - vertA.y) - vertC.y * (vertP1.x - vertA.x)};
-                auto crossProductF2{vertC.x * (vertP2.y - vertA.y) - vertC.y * (vertP2.x - vertA.x)};
-                auto crossProductF3{vertC.x * (vertP3.y - vertA.y) - vertC.y * (vertP3.x - vertA.x)};
-                if (crossProductF0 < 0 and crossProductF1 < 0 and crossProductF2 < 0 and crossProductF3 < 0)
+                const vertex vertP0{obsShape.outer()[0].x(), obsShape.outer()[0].y()};
+                const vertex vertP1{obsShape.outer()[1].x(), obsShape.outer()[1].y()};
+                const vertex vertP2{obsShape.outer()[2].x(), obsShape.outer()[2].y()};
+                const vertex vertP3{obsShape.outer()[3].x(), obsShape.outer()[3].y()};
+                const auto crossProductF0{vertC.x * (vertP0.y - vertA.y) - vertC.y * (vertP0.x - vertA.x)};
+                const auto crossProductF1{vertC.x * (vertP1.y - vertA.y) - vertC.y * (vertP1.x - vertA.x)};
+                const auto crossProductF2{vertC.x * (vertP2.y - vertA.y) - vertC.y * (vertP2.x - vertA.x)};
+                if (auto crossProductF3{vertC.x * (vertP3.y - vertA.y) - vertC.y * (vertP3.x - vertA.x)};
+                    crossProductF0 < 0 and crossProductF1 < 0 and crossProductF2 < 0 and crossProductF3 < 0)
                     vehicles_left.push_back(obs);
             }
         }
@@ -133,13 +131,12 @@ obstacle_operations::obstaclesLeft(size_t timeStep, const std::vector<std::share
 
 std::vector<std::shared_ptr<Obstacle>>
 obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                       const std::shared_ptr<Obstacle> &obstacleK,
-                                       const std::shared_ptr<RoadNetwork> &roadNetwork) {
+                                       const std::shared_ptr<Obstacle> &obstacleK) {
     std::vector<std::shared_ptr<Obstacle>> vehiclesAdj;
     // use cross product between a line and a point to evaluate whether obstacle is adjacent
 
     const auto &obstacleKShapes{obstacleK->getOccupancyPolygonShape(timeStep)};
-    for (const auto obstacleKShape : obstacleKShapes) {
+    for (const auto &obstacleKShape : obstacleKShapes) {
         assert(obstacleKShape.outer().size() >= 4);
         vertex vertA{obstacleKShape.outer()[1].x(), obstacleKShape.outer()[1].y()};
         vertex vertB{obstacleKShape.outer()[2].x(), obstacleKShape.outer()[2].y()};
@@ -180,12 +177,12 @@ obstacle_operations::obstaclesAdjacent(size_t timeStep, const std::vector<std::s
     return vehiclesAdj;
 }
 
-std::shared_ptr<Obstacle>
-obstacle_operations::obstacleDirectlyRight(size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
-                                           const std::shared_ptr<Obstacle> &obstacleK,
-                                           const std::shared_ptr<RoadNetwork> &roadNetwork) {
-    std::vector<std::shared_ptr<Obstacle>> vehicles_right = obstaclesRight(timeStep, obstacles, obstacleK, roadNetwork);
-    if (vehicles_right.empty())
+std::shared_ptr<Obstacle> obstacle_operations::obstacleDirectlyRight(
+    const size_t timeStep, const std::vector<std::shared_ptr<Obstacle>> &obstacles,
+    const std::shared_ptr<Obstacle> &obstacleK, const std::shared_ptr<RoadNetwork> &roadNetwork) {
+    if (std::vector<std::shared_ptr<Obstacle>> vehicles_right =
+            obstaclesRight(timeStep, obstacles, obstacleK, roadNetwork);
+        vehicles_right.empty())
         return nullptr;
     else if (vehicles_right.size() == 1)
         return vehicles_right[0];
@@ -207,8 +204,7 @@ obstacle_operations::obstaclesRight(size_t timeStep, const std::vector<std::shar
                                     const std::shared_ptr<Obstacle> &obstacleK,
                                     const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::vector<std::shared_ptr<Obstacle>> vehicles_right;
-    std::vector<std::shared_ptr<Obstacle>> vehicles_adj =
-        obstaclesAdjacent(timeStep, obstacles, obstacleK, roadNetwork);
+    std::vector<std::shared_ptr<Obstacle>> vehicles_adj = obstaclesAdjacent(timeStep, obstacles, obstacleK);
     // use cross product between a line and a point to evaluate whether obstacle is right
     const auto &obstacleKShapes{obstacleK->getOccupancyPolygonShape(timeStep)};
     for (const auto &obstacleKShape : obstacleKShapes) {
@@ -218,18 +214,18 @@ obstacle_operations::obstaclesRight(size_t timeStep, const std::vector<std::shar
         vertC -= vertA;
 
         for (const auto &obs : vehicles_adj) {
-            const auto &obsShape{obs->getOccupancyPolygonShape(timeStep)};
-            for (const auto &obsShape : obsShape) {
+            const auto &obsShapes{obs->getOccupancyPolygonShape(timeStep)};
+            for (const auto &obsShape : obsShapes) {
                 assert(obsShape.outer().size() >= 4);
-                vertex vertP0{obsShape.outer()[0].x(), obsShape.outer()[0].y()};
-                vertex vertP1{obsShape.outer()[1].x(), obsShape.outer()[1].y()};
-                vertex vertP2{obsShape.outer()[2].x(), obsShape.outer()[2].y()};
-                vertex vertP3{obsShape.outer()[3].x(), obsShape.outer()[3].y()};
-                auto crossProductF0{vertC.x * (vertP0.y - vertA.y) - vertC.y * (vertP0.x - vertA.x)};
-                auto crossProductF1{vertC.x * (vertP1.y - vertA.y) - vertC.y * (vertP1.x - vertA.x)};
-                auto crossProductF2{vertC.x * (vertP2.y - vertA.y) - vertC.y * (vertP2.x - vertA.x)};
-                auto crossProductF3{vertC.x * (vertP3.y - vertA.y) - vertC.y * (vertP3.x - vertA.x)};
-                if (crossProductF0 > 0 and crossProductF1 > 0 and crossProductF2 > 0 and crossProductF3 > 0)
+                const vertex vertP0{obsShape.outer()[0].x(), obsShape.outer()[0].y()};
+                const vertex vertP1{obsShape.outer()[1].x(), obsShape.outer()[1].y()};
+                const vertex vertP2{obsShape.outer()[2].x(), obsShape.outer()[2].y()};
+                const vertex vertP3{obsShape.outer()[3].x(), obsShape.outer()[3].y()};
+                const auto crossProductF0{vertC.x * (vertP0.y - vertA.y) - vertC.y * (vertP0.x - vertA.x)};
+                const auto crossProductF1{vertC.x * (vertP1.y - vertA.y) - vertC.y * (vertP1.x - vertA.x)};
+                const auto crossProductF2{vertC.x * (vertP2.y - vertA.y) - vertC.y * (vertP2.x - vertA.x)};
+                if (const auto crossProductF3{vertC.x * (vertP3.y - vertA.y) - vertC.y * (vertP3.x - vertA.x)};
+                    crossProductF0 > 0 and crossProductF1 > 0 and crossProductF2 > 0 and crossProductF3 > 0)
                     vehicles_right.push_back(obs);
             }
         }
@@ -277,7 +273,7 @@ obstacle_operations::laneletsParallelToObstacle(size_t timeStep, const std::shar
 }
 
 std::vector<std::shared_ptr<Intersection>>
-obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+obstacle_operations::getIntersections(const size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
                                       const std::shared_ptr<Obstacle> &obs) {
     std::vector<std::shared_ptr<Intersection>> relevantIntersections;
     auto relevantLanelets{lane_operations::extractLaneletsFromLanes(obs->getOccupiedLanes(roadNetwork, timeStep))};
@@ -292,13 +288,14 @@ obstacle_operations::getIntersections(size_t timeStep, const std::shared_ptr<Roa
     return relevantIntersections;
 }
 
-double obstacle_operations::drivingDistanceToCoordinatePoint(double xPosition, double yPosition,
+double obstacle_operations::drivingDistanceToCoordinatePoint(const double xPosition, const double yPosition,
                                                              const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                             const std::shared_ptr<Obstacle> &obs, size_t timeStep) {
-    double car_front = obs->frontS(roadNetwork, timeStep);
-    double lane_s = obs->getReferenceLane(roadNetwork, timeStep)
-                        ->getCurvilinearCoordinateSystem()
-                        ->convertToCurvilinearCoords(xPosition, yPosition)[0] -
-                    RoadNetworkParameters::numAdditionalSegmentsCCS * RoadNetworkParameters::eps2;
+                                                             const std::shared_ptr<Obstacle> &obs,
+                                                             const size_t timeStep) {
+    const double car_front{obs->frontS(roadNetwork, timeStep)};
+    const double lane_s{obs->getReferenceLane(roadNetwork, timeStep)
+                            ->getCurvilinearCoordinateSystem()
+                            ->convertToCurvilinearCoords(xPosition, yPosition)[0] -
+                        RoadNetworkParameters::numAdditionalSegmentsCCS * RoadNetworkParameters::eps2};
     return lane_s - car_front;
 }

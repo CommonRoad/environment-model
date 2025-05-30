@@ -68,10 +68,11 @@ double speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const T
  * @param lanelets List of pointers to lanelets which should be considered.
  * @param signType Type of speed limit sign.
  * @param desiredInterstateVelocity Desired interstate velocity.
+ * @param desiredUrbanVelocity Desired urban velocity.
  * @return Speed limit [m/s]
  */
 double speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const TrafficSignTypes &signType,
-                           double desiredInterstateVelocity);
+                           const double desiredInterstateVelocity, const double desiredUrbanVelocity);
 
 /**
  * Computes applicable required speed on provided lanelet.

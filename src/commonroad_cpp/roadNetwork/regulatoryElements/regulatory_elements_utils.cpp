@@ -92,12 +92,20 @@ double regulatory_elements_utils::speedLimit(const std::vector<std::shared_ptr<L
 
 double regulatory_elements_utils::speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
                                                       const TrafficSignTypes &signType,
-                                                      double desiredInterstateVelocity) {
+                                                      const double desiredInterstateVelocity,
+                                                      const double desiredUrbanVelocity) {
     double vMaxLane{speedLimit(lanelets, signType)};
-    if (vMaxLane == std::numeric_limits<double>::max())
-        return desiredInterstateVelocity;
-    else
-        return std::min(desiredInterstateVelocity, vMaxLane);
+    if (vMaxLane == std::numeric_limits<double>::max()) {
+        if (std::any_of(lanelets.begin(), lanelets.end(),
+                        [](const std::shared_ptr<Lanelet> &let) { return let->hasLaneletType(LaneletType::urban); }))
+            return desiredUrbanVelocity;
+        if (std::any_of(lanelets.begin(), lanelets.end(), [](const std::shared_ptr<Lanelet> &let) {
+                return let->hasLaneletType(LaneletType::interstate);
+            }))
+            return desiredInterstateVelocity;
+        return desiredUrbanVelocity;
+    }
+    return vMaxLane;
 }
 
 double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet> &lanelet,

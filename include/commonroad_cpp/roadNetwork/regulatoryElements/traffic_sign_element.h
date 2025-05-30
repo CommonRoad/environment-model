@@ -3,8 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include <memory>
+enum class TrafficSignTypes;
 
 /**
  * Class representing a CommonRoad traffic sign element.
@@ -14,8 +13,9 @@ class TrafficSignElement {
     /**
      * Constructor of traffic sign element.
      *
-     * @param trafficSignId ID of traffic sign element. Note this ID corresponds to the official national traffic sign
-     * ID of a country.
+     * @param trafficSignType Type of traffic sign element. Note this ID corresponds to the official national traffic
+     * sign ID of a country.
+     * @param values List of additional values, e.g., concrete speed limit.
      */
     explicit TrafficSignElement(TrafficSignTypes trafficSignType, std::vector<std::string> values = {});
 

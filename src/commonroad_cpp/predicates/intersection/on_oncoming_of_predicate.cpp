@@ -1,4 +1,5 @@
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
 #include <cmath>
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/obstacle/obstacle.h>

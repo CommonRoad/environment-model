@@ -13,7 +13,8 @@ bool SlowOtherVehiclePredicate::booleanEvaluation(size_t timeStep, const std::sh
     double vMax{std::min(
         {regulatory_elements_utils::speedLimitSuggested(
              obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep, setBased),
-             TrafficSignTypes::MAX_SPEED, parameters.getParam("desiredInterstateVelocity")),
+             TrafficSignTypes::MAX_SPEED, parameters.getParam("desiredInterstateVelocity"),
+             parameters.getParam("desiredUrbanVelocity")),
          regulatory_elements_utils::typeSpeedLimit(obstacleK->getObstacleType()),
          parameters.getParam("roadConditionSpeedLimit")})};
     return vMax - obstacleP->getVelocity(timeStep, setBased, false) >= parameters.getParam("minVelocityDif");
