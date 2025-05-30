@@ -7,6 +7,8 @@
 #include "commonroad_cpp/geometry/polygon.h"
 #include "commonroad_cpp/geometry/shape_group.h"
 #include "commonroad_cpp/obstacle/occupancy.h"
+#include "commonroad_cpp/roadNetwork/intersection/crossing_group.h"
+#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h"

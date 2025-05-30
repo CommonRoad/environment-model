@@ -1,8 +1,11 @@
 #pragma once
 
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include <deque>
+#include <memory>
 #include <optional>
+#include <vector>
+
+class Lanelet;
 
 /**
  * Class representing an incoming of an intersection.
@@ -63,7 +66,7 @@ class IncomingGroup {
     /**
      * Setter for lanelets belonging to incoming.
      *
-     * @param incomingLanelet List of pointers to lanelets.
+     * @param incomingLanelets List of pointers to lanelets.
      */
     void setIncomingLanelets(const std::vector<std::shared_ptr<Lanelet>> &incomingLanelets);
 
@@ -167,13 +170,15 @@ class IncomingGroup {
 
     /**
      * Setter for OutgoingGroup
+     *
      * @param outId size_t
      */
     void setOutgoingGroupID(size_t outId);
 
     /**
      * Getter for OutgoingGroup
-     * @param outId size_t
+     *
+     * @return size_t ID.
      */
     std::optional<size_t> getOutgoingGroupID();
 

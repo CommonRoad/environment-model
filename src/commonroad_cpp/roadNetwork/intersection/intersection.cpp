@@ -1,10 +1,14 @@
+#include "commonroad_cpp/roadNetwork/intersection/crossing_group.h"
+#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
+#include "commonroad_cpp/roadNetwork/intersection/outgoing_group.h"
+#include "commonroad_cpp/roadNetwork/road_network.h"
 #include <algorithm>
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 #include <utility>
 
-Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
+Intersection::Intersection(const size_t intersectionId, std::vector<std::shared_ptr<IncomingGroup>> incomingGroups,
                            std::vector<std::shared_ptr<OutgoingGroup>> outgoingGroups,
                            std::vector<std::shared_ptr<CrossingGroup>> crossingGroups)
     : id(intersectionId), incomings(std::move(incomingGroups)), outgoings(std::move(outgoingGroups)),
@@ -14,7 +18,7 @@ Intersection::Intersection(size_t intersectionId, std::vector<std::shared_ptr<In
 
 size_t Intersection::getId() const { return id; }
 
-void Intersection::setId(size_t num) { Intersection::id = num; }
+void Intersection::setId(const size_t num) { id = num; }
 
 const std::vector<std::shared_ptr<IncomingGroup>> &Intersection::getIncomingGroups() const { return incomings; }
 
@@ -50,12 +54,23 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
         for (const auto &letInc : incom->getIncomingLanelets()) {
             letInc->addLaneletType(LaneletType::incoming);
             memberLanelets.push_back(letInc);
+            std::vector<std::shared_ptr<Lanelet>> allOutgoings;
+            allOutgoings.insert(allOutgoings.end(), incom->getLeftOutgoings().begin(), incom->getLeftOutgoings().end());
+            allOutgoings.insert(allOutgoings.end(), incom->getStraightOutgoings().begin(),
+                                incom->getStraightOutgoings().end());
+            allOutgoings.insert(allOutgoings.end(), incom->getRightOutgoings().begin(),
+                                incom->getRightOutgoings().end());
+
             for (const auto &letOut : incom->getLeftOutgoings()) {
                 letOut->addLaneletType(LaneletType::intersectionLeftOutgoing);
                 letOut->addLaneletType(LaneletType::intersection);
+                letOut->addLaneletType(LaneletType::left);
+                memberLanelets.push_back(letOut);
                 auto path{roadNetwork->getTopologicalMap()->findPaths(letInc->getId(), letOut->getId(), false)};
                 for (const auto &pathLet : path) {
                     auto let{roadNetwork->findLaneletById(pathLet)};
+                    if (std::find(allOutgoings.begin(), allOutgoings.end(), let) != allOutgoings.end())
+                        break;
                     if (!std::any_of(
                             memberLanelets.begin(), memberLanelets.end(),
                             [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
@@ -67,10 +82,14 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
             }
             for (const auto &letOut : incom->getStraightOutgoings()) {
                 letOut->addLaneletType(LaneletType::intersectionStraightOutgoing);
+                letOut->addLaneletType(LaneletType::straight);
                 letOut->addLaneletType(LaneletType::intersection);
+                memberLanelets.push_back(letOut);
                 auto path{roadNetwork->getTopologicalMap()->findPaths(letInc->getId(), letOut->getId(), false)};
                 for (const auto &pathLet : path) {
                     auto let{roadNetwork->findLaneletById(pathLet)};
+                    if (std::find(allOutgoings.begin(), allOutgoings.end(), let) != allOutgoings.end())
+                        break;
                     if (!std::any_of(
                             memberLanelets.begin(), memberLanelets.end(),
                             [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
@@ -82,10 +101,14 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
             }
             for (const auto &letOut : incom->getRightOutgoings()) {
                 letOut->addLaneletType(LaneletType::intersectionRightOutgoing);
+                letOut->addLaneletType(LaneletType::right);
                 letOut->addLaneletType(LaneletType::intersection);
+                memberLanelets.push_back(letOut);
                 auto path{roadNetwork->getTopologicalMap()->findPaths(letInc->getId(), letOut->getId(), false)};
                 for (const auto &pathLet : path) {
                     auto let{roadNetwork->findLaneletById(pathLet)};
+                    if (std::find(allOutgoings.begin(), allOutgoings.end(), let) != allOutgoings.end())
+                        break;
                     if (!std::any_of(
                             memberLanelets.begin(), memberLanelets.end(),
                             [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
@@ -105,7 +128,7 @@ void Intersection::addCrossingGroup(const std::shared_ptr<CrossingGroup> &crossi
 
 const std::vector<std::shared_ptr<CrossingGroup>> &Intersection::getCrossingGroups() const { return crossings; }
 
-bool Intersection::hasIntersectionType(IntersectionType type) {
+bool Intersection::hasIntersectionType(const IntersectionType type) {
     if (intersectionTypes.empty())
         determineIntersectionType();
     if (intersectionTypes.find(type) != intersectionTypes.end())
@@ -114,7 +137,6 @@ bool Intersection::hasIntersectionType(IntersectionType type) {
 }
 
 void Intersection::determineIntersectionType() {
-    bool hasTIntersection{false};
     bool hasFourWayStop{false};
     if (incomings.size() == 4) {
         intersectionTypes.insert(IntersectionType::FOUR_WAY_INTERSECTION);
@@ -129,6 +151,7 @@ void Intersection::determineIntersectionType() {
             hasFourWayStop = true;
         }
     } else if (incomings.size() == 3) {
+        bool hasTIntersection{false};
         const auto incoming_1 = incomings.at(0)->getIncomingLanelets().at(0);
         const auto incoming_2 = incomings.at(1)->getIncomingLanelets().at(0);
         const auto incoming_3 = incomings.at(2)->getIncomingLanelets().at(0);
@@ -160,7 +183,6 @@ void Intersection::determineIntersectionType() {
             geometric_operations::is90Deg(orientation_incoming_3, orientation_incoming_2)) {
             if (geometric_operations::is180Deg(orientation_incoming_1, orientation_incoming_2)) {
                 intersectionTypes.insert(IntersectionType::T_INTERSECTION);
-                hasTIntersection = true;
             }
         }
     }

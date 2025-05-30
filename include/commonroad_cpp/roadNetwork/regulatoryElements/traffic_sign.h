@@ -51,7 +51,7 @@ class TrafficSign {
      *
      * @param trafficSignElement List of traffic sign elements.
      */
-    void setTrafficSignElement(const std::vector<std::shared_ptr<TrafficSignElement>> &trafficSignElement);
+    void setTrafficSignElements(const std::vector<std::shared_ptr<TrafficSignElement>> &trafficSignElement);
 
     /**
      * Setter for traffic sign position.

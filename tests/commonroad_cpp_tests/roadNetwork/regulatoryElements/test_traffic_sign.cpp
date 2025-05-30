@@ -19,7 +19,7 @@ void TrafficSignTest::SetUp() {
     sign2 = std::make_shared<TrafficSign>();
     sign2->setId(signId2);
     sign2->setPosition(pos2);
-    sign2->setTrafficSignElement(signElement2);
+    sign2->setTrafficSignElements(signElement2);
     sign2->addTrafficSignElement(signElement1.at(0));
     sign2->setVirtualElement(true);
 }

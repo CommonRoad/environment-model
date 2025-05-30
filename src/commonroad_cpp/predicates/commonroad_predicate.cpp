@@ -1,15 +1,15 @@
 #include <commonroad_cpp/predicates/commonroad_predicate.h>
 
-bool CommonRoadPredicate::statisticBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+bool CommonRoadPredicate::statisticBooleanEvaluation(const size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Timer> &evaluationTimer,
                                                      const std::shared_ptr<PredicateStatistics> &statistics,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
                                                      const std::vector<std::string> &additionalFunctionParameters,
-                                                     bool setBased) {
-    auto startTime{Timer::start()};
-    bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters, setBased)};
-    long compTime{evaluationTimer->stop(startTime)};
+                                                     const bool setBased) {
+    const auto startTime{Timer::start()};
+    const bool result{booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters, setBased)};
+    const long compTime{evaluationTimer->stop(startTime)};
 
     statistics->numExecutions++;
     statistics->totalComputationTime += static_cast<unsigned long>(compTime);
@@ -24,16 +24,16 @@ PredicateParameters &CommonRoadPredicate::getParameters() { return parameters; }
 
 void CommonRoadPredicate::setParameters(const PredicateParameters &params) { parameters = params; }
 
-CommonRoadPredicate::CommonRoadPredicate(bool vehicleDependent) : vehicleDependent(vehicleDependent) {}
+CommonRoadPredicate::CommonRoadPredicate(const bool vehicleDependent) : vehicleDependent(vehicleDependent) {}
 
-bool CommonRoadPredicate::simpleBooleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+bool CommonRoadPredicate::simpleBooleanEvaluation(const size_t timeStep, const std::shared_ptr<World> &world,
                                                   const std::shared_ptr<Obstacle> &obstacleK,
                                                   const std::shared_ptr<Obstacle> &obstacleP,
                                                   const std::vector<std::string> &additionalFunctionParameters,
-                                                  bool setBased) {
+                                                  const bool setBased) {
     return this->booleanEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters, setBased);
 }
 
-CommonRoadPredicate::~CommonRoadPredicate() {}
+CommonRoadPredicate::~CommonRoadPredicate() = default;
 
 bool CommonRoadPredicate::isVehicleDependent() const { return vehicleDependent; }

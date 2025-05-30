@@ -1,10 +1,9 @@
 #include <commonroad_cpp/roadNetwork/intersection/incoming_group.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 
 #include <algorithm>
 #include <deque>
 #include <utility>
-
-#include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 
 size_t IncomingGroup::getId() const { return groupID; }
 
