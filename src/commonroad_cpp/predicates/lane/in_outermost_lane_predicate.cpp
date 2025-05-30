@@ -2,6 +2,7 @@
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/lane/in_outermost_lane_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/world.h>
 
 bool InOutermostLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

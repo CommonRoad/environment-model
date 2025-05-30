@@ -6,6 +6,7 @@
 #include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 
 void OvertakingAllowedPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 90, 2, 5, 0, 0);

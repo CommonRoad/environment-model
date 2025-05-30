@@ -1,4 +1,5 @@
 #include "test_intersection.h"
+#include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 
 void IntersectionTest::SetUp() { setUpIncoming(); }
 
@@ -22,13 +23,13 @@ TEST_F(IntersectionTest, ComputeMemberLanelets) {
     auto laneletTypeLeft{std::set<LaneletType>{LaneletType::urban, LaneletType::intersection, LaneletType::left}};
     auto laneletTypeRight{std::set<LaneletType>{LaneletType::urban, LaneletType::intersection, LaneletType::right}};
 
-    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(1)->getLaneletTypes(), laneletTypeStraight);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(2)->getLaneletTypes(), laneletTypeStraight);
     EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(5)->getLaneletTypes(), laneletTypeIncoming);
-    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(6)->getLaneletTypes(), laneletTypeLeft);
-    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(13)->getLaneletTypes(), laneletTypeRight);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(7)->getLaneletTypes(), laneletTypeLeft);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(14)->getLaneletTypes(), laneletTypeRight);
 
-    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(1)->getId(), 80);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(2)->getId(), 80);
     EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(5)->getId(), 3);
-    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(6)->getId(), 100);
-    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(13)->getId(), 90);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(7)->getId(), 100);
+    EXPECT_EQ(intersection1->getMemberLanelets(roadNetwork).at(14)->getId(), 90);
 }

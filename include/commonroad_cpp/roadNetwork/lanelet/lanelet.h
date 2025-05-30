@@ -20,7 +20,7 @@ enum class ObstacleType;
 /**
  * Class representing a lanelet.
  */
-class Lanelet {
+class Lanelet : public std::enable_shared_from_this<Lanelet> {
   public:
     /**
      * Default Constructor without parameters for a lanelet.
@@ -138,14 +138,14 @@ class Lanelet {
      *
      * @param marking Left line marking.
      */
-    void setLineMarkingLeft(LineMarking marking);
+    void setLineMarkingLeft(LineMarking marking) const;
 
     /**
      * Setter for right line marking.
      *
      * @param marking Right line marking.
      */
-    void setLineMarkingRight(LineMarking marking);
+    void setLineMarkingRight(LineMarking marking) const;
 
     /**
      * Appends a center vertex.
@@ -404,7 +404,7 @@ class Lanelet {
      *
      * @param laType Lanelet type which should be added.
      */
-    void addLaneletType(LaneletType laType);
+    void addLaneletType(LaneletType laType) const;
 
     /**
      * Computes list of orientation values along lanelet center line or returns already computed values.
@@ -462,32 +462,90 @@ class Lanelet {
      */
     std::vector<vertex> computeIntersectionPointsWithShape(const multi_polygon_type &shape) const;
 
+    /**
+     *  Computes and sets adjacent lanelets.
+     */
+    void initAdjacentRoadLanes();
+
+    /**
+     *  Getter for adjacent left lanelets with the same driving direction.
+     *
+     * @return List of pointers to adjacent left lanelets with the same driving direction.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getAdjacentLeftSameDir() const;
+
+    /**
+     *  Getter for adjacent left lanelets.
+     *
+     * @return List of pointers to adjacent left lanelets.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getAdjacentLeftBothDir() const;
+
+    /**
+     * Getter for adjacent right lanelets with the same driving direction.
+     *
+     * @return List of pointers to adjacent right lanelets with the same driving direction.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getAdjacentRightSameDir() const;
+
+    /**
+     * Getter for adjacent right lanelets.
+     *
+     * @return List of pointers to adjacent right lanelets.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getAdjacentRightBothDir() const;
+
+    /**
+     * Getter for adjacent lanelets with the same driving direction.
+     *
+     * @return List of pointers to adjacent lanelets with the same driving direction.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getAdjacentSameDir() const;
+
+    /**
+     * Getter for adjacent lanelets.
+     *
+     * @return List of pointers to adjacent lanelets.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<Lanelet>> getAdjacentBothDir() const;
+
   private:
-    lanelet_id_t laneletId{};                                  //**< unique ID of lanelet */
-    std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
-    std::vector<vertex> leftBorder;                            //**< vertices of left border */
-    std::vector<vertex> rightBorder;                           //**< vertices of right border */
-    std::vector<std::shared_ptr<Lanelet>> predecessorLanelets; //**< list of pointers to predecessor lanelets */
-    std::vector<std::shared_ptr<Lanelet>> successorLanelets;   //**< list of pointers to successor lanelets */
-    adjacent adjacentLeft;     //**< pointer to left adjacent lanelet and info about its driving direction */
-    adjacent adjacentRight;    //**< pointer to right adjacent lanelet and info about its driving direction */
-    polygon_type outerPolygon; //**< Boost polygon of the lanelet */
-    box boundingBox{};         //**< Boost bounding box of the lanelet */
-    std::vector<std::shared_ptr<TrafficLight>>
+    mutable lanelet_id_t laneletId{};                                  //**< unique ID of lanelet */
+    mutable std::vector<vertex> centerVertices;                        //**< vertices of center line of lanelet */
+    mutable std::vector<vertex> leftBorder;                            //**< vertices of left border */
+    mutable std::vector<vertex> rightBorder;                           //**< vertices of right border */
+    mutable std::vector<std::shared_ptr<Lanelet>> predecessorLanelets; //**< list of pointers to predecessor lanelets */
+    mutable std::vector<std::shared_ptr<Lanelet>> successorLanelets;   //**< list of pointers to successor lanelets */
+    mutable adjacent
+        adjacentLeft; //**< pointer to directly adjacent left lanelet and info about its driving direction */
+    mutable adjacent
+        adjacentRight; //**< pointer to directly adjacent right lanelet and info about its driving direction */
+    mutable polygon_type outerPolygon; //**< Boost polygon of the lanelet */
+    mutable box boundingBox{};         //**< Boost bounding box of the lanelet */
+    mutable std::vector<std::shared_ptr<TrafficLight>>
         trafficLights; //**< list of pointers to traffic lights assigned to lanelet*/
-    std::vector<std::shared_ptr<TrafficSign>>
-        trafficSigns;                                  //**< list of pointers to traffic signs assigned to lanelet*/
-    std::vector<std::shared_ptr<Area>> adjacent_areas; //**< list of pointers to adjacent areas*/
-    std::set<LaneletType> laneletTypes;                //**< list of relevant lanelet types*/
-    std::set<ObstacleType> usersOneWay;                //**< list of relevant allowed users one way*/
-    std::set<ObstacleType> usersBidirectional;         //**< list of relevant allowed users bidirectional*/
-    std::shared_ptr<StopLine> stopLine;                //**< stopLine assigned to lanelet*/
-    LineMarking lineMarkingLeft;                       //**< Line marking of left boundary*/
-    LineMarking lineMarkingRight;                      //**< Line marking of right boundary*/
-    mutable std::vector<double> orientation;           //**< orientation along center line */
-    mutable std::vector<double> pathLength;            //**< path length along center line */
-    mutable std::vector<double> width;                 //**< width along center line */
-    mutable double minWidth;                           //**< minimum width of lanelet */
+    mutable std::vector<std::shared_ptr<TrafficSign>>
+        trafficSigns; //**< list of pointers to traffic signs assigned to lanelet*/
+    mutable std::vector<std::shared_ptr<Area>> adjacent_areas; //**< list of pointers to adjacent areas*/
+    mutable std::set<LaneletType> laneletTypes;                //**< list of relevant lanelet types*/
+    mutable std::set<ObstacleType> usersOneWay;                //**< list of relevant allowed users one way*/
+    mutable std::set<ObstacleType> usersBidirectional;         //**< list of relevant allowed users bidirectional*/
+    mutable std::shared_ptr<StopLine> stopLine;                //**< stopLine assigned to lanelet*/
+    mutable LineMarking lineMarkingLeft;                       //**< Line marking of left boundary*/
+    mutable LineMarking lineMarkingRight;                      //**< Line marking of right boundary*/
+    mutable std::vector<double> orientation;                   //**< orientation along center line */
+    mutable std::vector<double> pathLength;                    //**< path length along center line */
+    mutable std::vector<double> width;                         //**< width along center line */
+    mutable double minWidth;                                   //**< minimum width of lanelet */
+    mutable std::vector<std::shared_ptr<Lanelet>>
+        adjacentLeftSameDir; //**< all adjacent left lanelets with the same driving direction */
+    mutable std::vector<std::shared_ptr<Lanelet>> adjacentLeftBothDir; //**< all adjacent left lanelets */
+    mutable std::vector<std::shared_ptr<Lanelet>>
+        adjacentRightSameDir; //**< all adjacent right lanelets with the same driving direction */
+    mutable std::vector<std::shared_ptr<Lanelet>> adjacentRightBothDir; //**< all adjacent right lanelets */
+    mutable std::vector<std::shared_ptr<Lanelet>>
+        adjacentSameDir; //**< all adjacent lanelets with the same driving direction */
+    mutable std::vector<std::shared_ptr<Lanelet>> adjacentBothDir; //**< all adjacent lanelets */
 };
 
 extern const std::unordered_map<std::string, LaneletType> LaneletTypeNames;

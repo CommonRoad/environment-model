@@ -15,6 +15,7 @@ class TrafficSign;
 class TrafficLight;
 class Intersection;
 class StopLine;
+class TrafficLightCycleElement;
 
 namespace TranslatePythonTypes {
 /**
@@ -84,6 +85,8 @@ std::vector<std::shared_ptr<TrafficSign>> convertTrafficSigns(const nb::handle &
  * @return List of pointers to traffic light objects.
  */
 std::vector<std::shared_ptr<TrafficLight>> convertTrafficLights(const nb::handle &py_laneletNetwork);
+
+std::vector<TrafficLightCycleElement> convertTrafficLightCycleElements(const nb::handle &py_trafficLightCycle);
 
 /**
  * Converts Python intersection objects to C++ representation.

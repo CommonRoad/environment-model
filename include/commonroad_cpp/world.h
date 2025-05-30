@@ -146,7 +146,7 @@ class World {
      *
      * @param egos vector of pointer to obstacles
      */
-    void setEgoVehicles(std::vector<std::shared_ptr<Obstacle>> &egos);
+    void setEgoVehicles(const std::vector<std::shared_ptr<Obstacle>> &egos);
 
     /**
      * Sets ego vehicles for scenario by ids and moves the respective obstacles from obstacles to egoVehicles. Existing
@@ -213,13 +213,16 @@ class World {
     /**
      * Updates and adds obstacles. Moves current state to history and updates prediction.
      * Adds new obstacles and remove non-existing obstacles if history is empty.
+     * New obstacles must be provided via obstacleList. For obstacles which should be updated, current state,
+     * trajectory, and shape must be provided separately. For providing new and already present obstacles as obstacle
+     * list, use updateObstacles.
      *
      * @param obstacleList List of new obstacles.
      * @param currentStates Map of obstacle IDs to current states.
      * @param trajectoryPredictions Map of obstacle IDs to trajectory predictions.
      */
     void
-    updateObstaclesTraj(std::vector<std::shared_ptr<Obstacle>> &obstacleList,
+    updateObstaclesTraj(const std::vector<std::shared_ptr<Obstacle>> &obstacleList,
                         std::map<size_t, std::shared_ptr<State>> &currentStates,
                         std::map<size_t, tsl::robin_map<time_step_t, std::shared_ptr<State>>> &trajectoryPredictions);
 
@@ -254,7 +257,7 @@ class World {
     void initMissingInformation();
 
     /**
-     * Computes for all ego vehicles occupied lanes per time step and sets reference lane.
+     * Computes for all ego vehicles occupied lanes per time step and sets reference lane. Also computes road lanes.
      */
     void setInitialLanes();
 };

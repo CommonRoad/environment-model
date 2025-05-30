@@ -13,7 +13,8 @@ void TrafficSign::addTrafficSignElement(const std::shared_ptr<TrafficSignElement
 
 size_t TrafficSign::getId() const { return id; }
 
-void TrafficSign::setTrafficSignElement(const std::vector<std::shared_ptr<TrafficSignElement>> &newTrafficSignElement) {
+void TrafficSign::setTrafficSignElements(
+    const std::vector<std::shared_ptr<TrafficSignElement>> &newTrafficSignElement) {
     trafficSignElement = newTrafficSignElement;
 }
 

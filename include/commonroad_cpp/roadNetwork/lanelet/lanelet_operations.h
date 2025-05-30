@@ -122,4 +122,19 @@ bool areLaneletsAdjacent(const std::shared_ptr<Lanelet> &laneletOne, const std::
  */
 bool anyLaneletsContainLineMarkingType(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
                                        const std::vector<LineMarking> &lineMarkingTypes, const std::string &direction);
+
+/**
+ * Removes duplicate lanelets from a list of lanelets.
+ *
+ * @param lanelet Base lanelet.
+ * @param leftLanelets Lanelets left of base lanelet.
+ * @param rightLanelets Lanelets right of base lanelet.
+ *
+ * @return Updated list of lanelets.
+ */
+std::vector<std::shared_ptr<Lanelet>>
+removeDuplicateLanelets(const std::shared_ptr<Lanelet> &lanelet,
+                        const std::vector<std::shared_ptr<Lanelet>> &leftLanelets,
+                        const std::vector<std::shared_ptr<Lanelet>> &rightLanelets);
+
 } // namespace lanelet_operations

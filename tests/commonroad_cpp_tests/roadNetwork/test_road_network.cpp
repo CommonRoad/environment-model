@@ -1,5 +1,7 @@
 #include "test_road_network.h"
 #include "../interfaces/utility_functions.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
+
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
@@ -74,6 +76,20 @@ TEST_F(RoadNetworkTest, AddLanes) {
     EXPECT_EQ(lanes.size(), 1);
     EXPECT_EQ(lanes.size(), updatedLanes.size());
     EXPECT_NE(testLanes.at(0)->getId(), updatedLanes.at(0)->getId());
+}
+
+TEST_F(RoadNetworkTest, FindTrafficLightById) {
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1/USA_Lanker-1_1_T-1.pb"};
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
+    size_t globalID{123456789};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    roadNetworkScenario->setIdCounterRef(globalIdRef);
+    const auto light{roadNetworkScenario->findTrafficLightById(3772)};
+    EXPECT_EQ(light->getId(), 3772);
+    const auto light2{roadNetworkScenario->findTrafficLightById(3775)};
+    EXPECT_EQ(light2->getId(), 3775);
+    EXPECT_THROW(roadNetworkScenario->findTrafficLightById(1), std::domain_error);
 }
 
 TEST_F(RoadNetworkTest, GetIntersections) {

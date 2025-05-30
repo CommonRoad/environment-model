@@ -133,7 +133,7 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "commonroad-io", git = "https://github.com/commonroad/commonroad-io?rev=release-2024-3" },
+    { name = "commonroad-io", git = "https://github.com/commonroad/commonroad-io?rev=feature%2Fnew-format" },
     { name = "mkdocs", marker = "extra == 'docs'", specifier = "~=1.6.1" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = "~=9.5.42" },
     { name = "mkdoxy", marker = "extra == 'docs'", specifier = "~=1.2.4" },
@@ -144,8 +144,8 @@ provides-extras = ["test", "docs"]
 
 [[package]]
 name = "commonroad-io"
-version = "2024.2"
-source = { git = "https://github.com/commonroad/commonroad-io?rev=release-2024-3#897f0f979fa9267da23f3b185c6fc4d97a505270" }
+version = "2024.3"
+source = { git = "https://github.com/commonroad/commonroad-io?rev=feature%2Fnew-format#f5f83646d1d82265c44bf2193fc67460d58a98cd" }
 dependencies = [
     { name = "commonroad-vehicle-models" },
     { name = "iso3166" },
@@ -370,7 +370,7 @@ name = "importlib-metadata"
 version = "8.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "zipp" },
+    { name = "zipp", marker = "python_full_version < '3.10'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/33/08/c1395a292bb23fd03bdf572a1357c5a733d3eecbab877641ceacab23db6e/importlib_metadata-8.6.1.tar.gz", hash = "sha256:310b41d755445d74569f993ccfc22838295d9fe005425094fad953d7f15c8580", size = 55767 }
 wheels = [

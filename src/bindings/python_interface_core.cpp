@@ -6,6 +6,7 @@
 #include <commonroad_cpp/obstacle/occupancy.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 #include <commonroad_cpp/roadNetwork/road_network.h>
@@ -23,7 +24,10 @@
 #include "python_interface_predicates.h"
 #include "translate_python_types.h"
 
+#include "commonroad_cpp/roadNetwork/intersection/crossing_group.h"
+#include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
 #include <nanobind/nanobind.h>
+#include <nanobind/ndarray.h>
 #include <nanobind/stl/optional.h>
 #include <nanobind/stl/pair.h>
 #include <nanobind/stl/set.h>
@@ -31,7 +35,6 @@
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/tuple.h>
 #include <nanobind/stl/vector.h>
-
 namespace nb = nanobind;
 
 static std::string extractName(nb::handle py_scen) {
@@ -56,6 +59,15 @@ void updateTrajectory(Obstacle *t, const nb::handle &py_state_list) {
         trajectory[state->getTimeStep()] = state;
     }
     t->setTrajectoryPrediction(trajectory);
+}
+
+void updateTrafficLights(RoadNetwork *t, const nb::dict &py_traffic_light_cycles_mapping) {
+    for (const auto &[tid, cycle] : py_traffic_light_cycles_mapping) {
+        const auto light{t->findTrafficLightById(nb::cast<size_t>(tid))};
+        light->setOffset(nb::cast<size_t>(cycle.attr("time_offset")));
+        light->setCycle(TranslatePythonTypes::convertTrafficLightCycleElements(cycle.attr("cycle_elements")));
+        light->setActive(nb::cast<bool>(cycle.attr("active")));
+    }
 }
 
 void updateCurrentState(Obstacle *t, const nb::handle &py_current_state) {
@@ -94,6 +106,24 @@ void updateObstacles(World *t, const nb::list &py_obstacles) {
     std::vector<std::shared_ptr<Obstacle>> obstacleList{
         TranslatePythonTypes::convertObstacles(py_obstacles, wp, false)};
     t->updateObstacles(obstacleList);
+}
+
+void setReferenceLaneByLine(Obstacle *t, const nb::ndarray<double, nb::shape<2>> &start,
+                            const nb::ndarray<double, nb::shape<2>> &end,
+                            const std::shared_ptr<RoadNetwork> &roadNetwork) {
+    const double *start_data = start.data();
+    const double *end_data = end.data();
+    const vertex start_vertex{start_data[0], start_data[1]};
+    const vertex end_vertex{end_data[0], end_data[1]};
+    const auto newLane{lane_operations::computeLaneFromTwoPoints(start_vertex, end_vertex, roadNetwork)};
+    if (newLane != nullptr) {
+        for (const auto &lane : roadNetwork->getLanes())
+            if (lane->getContainedLaneletIDs() == newLane->getContainedLaneletIDs()) {
+                t->setReferenceLane(lane);
+                return;
+            }
+    }
+    t->setReferenceLane(newLane);
 }
 
 nb::dict getTrajectoryPrediction(Obstacle *t) {
@@ -152,11 +182,36 @@ void init_python_interface_core(nb::module_ &m) {
         .value("no_marking", LineMarking::no_marking)
         .export_values();
 
-    // TODO: Add missing lanelet types
     nb::enum_<LaneletType>(m, "LaneletType")
+        .value("accessRamp", LaneletType::accessRamp)
+        .value("bicycleLane", LaneletType::bicycleLane)
+        .value("border", LaneletType::border)
+        .value("busLane", LaneletType::busLane)
+        .value("busStop", LaneletType::busStop)
+        .value("country", LaneletType::country)
+        .value("crosswalk", LaneletType::crosswalk)
+        .value("driveWay", LaneletType::driveWay)
+        .value("exitRamp", LaneletType::exitRamp)
+        .value("highway", LaneletType::highway)
+        .value("incoming", LaneletType::incoming)
+        .value("intersection", LaneletType::intersection)
+        .value("intersectionLeftOutgoing", LaneletType::intersectionLeftOutgoing)
+        .value("intersectionRightOutgoing", LaneletType::intersectionRightOutgoing)
+        .value("intersectionStraightOutgoing", LaneletType::intersectionStraightOutgoing)
+        .value("interstate", LaneletType::interstate)
         .value("left", LaneletType::left)
+        .value("mainCarriageWay", LaneletType::mainCarriageWay)
+        .value("parking", LaneletType::parking)
+        .value("restricted", LaneletType::restricted)
         .value("right", LaneletType::right)
+        .value("shoulder", LaneletType::shoulder)
+        .value("sidewalk", LaneletType::sidewalk)
+        .value("straight", LaneletType::straight)
+        .value("restrictedArea", LaneletType::restrictedArea)
+        .value("urban", LaneletType::urban)
         .value("unknown", LaneletType::unknown)
+        .value("any", LaneletType::any)
+        .value("all", LaneletType::all)
         .export_values();
 
     nb::class_<StopLine>(m, "StopLine")
@@ -287,13 +342,51 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_rw("time_parameters", &Obstacle::getTimeParameters, &Obstacle::setTimeParameters)
         .def("get_state_by_time_step", &Obstacle::getStateByTimeStep)
         .def("reference_lane_by_time_step", &Obstacle::getReferenceLane)
+        .def("set_reference_lane_by_line", &setReferenceLaneByLine, "py_start", "py_end", "roadNetwork")
         .def("get_time_steps", &Obstacle::getTimeSteps)
         .def("update_trajectory", &updateTrajectory, "py_state_list")
         .def("update_current_state", &updateCurrentState, "py_current_state");
 
-    nb::class_<TrafficSign>(m, "TrafficSign").def_prop_rw("id", &TrafficSign::getId, &TrafficSign::setId);
+    nb::class_<TrafficSignElement>(m, "TrafficSignElement")
+        .def_prop_rw("trafficSignType", &TrafficSignElement::getTrafficSignType,
+                     &TrafficSignElement::setTrafficSignType)
+        .def_prop_rw("additionalValues", &TrafficSignElement::setAdditionalValues,
+                     &TrafficSignElement::getAdditionalValues);
 
-    nb::class_<TrafficLight>(m, "TrafficLight").def_prop_rw("id", &TrafficLight::getId, &TrafficLight::setId);
+    nb::class_<TrafficSign>(m, "TrafficSign")
+        .def_prop_rw("id", &TrafficSign::getId, &TrafficSign::setId)
+        .def_prop_rw("trafficSignElement", &TrafficSign::getTrafficSignElements, &TrafficSign::setTrafficSignElements)
+        .def_prop_rw("position", &TrafficSign::getPosition, &TrafficSign::setPosition);
+
+    nb::enum_<Direction>(m, "Direction")
+        .value("left", Direction::left)
+        .value("straight", Direction::straight)
+        .value("right", Direction::right)
+        .value("leftStraight", Direction::leftStraight)
+        .value("straightRight", Direction::straightRight)
+        .value("leftRight", Direction::leftRight)
+        .value("all", Direction::all)
+        .export_values();
+
+    nb::enum_<TrafficLightState>(m, "TrafficLightState")
+        .value("red", TrafficLightState::red)
+        .value("green", TrafficLightState::green)
+        .value("yellow", TrafficLightState::yellow)
+        .value("red_yellow", TrafficLightState::red_yellow)
+        .value("inactive", TrafficLightState::inactive)
+        .export_values();
+
+    nb::class_<TrafficLightCycleElement>(m, "TrafficLightCycleElement")
+        .def_ro("color", &TrafficLightCycleElement::color)
+        .def_ro("duration", &TrafficLightCycleElement::duration);
+
+    nb::class_<TrafficLight>(m, "TrafficLight")
+        .def_prop_rw("id", &TrafficLight::getId, &TrafficLight::setId)
+        .def_prop_rw("active", &TrafficLight::isActive, &TrafficLight::setActive)
+        .def_prop_rw("offset", &TrafficLight::getOffset, &TrafficLight::setOffset)
+        .def_prop_rw("cycle", &TrafficLight::getCycle, &TrafficLight::setCycle)
+        .def_prop_rw("direction", &TrafficLight::getDirection, &TrafficLight::setDirection)
+        .def_prop_rw("position", &TrafficLight::getPosition, &TrafficLight::setPosition);
 
     nb::class_<Lanelet>(m, "Lanelet")
         .def_prop_rw("id", &Lanelet::getId, &Lanelet::setId)
@@ -314,10 +407,57 @@ void init_python_interface_core(nb::module_ &m) {
 
     nb::class_<Lane, Lanelet>(m, "Lane").def_prop_ro("contained_lanelets", &Lane::getContainedLanelets);
 
+    nb::enum_<IntersectionType>(m, "IntersectionType")
+        .value("UNKNOWN", IntersectionType::UNKNOWN)
+        .value("T_INTERSECTION", IntersectionType::T_INTERSECTION)
+        .value("FOUR_WAY_INTERSECTION", IntersectionType::FOUR_WAY_INTERSECTION)
+        .value("FOUR_WAY_STOP_INTERSECTION", IntersectionType::FOUR_WAY_STOP_INTERSECTION)
+        .value("UNCONTROLLED_INTERSECTION", IntersectionType::UNCONTROLLED_INTERSECTION)
+        .export_values();
+
+    nb::class_<CrossingGroup>(m, "CrossingGroup")
+        .def_prop_ro("crossing_group_id", &CrossingGroup::crossingId)
+        .def_prop_ro("crossing_lanelets", &CrossingGroup::getCrossingGroupLanelets)
+        .def_prop_ro("incoming_group_id", &CrossingGroup::getIncomingGroupID)
+        .def_prop_ro("outgoing_group_id", &CrossingGroup::getOutgoingGroupID);
+
+    nb::class_<IncomingGroup>(m, "IncomingGroup")
+        .def_prop_ro("id", &IncomingGroup::getId)
+        .def_prop_ro("incoming_lanelets", &IncomingGroup::getIncomingLanelets)
+        .def_prop_ro("is_left_of", &IncomingGroup::getIsLeftOf)
+        .def_prop_ro("straight_outgoings", &IncomingGroup::getStraightOutgoings)
+        .def_prop_ro("left_outgoings", &IncomingGroup::getLeftOutgoings)
+        .def_prop_ro("right_outgoings", &IncomingGroup::getRightOutgoings)
+        .def_prop_ro("oncomings", &IncomingGroup::getOncomings)
+        .def_prop_ro("outgoing_group_id", &IncomingGroup::getOutgoingGroupID)
+        .def("get_all_successor_left", &IncomingGroup::getAllSuccessorLeft)
+        .def("get_all_successor_right", &IncomingGroup::getAllSuccessorRight)
+        .def("get_all_successor_straight", &IncomingGroup::getAllSuccessorStraight)
+        .def("get_all_left_turning_lanelets", &IncomingGroup::getAllLeftTurningLanelets)
+        .def("get_all_right_turning_lanelets", &IncomingGroup::getAllRightTurningLanelets)
+        .def("get_all_straight_going_lanelets", &IncomingGroup::getAllStraightGoingLanelets);
+
+    nb::class_<OutgoingGroup>(m, "OutgoingGroup")
+        .def_prop_ro("id", &OutgoingGroup::getId)
+        .def_prop_ro("outgoing_lanelets", &OutgoingGroup::getOutgoingLanelets)
+        .def_prop_ro("incoming_group_id", &OutgoingGroup::getIncomingGroupID);
+
+    nb::class_<Intersection>(m, "Intersection")
+        .def_prop_ro("id", &Intersection::getId)
+        .def_prop_ro("incoming_groups", &Intersection::getIncomingGroups)
+        .def_prop_ro("outgoing_groups", &Intersection::getOutgoingGroups)
+        .def_prop_ro("crossing_groups", &Intersection::getCrossingGroups)
+        .def("get_member_lanelets", &Intersection::getMemberLanelets)
+        .def("has_intersection_type", &Intersection::hasIntersectionType);
+
     nb::class_<RoadNetwork>(m, "RoadNetwork")
         .def_prop_ro("lanelets", &RoadNetwork::getLaneletNetwork)
         .def_prop_ro("lanes", &RoadNetwork::getLanes)
-        .def_prop_ro("traffic_signs", &RoadNetwork::getTrafficSigns);
+        .def_prop_ro("traffic_lights", &RoadNetwork::getTrafficLights)
+        .def_prop_ro("traffic_signs", &RoadNetwork::getTrafficSigns)
+        .def_prop_ro("intersections", &RoadNetwork::getIntersections)
+        .def("update_traffic_lights", &updateTrafficLights)
+        .def("find_traffic_light_by_id", &RoadNetwork::findTrafficLightById);
 
     nb::class_<World>(m, "World")
         .def("__init__",

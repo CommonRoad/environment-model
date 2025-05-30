@@ -74,7 +74,7 @@ TEST_F(ObstacleOperationsTest, ObstaclesLeft) {
     //              0); // other vehicle in same lane in front
     //    EXPECT_EQ(obstacle_operations::obstaclesLeft(6, obstacleList, obstacleThree, roadNetwork).size(),
     //              0); // other vehicle in right lane but not adjacent
-    EXPECT_EQ(obstacle_operations::obstaclesLeft(7, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesLeft(7, obstacleList, obstacleThree).size(),
               2); // other vehicle exactly right of
     //    EXPECT_EQ(obstacle_operations::obstaclesLeft(7, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 2);
     //    EXPECT_EQ(obstacle_operations::obstaclesLeft(7, obstacleList, obstacleThree, roadNetwork).at(1)->getId(), 5);
@@ -87,38 +87,38 @@ TEST_F(ObstacleOperationsTest, ObstaclesLeft) {
 }
 
 TEST_F(ObstacleOperationsTest, ObstaclesAdjacent) {
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(0, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(0, obstacleList, obstacleThree).size(),
               1); // static obstacle adjacent
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(0, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 1);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(1, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(0, obstacleList, obstacleThree).at(0)->getId(), 1);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(1, obstacleList, obstacleThree).size(),
               1); // other vehicle exactly left of
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(1, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(2, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(1, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(2, obstacleList, obstacleThree).size(),
               1); // other vehicle partially left of in front
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(2, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(3, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(2, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(3, obstacleList, obstacleThree).size(),
               1); // other vehicle partially left of in behind
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(3, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(4, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(3, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(4, obstacleList, obstacleThree).size(),
               1); // other vehicle left of in front and behind
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(4, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 5);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(5, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(4, obstacleList, obstacleThree).at(0)->getId(), 5);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(5, obstacleList, obstacleThree).size(),
               0); // other vehicle in same lane in front
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(6, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(6, obstacleList, obstacleThree).size(),
               0); // other vehicle in right lane but not adjacent
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree, roadNetwork).size(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 2);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree, roadNetwork).at(1)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree, roadNetwork).at(2)->getId(), 5);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(8, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree).size(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree).at(0)->getId(), 2);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree).at(1)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree).at(2)->getId(), 5);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(8, obstacleList, obstacleThree).size(),
               1); // other vehicle partially right of in front
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(8, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(9, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(8, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(9, obstacleList, obstacleThree).size(),
               1); // other vehicle partially right of behind
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(9, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(10, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(9, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(10, obstacleList, obstacleThree).size(),
               1); // other vehicle partially right of in front and behind
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(10, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 5);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(10, obstacleList, obstacleThree).at(0)->getId(), 5);
 }
 
 TEST_F(ObstacleOperationsTest, ObstacleDirectlyRight) {

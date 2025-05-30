@@ -1,3 +1,5 @@
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
+
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
@@ -12,6 +14,7 @@
 
 #include <boost/geometry.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
+#include <range/v3/all.hpp>
 
 namespace bg = boost::geometry;
 
@@ -153,6 +156,29 @@ std::vector<vertex> Lanelet::computeIntersectionPointsWithShape(const multi_poly
     return intersectionPoints;
 }
 
+void Lanelet::initAdjacentRoadLanes() {
+    adjacentLeftSameDir = lanelet_operations::laneletsLeftOfLanelet(shared_from_this(), true);
+    adjacentLeftBothDir = lanelet_operations::laneletsLeftOfLanelet(shared_from_this(), false);
+    adjacentRightSameDir = lanelet_operations::laneletsRightOfLanelet(shared_from_this(), true);
+    adjacentRightBothDir = lanelet_operations::laneletsRightOfLanelet(shared_from_this(), false);
+    adjacentBothDir =
+        lanelet_operations::removeDuplicateLanelets(shared_from_this(), adjacentLeftBothDir, adjacentRightBothDir);
+    adjacentSameDir =
+        lanelet_operations::removeDuplicateLanelets(shared_from_this(), adjacentLeftSameDir, adjacentRightSameDir);
+}
+
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getAdjacentLeftSameDir() const { return adjacentLeftSameDir; }
+
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getAdjacentLeftBothDir() const { return adjacentLeftBothDir; }
+
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getAdjacentRightSameDir() const { return adjacentRightSameDir; }
+
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getAdjacentRightBothDir() const { return adjacentRightBothDir; }
+
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getAdjacentSameDir() const { return adjacentSameDir; }
+
+std::vector<std::shared_ptr<Lanelet>> Lanelet::getAdjacentBothDir() const { return adjacentBothDir; }
+
 void Lanelet::constructOuterPolygon() {
     const std::vector<vertex> &leftBorderTemp = this->getLeftBorderVertices();
     const std::vector<vertex> &rightBorderTemp = this->getRightBorderVertices();
@@ -244,9 +270,8 @@ bool Lanelet::hasLaneletType(LaneletType laType) const {
 bool Lanelet::hasLaneletTypes(std::vector<LaneletType> laTypes) const {
     if (laTypes.size() == 1)
         return laTypes.at(0) == LaneletType::any or laneletTypes.find(laTypes.at(0)) != laneletTypes.end();
-    else
-        return std::all_of(laTypes.begin(), laTypes.end(),
-                           [this](LaneletType ty) { return laneletTypes.find(ty) != laneletTypes.end(); });
+    return std::all_of(laTypes.begin(), laTypes.end(),
+                       [this](const LaneletType ty) { return laneletTypes.find(ty) != laneletTypes.end(); });
 }
 
 bool Lanelet::hasTrafficSign(TrafficSignTypes trafficSignType) const {
@@ -256,15 +281,15 @@ bool Lanelet::hasTrafficSign(TrafficSignTypes trafficSignType) const {
                        });
 }
 
-void Lanelet::addLaneletType(LaneletType laType) { laneletTypes.insert(laType); }
+void Lanelet::addLaneletType(LaneletType laType) const { laneletTypes.insert(laType); }
 
 LineMarking Lanelet::getLineMarkingLeft() const { return lineMarkingLeft; }
 
-void Lanelet::setLineMarkingLeft(LineMarking marking) { lineMarkingLeft = marking; }
+void Lanelet::setLineMarkingLeft(LineMarking marking) const { lineMarkingLeft = marking; }
 
 LineMarking Lanelet::getLineMarkingRight() const { return lineMarkingRight; }
 
-void Lanelet::setLineMarkingRight(LineMarking marking) { lineMarkingRight = marking; }
+void Lanelet::setLineMarkingRight(const LineMarking marking) const { lineMarkingRight = marking; }
 
 const std::vector<double> &Lanelet::getOrientation() const {
     if (orientation.empty())

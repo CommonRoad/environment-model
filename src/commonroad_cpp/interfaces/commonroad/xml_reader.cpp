@@ -8,7 +8,6 @@
 #include <pugixml.hpp>
 
 #include "commonroad_cpp/auxiliaryDefs/interval.h"
-#include "commonroad_cpp/geometry/rectangle.h"
 #include "commonroad_cpp/goal_state.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
@@ -29,25 +28,24 @@
 #include "commonroad_cpp/obstacle/occupancy.h"
 
 double XMLReader::extractTimeStepSize(const std::string &xmlFile) {
-    std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
+    const auto doc = std::make_unique<pugi::xml_document>();
     if (!doc->load_file(xmlFile.c_str()))
         throw std::runtime_error("Couldn't load XML-File: " + xmlFile);
     return doc->child("commonRoad").attribute("timeStepSize").as_double();
 }
 
 std::unique_ptr<CommonRoadFactory> createCommonRoadFactory(const std::string &xmlFile) {
-    std::unique_ptr<pugi::xml_document> doc = std::make_unique<pugi::xml_document>();
+    auto doc = std::make_unique<pugi::xml_document>();
 
     if (!doc->load_file(xmlFile.c_str()))
         throw std::runtime_error("Couldn't load XML-File: " + xmlFile);
 
     const auto *const version = doc->child("commonRoad").attribute("commonRoadVersion").value();
-    if ((strcmp(version, "2017a") == 0) || (strcmp(version, "2018b") == 0))
+    if (strcmp(version, "2017a") == 0 || strcmp(version, "2018b") == 0)
         return std::make_unique<CommonRoadFactory2018b>(std::move(doc));
-    else if (strcmp(version, "2020a") == 0)
+    if (strcmp(version, "2020a") == 0)
         return std::make_unique<CommonRoadFactory2020a>(std::move(doc));
-    else
-        throw std::runtime_error("This CommonRoad version is not supported.");
+    throw std::runtime_error("This CommonRoad version is not supported.");
 }
 
 std::vector<std::shared_ptr<Obstacle>> XMLReader::createObstacleFromXML(const std::string &xmlFile) {
@@ -107,14 +105,26 @@ XMLReader::createIntersectionFromXML(const std::string &xmlFile,
 }
 
 std::shared_ptr<State> XMLReader::extractInitialState(const pugi::xml_node &child) {
-    pugi::xml_node states = child;
+    const pugi::xml_node states = child;
+
+    const auto timeStep = states.child("time").child("exact").text().as_ullong();
+    const auto xPosition = states.child("position").child("point").child("x").text().as_double();
+    const auto yPosition = states.child("position").child("point").child("y").text().as_double();
+    const auto orientation = states.child("orientation").child("exact").text().as_double();
+
+    if (std::isnan(xPosition) or std::isnan(yPosition) or std::isnan(orientation)) {
+        throw std::runtime_error("XMLReader::extractInitialState: Value is NaN.");
+    }
+
     State initialState;
-    initialState.setTimeStep(states.child("time").child("exact").text().as_ullong());
-    initialState.setXPosition(states.child("position").child("point").child("x").text().as_double());
-    initialState.setYPosition(states.child("position").child("point").child("y").text().as_double());
-    initialState.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
+    initialState.setTimeStep(timeStep);
+    initialState.setXPosition(xPosition);
+    initialState.setYPosition(yPosition);
+    initialState.setGlobalOrientation(orientation);
     if (states.child("velocity").child("exact").text() != nullptr)
-        initialState.setVelocity(states.child("velocity").child("exact").text().as_double());
+        if (std::isnan(states.child("velocity").child("exact").text().as_double()))
+            throw std::runtime_error("XMLReader::extractInitialState: Velocity is NaN.");
+    initialState.setVelocity(states.child("velocity").child("exact").text().as_double());
     if (states.child("acceleration").child("exact").text() != nullptr)
         initialState.setAcceleration(states.child("acceleration").child("exact").text().as_double());
     return std::make_shared<State>(initialState);
@@ -152,7 +162,7 @@ std::shared_ptr<Occupancy> XMLReader::extractOccupancy(const pugi::xml_node &chi
                 vertex vert{xmlShape.child("center").child("x").text().as_double(),
                             xmlShape.child("center").child("y").text().as_double()};
                 shapes.push_back(std::make_shared<Circle>(xmlShape.child("radius").text().as_double(), vert));
-            } else if ((strcmp(xmlShape.name(), "polygon")) == 0) {
+            } else if (strcmp(xmlShape.name(), "polygon") == 0) {
                 std::vector<vertex> vertices;
                 for (pugi::xml_node points = xmlShape.first_child(); points != nullptr;
                      points = points.next_sibling()) {
@@ -172,12 +182,22 @@ std::shared_ptr<Occupancy> XMLReader::extractOccupancy(const pugi::xml_node &chi
 }
 
 std::shared_ptr<State> XMLReader::extractState(const pugi::xml_node &states) {
+    const auto timeStep = states.child("time").child("exact").text().as_ullong();
+    const auto xPosition = states.child("position").child("point").child("x").text().as_double();
+    const auto yPosition = states.child("position").child("point").child("y").text().as_double();
+    const auto orientation = states.child("orientation").child("exact").text().as_double();
+    const auto velocity = states.child("velocity").child("exact").text().as_double();
+
+    if (std::isnan(velocity) or std::isnan(xPosition) or std::isnan(yPosition) or std::isnan(orientation)) {
+        throw std::runtime_error("XMLReader::extractState: Value is NaN.");
+    }
+
     State sta;
-    sta.setTimeStep(states.child("time").child("exact").text().as_ullong());
-    sta.setXPosition(states.child("position").child("point").child("x").text().as_double());
-    sta.setYPosition(states.child("position").child("point").child("y").text().as_double());
-    sta.setGlobalOrientation(states.child("orientation").child("exact").text().as_double());
-    sta.setVelocity(states.child("velocity").child("exact").text().as_double());
+    sta.setTimeStep(timeStep);
+    sta.setXPosition(xPosition);
+    sta.setYPosition(yPosition);
+    sta.setGlobalOrientation(orientation);
+    sta.setVelocity(velocity);
     if (states.child("acceleration").child("exact").text() != nullptr)
         sta.setAcceleration(states.child("acceleration").child("exact").text().as_double());
     return std::make_shared<State>(sta);
@@ -231,7 +251,7 @@ void XMLReader::createDynamicObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
         } else if ((strcmp(child.name(), "signalSeries")) == 0) {
             for (pugi::xml_node states = child.first_child(); states != nullptr; states = states.next_sibling())
                 tempObstacle->appendSignalStateToSeries(XMLReader::extractSignalState(states));
-        } else if ((strcmp(child.name(), "occupancySet")) == 0) {
+        } else if (strcmp(child.name(), "occupancySet") == 0) {
             for (pugi::xml_node occ = child.first_child(); occ != nullptr; occ = occ.next_sibling()) {
                 tempObstacle->appendOccupancyToSetBasedPrediction(XMLReader::extractOccupancy(occ));
             }
@@ -256,7 +276,7 @@ void XMLReader::extractStaticObstacle(std::vector<std::shared_ptr<Obstacle>> &ob
         if ((strcmp(child.name(), "shape")) == 0) {
             extractObstacleShape(tempObstacle, child);
             continue;
-        } else if ((strcmp(child.name(), "initialState")) == 0) {
+        } else if (strcmp(child.name(), "initialState") == 0) {
             std::shared_ptr<State> initialState{XMLReader::extractInitialState(child)};
             tempObstacle->setCurrentState(initialState);
         }
@@ -348,7 +368,7 @@ void XMLReader::extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanele
 
 // TODO: Merge with extractInitialState
 static std::shared_ptr<InitialState> extractInitialStateForPlanningProblem(const pugi::xml_node &child) {
-    pugi::xml_node states = child;
+    const pugi::xml_node states = child;
 
     auto timeStep = states.child("time").child("exact").text().as_ullong();
     auto xPosition = states.child("position").child("point").child("x").text().as_double();
@@ -357,6 +377,11 @@ static std::shared_ptr<InitialState> extractInitialStateForPlanningProblem(const
     auto velocity = states.child("velocity").child("exact").text().as_double();
     auto yawRate = states.child("yawRate").child("exact").text().as_double();
     auto slipAngle = states.child("slipAngle").child("exact").text().as_double();
+
+    if (std::isnan(velocity) or std::isnan(yawRate) or std::isnan(slipAngle) or std::isnan(xPosition) or
+        std::isnan(yPosition) or std::isnan(orientation)) {
+        throw std::runtime_error("extractInitialStateForPlanningProblem: Value is NaN.");
+    }
 
     std::optional<double> acceleration;
     if (states.child("acceleration").child("exact").text() != nullptr) {

@@ -82,8 +82,9 @@ struct ObstacleCache {
      * Resets helper mappings for specific obstacle time step
      *
      * @param timeStep Relevant time step.
+     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
      */
-    void removeTimeStepFromMappingVariables(size_t timeStep) {
+    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
         occupiedLanelets.erase(timeStep);
         occupiedLaneletsState.erase(timeStep);
         occupiedLaneletsFront.erase(timeStep);
@@ -91,7 +92,8 @@ struct ObstacleCache {
         occupiedLanesDrivingDir.erase(timeStep);
         occupiedLaneletsDrivingDir.erase(timeStep);
         occupiedLaneletsNotDrivingDir.erase(timeStep);
-        referenceLane.erase(timeStep);
+        if (clearReferenceLane)
+            referenceLane.erase(timeStep);
         occupiedLanes.erase(timeStep);
         frontXYPositions.erase(timeStep);
         backXYPositions.erase(timeStep);

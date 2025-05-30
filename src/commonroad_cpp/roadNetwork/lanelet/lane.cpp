@@ -52,9 +52,9 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
 
         reference_path = temp_path;
 
-        curvilinearCoordinateSystem =
-            std::make_shared<CurvilinearCoordinateSystem>(reference_path, RoadNetworkParameters::projectionDomainLimit,
-                                                          RoadNetworkParameters::eps1, RoadNetworkParameters::eps2);
+        curvilinearCoordinateSystem = std::make_shared<CurvilinearCoordinateSystem>(
+            reference_path, RoadNetworkParameters::projectionDomainLimit, RoadNetworkParameters::eps1,
+            RoadNetworkParameters::eps2, "off", 2);
     }
 
     return curvilinearCoordinateSystem;

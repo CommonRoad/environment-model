@@ -204,6 +204,9 @@ TEST_F(WorldTest, UpdateObstacles) {
               initialTimeStepTraj + 1);
     EXPECT_EQ(world1.findObstacle(obsManip->getId())->getTrajectoryHistory().size(), 1);
 
+    newObstacles = {};
+    EXPECT_NO_THROW(world1.updateObstacles(newObstacles));
+
     // obstacle is not present anymore -> should be considered until relevant history size has passed
     for (size_t idx{0}; idx < 4; idx++) {
         obstacleCopyState = obsManip->getTrajectoryPrediction().begin()->second;
@@ -278,6 +281,8 @@ TEST_F(WorldTest, UpdateObstaclesTraj) {
     EXPECT_EQ(world1.findObstacle(obsManip->getId())->getTrajectoryPrediction().begin()->second->getTimeStep(),
               initialTimeStepTraj + 1);
     EXPECT_EQ(world1.findObstacle(obsManip->getId())->getTrajectoryHistory().size(), 1);
+
+    EXPECT_NO_THROW(world1.updateObstaclesTraj({}, cstate, traj));
 
     // obstacle is not present anymore -> should be considered until relevant history size has passed
     newObstacles.clear();
