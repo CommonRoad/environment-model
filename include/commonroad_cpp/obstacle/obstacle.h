@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstddef>
 #include <map>
 #include <memory>
 #include <vector>
@@ -49,11 +48,17 @@ struct SetBasedPrediction {
     /**
      * Resets helper mappings for obstacle time steps.
      *
+     * @param timeStep Time step to remove from mapping variables.
      * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
      */
-    void removeTimeStepFromMappingVariables(size_t timeStep, bool clearReferenceLane) {
+    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
         obstacleCache.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
     }
+
+    /**
+     * Clears the cache for set-based prediction.
+     */
+    void clearCache() { obstacleCache.clear(); }
 };
 
 /**
@@ -67,9 +72,10 @@ struct TrajectoryPrediction {
     /**
      * Resets helper mappings for obstacle time steps.
      *
+     * @param timeStep Time step to remove from mapping variables.
      * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
      */
-    void removeTimeStepFromMappingVariables(size_t timeStep, bool clearReferenceLane) {
+    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
         obstacleCache.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
     }
 
@@ -92,9 +98,10 @@ struct RecordedStates {
     /**
      * Resets helper mappings for obstacle time steps.
      *
+     * @param timeStep Time step to remove from mapping variables.
      * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
      */
-    void removeTimeStepFromMappingVariables(const size_t timeStep, bool clearReferenceLane) {
+    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
         occupancyRecorded.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
     }
 
@@ -628,7 +635,7 @@ class Obstacle {
      * @return lateral position [m]
      */
     double rightD(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                  bool setBased = false);
+                  bool setBased = false) const;
 
     /**
      * Calculates left d-coordinate of vehicle
@@ -649,7 +656,7 @@ class Obstacle {
      * @return lateral position [m]
      */
     double leftD(time_step_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                 bool setBased = false);
+                 bool setBased = false) const;
 
     /**
      * Computes the longitudinal position of obstacle based on Cartesian state and assigned reference lane
@@ -670,7 +677,7 @@ class Obstacle {
      */
     [[nodiscard]] double getLonPosition(time_step_t timeStep,
                                         const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                                        bool setBased = false);
+                                        bool setBased = false) const;
 
     /**
      * Computes the lateral position of obstacle based on Cartesian state and assigned reference lane
@@ -691,7 +698,7 @@ class Obstacle {
      */
     [[nodiscard]] double getLatPosition(time_step_t timeStep,
                                         const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                                        bool setBased = false);
+                                        bool setBased = false) const;
 
     /**
      * Computes the curvilinear orientation of obstacle based on Cartesian state and assigned lane
@@ -835,7 +842,7 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      */
     void convertPointToCurvilinear(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                                   bool setBased = false);
+                                   bool setBased = false) const;
 
     /**
      * Getter for field of view area.
@@ -979,6 +986,11 @@ class Obstacle {
      * @param refLane New reference lane.
      */
     void setReferenceLane(const std::shared_ptr<Lane> &refLane);
+
+    /**
+     * Clears the caches of predictions and recorded states.
+     */
+    void clearCache();
 
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */
