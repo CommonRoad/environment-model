@@ -77,7 +77,7 @@ std::shared_ptr<Obstacle> World::findObstacle(const size_t obstacleId) const {
     throw std::logic_error("Provided obstacle ID does not exist! ID: " + std::to_string(obstacleId));
 }
 
-void World::setInitialLanes() {
+void World::setInitialLanes() const {
     // create lanes occupied by ego vehicle
     for (const auto &obs : egoVehicles)
         obs->computeLanes(roadNetwork);
@@ -105,7 +105,7 @@ std::shared_ptr<size_t> World::getIdCounterRef() const { return std::make_shared
 
 double World::getDt() const { return dt; }
 
-void World::setCurvilinearStates() {
+void World::setCurvilinearStates() const {
     for (const auto &obs : egoVehicles)
         if (!obs->isStatic())
             obs->setCurvilinearStates(roadNetwork);
@@ -142,7 +142,7 @@ void World::setEgoVehicles(std::vector<size_t> &egos) {
 
 const std::string &World::getName() const { return name; }
 
-void World::initMissingInformation() {
+void World::initMissingInformation() const {
     for (const auto &obs : egoVehicles) {
         if (obs->isStatic())
             continue;
@@ -159,7 +159,7 @@ void World::initMissingInformation() {
     }
 }
 
-void World::updateObstacles(std::vector<std::shared_ptr<Obstacle>> &obstacleList) {
+void World::updateObstacles(const std::vector<std::shared_ptr<Obstacle>> &obstacleList) {
     std::vector<std::shared_ptr<Obstacle>> newObstacles;
     std::set<size_t> newObstacleIds;
     for (const auto &obs : obstacleList) {
@@ -227,10 +227,17 @@ void World::updateObstaclesTraj(
 
 WorldParameters World::getWorldParameters() const { return worldParameters; }
 
-void World::propagate(const bool ego) {
+void World::propagate(const bool ego) const {
     for (const auto &obs : obstacles)
         obs->propagate();
     if (ego)
         for (const auto &obs : egoVehicles)
             obs->propagate();
+}
+
+void World::resetObstacleCache() const {
+    for (const auto &obs : obstacles)
+        obs->clearCache();
+    for (const auto &obs : egoVehicles)
+        obs->clearCache();
 }

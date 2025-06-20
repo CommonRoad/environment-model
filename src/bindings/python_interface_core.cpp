@@ -345,6 +345,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def("set_reference_lane_by_line", &setReferenceLaneByLine, "py_start", "py_end", "roadNetwork")
         .def("get_time_steps", &Obstacle::getTimeSteps)
         .def("update_trajectory", &updateTrajectory, "py_state_list")
+        .def("clear_cache", &Obstacle::clearCache)
         .def("update_current_state", &updateCurrentState, "py_current_state");
 
     nb::class_<TrafficSignElement>(m, "TrafficSignElement")
@@ -569,6 +570,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def("propagate", &World::propagate, nb::arg("ego") = true)
         .def("update_obstacles", &World::updateObstacles)
         .def("update_obstacles", &updateObstacles)
+        .def("resetObstacleCache", &World::resetObstacleCache)
         .def("update_obstacles_traj", &updateObstaclesTraj);
 
     nb::class_<PlanningProblem>(m, "PlanningProblem");

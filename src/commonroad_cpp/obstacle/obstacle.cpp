@@ -176,13 +176,13 @@ size_t Obstacle::getId() const { return obstacleId; }
 
 const std::shared_ptr<State> &Obstacle::getCurrentState() const { return recordedStates.currentState; }
 
-bool Obstacle::timeStepExists(size_t timeStep) const {
+bool Obstacle::timeStepExists(const size_t timeStep) const {
     // for computational reasons we assume an obstacle trajectory has equidistant time steps from the initial/current
     // state or first history state until the last trajectory prediction state
     return isStatic() or (firstTimeStep <= timeStep and timeStep <= finalTimeStep);
 }
 
-std::shared_ptr<State> Obstacle::getStateByTimeStep(size_t timeStep) const {
+std::shared_ptr<State> Obstacle::getStateByTimeStep(const size_t timeStep) const {
     if (isStatic())
         return recordedStates.currentState;
     if (trajectoryPrediction.trajectoryPrediction.count(timeStep) == 1)
@@ -264,9 +264,12 @@ state_map_t Obstacle::getTrajectoryHistory() const { return recordedStates.traje
 
 size_t Obstacle::getTrajectoryLength() const { return trajectoryPrediction.trajectoryPrediction.size(); }
 
-multi_polygon_type Obstacle::getOccupancyPolygonShape(size_t timeStep) { return setOccupancyPolygonShape(timeStep); }
+multi_polygon_type Obstacle::getOccupancyPolygonShape(const size_t timeStep) {
+    return setOccupancyPolygonShape(timeStep);
+}
 
-time_step_map_t<multi_polygon_type> &Obstacle::getOccupancyPolygonShapeCache(size_t timeStep, bool setBased) const {
+time_step_map_t<multi_polygon_type> &Obstacle::getOccupancyPolygonShapeCache(const size_t timeStep,
+                                                                             const bool setBased) const {
     if (timeStep <= recordedStates.currentState->getTimeStep())
         return recordedStates.occupancyRecorded.shapeAtTimeStep;
     if (setBased and !setBasedPrediction.setBasedPrediction.empty())
@@ -337,7 +340,7 @@ std::unique_ptr<Shape> Obstacle::getShapePtr() const {
 }
 
 std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
-Obstacle::getOccupiedLaneletsCache(size_t timeStep, bool setBased) {
+Obstacle::getOccupiedLaneletsCache(const size_t timeStep, const bool setBased) {
     if (timeStep <= recordedStates.currentState->getTimeStep())
         return recordedStates.occupancyRecorded.occupiedLanelets;
     if (setBased and !setBasedPrediction.setBasedPrediction.empty())
@@ -346,23 +349,25 @@ Obstacle::getOccupiedLaneletsCache(size_t timeStep, bool setBased) {
 }
 
 std::vector<std::shared_ptr<Lanelet>>
-Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep, bool setBased) {
+Obstacle::setOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                     const bool setBased) {
     auto &occupiedLanelets{getOccupiedLaneletsCache(timeStep, setBased)};
     if (occupiedLanelets.find(timeStep) != occupiedLanelets.end())
         return occupiedLanelets.at(timeStep);
-    multi_polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
+    const multi_polygon_type polygonShape{getOccupancyPolygonShape(timeStep)};
     auto occupied{roadNetwork->findOccupiedLaneletsByShape(polygonShape)};
     occupiedLanelets.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occupied));
     return occupied;
 }
 
 std::vector<std::shared_ptr<Lanelet>>
-Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep, bool setBased) {
+Obstacle::getOccupiedLaneletsByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, const size_t timeStep,
+                                     const bool setBased) {
     return setOccupiedLaneletsByShape(roadNetwork, timeStep, setBased);
 }
 
 std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
-Obstacle::getOccupiedLaneletsStateCache(size_t timeStep, bool setBased) {
+Obstacle::getOccupiedLaneletsStateCache(const size_t timeStep, const bool setBased) {
     if (timeStep <= recordedStates.currentState->getTimeStep())
         return recordedStates.occupancyRecorded.occupiedLaneletsState;
     if (setBased and !setBasedPrediction.setBasedPrediction.empty())
@@ -371,7 +376,8 @@ Obstacle::getOccupiedLaneletsStateCache(size_t timeStep, bool setBased) {
 }
 
 std::vector<std::shared_ptr<Lanelet>>
-Obstacle::getOccupiedLaneletsByState(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep, bool setBased) {
+Obstacle::getOccupiedLaneletsByState(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                     const bool setBased) {
     auto &occupiedLaneletsState{getOccupiedLaneletsStateCache(timeStep, setBased)};
     if (occupiedLaneletsState.find(timeStep) != occupiedLaneletsState.end())
         return occupiedLaneletsState.at(timeStep);
@@ -382,18 +388,19 @@ Obstacle::getOccupiedLaneletsByState(const std::shared_ptr<RoadNetwork> &roadNet
 }
 
 std::vector<std::shared_ptr<Lanelet>>
-Obstacle::getOccupiedLaneletsByFront(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep, bool setBased) {
+Obstacle::getOccupiedLaneletsByFront(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                     const bool setBased) {
     auto &occupiedLaneletsFront{getOccupiedLaneletsFrontCache(timeStep, setBased)};
     if (occupiedLaneletsFront.find(timeStep) != occupiedLaneletsFront.end())
         return occupiedLaneletsFront.at(timeStep);
-    std::vector<double> front = getFrontXYCoordinates(timeStep, setBased);
+    const std::vector<double> front = getFrontXYCoordinates(timeStep, setBased);
     auto occ{roadNetwork->findLaneletsByPosition(front[0], front[1])};
     occupiedLaneletsFront.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occ));
     return occ;
 }
 
 std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
-Obstacle::getOccupiedLaneletsFrontCache(size_t timeStep, bool setBased) {
+Obstacle::getOccupiedLaneletsFrontCache(const size_t timeStep, const bool setBased) {
     if (timeStep <= recordedStates.currentState->getTimeStep())
         return recordedStates.occupancyRecorded.occupiedLaneletsFront;
     if (setBased and !setBasedPrediction.setBasedPrediction.empty())
@@ -402,7 +409,7 @@ Obstacle::getOccupiedLaneletsFrontCache(size_t timeStep, bool setBased) {
 }
 
 std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
-Obstacle::getOccupiedLaneletsBackCache(size_t timeStep, bool setBased) {
+Obstacle::getOccupiedLaneletsBackCache(const size_t timeStep, const bool setBased) {
     if (timeStep <= recordedStates.currentState->getTimeStep())
         return recordedStates.occupancyRecorded.occupiedLaneletsBack;
     if (setBased and !setBasedPrediction.setBasedPrediction.empty())
@@ -411,43 +418,45 @@ Obstacle::getOccupiedLaneletsBackCache(size_t timeStep, bool setBased) {
 }
 
 std::vector<std::shared_ptr<Lanelet>>
-Obstacle::getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep, bool setBased) {
+Obstacle::getOccupiedLaneletsByBack(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
+                                    const bool setBased) {
     auto &occupiedLaneletsBack{getOccupiedLaneletsBackCache(timeStep, setBased)};
     if (occupiedLaneletsBack.find(timeStep) != occupiedLaneletsBack.end())
         return occupiedLaneletsBack.at(timeStep);
-    auto back{getBackXYCoordinates(timeStep, setBased)};
+    const auto back{getBackXYCoordinates(timeStep, setBased)};
     auto occ{roadNetwork->findLaneletsByPosition(back[0], back[1])};
     occupiedLaneletsBack.insert(std::pair<int, std::vector<std::shared_ptr<Lanelet>>>(timeStep, occ));
     return occ;
 }
 
 std::vector<std::shared_ptr<Lanelet>>
-Obstacle::getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep,
-                                                     bool setBased) {
+Obstacle::getOccupiedLaneletsDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                                     const size_t timeStep, const bool setBased) {
     return setOccupiedLaneletsDrivingDirectionByShape(roadNetwork, timeStep, setBased);
 }
 
 std::vector<std::shared_ptr<Lanelet>>
 Obstacle::getOccupiedLaneletsNotDrivingDirectionByShape(const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                        size_t timeStep, bool setBased) {
+                                                        const size_t timeStep, const bool setBased) {
     return setOccupiedLaneletsNotDrivingDirectionByShape(roadNetwork, timeStep, setBased);
 }
 
-void Obstacle::convertPointToCurvilinear(size_t timeStep,
+void Obstacle::convertPointToCurvilinear(const size_t timeStep,
                                          const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                                         bool setBased) {
-    auto state{getStateByTimeStep(timeStep)};
+                                         const bool setBased) const {
+    const auto state{getStateByTimeStep(timeStep)};
     Eigen::Vector2d convertedPoint{ccs->convertToCurvilinearCoords(state->getXPosition(), state->getYPosition())};
     auto ccsTangent{ccs->tangent(convertedPoint.x())};
-    double ccsOrientation = atan2(ccsTangent.y(), ccsTangent.x());
-    double theta = geometric_operations::subtractOrientations(state->getGlobalOrientation(), ccsOrientation);
+    const double ccsOrientation = atan2(ccsTangent.y(), ccsTangent.x());
+    const double theta = geometric_operations::subtractOrientations(state->getGlobalOrientation(), ccsOrientation);
 
     auto &convertedPositions{convertedPositionsCache(timeStep, setBased)};
     convertedPositions[timeStep][ccs] = {
         convertedPoint.x() - RoadNetworkParameters::numAdditionalSegmentsCCS * ccs->eps2(), convertedPoint.y(), theta};
 }
 
-std::string Obstacle::ccsErrorMsg(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+std::string Obstacle::ccsErrorMsg(const size_t timeStep,
+                                  const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
                                   const std::string &func) const {
     std::string refInfo;
     for (const auto &ref : ccs->referencePath())
@@ -459,19 +468,19 @@ std::string Obstacle::ccsErrorMsg(size_t timeStep, const std::shared_ptr<geometr
            " - y-position: " + std::to_string(getStateByTimeStep(timeStep)->getYPosition());
 }
 
-double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
-    double lonPosition = getLonPosition(roadNetwork, timeStep);
-    double theta = getCurvilinearOrientation(roadNetwork, timeStep);
+double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, const size_t timeStep) {
+    const double lonPosition = getLonPosition(roadNetwork, timeStep);
+    const double theta = getCurvilinearOrientation(roadNetwork, timeStep);
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
     // use maximum of all corners
     return lonPosition + rotatedMaximumLongitude(rect, theta);
 }
 
-double Obstacle::frontS(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                        bool setBased) {
-    double frontS{0.0};
+double Obstacle::frontS(const size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                        const bool setBased) {
     if (setBased and timeStep > recordedStates.currentState->getTimeStep()) {
+        double frontS{0.0};
         std::vector<vertex> vertices;
         if (setBasedPrediction.setBasedPrediction.at(timeStep)->getShape()->getType() == ShapeType::polygon)
             vertices = dynamic_cast<const Polygon &>(*setBasedPrediction.setBasedPrediction.at(timeStep)->getShape())
@@ -502,25 +511,25 @@ double Obstacle::frontS(size_t timeStep, const std::shared_ptr<geometry::Curvili
             throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "frontS"));
         }
     }
-    double lonPosition = convertedPositions[timeStep][ccs][0];
-    double theta = convertedPositions[timeStep][ccs][2];
+    const double lonPosition = convertedPositions[timeStep][ccs][0];
+    const double theta = convertedPositions[timeStep][ccs][2];
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
     // use maximum of all corners
     return lonPosition + rotatedMaximumLongitude(rect, theta);
 }
 
-double Obstacle::rearS(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
-    double lonPosition = getLonPosition(roadNetwork, timeStep);
+double Obstacle::rearS(const std::shared_ptr<RoadNetwork> &roadNetwork, const size_t timeStep) {
+    const double lonPosition = getLonPosition(roadNetwork, timeStep);
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
-    double theta = getCurvilinearOrientation(roadNetwork, timeStep);
+    const double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
     // use minimum of all corners
     return lonPosition + rotatedMinimumLongitude(rect, theta);
 }
 
-double Obstacle::rearS(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                       bool setBased) {
+double Obstacle::rearS(const size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                       const bool setBased) {
     double rearS{std::numeric_limits<double>::max()};
     if (setBased and !setBasedPrediction.setBasedPrediction.empty() and timeStep > getCurrentState()->getTimeStep()) {
         std::vector<vertex> vertices;
@@ -552,26 +561,26 @@ double Obstacle::rearS(size_t timeStep, const std::shared_ptr<geometry::Curvilin
             throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "rearS"));
         }
     }
-    double lonPosition = convertedPositions[timeStep][ccs][0];
-    double theta = convertedPositions[timeStep][ccs][2];
+    const double lonPosition = convertedPositions[timeStep][ccs][0];
+    const double theta = convertedPositions[timeStep][ccs][2];
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
     // use minimum of all corners
     return lonPosition + rotatedMinimumLongitude(rect, theta);
 }
 
-double Obstacle::rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep, bool setBased) {
+double Obstacle::rightD(const std::shared_ptr<RoadNetwork> &roadNetwork, const size_t timeStep, const bool setBased) {
     auto &rightLatPosition{getRightLatPositionCache(timeStep, setBased)};
-    double latPos = getLatPosition(roadNetwork, timeStep);
+    const double latPos = getLatPosition(roadNetwork, timeStep);
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
-    double theta = getCurvilinearOrientation(roadNetwork, timeStep);
+    const double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
     rightLatPosition[timeStep] = latPos + rotatedMinimumLatitude(rect, theta);
     return rightLatPosition[timeStep];
 }
 
-double Obstacle::rightD(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                        bool setBased) {
+double Obstacle::rightD(const size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                        const bool setBased) const {
     auto &convertedPositions{convertedPositionsCache(timeStep, setBased)};
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
@@ -580,14 +589,14 @@ double Obstacle::rightD(size_t timeStep, const std::shared_ptr<geometry::Curvili
             throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "rightD"));
         }
     }
-    double latPosition = convertedPositions[timeStep][ccs][1];
-    double theta = convertedPositions[timeStep][ccs][2];
+    const double latPosition = convertedPositions[timeStep][ccs][1];
+    const double theta = convertedPositions[timeStep][ccs][2];
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
     return latPosition + rotatedMinimumLatitude(rect, theta);
 }
 
-time_step_map_t<double> &Obstacle::getRightLatPositionCache(size_t timeStep, bool setBased) const {
+time_step_map_t<double> &Obstacle::getRightLatPositionCache(const size_t timeStep, const bool setBased) const {
     if (timeStep <= recordedStates.currentState->getTimeStep())
         return recordedStates.occupancyRecorded.rightLatPosition;
     if (setBased and !setBasedPrediction.setBasedPrediction.empty())
@@ -595,7 +604,7 @@ time_step_map_t<double> &Obstacle::getRightLatPositionCache(size_t timeStep, boo
     return trajectoryPrediction.obstacleCache.rightLatPosition;
 }
 
-time_step_map_t<double> &Obstacle::getLeftLatPositionCache(size_t timeStep, bool setBased) const {
+time_step_map_t<double> &Obstacle::getLeftLatPositionCache(const size_t timeStep, const bool setBased) const {
     if (timeStep <= recordedStates.currentState->getTimeStep())
         return recordedStates.occupancyRecorded.leftLatPosition;
     if (setBased and !setBasedPrediction.setBasedPrediction.empty())
@@ -603,18 +612,18 @@ time_step_map_t<double> &Obstacle::getLeftLatPositionCache(size_t timeStep, bool
     return trajectoryPrediction.obstacleCache.leftLatPosition;
 }
 
-double Obstacle::leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep, bool setBased) {
+double Obstacle::leftD(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep, const bool setBased) {
     auto &leftLatPosition{getLeftLatPositionCache(timeStep, setBased)};
-    double latPos = getLatPosition(roadNetwork, timeStep);
+    const double latPos = getLatPosition(roadNetwork, timeStep);
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
-    double theta = getCurvilinearOrientation(roadNetwork, timeStep);
+    const double theta = getCurvilinearOrientation(roadNetwork, timeStep);
 
     leftLatPosition[timeStep] = latPos + rotatedMaximumLatitude(rect, theta);
     return leftLatPosition[timeStep];
 }
 
-double Obstacle::leftD(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                       bool setBased) {
+double Obstacle::leftD(const size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                       const bool setBased) const {
     auto &convertedPositions{convertedPositionsCache(timeStep, setBased)};
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
@@ -623,29 +632,30 @@ double Obstacle::leftD(size_t timeStep, const std::shared_ptr<geometry::Curvilin
             throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "leftD"));
         }
     }
-    double latPosition = convertedPositions[timeStep][ccs][1];
-    double theta = convertedPositions[timeStep][ccs][2];
+    const double latPosition = convertedPositions[timeStep][ccs][1];
+    const double theta = convertedPositions[timeStep][ccs][2];
     const auto &rect = dynamic_cast<const Rectangle &>(*geoShape);
 
     return latPosition + rotatedMaximumLatitude(rect, theta);
 }
 
-double Obstacle::getLonPosition(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+double Obstacle::getLonPosition(const std::shared_ptr<RoadNetwork> &roadNetwork, const size_t timeStep) {
     if (getStateByTimeStep(timeStep)->getValidStates().lonPosition)
         return getStateByTimeStep(timeStep)->getLonPosition();
     convertPointToCurvilinear(roadNetwork, timeStep);
     return getStateByTimeStep(timeStep)->getLonPosition();
 }
 
-double Obstacle::getLatPosition(const std::shared_ptr<RoadNetwork> &roadNetwork, size_t timeStep) {
+double Obstacle::getLatPosition(const std::shared_ptr<RoadNetwork> &roadNetwork, const size_t timeStep) {
     if (getStateByTimeStep(timeStep)->getValidStates().latPosition)
         return getStateByTimeStep(timeStep)->getLatPosition();
     convertPointToCurvilinear(roadNetwork, timeStep);
     return getStateByTimeStep(timeStep)->getLatPosition();
 }
 
-double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                                bool setBased) {
+double Obstacle::getLonPosition(const size_t timeStep,
+                                const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                                const bool setBased) const {
     auto &convertedPositions{convertedPositionsCache(timeStep, setBased)};
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
@@ -657,8 +667,9 @@ double Obstacle::getLonPosition(size_t timeStep, const std::shared_ptr<geometry:
     return convertedPositions[timeStep][ccs][0];
 }
 
-double Obstacle::getLatPosition(size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                                bool setBased) {
+double Obstacle::getLatPosition(const size_t timeStep,
+                                const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
+                                const bool setBased) const {
     auto &convertedPositions{convertedPositionsCache(timeStep, setBased)};
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
@@ -682,7 +693,7 @@ double Obstacle::getCurvilinearOrientation(const std::shared_ptr<RoadNetwork> &r
 
 double Obstacle::getCurvilinearOrientation(size_t timeStep,
                                            const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                                           bool setBased) {
+                                           const bool setBased) {
     auto &convertedPositions{convertedPositionsCache(timeStep, setBased)};
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
@@ -1219,6 +1230,12 @@ double Obstacle::getLateralDistanceToObstacle(time_step_t timeStep, const std::s
     lateralDistanceToObjects[timeStep][obs->getId()] = min;
 
     return min;
+}
+
+void Obstacle::clearCache() {
+    recordedStates.clearCache();
+    trajectoryPrediction.clearCache();
+    setBasedPrediction.clearCache();
 }
 
 void Obstacle::setReferenceLane(const std::shared_ptr<Lane> &refLane) {
