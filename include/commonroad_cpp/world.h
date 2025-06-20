@@ -58,7 +58,7 @@ class WorldParameters {
      * Setter for time step size.
      * @param timeStepSize Time step size [s].
      */
-    void setTimeStepSize(double timeStepSize) { timeParams.setTimeStepSize(timeStepSize); }
+    void setTimeStepSize(const double timeStepSize) { timeParams.setTimeStepSize(timeStepSize); }
 
     /**
      * Getter for actuator parameters.
@@ -180,7 +180,7 @@ class World {
     /**
      * Computes all curvilinear states for ego vehicles and obstacles.
      */
-    void setCurvilinearStates();
+    void setCurvilinearStates() const;
 
     /**
      * Creates pointer to ID counter so that it can be increased by other classes.
@@ -208,7 +208,7 @@ class World {
      *
      * @param obstacleList List of new and updated obstacles.
      */
-    void updateObstacles(std::vector<std::shared_ptr<Obstacle>> &obstacleList);
+    void updateObstacles(const std::vector<std::shared_ptr<Obstacle>> &obstacleList);
 
     /**
      * Updates and adds obstacles. Moves current state to history and updates prediction.
@@ -239,7 +239,12 @@ class World {
      *
      * @param ego Boolean indicating whether ego vehicles should be propagated.
      */
-    void propagate(bool ego = true);
+    void propagate(bool ego = true) const;
+
+    /**
+     * Resets the obstacle cache for all obstacles in the world.
+     */
+    void resetObstacleCache() const;
 
   private:
     std::string name;                                   //**< ID/name of world. */
@@ -254,10 +259,10 @@ class World {
     /**
      * Initializes missing state information, e.g, acceleration or reaction time.
      */
-    void initMissingInformation();
+    void initMissingInformation() const;
 
     /**
      * Computes for all ego vehicles occupied lanes per time step and sets reference lane. Also computes road lanes.
      */
-    void setInitialLanes();
+    void setInitialLanes() const;
 };
