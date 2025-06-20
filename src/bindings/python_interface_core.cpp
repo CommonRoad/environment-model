@@ -570,7 +570,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def("propagate", &World::propagate, nb::arg("ego") = true)
         .def("update_obstacles", &World::updateObstacles)
         .def("update_obstacles", &updateObstacles)
-        .def("resetObstacleCache", &World::resetObstacleCache)
+        .def("reset_obstacle_cache", &World::resetObstacleCache)
         .def("update_obstacles_traj", &updateObstaclesTraj);
 
     nb::class_<PlanningProblem>(m, "PlanningProblem");
