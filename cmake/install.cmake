@@ -86,12 +86,6 @@ if(_enable_package_export)
             FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake
             NAMESPACE ${PROJECT_NAME}::
             )
-elseif(TARGET eigen)
-    # Workaround for required Eigen export
-    export(TARGETS eigen
-            FILE ${PROJECT_BINARY_DIR}/eigen-export-private.cmake
-            NAMESPACE ${PROJECT_NAME}_private::
-            )
 endif()
 
 set(foreign_targets_base
