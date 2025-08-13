@@ -1,23 +1,24 @@
 #include "test_regulatory_elements_utils.h"
 #include "../../predicates/utils_predicate_test.h"
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign_element.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 
 void RegulatoryElementsUtilsTest::SetUp() {
-    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 45, 0, 0, 0, 0, 0);
-    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 45, 2, 50, 0, 0, 0, 45, 0);
-    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 95, 2, 55, 0, 0, 0, 95, 0);
-    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 150, 2, 45, 0, 0, 0, 150, 0);
+    auto stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 45, 0, 0, 0, 0, 0);
+    auto stateOneObstacleOne = std::make_shared<State>(1, 45, 2, 50, 0, 0, 0, 45, 0);
+    auto stateTwoObstacleOne = std::make_shared<State>(2, 95, 2, 55, 0, 0, 0, 95, 0);
+    auto stateThreeObstacleOne = std::make_shared<State>(3, 150, 2, 45, 0, 0, 0, 150, 0);
 
-    state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-                                               std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
+    const state_map_t trajectoryPredictionEgoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                     std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                     std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                     std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
     obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
                                                       50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
 
-    auto roadNetwork{utils_predicate_test::create_road_network_2()};
+    const auto roadNetwork{utils_predicate_test::create_road_network_2()};
     world = std::make_shared<World>(
         World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {}, 0.1));
 }
@@ -140,4 +141,9 @@ TEST_F(RegulatoryElementsUtilsTest, MatchDirections) {
     EXPECT_EQ(regulatory_elements_utils::matchDirections("straightRight"), Direction::straightRight);
     EXPECT_EQ(regulatory_elements_utils::matchDirections("leftRight"), Direction::leftRight);
     EXPECT_THROW(regulatory_elements_utils::matchDirections("test"), std::logic_error);
+}
+
+TEST_F(RegulatoryElementsUtilsTest, extractPriorityTrafficSign) {
+    const auto la{world->getRoadNetwork()->findLaneletById(222)};
+    EXPECT_EQ(regulatory_elements_utils::extractPriorityTrafficSign(la)->getTrafficSignType(), TrafficSignTypes::YIELD);
 }
