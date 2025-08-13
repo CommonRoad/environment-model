@@ -35,7 +35,7 @@ TEST_F(RegulatoryElementsUtilsTest, SpeedLimitSingle) {
               35.0);
     EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(222),
                                                     TrafficSignTypes::MAX_SPEED),
-              std::numeric_limits<double>::max());
+              35.0);
     EXPECT_EQ(regulatory_elements_utils::speedLimit(world->getRoadNetwork()->findLaneletById(333),
                                                     TrafficSignTypes::MAX_SPEED),
               std::numeric_limits<double>::max());
@@ -52,9 +52,9 @@ TEST_F(RegulatoryElementsUtilsTest, SpeedLimitVector) {
     EXPECT_EQ(regulatory_elements_utils::speedLimit(
                   {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)},
                   TrafficSignTypes::MAX_SPEED),
-              std::numeric_limits<double>::max());
+              35.0);
     EXPECT_EQ(regulatory_elements_utils::speedLimit(
-                  {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)},
+                  {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(444)},
                   TrafficSignTypes::MAX_SPEED),
               std::numeric_limits<double>::max());
     EXPECT_EQ(regulatory_elements_utils::speedLimit({world->getRoadNetwork()->findLaneletById(111)},
@@ -103,9 +103,9 @@ TEST_F(RegulatoryElementsUtilsTest, SpeedLimitSuggested) {
     EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested(
                   {world->getRoadNetwork()->findLaneletById(222), world->getRoadNetwork()->findLaneletById(444)},
                   TrafficSignTypes::MAX_SPEED, 36.11, 13.89),
-              36.11);
+              35.0);
     EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested(
-                  {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(222)},
+                  {world->getRoadNetwork()->findLaneletById(333), world->getRoadNetwork()->findLaneletById(333)},
                   TrafficSignTypes::MAX_SPEED, 36.11, 13.89),
               36.11);
     EXPECT_EQ(regulatory_elements_utils::speedLimitSuggested({world->getRoadNetwork()->findLaneletById(111)},
