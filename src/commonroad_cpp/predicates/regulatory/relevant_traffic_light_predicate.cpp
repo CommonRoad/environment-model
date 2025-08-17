@@ -13,19 +13,20 @@ bool RelevantTrafficLightPredicate::booleanEvaluation(size_t timeStep, const std
                                                       bool setBased) {
     if (!regulatory_elements_utils::activeTrafficLights(timeStep, obstacleK, world->getRoadNetwork()).empty())
         return true;
-    else {
-        for (const auto &lanelet : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)) {
+    for (const auto &lanelet : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)) {
             auto lanes{world->getRoadNetwork()->findLanesByBaseLanelet(lanelet->getId())};
             for (const auto &lane : lanes) {
                 auto relevantLanelets{lane->getSuccessorLanelets(lanelet)};
                 for (const auto &let : relevantLanelets) {
+                    // TODO improve
+                    if (let->hasLaneletType(LaneletType::intersectionLeftOutgoing) or let->hasLaneletType(LaneletType::intersectionRightOutgoing) or let->hasLaneletType(LaneletType::intersectionStraightOutgoing))
+                        break;
                     for (const auto &light : let->getTrafficLights())
                         if (light->isActive() or light->getElementAtTime(timeStep).color != TrafficLightState::inactive)
                             return true;
                 }
             }
         }
-    }
     return false;
 }
 
