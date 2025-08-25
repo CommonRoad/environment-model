@@ -27,8 +27,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/interfaces/test_interfaces.cpp
         commonroad_cpp_tests/auxiliaryDefs/test_timer.cpp
 
-        commonroad_cpp_tests/lanePredicates/test_is_same_lane_pred.cpp
-
         commonroad_cpp_tests/predicates/predicate_config_test.cpp
         commonroad_cpp_tests/predicates/predicate_manager_test.cpp
         commonroad_cpp_tests/predicates/utils_predicate_test.cpp

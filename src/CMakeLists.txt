@@ -110,9 +110,6 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/predicate_parameter.cpp
         commonroad_cpp/predicates/predicate_parameter_collection.cpp
 
-        commonroad_cpp/lanePredicates/commonroad_lane.cpp
-        commonroad_cpp/lanePredicates/is_same_lane_pred.cpp
-
         commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.cpp
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.cpp
@@ -188,9 +185,6 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/predicate_parameter.h
         commonroad_cpp/predicates/predicate_parameter_collection.h
         commonroad_cpp/predicates/commonroad_predicate.h
-
-        commonroad_cpp/lanePredicates/commonroad_lane.h
-        commonroad_cpp/lanePredicates/is_same_lane_pred.h
 
         commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.h
