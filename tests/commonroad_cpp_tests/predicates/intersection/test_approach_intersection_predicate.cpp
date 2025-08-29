@@ -38,23 +38,23 @@ void ApproachIntersectionPredicateTest::SetUp() {
 }
 
 TEST_F(ApproachIntersectionPredicateTest, BooleanEvaluation) {
-    EXPECT_TRUE(pred.booleanEvaluation(
-        0, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo)); // completely on intersection
-    EXPECT_TRUE(pred.booleanEvaluation(
-        1, world, obstacleOne)); // in front of intersection/traffic light -> completely on incoming
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleTwo)); // completely on intersection
-    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne)); // on intersection and on incoming
-    EXPECT_TRUE(pred.booleanEvaluation(
-        2, world, obstacleTwo)); // in front of intersection/traffic light -> completely on incoming
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, nullptr,
+                                       {"25"})); // in front of intersection/traffic light -> completely on incoming
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo, nullptr, {"25"})); // completely on intersection
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, nullptr,
+                                       {"25"})); // in front of intersection/traffic light -> completely on incoming
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleTwo, nullptr, {"25"})); // completely on intersection
+    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, nullptr, {"25"})); // on intersection and on incoming
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleTwo, nullptr,
+                                       {"25"})); // in front of intersection/traffic light -> completely on incoming
 }
 
 TEST_F(ApproachIntersectionPredicateTest, RobustEvaluation) {
-    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo, {"25"}), std::runtime_error);
 }
 
 TEST_F(ApproachIntersectionPredicateTest, ConstraintEvaluation) {
-    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo, {"25"}), std::runtime_error);
 }
 
 TEST_F(ApproachIntersectionPredicateTest, SetBasedPrediction) {
@@ -70,9 +70,9 @@ TEST_F(ApproachIntersectionPredicateTest, SetBasedPrediction) {
     auto obs1{world->findObstacle(1213)};
     auto obs2{world->findObstacle(1219)};
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs1, {}, {}, true));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs1, {}, {}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs1, {}, {"3780"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs1, {}, {"3780"}, true));
 
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs2, {}, {}, true));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs2, {}, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs2, {}, {"3780"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs2, {}, {"3780"}, true));
 }
