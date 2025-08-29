@@ -127,6 +127,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
 
         commonroad_cpp/predicates/intersection/at_intersection_type_predicate.cpp
         commonroad_cpp/predicates/intersection/approach_intersection_predicate.cpp
+        commonroad_cpp/predicates/intersection/in_intersection_predicate.cpp
         commonroad_cpp/predicates/intersection/at_same_intersection_predicate.cpp
         commonroad_cpp/predicates/intersection/in_intersection_conflict_area_predicate.cpp
         commonroad_cpp/predicates/intersection/close_to_intersection_predicate.cpp
@@ -204,6 +205,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/intersection/at_intersection_type_predicate.h
         commonroad_cpp/predicates/intersection/approach_intersection_predicate.h
         commonroad_cpp/predicates/intersection/at_same_intersection_predicate.h
+        commonroad_cpp/predicates/intersection/in_intersection_predicate.h
         commonroad_cpp/predicates/intersection/in_intersection_conflict_area_predicate.h
         commonroad_cpp/predicates/intersection/close_to_intersection_predicate.h
         commonroad_cpp/predicates/intersection/unobstructed_intersection_view_predicate.h

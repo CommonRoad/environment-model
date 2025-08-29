@@ -1,5 +1,4 @@
 #include <commonroad_cpp/obstacle/obstacle.h>
-#include <commonroad_cpp/predicates/intersection/approach_intersection_predicate.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
 
@@ -11,7 +10,7 @@ bool AtIntersectionTypePredicate::booleanEvaluation(size_t timeStep, const std::
                                                     const std::vector<std::string> &additionalFunctionParameters,
                                                     bool setBased) {
     // get current Intersection
-    auto currentIntersection = intersection_operations::currentIntersection(timeStep, world, obstacleK);
+    const auto currentIntersection = intersection_operations::currentIntersection(timeStep, world, obstacleK);
     if (currentIntersection == nullptr)
         return false;
     return currentIntersection->hasIntersectionType(

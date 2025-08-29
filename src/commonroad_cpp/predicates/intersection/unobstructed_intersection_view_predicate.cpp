@@ -10,7 +10,7 @@
 namespace bg = boost::geometry;
 
 bool UnobstructedIntersectionViewPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
     bool setBased) {
     for (const auto &inter : obstacle_operations::getIntersections(timeStep, world->getRoadNetwork(), obstacleK)) {
@@ -18,7 +18,7 @@ bool UnobstructedIntersectionViewPredicate::booleanEvaluation(
             for (const auto &let : incom->getIncomingLanelets()) {
                 auto newLanes{lane_operations::combineLaneletAndPredecessorsToLane(let, 50, 0, {})};
                 for (const auto &laneLanelets : newLanes) {
-                    auto lane{lane_operations::createLaneByContainedLanelets(laneLanelets, 1)};
+                    const auto lane{lane_operations::createLaneByContainedLanelets(laneLanelets, 1)};
                     bool laneContained{false};
                     std::deque<polygon_type> laneletIntersection;
                     bg::intersection(obstacleK->getFov(), lane->getOuterPolygon(),

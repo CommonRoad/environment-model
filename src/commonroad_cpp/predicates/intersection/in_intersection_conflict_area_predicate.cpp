@@ -18,7 +18,7 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
         for (const auto &lane : obstacleP->getOccupiedLanes(world->getRoadNetwork(), timeStep, setBased))
             laneletsP.insert(laneletsP.end(), lane->getContainedLanelets().begin(), lane->getContainedLanelets().end());
     else {
-        auto lane{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
+        const auto lane{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
         laneletsP = lane->getContainedLanelets();
     }
 

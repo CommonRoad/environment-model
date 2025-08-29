@@ -1,11 +1,11 @@
-#include "test_approach_intersection_predicate.h"
+#include "test_in_intersection_predicate.h"
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/state.h"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 
-void ApproachIntersectionPredicateTest::SetUp() {
+void InIntersectionPredicateTest::SetUp() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() +
                                "/predicates/DEU_TrafficLightTest-1/DEU_TrafficLightTest-1_1_T-1.pb"};
     const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
@@ -38,27 +38,27 @@ void ApproachIntersectionPredicateTest::SetUp() {
                                           timeStepSize));
 }
 
-TEST_F(ApproachIntersectionPredicateTest, BooleanEvaluation) {
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, nullptr,
-                                       {"25"})); // in front of intersection/traffic light -> completely on incoming
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleTwo, nullptr, {"25"})); // completely on intersection
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, nullptr,
-                                       {"25"})); // in front of intersection/traffic light -> completely on incoming
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleTwo, nullptr, {"25"})); // completely on intersection
-    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleOne, nullptr, {"25"})); // on intersection and on incoming
-    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleTwo, nullptr,
-                                       {"25"})); // in front of intersection/traffic light -> completely on incoming
+TEST_F(InIntersectionPredicateTest, BooleanEvaluation) {
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne, nullptr,
+                                        {"25"})); // in front of intersection/traffic light -> completely on incoming
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleTwo, nullptr, {"25"})); // completely on intersection
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, nullptr,
+                                        {"25"})); // in front of intersection/traffic light -> completely on incoming
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleTwo, nullptr, {"25"})); // completely on intersection
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne, nullptr, {"25"})); // on intersection and on incoming
+    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleTwo, nullptr,
+                                        {"25"})); // in front of intersection/traffic light -> completely on incoming
 }
 
-TEST_F(ApproachIntersectionPredicateTest, RobustEvaluation) {
+TEST_F(InIntersectionPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo, {"25"}), std::runtime_error);
 }
 
-TEST_F(ApproachIntersectionPredicateTest, ConstraintEvaluation) {
+TEST_F(InIntersectionPredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo, {"25"}), std::runtime_error);
 }
 
-TEST_F(ApproachIntersectionPredicateTest, SetBasedPrediction) {
+TEST_F(InIntersectionPredicateTest, SetBasedPrediction) {
     std::string scenarioName = "USA_Lanker-1_1_S-2";
     std::vector<std::string> pathSplit;
     boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
@@ -71,9 +71,9 @@ TEST_F(ApproachIntersectionPredicateTest, SetBasedPrediction) {
     auto obs1{world->findObstacle(1213)};
     auto obs2{world->findObstacle(1219)};
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs1, {}, {"3780"}, true));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs1, {}, {"3780"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs1, {}, {"3780"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs1, {}, {"3780"}, true));
 
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs2, {}, {"3780"}, true));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs2, {}, {"3780"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs2, {}, {"3780"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs2, {}, {"3780"}, true));
 }
