@@ -5,9 +5,6 @@
 #include "interfaces/utility_functions.h"
 #include <array>
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/filesystem.hpp>
-
-using namespace boost::filesystem;
 
 TEST_F(WorldTest, TestScenariosValid) {
     std::array<std::string, 5> scenarioDirs{"ZAM_Urban-2_1_T-1", "USA_Peach-4_1_T-1", "USA_Peach-2_1_T-1",

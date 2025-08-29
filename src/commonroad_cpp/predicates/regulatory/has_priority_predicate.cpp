@@ -4,7 +4,7 @@
 #include <commonroad_cpp/world.h>
 #include <memory>
 
-bool HasPriorityPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+bool HasPriorityPredicate::booleanEvaluation(const size_t timeStep, const std::shared_ptr<World> &world,
                                              const std::shared_ptr<Obstacle> &obstacleK,
                                              const std::shared_ptr<Obstacle> &obstacleP,
                                              const std::vector<std::string> &additionalFunctionParameters,

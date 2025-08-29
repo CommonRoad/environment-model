@@ -117,7 +117,6 @@ if (ENV_MODEL_BUILD_TESTS)
             PRIVATE
             env_model
             GTest::gtest
-            Boost::filesystem
             OpenMP::OpenMP_CXX
             spdlog::spdlog
             )
