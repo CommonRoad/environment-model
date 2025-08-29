@@ -134,6 +134,14 @@ class Intersection {
      */
     [[nodiscard]] bool hasIntersectionType(IntersectionType type);
 
+    /**
+     * Checks whether lanelet is member of intersection.
+     *
+     * @param memberLanelet ID of lanelet of interest.
+     * @return Boolean indicating whether lanelet is member of intersection.
+     */
+    [[nodiscard]] bool isMemberLanelet(size_t memberLanelet);
+
   private:
     size_t id; //**< ID of intersection. */
     std::vector<std::shared_ptr<IncomingGroup>>

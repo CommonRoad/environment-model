@@ -200,3 +200,9 @@ void Intersection::determineIntersectionType() {
     if (intersectionTypes.empty())
         intersectionTypes.insert(IntersectionType::UNKNOWN);
 }
+
+bool Intersection::isMemberLanelet(size_t memberLanelet) {
+    return std::any_of(
+        memberLanelets.begin(), memberLanelets.end(),
+        [memberLanelet](const std::shared_ptr<Lanelet> &lanelet) { return lanelet->getId() == memberLanelet; });
+}

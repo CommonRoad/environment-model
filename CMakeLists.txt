@@ -290,9 +290,6 @@ list(APPEND CMAKE_MODULE_PATH ${commonroad_cmake_SOURCE_DIR})
 include(toolchain/DiscoverLLD OPTIONAL)
 include(toolchain/DiscoverSanitizers OPTIONAL)
 
-# Required for boost::stacktrace and LINK_LIBRARIES_ONLY_TARGETS
-include(toolchain/ToolchainLibraries)
-
 # This is a helper script that will automatically add a .gitignore file to the
 # binary directory (build directory) so you don't have to do add every build folder
 # to your .gitignore.

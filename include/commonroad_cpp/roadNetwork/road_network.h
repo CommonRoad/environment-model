@@ -115,6 +115,14 @@ class RoadNetwork {
     [[nodiscard]] const std::vector<std::shared_ptr<Intersection>> &getIntersections() const;
 
     /**
+     * Getter for intersection via ID.
+     *
+     * @param intersectionID ID of intersection
+     * @return list of pointers to intersections.
+     */
+    [[nodiscard]] const std::shared_ptr<Intersection> &getIntersectionByID(size_t intersectionID) const;
+
+    /**
      * Getter for country.
      *
      * @return Country where road network is located.
