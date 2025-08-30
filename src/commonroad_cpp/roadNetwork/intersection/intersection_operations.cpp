@@ -53,14 +53,19 @@ std::vector<std::shared_ptr<Intersection>>
 intersection_operations::currentIntersection(const size_t timeStep, const std::shared_ptr<World> &world,
                                              const std::shared_ptr<Obstacle> &obstacleK) {
     std::vector<std::shared_ptr<Intersection>> intersections;
+    std::set<size_t> intersectionIDs;
     auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
 
     for (const auto &intersection : world->getRoadNetwork()->getIntersections()) {
+        if (intersectionIDs.find(intersection->getId()) != intersectionIDs.end())
+            continue;
         for (const auto &lanelet : intersection->getMemberLanelets(world->getRoadNetwork())) {
             if (std::any_of(lanelets.begin(), lanelets.end(), [lanelet](const std::shared_ptr<Lanelet> &occLane) {
                     return occLane->getId() == lanelet->getId();
-                }))
+                })) {
+                intersectionIDs.insert(intersection->getId());
                 intersections.push_back(intersection);
+            }
         }
     }
     return intersections;
