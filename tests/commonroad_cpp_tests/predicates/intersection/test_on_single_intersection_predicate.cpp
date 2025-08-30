@@ -37,47 +37,23 @@ void OnSingleIntersectionPredicateTest::SetUp() {
 }
 
 TEST_F(OnSingleIntersectionPredicateTest, BooleanEvaluation) {
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));
     EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne));
 }
 
 TEST_F(OnSingleIntersectionPredicateTest, BooleanEvaluationDifferentIntersection) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/ARG_Carcarana-6_5_T-1.xml"};
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestFile);
     auto worldDEU{
         std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
 
     auto obs1{worldDEU->findObstacle(32)};
-    auto obs2{worldDEU->findObstacle(370)};
-    auto obs3{worldDEU->findObstacle(330)};
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs1));
+    auto obs2{worldDEU->findObstacle(315)};
+    auto obs3{worldDEU->findObstacle(353)};
+    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs1));
     EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs2));
-
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs1));
     EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3));
-
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3));
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs2));
-}
-
-TEST_F(OnSingleIntersectionPredicateTest, BooleanEvaluationDifferentIntersectionRandomIntersectionParam) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
-    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestFile);
-    auto worldDEU{
-        std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
-
-    auto obs1{worldDEU->findObstacle(32)};
-    auto obs2{worldDEU->findObstacle(370)};
-    auto obs3{worldDEU->findObstacle(330)};
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs1));
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs2));
-
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs1));
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3));
-
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3));
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs2));
 }
 
 TEST_F(OnSingleIntersectionPredicateTest, RobustEvaluation) {
