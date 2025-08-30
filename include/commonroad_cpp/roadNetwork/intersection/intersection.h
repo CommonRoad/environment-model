@@ -1,6 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <set>
+#include <vector>
 
 class CrossingGroup;
 class IncomingGroup;

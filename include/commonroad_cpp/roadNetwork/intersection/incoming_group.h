@@ -190,7 +190,7 @@ class IncomingGroup {
     std::vector<std::shared_ptr<Lanelet>> getAllStraightGoingLanelets();
 
   private:
-    size_t groupID;
+    size_t groupID{};
     std::vector<std::shared_ptr<Lanelet>>
         incomingLanelets;                    //**< set of pointers to lanelets belonging to incoming group */
     std::shared_ptr<IncomingGroup> isLeftOf; //**< pointer to incoming which is left */

@@ -3,14 +3,14 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *  Evaluates if a vehicle is on an incoming of an intersection
+ *  Evaluates if a vehicle is only on a single intersection.
  */
-class ApproachIntersectionPredicate : public CommonRoadPredicate {
+class OnSingleIntersectionPredicate : public CommonRoadPredicate {
   public:
     /**
-     * Constructor for ApproachIntersectionPredicate
+     * Constructor for OnSingleIntersectionPredicate
      */
-    ApproachIntersectionPredicate();
+    OnSingleIntersectionPredicate();
 
     /**
      * Boolean evaluation of predicate using objects.

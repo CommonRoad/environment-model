@@ -1,11 +1,11 @@
-#include "test_at_same_intersection_predicate.h"
+#include "test_on_single_intersection_predicate.h"
 #include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/state.h"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 
-void AtSameIntersectionPredicateTest::SetUp() {
+void OnSingleIntersectionPredicateTest::SetUp() {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_Intersection.xml"};
     const auto &[obstacles, roadNetwork, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFile);
@@ -36,13 +36,13 @@ void AtSameIntersectionPredicateTest::SetUp() {
         "testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne}, {obstacleTwo}, timeStepSize));
 }
 
-TEST_F(AtSameIntersectionPredicateTest, BooleanEvaluation) {
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, obstacleTwo, {"25"}));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo, {"25"}));
-    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo, {"25"}));
+TEST_F(OnSingleIntersectionPredicateTest, BooleanEvaluation) {
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne));
 }
 
-TEST_F(AtSameIntersectionPredicateTest, BooleanEvaluationDifferentIntersection) {
+TEST_F(OnSingleIntersectionPredicateTest, BooleanEvaluationDifferentIntersection) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestFile);
     auto worldDEU{
@@ -51,17 +51,17 @@ TEST_F(AtSameIntersectionPredicateTest, BooleanEvaluationDifferentIntersection) 
     auto obs1{worldDEU->findObstacle(32)};
     auto obs2{worldDEU->findObstacle(370)};
     auto obs3{worldDEU->findObstacle(330)};
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs1, obs2, {"86122"}));
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs2, obs1, {"86122"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs1));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs2));
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs1, obs3, {"86122"}));
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs3, obs1, {"86122"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs1));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3));
 
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3, obs2, {"85983"}));
-    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs2, obs3, {"85983"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs2));
 }
 
-TEST_F(AtSameIntersectionPredicateTest, BooleanEvaluationDifferentIntersectionRandomIntersectionParam) {
+TEST_F(OnSingleIntersectionPredicateTest, BooleanEvaluationDifferentIntersectionRandomIntersectionParam) {
     std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/DEU_Guetersloh-25_4_T-1.xml"};
     const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestFile);
     auto worldDEU{
@@ -70,20 +70,20 @@ TEST_F(AtSameIntersectionPredicateTest, BooleanEvaluationDifferentIntersectionRa
     auto obs1{worldDEU->findObstacle(32)};
     auto obs2{worldDEU->findObstacle(370)};
     auto obs3{worldDEU->findObstacle(330)};
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs1, obs2, {"85981"}));
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs2, obs1, {"85981"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs1));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs2));
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs1, obs3, {"85981"}));
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs3, obs1, {"85981"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs1));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3));
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs3, obs2, {"85981"}));
-    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs2, obs3, {"85981"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs2));
 }
 
-TEST_F(AtSameIntersectionPredicateTest, RobustEvaluation) {
+TEST_F(OnSingleIntersectionPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }
 
-TEST_F(AtSameIntersectionPredicateTest, ConstraintEvaluation) {
+TEST_F(OnSingleIntersectionPredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }

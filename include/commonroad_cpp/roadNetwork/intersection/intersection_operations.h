@@ -47,21 +47,23 @@ bool checkSameIncoming(const std::shared_ptr<Lanelet> &letK, const std::shared_p
 void findLeftOf(const std::shared_ptr<IncomingGroup> &origin, const std::shared_ptr<RoadNetwork> &roadNetwork);
 
 /**
- * Gets the intersection on which the obstacle is currently.
+ * Gets the intersections on which the obstacle is currently.
+ *
  * @param timeStep Time step of interest.
  * @param world World object
  * @param obstacleK Relevant obstacle.
- * @return Boolean indicating whether incoming is occupied by obstacle.
+ * @return List of intersections.
  */
-std::shared_ptr<Intersection> currentIntersection(size_t timeStep, const std::shared_ptr<World> &world,
-                                                  const std::shared_ptr<Obstacle> &obstacleK);
+std::vector<std::shared_ptr<Intersection>> currentIntersection(size_t timeStep, const std::shared_ptr<World> &world,
+                                                               const std::shared_ptr<Obstacle> &obstacleK);
 
 /**
  * Gets the incoming from the intersection on which the obstacle is currently.
+ *
  * @param timeStep Time step of interest.
  * @param world World object
  * @param obs Relevant obstacle.
- * @return Boolean indicating whether incoming is occupied by obstacle.
+ * @return Currently occupied incoming or nullptr if no incoming is occupied.
  */
 std::shared_ptr<IncomingGroup> currentIncoming(size_t timeStep, const std::shared_ptr<World> &world,
                                                const std::shared_ptr<Obstacle> &obs);

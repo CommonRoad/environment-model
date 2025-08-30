@@ -49,6 +49,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/intersection/test_approach_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_in_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_at_same_intersection_predicate.cpp
+        commonroad_cpp_tests/predicates/intersection/test_on_single_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_in_intersection_conflict_area_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_close_to_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_unobstructed_intersection_view_predicate.cpp

@@ -1,3 +1,5 @@
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
+
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/predicates/intersection/approach_intersection_predicate.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
