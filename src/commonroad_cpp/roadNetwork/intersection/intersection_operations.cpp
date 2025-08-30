@@ -65,6 +65,7 @@ intersection_operations::currentIntersection(const size_t timeStep, const std::s
                 })) {
                 intersectionIDs.insert(intersection->getId());
                 intersections.push_back(intersection);
+                break;
             }
         }
     }
