@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <commonroad_cpp/predicates/intersection/on_single_intersection_predicate.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection.h>
 #include <commonroad_cpp/roadNetwork/intersection/intersection_operations.h>
