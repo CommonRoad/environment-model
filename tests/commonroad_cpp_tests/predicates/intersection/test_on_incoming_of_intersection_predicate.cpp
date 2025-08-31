@@ -60,6 +60,20 @@ TEST_F(OnIncomingOfIntersectionPredicateTest, BooleanEvaluationObjectsTIntersect
     EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacles.at(2), {}, {"1017"}));
 }
 
+TEST_F(OnIncomingOfIntersectionPredicateTest, BooleanEvaluationSeveralIntersections) {
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/ARG_Carcarana-6_5_T-1.xml"};
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    auto worldDEU{
+        std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+
+    auto obs1{worldDEU->findObstacle(32)};
+    auto obs2{worldDEU->findObstacle(315)};
+    auto obs3{worldDEU->findObstacle(353)};
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs1, {}, {"8460"}));
+    EXPECT_FALSE(pred.booleanEvaluation(0, worldDEU, obs2, {}, {"8460"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, worldDEU, obs3, {}, {"8460"}));
+}
+
 TEST_F(OnIncomingOfIntersectionPredicateTest, RobustEvaluation) {
     EXPECT_THROW(pred.robustEvaluation(0, world, {}, {}), std::runtime_error);
 }
