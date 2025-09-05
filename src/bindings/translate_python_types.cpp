@@ -248,18 +248,17 @@ TranslatePythonTypes::convertIntersections(const nb::handle &py_laneletNetwork,
     tempIntersectionContainer.reserve(n); // Already know the size --> Faster memory allocation
     // all intersections must be initialized first
     for (size_t i = 0; i < py_intersection_list.size(); i++) {
-        std::shared_ptr<Intersection> tempIntersection = std::make_shared<Intersection>();
+        auto tempIntersection = std::make_shared<Intersection>();
         tempIntersectionContainer.emplace_back(tempIntersection);
     }
 
     size_t intersectionIndex{0};
     for (const auto &py_intersection : py_intersection_list) {
-        std::shared_ptr<Intersection> tempIntersection = std::make_shared<Intersection>();
-        tempIntersection->setId(nb::cast<size_t>(py_intersection.attr("intersection_id")));
+        tempIntersectionContainer[intersectionIndex]->setId(nb::cast<size_t>(py_intersection.attr("intersection_id")));
         std::vector<std::shared_ptr<IncomingGroup>> incomings;
         incomings.reserve(nb::cast<nb::list>(py_intersection.attr("incomings")).size());
         for (const auto &py_incoming : nb::cast<nb::list>(py_intersection.attr("incomings"))) {
-            std::shared_ptr<IncomingGroup> tempIncoming = std::make_shared<IncomingGroup>();
+            auto tempIncoming = std::make_shared<IncomingGroup>();
             tempIncoming->setId(nb::cast<size_t>(py_incoming.attr("incoming_id")));
             incomings.emplace_back(tempIncoming);
         }
