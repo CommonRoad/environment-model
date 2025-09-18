@@ -6,7 +6,7 @@
  * TimeParameters includes information regarding obstacle time parameters
  */
 class TimeParameters {
-    size_t relevantHistorySize{50}; //**< number of history time steps to consider  */
+    size_t relevantHistorySize{100}; //**< number of history time steps to consider  */
     double reactionTime{0.3};       /** reaction time of obstacle in [s] */
     double timeStepSize{0.1};       /** time step size of obstacle in [s] */
 
