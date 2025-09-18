@@ -493,7 +493,7 @@ std::shared_ptr<SignalState> extractSignalState(nb::handle py_state) {
         state->setHorn(nb::cast<bool>(py_state.attr("horn")));
     if (nb::hasattr(py_state, "indicator_left"))
         state->setHorn(nb::cast<bool>(py_state.attr("indicator_left")));
-    if (nb::hasattr(py_state, "indicator_rightorn"))
+    if (nb::hasattr(py_state, "indicator_right"))
         state->setHorn(nb::cast<bool>(py_state.attr("indicator_right")));
     if (nb::hasattr(py_state, "braking_lights"))
         state->setHorn(nb::cast<bool>(py_state.attr("braking_lights")));
