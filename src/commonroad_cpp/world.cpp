@@ -163,6 +163,10 @@ void World::updateObstacles(const std::vector<std::shared_ptr<Obstacle>> &obstac
     std::vector<std::shared_ptr<Obstacle>> newObstacles;
     std::set<size_t> newObstacleIds;
     for (const auto &obs : obstacleList) {
+        obs->setActuatorParameters(worldParameters.getActuatorParamsObstacles());
+        obs->setSensorParameters(worldParameters.getSensorParams());
+        obs->setRoadNetworkParameters(worldParameters.getRoadNetworkParams());
+        obs->setTimeParameters(worldParameters.getTimeParams());
         newObstacleIds.insert(obs->getId());
         auto existingObs{std::find_if(obstacles.begin(), obstacles.end(), [obs](const std::shared_ptr<Obstacle> &o) {
             return o->getId() == obs->getId();
