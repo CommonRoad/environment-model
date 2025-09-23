@@ -1,6 +1,5 @@
 #include <commonroad_cpp/obstacle/state.h>
 #include <sstream>
-#include <stdexcept>
 
 State::State(const size_t timeStep, const double xPosition, const double yPosition, const double velocity,
              const double acceleration, const double globalOrientation, const double curvilinearOrientation,
