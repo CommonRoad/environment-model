@@ -6,7 +6,7 @@
 /**
  * Class representing a rectangle.
  */
-class Rectangle : public Shape {
+class Rectangle final : public Shape {
   public:
     /**
      * Constructor for rectangle.
@@ -14,19 +14,19 @@ class Rectangle : public Shape {
      * @param len Length of rectangle [m].
      * @param wid Width of rectangle [m].
      */
-    explicit Rectangle(double len = 4.5, double wid = 1.8) : length(len), width(wid) {}
+    explicit Rectangle(const double len = 4.5, const double wid = 1.8) : length(len), width(wid) {}
 
     /**
      * Setter for rectangle length.
      *
-     * @param l Length of rectangle [m].
+     * @param len Length of rectangle [m].
      */
     void setLength(double len) override;
 
     /**
      * Setter for rectangle width.
      *
-     * @param w Width of rectangle [m].
+     * @param wid Width of rectangle [m].
      */
     void setWidth(double wid) override;
 
@@ -69,6 +69,13 @@ class Rectangle : public Shape {
      * Print function. Prints width and length on console output.
      */
     void printParameters() override;
+
+    /**
+     * Creates a string representation of a rectangle.
+     *
+     * @return String representation of rectangle.
+     */
+    std::string to_string() override;
 
   private:
     double length{}; //**< Length of shape. */

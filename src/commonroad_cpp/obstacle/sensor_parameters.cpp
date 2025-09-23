@@ -4,9 +4,9 @@
 #include <boost/geometry/geometries/polygon.hpp>
 #include <commonroad_cpp/auxiliaryDefs/structs.h>
 
-class vertex;
+struct vertex;
 
-SensorParameters::SensorParameters(double fieldOfViewRear, double fieldOfViewFront)
+SensorParameters::SensorParameters(const double fieldOfViewRear, const double fieldOfViewFront)
     : fieldOfViewRear{fieldOfViewRear}, fieldOfViewFront{fieldOfViewFront} {}
 
 double SensorParameters::getFieldOfViewRear() const noexcept { return fieldOfViewRear; }
@@ -17,12 +17,12 @@ std::vector<vertex> SensorParameters::getFieldOfViewVertices() const noexcept { 
 
 polygon_type SensorParameters::getFieldOfViewPolygon() const noexcept { return fovPolygon.value(); }
 
-void SensorParameters::setFov(const std::vector<vertex> &fovVertices) {
-    this->fovVertices = fovVertices;
+void SensorParameters::setFov(const std::vector<vertex> &vertices) {
+    fovVertices = vertices;
     polygon_type polygon;
-    polygon.outer().resize(fovVertices.size());
+    polygon.outer().resize(fovVertices.value().size());
     size_t idx{0};
-    for (const auto &left : fovVertices) {
+    for (const auto &left : fovVertices.value()) {
         polygon.outer()[idx] = point_type{left.x, left.y};
         idx++;
     }
@@ -47,4 +47,9 @@ void SensorParameters::setDefaultFov() {
             {-400.0, 0.0},
             {-282.8427, -282.8427},
             {0.0, -400.0}});
+}
+
+std::string SensorParameters::to_string() const {
+    return "fieldOfViewRear: " + std::to_string(fieldOfViewRear) +
+           ", fieldOfViewFront: " + std::to_string(fieldOfViewFront);
 }

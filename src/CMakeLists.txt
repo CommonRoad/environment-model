@@ -19,6 +19,7 @@ set(ENV_MODEL_SRC_FILES
         commonroad_cpp/roadNetwork/road_network_config.cpp
         commonroad_cpp/obstacle/initial_state.cpp
         commonroad_cpp/obstacle/obstacle.cpp
+        commonroad_cpp/obstacle/obstacle_cache.cpp
         commonroad_cpp/obstacle/obstacle_operations.cpp
         commonroad_cpp/obstacle/obstacle_reference.cpp
         commonroad_cpp/obstacle/actuator_parameters.cpp

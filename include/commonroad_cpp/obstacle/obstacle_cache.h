@@ -1,4 +1,7 @@
 #pragma once
+#include "commonroad_cpp/roadNetwork/lanelet/lane.h"
+#include <sstream>
+
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/types.h>
 #include <map>
@@ -84,45 +87,15 @@ struct ObstacleCache {
      * @param timeStep Relevant time step.
      * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
      */
-    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
-        occupiedLanelets.erase(timeStep);
-        occupiedLaneletsState.erase(timeStep);
-        occupiedLaneletsFront.erase(timeStep);
-        occupiedLaneletsBack.erase(timeStep);
-        occupiedLanesDrivingDir.erase(timeStep);
-        occupiedLaneletsDrivingDir.erase(timeStep);
-        occupiedLaneletsNotDrivingDir.erase(timeStep);
-        if (clearReferenceLane)
-            referenceLane.erase(timeStep);
-        occupiedLanes.erase(timeStep);
-        frontXYPositions.erase(timeStep);
-        backXYPositions.erase(timeStep);
-        leftLatPosition.erase(timeStep);
-        rightLatPosition.erase(timeStep);
-        lateralDistanceToObjects.erase(timeStep);
-        convertedPositions.erase(timeStep);
-        shapeAtTimeStep.erase(timeStep);
-    }
+    void removeTimeStepFromMappingVariables(size_t timeStep, bool clearReferenceLane);
 
     /**
      * Clears all mappings.
      */
-    void clear() {
-        occupiedLanelets.clear();
-        occupiedLaneletsState.clear();
-        occupiedLaneletsFront.clear();
-        occupiedLaneletsBack.clear();
-        occupiedLanesDrivingDir.clear();
-        occupiedLaneletsDrivingDir.clear();
-        occupiedLaneletsNotDrivingDir.clear();
-        referenceLane.clear();
-        occupiedLanes.clear();
-        frontXYPositions.clear();
-        backXYPositions.clear();
-        leftLatPosition.clear();
-        rightLatPosition.clear();
-        lateralDistanceToObjects.clear();
-        convertedPositions.clear();
-        shapeAtTimeStep.clear();
-    }
+    void clear();
+
+    /**
+     * Returns a string summary of the cache contents, iterating over elements.
+     */
+    std::string to_string() const;
 };
