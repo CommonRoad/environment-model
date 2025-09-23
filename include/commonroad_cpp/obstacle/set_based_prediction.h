@@ -31,4 +31,16 @@ struct SetBasedPrediction {
      * Clears the cache for set-based prediction.
      */
     void clearCache() { obstacleCache.clear(); }
+
+    std::string to_string() const {
+        std::ostringstream oss;
+        oss << "SetBasedPrediction: ";
+        oss << "SetBasedPrediction size: " << setBasedPrediction.size() << "\n";
+        // oss << "SetBasedPrediction: [";
+        // for (const auto &[_, snd] : setBasedPrediction)
+        //     oss << snd->to_string();
+        // oss << "]\n";
+        oss << obstacleCache.to_string();
+        return oss.str();
+    }
 };

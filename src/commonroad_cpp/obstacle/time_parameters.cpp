@@ -23,6 +23,6 @@ TimeParameters TimeParameters::dynamicDefaults() { return TimeParameters{50, 0.3
 TimeParameters TimeParameters::staticDefaults() { return TimeParameters{0, 0.0, 0.1}; }
 
 std::string TimeParameters::to_string() const {
-    return "relevantHistorySize: " + std::to_string(relevantHistorySize) +
-           ", reactionTime: " + std::to_string(reactionTime) + ", timeStepSize: " + std::to_string(timeStepSize);
+    return "TimeParameters: relevantHistorySize: " + std::to_string(relevantHistorySize) +
+           ", reactionTime: " + std::to_string(reactionTime) + ", timeStepSize: " + std::to_string(timeStepSize) + "\n";
 }

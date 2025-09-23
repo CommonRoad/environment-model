@@ -11,12 +11,12 @@ void RoadNetworkParameters::checkParameterValidity() {
 }
 
 std::string RoadNetworkParameters::to_string() const {
-    return "eps1: " + std::to_string(eps1) + ", eps2: " + std::to_string(eps2) +
+    return "RoadNetworkParameters: eps1: " + std::to_string(eps1) + ", eps2: " + std::to_string(eps2) +
            ", stepsToResamplePolyline: " + std::to_string(stepsToResamplePolyline) +
            ", cornerCuttingRefinements: " + std::to_string(cornerCuttingRefinements) +
            ", projectionDomainLimit: " + std::to_string(projectionDomainLimit) +
            ", numAdditionalSegmentsCCS: " + std::to_string(numAdditionalSegmentsCCS) +
            ", numIntersectionsPerDirectionLaneGeneration: " +
            std::to_string(numIntersectionsPerDirectionLaneGeneration) +
-           ", relevantTimeIntervalSize: " + std::to_string(relevantTimeIntervalSize);
+           ", relevantTimeIntervalSize: " + std::to_string(relevantTimeIntervalSize) + "\n";
 }

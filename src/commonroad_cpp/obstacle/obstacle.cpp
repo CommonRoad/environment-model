@@ -1256,18 +1256,16 @@ std::string Obstacle::to_string() const {
     oss << "Obstacle[ID=" << getId() << ", Role=" << static_cast<int>(getObstacleRole())
         << ", Type=" << static_cast<int>(getObstacleType()) << ", isStatic=" << isStatic()
         << ", FirstTimeStep=" << getFirstTimeStep() << ", FinalTimeStep=" << getFinalTimeStep() << "]\n";
-    oss << "  ActuatorParameters: " << getActuatorParameters().to_string() << "\n";
-    oss << "  SensorParameters: " << getSensorParameters().to_string() << "\n";
-    oss << "  TimeParameters: " << getTimeParameters().to_string() << "\n";
-    oss << "  RoadNetworkParameters: " << getRoadNetworkParameters().to_string() << "\n";
-    oss << "  vMax=" << getVmax() << ", aMax=" << getAmax() << ", aMaxLong=" << getAmaxLong()
-        << ", aMinLong=" << getAminLong() << ", reactionTime=" << getReactionTime() << "\n";
+    oss << "  " << getActuatorParameters().to_string();
+    oss << "  " << getSensorParameters().to_string();
+    oss << "  " << getTimeParameters().to_string();
+    oss << "  " << getRoadNetworkParameters().to_string();
     oss << "  CurrentState: " << (getCurrentState() ? getCurrentState()->to_string() : "nullptr") << "\n";
     oss << "  CurrentSignalState: " << (getCurrentSignalState() ? getCurrentSignalState()->to_string() : "nullptr")
         << "\n";
-    oss << "  TrajectoryPrediction: " << trajectoryPrediction.to_string() << "\n";
-    oss << "  RecordedStates: " << recordedStates.to_string() << "\n";
-    oss << "  SetBasedPrediction: " << setBasedPrediction.obstacleCache.to_string() << "\n";
+    oss << "  " << trajectoryPrediction.to_string() << "\n";
+    oss << "  " << recordedStates.to_string() << "\n";
+    oss << "  " << setBasedPrediction.to_string() << "\n";
     oss << "  Shape: " << geoShape->to_string() << "\n";
     oss << "  SignalSeries: [";
     for (const auto &[ts, sig] : getSignalSeries()) {

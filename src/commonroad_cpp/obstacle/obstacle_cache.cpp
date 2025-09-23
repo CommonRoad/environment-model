@@ -41,9 +41,9 @@ void ObstacleCache::clear() {
 
 std::string ObstacleCache::to_string() const {
     std::ostringstream oss;
-    oss << "ObstacleCache: \n";
+    oss << "  ObstacleCache: \n";
     // occupiedLanelets
-    oss << "  occupiedLanelets: " << occupiedLanelets.size() << " entries\n";
+    oss << "    occupiedLanelets: " << occupiedLanelets.size() << " entries\n";
     for (const auto &[ts, lanelets] : occupiedLanelets) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
@@ -54,7 +54,7 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // occupiedLaneletsState
-    oss << "  occupiedLaneletsState: " << occupiedLaneletsState.size() << " entries\n";
+    oss << "    occupiedLaneletsState: " << occupiedLaneletsState.size() << " entries\n";
     for (const auto &[ts, lanelets] : occupiedLaneletsState) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
@@ -65,7 +65,7 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // occupiedLaneletsFront
-    oss << "  occupiedLaneletsFront: " << occupiedLaneletsFront.size() << " entries\n";
+    oss << "    occupiedLaneletsFront: " << occupiedLaneletsFront.size() << " entries\n";
     for (const auto &[ts, lanelets] : occupiedLaneletsFront) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
@@ -76,7 +76,7 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // occupiedLaneletsBack
-    oss << "  occupiedLaneletsBack: " << occupiedLaneletsBack.size() << " entries\n";
+    oss << "    occupiedLaneletsBack: " << occupiedLaneletsBack.size() << " entries\n";
     for (const auto &[ts, lanelets] : occupiedLaneletsBack) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
@@ -87,7 +87,7 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // occupiedLanesDrivingDir
-    oss << "  occupiedLanesDrivingDir: " << occupiedLanesDrivingDir.size() << " entries\n";
+    oss << "    occupiedLanesDrivingDir: " << occupiedLanesDrivingDir.size() << " entries\n";
     for (const auto &[ts, lanes] : occupiedLanesDrivingDir) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < lanes.size(); ++i) {
@@ -98,7 +98,7 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // occupiedLaneletsDrivingDir
-    oss << "  occupiedLaneletsDrivingDir: " << occupiedLaneletsDrivingDir.size() << " entries\n";
+    oss << "    occupiedLaneletsDrivingDir: " << occupiedLaneletsDrivingDir.size() << " entries\n";
     for (const auto &[ts, lanelets] : occupiedLaneletsDrivingDir) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
@@ -109,7 +109,7 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // occupiedLaneletsNotDrivingDir
-    oss << "  occupiedLaneletsNotDrivingDir: " << occupiedLaneletsNotDrivingDir.size() << " entries\n";
+    oss << "    occupiedLaneletsNotDrivingDir: " << occupiedLaneletsNotDrivingDir.size() << " entries\n";
     for (const auto &[ts, lanelets] : occupiedLaneletsNotDrivingDir) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
@@ -120,12 +120,12 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // referenceLane
-    oss << "  referenceLane: " << referenceLane.size() << " entries\n";
+    oss << "    referenceLane: " << referenceLane.size() << " entries\n";
     for (const auto &[ts, lane] : referenceLane) {
         oss << "    t=" << ts << ": " << lane->getId() << "\n";
     }
     // occupiedLanes
-    oss << "  occupiedLanes: " << occupiedLanes.size() << " entries\n";
+    oss << "    occupiedLanes: " << occupiedLanes.size() << " entries\n";
     for (const auto &[ts, lanes] : occupiedLanes) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < lanes.size(); ++i) {
@@ -136,7 +136,7 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // frontXYPositions
-    oss << "  frontXYPositions: " << frontXYPositions.size() << " entries\n";
+    oss << "    frontXYPositions: " << frontXYPositions.size() << " entries\n";
     for (const auto &[ts, positions] : frontXYPositions) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < positions.size(); ++i) {
@@ -147,7 +147,7 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // backXYPositions
-    oss << "  backXYPositions: " << backXYPositions.size() << " entries\n";
+    oss << "    backXYPositions: " << backXYPositions.size() << " entries\n";
     for (const auto &[ts, positions] : backXYPositions) {
         oss << "    t=" << ts << ": [";
         for (size_t i = 0; i < positions.size(); ++i) {
@@ -158,17 +158,17 @@ std::string ObstacleCache::to_string() const {
         oss << "]\n";
     }
     // leftLatPosition
-    oss << "  leftLatPosition: " << leftLatPosition.size() << " entries\n";
+    oss << "    leftLatPosition: " << leftLatPosition.size() << " entries\n";
     for (const auto &[ts, val] : leftLatPosition) {
         oss << "    t=" << ts << ": " << val << "\n";
     }
     // rightLatPosition
-    oss << "  rightLatPosition: " << rightLatPosition.size() << " entries\n";
+    oss << "    rightLatPosition: " << rightLatPosition.size() << " entries\n";
     for (const auto &[ts, val] : rightLatPosition) {
         oss << "    t=" << ts << ": " << val << "\n";
     }
     // lateralDistanceToObjects
-    oss << "  lateralDistanceToObjects: " << lateralDistanceToObjects.size() << " entries\n";
+    oss << "    lateralDistanceToObjects: " << lateralDistanceToObjects.size() << " entries\n";
     for (const auto &[ts, distMap] : lateralDistanceToObjects) {
         oss << "    t=" << ts << ": {";
         size_t count = 0;
@@ -180,7 +180,7 @@ std::string ObstacleCache::to_string() const {
         oss << "}\n";
     }
     // convertedPositions
-    oss << "  convertedPositions: " << convertedPositions.size() << " entries\n";
+    oss << "    convertedPositions: " << convertedPositions.size() << " entries\n";
     for (const auto &[ts, ccsMap] : convertedPositions) {
         oss << "    t=" << ts << ": {";
         size_t count = 0;
@@ -192,7 +192,7 @@ std::string ObstacleCache::to_string() const {
         oss << "}\n";
     }
     // shapeAtTimeStep
-    oss << "  shapeAtTimeStep: " << shapeAtTimeStep.size() << " entries\n";
+    oss << "    shapeAtTimeStep: " << shapeAtTimeStep.size() << " entries\n";
     for (const auto &[ts, mp] : shapeAtTimeStep) {
         oss << "    t=" << ts << ": polygons=" << mp.size() << "\n";
     }

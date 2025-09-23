@@ -42,31 +42,17 @@ struct TrajectoryPrediction {
     std::string to_string() const {
         std::ostringstream oss;
         oss << "TrajectoryPrediction: ";
-        oss << "SignalSeries size: " << signalSeries.size()
+        oss << "  SignalSeries size: " << signalSeries.size()
             << ", TrajectoryPrediction size: " << trajectoryPrediction.size() << "\n";
-        oss << "SignalSeries: [";
-        for (size_t i = 0; i < signalSeries.size(); ++i) {
-            if (signalSeries.at(i)) {
-                oss << signalSeries.at(i)->to_string();
-            } else {
-                oss << "nullptr";
-            }
-            if (i < signalSeries.size() - 1)
-                oss << ", ";
-        }
+        oss << "    SignalSeries: [";
+        for (const auto &[_, snd] : signalSeries)
+            oss << snd->to_string();
         oss << "]\n";
-        oss << "TrajectoryPrediction: [";
-        for (size_t i = 0; i < trajectoryPrediction.size(); ++i) {
-            if (trajectoryPrediction.at(i)) {
-                oss << trajectoryPrediction.at(i)->to_string();
-            } else {
-                oss << "nullptr";
-            }
-            if (i < trajectoryPrediction.size() - 1)
-                oss << ", ";
-        }
-        oss << "]";
-        oss << "ObstacleCache: [" << obstacleCache.to_string() << "]\n";
+        oss << "    TrajectoryPrediction: [";
+        for (const auto &[_, snd] : trajectoryPrediction)
+            oss << snd->to_string();
+        oss << "]\n";
+        oss << obstacleCache.to_string();
         return oss.str();
     }
 };

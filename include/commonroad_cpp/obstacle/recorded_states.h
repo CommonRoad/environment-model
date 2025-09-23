@@ -45,34 +45,20 @@ struct RecordedStates {
      */
     std::string to_string() const {
         std::ostringstream oss;
-        oss << "RecordedStates: ";
-        oss << "CurrentState: " << (currentState ? currentState->to_string() : "nullptr")
+        oss << "  RecordedStates: ";
+        oss << "    CurrentState: " << (currentState ? currentState->to_string() : "nullptr")
             << ", CurrentSignalState: " << (currentSignalState ? currentSignalState->to_string() : "nullptr") << "\n";
-        oss << "TrajectoryHistory size: " << trajectoryHistory.size()
+        oss << "    TrajectoryHistory size: " << trajectoryHistory.size()
             << ", SignalSeriesHistory size: " << signalSeriesHistory.size() << "\n";
-        oss << "TrajectoryHistory: [";
-        for (size_t i = 0; i < trajectoryHistory.size(); ++i) {
-            if (trajectoryHistory.at(i)) {
-                oss << trajectoryHistory.at(i)->to_string();
-            } else {
-                oss << "nullptr";
-            }
-            if (i < trajectoryHistory.size() - 1)
-                oss << ", ";
-        }
+        oss << "    TrajectoryHistory: [";
+        for (const auto &[_, snd] : trajectoryHistory)
+            oss << snd->to_string();
         oss << "]\n";
-        oss << "SignalSeriesHistory: [";
-        for (size_t i = 0; i < signalSeriesHistory.size(); ++i) {
-            if (signalSeriesHistory.at(i)) {
-                oss << signalSeriesHistory.at(i)->to_string();
-            } else {
-                oss << "nullptr";
-            }
-            if (i < signalSeriesHistory.size() - 1)
-                oss << ", ";
-        }
+        oss << "    SignalSeriesHistory: [";
+        for (const auto &[_, snd] : signalSeriesHistory)
+            oss << snd->to_string();
         oss << "]\n";
-        oss << "OccupancyRecorded: [" << occupancyRecorded.to_string() << "]\n";
+        oss << occupancyRecorded.to_string();
         return oss.str();
     }
 };

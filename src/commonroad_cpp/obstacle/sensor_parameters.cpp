@@ -50,6 +50,6 @@ void SensorParameters::setDefaultFov() {
 }
 
 std::string SensorParameters::to_string() const {
-    return "fieldOfViewRear: " + std::to_string(fieldOfViewRear) +
-           ", fieldOfViewFront: " + std::to_string(fieldOfViewFront);
+    return "SensorParameters: fieldOfViewRear: " + std::to_string(fieldOfViewRear) +
+           ", fieldOfViewFront: " + std::to_string(fieldOfViewFront) + "\n";
 }

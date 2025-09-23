@@ -36,7 +36,7 @@ ActuatorParameters ActuatorParameters::pedestrianDefaults() { return ActuatorPar
 ActuatorParameters ActuatorParameters::staticDefaults() { return ActuatorParameters{0.0, 0.0}; }
 
 std::string ActuatorParameters::to_string() const {
-    return "vMax: " + std::to_string(vMax) + ", aMax: " + std::to_string(aMax) +
+    return "ActuatorParameters: vMax: " + std::to_string(vMax) + ", aMax: " + std::to_string(aMax) +
            ", aMaxLong: " + std::to_string(aMaxLong) + ", aMinLong: " + std::to_string(aMinLong) +
-           ", aBraking: " + std::to_string(aBraking);
+           ", aBraking: " + std::to_string(aBraking) + "\n";
 }

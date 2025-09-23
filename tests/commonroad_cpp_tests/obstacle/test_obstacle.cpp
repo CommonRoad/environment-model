@@ -570,3 +570,9 @@ TEST_F(ObstacleTest, resetTimeVariables) {
             EXPECT_THROW(obstacleOne->getOccupiedLaneletsByShape(roadNetwork, time), std::logic_error);
     }
 }
+
+TEST_F(ObstacleTest, testToString) {
+    auto a{obstacleOne->to_string()};
+    EXPECT_EQ(obstacleOne->to_string(), "Obstacle ID: 1, Role: DYNAMIC, Type: car");
+    EXPECT_EQ(obstacleTwo->to_string(), "Obstacle ID: 2, Role: STATIC, Type: pedestrian");
+}
