@@ -14,10 +14,13 @@
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
 
 #include "actuator_parameters.h"
+#include "recorded_states.h"
 #include "sensor_parameters.h"
+#include "set_based_prediction.h"
 #include "signal_state.h"
 #include "state_meta_info.h"
 #include "time_parameters.h"
+#include "trajectory_prediction.h"
 
 #include <tsl/robin_map.h>
 
@@ -37,153 +40,6 @@ using state_map_t = time_step_map_t<std::shared_ptr<State>>;
 using occupancy_map_t = time_step_map_t<std::shared_ptr<Occupancy>>;
 //** type of history/trajectory prediction maps for signal states*/
 using signal_state_map_t = time_step_map_t<std::shared_ptr<SignalState>>;
-
-/**
- * Struct representing set-based prediction.
- */
-struct SetBasedPrediction {
-    occupancy_map_t setBasedPrediction{}; //**< set-based prediction of the obstacle */
-    ObstacleCache obstacleCache{};        //**< cache for set-based prediction */
-
-    /**
-     * Resets helper mappings for obstacle time steps.
-     *
-     * @param timeStep Time step to remove from mapping variables.
-     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
-     */
-    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
-        obstacleCache.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
-    }
-
-    /**
-     * Clears the cache for set-based prediction.
-     */
-    void clearCache() { obstacleCache.clear(); }
-};
-
-/**
- * Struct representing trajectory prediction.
- */
-struct TrajectoryPrediction {
-    signal_state_map_t signalSeries{};  //**< signal series of the obstacle */
-    state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
-    ObstacleCache obstacleCache{};      //**< cache for trajectory prediction */
-
-    /**
-     * Resets helper mappings for obstacle time steps.
-     *
-     * @param timeStep Time step to remove from mapping variables.
-     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
-     */
-    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
-        obstacleCache.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
-    }
-
-    /**
-     * Clears the cache for trajectory prediction.
-     */
-    void clearCache() { obstacleCache.clear(); }
-
-    /**
-     * Creates a string representation of a trajectory prediction.
-     *
-     * @return String representation of trajectory prediction.
-     */
-    std::string to_string() const {
-        std::ostringstream oss;
-        oss << "TrajectoryPrediction: ";
-        oss << "SignalSeries size: " << signalSeries.size()
-            << ", TrajectoryPrediction size: " << trajectoryPrediction.size() << "\n";
-        oss << "SignalSeries: [";
-        for (size_t i = 0; i < signalSeries.size(); ++i) {
-            if (signalSeries.at(i)) {
-                oss << signalSeries.at(i)->to_string();
-            } else {
-                oss << "nullptr";
-            }
-            if (i < signalSeries.size() - 1)
-                oss << ", ";
-        }
-        oss << "]\n";
-        oss << "TrajectoryPrediction: [";
-        for (size_t i = 0; i < trajectoryPrediction.size(); ++i) {
-            if (trajectoryPrediction.at(i)) {
-                oss << trajectoryPrediction.at(i)->to_string();
-            } else {
-                oss << "nullptr";
-            }
-            if (i < trajectoryPrediction.size() - 1)
-                oss << ", ";
-        }
-        oss << "]";
-        oss << "ObstacleCache: [" << obstacleCache.to_string() << "]\n";
-        return oss.str();
-    }
-};
-
-/**
- * Struct representing recorded states.
- */
-struct RecordedStates {
-    std::shared_ptr<State> currentState;             //**< pointer to current state of obstacle */
-    std::shared_ptr<SignalState> currentSignalState; //**< pointer to current signal state of obstacle */
-    state_map_t trajectoryHistory{};                 //**< previous states of the obstacle */
-    signal_state_map_t signalSeriesHistory{};        //**< previous signal states of the obstacle */
-    ObstacleCache occupancyRecorded;                 //**< cache for recorded occupancy (history + current time step) */
-
-    /**
-     * Resets helper mappings for obstacle time steps.
-     *
-     * @param timeStep Time step to remove from mapping variables.
-     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
-     */
-    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
-        occupancyRecorded.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
-    }
-
-    /**
-     * Clears the cache for trajectory prediction.
-     */
-    void clearCache() { occupancyRecorded.clear(); }
-
-    /**
-     * Creates a string representation of a recorded states.
-     *
-     * @return String representation of recorded states.
-     */
-    std::string to_string() const {
-        std::ostringstream oss;
-        oss << "RecordedStates: ";
-        oss << "CurrentState: " << (currentState ? currentState->to_string() : "nullptr")
-            << ", CurrentSignalState: " << (currentSignalState ? currentSignalState->to_string() : "nullptr") << "\n";
-        oss << "TrajectoryHistory size: " << trajectoryHistory.size()
-            << ", SignalSeriesHistory size: " << signalSeriesHistory.size() << "\n";
-        oss << "TrajectoryHistory: [";
-        for (size_t i = 0; i < trajectoryHistory.size(); ++i) {
-            if (trajectoryHistory.at(i)) {
-                oss << trajectoryHistory.at(i)->to_string();
-            } else {
-                oss << "nullptr";
-            }
-            if (i < trajectoryHistory.size() - 1)
-                oss << ", ";
-        }
-        oss << "]\n";
-        oss << "SignalSeriesHistory: [";
-        for (size_t i = 0; i < signalSeriesHistory.size(); ++i) {
-            if (signalSeriesHistory.at(i)) {
-                oss << signalSeriesHistory.at(i)->to_string();
-            } else {
-                oss << "nullptr";
-            }
-            if (i < signalSeriesHistory.size() - 1)
-                oss << ", ";
-        }
-        oss << "]\n";
-        oss << "OccupancyRecorded: [" << occupancyRecorded.to_string() << "]\n";
-        return oss.str();
-    }
-};
 
 /**
  * Class representing an obstacle.

@@ -73,6 +73,9 @@ set(ENV_MODEL_HDR_FILES
         commonroad_cpp/obstacle/time_parameters.h
         commonroad_cpp/obstacle/state.h
         commonroad_cpp/obstacle/obstacle_cache.h
+        commonroad_cpp/obstacle/recorded_states.h
+        commonroad_cpp/obstacle/trajectory_prediction.h
+        commonroad_cpp/obstacle/set_based_prediction.h
         commonroad_cpp/obstacle/occupancy.h
         commonroad_cpp/obstacle/signal_state.h
         commonroad_cpp/obstacle/state_meta_info.h
