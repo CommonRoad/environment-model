@@ -163,7 +163,7 @@ std::string ObstacleCache::to_string() const {
         oss << "\n        t=" << ts << ": " << val;
     }
     // rightLatPosition
-    oss << "      rightLatPosition: " << rightLatPosition.size() << " entries";
+    oss << "\n      rightLatPosition: " << rightLatPosition.size() << " entries";
     for (const auto &[ts, val] : rightLatPosition) {
         oss << "\n    t=" << ts << ": " << val;
     }
