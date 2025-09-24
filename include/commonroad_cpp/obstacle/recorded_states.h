@@ -45,18 +45,19 @@ struct RecordedStates {
      */
     std::string to_string() const {
         std::ostringstream oss;
-        oss << "  RecordedStates: ";
+        oss << "RecordedStates:\n";
         oss << "    CurrentState: " << (currentState ? currentState->to_string() : "nullptr")
-            << ", CurrentSignalState: " << (currentSignalState ? currentSignalState->to_string() : "nullptr") << "\n";
+            << ",\n    CurrentSignalState: " << (currentSignalState ? currentSignalState->to_string() : "nullptr")
+            << "\n";
         oss << "    TrajectoryHistory size: " << trajectoryHistory.size()
-            << ", SignalSeriesHistory size: " << signalSeriesHistory.size() << "\n";
+            << ",\n    SignalSeriesHistory size: " << signalSeriesHistory.size() << "\n";
         oss << "    TrajectoryHistory: [";
         for (const auto &[_, snd] : trajectoryHistory)
-            oss << snd->to_string();
+            oss << "\n      " << snd->to_string();
         oss << "]\n";
         oss << "    SignalSeriesHistory: [";
         for (const auto &[_, snd] : signalSeriesHistory)
-            oss << snd->to_string();
+            oss << "\n      " << snd->to_string();
         oss << "]\n";
         oss << occupancyRecorded.to_string();
         return oss.str();

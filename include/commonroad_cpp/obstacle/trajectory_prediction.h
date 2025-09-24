@@ -41,16 +41,16 @@ struct TrajectoryPrediction {
      */
     std::string to_string() const {
         std::ostringstream oss;
-        oss << "TrajectoryPrediction: ";
-        oss << "  SignalSeries size: " << signalSeries.size()
-            << ", TrajectoryPrediction size: " << trajectoryPrediction.size() << "\n";
+        oss << "TrajectoryPrediction:\n";
+        oss << "    SignalSeries size: " << signalSeries.size()
+            << ",\n    TrajectoryPrediction size: " << trajectoryPrediction.size() << "\n";
         oss << "    SignalSeries: [";
         for (const auto &[_, snd] : signalSeries)
-            oss << snd->to_string();
+            oss << "\n      " << snd->to_string();
         oss << "]\n";
         oss << "    TrajectoryPrediction: [";
         for (const auto &[_, snd] : trajectoryPrediction)
-            oss << snd->to_string();
+            oss << "\n      " << snd->to_string();
         oss << "]\n";
         oss << obstacleCache.to_string();
         return oss.str();

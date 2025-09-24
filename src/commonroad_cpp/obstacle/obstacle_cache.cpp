@@ -41,160 +41,160 @@ void ObstacleCache::clear() {
 
 std::string ObstacleCache::to_string() const {
     std::ostringstream oss;
-    oss << "  ObstacleCache: \n";
+    oss << "    ObstacleCache: ";
     // occupiedLanelets
-    oss << "    occupiedLanelets: " << occupiedLanelets.size() << " entries\n";
+    oss << "\n      occupiedLanelets: " << occupiedLanelets.size() << " entries";
     for (const auto &[ts, lanelets] : occupiedLanelets) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
             oss << lanelets[i]->getId();
             if (i < lanelets.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // occupiedLaneletsState
-    oss << "    occupiedLaneletsState: " << occupiedLaneletsState.size() << " entries\n";
+    oss << "\n      occupiedLaneletsState: " << occupiedLaneletsState.size() << " entries";
     for (const auto &[ts, lanelets] : occupiedLaneletsState) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
             oss << lanelets[i]->getId();
             if (i < lanelets.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // occupiedLaneletsFront
-    oss << "    occupiedLaneletsFront: " << occupiedLaneletsFront.size() << " entries\n";
+    oss << "\n      occupiedLaneletsFront: " << occupiedLaneletsFront.size() << " entries";
     for (const auto &[ts, lanelets] : occupiedLaneletsFront) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
             oss << lanelets[i]->getId();
             if (i < lanelets.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // occupiedLaneletsBack
-    oss << "    occupiedLaneletsBack: " << occupiedLaneletsBack.size() << " entries\n";
+    oss << "\n      occupiedLaneletsBack: " << occupiedLaneletsBack.size() << " entries";
     for (const auto &[ts, lanelets] : occupiedLaneletsBack) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
             oss << lanelets[i]->getId();
             if (i < lanelets.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // occupiedLanesDrivingDir
-    oss << "    occupiedLanesDrivingDir: " << occupiedLanesDrivingDir.size() << " entries\n";
+    oss << "\n      occupiedLanesDrivingDir: " << occupiedLanesDrivingDir.size() << " entries";
     for (const auto &[ts, lanes] : occupiedLanesDrivingDir) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < lanes.size(); ++i) {
             oss << lanes[i]->getId();
             if (i < lanes.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // occupiedLaneletsDrivingDir
-    oss << "    occupiedLaneletsDrivingDir: " << occupiedLaneletsDrivingDir.size() << " entries\n";
+    oss << "\n      occupiedLaneletsDrivingDir: " << occupiedLaneletsDrivingDir.size() << " entries";
     for (const auto &[ts, lanelets] : occupiedLaneletsDrivingDir) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
             oss << lanelets[i]->getId();
             if (i < lanelets.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // occupiedLaneletsNotDrivingDir
-    oss << "    occupiedLaneletsNotDrivingDir: " << occupiedLaneletsNotDrivingDir.size() << " entries\n";
+    oss << "\n      occupiedLaneletsNotDrivingDir: " << occupiedLaneletsNotDrivingDir.size() << " entries";
     for (const auto &[ts, lanelets] : occupiedLaneletsNotDrivingDir) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < lanelets.size(); ++i) {
             oss << lanelets[i]->getId();
             if (i < lanelets.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // referenceLane
-    oss << "    referenceLane: " << referenceLane.size() << " entries\n";
+    oss << "\n      referenceLane: " << referenceLane.size() << " entries";
     for (const auto &[ts, lane] : referenceLane) {
-        oss << "    t=" << ts << ": " << lane->getId() << "\n";
+        oss << "\n        t=" << ts << ": " << lane->getId() << "";
     }
     // occupiedLanes
-    oss << "    occupiedLanes: " << occupiedLanes.size() << " entries\n";
+    oss << "\n      occupiedLanes: " << occupiedLanes.size() << " entries";
     for (const auto &[ts, lanes] : occupiedLanes) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < lanes.size(); ++i) {
             oss << lanes[i]->getId();
             if (i < lanes.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // frontXYPositions
-    oss << "    frontXYPositions: " << frontXYPositions.size() << " entries\n";
+    oss << "\n      frontXYPositions: " << frontXYPositions.size() << " entries";
     for (const auto &[ts, positions] : frontXYPositions) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < positions.size(); ++i) {
             oss << positions[i];
             if (i < positions.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // backXYPositions
-    oss << "    backXYPositions: " << backXYPositions.size() << " entries\n";
+    oss << "\n      backXYPositions: " << backXYPositions.size() << " entries";
     for (const auto &[ts, positions] : backXYPositions) {
-        oss << "    t=" << ts << ": [";
+        oss << "\n        t=" << ts << ": [";
         for (size_t i = 0; i < positions.size(); ++i) {
             oss << positions[i];
             if (i < positions.size() - 1)
                 oss << ", ";
         }
-        oss << "]\n";
+        oss << "]";
     }
     // leftLatPosition
-    oss << "    leftLatPosition: " << leftLatPosition.size() << " entries\n";
+    oss << "\n      leftLatPosition: " << leftLatPosition.size() << " entries";
     for (const auto &[ts, val] : leftLatPosition) {
-        oss << "    t=" << ts << ": " << val << "\n";
+        oss << "\n        t=" << ts << ": " << val;
     }
     // rightLatPosition
-    oss << "    rightLatPosition: " << rightLatPosition.size() << " entries\n";
+    oss << "      rightLatPosition: " << rightLatPosition.size() << " entries";
     for (const auto &[ts, val] : rightLatPosition) {
-        oss << "    t=" << ts << ": " << val << "\n";
+        oss << "\n    t=" << ts << ": " << val;
     }
     // lateralDistanceToObjects
-    oss << "    lateralDistanceToObjects: " << lateralDistanceToObjects.size() << " entries\n";
+    oss << "\n      lateralDistanceToObjects: " << lateralDistanceToObjects.size() << " entries";
     for (const auto &[ts, distMap] : lateralDistanceToObjects) {
-        oss << "    t=" << ts << ": {";
+        oss << "\n        t=" << ts << ": {";
         size_t count = 0;
         for (const auto &[oid, dist] : distMap) {
             oss << oid << ":" << dist;
             if (++count < distMap.size())
                 oss << ", ";
         }
-        oss << "}\n";
+        oss << "}";
     }
     // convertedPositions
-    oss << "    convertedPositions: " << convertedPositions.size() << " entries\n";
+    oss << "\n      convertedPositions: " << convertedPositions.size() << " entries";
     for (const auto &[ts, ccsMap] : convertedPositions) {
-        oss << "    t=" << ts << ": {";
+        oss << "\n        t=" << ts << ": {";
         size_t count = 0;
         for (const auto &[ccs, pos] : ccsMap) {
             oss << "CCS@" << ccs.get() << ": [" << pos[0] << ", " << pos[1] << ", " << pos[2] << "]";
             if (++count < ccsMap.size())
                 oss << ", ";
         }
-        oss << "}\n";
+        oss << "}";
     }
     // shapeAtTimeStep
-    oss << "    shapeAtTimeStep: " << shapeAtTimeStep.size() << " entries\n";
+    oss << "\n      shapeAtTimeStep: " << shapeAtTimeStep.size() << " entries";
     for (const auto &[ts, mp] : shapeAtTimeStep) {
-        oss << "    t=" << ts << ": polygons=" << mp.size() << "\n";
+        oss << "\n        t=" << ts << ": polygons=" << mp.size() << "";
     }
     return oss.str();
 }
