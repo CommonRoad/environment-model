@@ -201,12 +201,13 @@ void World::updateObstacles(const std::vector<std::shared_ptr<Obstacle>> &obstac
         }
     }
     obstacles = newObstacles;
+    initMissingInformation();
 }
 
 void World::updateObstaclesTraj(
     const std::vector<std::shared_ptr<Obstacle>> &obstacleList, std::map<size_t, std::shared_ptr<State>> &currentStates,
     std::map<size_t, tsl::robin_map<time_step_t, std::shared_ptr<State>>> &trajectoryPredictions) {
-    std::vector<std::shared_ptr<Obstacle>> newObstacles{obstacleList};
+    std::vector newObstacles{obstacleList};
 
     for (const auto &[obsID, state] : currentStates) {
         auto existingObs{findObstacle(obsID)};
