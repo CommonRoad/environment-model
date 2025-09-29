@@ -15,7 +15,7 @@ bool ParallelToLaneMarkingOfTypeOnSidePredicate::booleanEvaluation(
 
     // check occupied lanelets first
     if (lanelet_operations::anyLaneletsContainLineMarkingType(
-            obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep), lineMarkingTypes,
+            obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep), lineMarkingTypes,
             additionalFunctionParameters.at(0)))
         return false;
 
