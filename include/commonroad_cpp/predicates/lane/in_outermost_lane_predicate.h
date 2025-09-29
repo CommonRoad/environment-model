@@ -5,7 +5,7 @@
 /**
  *  Evaluates if a vehicle is in the leftmost or rightmost lane. Side is given as parameter.
  */
-class InOutermostLanePredicate : public CommonRoadPredicate {
+class InOutermostLanePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for InOutermostLanePredicate.

@@ -5,7 +5,7 @@
 /**
  * Evaluates if a vehicle is not on an lanelet of similar orientation and with a specific type
  */
-class OnSimilarOrientedLaneletWithoutTypePredicate : public CommonRoadPredicate {
+class OnSimilarOrientedLaneletWithoutTypePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for OnShoulderPredicate
