@@ -12,15 +12,13 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.5
+        uses: pypa/cibuildwheel@v3.2.0
         env:
           # Increase build verbosity
           CIBW_BUILD_VERBOSITY: 1
-
-          CIBW_SKIP: "pp*"
 
           # Apparently libomp is already installed on macos-12, so this is unnecessary
           # CIBW_BEFORE_ALL_MACOS: brew install libomp
