@@ -40,14 +40,14 @@ Lanelet::Lanelet(size_t laneletId, std::vector<vertex> leftBorder, std::vector<v
     constructOuterPolygon();
 }
 
-void Lanelet::setId(const size_t lid) { laneletId = lid; }
+void Lanelet::setId(const size_t lid) const { laneletId = lid; }
 
-void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet> &left, bool oppositeDir) {
+void Lanelet::setLeftAdjacent(const std::shared_ptr<Lanelet> &left, bool oppositeDir) const {
     adjacentLeft.adj = left;
     adjacentLeft.oppositeDir = oppositeDir;
 }
 
-void Lanelet::setRightAdjacent(const std::shared_ptr<Lanelet> &right, bool oppositeDir) {
+void Lanelet::setRightAdjacent(const std::shared_ptr<Lanelet> &right, bool oppositeDir) const {
     adjacentRight.adj = right;
     adjacentRight.oppositeDir = oppositeDir;
 }
@@ -60,13 +60,13 @@ void Lanelet::setRightBorderVertices(const std::vector<vertex> &rightBorderVerti
 
 void Lanelet::setLaneletTypes(const std::set<LaneletType> &laType) { laneletTypes = laType; }
 
-void Lanelet::setUsersOneWay(const std::set<ObstacleType> &user) { usersOneWay = user; }
+void Lanelet::setUsersOneWay(const std::set<ObstacleType> &user) const { usersOneWay = user; }
 
 void Lanelet::setUsersBidirectional(const std::set<ObstacleType> &user) { usersBidirectional = user; }
 
 void Lanelet::setStopLine(const std::shared_ptr<StopLine> &line) { stopLine = line; }
 
-void Lanelet::addLeftVertex(const vertex left) { leftBorder.push_back(left); }
+void Lanelet::addLeftVertex(const vertex left) const { leftBorder.push_back(left); }
 
 void Lanelet::addRightVertex(const vertex right) { rightBorder.push_back(right); }
 
@@ -78,7 +78,7 @@ void Lanelet::addSuccessor(const std::shared_ptr<Lanelet> &suc) { successorLanel
 
 void Lanelet::addTrafficLight(const std::shared_ptr<TrafficLight> &light) { trafficLights.push_back(light); }
 
-void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign> &sign) { trafficSigns.push_back(sign); }
+void Lanelet::addTrafficSign(const std::shared_ptr<TrafficSign> &sign) const { trafficSigns.push_back(sign); }
 
 size_t Lanelet::getId() const { return laneletId; }
 
@@ -110,10 +110,10 @@ const Lanelet::adjacent &Lanelet::getAdjacentLeft() const { return adjacentLeft;
 
 const Lanelet::adjacent &Lanelet::getAdjacentRight() const { return adjacentRight; }
 
-const Lanelet::adjacent &Lanelet::getAdjacent(Direction dir) const {
+const Lanelet::adjacent &Lanelet::getAdjacent(const Direction dir) const {
     if (dir == Direction::left)
         return adjacentLeft;
-    else if (dir == Direction::right)
+    if (dir == Direction::right)
         return adjacentRight;
     throw std::invalid_argument("Lanelet::adjacent: Invalid direction");
 }
@@ -126,7 +126,7 @@ bool Lanelet::applyIntersectionTesting(const polygon_type &polygon_shape) const 
            bg::intersects(polygon_shape, this->getOuterPolygon());
 }
 
-bool Lanelet::checkIntersection(const polygon_type &polygon_shape, ContainmentType intersection_type) const {
+bool Lanelet::checkIntersection(const polygon_type &polygon_shape, const ContainmentType intersection_type) const {
     switch (intersection_type) {
     case ContainmentType::PARTIALLY_CONTAINED: {
         return this->applyIntersectionTesting(polygon_shape);
@@ -179,7 +179,7 @@ std::vector<std::shared_ptr<Lanelet>> Lanelet::getAdjacentSameDir() const { retu
 
 std::vector<std::shared_ptr<Lanelet>> Lanelet::getAdjacentBothDir() const { return adjacentBothDir; }
 
-void Lanelet::constructOuterPolygon() {
+void Lanelet::constructOuterPolygon() const {
     const std::vector<vertex> &leftBorderTemp = this->getLeftBorderVertices();
     const std::vector<vertex> &rightBorderTemp = this->getRightBorderVertices();
 
@@ -208,7 +208,7 @@ void Lanelet::constructOuterPolygon() {
 }
 
 void Lanelet::createCenterVertices() {
-    unsigned long numVertices = leftBorder.size();
+    const unsigned long numVertices = leftBorder.size();
     for (unsigned long i = 0; i < numVertices; i++) {
         vertex newVertex{};
         // calculate x and y values separately in order to minimize error
@@ -218,17 +218,17 @@ void Lanelet::createCenterVertices() {
     }
 }
 
-double Lanelet::getOrientationAtPosition(double positionX, double positionY) const {
-    unsigned long closestIndex = findClosestIndex(positionX, positionY);
+double Lanelet::getOrientationAtPosition(const double positionX, const double positionY) const {
+    const unsigned long closestIndex = findClosestIndex(positionX, positionY);
 
     // calculate orientation at vertex using its successor vertex
-    vertex vert1{centerVertices[closestIndex]};
-    vertex vert2{centerVertices[closestIndex + 1]};
+    const vertex vert1{centerVertices[closestIndex]};
+    const vertex vert2{centerVertices[closestIndex + 1]};
     return atan2(vert2.y - vert1.y, vert2.x - vert1.x);
 }
 
-size_t Lanelet::findClosestIndex(double positionX, double positionY,
-                                 bool considerLastIndex) const { // find the closest vertex to the given position
+size_t Lanelet::findClosestIndex(const double positionX, const double positionY,
+                                 const bool considerLastIndex) const { // find the closest vertex to the given position
     assert(!centerVertices.empty());
 
     double minimum_diff = std::numeric_limits<double>::infinity();
@@ -239,8 +239,8 @@ size_t Lanelet::findClosestIndex(double positionX, double positionY,
         numIterations = centerVertices.size();
 
     for (size_t i = 0; i < numIterations; ++i) {
-        double diffX = centerVertices[i].x - positionX;
-        double diffY = centerVertices[i].y - positionY;
+        const double diffX = centerVertices[i].x - positionX;
+        const double diffY = centerVertices[i].y - positionY;
 
         // NOTE:
         // Instead of calculating sqrt(diffX * diffX + diffY + diffY), we leave out the square root here!
@@ -249,9 +249,8 @@ size_t Lanelet::findClosestIndex(double positionX, double positionY,
         // Therefore it is OK to use the squared distance, saving a few cycles of calculating the square root.
         // Since findClosestIndex() is called quite often depending on the use case, this optimization
         // can have a notable impact.
-        double squared_diff = diffX * diffX + diffY * diffY;
 
-        if (squared_diff < minimum_diff) {
+        if (const double squared_diff = diffX * diffX + diffY * diffY; squared_diff < minimum_diff) {
             minimum_diff = squared_diff;
             minimum_index = i;
         }
@@ -263,14 +262,14 @@ size_t Lanelet::findClosestIndex(double positionX, double positionY,
     return minimum_index;
 }
 
-bool Lanelet::hasLaneletType(LaneletType laType) const {
+bool Lanelet::hasLaneletType(const LaneletType laType) const {
     return laType == LaneletType::all or laType == LaneletType::any or laneletTypes.find(laType) != laneletTypes.end();
 }
 
-bool Lanelet::hasLaneletTypes(std::vector<LaneletType> laTypes) const {
-    if (laTypes.size() == 1)
-        return laTypes.at(0) == LaneletType::any or laneletTypes.find(laTypes.at(0)) != laneletTypes.end();
-    return std::all_of(laTypes.begin(), laTypes.end(),
+bool Lanelet::hasLaneletTypes(std::vector<LaneletType> laType) const {
+    if (laType.size() == 1)
+        return laType.at(0) == LaneletType::any or laneletTypes.find(laType.at(0)) != laneletTypes.end();
+    return std::all_of(laType.begin(), laType.end(),
                        [this](const LaneletType ty) { return laneletTypes.find(ty) != laneletTypes.end(); });
 }
 
@@ -281,11 +280,11 @@ bool Lanelet::hasTrafficSign(TrafficSignTypes trafficSignType) const {
                        });
 }
 
-void Lanelet::addLaneletType(LaneletType laType) const { laneletTypes.insert(laType); }
+void Lanelet::addLaneletType(const LaneletType laType) const { laneletTypes.insert(laType); }
 
 LineMarking Lanelet::getLineMarkingLeft() const { return lineMarkingLeft; }
 
-void Lanelet::setLineMarkingLeft(LineMarking marking) const { lineMarkingLeft = marking; }
+void Lanelet::setLineMarkingLeft(const LineMarking marking) const { lineMarkingLeft = marking; }
 
 LineMarking Lanelet::getLineMarkingRight() const { return lineMarkingRight; }
 
@@ -311,16 +310,16 @@ const std::vector<double> &Lanelet::getWidthAlongLanelet() const {
 
 double Lanelet::getWidth(double positionX, double positionY) const {
     if (width.empty()) {
-        auto tmpWidth{geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder)};
+        const auto tmpWidth{geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder)};
         width = std::get<0>(tmpWidth);
         minWidth = std::get<1>(tmpWidth);
     }
     unsigned long closestIndex = findClosestIndex(positionX, positionY);
-    vertex vertS{centerVertices[closestIndex + 1] - centerVertices[closestIndex]};
-    vertex vertV{vertex{positionX, positionY} - centerVertices[closestIndex]};
-    vertex vertP{vertS * (geometric_operations::scalarProduct(vertS, vertV) /
-                          geometric_operations::scalarProduct(vertS, vertS))};
-    double scalar{
+    const vertex vertS{centerVertices[closestIndex + 1] - centerVertices[closestIndex]};
+    const vertex vertV{vertex{positionX, positionY} - centerVertices[closestIndex]};
+    const vertex vertP{vertS * (geometric_operations::scalarProduct(vertS, vertV) /
+                                geometric_operations::scalarProduct(vertS, vertS))};
+    const double scalar{
         geometric_operations::euclideanDistance2Dim(centerVertices[closestIndex],
                                                     vertP + centerVertices[closestIndex]) /
         geometric_operations::euclideanDistance2Dim(centerVertices[closestIndex], centerVertices[closestIndex + 1])};
@@ -329,17 +328,17 @@ double Lanelet::getWidth(double positionX, double positionY) const {
 
 double Lanelet::getMinWidth() const {
     if (width.empty()) {
-        auto tmpWidth{geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder)};
+        const auto tmpWidth{geometric_operations::computeDistanceFromPolylines(leftBorder, rightBorder)};
         width = std::get<0>(tmpWidth);
         minWidth = std::get<1>(tmpWidth);
     }
     return minWidth;
 }
 
-LineMarking Lanelet::getLineMarking(Direction dir) const {
+LineMarking Lanelet::getLineMarking(const Direction dir) const {
     if (dir == Direction::left)
         return lineMarkingLeft;
-    else if (dir == Direction::right)
+    if (dir == Direction::right)
         return lineMarkingRight;
     throw std::invalid_argument("Lanelet::getLineMarking: Invalid direction");
 }

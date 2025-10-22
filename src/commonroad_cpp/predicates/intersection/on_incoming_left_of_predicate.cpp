@@ -5,7 +5,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
-bool OnIncomingLeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+bool OnIncomingLeftOfPredicate::booleanEvaluation(const size_t timeStep, const std::shared_ptr<World> &world,
                                                   const std::shared_ptr<Obstacle> &obstacleK,
                                                   const std::shared_ptr<Obstacle> &obstacleP,
                                                   const std::vector<std::string> &additionalFunctionParameters,
@@ -24,19 +24,19 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(size_t timeStep, const std::sh
         }))
         return false;
 
-    auto laneK = obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep);
-    auto laneP = obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep);
+    const auto laneK = obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep);
+    const auto laneP = obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep);
     for (const auto &letK : laneK->getContainedLanelets()) {
         if (!letK->hasLaneletType(LaneletType::incoming))
             continue;
-        auto incomingK{world->getRoadNetwork()->findIncomingGroupByLanelet(letK)};
+        const auto incomingK{world->getRoadNetwork()->findIncomingGroupByLanelet(letK)};
         if (incomingK->getIsLeftOf() == nullptr)
             return false; // e.g, T-intersection or intersection with single incoming group
         for (const auto &letP : laneP->getContainedLanelets()) {
             if (!letP->hasLaneletType(LaneletType::incoming))
                 continue;
-            auto incomingP{world->getRoadNetwork()->findIncomingGroupByLanelet(letP)};
-            if (incomingK->getIsLeftOf()->getId() == incomingP->getId())
+            if (const auto incomingP{world->getRoadNetwork()->findIncomingGroupByLanelet(letP)};
+                incomingK->getIsLeftOf()->getId() == incomingP->getId())
                 return true;
         }
     }

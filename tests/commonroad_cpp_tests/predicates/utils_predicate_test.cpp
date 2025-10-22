@@ -96,13 +96,19 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
     auto vertTwo{vertex{0, 0}};
     auto trafficSignTwo{std::make_shared<TrafficSign>(trafficSignIdTwo, trafficSignElementsTwo, vertTwo, false)};
     // stop sign
-    size_t trafficSignIdThree = 201;
+    size_t trafficSignIdThree = 202;
     std::vector<std::string> trafficSignElementThreeValues;
     auto trafficSignElementsThree{std::vector<std::shared_ptr<TrafficSignElement>>{
         std::make_shared<TrafficSignElement>(TrafficSignTypes::STOP, trafficSignElementThreeValues)}};
     auto vertThree{vertex{40, 0}};
     auto trafficSignThree{
         std::make_shared<TrafficSign>(trafficSignIdThree, trafficSignElementsThree, vertThree, false)};
+    size_t trafficSignIdFour = 203;
+    std::vector<std::string> trafficSignElementFourValues;
+    auto trafficSignElementsFour{std::vector<std::shared_ptr<TrafficSignElement>>{
+        std::make_shared<TrafficSignElement>(TrafficSignTypes::YIELD, trafficSignElementThreeValues)}};
+    auto vertFour{vertex{40, 0}};
+    auto trafficSignFour{std::make_shared<TrafficSign>(trafficSignIdFour, trafficSignElementsFour, vertFour, false)};
     // stop line
     std::pair<vertex, vertex> slPositionOne{{20.0, 0.0}, {20.0, 3.0}};
     std::pair<vertex, vertex> slPositionTwo{{20.0, 3.0}, {21.0, 6.0}};
@@ -150,6 +156,8 @@ std::shared_ptr<RoadNetwork> create_road_network_2() {
 
     laneletOne2->setLeftAdjacent(laneletTwo2, false);
     laneletTwo2->setRightAdjacent(laneletOne2, false);
+    laneletTwo2->addTrafficSign(trafficSignOne);
+    laneletTwo2->addTrafficSign(trafficSignFour);
 
     // third lanelet
     size_t idLaneletThree = 333;

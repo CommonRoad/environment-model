@@ -9,7 +9,7 @@ bool InSingleLanePredicate::booleanEvaluation(size_t timeStep, const std::shared
                                               const std::shared_ptr<Obstacle> &obstacleP,
                                               const std::vector<std::string> &additionalFunctionParameters,
                                               bool setBased) {
-    auto occLanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
+    const auto occLanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
 
     auto comparePreSuc = [](const std::vector<std::shared_ptr<Lanelet>> &lanelets1,
                             const std::vector<std::shared_ptr<Lanelet>> &lanelets2) {

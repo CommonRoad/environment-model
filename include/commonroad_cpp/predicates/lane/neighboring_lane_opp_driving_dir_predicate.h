@@ -6,7 +6,7 @@
  * Evaluates if the adjacent lanelet of any occupied lanelet is of opposite driving direction.
  * Left/right adjacency is specified via a parameter.
  */
-class NeighboringLaneOppDrivingDirPredicate : public CommonRoadPredicate {
+class NeighboringLaneOppDrivingDirPredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for OncomingVehiclePredicate.

@@ -2,8 +2,6 @@
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
-
 /**
  *  Evaluates if two vehicles are located at the same intersection
  */

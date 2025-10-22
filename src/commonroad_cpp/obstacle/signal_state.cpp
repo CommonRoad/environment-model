@@ -1,12 +1,12 @@
 #include "commonroad_cpp/obstacle/signal_state.h"
 #include <algorithm>
 #include <spdlog/spdlog.h>
-#include <stdexcept>
+#include <sstream>
 
 size_t SignalState::getTimeStep() const { return timeStep; }
 
-SignalState::SignalState(size_t timeStep, bool horn, bool indicatorLeft, bool indicatorRight, bool brakingLights,
-                         bool hazardWarningLights, bool flashingBlueLights)
+SignalState::SignalState(const size_t timeStep, const bool horn, const bool indicatorLeft, const bool indicatorRight,
+                         const bool brakingLights, const bool hazardWarningLights, const bool flashingBlueLights)
     : horn(horn), indicatorLeft(indicatorLeft), indicatorRight(indicatorRight), brakingLights(brakingLights),
       hazardWarningLights(hazardWarningLights), flashingBlueLights(flashingBlueLights), timeStep(timeStep) {}
 
@@ -22,23 +22,23 @@ bool SignalState::isHazardWarningLights() const { return hazardWarningLights; }
 
 bool SignalState::isFlashingBlueLights() const { return flashingBlueLights; }
 
-void SignalState::setHorn(bool hornStatus) { horn = hornStatus; }
+void SignalState::setHorn(const bool hornStatus) { horn = hornStatus; }
 
-void SignalState::setIndicatorLeft(bool inl) { indicatorLeft = inl; }
+void SignalState::setIndicatorLeft(const bool inl) { indicatorLeft = inl; }
 
-void SignalState::setIndicatorRight(bool inr) { indicatorRight = inr; }
+void SignalState::setIndicatorRight(const bool inr) { indicatorRight = inr; }
 
-void SignalState::setBrakingLights(bool bls) { brakingLights = bls; }
+void SignalState::setBrakingLights(const bool bls) { brakingLights = bls; }
 
-void SignalState::setHazardWarningLights(bool hwl) { hazardWarningLights = hwl; }
+void SignalState::setHazardWarningLights(const bool hwl) { hazardWarningLights = hwl; }
 
-void SignalState::setFlashingBlueLights(bool fbl) { flashingBlueLights = fbl; }
+void SignalState::setFlashingBlueLights(const bool fbl) { flashingBlueLights = fbl; }
 
-void SignalState::setTimeStep(size_t tsp) { timeStep = tsp; }
+void SignalState::setTimeStep(const size_t tsp) { timeStep = tsp; }
 
-bool SignalState::isSignalSet(const std::string &signalName) {
+bool SignalState::isSignalSet(const std::string &signalName) const {
     auto sigNameTmp{signalName};
-    std::transform(sigNameTmp.begin(), sigNameTmp.end(), sigNameTmp.begin(), ::tolower);
+    std::transform(sigNameTmp.begin(), sigNameTmp.end(), sigNameTmp.begin(), tolower);
     if (sigNameTmp == "horn")
         return isHorn();
     if (sigNameTmp == "indicatorleft")
@@ -53,4 +53,12 @@ bool SignalState::isSignalSet(const std::string &signalName) {
         return isFlashingBlueLights();
     spdlog::error("SignalState::isSignalSet: Unknown signal name!");
     return false;
+}
+
+std::string SignalState::to_string() const {
+    std::ostringstream oss;
+    oss << "SignalState[timeStep=" << timeStep << ", horn=" << horn << ", indicatorLeft=" << indicatorLeft
+        << ", indicatorRight=" << indicatorRight << ", brakingLights=" << brakingLights
+        << ", hazardWarningLights=" << hazardWarningLights << ", flashingBlueLights=" << flashingBlueLights << "]";
+    return oss.str();
 }

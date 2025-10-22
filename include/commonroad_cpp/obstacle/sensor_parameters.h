@@ -57,9 +57,9 @@ class SensorParameters {
     /**
      * Setter of field of fiew.
      *
-     * @param fovVertices Vertices representing field of view.
+     * @param vertices Vertices representing field of view.
      */
-    void setFov(const std::vector<vertex> &fovVertices);
+    void setFov(const std::vector<vertex> &vertices);
 
     /**
      * Default sensor parameters for vehicles:
@@ -82,4 +82,11 @@ class SensorParameters {
      * Setter for default field of view.
      */
     void setDefaultFov();
+
+    /**
+     * Creates a string representation of the sensor parameters.
+     *
+     * @return String representation of sensor parameters.
+     */
+    [[nodiscard]] std::string to_string() const;
 };

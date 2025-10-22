@@ -6,19 +6,19 @@
 
 CloseToIntersectionPredicate::CloseToIntersectionPredicate() : CommonRoadPredicate(false) {}
 
-bool CloseToIntersectionPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+bool CloseToIntersectionPredicate::booleanEvaluation(const size_t timeStep, const std::shared_ptr<World> &world,
                                                      const std::shared_ptr<Obstacle> &obstacleK,
                                                      const std::shared_ptr<Obstacle> &obstacleP,
                                                      const std::vector<std::string> &additionalFunctionParameters,
                                                      bool setBased) {
-    std::vector<std::shared_ptr<Lanelet>> occupiedLanelets =
+    const std::vector<std::shared_ptr<Lanelet>> occupiedLanelets =
         obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep);
-    auto closeToIntersectionMaxDistance{std::stod(additionalFunctionParameters.at(0))};
+    const auto closeToIntersectionMaxDistance{std::stod(additionalFunctionParameters.at(0))};
 
     std::map<size_t, double> resultIdsWithDistance;
     std::vector<std::shared_ptr<Lanelet>> lanelets;
     for (const std::shared_ptr<Lanelet> &lanelet : occupiedLanelets) {
-        auto centerEndOfLane = lanelet->getCenterVertices().back();
+        const auto centerEndOfLane = lanelet->getCenterVertices().back();
         double distToEnd = obstacle_operations::drivingDistanceToCoordinatePoint(
             centerEndOfLane.x, centerEndOfLane.y, world->getRoadNetwork(), obstacleK, timeStep);
         resultIdsWithDistance.insert({lanelet->getId(), distToEnd});

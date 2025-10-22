@@ -335,6 +335,7 @@ void init_python_interface_core(nb::module_ &m) {
         .def("shape", &Obstacle::getGeoShape)
         .def("occupied_lanes", &Obstacle::getOccupiedLanes)
         .def("occupied_lanelets", &Obstacle::getOccupiedLaneletsByShape)
+        .def("to_string", &Obstacle::to_string)
         .def("driving_direction_lanes", &Obstacle::getOccupiedLanesDrivingDirection)
         .def("time_step_exists", &Obstacle::timeStepExists)
         .def_prop_rw("actuator_parameters", &Obstacle::getActuatorParameters, &Obstacle::setActuatorParameters)

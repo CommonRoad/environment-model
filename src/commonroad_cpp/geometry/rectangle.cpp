@@ -27,3 +27,7 @@ void Rectangle::printParameters() {
 }
 
 ShapeType Rectangle::getType() { return ShapeType::rectangle; }
+
+std::string Rectangle::to_string() {
+    return "Rectangle: length: " + std::to_string(length) + ", width: " + std::to_string(width);
+}

@@ -6,7 +6,7 @@
  * Evaluates whether a vehicle is on a lanelet of a given type or any successor lanelet of the currently occupied lanes
  * is of that type. Determination within a distance specified in the config parameters.
  */
-class OnLaneletWithSuccessorTypePredicate : public CommonRoadPredicate {
+class OnLaneletWithSuccessorTypePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for OnLaneletWithSuccessorTypePredicate

@@ -6,7 +6,7 @@
  * Evaluates whether the pth vehicle is on the same road as the kth vehicle.
  * The road is defined by the reference lane of the kth vehicle and its adjacent lanelets.
  */
-class OnSameRoadPredicate : public CommonRoadPredicate {
+class OnSameRoadPredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for OnSameRoadPredicate.

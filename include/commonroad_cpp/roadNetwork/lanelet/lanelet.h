@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstddef>
 #include <memory>
 #include <set>
 #include <vector>
@@ -73,7 +72,7 @@ class Lanelet : public std::enable_shared_from_this<Lanelet> {
      *
      * @param lid ID of lanelet.
      */
-    void setId(size_t lid);
+    void setId(size_t lid) const;
 
     /**
      * Setter for adjacent left lanelet.
@@ -81,7 +80,7 @@ class Lanelet : public std::enable_shared_from_this<Lanelet> {
      * @param left pointer to left lanelet.
      * @param oppositeDir driving direction of adjacent left lanelet.
      */
-    void setLeftAdjacent(const std::shared_ptr<Lanelet> &left, bool oppositeDir);
+    void setLeftAdjacent(const std::shared_ptr<Lanelet> &left, bool oppositeDir) const;
 
     /**
      * Setter for adjacent right lanelet.
@@ -89,7 +88,7 @@ class Lanelet : public std::enable_shared_from_this<Lanelet> {
      * @param right pointer to right lanelet.
      * @param oppositeDir driving direction of adjacent right lanelet.
      */
-    void setRightAdjacent(const std::shared_ptr<Lanelet> &right, bool oppositeDir);
+    void setRightAdjacent(const std::shared_ptr<Lanelet> &right, bool oppositeDir) const;
 
     /**
      * Setter for left lanelet border vertices.
@@ -117,7 +116,7 @@ class Lanelet : public std::enable_shared_from_this<Lanelet> {
      *
      * @param usersOneWay List of road users one way.
      */
-    void setUsersOneWay(const std::set<ObstacleType> &usersOneWay);
+    void setUsersOneWay(const std::set<ObstacleType> &usersOneWay) const;
 
     /**
      * Setter for road users bidirectional.
@@ -159,7 +158,7 @@ class Lanelet : public std::enable_shared_from_this<Lanelet> {
      *
      * @param left Vertex which should be appended.
      */
-    void addLeftVertex(vertex left);
+    void addLeftVertex(vertex left) const;
 
     /**
      * Appends a vertex to the right border.
@@ -194,7 +193,7 @@ class Lanelet : public std::enable_shared_from_this<Lanelet> {
      *
      * @param sign Pointer to traffic sign which should be added to lanelet.
      */
-    void addTrafficSign(const std::shared_ptr<TrafficSign> &sign);
+    void addTrafficSign(const std::shared_ptr<TrafficSign> &sign) const;
 
     /**
      * Getter for lanelet ID.
@@ -364,7 +363,7 @@ class Lanelet : public std::enable_shared_from_this<Lanelet> {
     /**
      * Constructs boost polygon representing shape of lanelet based on left and right border vertices.
      */
-    void constructOuterPolygon();
+    void constructOuterPolygon() const;
 
     /**
      * Computes orientation of lanelet given a x- and y-position of center vertices.

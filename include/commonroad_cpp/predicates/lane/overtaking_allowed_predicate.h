@@ -5,7 +5,7 @@
 /**
  * Checks whether overtaking is allowed based on lane marking and traffic signs
  */
-class OvertakingAllowedPredicate : public CommonRoadPredicate {
+class OvertakingAllowedPredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for OvertakingAllowedPredicate

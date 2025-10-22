@@ -138,7 +138,14 @@ class SignalState {
      * @param signalName Name of signal.
      * @return Boolean indicating whether signal is activated.
      */
-    bool isSignalSet(const std::string &signalName);
+    bool isSignalSet(const std::string &signalName) const;
+
+    /**
+     * Creates a string representation of a singal state.
+     *
+     * @return String representation of signal state.
+     */
+    std::string to_string() const;
 
   private:
     bool horn{false};                //**< Boolean indicating activity of horn. */

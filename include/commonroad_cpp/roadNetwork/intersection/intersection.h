@@ -1,6 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <set>
+#include <vector>
 
 class CrossingGroup;
 class IncomingGroup;
@@ -133,6 +135,14 @@ class Intersection {
      * @return Boolean indicating whether intersection has the specified type.
      */
     [[nodiscard]] bool hasIntersectionType(IntersectionType type);
+
+    /**
+     * Checks whether lanelet is member of intersection.
+     *
+     * @param memberLanelet ID of lanelet of interest.
+     * @return Boolean indicating whether lanelet is member of intersection.
+     */
+    [[nodiscard]] bool isMemberLanelet(size_t memberLanelet);
 
   private:
     size_t id; //**< ID of intersection. */

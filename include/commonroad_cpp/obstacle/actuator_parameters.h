@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 /*
  * orientation/acceleration/velocity error
@@ -130,4 +131,11 @@ class ActuatorParameters {
      * @return Default static obstacle kinematic parameters.
      */
     static ActuatorParameters staticDefaults();
+
+    /**
+     * Creates a string representation of the actuator parameters.
+     *
+     * @return String representation of actuator parameters.
+     */
+    [[nodiscard]] std::string to_string() const;
 };
