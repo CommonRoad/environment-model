@@ -34,12 +34,12 @@ void AtIntersectionTypePredicateTest::SetUp() {
 }
 
 TEST_F(AtIntersectionTypePredicateTest, TestFourWayStop) {
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle, {}, {"four_way_stop_intersection"}));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, {"four_way_stop_intersection"}));
-    EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, {"four_way_stop_intersection"}));
-    EXPECT_TRUE(pred.booleanEvaluation(4, world, egoVehicle, {}, {"four_way_stop_intersection"}));
-    EXPECT_FALSE(pred.booleanEvaluation(0, world_2, egoVehicle, {}, {"four_way_stop_intersection"}));
-    EXPECT_FALSE(pred.booleanEvaluation(3, world_2, egoVehicle, {}, {"four_way_stop_intersection"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, egoVehicle, {}, {"four_way_stop_intersection", "25"}));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, egoVehicle, {}, {"four_way_stop_intersection", "25"}));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, egoVehicle, {}, {"four_way_stop_intersection", "25"}));
+    EXPECT_TRUE(pred.booleanEvaluation(4, world, egoVehicle, {}, {"four_way_stop_intersection", "25"}));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world_2, egoVehicle, {}, {"four_way_stop_intersection", "25"}));
+    EXPECT_FALSE(pred.booleanEvaluation(3, world_2, egoVehicle, {}, {"four_way_stop_intersection", "25"}));
 }
 
 void AtIntersectionTypePredicateTest::SetUpTIntersection() {
@@ -83,17 +83,19 @@ void AtIntersectionTypePredicateTest::SetUpTIntersection() {
 
 TEST_F(AtIntersectionTypePredicateTest, TestTIntersection) {
     SetUpTIntersection();
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleTwo, {}, {"t_intersection"}));
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {}, {"t_intersection"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleTwo, {}, {"t_intersection", "25"}));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, {}, {"t_intersection", "25"}));
 
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleTwo, {}, {"t_intersection"}));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, {}, {"t_intersection"}));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleTwo, {}, {"t_intersection", "25"}));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, {}, {"t_intersection", "25"}));
 
-    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne, {}, {"t_intersection"}));
-    EXPECT_FALSE(pred.booleanEvaluation(2, world, obstacleTwo, {}, {"t_intersection"}));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne, {}, {"t_intersection", "25"}));
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleTwo, {}, {"t_intersection", "25"}));
 
-    EXPECT_FALSE(pred.booleanEvaluation(2, world_2, obstacleOne, {}, {"t_intersection"})); // not on t-intersection
-    EXPECT_FALSE(pred.booleanEvaluation(2, world_2, obstacleTwo, {}, {"t_intersection"})); // not on t-intersection
+    EXPECT_FALSE(
+        pred.booleanEvaluation(2, world_2, obstacleOne, {}, {"t_intersection", "25"})); // not on t-intersection
+    EXPECT_FALSE(
+        pred.booleanEvaluation(2, world_2, obstacleTwo, {}, {"t_intersection", "25"})); // not on t-intersection
 }
 
 void AtIntersectionTypePredicateTest::SetUpUncontrolledIntersection() {
@@ -133,22 +135,22 @@ void AtIntersectionTypePredicateTest::SetUpUncontrolledIntersection() {
 TEST_F(AtIntersectionTypePredicateTest, TestUncontrolledIntersection) {
     SetUpUncontrolledIntersection();
     EXPECT_FALSE(pred.booleanEvaluation(0, world, obstacleOne, {},
-                                        {"uncontrolled_intersection"})); // not at uncontrolled intersection
+                                        {"uncontrolled_intersection", "25"})); // not at uncontrolled intersection
 
     EXPECT_TRUE(pred.booleanEvaluation(1, world_2, obstacleOne, {},
-                                       {"uncontrolled_intersection"})); // approach uncontrolled intersection
+                                       {"uncontrolled_intersection", "25"})); // approach uncontrolled intersection
 
-    EXPECT_TRUE(
-        pred.booleanEvaluation(2, world_2, obstacleOne, {},
-                               {"uncontrolled_intersection"})); // in uncontrolled intersection but does not approach
-    EXPECT_TRUE(
-        pred.booleanEvaluation(3, world_2, obstacleOne, {},
-                               {"uncontrolled_intersection"})); // in uncontrolled intersection but does not approach
+    EXPECT_TRUE(pred.booleanEvaluation(
+        2, world_2, obstacleOne, {},
+        {"uncontrolled_intersection", "25"})); // in uncontrolled intersection but does not approach
+    EXPECT_TRUE(pred.booleanEvaluation(
+        3, world_2, obstacleOne, {},
+        {"uncontrolled_intersection", "25"})); // in uncontrolled intersection but does not approach
 
     EXPECT_TRUE(pred.booleanEvaluation(4, world_2, obstacleOne, {},
-                                       {"uncontrolled_intersection"})); // approach uncontrolled intersection
+                                       {"uncontrolled_intersection", "25"})); // approach uncontrolled intersection
     EXPECT_TRUE(pred.booleanEvaluation(5, world_2, obstacleOne, {},
-                                       {"uncontrolled_intersection"})); // approach uncontrolled intersection
+                                       {"uncontrolled_intersection", "25"})); // approach uncontrolled intersection
 }
 
 TEST_F(AtIntersectionTypePredicateTest, RobustEvaluation) {
@@ -172,15 +174,15 @@ TEST_F(AtIntersectionTypePredicateTest, SetBasedPrediction) {
     auto obs1{world->findObstacle(1213)};
     auto obs2{world->findObstacle(1219)};
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs1, {}, {"UNKNOWN"}, true));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs1, {}, {"UNKNOWN"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs1, {}, {"UNKNOWN", "3780"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs1, {}, {"UNKNOWN", "3780"}, true));
 
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs1, {}, {"FOUR_WAY_INTERSECTION"}, true));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs1, {}, {"FOUR_WAY_INTERSECTION"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs1, {}, {"FOUR_WAY_INTERSECTION", "3780"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs1, {}, {"FOUR_WAY_INTERSECTION", "3780"}, true));
 
-    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs2, {}, {"UNKNOWN"}, true));
-    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs2, {}, {"UNKNOWN"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, obs2, {}, {"UNKNOWN", "3780"}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obs2, {}, {"UNKNOWN", "3780"}, true));
 
-    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs2, {}, {"FOUR_WAY_INTERSECTION"}, true));
-    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs2, {}, {"FOUR_WAY_INTERSECTION"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obs2, {}, {"FOUR_WAY_INTERSECTION", "3780"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obs2, {}, {"FOUR_WAY_INTERSECTION", "3780"}, true));
 }

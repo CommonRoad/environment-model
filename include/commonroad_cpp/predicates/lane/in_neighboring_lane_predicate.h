@@ -6,7 +6,7 @@
  * Evaluates whether the pth vehicle is in the lane to the left/right of the kth vehicle. The side is given as
  * parameter.
  */
-class InNeighboringLanePredicate : public CommonRoadPredicate {
+class InNeighboringLanePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for InNeighboringLanePredicate.

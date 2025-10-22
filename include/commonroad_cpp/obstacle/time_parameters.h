@@ -1,14 +1,15 @@
 #pragma once
 
 #include <cstddef>
+#include <string>
 
 /**
  * TimeParameters includes information regarding obstacle time parameters
  */
 class TimeParameters {
-    size_t relevantHistorySize{50}; //**< number of history time steps to consider  */
-    double reactionTime{0.3};       /** reaction time of obstacle in [s] */
-    double timeStepSize{0.1};       /** time step size of obstacle in [s] */
+    size_t relevantHistorySize{100}; //**< number of history time steps to consider  */
+    double reactionTime{0.3};        /** reaction time of obstacle in [s] */
+    double timeStepSize{0.1};        /** time step size of obstacle in [s] */
 
   public:
     TimeParameters() = default;
@@ -46,9 +47,9 @@ class TimeParameters {
     /**
      * Setter for time step size (time step size needs to be adjusted in world object -> therefore separate setter).
      *
-     * @param timeStepSize New time step size [s].
+     * @param stepSize New time step size [s].
      */
-    void setTimeStepSize(double timeStepSize);
+    void setTimeStepSize(double stepSize);
 
     /**
      * Default time parameters for dynamic obstacles: relevantHistorySize = 50, reactionTime = 0.3s.
@@ -63,4 +64,11 @@ class TimeParameters {
      * @return Default static obstacle sensor parameters.
      */
     static TimeParameters staticDefaults();
+
+    /**
+     * Creates a string representation of the time parameters.
+     *
+     * @return String representation of time parameters.
+     */
+    [[nodiscard]] std::string to_string() const;
 };

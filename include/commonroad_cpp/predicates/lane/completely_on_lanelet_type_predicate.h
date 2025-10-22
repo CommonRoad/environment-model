@@ -5,7 +5,7 @@
 /**
  *  Evaluates if a vehicle is completely with its hole shape on a specific lanelet-type.
  */
-class CompletelyOnLaneletTypePredicate : public CommonRoadPredicate {
+class CompletelyOnLaneletTypePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for CompletelyOnOneLaneletTypePredicate

@@ -570,3 +570,9 @@ TEST_F(ObstacleTest, resetTimeVariables) {
             EXPECT_THROW(obstacleOne->getOccupiedLaneletsByShape(roadNetwork, time), std::logic_error);
     }
 }
+
+TEST_F(ObstacleTest, testToString) {
+    auto a{obstacleOne->to_string()};
+    EXPECT_GE(obstacleOne->to_string().size(), 4250);
+    EXPECT_GE(obstacleTwo->to_string().size(), 3250);
+}

@@ -14,10 +14,13 @@
 #include <commonroad_cpp/roadNetwork/road_network_config.h>
 
 #include "actuator_parameters.h"
+#include "recorded_states.h"
 #include "sensor_parameters.h"
+#include "set_based_prediction.h"
 #include "signal_state.h"
 #include "state_meta_info.h"
 #include "time_parameters.h"
+#include "trajectory_prediction.h"
 
 #include <tsl/robin_map.h>
 
@@ -37,79 +40,6 @@ using state_map_t = time_step_map_t<std::shared_ptr<State>>;
 using occupancy_map_t = time_step_map_t<std::shared_ptr<Occupancy>>;
 //** type of history/trajectory prediction maps for signal states*/
 using signal_state_map_t = time_step_map_t<std::shared_ptr<SignalState>>;
-
-/**
- * Struct representing set-based prediction.
- */
-struct SetBasedPrediction {
-    occupancy_map_t setBasedPrediction{}; //**< set-based prediction of the obstacle */
-    ObstacleCache obstacleCache{};        //**< cache for set-based prediction */
-
-    /**
-     * Resets helper mappings for obstacle time steps.
-     *
-     * @param timeStep Time step to remove from mapping variables.
-     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
-     */
-    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
-        obstacleCache.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
-    }
-
-    /**
-     * Clears the cache for set-based prediction.
-     */
-    void clearCache() { obstacleCache.clear(); }
-};
-
-/**
- * Struct representing trajectory prediction.
- */
-struct TrajectoryPrediction {
-    signal_state_map_t signalSeries{};  //**< signal series of the obstacle */
-    state_map_t trajectoryPrediction{}; //**< trajectory prediction of the obstacle */
-    ObstacleCache obstacleCache{};      //**< cache for trajectory prediction */
-
-    /**
-     * Resets helper mappings for obstacle time steps.
-     *
-     * @param timeStep Time step to remove from mapping variables.
-     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
-     */
-    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
-        obstacleCache.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
-    }
-
-    /**
-     * Clears the cache for trajectory prediction.
-     */
-    void clearCache() { obstacleCache.clear(); }
-};
-
-/**
- * Struct representing recorded states.
- */
-struct RecordedStates {
-    std::shared_ptr<State> currentState;             //**< pointer to current state of obstacle */
-    std::shared_ptr<SignalState> currentSignalState; //**< pointer to current signal state of obstacle */
-    state_map_t trajectoryHistory{};                 //**< previous states of the obstacle */
-    signal_state_map_t signalSeriesHistory{};        //**< previous signal states of the obstacle */
-    ObstacleCache occupancyRecorded;                 //**< cache for recorded occupancy (history + current time step) */
-
-    /**
-     * Resets helper mappings for obstacle time steps.
-     *
-     * @param timeStep Time step to remove from mapping variables.
-     * @param clearReferenceLane Boolean indicating whether reference lane should be cleared.
-     */
-    void removeTimeStepFromMappingVariables(const size_t timeStep, const bool clearReferenceLane) {
-        occupancyRecorded.removeTimeStepFromMappingVariables(timeStep, clearReferenceLane);
-    }
-
-    /**
-     * Clears the cache for trajectory prediction.
-     */
-    void clearCache() { occupancyRecorded.clear(); }
-};
 
 /**
  * Class representing an obstacle.
@@ -163,9 +93,9 @@ class Obstacle {
     /**
      * Setter for ID of obstacle.
      *
-     * @param obstacleId ID of obstacle.
+     * @param oId ID of obstacle.
      */
-    void setId(size_t obstacleId);
+    void setId(size_t oId);
 
     /**
      * Setter for isStatic.
@@ -212,30 +142,30 @@ class Obstacle {
     /**
      * Setter for actuator parameters.
      *
-     * @param actuatorParameters Actuator parameters
+     * @param params Actuator parameters
      */
-    void setActuatorParameters(const ActuatorParameters &actuatorParameters);
+    void setActuatorParameters(const ActuatorParameters &params);
 
     /**
      * Setter for time parameters.
      *
-     * @param timeParameters Time parameters
+     * @param params Time parameters
      */
-    void setTimeParameters(TimeParameters timeParameters);
+    void setTimeParameters(const TimeParameters &params);
 
     /**
      * Setter for sensor parameters.
      *
-     * @param sensorParameters Sensor parameters
+     * @param params Sensor parameters
      */
-    void setSensorParameters(SensorParameters sensorParameters);
+    void setSensorParameters(SensorParameters params);
 
     /**
      * Setter for road network parameters.
      *
-     * @param roadNetworkParameters Road network parameters
+     * @param params Road network parameters
      */
-    void setRoadNetworkParameters(RoadNetworkParameters roadNetworkParameters);
+    void setRoadNetworkParameters(RoadNetworkParameters params);
 
     /**
      * Setter for trajectory prediction.
@@ -563,7 +493,7 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Vector of double with X- and Y-Coordinate-Point.
      */
-    std::vector<double> getFrontXYCoordinates(time_step_t timeStep, bool setBased = false);
+    std::vector<double> getFrontXYCoordinates(time_step_t timeStep, bool setBased = false) const;
 
     /**
      * Computes the global coordinates of the back of the car.
@@ -572,7 +502,7 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      * @return Vector of double with X- and Y-Coordinate-Point.
      */
-    std::vector<double> getBackXYCoordinates(time_step_t timeStep, bool setBased = false);
+    std::vector<double> getBackXYCoordinates(time_step_t timeStep, bool setBased = false) const;
 
     /**
      * Computes the maximum longitudinal front position of obstacle (for rectangle shapes)
@@ -721,7 +651,7 @@ class Obstacle {
      */
     [[nodiscard]] double getCurvilinearOrientation(time_step_t timeStep,
                                                    const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
-                                                   bool setBased = false);
+                                                   bool setBased = false) const;
 
     /**
      * Sets the lanes from the road network the obstacle occupies at a certain time step
@@ -731,7 +661,7 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered. Default is false.
      */
     void setOccupiedLanes(const std::vector<std::shared_ptr<Lane>> &lanes, time_step_t timeStep,
-                          bool setBased = false); // TODO create test case
+                          bool setBased = false) const; // TODO create test case
 
     /**
      * Computes occupied lanes at a time step.
@@ -849,7 +779,7 @@ class Obstacle {
      *
      * @return Field of view area as polygon.
      */
-    const polygon_type getFov();
+    polygon_type getFov() const;
 
     /**
      * Setter for field of view area.
@@ -991,6 +921,13 @@ class Obstacle {
      * Clears the caches of predictions and recorded states.
      */
     void clearCache();
+
+    /**
+     * Creates a string representation of an obstacle.
+     *
+     * @return String representation of obstacle.
+     */
+    std::string to_string() const;
 
   private:
     size_t obstacleId;                                //**< unique ID of obstacle */

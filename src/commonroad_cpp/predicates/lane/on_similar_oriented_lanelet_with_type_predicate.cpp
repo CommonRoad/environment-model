@@ -4,13 +4,12 @@
 #include <commonroad_cpp/world.h>
 
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h"
-#include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/predicates/lane/on_similar_oriented_lanelet_with_type_predicate.h>
 
 bool OnSimilarOrientedLaneletWithTypePredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
-    bool setBased) {
+    const bool setBased) {
 
     auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep, setBased)};
     return std::any_of(lanelets.begin(), lanelets.end(),

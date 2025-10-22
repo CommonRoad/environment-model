@@ -5,7 +5,7 @@
 /**
  * Predicate which checks whether a road has two or more lanes in the same direction.
  */
-class TwoOrMoreLanesForOneDirPredicate : public CommonRoadPredicate {
+class TwoOrMoreLanesForOneDirPredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for TwoOrMoreLanesForOneDirPredicate.

@@ -2,8 +2,6 @@
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
-
 /**
  *  Evaluates if a vehicle is close to intersection by distance.
  *  The distance is specified in the config parameters.

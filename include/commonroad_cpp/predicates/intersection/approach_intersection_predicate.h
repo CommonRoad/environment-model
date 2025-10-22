@@ -2,8 +2,6 @@
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
-#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
-
 /**
  *  Evaluates if a vehicle is on an incoming of an intersection
  */

@@ -6,7 +6,7 @@
 /**
  * Class representing a circle.
  */
-class Circle : public Shape {
+class Circle final : public Shape {
   public:
     /**
      * Constructor without parameters. Sets center to origin and radius to zero.
@@ -21,7 +21,7 @@ class Circle : public Shape {
      *
      * @param rad Radius of circle [m].
      */
-    explicit Circle(double rad) {
+    explicit Circle(const double rad) {
         radius = rad;
         center = {0.0, 0.0};
     }
@@ -32,7 +32,7 @@ class Circle : public Shape {
      * @param rad Radius of circle [m].
      * @param vert Center vertex.
      */
-    Circle(double rad, vertex vert) {
+    Circle(const double rad, const vertex vert) {
         radius = rad;
         center = vert;
     }
