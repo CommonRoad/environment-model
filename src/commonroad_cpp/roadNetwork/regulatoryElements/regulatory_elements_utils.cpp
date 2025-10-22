@@ -12,10 +12,10 @@
 #include <unordered_set>
 
 std::set<std::shared_ptr<TrafficLight>>
-regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
+regulatory_elements_utils::activeTrafficLights(const size_t timeStep, const std::shared_ptr<Obstacle> &obs,
                                                const std::shared_ptr<RoadNetwork> &roadNetwork) {
     std::set<std::shared_ptr<TrafficLight>> trafficLights;
-    auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
+    const auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
     for (const auto &lanelet : lanelets) {
         for (const auto &light : lanelet->getTrafficLights()) {
             if (light->isActive() and light->getElementAtTime(timeStep).color != TrafficLightState::inactive)
@@ -25,9 +25,9 @@ regulatory_elements_utils::activeTrafficLights(size_t timeStep, const std::share
     return trafficLights;
 }
 
-bool regulatory_elements_utils::atTrafficLightDirState(size_t timeStep, const std::shared_ptr<Obstacle> &obs,
+bool regulatory_elements_utils::atTrafficLightDirState(const size_t timeStep, const std::shared_ptr<Obstacle> &obs,
                                                        const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                                       Direction turnDir, TrafficLightState tlState) {
+                                                       const Direction turnDir, const TrafficLightState tlState) {
     if (!intersection_operations::onIncoming(timeStep, obs, roadNetwork))
         return false;
     std::unordered_set<Direction> relevantTrafficLightDirections;
@@ -54,7 +54,7 @@ bool regulatory_elements_utils::atTrafficLightDirState(size_t timeStep, const st
                                           Direction::all,     Direction::right,        Direction::straightRight,
                                           Direction::straight};
     }
-    auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
+    const auto activeTl{activeTrafficLights(timeStep, obs, roadNetwork)};
     for (const auto &light : activeTl) {
         if (std::any_of(
                 relevantTrafficLightDirections.begin(), relevantTrafficLightDirections.end(),
@@ -68,12 +68,11 @@ bool regulatory_elements_utils::atTrafficLightDirState(size_t timeStep, const st
 double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lanelet,
                                              const TrafficSignTypes &signType) {
     double limit = std::numeric_limits<double>::max();
-    std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
+    const std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
     for (const std::shared_ptr<TrafficSign> &signPtr : trafficSigns) {
         for (const std::shared_ptr<TrafficSignElement> &elemPtr : signPtr->getTrafficSignElements()) {
             if (elemPtr->getTrafficSignType() == signType) {
-                double signLimit = std::stod(elemPtr->getAdditionalValues()[0]);
-                if (limit > signLimit)
+                if (const double signLimit = std::stod(elemPtr->getAdditionalValues()[0]); limit > signLimit)
                     limit = signLimit;
             }
         }
@@ -83,7 +82,7 @@ double regulatory_elements_utils::speedLimit(const std::shared_ptr<Lanelet> &lan
 
 double regulatory_elements_utils::speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
                                              const TrafficSignTypes &signType) {
-    std::vector<double> speedLimits{std::numeric_limits<double>::max()};
+    std::vector speedLimits{std::numeric_limits<double>::max()};
     for (const auto &lanelet : lanelets) {
         speedLimits.push_back(speedLimit(lanelet, signType));
     }
@@ -94,7 +93,7 @@ double regulatory_elements_utils::speedLimitSuggested(const std::vector<std::sha
                                                       const TrafficSignTypes &signType,
                                                       const double desiredInterstateVelocity,
                                                       const double desiredUrbanVelocity) {
-    double vMaxLane{speedLimit(lanelets, signType)};
+    const double vMaxLane{speedLimit(lanelets, signType)};
     if (vMaxLane == std::numeric_limits<double>::max()) {
         if (std::any_of(lanelets.begin(), lanelets.end(),
                         [](const std::shared_ptr<Lanelet> &let) { return let->hasLaneletType(LaneletType::urban); }))
@@ -111,12 +110,11 @@ double regulatory_elements_utils::speedLimitSuggested(const std::vector<std::sha
 double regulatory_elements_utils::requiredVelocity(const std::shared_ptr<Lanelet> &lanelet,
                                                    const TrafficSignTypes &signType) {
     double limit = std::numeric_limits<double>::lowest();
-    std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
+    const std::vector<std::shared_ptr<TrafficSign>> trafficSigns = lanelet->getTrafficSigns();
     for (const std::shared_ptr<TrafficSign> &signPtr : trafficSigns) {
         for (const std::shared_ptr<TrafficSignElement> &elemPtr : signPtr->getTrafficSignElements()) {
             if (elemPtr->getTrafficSignType() == signType) {
-                double signLimit = std::stod(elemPtr->getAdditionalValues()[0]);
-                if (limit < signLimit)
+                if (const double signLimit = std::stod(elemPtr->getAdditionalValues()[0]); limit < signLimit)
                     limit = signLimit;
             }
         }
@@ -135,7 +133,7 @@ double regulatory_elements_utils::requiredVelocity(const std::vector<std::shared
     return *std::max_element(speedLimits.begin(), speedLimits.end());
 }
 
-double regulatory_elements_utils::typeSpeedLimit(ObstacleType obstacleType) {
+double regulatory_elements_utils::typeSpeedLimit(const ObstacleType obstacleType) {
     switch (obstacleType) {
     case ObstacleType::truck:
         return 22.22;
@@ -155,15 +153,19 @@ std::vector<std::string> regulatory_elements_utils::getRelevantPrioritySignIDs()
 
 std::shared_ptr<TrafficSignElement>
 regulatory_elements_utils::extractPriorityTrafficSign(const std::shared_ptr<Lanelet> &lanelet) {
-    static const std::vector<std::string> relevantPrioritySignIds{getRelevantPrioritySignIDs()};
+    static const std::vector relevantPrioritySignIds{getRelevantPrioritySignIDs()};
     std::vector<std::shared_ptr<TrafficSignElement>> relevantTrafficSignElements;
     for (const auto &trs : lanelet->getTrafficSigns()) {
         auto trafficSignElements{trs->getTrafficSignElements()};
-        relevantTrafficSignElements.insert(relevantTrafficSignElements.end(), trafficSignElements.begin(),
-                                           trafficSignElements.end());
+        for (const auto &elem : trafficSignElements) {
+            // Only insert if the traffic sign element type is in relevantPrioritySignIds
+            if (std::find(relevantPrioritySignIds.begin(), relevantPrioritySignIds.end(),
+                          TrafficSignIDGermany.at(elem->getTrafficSignType())) != relevantPrioritySignIds.end()) {
+                relevantTrafficSignElements.push_back(elem);
+            }
+        }
     }
-    std::shared_ptr<TrafficSignElement> tmpSign{
-        std::make_shared<TrafficSignElement>(TrafficSignTypes::WARNING_RIGHT_BEFORE_LEFT)};
+    auto tmpSign{std::make_shared<TrafficSignElement>(TrafficSignTypes::WARNING_RIGHT_BEFORE_LEFT)};
     for (const auto &tse : relevantTrafficSignElements) {
         if (!std::any_of(relevantTrafficSignElements.begin(), relevantTrafficSignElements.end(),
                          [tse](const std::shared_ptr<TrafficSignElement> &tel) {
@@ -184,9 +186,9 @@ int regulatory_elements_utils::extractPriorityTrafficSign(const std::vector<std:
     std::shared_ptr<TrafficSignElement> tmpSign;
     int currentPriorityValue{std::numeric_limits<int>::min()};
     for (const auto &let : lanelets) {
-        auto trs{regulatory_elements_utils::extractPriorityTrafficSign(let)};
         // TODO replace TrafficSignIDGermany.at(
-        if (priorityTable.count(TrafficSignIDGermany.at(trs->getTrafficSignType())) == 1 and
+        if (const auto trs{extractPriorityTrafficSign(let)};
+            priorityTable.count(TrafficSignIDGermany.at(trs->getTrafficSignType())) == 1 and
             (currentPriorityValue == std::numeric_limits<int>::min() or
              priorityTable.at(TrafficSignIDGermany.at(trs->getTrafficSignType())).at(static_cast<size_t>(dir)) <
                  currentPriorityValue))
@@ -196,46 +198,46 @@ int regulatory_elements_utils::extractPriorityTrafficSign(const std::vector<std:
     return currentPriorityValue;
 }
 
-int regulatory_elements_utils::getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
-                                           const std::shared_ptr<Obstacle> &obs, Direction dir) {
-    auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
+int regulatory_elements_utils::getPriority(const size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork,
+                                           const std::shared_ptr<Obstacle> &obs, const Direction dir) {
+    const auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
     std::vector<std::shared_ptr<Lanelet>> relevantIncomingLanelets;
     for (const auto &let : lanelets) {
         if (let->hasLaneletType(LaneletType::incoming))
             relevantIncomingLanelets.push_back(let);
     }
-    return regulatory_elements_utils::extractPriorityTrafficSign(relevantIncomingLanelets, dir);
+    return extractPriorityTrafficSign(relevantIncomingLanelets, dir);
 }
 
 TrafficSignTypes regulatory_elements_utils::extractTypeFromNationalID(const std::string &trafficSignId,
-                                                                      SupportedTrafficSignCountry country,
+                                                                      const SupportedTrafficSignCountry country,
                                                                       const std::string &country_string) {
     if (trafficSignId == "274") // some old scenarios use German ID for other countries.
         return TrafficSignTypes::MAX_SPEED;
     if (country == SupportedTrafficSignCountry::GERMANY or country == SupportedTrafficSignCountry::ZAMUNDA) {
-        for (const auto &countrySign : TrafficSignIDGermany)
-            if (countrySign.second == trafficSignId)
-                return countrySign.first;
+        for (const auto &[fst, snd] : TrafficSignIDGermany)
+            if (snd == trafficSignId)
+                return fst;
     } else if (country == SupportedTrafficSignCountry::USA) {
-        for (const auto &countrySign : TrafficSignIDUSA)
-            if (countrySign.second == trafficSignId)
-                return countrySign.first;
+        for (const auto &[fst, snd] : TrafficSignIDUSA)
+            if (snd == trafficSignId)
+                return fst;
     } else if (country == SupportedTrafficSignCountry::SPAIN) {
-        for (const auto &countrySign : TrafficSignIDSpain)
-            if (countrySign.second == trafficSignId)
-                return countrySign.first;
+        for (const auto &[fst, snd] : TrafficSignIDSpain)
+            if (snd == trafficSignId)
+                return fst;
     } else if (country == SupportedTrafficSignCountry::ARGENTINA) {
-        for (const auto &countrySign : TrafficSignIDArgentina)
-            if (countrySign.second == trafficSignId)
-                return countrySign.first;
+        for (const auto &[fst, snd] : TrafficSignIDArgentina)
+            if (snd == trafficSignId)
+                return fst;
     } else if (country == SupportedTrafficSignCountry::BELGIUM) {
-        for (const auto &countrySign : TrafficSignIDBelgium)
-            if (countrySign.second == trafficSignId)
-                return countrySign.first;
+        for (const auto &[fst, snd] : TrafficSignIDBelgium)
+            if (snd == trafficSignId)
+                return fst;
     } else if (country == SupportedTrafficSignCountry::AUSTRALIA) {
-        for (const auto &countrySign : TrafficSignIDAustralia)
-            if (countrySign.second == trafficSignId)
-                return countrySign.first;
+        for (const auto &[fst, snd] : TrafficSignIDAustralia)
+            if (snd == trafficSignId)
+                return fst;
     } else
         throw std::runtime_error("regulatory_elements_utils::extractTypeFromNationalID: Unknown country ID " +
                                  country_string);
@@ -244,15 +246,15 @@ TrafficSignTypes regulatory_elements_utils::extractTypeFromNationalID(const std:
 }
 
 bool regulatory_elements_utils::lineInFront(const std::vector<vertex> &line, const std::shared_ptr<Obstacle> &obs,
-                                            size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork) {
-    auto ccs{obs->getReferenceLane(roadNetwork, timeStep)->getCurvilinearCoordinateSystem()};
+                                            const size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork) {
+    const auto ccs{obs->getReferenceLane(roadNetwork, timeStep)->getCurvilinearCoordinateSystem()};
     if (!ccs->cartesianPointInProjectionDomain(line.at(0).x, line.at(0).y))
         return false;
     auto a{ccs->convertToCurvilinearCoords(line.at(0).x, line.at(0).y)};
     if (!ccs->cartesianPointInProjectionDomain(line.at(1).x, line.at(1).y))
         return false;
     auto b{ccs->convertToCurvilinearCoords(line.at(1).x, line.at(1).y)};
-    multi_polygon_type shapes{obs->getOccupancyPolygonShape(timeStep)};
+    const multi_polygon_type shapes{obs->getOccupancyPolygonShape(timeStep)};
     for (const auto &shape : shapes)
         for (size_t idx{0}; idx < shape.outer().size(); ++idx) {
             auto point{shape.outer().at(idx)};
@@ -272,23 +274,22 @@ bool regulatory_elements_utils::lineInFront(const std::vector<vertex> &line, con
 }
 
 double regulatory_elements_utils::minDistance(const std::vector<vertex> &line, polygon_type shape) {
-    auto a{(line.at(0).y - line.at(1).y)};
-    auto b{line.at(1).x - line.at(0).x};
-    auto c{(line.at(0).x - line.at(1).x) * line.at(0).y + (line.at(1).y - line.at(0).y) * line.at(0).x};
+    const auto a{(line.at(0).y - line.at(1).y)};
+    const auto b{line.at(1).x - line.at(0).x};
+    const auto c{(line.at(0).x - line.at(1).x) * line.at(0).y + (line.at(1).y - line.at(0).y) * line.at(0).x};
     std::vector<double> distances;
     for (const auto &point : shape.outer()) {
-        distances.push_back(std::fabs((a * point.x() + b * point.y() + c)) / (sqrt(a * a + b * b)));
+        distances.push_back(std::fabs(a * point.x() + b * point.y() + c) / sqrt(a * a + b * b));
     }
     return *std::min_element(distances.begin(), distances.end());
 }
 
 Direction regulatory_elements_utils::matchDirections(const std::string &dir) {
     std::string str{dir};
-    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    std::transform(str.begin(), str.end(), str.begin(), toupper);
     str.erase(remove(str.begin(), str.end(), '_'), str.end());
     if (DirectionNames.count(str) == 1)
         return DirectionNames.at(str);
-    else
-        throw std::logic_error("regulatory_elements_utils::matchDirections: Invalid turning direction state '" + str +
-                               "'!");
+    throw std::logic_error("regulatory_elements_utils::matchDirections: Invalid turning direction state '" + str +
+                           "'!");
 }

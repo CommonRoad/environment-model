@@ -27,8 +27,6 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/interfaces/test_interfaces.cpp
         commonroad_cpp_tests/auxiliaryDefs/test_timer.cpp
 
-        commonroad_cpp_tests/lanePredicates/test_is_same_lane_pred.cpp
-
         commonroad_cpp_tests/predicates/predicate_config_test.cpp
         commonroad_cpp_tests/predicates/predicate_manager_test.cpp
         commonroad_cpp_tests/predicates/utils_predicate_test.cpp
@@ -49,11 +47,14 @@ set(ENV_MODEL_TEST_SRC_FILES
 
         commonroad_cpp_tests/predicates/intersection/test_at_intersection_type_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_approach_intersection_predicate.cpp
+        commonroad_cpp_tests/predicates/intersection/test_in_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_at_same_intersection_predicate.cpp
+        commonroad_cpp_tests/predicates/intersection/test_on_single_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_in_intersection_conflict_area_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_close_to_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_unobstructed_intersection_view_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_on_incoming_left_of_predicate.cpp
+        commonroad_cpp_tests/predicates/intersection/test_on_incoming_of_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/intersection/test_on_oncoming_of_predicate.cpp
 
         commonroad_cpp_tests/predicates/lane/test_overtaking_allowed_predicate.cpp

@@ -213,3 +213,11 @@ const std::shared_ptr<LaneletGraph> &RoadNetwork::getTopologicalMap() const {
     topologicalMap = std::make_shared<LaneletGraph>(laneletNetwork);
     return topologicalMap;
 }
+
+const std::shared_ptr<Intersection> &RoadNetwork::getIntersectionByID(const size_t intersectionID) const {
+    for (const auto &inter : intersections)
+        if (inter->getId() == intersectionID)
+            return inter;
+    throw std::domain_error("RoadNetwork::getIntersectionByID: Intersection with ID " + std::to_string(intersectionID) +
+                            " does not exist in road network!");
+}

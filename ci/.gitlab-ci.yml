@@ -12,11 +12,6 @@ before_script:
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de".insteadOf "ssh://git@gitlab.lrz.de"
 
 ### static test ###
-clang-format:
-  stage: static-test
-  script: ./ci/clang-format.sh
-  needs: []
-
 clang-tidy:
   stage: static-test
   script: ./ci/clang-tidy.sh

@@ -26,3 +26,11 @@ Polygon::Polygon(const std::vector<vertex> &pol) {
     }
     return vertices;
 }
+
+std::string Polygon::to_string() {
+    std::string result = "Polygon: ";
+    for (const auto &point : polygon.outer()) {
+        result += "{" + std::to_string(point.x()) + ", " + std::to_string(point.y()) + "}; ";
+    }
+    return result;
+}

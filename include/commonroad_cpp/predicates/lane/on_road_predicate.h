@@ -5,7 +5,7 @@
 /**
  * Evaluates if the kth obstacle is on the road
  */
-class OnRoadPredicate : public CommonRoadPredicate {
+class OnRoadPredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for OnRoadPredicate
