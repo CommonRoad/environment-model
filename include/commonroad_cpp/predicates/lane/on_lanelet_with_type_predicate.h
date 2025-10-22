@@ -5,7 +5,7 @@
 /**
  * Evaluates if a vehicle is on an lanelet with a specific type
  */
-class OnLaneletWithTypePredicate : public CommonRoadPredicate {
+class OnLaneletWithTypePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for OnShoulderPredicate

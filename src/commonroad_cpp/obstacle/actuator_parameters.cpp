@@ -1,6 +1,7 @@
 #include "commonroad_cpp/obstacle/actuator_parameters.h"
 #include <cassert>
 #include <cmath>
+#include <string>
 
 ActuatorParameters::ActuatorParameters(double vMax, double aMax, double aMaxLong, double aMinLong, double aBraking)
     : vMax{vMax}, aMax{aMax}, aMaxLong{aMaxLong}, aMinLong{aMinLong}, aBraking{aBraking} {
@@ -33,3 +34,9 @@ ActuatorParameters ActuatorParameters::egoDefaults() { return ActuatorParameters
 ActuatorParameters ActuatorParameters::pedestrianDefaults() { return ActuatorParameters{2.0, 0.6}; }
 
 ActuatorParameters ActuatorParameters::staticDefaults() { return ActuatorParameters{0.0, 0.0}; }
+
+std::string ActuatorParameters::to_string() const {
+    return "ActuatorParameters: vMax: " + std::to_string(vMax) + ", aMax: " + std::to_string(aMax) +
+           ", aMaxLong: " + std::to_string(aMaxLong) + ", aMinLong: " + std::to_string(aMinLong) +
+           ", aBraking: " + std::to_string(aBraking) + "\n";
+}

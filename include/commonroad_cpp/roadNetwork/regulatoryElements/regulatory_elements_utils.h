@@ -72,7 +72,7 @@ double speedLimit(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const T
  * @return Speed limit [m/s]
  */
 double speedLimitSuggested(const std::vector<std::shared_ptr<Lanelet>> &lanelets, const TrafficSignTypes &signType,
-                           const double desiredInterstateVelocity, const double desiredUrbanVelocity);
+                           double desiredInterstateVelocity, double desiredUrbanVelocity);
 
 /**
  * Computes applicable required speed on provided lanelet.
@@ -100,12 +100,39 @@ double requiredVelocity(const std::vector<std::shared_ptr<Lanelet>> &lanelets, c
  */
 double typeSpeedLimit(ObstacleType obstacleType);
 
+/**
+ * Returns all relevant priority traffic sign IDs.
+ *
+ * @return Vector of strings containing relevant priority traffic sign IDs.
+ */
 std::vector<std::string> getRelevantPrioritySignIDs();
 
+/**
+ * Extracts the priority traffic sign from a lanelet.
+ *
+ * @param lanelet Pointer to the lanelet from which the priority traffic sign should be extracted.
+ * @return Pointer to the extracted priority traffic sign element, or a default one if none is found.
+ */
 std::shared_ptr<TrafficSignElement> extractPriorityTrafficSign(const std::shared_ptr<Lanelet> &lanelet);
 
+/**
+ * Extracts the priority value of a traffic sign from a vector of lanelets and a given turning direction.
+ *
+ * @param lanelets Vector of pointers to lanelets from which the priority traffic sign should be extracted.
+ * @param dir Turning direction for which the priority should be extracted.
+ * @return Integer representing the priority value of the traffic sign.
+ */
 int extractPriorityTrafficSign(const std::vector<std::shared_ptr<Lanelet>> &lanelets, Direction dir);
 
+/**
+ * Extracts the priority value of a traffic sign from a vector of lanelets and a given turning direction.
+ *
+ * @param timeStep Time Step of interest.
+ * @param roadNetwork Pointer to road network.
+ * @param obs Obstacle for which the priority should be extracted.
+ * @param dir Turning direction for which the priority should be extracted.
+ * @return Integer representing the priority value of the obstacle.
+ */
 int getPriority(size_t timeStep, const std::shared_ptr<RoadNetwork> &roadNetwork, const std::shared_ptr<Obstacle> &obs,
                 Direction dir);
 /**

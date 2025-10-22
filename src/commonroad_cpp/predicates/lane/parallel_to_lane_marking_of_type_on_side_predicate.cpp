@@ -6,14 +6,16 @@
 #include <commonroad_cpp/predicates/lane/parallel_to_lane_marking_of_type_on_side_predicate.h>
 
 bool ParallelToLaneMarkingOfTypeOnSidePredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
+    const size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
     bool setBased) {
     // get relevant line marking types
-    std::vector<LineMarking> lineMarkingTypes{
+    const std::vector lineMarkingTypes{
         lanelet_operations::matchStringToLineMarkingOptions(additionalFunctionParameters.at(1))};
+
+    // check occupied lanelets first
     if (lanelet_operations::anyLaneletsContainLineMarkingType(
-            obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep), lineMarkingTypes,
+            obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep), lineMarkingTypes,
             additionalFunctionParameters.at(0)))
         return false;
 

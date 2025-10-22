@@ -5,7 +5,7 @@
 /**
  * Evaluates whether the kth and pth vehicle occupy the same lane.
  */
-class InSameLanePredicate : public CommonRoadPredicate {
+class InSameLanePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for InSameLanePredicate.

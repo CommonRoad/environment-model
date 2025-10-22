@@ -8,35 +8,36 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 
-bool OnOncomingOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+bool OnOncomingOfPredicate::booleanEvaluation(const size_t timeStep, const std::shared_ptr<World> &world,
                                               const std::shared_ptr<Obstacle> &obstacleK,
                                               const std::shared_ptr<Obstacle> &obstacleP,
                                               const std::vector<std::string> &additionalFunctionParameters,
-                                              bool setBased) {
+                                              const bool setBased) {
 
-    auto intersections{obstacle_operations::getIntersections(timeStep, world->getRoadNetwork(), obstacleP)};
+    const auto intersections{obstacle_operations::getIntersections(timeStep, world->getRoadNetwork(), obstacleP)};
     std::vector<std::shared_ptr<IncomingGroup>> incomings;
     for (const auto &inter : intersections)
         for (const auto &incom : inter->getIncomingGroups()) {
-            auto angle{incom->getIncomingLanelets().at(0)->getOrientation().back()};
-            auto angleDif{M_PI - std::abs(geometric_operations::subtractOrientations(
-                                     angle, obstacleP->getStateByTimeStep(timeStep)->getGlobalOrientation()))};
+            const auto angle{incom->getIncomingLanelets().at(0)->getOrientation().back()};
+            const auto angleDif{M_PI - std::abs(geometric_operations::subtractOrientations(
+                                           angle, obstacleP->getStateByTimeStep(timeStep)->getGlobalOrientation()))};
             if (std::abs(angleDif) < std::stod(additionalFunctionParameters.at(0)))
                 incomings.push_back(incom);
         }
-    auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep, setBased)};
+    const auto lanelets{
+        obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep, setBased)};
     for (const auto &let : lanelets)
         for (const auto &incom : incomings) {
-            auto straightSuccessors{incom->getAllStraightGoingLanelets()};
-            if (std::any_of(straightSuccessors.begin(), straightSuccessors.end(),
+            if (auto straightSuccessors{incom->getAllStraightGoingLanelets()};
+                std::any_of(straightSuccessors.begin(), straightSuccessors.end(),
                             [let](const std::shared_ptr<Lanelet> &letSuc) { return let->getId() == letSuc->getId(); }))
                 return true;
-            auto rightSuccessors{incom->getAllRightTurningLanelets()};
-            if (std::any_of(rightSuccessors.begin(), rightSuccessors.end(),
+            if (auto rightSuccessors{incom->getAllRightTurningLanelets()};
+                std::any_of(rightSuccessors.begin(), rightSuccessors.end(),
                             [let](const std::shared_ptr<Lanelet> &letSuc) { return let->getId() == letSuc->getId(); }))
                 return true;
-            auto incomingLanelets{incom->getIncomingLanelets()};
-            if (std::any_of(incomingLanelets.begin(), incomingLanelets.end(),
+            if (auto incomingLanelets{incom->getIncomingLanelets()};
+                std::any_of(incomingLanelets.begin(), incomingLanelets.end(),
                             [let](const std::shared_ptr<Lanelet> &letSuc) { return let->getId() == letSuc->getId(); }))
                 return true;
         }

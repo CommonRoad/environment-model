@@ -3,11 +3,11 @@
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
 /**
- *  Evaluates if a the adjacent lanelet of a vehicle has a provided type.
+ *  Evaluates if the adjacent lanelet of a vehicle has a provided type.
  *  The side and lanelet type must be provided as parameter.
  *  Only lanelets which are not occupied are considered as adjacent.
  */
-class AdjacentLaneletOfTypePredicate : public CommonRoadPredicate {
+class AdjacentLaneletOfTypePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for AdjacentLaneletOfTypePredicate

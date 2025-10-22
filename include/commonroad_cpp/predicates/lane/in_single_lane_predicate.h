@@ -5,7 +5,7 @@
 /**
  * Evaluates whether the kth vehicle occupies as single lane.
  */
-class InSingleLanePredicate : public CommonRoadPredicate {
+class InSingleLanePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for InSingleLanePredicate.

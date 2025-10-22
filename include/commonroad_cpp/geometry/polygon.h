@@ -8,7 +8,7 @@
 /**
  * Class representing a polygon.
  */
-class Polygon : public Shape {
+class Polygon final : public Shape {
   public:
     /**
      * Constructor for polygon.
@@ -49,6 +49,13 @@ class Polygon : public Shape {
      * Print function. Prints vertices on console output.
      */
     void printParameters() override;
+
+    /**
+     * Creates a string representation of a polygon.
+     *
+     * @return String representation of polygon.
+     */
+    std::string to_string() override;
 
   private:
     polygon_type polygon; // boost polygon representation

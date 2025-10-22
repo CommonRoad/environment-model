@@ -1,7 +1,6 @@
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
-#include "commonroad_cpp/roadNetwork/road_network_config.h"
 
 /**
  * Evaluates if the kth obstacle is on the incoming of the pth vehicle
@@ -61,6 +60,4 @@ class OnOncomingOfPredicate : public CommonRoadPredicate {
                                     const std::shared_ptr<Obstacle> &obstacleP = {},
                                     const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
                                     bool setBased = false) override;
-
-    RoadNetworkParameters roadNetworkParameters{};
 };

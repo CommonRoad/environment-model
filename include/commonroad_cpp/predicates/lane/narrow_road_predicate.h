@@ -6,7 +6,7 @@
 /**
  *  Evaluates if a road is narrow
  */
-class NarrowRoadPredicate : public CommonRoadPredicate {
+class NarrowRoadPredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for NarrowRoadPredicate

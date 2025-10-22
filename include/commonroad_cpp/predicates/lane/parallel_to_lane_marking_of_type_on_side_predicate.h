@@ -6,7 +6,7 @@
  * Evaluates if a vehicle is completely left/right of (parallel to) a given lane marking type. The side and lane marking
  * type are given as parameter.
  */
-class ParallelToLaneMarkingOfTypeOnSidePredicate : public CommonRoadPredicate {
+class ParallelToLaneMarkingOfTypeOnSidePredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for ParallelToLaneMarkingOfTypeOnSidePredicate

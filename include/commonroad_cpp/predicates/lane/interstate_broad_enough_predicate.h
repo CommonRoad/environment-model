@@ -6,7 +6,7 @@
 /**
  *  Evaluates if a interstate is broad enough to build a standard emergency lane
  */
-class InterstateBroadEnoughPredicate : public CommonRoadPredicate {
+class InterstateBroadEnoughPredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for InterstateBroadEnough

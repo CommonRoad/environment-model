@@ -5,7 +5,7 @@
 /**
  *  Evaluates if a vehicle drives close to its lane border. The side (right/left) must be provided via parameter).
  */
-class CloseToLaneBorderPredicate : public CommonRoadPredicate {
+class CloseToLaneBorderPredicate final : public CommonRoadPredicate {
   public:
     /**
      * Constructor for DrivesLeftmostPredicate
