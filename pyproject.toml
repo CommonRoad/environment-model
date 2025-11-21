@@ -58,6 +58,9 @@ test-skip = ["*-musllinux*"] # Skip tests on musllinux due to missing wheels
 test-extras = ["test"]
 test-command = "python -m pytest {package}/tests/python"
 
+[tool.cibuildwheel.windows]
+archs = ["AMD64"]
+
 [tool.cibuildwheel.macos]
 # skip x86_64 macOS builds
 archs = ["arm64"]
