@@ -36,8 +36,7 @@ jobs:
           CIBW_BEFORE_ALL_WINDOWS: >
             C:\vcpkg\bootstrap-vcpkg.bat &&
             C:\vcpkg\vcpkg integrate install &&
-            C:\vcpkg\vcpkg install pkgconf &&
-            C:\vcpkg\vcpkg install zlib
+            C:\vcpkg\vcpkg install pkgconf boost eigen3 range-v3 yaml-cpp gtest zlib protobuf
 
           # brew fetch --force --bottle-tag=arm64_monterey libomp &&
           # brew reinstall $(brew --cache --bottle-tag=arm64_monterey libomp)
