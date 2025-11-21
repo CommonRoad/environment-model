@@ -279,6 +279,8 @@ cmake_dependent_option(ENV_MODEL_SYSTEM_PACKAGES_FORCE
     OFF
     )
 
+set(Protobuf_DEBUG ON)
+
 include(FetchContent)
 FetchContent_Declare(
     commonroad_cmake
