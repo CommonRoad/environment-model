@@ -54,7 +54,7 @@ skip = ["pp*", "*i686, *-musllinux*"]
 archs = ["auto"]
 environment = { PIP_DISABLE_PIP_VERSION_CHECK="1" } # Disable pip warning about newer versions being available
 build-verbosity = 1
-test-skip = ["pp*", "*i686, *-musllinux*"] # Skip tests on musllinux due to missing wheels
+test-skip = ["*-musllinux*"] # Skip tests on musllinux due to missing wheels
 test-extras = ["test"]
 test-command = "python -m pytest {package}/tests/python"
 
