@@ -22,8 +22,9 @@ jobs:
 
           # Apparently libomp is already installed on macos-12, so this is unnecessary
           # CIBW_BEFORE_ALL_MACOS: brew install libomp
+          # Build protobuf ourselves due to absl
           CIBW_BEFORE_ALL_MACOS: >
-            brew install boost protobuf eigen range-v3 yaml-cpp googletest
+            brew install boost eigen range-v3 yaml-cpp googletest
 
           CIBW_BEFORE_BUILD_MACOS: >
             brew fetch --force --bottle-tag=arm64_monterey libomp &&
