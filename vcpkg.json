@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "environment-model",
+  "version": "0.1.0",
+  "description": "Classes and methods to represent the CommonRoad format in C++17",
+  "homepage": "https://github.com/CommonRoad/environment-model",
+  "license": "GPL-3.0-only",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    },
+    {
+      "name": "pkgconf",
+      "host": true
+    },
+    "boost-geometry",
+    "boost-filesystem",
+    "boost-program-options",
+    "eigen3",
+    "range-v3",
+    "yaml-cpp",
+    "gtest",
+    "zlib",
+    "protobuf"
+  ]
+}
