@@ -29,6 +29,11 @@ jobs:
             brew fetch --force --bottle-tag=arm64_monterey libomp &&
             brew reinstall libomp
 
+          CIBW_BEFORE_ALL_WINDOWS: >
+            C:\vcpkg\bootstrap-vcpkg.bat &&
+            C:\vcpkg\vcpkg integrate install &&
+            C:\vcpkg\vcpkg install zlib
+
           # brew fetch --force --bottle-tag=arm64_monterey libomp &&
           # brew reinstall $(brew --cache --bottle-tag=arm64_monterey libomp)
 
