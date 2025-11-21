@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ["self-hosted", "ubuntu-22.04", "windows-2022", "macos-12"]
+        os: ["self-hosted", "ubuntu-22.04", "ubuntu-24.04", "windows-2022", "windows-2025", "macos-15", "macos-26"]
       fail-fast: false
 
     steps:
