@@ -59,7 +59,8 @@ test-extras = ["test"]
 test-command = "python -m pytest {package}/tests/python"
 
 [tool.cibuildwheel.macos]
-archs = ["x86_64", "arm64"]
+# skip x86_64 macOS builds
+archs = ["arm64"]
 environment = {MACOSX_DEPLOYMENT_TARGET=10.15} # macOS 10.15 for directory_iterator and C++17 support (macOS 10.14)
 
 [tool.ruff]
