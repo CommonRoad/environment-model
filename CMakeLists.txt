@@ -194,8 +194,11 @@ endif()
 #     * There is a typo in the target name.
 #     * A find_package call is missing for an IMPORTED target.
 #     * An ALIAS target is missing.
-
-set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS ON)
+#
+# NOTE: Disabled on MSVC at the moment because some toolchain dummy library definitions are missing.
+if(NOT MSVC)
+    set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS ON)
+endif()
 
 set(CMAKE_MESSAGE_CONTEXT_SHOW ON)
 
