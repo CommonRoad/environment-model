@@ -36,6 +36,7 @@ jobs:
           CIBW_BEFORE_ALL_WINDOWS: >
             C:\vcpkg\bootstrap-vcpkg.bat &&
             C:\vcpkg\vcpkg integrate install &&
+            C:\vcpkg\vcpkg install pkgconf &&
             C:\vcpkg\vcpkg install zlib
 
           # brew fetch --force --bottle-tag=arm64_monterey libomp &&
