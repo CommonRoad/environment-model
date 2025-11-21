@@ -50,7 +50,7 @@ ENV_MODEL_BUILD_PYTHON_BINDINGS = "ON"
 language = "en"
 
 [tool.cibuildwheel]
-skip = ["pp*", "*i686, *-musllinux*"]
+skip = ["*-musllinux*"]
 archs = ["auto"]
 environment = { PIP_DISABLE_PIP_VERSION_CHECK="1" } # Disable pip warning about newer versions being available
 build-verbosity = 1
