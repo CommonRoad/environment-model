@@ -284,7 +284,7 @@ FetchContent_Declare(
     commonroad_cmake
 
     GIT_REPOSITORY https://gitlab.lrz.de/tum-cps/commonroad-cmake.git
-    GIT_TAG        main
+    GIT_TAG        develop
 )
 FetchContent_MakeAvailable(commonroad_cmake)
 
