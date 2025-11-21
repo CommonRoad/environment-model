@@ -24,11 +24,14 @@ jobs:
           # CIBW_BEFORE_ALL_MACOS: brew install libomp
           # Build protobuf ourselves due to absl
           CIBW_BEFORE_ALL_MACOS: >
-            brew install boost eigen range-v3 yaml-cpp googletest zlib
+            brew install boost eigen range-v3 yaml-cpp googletest zlib protobuf
 
           CIBW_BEFORE_BUILD_MACOS: >
             brew fetch --force --bottle-tag=arm64_monterey libomp &&
             brew reinstall libomp
+
+          CIBW_ENVIRONMENT_MACOS: >
+            PKG_CONFIG_PATH="/opt/homebrew/opt/zlib/lib/pkgconfig"
 
           CIBW_ENVIRONMENT_WINDOWS: >
             CMAKE_TOOLCHAIN_FILE="C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
