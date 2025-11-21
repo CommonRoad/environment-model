@@ -96,6 +96,9 @@ set(foreign_targets_base
     boost_headers
     Boost::geometry
     Boost::program_options
+    # Boost::filesystem
+    # Boost::stacktrace
+    tsl::robin_map
 )
 set(foreign_targets ${foreign_targets_base})
 set(checked)
