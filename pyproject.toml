@@ -45,6 +45,7 @@ editable.rebuild = true
 
 [tool.scikit-build.cmake.define]
 ENV_MODEL_BUILD_PYTHON_BINDINGS = "ON"
+CR_CLCS_BUILD_S11N = "OFF"
 
 [tool.sphinx-pyproject]
 language = "en"
