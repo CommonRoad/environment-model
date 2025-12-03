@@ -1,7 +1,11 @@
 include(FetchContent)
 
 # we explicitly set build s11n to ON since it is deactivated by default in the CMake file of the CLCS if it is not top level
-set(CR_CLCS_BUILD_S11N ON)
+if(DEFINED ENV{CIBUILDWHEEL})
+        set(CR_CLCS_BUILD_S11N OFF)
+else()
+        set(CR_CLCS_BUILD_S11N ON)
+endif()
 
 FetchContent_Declare(
         CommonRoadCLCS
