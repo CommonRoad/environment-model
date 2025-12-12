@@ -29,6 +29,7 @@ cppcheck:
   script:
     cppcheck
     --project=build/compile_commands.json
+    -i"$(pwd)/build/_deps/boost-src/"
     -i"$(pwd)/external"
   needs:
     - job: build-compile-commands
