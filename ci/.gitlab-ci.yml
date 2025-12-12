@@ -319,7 +319,7 @@ run-coverage:
 .test-python-matrix: &test-python-matrix
   parallel:
     matrix:
-      - JOB_PYTHON_VERSION: ["3.9", "3.10", "3.11"]
+      - JOB_PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
   rules:
     - *skip_non_protected_pipeline
     - if: *full_wheel_build_condition
@@ -329,7 +329,7 @@ run-coverage:
 test-python-manylinux-single:
   <<: [ *test-python-common, *test-python-single ]
   variables:
-    JOB_PYTHON_VERSION: "3.10"
+    JOB_PYTHON_VERSION: "3.11"
 
 test-python-manylinux:
   <<: [ *test-python-common, *test-python-matrix ]
@@ -339,7 +339,7 @@ test-python-general:
   image: python:${JOB_PYTHON_VERSION}-slim-bullseye
   parallel:
     matrix:
-      - JOB_PYTHON_VERSION: [ "3.9", "3.10", "3.11" ]
+      - JOB_PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
   before_script:
     - *install-python-venv
     - python -m pip install ".[test]"
