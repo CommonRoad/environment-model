@@ -110,4 +110,7 @@ UseTab:          Never
 ---
 Language: Proto
 DisableFormat: true
+---
+Language: Json
+DisableFormat: true
 ...
