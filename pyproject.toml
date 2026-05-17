@@ -9,7 +9,11 @@ authors = [
   {name = "Sebastian Maierhofer"}
 ]
 description = "CommonRoad C++ Environment Model"
-dependencies = [ "commonroad-io @ git+https://github.com/commonroad/commonroad-io@feature/new-format"]
+dependencies = [
+    "commonroad-io @ git+https://github.com/commonroad/commonroad-io@feature/new-format",
+    "scipy<1.15",  # scipy>=1.15 dropped manylinux_2_17 wheels, causing source builds to fail in CI (missing OpenBLAS)
+
+]
 
 [project.optional-dependencies]
 test = [
