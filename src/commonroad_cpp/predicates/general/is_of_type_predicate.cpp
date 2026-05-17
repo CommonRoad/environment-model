@@ -14,11 +14,12 @@ bool IsOfTypePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr
         return obstacleK->isStatic();
     else if (type == "dynamic")
         return !obstacleK->isStatic();
-    else if (obstacle_operations::matchStringToObstacleType(type) == ObstacleType::vru)
+    const ObstacleType matchedType{obstacle_operations::matchStringToObstacleType(type)};
+    if (matchedType == ObstacleType::vru)
         return obstacleK->getObstacleType() == ObstacleType::bicycle or
                obstacleK->getObstacleType() == ObstacleType::pedestrian or
                obstacleK->getObstacleType() == ObstacleType::motorcycle;
-    else if (obstacle_operations::matchStringToObstacleType(type) == ObstacleType::vehicle)
+    else if (matchedType == ObstacleType::vehicle)
         return obstacleK->getObstacleType() == ObstacleType::car or
                obstacleK->getObstacleType() == ObstacleType::vehicle or
                obstacleK->getObstacleType() == ObstacleType::bus or
@@ -27,13 +28,13 @@ bool IsOfTypePredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr
                obstacleK->getObstacleType() == ObstacleType::truck or
                obstacleK->getObstacleType() == ObstacleType::taxi or
                obstacleK->getObstacleType() == ObstacleType::bicycle;
-    else if (obstacle_operations::matchStringToObstacleType(type) == ObstacleType::special_purpose_vehicle)
+    else if (matchedType == ObstacleType::special_purpose_vehicle)
         return obstacleK->getObstacleType() == ObstacleType::bus or
                obstacleK->getObstacleType() == ObstacleType::taxi or
                obstacleK->getObstacleType() == ObstacleType::bicycle or
                obstacleK->getObstacleType() == ObstacleType::special_purpose_vehicle;
     else
-        return obstacleK->getObstacleType() == obstacle_operations::matchStringToObstacleType(type);
+        return obstacleK->getObstacleType() == matchedType;
 }
 
 double IsOfTypePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

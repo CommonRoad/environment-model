@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <set>
+#include <unordered_set>
 #include <vector>
 
 class CrossingGroup;
@@ -154,7 +155,10 @@ class Intersection {
         crossings; //**< List of pointers to crossing groups belonging to intersection. */
     std::vector<std::shared_ptr<Lanelet>> memberLanelets; //**< List of lanelets belonging to intersection starting from
                                                           // incoming until outgoing. Crossings are not considered. */
-    std::set<IntersectionType> intersectionTypes;         //**< Types of intersection. */
+    mutable std::unordered_set<size_t>
+        memberLaneletIds_;                        //**< Lazily populated O(1) lookup index of member lanelet IDs.
+                                                  // Mirrors `memberLanelets`. */
+    std::set<IntersectionType> intersectionTypes; //**< Types of intersection. */
 
     /**
      * Determines and sets the type of intersection based on the incoming groups, outgoing groups, and regulatory

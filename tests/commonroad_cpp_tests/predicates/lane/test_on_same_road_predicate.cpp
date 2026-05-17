@@ -37,8 +37,8 @@ void TestOnSameRoadPredicate::SetUp() {
                                                std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleEgo),
                                                std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleEgo),
                                                std::pair<int, std::shared_ptr<State>>(8, stateSevenObstacleEgo)};
-    obstacleEgo = std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleEgo, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    obstacleEgo = std::make_shared<Obstacle>(0, ObstacleRole::DYNAMIC, stateZeroObstacleEgo, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 115, 2, 1, 0, 0, 0, 115, 0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 116, 2, 1, 0, 0, 0, 116.5, 0);
@@ -58,8 +58,8 @@ void TestOnSameRoadPredicate::SetUp() {
                                                 std::pair<int, std::shared_ptr<State>>(6, stateSixObstacleOne),
                                                 std::pair<int, std::shared_ptr<State>>(7, stateSevenObstacleOne),
                                                 std::pair<int, std::shared_ptr<State>>(8, stateEightObstacleOne)};
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2);
 
     std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 60, 5, 2.5, 0, 0, 0, 60, 0);
     std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 62.5, 5, 2.5, 0, 0, 0, 62.5, 0);
@@ -73,8 +73,8 @@ void TestOnSameRoadPredicate::SetUp() {
                                                 std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo),
                                                 std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleTwo),
                                                 std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleTwo)};
-    obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
+    obstacleTwo = std::make_shared<Obstacle>(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2);
 
     std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(0, 105, 8.5, 15, 0, 0, 0, 105, 0);
     std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 120, 8.5, 15, 0, 0, 0, 120, 0);
@@ -88,9 +88,8 @@ void TestOnSameRoadPredicate::SetUp() {
                                                   std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleThree),
                                                   std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleThree),
                                                   std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleThree)};
-    obstacleThree =
-        std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
+    obstacleThree = std::make_shared<Obstacle>(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50,
+                                               10, 3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2);
 
     std::shared_ptr<State> stateZeroObstacleFour = std::make_shared<State>(0, 60, 8.5, 2.5, 0, 0, 0, 60, 0);
     std::shared_ptr<State> stateOneObstacleFour = std::make_shared<State>(1, 62.5, 8.5, 2.5, 0, 0, 0, 62.5, 0);
@@ -104,9 +103,8 @@ void TestOnSameRoadPredicate::SetUp() {
                                                  std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleFour),
                                                  std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleFour),
                                                  std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFour)};
-    obstacleFour =
-        std::make_shared<Obstacle>(Obstacle(4, ObstacleRole::DYNAMIC, stateZeroObstacleFour, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleFour, 5, 2));
+    obstacleFour = std::make_shared<Obstacle>(4, ObstacleRole::DYNAMIC, stateZeroObstacleFour, ObstacleType::car, 50,
+                                              10, 3, -10, 0.3, trajectoryPredictionObstacleFour, 5, 2);
 
     std::shared_ptr<State> stateZeroObstacleFive = std::make_shared<State>(0, 85, 3, 5, 0, 0);
     std::shared_ptr<State> stateOneObstacleFive = std::make_shared<State>(1, 80, 3, 5, 0, 0);
@@ -120,9 +118,8 @@ void TestOnSameRoadPredicate::SetUp() {
                                                  std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleFive),
                                                  std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleFive),
                                                  std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleFive)};
-    obstacleFive =
-        std::make_shared<Obstacle>(Obstacle(5, ObstacleRole::DYNAMIC, stateZeroObstacleFive, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleFive, 5, 2));
+    obstacleFive = std::make_shared<Obstacle>(5, ObstacleRole::DYNAMIC, stateZeroObstacleFive, ObstacleType::car, 50,
+                                              10, 3, -10, 0.3, trajectoryPredictionObstacleFive, 5, 2);
 
     std::shared_ptr<State> stateZeroObstacleSix = std::make_shared<State>(0, 10, 0, 2, 0, 0);
     std::shared_ptr<State> stateOneObstacleSix = std::make_shared<State>(1, 12, 0, 2, 0, 0);
@@ -136,8 +133,8 @@ void TestOnSameRoadPredicate::SetUp() {
                                                 std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleSix),
                                                 std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleSix),
                                                 std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleSix)};
-    obstacleSix = std::make_shared<Obstacle>(Obstacle(6, ObstacleRole::DYNAMIC, stateZeroObstacleSix, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleSix, 5, 2));
+    obstacleSix = std::make_shared<Obstacle>(6, ObstacleRole::DYNAMIC, stateZeroObstacleSix, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleSix, 5, 2);
 
     world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleEgo},
                                           {obstacleOne, obstacleTwo, obstacleThree, obstacleFour}, 0.1));
@@ -264,15 +261,14 @@ TEST_F(TestOnSameRoadPredicate, BooleanEvaluationDifferentIntersectionIncoming) 
                                          std::pair<int, std::shared_ptr<State>>(3, stateThreeObs3),
                                          std::pair<int, std::shared_ptr<State>>(4, stateFourObs3)};
 
-    auto egoVehicle =
-        std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3,
-                                            -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
-    auto obs1 = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObs1, ObstacleType::car, 50, 10,
-                                                    3, -10, 0.3, trajectoryPredictionObs1, 5, 2));
-    auto obs2 = std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateZeroObs2, ObstacleType::car, 50, 10,
-                                                    3, -10, 0.3, trajectoryPredictionObs2, 5, 2));
-    auto obs3 = std::make_shared<Obstacle>(Obstacle(4, ObstacleRole::DYNAMIC, stateZeroObs3, ObstacleType::car, 50, 10,
-                                                    3, -10, 0.3, trajectoryPredictionObs3, 5, 2));
+    auto egoVehicle = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50,
+                                                 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
+    auto obs1 = std::make_shared<Obstacle>(2, ObstacleRole::DYNAMIC, stateZeroObs1, ObstacleType::car, 50, 10, 3, -10,
+                                           0.3, trajectoryPredictionObs1, 5, 2);
+    auto obs2 = std::make_shared<Obstacle>(3, ObstacleRole::DYNAMIC, stateZeroObs2, ObstacleType::car, 50, 10, 3, -10,
+                                           0.3, trajectoryPredictionObs2, 5, 2);
+    auto obs3 = std::make_shared<Obstacle>(4, ObstacleRole::DYNAMIC, stateZeroObs3, ObstacleType::car, 50, 10, 3, -10,
+                                           0.3, trajectoryPredictionObs3, 5, 2);
 
     auto worldFourWay =
         std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {obs1, obs2, obs3}, 0.1));

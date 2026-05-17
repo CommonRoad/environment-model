@@ -37,9 +37,9 @@ TEST_F(OnIncomingOfIntersectionPredicateTest, BooleanEvaluationObjectsTIntersect
 
     obstacles.push_back(obstaclesTmp.at(0));
     obstacles.push_back(obstaclesTmp.at(1));
-    obstacles.push_back(
-        std::make_shared<Obstacle>(Obstacle(124567, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50,
-                                            10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2)));
+    obstacles.push_back(std::make_shared<Obstacle>(124567, ObstacleRole::DYNAMIC, stateZeroObstacleOne,
+                                                   ObstacleType::car, 50, 10, 3, -10, 0.3,
+                                                   trajectoryPredictionObstacleOne, 5, 2));
 
     world = std::make_shared<World>(World(
         "testWorld", 0, roadNetwork,

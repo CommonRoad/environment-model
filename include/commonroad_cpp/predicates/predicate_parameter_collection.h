@@ -5,9 +5,12 @@
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
 #endif
+#include <algorithm>
 #include <commonroad_cpp/predicates/predicate_parameter.h>
 #include <map>
 #include <string>
+#include <tsl/robin_map.h>
+#include <unordered_map>
 
 extern std::map<std::string, PredicateParam> paramMap;
 
@@ -68,12 +71,14 @@ struct PredicateParameters {
     std::map<std::string, double> getParameterCollectionComplete() const;
 
   private:
-    std::map<std::string, double> constantMap{
+    std::unordered_map<std::string, double> constantMap{
         {"epsilon", 1e-6},         // small value close to zero for different purposes
         {"fovSpeedLimit", 50},     // field of view speed limit; will be replaced by compute with calc_v_max_fov() [m/s]
         {"brakingSpeedLimit", 50}, // braking speed limit; will be replaced by compute with calc_v_max_braking() [m/s]
         {"roadConditionSpeedLimit",
          50}, // road condition speed limit; will be replaced by compute with calc_v_max_road_condition() [m/s]
     };
-    std::map<std::string, PredicateParam> parameterCollection = paramMap;
+    // robin_map gives O(1) average lookup for getParam() hot path.
+    // getPredicateNames() / getParameterCollection() sort on return (not on hot path).
+    tsl::robin_map<std::string, PredicateParam> parameterCollection{paramMap.begin(), paramMap.end()};
 };

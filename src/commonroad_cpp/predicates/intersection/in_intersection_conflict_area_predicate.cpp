@@ -22,8 +22,9 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
         laneletsP = lane->getContainedLanelets();
     }
 
+    const auto occupiedLaneletsK = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     for (const auto &letP : laneletsP) {
-        for (const auto &letK : obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)) {
+        for (const auto &letK : occupiedLaneletsK) {
             if (!letK->hasLaneletType(LaneletType::intersection))
                 continue;
             if (letK->getId() == letP->getId() and

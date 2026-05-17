@@ -10,17 +10,19 @@ bool OnIncomingOfIntersectionPredicate::booleanEvaluation(const size_t timeStep,
                                                           const std::shared_ptr<Obstacle> &obstacleP,
                                                           const std::vector<std::string> &additionalFunctionParameters,
                                                           bool setBased) {
-    std::vector<std::shared_ptr<Lanelet>> laneletsK =
-        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    if (std::any_of(laneletsK.begin(), laneletsK.end(),
-                    [world, additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                        return lanelet->hasLaneletType(LaneletType::incoming) and
-                               world->getRoadNetwork()
-                                   ->getIntersectionByID(std::stoul(additionalFunctionParameters[0]))
-                                   ->isMemberLanelet(lanelet->getId());
-                    }))
-        return true;
-    return false;
+    // Cache parsed ID; params[0] is fixed per scenario instance. Saves some resource compared to using std::stoul at
+    // every function call.
+    if (additionalFunctionParameters[0] != cachedIdStr_) {
+        cachedIdStr_ = additionalFunctionParameters[0];
+        cachedId_ = std::stoul(additionalFunctionParameters[0]);
+    }
+    const auto intersectionId = cachedId_;
+    const auto &roadNetwork = world->getRoadNetwork();
+    const auto laneletsK = obstacleK->getOccupiedLaneletsByShape(roadNetwork, timeStep);
+    const auto intersection = roadNetwork->getIntersectionByID(intersectionId);
+    return std::any_of(laneletsK.begin(), laneletsK.end(), [&intersection](const std::shared_ptr<Lanelet> &lanelet) {
+        return lanelet->hasLaneletType(LaneletType::incoming) and intersection->isMemberLanelet(lanelet->getId());
+    });
 }
 
 double OnIncomingOfIntersectionPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

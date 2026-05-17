@@ -21,8 +21,8 @@ void TwoOrMoreLanesPredicateTest::SetUp() {
                                                std::pair<int, std::shared_ptr<State>>(4, stateThreeEgoVehicle),
                                                std::pair<int, std::shared_ptr<State>>(5, stateThreeEgoVehicle)};
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3,
+                                            -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
 
     auto roadNetwork{utils_predicate_test::create_road_network_4()};
 

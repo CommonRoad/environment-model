@@ -73,8 +73,9 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const s
     // robustness; collision must be checked separately
     if (deltaS < 0)
         return std::abs(deltaS);
-    if (deltaS - stod(additionalFunctionParameters.at(0)) < 0)
-        return std::min(deltaS - stod(additionalFunctionParameters.at(0)), deltaS - dSafe);
+    const double param0 = std::stod(additionalFunctionParameters.at(0));
+    if (deltaS - param0 < 0)
+        return std::min(deltaS - param0, deltaS - dSafe);
     return (deltaS - dSafe);
 }
 

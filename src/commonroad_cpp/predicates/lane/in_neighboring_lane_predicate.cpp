@@ -10,17 +10,15 @@ bool InNeighboringLanePredicate::booleanEvaluation(size_t timeStep, const std::s
                                                    const std::shared_ptr<Obstacle> &obstacleP,
                                                    const std::vector<std::string> &additionalFunctionParameters,
                                                    bool setBased) {
-    std::unordered_set<unsigned long> relevantIDs;
     auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+    std::unordered_set<size_t> laneletPIDs;
+    for (const auto &la : laneletsP)
+        laneletPIDs.insert(la->getId());
+    const auto direction = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
     for (const auto &laneK : obstacleK->getOccupiedRoadLanes(world->getRoadNetwork(), timeStep)) {
         for (const auto &laneletK : laneK->getContainedLanelets()) {
-            auto adjacent{
-                laneletK->getAdjacent(regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)))
-                    .adj};
-            if (adjacent and
-                std::any_of(laneletsP.begin(), laneletsP.end(), [adjacent](const std::shared_ptr<Lanelet> &lanelet) {
-                    return adjacent->getId() == lanelet->getId();
-                })) {
+            auto adjacent{laneletK->getAdjacent(direction).adj};
+            if (adjacent and laneletPIDs.count(adjacent->getId())) {
                 return true;
             }
         }

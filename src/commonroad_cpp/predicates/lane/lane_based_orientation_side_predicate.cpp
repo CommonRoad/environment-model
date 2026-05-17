@@ -8,10 +8,9 @@ bool LaneBasedOrientationSidePredicate::booleanEvaluation(size_t timeStep, const
                                                           const std::shared_ptr<Obstacle> &obstacleP,
                                                           const std::vector<std::string> &additionalFunctionParameters,
                                                           bool setBased) {
-    return (regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)) == Direction::left and
-            obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep) > 0) or
-           (regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)) == Direction::right and
-            obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep) < 0);
+    const auto direction = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
+    const auto orientation = obstacleK->getCurvilinearOrientation(world->getRoadNetwork(), timeStep);
+    return (direction == Direction::left and orientation > 0) or (direction == Direction::right and orientation < 0);
 }
 
 double LaneBasedOrientationSidePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

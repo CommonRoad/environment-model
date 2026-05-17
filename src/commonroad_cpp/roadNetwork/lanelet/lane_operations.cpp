@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
+#include <unordered_set>
 
 #include <range/v3/all.hpp>
 
@@ -221,6 +222,15 @@ lane_operations::createLanesBySingleLanelets(const std::vector<std::shared_ptr<L
     return removeSubPartLanes(lanes);
 }
 
+// NOTE: Memoization (caching by sorted contained-lanelet IDs) was considered but is unsafe here.
+// The function takes a caller-supplied `newId` (typically `++*roadNetwork->getIdCounterRef()`),
+// which is baked into the backing Lanelet of the returned Lane. Returning a cached Lane would:
+//   (a) hand back a Lane whose internal ID differs from the freshly-incremented counter value,
+//       breaking the invariant that each call consumes a unique ID from the RoadNetwork; and
+//   (b) leak Lane objects across RoadNetwork/scenario boundaries, since the key (lanelet IDs)
+//       does not identify which RoadNetwork the underlying Lanelets belong to.
+// If memoization is desired, the cache must be owned by the RoadNetwork (so it is reset when
+// the network is rebuilt) and the ID assignment must be decoupled from this function.
 std::shared_ptr<Lane>
 lane_operations::createLaneByContainedLanelets(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets,
                                                const size_t newId) {
@@ -233,10 +243,10 @@ lane_operations::createLaneByContainedLanelets(const std::vector<std::shared_ptr
     long shift{0};
 
     std::vector<std::shared_ptr<Lanelet>> containedLaneletsWithoutDuplicates;
+    std::unordered_set<size_t> seenLaneletIds;
 
     for (const auto &lanelet : containedLanelets) {
-        if (std::any_of(containedLaneletsWithoutDuplicates.begin(), containedLaneletsWithoutDuplicates.end(),
-                        [lanelet](const std::shared_ptr<Lanelet> &let) { return let->getId() == lanelet->getId(); }))
+        if (!seenLaneletIds.insert(lanelet->getId()).second)
             continue;
         bool reverse{false};
         if (!containedLaneletsWithoutDuplicates.empty() and
@@ -307,10 +317,10 @@ lane_operations::extractLaneletsFromLanes(const std::vector<std::shared_ptr<Lane
 std::vector<std::shared_ptr<Lanelet>>
 lane_operations::combineLaneLanelets(const std::vector<std::vector<std::shared_ptr<Lanelet>>> &lanes) {
     std::vector<std::shared_ptr<Lanelet>> lanelets;
+    std::unordered_set<size_t> seen;
     for (const auto &lane : lanes)
         for (const auto &let : lane)
-            if (!std::any_of(lanelets.begin(), lanelets.end(),
-                             [let](const std::shared_ptr<Lanelet> &exLet) { return exLet->getId() == let->getId(); }))
+            if (seen.insert(let->getId()).second)
                 lanelets.push_back(let);
     return lanelets;
 }

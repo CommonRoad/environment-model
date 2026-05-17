@@ -9,8 +9,8 @@ bool LateralDistanceToObstacleAboveThresholdPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
     bool setBased) {
-    return obstacleK->getLateralDistanceToObstacle(timeStep, obstacleP, world->getRoadNetwork()) >=
-           std::stod(additionalFunctionParameters.at(0));
+    const double threshold = std::stod(additionalFunctionParameters.at(0));
+    return obstacleK->getLateralDistanceToObstacle(timeStep, obstacleP, world->getRoadNetwork()) >= threshold;
 }
 
 double LateralDistanceToObstacleAboveThresholdPredicate::robustEvaluation(

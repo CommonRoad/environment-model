@@ -187,10 +187,10 @@ TEST_F(WorldTest, UpdateObstacles) {
     auto obstacleCopyTraj{obsManip->getTrajectoryPrediction()};
     obstacleCopyTraj.erase(obstacleCopyTraj.begin());
     auto obstacleCopy{std::make_shared<Obstacle>(
-        Obstacle(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
-                 obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
-                 obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
-                 obsManip->getGeoShape().getWidth()))};
+        obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
+        obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
+        obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
+        obsManip->getGeoShape().getWidth())};
 
     obstaclesScenarioOne.at(1)->setTimeParameters(wp.getTimeParams());
     std::vector<std::shared_ptr<Obstacle>> newObstacles{obstacleCopy, obstaclesScenarioOne.at(1)};
@@ -210,10 +210,10 @@ TEST_F(WorldTest, UpdateObstacles) {
         obstacleCopyTraj = obsManip->getTrajectoryPrediction();
         obstacleCopyTraj.erase(obstacleCopyTraj.begin());
         obstacleCopy = std::make_shared<Obstacle>(
-            Obstacle(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
-                     obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
-                     obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
-                     obsManip->getGeoShape().getWidth()));
+            obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
+            obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
+            obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
+            obsManip->getGeoShape().getWidth());
         newObstacles = {obstacleCopy};
         EXPECT_NO_THROW(world1.updateObstacles(newObstacles));
         EXPECT_EQ(world1.getObstacles().size(), 2);
@@ -221,11 +221,11 @@ TEST_F(WorldTest, UpdateObstacles) {
     obstacleCopyState = obsManip->getTrajectoryPrediction().begin()->second;
     obstacleCopyTraj = obsManip->getTrajectoryPrediction();
     obstacleCopyTraj.erase(obstacleCopyTraj.begin());
-    obstacleCopy = std::make_shared<Obstacle>(
-        Obstacle(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
-                 obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
-                 obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
-                 obsManip->getGeoShape().getWidth()));
+    obstacleCopy = std::make_shared<Obstacle>(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState,
+                                              obsManip->getObstacleType(), obsManip->getVmax(), obsManip->getAmax(),
+                                              obsManip->getAmaxLong(), obsManip->getAminLong(),
+                                              obsManip->getReactionTime(), obstacleCopyTraj,
+                                              obsManip->getGeoShape().getLength(), obsManip->getGeoShape().getWidth());
     newObstacles = {obstacleCopy};
     EXPECT_NO_THROW(world1.updateObstacles(newObstacles));
     EXPECT_EQ(world1.getObstacles().size(), 1);
@@ -236,11 +236,11 @@ TEST_F(WorldTest, UpdateObstacles) {
     obstacleCopyState = obsManip->getTrajectoryPrediction().begin()->second;
     obstacleCopyTraj = obsManip->getTrajectoryPrediction();
     obstacleCopyTraj.erase(obstacleCopyTraj.begin());
-    obstacleCopy = std::make_shared<Obstacle>(
-        Obstacle(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState, obsManip->getObstacleType(),
-                 obsManip->getVmax(), obsManip->getAmax(), obsManip->getAmaxLong(), obsManip->getAminLong(),
-                 obsManip->getReactionTime(), obstacleCopyTraj, obsManip->getGeoShape().getLength(),
-                 obsManip->getGeoShape().getWidth()));
+    obstacleCopy = std::make_shared<Obstacle>(obsManip->getId(), obsManip->getObstacleRole(), obstacleCopyState,
+                                              obsManip->getObstacleType(), obsManip->getVmax(), obsManip->getAmax(),
+                                              obsManip->getAmaxLong(), obsManip->getAminLong(),
+                                              obsManip->getReactionTime(), obstacleCopyTraj,
+                                              obsManip->getGeoShape().getLength(), obsManip->getGeoShape().getWidth());
     obstacleCopy->setTrajectoryHistory({{hist->getTimeStep(), hist}});
     newObstacles = {obstacleCopy};
     EXPECT_NO_THROW(world1.updateObstacles(newObstacles));

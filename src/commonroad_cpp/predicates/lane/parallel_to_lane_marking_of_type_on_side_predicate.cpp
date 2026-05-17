@@ -21,9 +21,10 @@ bool ParallelToLaneMarkingOfTypeOnSidePredicate::booleanEvaluation(
 
     std::vector<std::shared_ptr<Lanelet>> lanelets{};
     std::set<std::shared_ptr<Lanelet>> adjLanelets;
-    if (regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)) == Direction::left) {
+    const auto direction = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
+    if (direction == Direction::left) {
         adjLanelets = obstacle_operations::laneletsRightOfObstacle(timeStep, world->getRoadNetwork(), obstacleK);
-    } else if (regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)) == Direction::right) {
+    } else if (direction == Direction::right) {
         adjLanelets = obstacle_operations::laneletsLeftOfObstacle(timeStep, world->getRoadNetwork(), obstacleK);
     } else
         throw std::runtime_error(

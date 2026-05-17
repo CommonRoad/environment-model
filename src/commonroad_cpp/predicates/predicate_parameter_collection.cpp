@@ -10,33 +10,40 @@ void PredicateParameters::checkParameterValidity() {
 }
 
 void PredicateParameters::updateParam(const std::string &name, double value) {
-    if (parameterCollection.count(name) == 1) {
-        parameterCollection.find(name)->second.updateValue(value);
-        parameterCollection.find(name)->second.checkParameterValidity();
-    } else if (constantMap.count(name) == 1) {
-        constantMap.at(name) = value;
-    } else
+    // Single find() per map instead of count()+find() twice.
+    if (const auto it = parameterCollection.find(name); it != parameterCollection.end()) {
+        // tsl::robin_map: mutable value access requires it.value(), not it->second.
+        it.value().updateValue(value);
+        it.value().checkParameterValidity();
+    } else if (const auto cit = constantMap.find(name); cit != constantMap.end()) {
+        cit->second = value;
+    } else {
         throw std::runtime_error("No predicate " + name + " found for update");
+    }
 }
 
 double PredicateParameters::getParam(const std::string &name) {
-    if (parameterCollection.count(name) == 1)
-        return parameterCollection.find(name)->second.getValue();
-    else if (constantMap.count(name) == 1)
-        return constantMap.find(name)->second;
-    else
-        throw std::runtime_error("No predicate " + name + " found");
+    if (const auto it = parameterCollection.find(name); it != parameterCollection.end())
+        return it->second.getValue();
+    if (const auto it = constantMap.find(name); it != constantMap.end())
+        return it->second;
+    throw std::runtime_error("No predicate " + name + " found");
 }
 
 std::vector<std::string> PredicateParameters::getPredicateNames() const {
+    // robin_map has no sorted iteration; sort explicitly here (not on hot path).
     std::vector<std::string> keys;
-    boost::copy(parameterCollection | boost::adaptors::map_keys, std::back_inserter(keys));
+    keys.reserve(parameterCollection.size());
+    for (const auto &[k, _] : parameterCollection)
+        keys.push_back(k);
+    std::sort(keys.begin(), keys.end());
     return keys;
 }
 
 std::vector<std::string> PredicateParameters::getConstantNames() const {
     std::vector<std::string> keys;
     boost::copy(constantMap | boost::adaptors::map_keys, std::back_inserter(keys));
+    std::sort(keys.begin(), keys.end());
     return keys;
 }
 
@@ -53,9 +60,9 @@ PredicateParameters::getParameterCollection() const {
     return parameterCollectionTuple;
 }
 std::map<std::string, double> PredicateParameters::getParameterCollectionComplete() const {
-    auto tmpMap{constantMap};
-    for (const auto &elem : parameterCollection)
-        tmpMap.insert({elem.first, elem.second.getValue()});
+    std::map<std::string, double> tmpMap(constantMap.begin(), constantMap.end());
+    for (const auto &[k, v] : parameterCollection)
+        tmpMap.emplace(k, v.getValue());
     return tmpMap;
 }
 

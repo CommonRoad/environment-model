@@ -10,10 +10,9 @@ bool AtTrafficLightPredicate::booleanEvaluation(size_t timeStep, const std::shar
                                                 const std::shared_ptr<Obstacle> &obstacleP,
                                                 const std::vector<std::string> &additionalFunctionParameters,
                                                 bool setBased) {
-    return regulatory_elements_utils::atTrafficLightDirState(
-        timeStep, obstacleK, world->getRoadNetwork(),
-        regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)),
-        TrafficLight::matchTrafficLightState(additionalFunctionParameters.at(1)));
+    const auto dir = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
+    const auto state = TrafficLight::matchTrafficLightState(additionalFunctionParameters.at(1));
+    return regulatory_elements_utils::atTrafficLightDirState(timeStep, obstacleK, world->getRoadNetwork(), dir, state);
 }
 double AtTrafficLightPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
                                                  const std::shared_ptr<Obstacle> &obstacleK,
