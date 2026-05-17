@@ -19,12 +19,17 @@ Polygon::Polygon(const std::vector<vertex> &pol) {
     }
 }
 
-[[nodiscard]] std::vector<vertex> Polygon::getPolygonVertices() const {
-    std::vector<vertex> vertices;
-    for (const auto &point : polygon.outer()) {
-        vertices.emplace_back(vertex{point.x(), point.y()});
+[[nodiscard]] const std::vector<vertex> &Polygon::getPolygonVertices() const {
+    // Cache assumes Polygon is immutable after construction (no public mutators).
+    if (!verticesCacheValid_) {
+        verticesCache_.clear();
+        verticesCache_.reserve(polygon.outer().size());
+        for (const auto &point : polygon.outer()) {
+            verticesCache_.emplace_back(vertex{point.x(), point.y()});
+        }
+        verticesCacheValid_ = true;
     }
-    return vertices;
+    return verticesCache_;
 }
 
 std::string Polygon::to_string() {

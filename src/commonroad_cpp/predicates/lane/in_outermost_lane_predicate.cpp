@@ -12,12 +12,11 @@ bool InOutermostLanePredicate::booleanEvaluation(size_t timeStep, const std::sha
                                                  bool setBased) {
     std::vector<std::shared_ptr<Lanelet>> lanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    return std::any_of(
-        lanelets.begin(), lanelets.end(), [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-            auto adjacent{
-                lanelet->getAdjacent(regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)))};
-            return adjacent.adj == nullptr || adjacent.oppositeDir != adjacent.adj->getAdjacentRight().oppositeDir;
-        });
+    const auto direction = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
+    return std::any_of(lanelets.begin(), lanelets.end(), [direction](const std::shared_ptr<Lanelet> &lanelet) {
+        auto adjacent{lanelet->getAdjacent(direction)};
+        return adjacent.adj == nullptr || adjacent.oppositeDir != adjacent.adj->getAdjacentRight().oppositeDir;
+    });
 }
 
 double InOutermostLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <unordered_map>
 
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/obstacle/obstacle.h>
@@ -166,15 +167,15 @@ regulatory_elements_utils::extractPriorityTrafficSign(const std::shared_ptr<Lane
         }
     }
     auto tmpSign{std::make_shared<TrafficSignElement>(TrafficSignTypes::WARNING_RIGHT_BEFORE_LEFT)};
+    // First-occurrence-wins deduplication: once a sign type is chosen, ignore duplicates.
+    // PRIORITY/YIELD are only accepted when no other priority sign has been found yet.
+    std::unordered_set<TrafficSignTypes> seen;
     for (const auto &tse : relevantTrafficSignElements) {
-        if (!std::any_of(relevantTrafficSignElements.begin(), relevantTrafficSignElements.end(),
-                         [tse](const std::shared_ptr<TrafficSignElement> &tel) {
-                             return tel->getTrafficSignType() == tse->getTrafficSignType();
-                         }))
+        const auto type = tse->getTrafficSignType();
+        if (!seen.insert(type).second)
             continue;
         if (tmpSign->getTrafficSignType() != TrafficSignTypes::WARNING_RIGHT_BEFORE_LEFT and
-            (tse->getTrafficSignType() == TrafficSignTypes::PRIORITY or
-             tse->getTrafficSignType() == TrafficSignTypes::YIELD))
+            (type == TrafficSignTypes::PRIORITY or type == TrafficSignTypes::YIELD))
             continue;
         tmpSign = tse;
     }
@@ -214,33 +215,43 @@ TrafficSignTypes regulatory_elements_utils::extractTypeFromNationalID(const std:
                                                                       const std::string &country_string) {
     if (trafficSignId == "274") // some old scenarios use German ID for other countries.
         return TrafficSignTypes::MAX_SPEED;
-    if (country == SupportedTrafficSignCountry::GERMANY or country == SupportedTrafficSignCountry::ZAMUNDA) {
-        for (const auto &[fst, snd] : TrafficSignIDGermany)
-            if (snd == trafficSignId)
-                return fst;
-    } else if (country == SupportedTrafficSignCountry::USA) {
-        for (const auto &[fst, snd] : TrafficSignIDUSA)
-            if (snd == trafficSignId)
-                return fst;
-    } else if (country == SupportedTrafficSignCountry::SPAIN) {
-        for (const auto &[fst, snd] : TrafficSignIDSpain)
-            if (snd == trafficSignId)
-                return fst;
-    } else if (country == SupportedTrafficSignCountry::ARGENTINA) {
-        for (const auto &[fst, snd] : TrafficSignIDArgentina)
-            if (snd == trafficSignId)
-                return fst;
-    } else if (country == SupportedTrafficSignCountry::BELGIUM) {
-        for (const auto &[fst, snd] : TrafficSignIDBelgium)
-            if (snd == trafficSignId)
-                return fst;
-    } else if (country == SupportedTrafficSignCountry::AUSTRALIA) {
-        for (const auto &[fst, snd] : TrafficSignIDAustralia)
-            if (snd == trafficSignId)
-                return fst;
-    } else
+
+    // Static reverse maps built once per country on first call (same pattern as matchDirections).
+    using ReverseMap = std::unordered_map<std::string, TrafficSignTypes>;
+    auto buildReverse = [](const std::unordered_map<TrafficSignTypes, std::string> &forward) {
+        ReverseMap rev;
+        rev.reserve(forward.size());
+        for (const auto &[type, id] : forward)
+            rev.emplace(id, type);
+        return rev;
+    };
+    static const ReverseMap reverseGermany = buildReverse(TrafficSignIDGermany);
+    static const ReverseMap reverseUSA = buildReverse(TrafficSignIDUSA);
+    static const ReverseMap reverseSpain = buildReverse(TrafficSignIDSpain);
+    static const ReverseMap reverseArgentina = buildReverse(TrafficSignIDArgentina);
+    static const ReverseMap reverseBelgium = buildReverse(TrafficSignIDBelgium);
+    static const ReverseMap reverseAustralia = buildReverse(TrafficSignIDAustralia);
+
+    const ReverseMap *rev = nullptr;
+    if (country == SupportedTrafficSignCountry::GERMANY or country == SupportedTrafficSignCountry::ZAMUNDA)
+        rev = &reverseGermany;
+    else if (country == SupportedTrafficSignCountry::USA)
+        rev = &reverseUSA;
+    else if (country == SupportedTrafficSignCountry::SPAIN)
+        rev = &reverseSpain;
+    else if (country == SupportedTrafficSignCountry::ARGENTINA)
+        rev = &reverseArgentina;
+    else if (country == SupportedTrafficSignCountry::BELGIUM)
+        rev = &reverseBelgium;
+    else if (country == SupportedTrafficSignCountry::AUSTRALIA)
+        rev = &reverseAustralia;
+    else
         throw std::runtime_error("regulatory_elements_utils::extractTypeFromNationalID: Unknown country ID " +
                                  country_string);
+
+    const auto it = rev->find(trafficSignId);
+    if (it != rev->end())
+        return it->second;
     throw std::runtime_error("regulatory_elements_utils::extractTypeFromNationalID: Unknown traffic sign ID " +
                              trafficSignId + " in country " + country_string);
 }
@@ -285,11 +296,19 @@ double regulatory_elements_utils::minDistance(const std::vector<vertex> &line, p
 }
 
 Direction regulatory_elements_utils::matchDirections(const std::string &dir) {
+    static const std::unordered_map<std::string, Direction> cache = []() {
+        std::unordered_map<std::string, Direction> m;
+        for (const auto &[key, val] : DirectionNames) {
+            m.emplace(key, val);
+        }
+        return m;
+    }();
     std::string str{dir};
     std::transform(str.begin(), str.end(), str.begin(), toupper);
     str.erase(remove(str.begin(), str.end(), '_'), str.end());
-    if (DirectionNames.count(str) == 1)
-        return DirectionNames.at(str);
+    const auto it = cache.find(str);
+    if (it != cache.end())
+        return it->second;
     throw std::logic_error("regulatory_elements_utils::matchDirections: Invalid turning direction state '" + str +
                            "'!");
 }

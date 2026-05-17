@@ -60,4 +60,8 @@ class OnOncomingOfPredicate : public CommonRoadPredicate {
                                     const std::shared_ptr<Obstacle> &obstacleP = {},
                                     const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
                                     bool setBased = false) override;
+
+  private:
+    mutable std::string cachedAngleToleranceStr_;
+    mutable double cachedAngleTolerance_ = 0.0;
 };

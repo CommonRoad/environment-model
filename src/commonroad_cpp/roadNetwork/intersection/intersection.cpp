@@ -25,12 +25,14 @@ const std::vector<std::shared_ptr<IncomingGroup>> &Intersection::getIncomingGrou
 void Intersection::addIncomingGroup(const std::shared_ptr<IncomingGroup> &incoming) {
     incomings.push_back(incoming);
     memberLanelets.clear();
+    memberLaneletIds_.clear();
     intersectionTypes.clear();
 }
 
 void Intersection::addOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoing) {
     outgoings.push_back(outgoing);
     memberLanelets.clear();
+    memberLaneletIds_.clear();
     intersectionTypes.clear();
 }
 
@@ -44,37 +46,52 @@ const std::vector<std::shared_ptr<Lanelet>> &
 Intersection::getMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork) {
     if (memberLanelets.empty())
         computeMemberLanelets(roadNetwork);
+    if (memberLaneletIds_.empty() && !memberLanelets.empty()) {
+        memberLaneletIds_.reserve(memberLanelets.size());
+        for (const auto &la : memberLanelets)
+            memberLaneletIds_.emplace(la->getId());
+    }
     return memberLanelets;
 }
 
 void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roadNetwork) {
     memberLanelets = {};
-    // collect outgoings
+    memberLaneletIds_.clear();
+
+    // Helper: add a lanelet to memberLanelets if not already present (O(1) via memberLaneletIds_).
+    auto addMember = [this](const std::shared_ptr<Lanelet> &let) -> bool {
+        if (memberLaneletIds_.insert(let->getId()).second) {
+            memberLanelets.push_back(let);
+            return true;
+        }
+        return false;
+    };
+
     for (const auto &incom : incomings) {
         for (const auto &letInc : incom->getIncomingLanelets()) {
             letInc->addLaneletType(LaneletType::incoming);
-            memberLanelets.push_back(letInc);
-            std::vector<std::shared_ptr<Lanelet>> allOutgoings;
-            allOutgoings.insert(allOutgoings.end(), incom->getLeftOutgoings().begin(), incom->getLeftOutgoings().end());
-            allOutgoings.insert(allOutgoings.end(), incom->getStraightOutgoings().begin(),
-                                incom->getStraightOutgoings().end());
-            allOutgoings.insert(allOutgoings.end(), incom->getRightOutgoings().begin(),
-                                incom->getRightOutgoings().end());
+            addMember(letInc);
+
+            // Build set of outgoing endpoint IDs for early-exit during path traversal.
+            std::unordered_set<size_t> allOutgoingIds;
+            for (const auto &l : incom->getLeftOutgoings())
+                allOutgoingIds.insert(l->getId());
+            for (const auto &l : incom->getStraightOutgoings())
+                allOutgoingIds.insert(l->getId());
+            for (const auto &l : incom->getRightOutgoings())
+                allOutgoingIds.insert(l->getId());
 
             for (const auto &letOut : incom->getLeftOutgoings()) {
                 letOut->addLaneletType(LaneletType::intersectionLeftOutgoing);
                 letOut->addLaneletType(LaneletType::intersection);
                 letOut->addLaneletType(LaneletType::left);
-                memberLanelets.push_back(letOut);
+                addMember(letOut);
                 auto path{roadNetwork->getTopologicalMap()->findPaths(letInc->getId(), letOut->getId(), false)};
                 for (const auto &pathLet : path) {
-                    auto let{roadNetwork->findLaneletById(pathLet)};
-                    if (std::find(allOutgoings.begin(), allOutgoings.end(), let) != allOutgoings.end())
+                    if (allOutgoingIds.count(pathLet))
                         break;
-                    if (!std::any_of(
-                            memberLanelets.begin(), memberLanelets.end(),
-                            [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
-                        memberLanelets.push_back(let);
+                    auto let{roadNetwork->findLaneletById(pathLet)};
+                    if (addMember(let)) {
                         let->addLaneletType(LaneletType::intersection);
                         let->addLaneletType(LaneletType::left);
                     }
@@ -84,16 +101,13 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
                 letOut->addLaneletType(LaneletType::intersectionStraightOutgoing);
                 letOut->addLaneletType(LaneletType::straight);
                 letOut->addLaneletType(LaneletType::intersection);
-                memberLanelets.push_back(letOut);
+                addMember(letOut);
                 auto path{roadNetwork->getTopologicalMap()->findPaths(letInc->getId(), letOut->getId(), false)};
                 for (const auto &pathLet : path) {
-                    auto let{roadNetwork->findLaneletById(pathLet)};
-                    if (std::find(allOutgoings.begin(), allOutgoings.end(), let) != allOutgoings.end())
+                    if (allOutgoingIds.count(pathLet))
                         break;
-                    if (!std::any_of(
-                            memberLanelets.begin(), memberLanelets.end(),
-                            [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
-                        memberLanelets.push_back(let);
+                    auto let{roadNetwork->findLaneletById(pathLet)};
+                    if (addMember(let)) {
                         let->addLaneletType(LaneletType::intersection);
                         let->addLaneletType(LaneletType::straight);
                     }
@@ -103,16 +117,13 @@ void Intersection::computeMemberLanelets(const std::shared_ptr<RoadNetwork> &roa
                 letOut->addLaneletType(LaneletType::intersectionRightOutgoing);
                 letOut->addLaneletType(LaneletType::right);
                 letOut->addLaneletType(LaneletType::intersection);
-                memberLanelets.push_back(letOut);
+                addMember(letOut);
                 auto path{roadNetwork->getTopologicalMap()->findPaths(letInc->getId(), letOut->getId(), false)};
                 for (const auto &pathLet : path) {
-                    auto let{roadNetwork->findLaneletById(pathLet)};
-                    if (std::find(allOutgoings.begin(), allOutgoings.end(), let) != allOutgoings.end())
+                    if (allOutgoingIds.count(pathLet))
                         break;
-                    if (!std::any_of(
-                            memberLanelets.begin(), memberLanelets.end(),
-                            [let](const std::shared_ptr<Lanelet> &tmp) { return tmp->getId() == let->getId(); })) {
-                        memberLanelets.push_back(let);
+                    auto let{roadNetwork->findLaneletById(pathLet)};
+                    if (addMember(let)) {
                         let->addLaneletType(LaneletType::intersection);
                         let->addLaneletType(LaneletType::right);
                     }
@@ -201,8 +212,10 @@ void Intersection::determineIntersectionType() {
         intersectionTypes.insert(IntersectionType::UNKNOWN);
 }
 
-bool Intersection::isMemberLanelet(size_t memberLanelet) {
-    return std::any_of(
-        memberLanelets.begin(), memberLanelets.end(),
-        [memberLanelet](const std::shared_ptr<Lanelet> &lanelet) { return lanelet->getId() == memberLanelet; });
+bool Intersection::isMemberLanelet(const size_t memberLanelet) {
+    if (memberLaneletIds_.empty() && !memberLanelets.empty()) {
+        for (const auto &la : memberLanelets)
+            memberLaneletIds_.emplace(la->getId());
+    }
+    return memberLaneletIds_.count(memberLanelet) > 0;
 }

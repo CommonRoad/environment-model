@@ -10,12 +10,11 @@ bool OrientationTowardsPredicate::booleanEvaluation(size_t timeStep, const std::
                                                     const std::vector<std::string> &additionalFunctionParameters,
                                                     bool setBased) {
     auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
-    return (obstacleK->getLatPosition(timeStep, ccsP) > // k on left side
-                obstacleP->getLatPosition(world->getRoadNetwork(), timeStep) and
-            obstacleK->getCurvilinearOrientation(timeStep, ccsP) < 0) or
-           (obstacleK->getLatPosition(timeStep, ccsP) < // k on right side
-                obstacleP->getLatPosition(world->getRoadNetwork(), timeStep) and
-            obstacleK->getCurvilinearOrientation(timeStep, ccsP) > 0);
+    const auto curvilinearOrientation{obstacleK->getCurvilinearOrientation(timeStep, ccsP)};
+    const auto latPositionP{obstacleP->getLatPosition(world->getRoadNetwork(), timeStep)};
+    const auto latPositionK{obstacleK->getLatPosition(timeStep, ccsP)};
+    return (latPositionK > latPositionP and curvilinearOrientation < 0) or // k on left side
+           (latPositionK < latPositionP and curvilinearOrientation > 0);   // k on right side
 }
 
 double OrientationTowardsPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

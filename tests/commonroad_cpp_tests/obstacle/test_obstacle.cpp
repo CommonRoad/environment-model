@@ -11,7 +11,7 @@ void ObstacleTestInitialization::setUpObstacles() {
     size_t globalID{1234};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
 
-    obstacleOne = std::make_shared<Obstacle>(Obstacle());
+    obstacleOne = std::make_shared<Obstacle>();
     idObstacleOne = 1;
     roleObstacleOne = ObstacleRole::DYNAMIC;
     obstacleTypeObstacleOne = ObstacleType::car;
@@ -145,22 +145,18 @@ void ObstacleTestInitialization::setUpObstacles() {
                                                   std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleSeven),
                                                   std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleSeven)};
 
-    obstacleThree =
-        std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
-    obstacleFour =
-        std::make_shared<Obstacle>(Obstacle(4, ObstacleRole::DYNAMIC, stateZeroObstacleFour, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleFour, 5, 2));
-    obstacleFive =
-        std::make_shared<Obstacle>(Obstacle(5, ObstacleRole::DYNAMIC, stateFourObstacleFive, ObstacleType::truck, 50,
-                                            10, 3, -10, 0.3, trajectoryPredictionObstacleFive, 8, 2));
-    obstacleSix = std::make_shared<Obstacle>(Obstacle(6, ObstacleRole::DYNAMIC, stateSevenObstacleSix,
-                                                      ObstacleType::pedestrian, ActuatorParameters{50, 10, 3, -10, -10},
-                                                      SensorParameters{250.0, 250.0}, TimeParameters::dynamicDefaults(),
-                                                      {}, std::make_unique<Circle>(Circle(1))));
-    obstacleSeven =
-        std::make_shared<Obstacle>(Obstacle(7, ObstacleRole::DYNAMIC, stateZeroObstacleSeven, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleSeven, 5, 2));
+    obstacleThree = std::make_shared<Obstacle>(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50,
+                                               10, 3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2);
+    obstacleFour = std::make_shared<Obstacle>(4, ObstacleRole::DYNAMIC, stateZeroObstacleFour, ObstacleType::car, 50,
+                                              10, 3, -10, 0.3, trajectoryPredictionObstacleFour, 5, 2);
+    obstacleFive = std::make_shared<Obstacle>(5, ObstacleRole::DYNAMIC, stateFourObstacleFive, ObstacleType::truck, 50,
+                                              10, 3, -10, 0.3, trajectoryPredictionObstacleFive, 8, 2);
+    obstacleSix = std::make_shared<Obstacle>(6, ObstacleRole::DYNAMIC, stateSevenObstacleSix, ObstacleType::pedestrian,
+                                             ActuatorParameters{50, 10, 3, -10, -10}, SensorParameters{250.0, 250.0},
+                                             TimeParameters::dynamicDefaults(), state_map_t{},
+                                             std::make_unique<Circle>(Circle(1)));
+    obstacleSeven = std::make_shared<Obstacle>(7, ObstacleRole::DYNAMIC, stateZeroObstacleSeven, ObstacleType::car, 50,
+                                               10, 3, -10, 0.3, trajectoryPredictionObstacleSeven, 5, 2);
 
     obstacleList.push_back(obstacleOne);
     obstacleList.push_back(obstacleTwo);

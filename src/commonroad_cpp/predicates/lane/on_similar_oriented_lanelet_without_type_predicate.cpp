@@ -12,11 +12,10 @@ bool OnSimilarOrientedLaneletWithoutTypePredicate::booleanEvaluation(
     bool setBased) {
 
     auto lanelets{obstacleK->getOccupiedLaneletsDrivingDirectionByShape(world->getRoadNetwork(), timeStep, setBased)};
-    return std::all_of(lanelets.begin(), lanelets.end(),
-                       [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                           return !lanelet->hasLaneletType(
-                               lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0)));
-                       });
+    const auto laneletType = lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0));
+    return std::all_of(lanelets.begin(), lanelets.end(), [laneletType](const std::shared_ptr<Lanelet> &lanelet) {
+        return !lanelet->hasLaneletType(laneletType);
+    });
 }
 
 double OnSimilarOrientedLaneletWithoutTypePredicate::robustEvaluation(

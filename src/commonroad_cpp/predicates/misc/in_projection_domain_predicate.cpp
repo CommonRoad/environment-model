@@ -10,11 +10,9 @@ bool InProjectionDomainPredicate::booleanEvaluation(size_t timeStep, const std::
                                                     const std::vector<std::string> &additionalFunctionParameters,
                                                     bool setBased) {
     auto referenceLaneP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)};
-
-    return obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)
-        ->getCurvilinearCoordinateSystem()
-        ->cartesianPointInProjectionDomain(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                           obstacleK->getStateByTimeStep(timeStep)->getYPosition());
+    const auto stateK{obstacleK->getStateByTimeStep(timeStep)};
+    return referenceLaneP->getCurvilinearCoordinateSystem()->cartesianPointInProjectionDomain(stateK->getXPosition(),
+                                                                                              stateK->getYPosition());
 }
 
 double InProjectionDomainPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

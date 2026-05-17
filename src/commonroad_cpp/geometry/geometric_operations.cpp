@@ -262,9 +262,9 @@ double geometric_operations::subtractOrientations(const double lhs, const double
 }
 
 double geometric_operations::euclideanDistance2Dim(const vertex &pointA, const vertex &pointB) {
-    const double xDifference{pointA.x - pointB.x};
-    const double yDifference{pointA.y - pointB.y};
-    return sqrt(pow(xDifference, 2) + pow(yDifference, 2));
+    const double dx{pointA.x - pointB.x};
+    const double dy{pointA.y - pointB.y};
+    return std::sqrt(dx * dx + dy * dy);
 }
 
 std::tuple<std::vector<double>, double>

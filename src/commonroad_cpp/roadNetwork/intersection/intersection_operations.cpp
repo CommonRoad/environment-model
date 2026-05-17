@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <unordered_set>
 
 #include "commonroad_cpp/roadNetwork/intersection/incoming_group.h"
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
@@ -14,8 +15,7 @@ bool intersection_operations::onIncoming(const size_t timeStep, const std::share
                                          const std::shared_ptr<RoadNetwork> &roadNetwork) {
     const auto lanelets{obs->getOccupiedLaneletsByShape(roadNetwork, timeStep)};
     for (const auto &let : lanelets)
-        if (std::any_of(let->getLaneletTypes().begin(), let->getLaneletTypes().end(),
-                        [](const LaneletType typ) { return typ == LaneletType::incoming; }))
+        if (let->hasLaneletType(LaneletType::incoming))
             return true;
 
     return false;
@@ -26,15 +26,19 @@ bool intersection_operations::checkSameIncoming(const std::shared_ptr<Lanelet> &
                                                 const int numIntersections) {
     const auto simLaneletsK{lane_operations::combineLaneLanelets(
         lane_operations::combineLaneletAndPredecessorsToLane(letK, fov, numIntersections))};
-    auto simLaneletsP{lane_operations::combineLaneLanelets(
+    const auto simLaneletsP{lane_operations::combineLaneLanelets(
         lane_operations::combineLaneletAndPredecessorsToLane(letP, fov, numIntersections))};
+
+    std::unordered_set<size_t> simPIds;
+    simPIds.reserve(simLaneletsP.size());
+    for (const auto &l : simLaneletsP)
+        simPIds.insert(l->getId());
+
     for (const auto &laK : simLaneletsK) {
         if (!laK->hasLaneletType(LaneletType::incoming))
             continue;
         for (const auto &adjLet : lanelet_operations::adjacentLanelets(laK)) {
-            if (std::any_of(simLaneletsP.begin(), simLaneletsP.end(), [adjLet](const std::shared_ptr<Lanelet> &exLet) {
-                    return exLet->getId() == adjLet->getId();
-                }))
+            if (simPIds.count(adjLet->getId()))
                 return true;
         }
     }
@@ -52,44 +56,31 @@ void intersection_operations::findLeftOf(const std::shared_ptr<IncomingGroup> &o
 std::vector<std::shared_ptr<Intersection>>
 intersection_operations::currentIntersection(const size_t timeStep, const std::shared_ptr<World> &world,
                                              const std::shared_ptr<Obstacle> &obstacleK) {
-    std::vector<std::shared_ptr<Intersection>> intersections;
-    std::set<size_t> intersectionIDs;
-    auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
-
-    for (const auto &intersection : world->getRoadNetwork()->getIntersections()) {
-        if (intersectionIDs.find(intersection->getId()) != intersectionIDs.end())
-            continue;
-        for (const auto &lanelet : intersection->getMemberLanelets(world->getRoadNetwork())) {
-            if (std::any_of(lanelets.begin(), lanelets.end(), [lanelet](const std::shared_ptr<Lanelet> &occLane) {
-                    return occLane->getId() == lanelet->getId();
-                })) {
-                intersectionIDs.insert(intersection->getId());
-                intersections.push_back(intersection);
-                break;
-            }
+    // Use lanelet→intersection index for O(occupied_lanelets) instead of
+    // O(intersections × member_lanelets × occupied_lanelets).
+    std::vector<std::shared_ptr<Intersection>> result;
+    std::unordered_set<size_t> seen;
+    const auto lanelets = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+    for (const auto &let : lanelets) {
+        for (const auto &inter :
+             world->getRoadNetwork()->findIntersectionsByLaneletId(let->getId(), world->getRoadNetwork())) {
+            if (seen.insert(inter->getId()).second)
+                result.push_back(inter);
         }
     }
-    return intersections;
+    return result;
 }
 
 std::shared_ptr<IncomingGroup> intersection_operations::currentIncoming(const size_t timeStep,
                                                                         const std::shared_ptr<World> &world,
                                                                         const std::shared_ptr<Obstacle> &obs) {
-    const auto all_intersection{world->getRoadNetwork()->getIntersections()};
-    const auto lanelets{obs->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
-
-    for (const auto &intersection : all_intersection) {
-        for (const auto &incoming : intersection->getIncomingGroups()) {
-            for (const auto &lanelet : incoming->getIncomingLanelets()) {
-                if (std::any_of(lanelets.begin(), lanelets.end(),
-                                [lanelet](const std::shared_ptr<Lanelet> &occ_lanelet) {
-                                    return occ_lanelet->getId() == lanelet->getId();
-                                }))
-                    return incoming;
-            }
-        }
+    // Use lanelet→incoming-group index for O(occupied_lanelets) instead of
+    // O(intersections × incoming_groups × incoming_lanelets × occupied_lanelets).
+    const auto lanelets = obs->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+    for (const auto &let : lanelets) {
+        if (const auto incoming = world->getRoadNetwork()->findIncomingGroupByLanelet(let))
+            return incoming;
     }
-
     return nullptr;
 }
 
