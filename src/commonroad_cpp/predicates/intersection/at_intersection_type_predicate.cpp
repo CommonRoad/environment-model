@@ -11,10 +11,19 @@ bool AtIntersectionTypePredicate::booleanEvaluation(size_t timeStep, const std::
                                                     const std::shared_ptr<Obstacle> &obstacleP,
                                                     const std::vector<std::string> &additionalFunctionParameters,
                                                     bool setBased) {
-    return world->getRoadNetwork()
-        ->getIntersectionByID(std::stoul(additionalFunctionParameters[1]))
-        ->hasIntersectionType(
-            intersection_operations::matchStringToIntersectionType(additionalFunctionParameters.at(0)));
+    // Cache both parsed values; params are fixed per scenario instance. Saves some resource compared to using
+    // std::stoul at every function call
+    if (additionalFunctionParameters[1] != cachedIdStr_) {
+        cachedIdStr_ = additionalFunctionParameters[1];
+        cachedId_ = std::stoul(additionalFunctionParameters[1]);
+    }
+    if (additionalFunctionParameters[0] != cachedTypeStr_) {
+        cachedTypeStr_ = additionalFunctionParameters[0];
+        cachedType_ = intersection_operations::matchStringToIntersectionType(additionalFunctionParameters[0]);
+    }
+    const auto intersectionId = cachedId_;
+    const auto intersectionType = cachedType_.value();
+    return world->getRoadNetwork()->getIntersectionByID(intersectionId)->hasIntersectionType(intersectionType);
 }
 
 double AtIntersectionTypePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

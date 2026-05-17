@@ -9,12 +9,10 @@ bool HasPriorityPredicate::booleanEvaluation(const size_t timeStep, const std::s
                                              const std::shared_ptr<Obstacle> &obstacleP,
                                              const std::vector<std::string> &additionalFunctionParameters,
                                              bool setBased) {
-    const int prioK{regulatory_elements_utils::getPriority(
-        timeStep, world->getRoadNetwork(), obstacleK,
-        regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0)))};
-    const int prioP{regulatory_elements_utils::getPriority(
-        timeStep, world->getRoadNetwork(), obstacleP,
-        regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(1)))};
+    const auto dirK = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
+    const auto dirP = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(1));
+    const int prioK{regulatory_elements_utils::getPriority(timeStep, world->getRoadNetwork(), obstacleK, dirK)};
+    const int prioP{regulatory_elements_utils::getPriority(timeStep, world->getRoadNetwork(), obstacleP, dirP)};
     return prioK > prioP and prioK != std::numeric_limits<int>::min() and prioP != std::numeric_limits<int>::min();
 }
 

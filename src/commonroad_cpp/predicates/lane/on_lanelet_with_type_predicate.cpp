@@ -15,11 +15,10 @@ bool OnLaneletWithTypePredicate::booleanEvaluation(size_t timeStep, const std::s
                                                    bool setBased) {
     std::vector<std::shared_ptr<Lanelet>> lanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
-    return std::any_of(lanelets.begin(), lanelets.end(),
-                       [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                           return lanelet->hasLaneletType(
-                               lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0)));
-                       });
+    const auto laneletType = lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0));
+    return std::any_of(lanelets.begin(), lanelets.end(), [laneletType](const std::shared_ptr<Lanelet> &lanelet) {
+        return lanelet->hasLaneletType(laneletType);
+    });
 }
 
 double OnLaneletWithTypePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

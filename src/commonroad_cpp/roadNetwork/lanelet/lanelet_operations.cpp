@@ -3,6 +3,7 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lanelet_operations.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <unordered_set>
 #include <utility>
 
 #include "commonroad_cpp/roadNetwork/regulatoryElements/regulatory_elements_utils.h"
@@ -76,13 +77,11 @@ std::vector<LineMarking> lanelet_operations::matchStringToLineMarkingOptions(con
 std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet(std::shared_ptr<Lanelet> lanelet,
                                                                                  const bool sameDirection) {
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
+    std::unordered_set<size_t> seen;
     auto curLanelet{std::move(lanelet)};
 
     while (curLanelet->getAdjacentRight().adj != nullptr and
-           !std::any_of(adjacentLanelets.begin(), adjacentLanelets.end(),
-                        [curLanelet](const std::shared_ptr<Lanelet> &let) {
-                            return let->getId() == curLanelet->getAdjacentRight().adj->getId();
-                        }) and
+           seen.insert(curLanelet->getAdjacentRight().adj->getId()).second and
            (!sameDirection or !curLanelet->getAdjacentRight().oppositeDir)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentRight().adj);
         curLanelet = curLanelet->getAdjacentRight().adj;
@@ -93,13 +92,11 @@ std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsRightOfLanelet
 std::vector<std::shared_ptr<Lanelet>> lanelet_operations::laneletsLeftOfLanelet(std::shared_ptr<Lanelet> lanelet,
                                                                                 const bool sameDirection) {
     std::vector<std::shared_ptr<Lanelet>> adjacentLanelets;
+    std::unordered_set<size_t> seen;
     auto curLanelet{std::move(lanelet)};
 
     while (curLanelet->getAdjacentLeft().adj != nullptr and
-           !std::any_of(adjacentLanelets.begin(), adjacentLanelets.end(),
-                        [curLanelet](const std::shared_ptr<Lanelet> &let) {
-                            return let->getId() == curLanelet->getAdjacentLeft().adj->getId();
-                        }) and
+           seen.insert(curLanelet->getAdjacentLeft().adj->getId()).second and
            (!sameDirection or !curLanelet->getAdjacentLeft().oppositeDir)) {
         adjacentLanelets.push_back(curLanelet->getAdjacentLeft().adj);
         curLanelet = curLanelet->getAdjacentLeft().adj;

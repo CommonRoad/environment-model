@@ -222,12 +222,12 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
                                                std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleTwo)};
 
     std::shared_ptr<Obstacle> obstacleOne =
-        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionOneVehicle, 5, 2));
+        std::make_shared<Obstacle>(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
+                                   0.3, trajectoryPredictionOneVehicle, 5, 2);
 
     std::shared_ptr<Obstacle> obstacleTwo =
-        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::bus, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionTwoVehicle, 10, 2));
+        std::make_shared<Obstacle>(0, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::bus, 50, 10, 3, -10,
+                                   0.3, trajectoryPredictionTwoVehicle, 10, 2);
 
     std::shared_ptr<World> world =
         std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
@@ -271,8 +271,8 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
     const double obstacle_length = 5.0;
 
     std::shared_ptr<Obstacle> obstacleOne =
-        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionOneVehicle, 5, 2));
+        std::make_shared<Obstacle>(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
+                                   0.3, trajectoryPredictionOneVehicle, 5, 2);
 
     std::shared_ptr<World> world =
         std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));

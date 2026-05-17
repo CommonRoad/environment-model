@@ -34,9 +34,13 @@ class Polygon final : public Shape {
     /**
      * Getter for polygon vertices.
      *
+     * Vertices are computed lazily from the underlying boost polygon and then
+     * cached. The cache assumes the polygon is immutable after construction
+     * (no setters / mutators are exposed on Polygon).
+     *
      * @return Polygon vertices.
      */
-    [[nodiscard]] std::vector<vertex> getPolygonVertices() const;
+    [[nodiscard]] const std::vector<vertex> &getPolygonVertices() const;
 
     /**
      * Getter for type.
@@ -59,4 +63,6 @@ class Polygon final : public Shape {
 
   private:
     polygon_type polygon; // boost polygon representation
+    mutable std::vector<vertex> verticesCache_;
+    mutable bool verticesCacheValid_ = false;
 };

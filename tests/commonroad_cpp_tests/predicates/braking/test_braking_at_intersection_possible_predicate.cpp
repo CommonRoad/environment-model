@@ -20,10 +20,10 @@ void BrakingWithAccelerationPossibleAtIntersectionPredicateTest::SetUp() {
                                                 std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
                                                 std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne)};
 
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
-    obstacleTwo = std::make_shared<Obstacle>(
-        Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50, 10, 3, -10, 0.3, {}, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2);
+    obstacleTwo = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, state_map_t{}, 5, 2);
 
     auto roadNetwork1{utils_predicate_test::create_road_network({LaneletType::incoming}, {LaneletType::intersection})};
     auto roadNetwork2{utils_predicate_test::create_road_network_2()};

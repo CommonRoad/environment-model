@@ -20,8 +20,8 @@ void CloseToIntersectionPredicateTest::SetUp() {
                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeEgoVehicle),
                                                std::pair<int, std::shared_ptr<State>>(4, stateFourEgoVehicle)};
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3,
+                                            -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
 }
 
 void CloseToIntersectionPredicateTest::initializeTestData(LaneletType laneletTypeRight, LaneletType laneletTypeLeft,
@@ -82,15 +82,13 @@ TEST_F(CloseToIntersectionPredicateTest, InFrontOfIntersection) {
                                                 std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
                                                 std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo)};
 
-    auto obstacleOne{
-        std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2))};
-    auto obstacleTwo{
-        std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2))};
+    auto obstacleOne{std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50,
+                                                10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2)};
+    auto obstacleTwo{std::make_shared<Obstacle>(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50,
+                                                10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2)};
 
-    auto obstacleThree{std::make_shared<Obstacle>(
-        Obstacle(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50, 10, 3, -10, 0.3, {}, 5, 2))};
+    auto obstacleThree{std::make_shared<Obstacle>(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car,
+                                                  50, 10, 3, -10, 0.3, state_map_t{}, 5, 2)};
 
     auto worldNew{std::make_shared<World>(
         World("testWorld", 0, roadNetwork,

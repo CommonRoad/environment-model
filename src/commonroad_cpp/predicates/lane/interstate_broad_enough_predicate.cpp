@@ -9,8 +9,9 @@ bool InterstateBroadEnoughPredicate::booleanEvaluation(size_t timeStep, const st
                                                        const std::shared_ptr<Obstacle> &obstacleP,
                                                        const std::vector<std::string> &additionalFunctionParameters,
                                                        bool setBased) {
-    double obsK_x = obstacleK->getStateByTimeStep(timeStep)->getXPosition();
-    double obsK_y = obstacleK->getStateByTimeStep(timeStep)->getYPosition();
+    const auto state = obstacleK->getStateByTimeStep(timeStep);
+    double obsK_x = state->getXPosition();
+    double obsK_y = state->getYPosition();
     auto occupied_lanelets = world->getRoadNetwork()->findLaneletsByPosition(obsK_x, obsK_y);
     return std::all_of(occupied_lanelets.begin(), occupied_lanelets.end(),
                        [obsK_x, obsK_y, world, this](const std::shared_ptr<Lanelet> &lanelet) {

@@ -60,7 +60,7 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
     return curvilinearCoordinateSystem;
 }
 
-const std::set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
+const std::unordered_set<size_t> &Lane::getContainedLaneletIDs() const { return containedLaneletIds; }
 
 bool Lane::containsLanelet(const std::shared_ptr<Lanelet> &lanelet) const { return containsLanelet(lanelet->getId()); }
 
@@ -98,6 +98,11 @@ bool Lane::contains(std::vector<std::shared_ptr<Lanelet>> lanelets) {
 }
 
 bool Lane::isPartOf(const std::shared_ptr<Lane> &laneToCheck) {
-    return std::includes(containedLaneletIds.begin(), containedLaneletIds.end(),
-                         laneToCheck->getContainedLaneletIDs().begin(), laneToCheck->getContainedLaneletIDs().end());
+    // std::includes requires sorted ranges; containedLaneletIds is now unordered_set, so iterate manually.
+    const auto &other = laneToCheck->getContainedLaneletIDs();
+    for (const auto id : other) {
+        if (containedLaneletIds.find(id) == containedLaneletIds.end())
+            return false;
+    }
+    return true;
 }

@@ -15,11 +15,13 @@ bool OnSameRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
     // it to shape again since this simplifies set-based eval and assume we perform pre-checks to prevent failing ccs in
     // trajectory eval
     const auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
+    std::unordered_set<size_t> laneletPIDs;
+    for (const auto &la : laneletsP)
+        laneletPIDs.insert(la->getId());
     const auto refK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
     for (const auto &la : refK->getContainedLanelets()) {
         for (const auto &la2 : la->getAdjacentBothDir()) {
-            if (std::any_of(laneletsP.begin(), laneletsP.end(),
-                            [la2](const std::shared_ptr<Lanelet> &la3) { return la3->getId() == la2->getId(); }))
+            if (laneletPIDs.count(la2->getId()))
                 return true;
         }
     }

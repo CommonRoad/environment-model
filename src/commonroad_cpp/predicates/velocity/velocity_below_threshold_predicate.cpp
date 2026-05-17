@@ -6,7 +6,8 @@ bool VelocityBelowThresholdPredicate::booleanEvaluation(size_t timeStep, const s
                                                         const std::shared_ptr<Obstacle> &obstacleP,
                                                         const std::vector<std::string> &additionalFunctionParameters,
                                                         bool setBased) {
-    return obstacleK->getVelocity(timeStep, setBased, true) <= stod(additionalFunctionParameters.at(0));
+    const double threshold = std::stod(additionalFunctionParameters.at(0));
+    return obstacleK->getVelocity(timeStep, setBased, true) <= threshold;
 }
 
 Constraint VelocityBelowThresholdPredicate::constraintEvaluation(

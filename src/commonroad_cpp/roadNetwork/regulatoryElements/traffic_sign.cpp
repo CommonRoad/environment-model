@@ -3,6 +3,7 @@
 #include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
 #include <algorithm>
 #include <stdexcept>
+#include <unordered_map>
 #include <utility>
 
 void TrafficSign::setId(const size_t num) { id = num; }
@@ -46,10 +47,17 @@ TrafficSign::getTrafficSignElementsOfType(const TrafficSignTypes &signType) cons
 }
 
 TrafficSignTypes TrafficSign::matchTrafficSign(const std::string &trafficSignName) {
+    static const std::unordered_map<std::string, TrafficSignTypes> cache = []() {
+        std::unordered_map<std::string, TrafficSignTypes> m;
+        for (const auto &[key, val] : TrafficSignNames) {
+            m.emplace(key, val);
+        }
+        return m;
+    }();
     std::string str{trafficSignName};
     std::transform(str.begin(), str.end(), str.begin(), ::toupper);
-    if (TrafficSignNames.count(str) == 1)
-        return TrafficSignNames.at(str);
-    else
-        throw std::logic_error("TrafficSign::matchTrafficSign: Invalid traffic sign name '" + str + "'!");
+    const auto it = cache.find(str);
+    if (it != cache.end())
+        return it->second;
+    throw std::logic_error("TrafficSign::matchTrafficSign: Invalid traffic sign name '" + str + "'!");
 }

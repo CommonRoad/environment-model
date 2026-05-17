@@ -60,4 +60,8 @@ class AtSameIntersectionPredicate : public CommonRoadPredicate {
                                     const std::shared_ptr<Obstacle> &obstacleP = {},
                                     const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
                                     bool setBased = false) override;
+
+  private:
+    mutable std::string cachedIdStr_;
+    mutable size_t cachedId_ = 0;
 };

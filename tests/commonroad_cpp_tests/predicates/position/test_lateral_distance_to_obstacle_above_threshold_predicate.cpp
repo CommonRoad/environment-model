@@ -45,11 +45,10 @@ void TestLateralDistanceToObstacleAboveThresholdPredicate::SetUp() {
                                                std::pair<int, std::shared_ptr<State>>(5, stateFiveEgoVehicle),
                                                std::pair<int, std::shared_ptr<State>>(6, stateSixEgoVehicle)};
 
-    obstacleOne =
-        std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::bicycle, 50,
-                                            10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 2, 2));
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::bicycle, 50,
+                                             10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 2, 2);
+    egoVehicle = std::make_shared<Obstacle>(2, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3,
+                                            -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
 }
 
 TEST_F(TestLateralDistanceToObstacleAboveThresholdPredicate, Urban) {
@@ -102,11 +101,11 @@ void TestLateralDistanceToObstacleAboveThresholdPredicate::setUpLeft() {
                                                 std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
                                                 std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
-    egoVehicle2 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle2 = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
 
-    obstacleOne2 = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateTwoObstacleOne, ObstacleType::car,
-                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
+    obstacleOne2 = std::make_shared<Obstacle>(2, ObstacleRole::DYNAMIC, stateTwoObstacleOne, ObstacleType::car, 50, 10,
+                                              3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2);
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
     world2 = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle2}, {obstacleOne2}, 0.1));
@@ -136,11 +135,11 @@ void TestLateralDistanceToObstacleAboveThresholdPredicate::setUpRight() {
                                                 std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
                                                 std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
 
-    egoVehicle2 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle2 = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
 
-    obstacleOne2 = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateTwoObstacleOne, ObstacleType::car,
-                                                       50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
+    obstacleOne2 = std::make_shared<Obstacle>(2, ObstacleRole::DYNAMIC, stateTwoObstacleOne, ObstacleType::car, 50, 10,
+                                              3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2);
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
     world2 = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle2}, {obstacleOne2}, 0.1));
