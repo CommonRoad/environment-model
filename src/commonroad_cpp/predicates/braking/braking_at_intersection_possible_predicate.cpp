@@ -11,7 +11,8 @@ bool BrakingAtIntersectionPossiblePredicate::booleanEvaluation(
     bool setBased) {
     double distanceIntersection{0.0};
 
-    double brakingDistance{std::pow(obstacleK->getStateByTimeStep(timeStep)->getVelocity(), 2) /
+    const auto state = obstacleK->getStateByTimeStep(timeStep);
+    double brakingDistance{std::pow(state->getVelocity(), 2) /
                            (2 * abs(parameters.getParam("intersectionBrakingPossible")))};
     for (const auto &lane : lane_operations::createLanesBySingleLanelets(
              obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep), world->getRoadNetwork(),
@@ -20,11 +21,10 @@ bool BrakingAtIntersectionPossiblePredicate::booleanEvaluation(
              obstacleK->getRoadNetworkParameters().numIntersectionsPerDirectionLaneGeneration, {})) {
         for (const auto &letLane : lane->getContainedLanelets()) {
             if (letLane->hasLaneletType(LaneletType::incoming)) {
-                auto curvPos{lane->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
-                    letLane->getCenterVertices().back().x, letLane->getCenterVertices().back().y)};
-                auto ownPos{lane->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(
-                    obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                    obstacleK->getStateByTimeStep(timeStep)->getYPosition())};
+                const auto ccs = lane->getCurvilinearCoordinateSystem();
+                auto curvPos{ccs->convertToCurvilinearCoords(letLane->getCenterVertices().back().x,
+                                                             letLane->getCenterVertices().back().y)};
+                auto ownPos{ccs->convertToCurvilinearCoords(state->getXPosition(), state->getYPosition())};
                 distanceIntersection = curvPos.x() - ownPos.x();
                 break;
             }

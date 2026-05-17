@@ -9,16 +9,23 @@ bool AtSameIntersectionPredicate::booleanEvaluation(const size_t timeStep, const
                                                     const std::shared_ptr<Obstacle> &obstacleP,
                                                     const std::vector<std::string> &additionalFunctionParameters,
                                                     bool setBased) {
+    // Cache parsed ID; params[0] is fixed per scenario instance. Saves some resource compared to using std::stoul at
+    // every function call
+    if (additionalFunctionParameters[0] != cachedIdStr_) {
+        cachedIdStr_ = additionalFunctionParameters[0];
+        cachedId_ = std::stoul(additionalFunctionParameters[0]);
+    }
+    const auto targetId = cachedId_;
     const auto currentIntersection_k = intersection_operations::currentIntersection(timeStep, world, obstacleK);
     const auto currentIntersection_p = intersection_operations::currentIntersection(timeStep, world, obstacleP);
 
     return std::find_if(currentIntersection_k.begin(), currentIntersection_k.end(),
-                        [additionalFunctionParameters](const std::shared_ptr<Intersection> &intersection) {
-                            return intersection->getId() == std::stoul(additionalFunctionParameters[0]);
+                        [targetId](const std::shared_ptr<Intersection> &intersection) {
+                            return intersection->getId() == targetId;
                         }) != currentIntersection_k.end() &&
            std::find_if(currentIntersection_p.begin(), currentIntersection_p.end(),
-                        [additionalFunctionParameters](const std::shared_ptr<Intersection> &intersection) {
-                            return intersection->getId() == std::stoul(additionalFunctionParameters[0]);
+                        [targetId](const std::shared_ptr<Intersection> &intersection) {
+                            return intersection->getId() == targetId;
                         }) != currentIntersection_p.end();
 }
 double AtSameIntersectionPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

@@ -15,8 +15,8 @@ Constraint BrakesStrongerPredicate::constraintEvaluation(size_t timeStep, const 
                                                          const std::shared_ptr<Obstacle> &obstacleP,
                                                          const std::vector<std::string> &additionalFunctionParameters,
                                                          bool setBased) {
-    return {
-        std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(), stod(additionalFunctionParameters.at(0)))};
+    const double param0 = std::stod(additionalFunctionParameters.at(0));
+    return {std::min(obstacleP->getStateByTimeStep(timeStep)->getAcceleration(), param0)};
 }
 
 double BrakesStrongerPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
@@ -24,7 +24,8 @@ double BrakesStrongerPredicate::robustEvaluation(size_t timeStep, const std::sha
                                                  const std::shared_ptr<Obstacle> &obstacleP,
                                                  const std::vector<std::string> &additionalFunctionParameters,
                                                  bool setBased) {
-    return std::min(obstacleP->getAcceleration(timeStep, setBased, true), stod(additionalFunctionParameters.at(0))) -
+    const double param0 = std::stod(additionalFunctionParameters.at(0));
+    return std::min(obstacleP->getAcceleration(timeStep, setBased, true), param0) -
            obstacleK->getAcceleration(timeStep, setBased, true);
 }
 

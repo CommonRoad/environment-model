@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <mutex>
+#include <unordered_set>
 #include <vector>
 
 #include "lanelet.h"
@@ -59,7 +60,7 @@ class Lane : public Lanelet {
      *
      * @return Set of IDs of the lanelets contained in lane.
      */
-    [[nodiscard]] const std::set<size_t> &getContainedLaneletIDs() const;
+    [[nodiscard]] const std::unordered_set<size_t> &getContainedLaneletIDs() const;
 
     /**
      * Collects all successor lanelets within lane given a start lanelet.
@@ -105,8 +106,8 @@ class Lane : public Lanelet {
     mutable std::vector<std::shared_ptr<Lanelet>>
         containedLanelets; //**< list of pointers to lanelets constructing lane */
     mutable std::shared_ptr<CurvilinearCoordinateSystem>
-        curvilinearCoordinateSystem;      //**< curvilinear coordinate system defined by lane */
-    std::set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
+        curvilinearCoordinateSystem;                //**< curvilinear coordinate system defined by lane */
+    std::unordered_set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
 
     std::mutex ccs_lock;
 };

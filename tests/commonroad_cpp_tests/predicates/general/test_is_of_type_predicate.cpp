@@ -7,8 +7,8 @@
 
 void TestIsOfTypePredicate::SetUp() {
     std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0, 0, 0, 0, 0);
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, {stateZeroEgoVehicle},
-                                                     ObstacleType::pedestrian, 50, 10, 3, -10, 0.3, {}, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::pedestrian, 50,
+                                            10, 3, -10, 0.3, state_map_t{}, 5, 2);
 }
 
 TEST_F(TestIsOfTypePredicate, VRU) {
@@ -66,8 +66,8 @@ TEST_F(TestIsOfTypePredicate, Dynamic) {
 
 TEST_F(TestIsOfTypePredicate, Static) {
     std::shared_ptr<State> stateZeroObs = std::make_shared<State>(0, 0, 0, 10, 0, 0, 0, 0, 0);
-    auto obs = std::make_shared<Obstacle>(
-        Obstacle(1, ObstacleRole::STATIC, {stateZeroObs}, ObstacleType::pillar, 50, 10, 3, -10, 0.3, {}, 5, 2));
+    auto obs = std::make_shared<Obstacle>(1, ObstacleRole::STATIC, stateZeroObs, ObstacleType::pillar, 50, 10, 3, -10,
+                                          0.3, state_map_t{}, 5, 2);
     std::vector<std::string> opt{"static"};
     EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, obs, {}, opt));
     egoVehicle->setObstacleType(ObstacleType::building);

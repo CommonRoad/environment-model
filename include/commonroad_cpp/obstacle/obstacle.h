@@ -29,6 +29,7 @@ class Lanelet;
 class Lane;
 class RoadNetwork;
 class Occupancy;
+class Rectangle;
 namespace geometry {
 class CurvilinearCoordinateSystem;
 }
@@ -50,6 +51,8 @@ class Obstacle {
      * Default constructor without parameters for an obstacle.
      */
     Obstacle() = default;
+    Obstacle(const Obstacle &) = delete;
+    Obstacle &operator=(const Obstacle &) = delete;
 
     /**
      * Constructor initializing several obstacle attributes.
@@ -945,8 +948,9 @@ class Obstacle {
         roadNetworkParameters; //**< road network parameters, e.g., required to create reference lane */
     TimeParameters timeParameters{TimeParameters::dynamicDefaults()};
 
-    StateMetaInfo stateMetaInfo{};   //**< meta information relevant for obstacle */
-    std::unique_ptr<Shape> geoShape; //**< shape of the obstacle */
+    StateMetaInfo stateMetaInfo{};            //**< meta information relevant for obstacle */
+    std::unique_ptr<Shape> geoShape;          //**< shape of the obstacle */
+    const Rectangle *rectShapePtr_ = nullptr; //**< non-owning cache, set when geoShape changes */
 
     RecordedStates recordedStates{}; //**< recorded states of the obstacle consisting of history and current state*/
     TrajectoryPrediction trajectoryPrediction{}; //**< predicted states of the obstacle */
@@ -1033,7 +1037,8 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered.
      * @return Map of distance per time step.
      */
-    time_step_map_t<std::map<size_t, double>> &getLateralDistanceToObjectCache(size_t timeStep, bool setBased) const;
+    time_step_map_t<tsl::robin_map<size_t, double>> &getLateralDistanceToObjectCache(size_t timeStep,
+                                                                                     bool setBased) const;
 
     /**
      * Getter for rear position cache.
@@ -1117,8 +1122,8 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered.
      * @return Map of occupied lanelets per time step.
      */
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
-    getOccupiedLaneletsBackCache(size_t timeStep, bool setBased);
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>> &getOccupiedLaneletsBackCache(size_t timeStep,
+                                                                                         bool setBased);
 
     /**
      * Getter for occupied lanelets cache (front position).
@@ -1127,8 +1132,8 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered.
      * @return Map of occupied lanelets per time step.
      */
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
-    getOccupiedLaneletsFrontCache(size_t timeStep, bool setBased);
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>> &getOccupiedLaneletsFrontCache(size_t timeStep,
+                                                                                          bool setBased);
 
     /**
      * Getter for occupied lanelets cache (state occupancy).
@@ -1137,8 +1142,8 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered.
      * @return Map of occupied lanelets per time step.
      */
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &
-    getOccupiedLaneletsStateCache(size_t timeStep, bool setBased);
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>> &getOccupiedLaneletsStateCache(size_t timeStep,
+                                                                                          bool setBased);
 
     /**
      * Getter for occupied lanelets cache (shape occupancy).
@@ -1147,8 +1152,7 @@ class Obstacle {
      * @param setBased Boolean indicating whether set-based prediction should be considered.
      * @return Map of occupied lanelets per time step.
      */
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>> &getOccupiedLaneletsCache(size_t timeStep,
-                                                                                                     bool setBased);
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>> &getOccupiedLaneletsCache(size_t timeStep, bool setBased);
 
     /**
      * Getter for occupancy polygon shape cache.

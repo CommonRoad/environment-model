@@ -22,8 +22,8 @@ void OnRoadPredicateTest::SetUp() {
         std::pair<int, std::shared_ptr<State>>(5, stateFiveEgoVehicle),
     };
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3,
+                                            -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
     // To test that the first timestep with a distance to the successor lanelet of 100m evaluates to false
     egoVehicle->setSensorParameters({90.1, 90.1});
 }

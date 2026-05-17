@@ -7,6 +7,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <tsl/robin_map.h>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -244,6 +245,18 @@ class RoadNetwork {
     std::shared_ptr<OutgoingGroup> findOutgoingGroupByLanelet(const std::shared_ptr<Lanelet> &lanelet) const;
 
     /**
+     * Returns intersections whose member lanelets contain the given lanelet ID.
+     * The result is built lazily on first call and cached for subsequent calls.
+     * Requires self (shared_ptr to this RoadNetwork) to trigger getMemberLanelets().
+     *
+     * @param laneletId Lanelet ID to look up.
+     * @param self Shared pointer to this RoadNetwork instance.
+     * @return Reference to the (possibly empty) list of matching intersections.
+     */
+    [[nodiscard]] const std::vector<std::shared_ptr<Intersection>> &
+    findIntersectionsByLaneletId(size_t laneletId, const std::shared_ptr<RoadNetwork> &self) const;
+
+    /**
      * Getter for topological map of road network.
      *
      * @return Lanelet graph.
@@ -265,15 +278,50 @@ class RoadNetwork {
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
     std::shared_ptr<size_t> idCounterRef; //**< Pointer to ID counter of world object */
 
+    //**< Lazily populated O(1) ID lookup indices. mutable so they can be filled in const methods. */
+    mutable tsl::robin_map<size_t, std::shared_ptr<Lanelet>> laneletByIdIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<Intersection>> intersectionByIdIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<Lane>> laneByIdIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<TrafficLight>> trafficLightByIdIndex_;
+
+    //**< Lane reverse indices populated eagerly in addLanes(). */
+    mutable tsl::robin_map<size_t, std::vector<std::shared_ptr<Lane>>> lanesByContainedLaneletIndex_;
+    mutable tsl::robin_map<size_t, std::vector<std::shared_ptr<Lane>>> lanesByBaseLaneletIndex_;
+
+    //**< Incoming/outgoing group reverse indices populated lazily on first query. */
+    mutable tsl::robin_map<size_t, std::shared_ptr<IncomingGroup>> incomingByLaneletIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<OutgoingGroup>> outgoingByLaneletIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<IncomingGroup>> incomingByOutgoingGroupIndex_;
+
+    //**< Lanelet-to-intersection index populated lazily on first query. */
+    mutable tsl::robin_map<size_t, std::vector<std::shared_ptr<Intersection>>> intersectionsByLaneletIdIndex_;
+    mutable bool intersectionsByLaneletIdBuilt_ = false;
+
     //**< Struct for private fields including R-Tree */
     struct impl;
     std::unique_ptr<impl> pImpl;
 };
 
-// Required for lanes unordered_map in RoadNetwork class (unordered_set used as key)
+// Required for lanes unordered_map in RoadNetwork class (unordered_set used as key).
+// IMPORTANT: must use a commutative combiner because unordered_set iteration order
+// is implementation-defined; two equal sets must hash to the same value.
+// We hash each element with an avalanche mix, then XOR the results together: XOR is
+// commutative and associative, ensuring the same set always produces the same hash.
 namespace std {
 template <typename V, typename H, typename P, typename A>
 std::size_t hash_value(std::unordered_set<V, H, P, A> const &val) {
-    return boost::hash_range(val.begin(), val.end());
+    H hasher;
+    std::size_t result = 0;
+    for (auto const &elem : val) {
+        // splitmix64-style avalanche to spread bits before XOR-combining
+        std::size_t h = hasher(elem);
+        h ^= h >> 33;
+        h *= 0xff51afd7ed558ccdULL;
+        h ^= h >> 33;
+        h *= 0xc4ceb9fe1a85ec53ULL;
+        h ^= h >> 33;
+        result ^= h;
+    }
+    return result;
 }
 } // namespace std

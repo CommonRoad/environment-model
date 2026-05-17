@@ -6,8 +6,9 @@ bool InStandstillPredicate::booleanEvaluation(size_t timeStep, const std::shared
                                               const std::shared_ptr<Obstacle> &obstacleP,
                                               const std::vector<std::string> &additionalFunctionParameters,
                                               bool setBased) {
-    return -parameters.getParam("standstillError") < obstacleK->getVelocity(timeStep, setBased, true) and
-           parameters.getParam("standstillError") > obstacleK->getVelocity(timeStep, setBased, true);
+    const double standstillError = parameters.getParam("standstillError");
+    const double velocity = obstacleK->getVelocity(timeStep, setBased, true);
+    return -standstillError < velocity and standstillError > velocity;
 }
 
 double InStandstillPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

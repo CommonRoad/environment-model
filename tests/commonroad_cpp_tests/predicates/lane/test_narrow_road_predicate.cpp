@@ -17,29 +17,29 @@ void NarrowRoadPredicateTest::SetUp() {
                                                std::pair<int, std::shared_ptr<State>>(1, stateOneEgoVehicle),
                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoEgoVehicle)};
 
-    egoVehicle = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                     50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10, 3,
+                                            -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
 
     auto roadNetwork{utils_predicate_test::create_road_network()};
     world = std::make_shared<World>(World("testWorld", 0, roadNetwork, {egoVehicle}, {}, 0.1));
 
     auto roadNetwork2{utils_predicate_test::create_narrow_road_network(5.5)};
-    egoVehicle2 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle2 = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
     world2 = std::make_shared<World>(World("testWorld", 0, roadNetwork2, {egoVehicle2}, {}, 0.1));
 
     auto roadNetwork3{utils_predicate_test::create_narrow_road_network(7)};
-    egoVehicle3 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle3 = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
     world3 = std::make_shared<World>(World("testWorld", 0, roadNetwork3, {egoVehicle3}, {}, 0.1));
 
     auto roadNetwork4{utils_predicate_test::create_narrow_road_network(3)};
-    egoVehicle4 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle4 = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
     world4 = std::make_shared<World>(World("testWorld", 0, roadNetwork4, {egoVehicle4}, {}, 0.1));
 
-    egoVehicle5 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle5 = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
     std::string pathToTestFileOncoming =
         TestUtils::getTestScenarioDirectory() +
         "/predicates/DEU_TwoLanesWithOppositeDirections-1/DEU_TwoLanesWithOppositeDirections-1_1_T-1.pb";
@@ -47,8 +47,8 @@ void NarrowRoadPredicateTest::SetUp() {
         InputUtils::getDataFromCommonRoad(pathToTestFileOncoming);
     worldOncoming = std::make_shared<World>(World("testWorld", 0, roadNetworkOncoming, {egoVehicle5}, {}, 0.1));
 
-    egoVehicle6 = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    egoVehicle6 = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
     std::string pathToTestFileOncomingNarrow =
         TestUtils::getTestScenarioDirectory() +
         "/predicates/DEU_TwoLanesWithOppositeDirectionsNarrow-1/DEU_TwoLanesWithOppositeDirectionsNarrow-1_1_T-1.pb";

@@ -13,12 +13,13 @@ bool OnLaneletWithSuccessorTypePredicate::booleanEvaluation(
     bool setBased) {
     std::vector<std::shared_ptr<Lanelet>> occupiedLanelets =
         obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+    const auto state = obstacleK->getStateByTimeStep(timeStep);
+    const auto laneletType = lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0));
 
     for (auto &lanelet : occupiedLanelets) {
-        if (lanelet->hasLaneletType(lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0))))
+        if (lanelet->hasLaneletType(laneletType))
             return true;
-        auto idx{lanelet->findClosestIndex(obstacleK->getStateByTimeStep(timeStep)->getXPosition(),
-                                           obstacleK->getStateByTimeStep(timeStep)->getYPosition(), true)};
+        auto idx{lanelet->findClosestIndex(state->getXPosition(), state->getYPosition(), true)};
         std::vector<std::vector<std::shared_ptr<Lanelet>>> successors =
             lane_operations::combineLaneletAndSuccessorsToLane(
                 lanelet, obstacleK->getSensorParameters().getFieldOfViewFront(),
@@ -26,8 +27,7 @@ bool OnLaneletWithSuccessorTypePredicate::booleanEvaluation(
                 -lanelet->getPathLength().at(idx));
         for (auto &vec : successors) {
             for (auto &lane : vec) {
-                if (lane->hasLaneletType(
-                        lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0))))
+                if (lane->hasLaneletType(laneletType))
                     return true;
             }
         }

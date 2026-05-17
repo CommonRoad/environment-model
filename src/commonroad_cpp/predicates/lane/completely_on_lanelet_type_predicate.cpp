@@ -18,11 +18,10 @@ bool CompletelyOnLaneletTypePredicate::booleanEvaluation(size_t timeStep, const 
     // does not check lanelet driving direction
     // current implementation depends on obstacle shape
     auto lanelets{obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep)};
-    if (std::all_of(lanelets.begin(), lanelets.end(),
-                    [additionalFunctionParameters](const std::shared_ptr<Lanelet> &lanelet) {
-                        return lanelet->hasLaneletType(
-                            lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0)));
-                    }))
+    const auto laneletType = lanelet_operations::matchStringToLaneletType(additionalFunctionParameters.at(0));
+    if (std::all_of(lanelets.begin(), lanelets.end(), [laneletType](const std::shared_ptr<Lanelet> &lanelet) {
+            return lanelet->hasLaneletType(laneletType);
+        }))
         return true;
     for (const auto &shape : obstacleK->getOccupancyPolygonShape(timeStep)) {
         auto vertices = shape.outer();
@@ -30,9 +29,8 @@ bool CompletelyOnLaneletTypePredicate::booleanEvaluation(size_t timeStep, const 
             polygon_type polygonPos;
             bg::append(polygonPos, point_type{vertice.x(), vertice.y()});
             if (!std::any_of(lanelets.begin(), lanelets.end(),
-                             [additionalFunctionParameters, polygonPos](const std::shared_ptr<Lanelet> &lanelet) {
-                                 return lanelet->hasLaneletType(lanelet_operations::matchStringToLaneletType(
-                                            additionalFunctionParameters.at(0))) and
+                             [laneletType, polygonPos](const std::shared_ptr<Lanelet> &lanelet) {
+                                 return lanelet->hasLaneletType(laneletType) and
                                         lanelet->applyIntersectionTesting(polygonPos);
                              }))
                 return false;

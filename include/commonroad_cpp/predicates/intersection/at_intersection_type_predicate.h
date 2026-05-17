@@ -1,6 +1,8 @@
 #pragma once
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
+#include "commonroad_cpp/roadNetwork/intersection/intersection.h"
+#include <optional>
 
 /**
  *  Evaluates if a vehicle is at a specific intersection type
@@ -60,4 +62,10 @@ class AtIntersectionTypePredicate : public CommonRoadPredicate {
                                     const std::shared_ptr<Obstacle> &obstacleP = {},
                                     const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
                                     bool setBased = false) override;
+
+  private:
+    mutable std::string cachedIdStr_;
+    mutable size_t cachedId_ = 0;
+    mutable std::string cachedTypeStr_;
+    mutable std::optional<IntersectionType> cachedType_;
 };

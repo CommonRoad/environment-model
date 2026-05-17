@@ -2,6 +2,7 @@
 #include <commonroad_cpp/auxiliaryDefs/regulatory_elements.h>
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
 #include <stdexcept>
+#include <unordered_map>
 #include <utility>
 
 void TrafficLight::setId(const size_t num) { id = num; }
@@ -49,11 +50,19 @@ void TrafficLight::setPosition(const vertex pos) { position = pos; }
 vertex TrafficLight::getPosition() const { return position; }
 
 TrafficLightState TrafficLight::matchTrafficLightState(const std::string &trafficLightState) {
+    static const std::unordered_map<std::string, TrafficLightState> cache = []() {
+        std::unordered_map<std::string, TrafficLightState> m;
+        for (const auto &[key, val] : TrafficLightStateNames) {
+            m.emplace(key, val);
+        }
+        return m;
+    }();
     std::string str{trafficLightState};
     std::transform(str.begin(), str.end(), str.begin(), toupper);
     str.erase(remove(str.begin(), str.end(), '_'), str.end());
-    if (TrafficLightStateNames.count(str) == 1)
-        return TrafficLightStateNames.at(str);
+    const auto it = cache.find(str);
+    if (it != cache.end())
+        return it->second;
     throw std::logic_error("TrafficLight::matchTrafficLightState: Invalid traffic light state '" + str + "'!");
 }
 

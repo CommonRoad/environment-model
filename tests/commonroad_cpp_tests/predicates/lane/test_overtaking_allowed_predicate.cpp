@@ -25,8 +25,8 @@ void OvertakingAllowedPredicateTest::SetUp() {
         trajectoryPredictionObstacleFour.insert(std::pair<int, std::shared_ptr<State>>(i, newState));
     }
 
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
 
     auto roadNetwork{utils_predicate_test::create_road_network_with_2_successors(
         {LaneletType::urban}, {LaneletType::urban}, {LaneletType::urban}, {LaneletType::urban})};

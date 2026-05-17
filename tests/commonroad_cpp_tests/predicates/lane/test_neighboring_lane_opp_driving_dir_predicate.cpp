@@ -28,8 +28,8 @@ void TestNeighboringLaneOppDrivingDirPredicate::initObstacles() {
                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleEgo),
                                                std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleEgo),
                                                std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleEgo)};
-    obstacleEgo = std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleEgo, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2));
+    obstacleEgo = std::make_shared<Obstacle>(0, ObstacleRole::DYNAMIC, stateZeroObstacleEgo, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionEgoVehicle, 5, 2);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 35, 0, 1, 0, 0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 36, 0, 1, 0, 0);
@@ -43,8 +43,8 @@ void TestNeighboringLaneOppDrivingDirPredicate::initObstacles() {
                                                 std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
                                                 std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne),
                                                 std::pair<int, std::shared_ptr<State>>(5, stateFiveObstacleOne)};
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2);
 }
 
 TEST_F(TestNeighboringLaneOppDrivingDirPredicate, BooleanEvaluationObjectsMultilane) {

@@ -25,8 +25,8 @@ void TestInSingleLanePredicate::SetUp() {
                                                 std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
                                                 std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
 
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2);
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
     world = std::make_shared<World>("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},

@@ -4,7 +4,6 @@
 
 #include <commonroad_cpp/auxiliaryDefs/types_and_definitions.h>
 #include <commonroad_cpp/geometry/types.h>
-#include <map>
 #include <tsl/robin_map.h>
 
 class State;
@@ -25,19 +24,19 @@ struct ObstacleCache {
     //** type of prediction maps for occupancies */
     using occupancy_map_t = time_step_map_t<std::shared_ptr<Occupancy>>;
 
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>>
         occupiedLanelets{}; //**< map of time steps to lanelets occupied by the obstacle shape */
 
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>>
         occupiedLaneletsState{}; //**< map of time steps to lanelets occupied by the obstacle states (no shape
                                  // considered) */
 
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>>
         occupiedLaneletsFront{}; //**< map of time steps to lanelets in driving direction occupied by the obstacles
                                  // front
                                  //*/
 
-    std::unordered_map<time_step_t, std::vector<std::shared_ptr<Lanelet>>>
+    time_step_map_t<std::vector<std::shared_ptr<Lanelet>>>
         occupiedLaneletsBack{}; //**< map of time steps to lanelets in driving direction occupied by the obstacles back
                                 //*/
 
@@ -68,7 +67,7 @@ struct ObstacleCache {
 
     mutable time_step_map_t<double> rightLatPosition{}; //**< map of time step to right lat position */
 
-    mutable time_step_map_t<std::map<size_t, double>>
+    mutable time_step_map_t<tsl::robin_map<size_t, double>>
         lateralDistanceToObjects{}; //**< map of time steps to map of other obstacles and the regarding distance to the
                                     // obstacle */
 

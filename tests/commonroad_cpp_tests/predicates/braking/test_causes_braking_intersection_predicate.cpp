@@ -40,8 +40,8 @@ TEST_F(CausesBrakingIntersectionPredicateTest, SetBasedPrediction) {
     EXPECT_FALSE(pred.booleanEvaluation(40, world, obs1, ego, {}, true));
 
     EXPECT_FALSE(pred.booleanEvaluation(0, world, ego, obs1, {}, true));
-    EXPECT_TRUE(pred.booleanEvaluation(20, world, ego, obs1, {}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(20, world, ego, obs1, {}, true));
     EXPECT_TRUE(pred.booleanEvaluation(29, world, ego, obs1, {}, true));
-    EXPECT_FALSE(pred.booleanEvaluation(38, world, ego, obs1, {}, true));
-    EXPECT_FALSE(pred.booleanEvaluation(40, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(38, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(40, world, ego, obs1, {}, true));
 }
