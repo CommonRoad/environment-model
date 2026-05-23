@@ -3,7 +3,6 @@
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
 #include <geometry/curvilinear_coordinate_system.h>
-#include <limits>
 
 #include <commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h>
 
@@ -33,9 +32,6 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, cons
 
     // iterate over all lane pairs and compute intersection points; if between any intersection points and any obstacle
     // front position is below threshold return true
-    const bool useSetBased = setBased and !obstacleP->getSetBasedPrediction().empty() and
-                             obstacleP->getCurrentState()->getTimeStep() < timeStep;
-    const auto occupancyShape = useSetBased ? obstacleP->getOccupancyPolygonShape(timeStep) : multi_polygon_type{};
     for (const auto &laneP : lanesP) {
         std::vector<vertex> points;
         for (const auto &laneK : lanesK) {
@@ -43,11 +39,12 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, cons
             if (intersectionPoints.empty())
                 continue;
             for (const auto &point : intersectionPoints) {
-                double distance = std::numeric_limits<double>::max();
-                const auto pointCCSLon{
+                double distance;
+                auto pointCCSLon{
                     laneP->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(point.x, point.y).x()};
-                if (useSetBased) {
-                    for (const auto &obsShape : occupancyShape)
+                if (setBased and !obstacleP->getSetBasedPrediction().empty() and
+                    obstacleP->getCurrentState()->getTimeStep() < timeStep) {
+                    for (const auto &obsShape : obstacleP->getOccupancyPolygonShape(timeStep))
                         for (const auto obsPoint : obsShape.outer()) {
                             polygon_type polygonPos;
                             boost::geometry::append(polygonPos, point_type{obsPoint.x(), obsPoint.y()});
@@ -60,7 +57,6 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, cons
                         }
                 } else
                     distance = pointCCSLon - obstacleP->frontS(timeStep, laneP->getCurvilinearCoordinateSystem());
-
                 if (parameters.getParam("dCauseBrakingIntersection") <= distance and
                     distance <= parameters.getParam("dBrakingIntersection"))
                     return true;
