@@ -24,7 +24,8 @@ cppcheck:
   script:
     cppcheck
     --project=build/compile_commands.json
-    -i"$(pwd)/external"
+    -iexternal
+    -ibuild/_deps
   needs:
     - job: build-compile-commands
       artifacts: true
