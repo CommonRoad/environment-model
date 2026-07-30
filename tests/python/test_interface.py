@@ -486,32 +486,28 @@ class TestPythonInterface(unittest.TestCase):
             if obs.id == 42:
                 continue
             sp = obs.set_based_prediction
-            self.assertEqual(len(sp), len(scenario1.obstacle_by_id(obs.id).prediction.occupancy_set))
-            idx = 0
+            self.assertEqual(len(sp), len(scenario1.obstacle_by_id(obs.id).prediction.occupancies))
             for time_step, occ in sp.items():
-                self.assertEqual(time_step, scenario1.obstacle_by_id(obs.id).prediction.occupancy_set[idx].time_step)
-                idx += 1
+                self.assertTrue(time_step in scenario1.obstacle_by_id(obs.id).prediction.occupancies)
 
         sp = world1.obstacles[0].set_based_prediction
-        idx = 0
         self.assertEqual(
-            len(list(sp.values())[0].shape.vertices),
-            len(scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancy_set[0].shape.vertices),
+            len(sp[1].shape.vertices),
+            len(scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancies[1].vertices),
         )
-        for vert in list(sp.values())[0].shape.vertices:
+        for idx, vert in enumerate(sp[1].shape.vertices):
             self.assertEqual(
                 vert.x,
-                scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancy_set[0].shape.vertices[idx][0],
+                scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancies[1].vertices[idx][0],
             )
             self.assertEqual(
                 vert.y,
-                scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancy_set[0].shape.vertices[idx][1],
+                scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancies[1].vertices[idx][1],
             )
-            idx += 1
 
         self.assertEqual(
-            len(list(sp.values())[1].shape.shapes),
-            len(scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancy_set[1].shape.shapes),
+            len(sp[2].shape.shapes),
+            len(scenario1.obstacle_by_id(world1.obstacles[0].id).prediction.occupancies[2].occupancies),
         )
 
     def test_set_reference_lane_by_line(self):
