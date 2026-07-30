@@ -408,22 +408,22 @@ std::shared_ptr<State> createInitialState(nb::handle py_singleObstacle) {
 
 std::shared_ptr<Shape> extractOccupancyShape(nb::handle py_occupancyShape) {
     std::string commonroadShape{nb::cast<std::string>(inst_name(py_occupancyShape))};
-    if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "Rectangle") {
+    if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "RectOccupancy") {
         auto length{nb::cast<double>(py_occupancyShape.attr("length"))};
         auto width{nb::cast<double>(py_occupancyShape.attr("width"))};
         return std::make_shared<Rectangle>(length, width);
-    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "Circle") {
+    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "CircleOccupancy") {
         auto radius{nb::cast<double>(py_occupancyShape.attr("radius"))};
         return std::make_shared<Circle>(radius);
-    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "Polygon") {
+    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "PolygonOccupancy") {
         auto verticesRaw = nb::cast<std::vector<std::vector<double>>>(py_occupancyShape.attr("vertices"));
         std::vector<vertex> vertices;
         for (const auto &el : verticesRaw)
             vertices.push_back({el.at(0), el.at(1)});
         return std::make_shared<Polygon>(vertices);
-    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "ShapeGroup") {
+    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "OccupancyGroup") {
         std::vector<std::shared_ptr<Shape>> shapes;
-        for (const auto &shape : py_occupancyShape.attr("shapes"))
+        for (const auto &shape : py_occupancyShape.attr("occupancies"))
             shapes.push_back(extractOccupancyShape(shape));
         return std::make_shared<ShapeGroup>(shapes);
     } else
@@ -432,14 +432,14 @@ std::shared_ptr<Shape> extractOccupancyShape(nb::handle py_occupancyShape) {
 
 std::unique_ptr<Shape> extractObstacleShape(nb::handle py_obstacleShape) {
     std::string commonroadShape{nb::cast<std::string>(inst_name(py_obstacleShape))};
-    if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "Rectangle") {
+    if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "RectObstacleShape") {
         auto length{nb::cast<double>(py_obstacleShape.attr("length"))};
         auto width{nb::cast<double>(py_obstacleShape.attr("width"))};
         return std::make_unique<Rectangle>(length, width);
-    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "Circle") {
+    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "CircleObstacleShape") {
         auto radius{nb::cast<double>(py_obstacleShape.attr("radius"))};
         return std::make_unique<Circle>(radius);
-    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "Polygon") {
+    } else if (commonroadShape.substr(commonroadShape.find_last_of('.') + 1) == "PolygonObstacleShape") {
         std::vector<vertex> vertices;
         for (const auto &vertex : py_obstacleShape.attr("vertices"))
             vertices.push_back({nb::cast<double>(vertex[0]), nb::cast<double>(vertex[1])});
@@ -479,10 +479,10 @@ std::shared_ptr<State> TranslatePythonTypes::extractState(nb::handle py_state) {
     return state;
 }
 
-std::shared_ptr<Occupancy> TranslatePythonTypes::extractOccupancy(nb::handle py_occupancy) {
+std::shared_ptr<Occupancy> TranslatePythonTypes::extractOccupancy(time_step_t time_step, nb::handle py_occupancy) {
     auto occ{std::make_shared<Occupancy>()};
-    occ->setShape(extractOccupancyShape(py_occupancy.attr("shape")));
-    occ->setTimeStep(nb::cast<size_t>(py_occupancy.attr("time_step")));
+    occ->setShape(extractOccupancyShape(py_occupancy));
+    occ->setTimeStep(time_step);
     return occ;
 }
 
@@ -509,9 +509,11 @@ std::shared_ptr<Obstacle> TranslatePythonTypes::createDynamicObstacle(nb::handle
     if (nb::hasattr(py_singleObstacle.attr("prediction"), "trajectory"))
         for (const auto &py_state : py_singleObstacle.attr("prediction").attr("trajectory").attr("state_list"))
             tempObstacle->appendStateToTrajectoryPrediction(extractState(py_state));
-    else if (nb::hasattr(py_singleObstacle.attr("prediction"), "occupancy_set"))
-        for (const auto &py_occupancy : py_singleObstacle.attr("prediction").attr("occupancy_set"))
-            tempObstacle->appendOccupancyToSetBasedPrediction(extractOccupancy(py_occupancy));
+    else if (nb::hasattr(py_singleObstacle.attr("prediction"), "occupancies"))
+        for (const auto &[time_step, py_occupancy] :
+             nb::cast<nb::dict>(py_singleObstacle.attr("prediction").attr("occupancies")))
+            tempObstacle->appendOccupancyToSetBasedPrediction(
+                extractOccupancy(nb::cast<time_step_t>(time_step), py_occupancy));
     else
         spdlog::error(
             "TranslatePythonTypes::createDynamicObstacle: Unknown prediction type or no prediction. Obstacle ID: " +
