@@ -5,7 +5,13 @@ stages:
   - static-test
   - publish
 
-image: $CI_REGISTRY/tum-cps/commonroad-docker/ci-base:2025.2
+# Fall back to the runner's cached image if the registry rate-limits pulls (HTTP 429)
+.pull-policy: &pull_policy
+  pull_policy: [always, if-not-present]
+
+image:
+  name: $CI_REGISTRY/tum-cps/commonroad-docker/ci-base:2025.2
+  <<: *pull_policy
 
 before_script:
   - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/".insteadOf "git@gitlab.lrz.de:"
@@ -74,7 +80,9 @@ build-ubuntu2204:
   stage: compile
   cache:
     <<: *cache_dependency_archives
-  image: $CI_REGISTRY/tum-cps/commonroad-docker/ci-ubuntu2204:2025.2
+  image:
+    name: $CI_REGISTRY/tum-cps/commonroad-docker/ci-ubuntu2204:2025.2
+    <<: *pull_policy
   script:
     - cmake -G "Ninja Multi-Config" -S . -B build
     - cmake --build build --config Release
@@ -84,7 +92,9 @@ build-clang:
   stage: compile
   cache:
     <<: *cache_dependency_archives
-  image: $CI_REGISTRY/tum-cps/commonroad-docker/ci-clang:2025.2
+  image:
+    name: $CI_REGISTRY/tum-cps/commonroad-docker/ci-clang:2025.2
+    <<: *pull_policy
   parallel:
     matrix:
       - CLANG_VERSION: [15, 16, 17, 18, 19]
@@ -103,7 +113,9 @@ build-gcc:
   stage: compile
   cache:
     <<: *cache_dependency_archives
-  image: $CI_REGISTRY/tum-cps/commonroad-docker/ci-gcc:2025.2
+  image:
+    name: $CI_REGISTRY/tum-cps/commonroad-docker/ci-gcc:2025.2
+    <<: *pull_policy
   parallel:
     matrix:
       - GCC_VERSION: [10, 11, 12, 13, 14]
@@ -160,7 +172,9 @@ build-coverage:
 
 build-sdist:
   stage: compile
-  image: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
+  image:
+    name: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
+    <<: *pull_policy
   script:
     - python3 --version
     - git describe
@@ -179,7 +193,9 @@ build-wheel:
   stage: python
   tags:
     - dind
-  image: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
+  image:
+    name: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
+    <<: *pull_policy
   # make a docker daemon available for cibuildwheel to use
   services:
     - name: docker:20.10-dind
@@ -215,7 +231,9 @@ build-wheel:
 
 upload-wheel:
   stage: publish
-  image: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
+  image:
+    name: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
+    <<: *pull_policy
   variables:
     TWINE_USERNAME: gitlab-ci-token
     TWINE_PASSWORD: ${CI_JOB_TOKEN}
