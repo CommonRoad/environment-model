@@ -287,7 +287,7 @@ run-coverage:
 
 .test-python-common: &test-python-common
   stage: test
-  image: python:${JOB_PYTHON_VERSION}-slim-bullseye
+  image: python:${JOB_PYTHON_VERSION}-slim-bookworm
   before_script:
     - *install-python-venv
     - SETUPTOOLS_SCM_PRETEND_VERSION_FOR_COMMONROAD_CPP=1
@@ -331,7 +331,7 @@ test-python-manylinux:
 
 test-python-general:
   stage: test
-  image: python:${JOB_PYTHON_VERSION}-slim-bullseye
+  image: python:${JOB_PYTHON_VERSION}-slim-bookworm
   parallel:
     matrix:
       - JOB_PYTHON_VERSION: [ "3.9", "3.10", "3.11" ]
@@ -348,7 +348,7 @@ test-python-general:
 
 pages:
   stage: publish
-  image: python:3.11-slim-bullseye
+  image: python:3.11-slim-bookworm
   when: manual
   publish: site
   before_script:
@@ -366,7 +366,7 @@ pages:
 
 build_pages:
   stage: publish
-  image: python:3.11-slim-bullseye
+  image: python:3.11-slim-bookworm
   before_script:
     - *install-python-venv
   script:
