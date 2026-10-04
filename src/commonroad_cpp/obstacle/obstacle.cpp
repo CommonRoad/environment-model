@@ -486,7 +486,7 @@ double Obstacle::frontS(const std::shared_ptr<RoadNetwork> &roadNetwork, const s
 double Obstacle::frontS(const size_t timeStep, const std::shared_ptr<geometry::CurvilinearCoordinateSystem> &ccs,
                         const bool setBased) {
     if (setBased and timeStep > recordedStates.currentState->getTimeStep()) {
-        double frontS{0.0};
+        double frontS{std::numeric_limits<double>::lowest()};
         std::vector<vertex> vertices;
         if (setBasedPrediction.setBasedPrediction.at(timeStep)->getShape()->getType() == ShapeType::polygon)
             vertices = dynamic_cast<const Polygon &>(*setBasedPrediction.setBasedPrediction.at(timeStep)->getShape())
@@ -1191,8 +1191,8 @@ double Obstacle::getVelocity(const size_t timeStep, const bool setBased, const b
         if (min) {
             // addition since aMinLong already negative
             return std::max(recordedStates.currentState->getVelocity() +
-                                (timeStep - recordedStates.currentState->getTimeStep()) * 0.1 *
-                                    actuatorParameters.getAminLong(),
+                                (timeStep - recordedStates.currentState->getTimeStep()) *
+                                    timeParameters.getTimeStepSize() * actuatorParameters.getAminLong(),
                             0.0);
         }
         return std::min(recordedStates.currentState->getVelocity() +
@@ -1210,7 +1210,8 @@ double Obstacle::getAcceleration(const size_t timeStep, const bool setBased, con
                 return 0;
             return actuatorParameters.getAminLong();
         }
-        if (getVelocity(timeStep, setBased, min) == actuatorParameters.getVmax())
+        // only if all covered behaviors drive with maximum velocity, none of them can accelerate
+        if (getVelocity(timeStep, setBased, true) == actuatorParameters.getVmax())
             return 0;
         return actuatorParameters.getAmaxLong();
     }

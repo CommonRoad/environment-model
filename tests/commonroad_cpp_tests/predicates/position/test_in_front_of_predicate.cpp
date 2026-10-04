@@ -133,4 +133,13 @@ TEST_F(TestInFrontOfPredicate, SetBasedPrediction) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs1, {}, true));
     EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs2, {}, true));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, dynamicObstacle, obs1, {}, true));
+
+    // may-version for set-based predictions: at time step 30, the rearmost point of the occupancy of obs1 is behind
+    // the ego front, but its frontmost point is in front of it, i.e., some covered behavior is in front of the ego
+    const auto ccsEgo{ego->getReferenceLane(world->getRoadNetwork(), 30)->getCurvilinearCoordinateSystem()};
+    EXPECT_LT(obs1->rearS(30, ccsEgo, true), ego->frontS(world->getRoadNetwork(), 30));
+    EXPECT_GT(obs1->frontS(30, ccsEgo, true), ego->frontS(world->getRoadNetwork(), 30));
+    EXPECT_TRUE(pred.booleanEvaluation(30, world, ego, obs1, {}, true));
+    EXPECT_NEAR(pred.robustEvaluation(30, world, ego, obs1, {}, true),
+                obs1->frontS(30, ccsEgo, true) - ego->frontS(world->getRoadNetwork(), 30), 1e-9);
 }

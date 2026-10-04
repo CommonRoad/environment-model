@@ -150,7 +150,8 @@ TEST_F(KeepsSafeDistancePrecPredicateTest, SetBasedPrediction) {
     EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs2, {"0.0"}, true));
     EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs3, {"0.0"}, true));
     EXPECT_FALSE(pred.booleanEvaluation(27, world, ego, obs1, {"0.0"}, true));
-    EXPECT_TRUE(pred.booleanEvaluation(30, world, ego, obs1, {"0.0"}, true)); // collision must be checked separately
+    // occupancy of obs1 overlaps ego longitudinally: no deltaS < 0 shortcut for set-based predictions (must-version)
+    EXPECT_FALSE(pred.booleanEvaluation(30, world, ego, obs1, {"0.0"}, true));
     EXPECT_TRUE(pred.booleanEvaluation(0, world, dynamicObstacle, obs1, {"0.0"}, true));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, dynamicObstacle, obs1, {"0.0"}, true));
 }
