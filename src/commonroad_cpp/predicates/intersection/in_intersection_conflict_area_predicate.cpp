@@ -22,11 +22,19 @@ bool InIntersectionConflictAreaPredicate::booleanEvaluation(
         laneletsP = lane->getContainedLanelets();
     }
 
+    // For a set-based prediction of the kth vehicle, the predicate is used as may-version (it appears negated in
+    // R_IN5 via not_endanger_intersection). The exclusion of similarly oriented lanelets is negated within the
+    // predicate and would require lanelets occupied by all covered behaviors; since set-based predictions contain no
+    // orientation, the exclusion is skipped, which over-approximates the predicate.
+    const bool usesOccupancyK{setBased and !obstacleK->getSetBasedPrediction().empty() and
+                              timeStep > obstacleK->getCurrentState()->getTimeStep()};
     const auto occupiedLaneletsK = obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
     for (const auto &letP : laneletsP) {
         for (const auto &letK : occupiedLaneletsK) {
             if (!letK->hasLaneletType(LaneletType::intersection))
                 continue;
+            if (usesOccupancyK and letK->getId() == letP->getId())
+                return true;
             if (letK->getId() == letP->getId() and
                 !std::any_of(simLaneletsK.begin(), simLaneletsK.end(),
                              [letK](const std::shared_ptr<Lanelet> &letSim) {
