@@ -77,3 +77,17 @@ TEST_F(LaneBasedOrientationSimilarPredicateTest, RobustEvaluation) {
 TEST_F(LaneBasedOrientationSimilarPredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }
+
+TEST_F(LaneBasedOrientationSimilarPredicateTest, SetBasedPrediction) {
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/ZAM_Augmentation-1_1_S-3.xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+    auto worldSetBased{
+        std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+
+    auto ego{worldSetBased->findObstacle(42)};
+    auto obs1{worldSetBased->findObstacle(100)};
+
+    // set-based predictions contain no orientation: the may-version holds for future time steps
+    EXPECT_TRUE(pred.booleanEvaluation(25, worldSetBased, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(30, worldSetBased, ego, obs1, {}, true));
+}

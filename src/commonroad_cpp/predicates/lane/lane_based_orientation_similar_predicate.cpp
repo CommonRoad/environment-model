@@ -9,6 +9,11 @@ bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<Obstacle> &obstacleK, const std::vector<std::string> &additionalFunctionParameters,
     bool setBased) {
+    // Set-based predictions contain no orientation, so every orientation is covered. The predicate is used as
+    // may-version, i.e., it holds, since it appears negated in rule preconditions, e.g., in succeeds of R_G1.
+    if (setBased and !obstacleK->getSetBasedPrediction().empty() and
+        timeStep > obstacleK->getCurrentState()->getTimeStep())
+        return true;
     auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
     return std::abs(geometric_operations::subtractOrientations(
                obstacleK->getCurvilinearOrientation(timeStep, ccsP),
