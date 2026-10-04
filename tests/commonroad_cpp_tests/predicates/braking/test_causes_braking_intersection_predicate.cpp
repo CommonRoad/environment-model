@@ -39,9 +39,11 @@ TEST_F(CausesBrakingIntersectionPredicateTest, SetBasedPrediction) {
     EXPECT_FALSE(pred.booleanEvaluation(38, world, obs1, ego, {}, true));
     EXPECT_FALSE(pred.booleanEvaluation(40, world, obs1, ego, {}, true));
 
+    // may-version for the set-based prediction of obs1: true if the front of at least one covered behavior is within
+    // [dCauseBrakingIntersection, dBrakingIntersection] = [-2 m, 15 m] of an intersection point with the ego lane
     EXPECT_FALSE(pred.booleanEvaluation(0, world, ego, obs1, {}, true));
-    EXPECT_TRUE(pred.booleanEvaluation(20, world, ego, obs1, {}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(20, world, ego, obs1, {}, true)); // occupancy front still ~27 m away
     EXPECT_TRUE(pred.booleanEvaluation(29, world, ego, obs1, {}, true));
-    EXPECT_FALSE(pred.booleanEvaluation(38, world, ego, obs1, {}, true));
-    EXPECT_FALSE(pred.booleanEvaluation(40, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(38, world, ego, obs1, {}, true)); // occupancy front passed, rear part covered
+    EXPECT_TRUE(pred.booleanEvaluation(40, world, ego, obs1, {}, true));
 }

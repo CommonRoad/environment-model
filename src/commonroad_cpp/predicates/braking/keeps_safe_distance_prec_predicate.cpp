@@ -71,7 +71,13 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const s
 
     // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
     // robustness; collision must be checked separately
-    if (deltaS < 0)
+    // For a set-based prediction of the pth vehicle, the predicate is used as must-version, i.e., it may only hold if
+    // it holds for all behaviors covered by the occupancy (it appears positively in R_G1). deltaS < 0 only means that
+    // the rearmost point of the occupancy is behind the kth vehicle's front, while other covered behaviors may still be
+    // in front of the kth vehicle and closer than the safe distance. Therefore, the shortcut is not applied then.
+    const bool usesOccupancyP{setBased and !obstacleP->getSetBasedPrediction().empty() and
+                              timeStep > obstacleP->getCurrentState()->getTimeStep()};
+    if (deltaS < 0 and !usesOccupancyP)
         return std::abs(deltaS);
     const double param0 = std::stod(additionalFunctionParameters.at(0));
     if (deltaS - param0 < 0)

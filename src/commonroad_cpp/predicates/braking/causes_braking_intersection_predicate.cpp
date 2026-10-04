@@ -1,3 +1,5 @@
+#include <limits>
+
 #include <commonroad_cpp/obstacle/obstacle.h>
 #include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
@@ -39,13 +41,19 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, cons
             if (intersectionPoints.empty())
                 continue;
             for (const auto &point : intersectionPoints) {
-                double distance;
                 auto pointCCSLon{
                     laneP->getCurvilinearCoordinateSystem()->convertToCurvilinearCoords(point.x, point.y).x()};
                 if (setBased and !obstacleP->getSetBasedPrediction().empty() and
                     obstacleP->getCurrentState()->getTimeStep() < timeStep) {
+                    // may-version for set-based predictions (the predicate appears negated in R_IN5): true if the
+                    // front of at least one behavior covered by the occupancy has a distance to the intersection
+                    // point within the braking interval. The fronts of the covered behaviors lie within the
+                    // longitudinal extent [minLonObs, maxLonObs] of the occupancy within the lane, so the covered
+                    // distances form the interval [pointCCSLon - maxLonObs, pointCCSLon - minLonObs].
+                    double minLonObs{std::numeric_limits<double>::max()};
+                    double maxLonObs{std::numeric_limits<double>::lowest()};
                     for (const auto &obsShape : obstacleP->getOccupancyPolygonShape(timeStep))
-                        for (const auto obsPoint : obsShape.outer()) {
+                        for (const auto &obsPoint : obsShape.outer()) {
                             polygon_type polygonPos;
                             boost::geometry::append(polygonPos, point_type{obsPoint.x(), obsPoint.y()});
                             if (!laneP->applyIntersectionTesting(polygonPos))
@@ -53,10 +61,18 @@ bool CausesBrakingIntersectionPredicate::booleanEvaluation(size_t timeStep, cons
                             auto pointCCSLonObs{laneP->getCurvilinearCoordinateSystem()
                                                     ->convertToCurvilinearCoords(obsPoint.x(), obsPoint.y())
                                                     .x()};
-                            distance = std::min(distance, pointCCSLon - pointCCSLonObs);
+                            minLonObs = std::min(minLonObs, pointCCSLonObs);
+                            maxLonObs = std::max(maxLonObs, pointCCSLonObs);
                         }
-                } else
-                    distance = pointCCSLon - obstacleP->frontS(timeStep, laneP->getCurvilinearCoordinateSystem());
+                    if (minLonObs > maxLonObs) // no occupancy vertex within lane
+                        continue;
+                    if (pointCCSLon - maxLonObs <= parameters.getParam("dBrakingIntersection") and
+                        parameters.getParam("dCauseBrakingIntersection") <= pointCCSLon - minLonObs)
+                        return true;
+                    continue;
+                }
+                const double distance{pointCCSLon -
+                                      obstacleP->frontS(timeStep, laneP->getCurvilinearCoordinateSystem())};
                 if (parameters.getParam("dCauseBrakingIntersection") <= distance and
                     distance <= parameters.getParam("dBrakingIntersection"))
                     return true;
