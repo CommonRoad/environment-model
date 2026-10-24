@@ -6,7 +6,7 @@
  * Evaluates whether the kth vehicle is in front of the pth vehicle, withing the same lane, and drives in the same
  * direction.
  */
-class LaneBasedOrientationSimilarPredicate final : public CommonRoadPredicate {
+class LaneBasedOrientationSimilarPredicate : public CommonRoadPredicate {
   public:
     /**
      * Constructor for LaneBasedOrientationSimilarPredicate.
