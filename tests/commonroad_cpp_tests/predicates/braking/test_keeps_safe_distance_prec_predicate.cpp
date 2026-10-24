@@ -4,6 +4,12 @@
 #include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <commonroad_cpp/geometry/polygon.h>
+#include <commonroad_cpp/obstacle/occupancy.h>
+#include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_may_predicate.h>
+#include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_must_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 void KeepsSafeDistancePrecPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 20, 0, 0);
@@ -153,4 +159,49 @@ TEST_F(KeepsSafeDistancePrecPredicateTest, SetBasedPrediction) {
     EXPECT_TRUE(pred.booleanEvaluation(30, world, ego, obs1, {"0.0"}, true)); // collision must be checked separately
     EXPECT_TRUE(pred.booleanEvaluation(0, world, dynamicObstacle, obs1, {"0.0"}, true));
     EXPECT_FALSE(pred.booleanEvaluation(1, world, dynamicObstacle, obs1, {"0.0"}, true));
+}
+
+TEST_F(KeepsSafeDistancePrecPredicateTest, SetBasedMustMay) {
+    KeepsSafeDistancePrecMustPredicate predMust;
+    KeepsSafeDistancePrecMayPredicate predMay;
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_Augmentation-1_1_S-3.xml")};
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+    auto ego{world->findObstacle(42)};
+    auto obs1{world->findObstacle(100)};
+
+    // time step 25: the rear of the occupancy is too close to the ego vehicle, its front is far enough away
+    EXPECT_FALSE(predMust.booleanEvaluation(25, world, ego, obs1, {"0.0"}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(25, world, ego, obs1, {"0.0"}, true));
+    // time step 30: the occupancy overlaps the ego vehicle longitudinally; the covered behaviors directly in front of
+    // the ego vehicle violate the safe distance (must), the covered behaviors behind it don't (may)
+    EXPECT_FALSE(predMust.booleanEvaluation(30, world, ego, obs1, {"0.0"}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(30, world, ego, obs1, {"0.0"}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(30, world, ego, obs1, {"0.0"}, true)); // unchanged Boolean set-based evaluation
+
+    // the must-version holds only if the may-version holds
+    for (const size_t obsId : {100, 101, 102}) {
+        auto obs{world->findObstacle(obsId)};
+        for (size_t timeStep{1}; timeStep <= 30; ++timeStep)
+            EXPECT_LE(predMust.robustEvaluation(timeStep, world, ego, obs, {"0.0"}, true),
+                      predMay.robustEvaluation(timeStep, world, ego, obs, {"0.0"}, true));
+    }
+
+    // occupancy entirely behind the ego front: the safe distance does not apply to any covered behavior
+    const auto params{obs1->getActuatorParameters()};
+    auto obsBehind{std::make_shared<Obstacle>(2000, ObstacleRole::DYNAMIC, obs1->getCurrentState(), ObstacleType::car,
+                                              params.getVmax(), params.getAmax(), params.getAmaxLong(),
+                                              params.getAminLong(), 0.3, state_map_t{}, 4.5, 1.8)};
+    const auto egoState{ego->getStateByTimeStep(30)};
+    const double xEgo{egoState->getXPosition()};
+    const double yEgo{egoState->getYPosition()};
+    obsBehind->appendOccupancyToSetBasedPrediction(
+        std::make_shared<Occupancy>(30, std::make_shared<Polygon>(std::vector<vertex>{{xEgo - 20.0, yEgo - 1.0},
+                                                                                      {xEgo - 15.0, yEgo - 1.0},
+                                                                                      {xEgo - 15.0, yEgo + 1.0},
+                                                                                      {xEgo - 20.0, yEgo + 1.0}})));
+    const auto ccsEgo{ego->getReferenceLane(world->getRoadNetwork(), 30)->getCurvilinearCoordinateSystem()};
+    EXPECT_LT(obsBehind->frontS(30, ccsEgo, true), ego->frontS(world->getRoadNetwork(), 30));
+    EXPECT_TRUE(predMust.booleanEvaluation(30, world, ego, obsBehind, {"0.0"}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(30, world, ego, obsBehind, {"0.0"}, true));
 }
