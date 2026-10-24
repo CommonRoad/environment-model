@@ -36,20 +36,56 @@ void init_python_interface_predicates(nb::module_ &m) {
         .def_ro("num_satisfaction", &PredicateStatistics::numSatisfaction)
         .def("reset", &PredicateStatistics::reset);
 
+    nb::enum_<SetBasedMode>(m, "SetBasedMode")
+        .value("none", SetBasedMode::none)
+        .value("must", SetBasedMode::must)
+        .value("may", SetBasedMode::may);
+
+    using ObstaclePtr = const std::shared_ptr<Obstacle> &;
+    using WorldPtr = const std::shared_ptr<World> &;
+    using Parameters = const std::vector<std::string> &;
     nb::class_<CommonRoadPredicate>(m, "CommonRoadPredicate")
         .def("boolean_evaluation", &CommonRoadPredicate::simpleBooleanEvaluation, nb::arg("timeStep"), nb::arg("world"),
              nb::arg("obstacleK"), nb::arg("obstacleP"),
              nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false)
-        .def("statistic_boolean_evaluation", &CommonRoadPredicate::statisticBooleanEvaluation, nb::arg("timeStep"),
-             nb::arg("world"), nb::arg("obstacleK"), nb::arg("evaluationTimer"), nb::arg("statistics"),
-             nb::arg("obstacleP"), nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"},
-             nb::arg("setBased") = false)
-        .def("robust_evaluation", &CommonRoadPredicate::robustEvaluation, nb::arg("timeStep"), nb::arg("world"),
-             nb::arg("obstacleK"), nb::arg("obstacleP"),
+        .def("boolean_evaluation",
+             nb::overload_cast<size_t, WorldPtr, ObstaclePtr, ObstaclePtr, Parameters, SetBasedMode>(
+                 &CommonRoadPredicate::booleanEvaluation),
+             nb::arg("timeStep"), nb::arg("world"), nb::arg("obstacleK"), nb::arg("obstacleP"),
+             nb::arg("additionalFunctionParameters"), nb::arg("mode"))
+        .def("statistic_boolean_evaluation",
+             nb::overload_cast<size_t, WorldPtr, ObstaclePtr, const std::shared_ptr<Timer> &,
+                               const std::shared_ptr<PredicateStatistics> &, ObstaclePtr, Parameters, bool>(
+                 &CommonRoadPredicate::statisticBooleanEvaluation),
+             nb::arg("timeStep"), nb::arg("world"), nb::arg("obstacleK"), nb::arg("evaluationTimer"),
+             nb::arg("statistics"), nb::arg("obstacleP"),
              nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false)
-        .def("constraint_evaluation", &CommonRoadPredicate::constraintEvaluation, nb::arg("timeStep"), nb::arg("world"),
-             nb::arg("obstacleK"), nb::arg("obstacleP"),
+        .def("statistic_boolean_evaluation",
+             nb::overload_cast<size_t, WorldPtr, ObstaclePtr, const std::shared_ptr<Timer> &,
+                               const std::shared_ptr<PredicateStatistics> &, ObstaclePtr, Parameters, SetBasedMode>(
+                 &CommonRoadPredicate::statisticBooleanEvaluation),
+             nb::arg("timeStep"), nb::arg("world"), nb::arg("obstacleK"), nb::arg("evaluationTimer"),
+             nb::arg("statistics"), nb::arg("obstacleP"), nb::arg("additionalFunctionParameters"), nb::arg("mode"))
+        .def("robust_evaluation",
+             nb::overload_cast<size_t, WorldPtr, ObstaclePtr, ObstaclePtr, Parameters, bool>(
+                 &CommonRoadPredicate::robustEvaluation),
+             nb::arg("timeStep"), nb::arg("world"), nb::arg("obstacleK"), nb::arg("obstacleP"),
              nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false)
+        .def("robust_evaluation",
+             nb::overload_cast<size_t, WorldPtr, ObstaclePtr, ObstaclePtr, Parameters, SetBasedMode>(
+                 &CommonRoadPredicate::robustEvaluation),
+             nb::arg("timeStep"), nb::arg("world"), nb::arg("obstacleK"), nb::arg("obstacleP"),
+             nb::arg("additionalFunctionParameters"), nb::arg("mode"))
+        .def("constraint_evaluation",
+             nb::overload_cast<size_t, WorldPtr, ObstaclePtr, ObstaclePtr, Parameters, bool>(
+                 &CommonRoadPredicate::constraintEvaluation),
+             nb::arg("timeStep"), nb::arg("world"), nb::arg("obstacleK"), nb::arg("obstacleP"),
+             nb::arg("additionalFunctionParameters") = std::vector<std::string>{"0.0"}, nb::arg("setBased") = false)
+        .def("constraint_evaluation",
+             nb::overload_cast<size_t, WorldPtr, ObstaclePtr, ObstaclePtr, Parameters, SetBasedMode>(
+                 &CommonRoadPredicate::constraintEvaluation),
+             nb::arg("timeStep"), nb::arg("world"), nb::arg("obstacleK"), nb::arg("obstacleP"),
+             nb::arg("additionalFunctionParameters"), nb::arg("mode"))
         .def_prop_ro("is_vehicle_dependent", &CommonRoadPredicate::isVehicleDependent);
 
     instantiate_predicates(m);

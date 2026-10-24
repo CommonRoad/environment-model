@@ -12,6 +12,14 @@ bool InFrontOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_pt
     return robustEvaluation(timeStep, world, obstacleP, obstacleK, additionalFunctionParameters, setBased) > 0;
 }
 
+bool InFrontOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                           const std::shared_ptr<Obstacle> &obstacleP,
+                                           const std::shared_ptr<Obstacle> &obstacleK,
+                                           const std::vector<std::string> &additionalFunctionParameters,
+                                           SetBasedMode mode) {
+    return robustEvaluation(timeStep, world, obstacleP, obstacleK, additionalFunctionParameters, mode) > 0;
+}
+
 bool InFrontOfPredicate::booleanEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {
     return robustEvaluation(lonPositionP, lonPositionK, lengthP, lengthK) > 0;
 }
@@ -34,15 +42,27 @@ double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::vector<std::string> &additionalFunctionParameters,
                                             bool setBased) {
+    return obstacleK->rearS(
+               timeStep,
+               obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
+               setBased) -
+           obstacleP->frontS(world->getRoadNetwork(), timeStep);
+}
+
+double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                            const std::shared_ptr<Obstacle> &obstacleP,
+                                            const std::shared_ptr<Obstacle> &obstacleK,
+                                            const std::vector<std::string> &additionalFunctionParameters,
+                                            SetBasedMode mode) {
+    if (!evaluatesOccupancy(obstacleK, timeStep, mode))
+        return robustEvaluation(timeStep, world, obstacleP, obstacleK, additionalFunctionParameters,
+                                mode != SetBasedMode::none);
     const auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
-    // For a set-based prediction of the kth vehicle, the predicate is used as may-version, i.e., it holds if at least
-    // one behavior covered by the occupancy is in front of the pth vehicle. This is the case if the frontmost point of
-    // the occupancy is in front of the pth vehicle's front. The may-version is required for soundness since the
-    // predicate occurs negatively in R_G1 (via succeeds).
-    if (setBased and !obstacleK->getSetBasedPrediction().empty() and
-        timeStep > obstacleK->getCurrentState()->getTimeStep())
-        return obstacleK->frontS(timeStep, ccsP, setBased) - obstacleP->frontS(world->getRoadNetwork(), timeStep);
-    return obstacleK->rearS(timeStep, ccsP, setBased) - obstacleP->frontS(world->getRoadNetwork(), timeStep);
+    // must: the rear of the occupancy is in front of the pth vehicle, i.e., all covered behaviors are in front of it;
+    // may: the front of the occupancy is in front of the pth vehicle, i.e., at least one covered behavior is in front
+    const double lonPositionK{mode == SetBasedMode::must ? obstacleK->rearS(timeStep, ccsP, true)
+                                                         : obstacleK->frontS(timeStep, ccsP, true)};
+    return lonPositionK - obstacleP->frontS(world->getRoadNetwork(), timeStep);
 }
 
 double InFrontOfPredicate::robustEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {

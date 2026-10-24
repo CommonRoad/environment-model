@@ -5,6 +5,7 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <cmath>
+#include <commonroad_cpp/world.h>
 
 void LaneBasedOrientationSimilarPredicateTest::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 10, 0, 0);
@@ -78,16 +79,17 @@ TEST_F(LaneBasedOrientationSimilarPredicateTest, ConstraintEvaluation) {
     EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
 }
 
-TEST_F(LaneBasedOrientationSimilarPredicateTest, SetBasedPrediction) {
-    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/ZAM_Augmentation-1_1_S-3.xml";
-    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+TEST_F(LaneBasedOrientationSimilarPredicateTest, SetBasedModes) {
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_Augmentation-1_1_S-3.xml")};
     auto worldSetBased{
         std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
-
     auto ego{worldSetBased->findObstacle(42)};
     auto obs1{worldSetBased->findObstacle(100)};
 
-    // set-based predictions contain no orientation: the may-version holds for future time steps
-    EXPECT_TRUE(pred.booleanEvaluation(25, worldSetBased, ego, obs1, {}, true));
-    EXPECT_TRUE(pred.booleanEvaluation(30, worldSetBased, ego, obs1, {}, true));
+    // set-based predictions contain no orientation, so every orientation is covered
+    for (const size_t timeStep : {25, 30}) {
+        EXPECT_FALSE(pred.booleanEvaluation(timeStep, worldSetBased, ego, obs1, {}, SetBasedMode::must));
+        EXPECT_TRUE(pred.booleanEvaluation(timeStep, worldSetBased, ego, obs1, {}, SetBasedMode::may));
+    }
 }

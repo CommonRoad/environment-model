@@ -6,6 +6,8 @@
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 
 #include "commonroad_cpp/obstacle/occupancy.h"
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 void TestInFrontOfPredicate::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 8, 0, 10, -1, 0, 0, 8, 0);
@@ -133,13 +135,37 @@ TEST_F(TestInFrontOfPredicate, SetBasedPrediction) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs1, {}, true));
     EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs2, {}, true));
     EXPECT_FALSE(pred.booleanEvaluation(0, world, dynamicObstacle, obs1, {}, true));
+}
 
-    // may-version for set-based predictions: at time step 30, the rearmost point of the occupancy of obs1 is behind
-    // the ego front, but its frontmost point is in front of it, i.e., some covered behavior is in front of the ego
+TEST_F(TestInFrontOfPredicate, SetBasedModes) {
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_Augmentation-1_1_S-3.xml")};
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+    auto ego{world->findObstacle(42)};
+    auto obs1{world->findObstacle(100)};
+
+    // at time step 30, the rear of the occupancy of obs1 is behind the ego front, but its front is in front of it:
+    // not all covered behaviors are in front of the ego vehicle (must), but some are (may)
     const auto ccsEgo{ego->getReferenceLane(world->getRoadNetwork(), 30)->getCurvilinearCoordinateSystem()};
-    EXPECT_LT(obs1->rearS(30, ccsEgo, true), ego->frontS(world->getRoadNetwork(), 30));
-    EXPECT_GT(obs1->frontS(30, ccsEgo, true), ego->frontS(world->getRoadNetwork(), 30));
-    EXPECT_TRUE(pred.booleanEvaluation(30, world, ego, obs1, {}, true));
-    EXPECT_NEAR(pred.robustEvaluation(30, world, ego, obs1, {}, true),
-                obs1->frontS(30, ccsEgo, true) - ego->frontS(world->getRoadNetwork(), 30), 1e-9);
+    const double frontEgo{ego->frontS(world->getRoadNetwork(), 30)};
+    EXPECT_FALSE(pred.booleanEvaluation(30, world, ego, obs1, {}, SetBasedMode::must));
+    EXPECT_TRUE(pred.booleanEvaluation(30, world, ego, obs1, {}, SetBasedMode::may));
+    EXPECT_NEAR(pred.robustEvaluation(30, world, ego, obs1, {}, SetBasedMode::must),
+                obs1->rearS(30, ccsEgo, true) - frontEgo, 1e-9);
+    EXPECT_NEAR(pred.robustEvaluation(30, world, ego, obs1, {}, SetBasedMode::may),
+                obs1->frontS(30, ccsEgo, true) - frontEgo, 1e-9);
+
+    // the must-version holds only if the may-version holds; the Boolean set-based evaluation is the must-version
+    for (const size_t obsId : {100, 101, 102}) {
+        auto obs{world->findObstacle(obsId)};
+        for (size_t timeStep{1}; timeStep <= 30; ++timeStep) {
+            const double must{pred.robustEvaluation(timeStep, world, ego, obs, {}, SetBasedMode::must)};
+            EXPECT_LE(must, pred.robustEvaluation(timeStep, world, ego, obs, {}, SetBasedMode::may));
+            EXPECT_DOUBLE_EQ(must, pred.robustEvaluation(timeStep, world, ego, obs, {}, true));
+        }
+    }
+
+    // without set-based evaluation, the modes are not used
+    EXPECT_DOUBLE_EQ(pred.robustEvaluation(0, world, ego, obs1, {}, SetBasedMode::none),
+                     pred.robustEvaluation(0, world, ego, obs1, {}, false));
 }
