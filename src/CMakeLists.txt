@@ -119,6 +119,8 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/braking/keeps_safe_distance_prec_must_predicate.cpp
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.cpp
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.cpp
+        commonroad_cpp/predicates/braking/causes_braking_intersection_may_predicate.cpp
+        commonroad_cpp/predicates/braking/causes_braking_intersection_must_predicate.cpp
         commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.cpp
         commonroad_cpp/predicates/braking/decelerates_predicate.cpp
 
@@ -136,6 +138,8 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/intersection/in_intersection_predicate.cpp
         commonroad_cpp/predicates/intersection/at_same_intersection_predicate.cpp
         commonroad_cpp/predicates/intersection/in_intersection_conflict_area_predicate.cpp
+        commonroad_cpp/predicates/intersection/in_intersection_conflict_area_may_predicate.cpp
+        commonroad_cpp/predicates/intersection/in_intersection_conflict_area_must_predicate.cpp
         commonroad_cpp/predicates/intersection/close_to_intersection_predicate.cpp
         commonroad_cpp/predicates/intersection/unobstructed_intersection_view_predicate.cpp
         commonroad_cpp/predicates/intersection/on_incoming_left_of_predicate.cpp
@@ -204,6 +208,8 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/braking/keeps_safe_distance_prec_must_predicate.h
         commonroad_cpp/predicates/braking/brakes_stronger_predicate.h
         commonroad_cpp/predicates/braking/causes_braking_intersection_predicate.h
+        commonroad_cpp/predicates/braking/causes_braking_intersection_may_predicate.h
+        commonroad_cpp/predicates/braking/causes_braking_intersection_must_predicate.h
         commonroad_cpp/predicates/braking/braking_at_intersection_possible_predicate.h
         commonroad_cpp/predicates/braking/decelerates_predicate.h
 
@@ -221,6 +227,8 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/intersection/at_same_intersection_predicate.h
         commonroad_cpp/predicates/intersection/in_intersection_predicate.h
         commonroad_cpp/predicates/intersection/in_intersection_conflict_area_predicate.h
+        commonroad_cpp/predicates/intersection/in_intersection_conflict_area_may_predicate.h
+        commonroad_cpp/predicates/intersection/in_intersection_conflict_area_must_predicate.h
         commonroad_cpp/predicates/intersection/close_to_intersection_predicate.h
         commonroad_cpp/predicates/intersection/unobstructed_intersection_view_predicate.h
         commonroad_cpp/predicates/intersection/on_incoming_left_of_predicate.h
