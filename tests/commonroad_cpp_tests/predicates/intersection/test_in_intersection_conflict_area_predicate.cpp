@@ -5,6 +5,8 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+#include <commonroad_cpp/predicates/intersection/in_intersection_conflict_area_may_predicate.h>
+#include <commonroad_cpp/predicates/intersection/in_intersection_conflict_area_must_predicate.h>
 
 void InIntersectionConflictAreaPredicateTest::SetUp() {
 
@@ -160,4 +162,31 @@ TEST_F(InIntersectionConflictAreaPredicateTest, SetBasedPrediction) {
     EXPECT_TRUE(pred.booleanEvaluation(29, world, ego, obs1, {}, true));
     EXPECT_TRUE(pred.booleanEvaluation(38, world, ego, obs1, {}, true));
     EXPECT_TRUE(pred.booleanEvaluation(40, world, ego, obs1, {}, true));
+}
+
+TEST_F(InIntersectionConflictAreaPredicateTest, SetBasedMustMay) {
+    InIntersectionConflictAreaMustPredicate predMust;
+    InIntersectionConflictAreaMayPredicate predMay;
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_TestTurnLeft-2_1_S-2.xml")};
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+    auto ego{world->findObstacle(42)};
+    auto obs1{world->findObstacle(1001)};
+
+    // From time step 31 on, the occupancy of obs1 covers intersection lanelets of its own lanes, which are also
+    // occupied in its driving direction. The state-based version excludes such lanelets, but set-based predictions
+    // contain no orientation: the may-version does not exclude them, the must-version cannot hold.
+    EXPECT_FALSE(predMay.booleanEvaluation(28, world, obs1, obs1, {}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(31, world, obs1, obs1, {}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(40, world, obs1, obs1, {}, true));
+    EXPECT_FALSE(predMust.booleanEvaluation(40, world, obs1, obs1, {}, true));
+    EXPECT_FALSE(predMust.booleanEvaluation(40, world, obs1, ego, {}, true));
+
+    // the must-version holds only if the may-version holds, for both roles of the set-based vehicle
+    for (size_t timeStep{0}; timeStep <= 40; ++timeStep) {
+        EXPECT_LE(predMust.booleanEvaluation(timeStep, world, obs1, ego, {}, true),
+                  predMay.booleanEvaluation(timeStep, world, obs1, ego, {}, true));
+        EXPECT_LE(predMust.booleanEvaluation(timeStep, world, ego, obs1, {}, true),
+                  predMay.booleanEvaluation(timeStep, world, ego, obs1, {}, true));
+    }
 }
