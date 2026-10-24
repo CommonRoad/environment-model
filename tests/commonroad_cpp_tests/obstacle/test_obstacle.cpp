@@ -3,9 +3,12 @@
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include <commonroad_cpp/geometry/circle.h>
+#include <commonroad_cpp/geometry/polygon.h>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+#include <commonroad_cpp/obstacle/occupancy.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/world.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 void ObstacleTestInitialization::setUpObstacles() {
     size_t globalID{1234};
@@ -571,4 +574,31 @@ TEST_F(ObstacleTest, testToString) {
     auto a{obstacleOne->to_string()};
     EXPECT_GE(obstacleOne->to_string().size(), 4250);
     EXPECT_GE(obstacleTwo->to_string().size(), 3250);
+}
+
+TEST_F(ObstacleTest, SetBasedKinematicBounds) {
+    // time step size 0.2 s differs from the default 0.1 s
+    auto obs{std::make_shared<Obstacle>(
+        1000, ObstacleRole::DYNAMIC, std::make_shared<State>(0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+        ObstacleType::car, ActuatorParameters(10.4, 11.5, 2.0, -10.0, -10.0), SensorParameters(250.0, 250.0),
+        TimeParameters(50, 0.3, 0.2), state_map_t{}, std::make_unique<Rectangle>(5.0, 2.0))};
+    for (size_t timeStep{1}; timeStep <= 2; ++timeStep)
+        obs->appendOccupancyToSetBasedPrediction(std::make_shared<Occupancy>(
+            timeStep,
+            std::make_shared<Polygon>(std::vector<vertex>{{-2.5, -1.0}, {-1.0, -1.0}, {-1.0, 1.0}, {-2.5, 1.0}})));
+
+    // velocity bounds use the time step size of the obstacle: 10 + 2 * 0.2 * (-10) and min(10 + 2 * 0.2 * 2, 10.4)
+    EXPECT_NEAR(obs->getVelocity(2, true, true), 6.0, 1e-9);
+    EXPECT_NEAR(obs->getVelocity(2, true, false), 10.4, 1e-9);
+    // upper velocity bound equals v_max, but covered behaviors below v_max can still accelerate
+    EXPECT_EQ(obs->getAcceleration(2, true, false), 2.0);
+    EXPECT_EQ(obs->getAcceleration(2, true, true), -10.0);
+
+    // occupancy lies entirely at negative s, i.e., within the extension of the reference path at its start (eps2 = 5 m)
+    geometry::EigenPolyline referencePath;
+    for (int x{0}; x <= 50; ++x)
+        referencePath.emplace_back(x, 0.0);
+    const auto ccs{std::make_shared<geometry::CurvilinearCoordinateSystem>(referencePath, 20.0, 0.1, 5.0)};
+    EXPECT_NEAR(obs->frontS(1, ccs, true), -1.0, 1e-6);
+    EXPECT_NEAR(obs->rearS(1, ccs, true), -2.5, 1e-6);
 }
