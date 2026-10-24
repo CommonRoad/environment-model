@@ -38,25 +38,6 @@ class InFrontOfPredicate : public CommonRoadPredicate {
                            bool setBased = false) override;
 
     /**
-     * Boolean evaluation of predicate with a must- or may-version for set-based predictions.
-     *
-     * For a set-based prediction of the kth vehicle, the must-version uses the rear of the occupancy (all covered
-     * behaviors are in front of the pth vehicle) and the may-version uses its front (at least one covered behavior is
-     * in front of the pth vehicle).
-     *
-     * @param timeStep Time step of interest.
-     * @param world World object.
-     * @param obstacleP The pth obstacle.
-     * @param obstacleK The kth obstacle.
-     * @param additionalFunctionParameters Additional parameters.
-     * @param mode Set-based evaluation mode.
-     * @return Boolean indicating satisfaction of the predicate.
-     */
-    bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                           const std::shared_ptr<Obstacle> &obstacleP, const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::vector<std::string> &additionalFunctionParameters, SetBasedMode mode) override;
-
-    /**
      * Constraint evaluation of predicate using objects.
      *
      * @param timeStep Time step of interest.
@@ -94,25 +75,6 @@ class InFrontOfPredicate : public CommonRoadPredicate {
                             const std::shared_ptr<Obstacle> &obstacleP, const std::shared_ptr<Obstacle> &obstacleK,
                             const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
                             bool setBased = false) override;
-
-    /**
-     * Robustness evaluation of predicate with a must- or may-version for set-based predictions.
-     *
-     * For a set-based prediction of the kth vehicle, the must-version uses the rear of the occupancy (all covered
-     * behaviors are in front of the pth vehicle) and the may-version uses its front (at least one covered behavior is
-     * in front of the pth vehicle).
-     *
-     * @param timeStep Time step of interest.
-     * @param world World object.
-     * @param obstacleP The pth obstacle.
-     * @param obstacleK The kth obstacle.
-     * @param additionalFunctionParameters Additional parameters.
-     * @param mode Set-based evaluation mode.
-     * @return Real value indicating robustness of the predicate.
-     */
-    double robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                            const std::shared_ptr<Obstacle> &obstacleP, const std::shared_ptr<Obstacle> &obstacleK,
-                            const std::vector<std::string> &additionalFunctionParameters, SetBasedMode mode) override;
 
     /**
      * Robustness evaluation of predicate using parameter values.

@@ -79,47 +79,6 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const s
     return (deltaS - dSafe);
 }
 
-bool KeepsSafeDistancePrecPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                       const std::shared_ptr<Obstacle> &obstacleK,
-                                                       const std::shared_ptr<Obstacle> &obstacleP,
-                                                       const std::vector<std::string> &additionalFunctionParameters,
-                                                       SetBasedMode mode) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters, mode) > 0;
-}
-
-double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                                                        const std::shared_ptr<Obstacle> &obstacleK,
-                                                        const std::shared_ptr<Obstacle> &obstacleP,
-                                                        const std::vector<std::string> &additionalFunctionParameters,
-                                                        SetBasedMode mode) {
-    if (!evaluatesOccupancy(obstacleP, timeStep, mode))
-        return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters,
-                                mode != SetBasedMode::none);
-    const bool must{mode == SetBasedMode::must};
-    const auto ccsK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
-    const double frontK{obstacleK->frontS(world->getRoadNetwork(), timeStep)};
-    const double rearP{obstacleP->rearS(timeStep, ccsK, true)};
-    const double frontP{obstacleP->frontS(timeStep, ccsK, true)};
-
-    // Covered behaviors behind the front of the kth vehicle satisfy the predicate (safe distance not applicable;
-    // collision must be checked separately). must: the whole occupancy is behind it; may: any part of it is.
-    if (must and frontP < frontK)
-        return frontK - frontP;
-    if (!must and rearP < frontK)
-        return frontK - rearP;
-
-    // The robustness increases with the distance and the velocity of the pth vehicle, so the must-version uses the
-    // rear of the occupancy and the lowest velocity, and the may-version uses the front and the highest velocity.
-    const double deltaS{(must ? rearP : frontP) - frontK};
-    const double dSafe{computeSafeDistance(obstacleK->getVelocity(timeStep, false),
-                                           obstacleP->getVelocity(timeStep, true, must), obstacleK->getAminLong(),
-                                           obstacleP->getAminLong(), obstacleK->getReactionTime())};
-    const double param0 = std::stod(additionalFunctionParameters.at(0));
-    if (deltaS - param0 < 0)
-        return std::min(deltaS - param0, deltaS - dSafe);
-    return deltaS - dSafe;
-}
-
 double KeepsSafeDistancePrecPredicate::robustEvaluation(double lonPosK, double lonPosP, double velocityK,
                                                         double velocityP, double minAccelerationK,
                                                         double minAccelerationP, double tReact, double lengthK,

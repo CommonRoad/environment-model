@@ -6,7 +6,7 @@
  * Evaluates whether the kth vehicle is in front of the pth vehicle, withing the same lane, and drives in the same
  * direction.
  */
-class LaneBasedOrientationSimilarPredicate final : public CommonRoadPredicate {
+class LaneBasedOrientationSimilarPredicate : public CommonRoadPredicate {
   public:
     /**
      * Constructor for LaneBasedOrientationSimilarPredicate.
@@ -26,24 +26,6 @@ class LaneBasedOrientationSimilarPredicate final : public CommonRoadPredicate {
                            const std::shared_ptr<Obstacle> &obstacleP, const std::shared_ptr<Obstacle> &obstacleK = {},
                            const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
                            bool setBased = false) override;
-
-    /**
-     * Boolean evaluation of predicate with a must- or may-version for set-based predictions.
-     *
-     * Set-based predictions contain no orientation, so every orientation is covered: for a set-based prediction of the
-     * kth vehicle, the must-version is false and the may-version is true.
-     *
-     * @param timeStep Time step of interest.
-     * @param world World object.
-     * @param obstacleP The pth obstacle.
-     * @param obstacleK The kth obstacle.
-     * @param additionalFunctionParameters Additional parameters.
-     * @param mode Set-based evaluation mode.
-     * @return Boolean indicating satisfaction of the predicate.
-     */
-    bool booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
-                           const std::shared_ptr<Obstacle> &obstacleP, const std::shared_ptr<Obstacle> &obstacleK,
-                           const std::vector<std::string> &additionalFunctionParameters, SetBasedMode mode) override;
 
     /**
      * Constraint evaluation of predicate using objects.

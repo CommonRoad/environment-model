@@ -16,18 +16,6 @@ bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
            parameters.getParam("laneMatchingOrientation");
 }
 
-bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<Obstacle> &obstacleK, const std::vector<std::string> &additionalFunctionParameters,
-    SetBasedMode mode) {
-    // set-based predictions contain no orientation, so every orientation is covered: no covered orientation is
-    // guaranteed to be similar (must), but some covered orientation is similar (may)
-    if (evaluatesOccupancy(obstacleK, timeStep, mode))
-        return mode == SetBasedMode::may;
-    return booleanEvaluation(timeStep, world, obstacleP, obstacleK, additionalFunctionParameters,
-                             mode != SetBasedMode::none);
-}
-
 Constraint LaneBasedOrientationSimilarPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<Obstacle> &obstacleK, const std::vector<std::string> &additionalFunctionParameters,
