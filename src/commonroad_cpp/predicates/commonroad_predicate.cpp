@@ -1,3 +1,5 @@
+#include <commonroad_cpp/obstacle/obstacle.h>
+#include <commonroad_cpp/obstacle/state.h>
 #include <commonroad_cpp/predicates/commonroad_predicate.h>
 
 bool CommonRoadPredicate::statisticBooleanEvaluation(const size_t timeStep, const std::shared_ptr<World> &world,
@@ -37,3 +39,9 @@ bool CommonRoadPredicate::simpleBooleanEvaluation(const size_t timeStep, const s
 CommonRoadPredicate::~CommonRoadPredicate() = default;
 
 bool CommonRoadPredicate::isVehicleDependent() const { return vehicleDependent; }
+
+bool CommonRoadPredicate::evaluatesOccupancy(const std::shared_ptr<Obstacle> &obstacle, const size_t timeStep,
+                                             const bool setBased) {
+    return setBased and obstacle != nullptr and !obstacle->getSetBasedPrediction().empty() and
+           timeStep > obstacle->getCurrentState()->getTimeStep();
+}
