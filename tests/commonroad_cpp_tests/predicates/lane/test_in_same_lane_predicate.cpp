@@ -7,6 +7,9 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+#include <commonroad_cpp/predicates/lane/in_same_lane_may_predicate.h>
+#include <commonroad_cpp/predicates/lane/in_same_lane_must_predicate.h>
+#include <commonroad_cpp/world.h>
 
 void TestInSameLanePredicate::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 10, 0, 0, 0, 0, 0);
@@ -125,4 +128,38 @@ TEST_F(TestInSameLanePredicate, SetBasedPrediction) {
     EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs1, {}, true));
     EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs2, {}, true));
     EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs3, {}, true));
+}
+
+TEST_F(TestInSameLanePredicate, SetBasedMustMay) {
+    InSameLaneMustPredicate predMust;
+    InSameLaneMayPredicate predMay;
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_Augmentation-1_1_S-3.xml")};
+    auto worldSetBased{
+        std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+    auto ego{worldSetBased->findObstacle(42)};
+    auto obs1{worldSetBased->findObstacle(100)};
+    auto obs3{worldSetBased->findObstacle(102)};
+
+    // time step 3: the occupancy of obs1 occupies one lanelet of the ego lane; from time step 6 on, it also occupies
+    // the adjacent lanelet, so only some covered behaviors share the lane with the ego vehicle
+    EXPECT_TRUE(predMust.booleanEvaluation(3, worldSetBased, ego, obs1, {}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(3, worldSetBased, ego, obs1, {}, true));
+    EXPECT_FALSE(predMust.booleanEvaluation(6, worldSetBased, ego, obs1, {}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(6, worldSetBased, ego, obs1, {}, true));
+    // obs3 starts in the adjacent lane
+    EXPECT_FALSE(predMust.booleanEvaluation(3, worldSetBased, ego, obs3, {}, true));
+    EXPECT_FALSE(predMay.booleanEvaluation(3, worldSetBased, ego, obs3, {}, true));
+
+    // the must-version holds only if the may-version holds; the set-based evaluation of in_same_lane is the
+    // may-version; a set-based kth vehicle has no must-version
+    for (const size_t obsId : {100, 101, 102}) {
+        auto obs{worldSetBased->findObstacle(obsId)};
+        for (size_t timeStep{1}; timeStep <= 30; ++timeStep) {
+            const bool may{predMay.booleanEvaluation(timeStep, worldSetBased, ego, obs, {}, true)};
+            EXPECT_LE(predMust.booleanEvaluation(timeStep, worldSetBased, ego, obs, {}, true), may);
+            EXPECT_EQ(may, pred.booleanEvaluation(timeStep, worldSetBased, ego, obs, {}, true));
+        }
+    }
+    EXPECT_FALSE(predMust.booleanEvaluation(3, worldSetBased, obs1, ego, {}, true));
 }
