@@ -145,6 +145,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/intersection/on_incoming_left_of_predicate.cpp
         commonroad_cpp/predicates/intersection/on_incoming_of_intersection_predicate.cpp
         commonroad_cpp/predicates/intersection/on_oncoming_of_predicate.cpp
+        commonroad_cpp/predicates/intersection/on_oncoming_of_may_predicate.cpp
         commonroad_cpp/predicates/intersection/on_single_intersection_predicate.cpp
 
         commonroad_cpp/predicates/lane/overtaking_allowed_predicate.cpp
@@ -184,6 +185,7 @@ set(ENV_MODEL_PREDICATES_SRC_FILES
         commonroad_cpp/predicates/regulatory/close_to_stop_line_predicate.cpp
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.cpp
         commonroad_cpp/predicates/regulatory/has_priority_predicate.cpp
+        commonroad_cpp/predicates/regulatory/has_priority_must_predicate.cpp
 
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.cpp
         commonroad_cpp/predicates/velocity/slow_other_vehicle_predicate.cpp
@@ -234,6 +236,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/intersection/on_incoming_left_of_predicate.h
         commonroad_cpp/predicates/intersection/on_incoming_of_intersection_predicate.h
         commonroad_cpp/predicates/intersection/on_oncoming_of_predicate.h
+        commonroad_cpp/predicates/intersection/on_oncoming_of_may_predicate.h
         commonroad_cpp/predicates/intersection/on_single_intersection_predicate.h
 
         commonroad_cpp/predicates/lane/overtaking_allowed_predicate.h
@@ -273,6 +276,7 @@ set(ENV_MODEL_PREDICATES_HDR_FILES
         commonroad_cpp/predicates/regulatory/close_to_stop_line_predicate.h
         commonroad_cpp/predicates/regulatory/relevant_traffic_light_predicate.h
         commonroad_cpp/predicates/regulatory/has_priority_predicate.h
+        commonroad_cpp/predicates/regulatory/has_priority_must_predicate.h
 
         commonroad_cpp/predicates/velocity/preserves_traffic_flow_predicate.h
         commonroad_cpp/predicates/velocity/slow_other_vehicle_predicate.h
