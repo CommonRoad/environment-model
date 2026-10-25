@@ -5,6 +5,8 @@
 #include <boost/algorithm/string/split.hpp>
 
 #include "commonroad_cpp/obstacle/obstacle.h"
+#include <commonroad_cpp/predicates/intersection/on_oncoming_of_may_predicate.h>
+#include <commonroad_cpp/world.h>
 
 void OnOncomingOfPredicateTest::SetUp() {}
 
@@ -76,4 +78,19 @@ TEST_F(OnOncomingOfPredicateTest, SetBasedPrediction) {
     EXPECT_FALSE(pred.booleanEvaluation(20, world, obs1, {ego}, {"0.75"}, true));
     EXPECT_FALSE(pred.booleanEvaluation(29, world, obs1, {ego}, {"0.75"}, true));
     EXPECT_FALSE(pred.booleanEvaluation(40, world, obs1, {ego}, {"0.75"}, true));
+}
+
+TEST_F(OnOncomingOfPredicateTest, SetBasedMay) {
+    OnOncomingOfMayPredicate predMay;
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_TestTurnLeft-2_1_S-2.xml")};
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+    auto ego{world->findObstacle(42)};
+    auto obs1{world->findObstacle(1001)};
+
+    // the set-based evaluation of on_oncoming_of is the may-version
+    for (size_t timeStep{0}; timeStep <= 40; timeStep += 4)
+        EXPECT_EQ(predMay.booleanEvaluation(timeStep, world, obs1, ego, {"0.75"}, true),
+                  pred.booleanEvaluation(timeStep, world, obs1, ego, {"0.75"}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(0, world, obs1, ego, {"0.75"}, true));
 }
