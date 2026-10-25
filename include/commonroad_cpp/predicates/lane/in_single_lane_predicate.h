@@ -2,10 +2,12 @@
 
 #include "commonroad_cpp/predicates/commonroad_predicate.h"
 
+class Lanelet;
+
 /**
  * Evaluates whether the kth vehicle occupies as single lane.
  */
-class InSingleLanePredicate final : public CommonRoadPredicate {
+class InSingleLanePredicate : public CommonRoadPredicate {
   public:
     /**
      * Constructor for InSingleLanePredicate.
@@ -56,4 +58,14 @@ class InSingleLanePredicate final : public CommonRoadPredicate {
                                     const std::shared_ptr<Obstacle> &obstacleP = {},
                                     const std::vector<std::string> &additionalFunctionParameters = {"0.0"},
                                     bool setBased = false) override;
+
+  protected:
+    /**
+     * Checks whether lanelets belong to a single lane: one lanelet, or two lanelets which are not adjacent or have the
+     * same predecessor or successor.
+     *
+     * @param lanelets Occupied lanelets.
+     * @return Boolean indicating whether the lanelets belong to a single lane.
+     */
+    static bool isSingleLane(const std::vector<std::shared_ptr<Lanelet>> &lanelets);
 };

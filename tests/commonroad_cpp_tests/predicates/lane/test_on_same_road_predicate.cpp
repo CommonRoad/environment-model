@@ -6,6 +6,8 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+#include <commonroad_cpp/predicates/lane/on_same_road_may_predicate.h>
+#include <commonroad_cpp/world.h>
 
 void TestOnSameRoadPredicate::SetUp() {
     std::string pathToTestFile =
@@ -333,4 +335,22 @@ TEST_F(TestOnSameRoadPredicate, SetBasedPrediction) {
     EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs1, {}, true));
     EXPECT_TRUE(pred.booleanEvaluation(1, world, ego, obs1, {}, true));
     EXPECT_TRUE(pred.booleanEvaluation(30, world, ego, obs1, {}, true));
+}
+
+TEST_F(TestOnSameRoadPredicate, SetBasedMay) {
+    OnSameRoadMayPredicate predMay;
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_Augmentation-1_1_S-3.xml")};
+    auto worldSetBased{
+        std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+    auto ego{worldSetBased->findObstacle(42)};
+
+    // the set-based evaluation of on_same_road is the may-version
+    for (const size_t obsId : {100, 101, 102}) {
+        auto obs{worldSetBased->findObstacle(obsId)};
+        for (size_t timeStep{1}; timeStep <= 30; ++timeStep)
+            EXPECT_EQ(predMay.booleanEvaluation(timeStep, worldSetBased, ego, obs, {}, true),
+                      pred.booleanEvaluation(timeStep, worldSetBased, ego, obs, {}, true));
+    }
+    EXPECT_TRUE(predMay.booleanEvaluation(10, worldSetBased, ego, worldSetBased->findObstacle(100), {}, true));
 }
