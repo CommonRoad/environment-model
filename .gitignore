@@ -3,6 +3,8 @@
 /cmake-build-release/
 /cmake-build-debug-coverage/
 /cmake-build-release-coverage/
+.vscode/
+venv/
 /build*
 env_model_test
 env_model_test_coverage
@@ -34,3 +36,10 @@ __pycache__/
 # For setuptools-scm
 /src/python/crcpp/_version.py
 /venv/
+
+# mkdocs/mkdoxy
+/site/
+
+# Local tooling
+.venv/
+.ruff_cache/

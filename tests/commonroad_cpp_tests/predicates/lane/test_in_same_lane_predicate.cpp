@@ -1,0 +1,165 @@
+#include "test_in_same_lane_predicate.h"
+#include "../../interfaces/utility_functions.h"
+#include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include "commonroad_cpp/obstacle/obstacle_operations.h"
+#include "commonroad_cpp/obstacle/state.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+#include <commonroad_cpp/predicates/lane/in_same_lane_may_predicate.h>
+#include <commonroad_cpp/predicates/lane/in_same_lane_must_predicate.h>
+#include <commonroad_cpp/world.h>
+
+void TestInSameLanePredicate::SetUp() {
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 2, 10, 0, 0, 0, 0, 0);
+    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 10, 2, 10, -1, 0, 0, 10, 0);
+
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 10, 4, 10, 0, 0, 0, 10, 2);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 20, 2, 10, 0, 0, 0, 20, 0);
+
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 20, 2, 10, 0, 0, 0, 20, 0);
+    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 30, 4, 10, 0, 0, 0, 30, 2);
+
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 30, 2, 10, 0, 0, 0, 30, 0);
+    std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 40, 6, 10, 0, 0, 0, 40, 4);
+
+    std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 40, 2, 10, 0, 0, 0, 40, 0);
+    std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(4, 20, 2, 10, 0, 0, 0, 20, 0);
+
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
+
+    state_map_t trajectoryPredictionObstacleTwo{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
+
+    state_map_t trajectoryPredictionObstacleThree{std::pair<int, std::shared_ptr<State>>(4, stateZeroObstacleThree)};
+
+    obstacleOne = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2);
+    obstacleTwo = std::make_shared<Obstacle>(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2);
+    obstacleThree = std::make_shared<Obstacle>(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50,
+                                               10, 3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2);
+    auto roadNetwork{utils_predicate_test::create_road_network()};
+
+    world = std::make_shared<World>("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
+                                    std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1);
+}
+
+TEST_F(TestInSameLanePredicate, BooleanEvaluationObjects) {
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne, obstacleTwo));  // vehicles completely on same lane
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo));  // ego vehicle partially in another lane
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo));  // other vehicle partially in another lane
+    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo)); // vehicles not in same lane
+    EXPECT_TRUE(pred.booleanEvaluation(4, world, obstacleOne,
+                                       obstacleThree)); // vehicles completely on same lane, but other vehicle is behind
+}
+
+TEST_F(TestInSameLanePredicate, StatisticBooleanEvaluation) {
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // vehicles completely on same lane
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // ego vehicle partially in another lane
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // other vehicle partially in another lane
+    EXPECT_FALSE(
+        pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat, obstacleTwo)); // vehicles not in same lane
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(
+        4, world, obstacleOne, timer, stat,
+        obstacleThree)); // vehicles completely on same lane, but other vehicle is behind
+}
+
+TEST_F(TestInSameLanePredicate, BooleanEvaluationObjectsInIntersection) {
+    std::string pathToTestFileOne{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1/USA_Lanker-1_1_T-1.pb"};
+    const auto &[obstaclesScenarioOne, roadNetworkScenarioOne, timeStepSizeOne, planningProblemsOne] =
+        InputUtils::getDataFromCommonRoad(pathToTestFileOne);
+    std::vector<std::shared_ptr<Obstacle>> egoObstacles{
+        obstacle_operations::getObstacleById(obstaclesScenarioOne, 1219)};
+    std::vector<std::shared_ptr<Obstacle>> relevantObstacles{
+        obstacle_operations::getObstacleById(obstaclesScenarioOne, 1230),
+        obstacle_operations::getObstacleById(obstaclesScenarioOne, 1214)};
+    auto world{std::make_shared<World>("testWorld", 0, roadNetworkScenarioOne, egoObstacles, relevantObstacles,
+                                       timeStepSizeOne)};
+    EXPECT_FALSE(pred.booleanEvaluation(
+        0, world, egoObstacles.at(0),
+        relevantObstacles.at(0))); // vehicles on right turning lane, but ego vehicle drives straight
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, egoObstacles.at(0),
+                                       relevantObstacles.at(1))); // vehicle on straight lane and ego vehicle drives
+                                                                  // straight
+}
+
+TEST_F(TestInSameLanePredicate, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(TestInSameLanePredicate, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(TestInSameLanePredicate, SetBasedPrediction) {
+    std::string scenarioName = "ZAM_Augmentation-1_1_S-3";
+    std::vector<std::string> pathSplit;
+    boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
+    auto dirName{pathSplit[0] + "_" + pathSplit[1]};
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+
+    auto ego{world->findObstacle(42)};
+    auto obs1{world->findObstacle(100)};
+    auto obs2{world->findObstacle(101)};
+    auto obs3{world->findObstacle(102)};
+
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs2, {}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, ego, obs3, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(1, world, ego, obs2, {}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, ego, obs3, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs2, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(25, world, ego, obs3, {}, true));
+}
+
+TEST_F(TestInSameLanePredicate, SetBasedMustMay) {
+    InSameLaneMustPredicate predMust;
+    InSameLaneMayPredicate predMay;
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_Augmentation-1_1_S-3.xml")};
+    auto worldSetBased{
+        std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+    auto ego{worldSetBased->findObstacle(42)};
+    auto obs1{worldSetBased->findObstacle(100)};
+    auto obs3{worldSetBased->findObstacle(102)};
+
+    // time step 3: the occupancy of obs1 occupies one lanelet of the ego lane; from time step 6 on, it also occupies
+    // the adjacent lanelet, so only some covered behaviors share the lane with the ego vehicle
+    EXPECT_TRUE(predMust.booleanEvaluation(3, worldSetBased, ego, obs1, {}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(3, worldSetBased, ego, obs1, {}, true));
+    EXPECT_FALSE(predMust.booleanEvaluation(6, worldSetBased, ego, obs1, {}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(6, worldSetBased, ego, obs1, {}, true));
+    // obs3 starts in the adjacent lane
+    EXPECT_FALSE(predMust.booleanEvaluation(3, worldSetBased, ego, obs3, {}, true));
+    EXPECT_FALSE(predMay.booleanEvaluation(3, worldSetBased, ego, obs3, {}, true));
+
+    // the must-version holds only if the may-version holds; the set-based evaluation of in_same_lane is the
+    // may-version; a set-based kth vehicle has no must-version
+    for (const size_t obsId : {100, 101, 102}) {
+        auto obs{worldSetBased->findObstacle(obsId)};
+        for (size_t timeStep{1}; timeStep <= 30; ++timeStep) {
+            const bool may{predMay.booleanEvaluation(timeStep, worldSetBased, ego, obs, {}, true)};
+            EXPECT_LE(predMust.booleanEvaluation(timeStep, worldSetBased, ego, obs, {}, true), may);
+            EXPECT_EQ(may, pred.booleanEvaluation(timeStep, worldSetBased, ego, obs, {}, true));
+        }
+    }
+    EXPECT_FALSE(predMust.booleanEvaluation(3, worldSetBased, obs1, ego, {}, true));
+}

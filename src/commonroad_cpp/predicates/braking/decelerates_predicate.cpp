@@ -2,25 +2,29 @@
 #include <commonroad_cpp/predicates/braking/decelerates_predicate.h>
 #include <commonroad_cpp/world.h>
 
-bool DeceleratesPredicate::booleanEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return robustEvaluation(timeStep, world, obstacleK, obstacleP) < 0;
+bool DeceleratesPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                             const std::shared_ptr<Obstacle> &obstacleK,
+                                             const std::shared_ptr<Obstacle> &obstacleP,
+                                             const std::vector<std::string> &additionalFunctionParameters,
+                                             bool setBased) {
+    const double param0 = std::stod(additionalFunctionParameters.at(0));
+    return robustEvaluation(timeStep, world, obstacleK, obstacleP, additionalFunctionParameters, setBased) < param0;
 }
 
-Constraint DeceleratesPredicate::constraintEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
+Constraint DeceleratesPredicate::constraintEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                                      const std::shared_ptr<Obstacle> &obstacleK,
+                                                      const std::shared_ptr<Obstacle> &obstacleP,
+                                                      const std::vector<std::string> &additionalFunctionParameters,
+                                                      bool setBased) {
     throw std::runtime_error("DeceleratesPredicate does not support constraint evaluation!");
 }
 
-double DeceleratesPredicate::robustEvaluation(
-    size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
-    const std::shared_ptr<Obstacle> &obstacleP,
-    const std::shared_ptr<OptionalPredicateParameters> &additionalFunctionParameters) {
-    return obstacleK->getStateByTimeStep(timeStep)->getAcceleration();
+double DeceleratesPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
+                                              const std::shared_ptr<Obstacle> &obstacleK,
+                                              const std::shared_ptr<Obstacle> &obstacleP,
+                                              const std::vector<std::string> &additionalFunctionParameters,
+                                              bool setBased) {
+    return obstacleK->getAcceleration(timeStep, setBased, true);
 }
 
 DeceleratesPredicate::DeceleratesPredicate() : CommonRoadPredicate(false) {}

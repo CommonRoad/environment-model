@@ -1,13 +1,6 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/geometry/geometric_operations.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
-
+#include <commonroad_cpp/roadNetwork/road_network_config.h>
 #include <geometry/curvilinear_coordinate_system.h>
 #include <utility>
 
@@ -19,21 +12,17 @@
  * alignment of certain structures. If different allocators are used for the allocation and deallocation,
  * silent memory corruption will occur resulting in hard to find bugs.
  */
-Lane::~Lane() { omp_destroy_lock(&ccs_lock); }
+Lane::~Lane() {}
 
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet,
            std::shared_ptr<CurvilinearCoordinateSystem> ccs)
     : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets), curvilinearCoordinateSystem(std::move(ccs)) {
-
-    omp_init_lock(&ccs_lock);
-
     for (const auto &coLa : containedLanelets)
         containedLaneletIds.insert(coLa->getId());
 }
 
 Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet)
     : Lanelet(std::move(lanelet)), containedLanelets(containedLanelets) {
-    omp_init_lock(&ccs_lock);
     for (const auto &coLa : containedLanelets)
         containedLaneletIds.insert(coLa->getId());
 }
@@ -41,7 +30,7 @@ Lane::Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanel
 const std::vector<std::shared_ptr<Lanelet>> &Lane::getContainedLanelets() const { return containedLanelets; }
 
 const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordinateSystem() {
-    omp_set_lock(&ccs_lock);
+    std::unique_lock lock{ccs_lock};
 
     if (!curvilinearCoordinateSystem) {
         geometry::EigenPolyline temp_path;
@@ -63,12 +52,10 @@ const std::shared_ptr<CurvilinearCoordinateSystem> &Lane::getCurvilinearCoordina
 
         reference_path = temp_path;
 
-        curvilinearCoordinateSystem =
-            std::make_shared<CurvilinearCoordinateSystem>(reference_path, RoadNetworkParameters::projectionDomainLimit,
-                                                          RoadNetworkParameters::eps1, RoadNetworkParameters::eps2);
+        curvilinearCoordinateSystem = std::make_shared<CurvilinearCoordinateSystem>(
+            reference_path, RoadNetworkParameters::projectionDomainLimit, RoadNetworkParameters::eps1,
+            RoadNetworkParameters::eps2, "off", 2);
     }
-
-    omp_unset_lock(&ccs_lock);
 
     return curvilinearCoordinateSystem;
 }
@@ -87,11 +74,16 @@ std::vector<std::shared_ptr<Lanelet>> Lane::getSuccessorLanelets(const std::shar
     std::vector<std::shared_ptr<Lanelet>> relevantLanelets;
     auto succs{lanelet->getSuccessors()};
     while (!succs.empty())
-        for (const auto &suc : succs) {
+        for (auto it = succs.begin(); it != succs.end(); ++it) {
+            const auto &suc = *it;
             if (getContainedLaneletIDs().find(suc->getId()) != getContainedLaneletIDs().end()) {
                 relevantLanelets.push_back(suc);
                 succs = relevantLanelets.back()->getSuccessors();
                 break;
+            } else {
+                it = succs.erase(it);
+                if (it == succs.end())
+                    break;
             }
         }
 
@@ -103,4 +95,14 @@ bool Lane::contains(std::vector<std::shared_ptr<Lanelet>> lanelets) {
     return std::any_of(lanelets.begin(), lanelets.end(), [containedLaneletIdsTmp](const std::shared_ptr<Lanelet> &let) {
         return containedLaneletIdsTmp.find(let->getId()) != containedLaneletIdsTmp.end();
     });
+}
+
+bool Lane::isPartOf(const std::shared_ptr<Lane> &laneToCheck) {
+    // std::includes requires sorted ranges; containedLaneletIds is now unordered_set, so iterate manually.
+    const auto &other = laneToCheck->getContainedLaneletIDs();
+    for (const auto id : other) {
+        if (containedLaneletIds.find(id) == containedLaneletIds.end())
+            return false;
+    }
+    return true;
 }

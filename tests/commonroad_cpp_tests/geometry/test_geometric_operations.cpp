@@ -1,9 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #include "test_geometric_operations.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/geometry/geometric_operations.h"
@@ -207,6 +201,12 @@ TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesRotate90Degree) {
     EXPECT_NEAR(result.at(0).y, expectedVector.at(0).y, epsilon);
 }
 
+TEST_F(GeometricOperationsTest, ConstrainAngle) {
+    EXPECT_NEAR(geometric_operations::constrainAngle(3 * M_PI), M_PI, 1e-9);
+    EXPECT_NEAR(geometric_operations::constrainAngle(-3 * M_PI), -M_PI, 1e-9);
+    EXPECT_NEAR(geometric_operations::constrainAngle(0), 0, 1e-9);
+}
+
 TEST_F(GeometricOperationsTest, RotateAndTranslateVerticesTranslate) {
     vertex translation{vertex{5.52, -2.2}};
     double rotationAngle{0};
@@ -228,12 +228,13 @@ TEST_F(GeometricOperationsTest, computeDistanceFromPolylines) {
     auto polylineC{std::vector<vertex>{vertex{0, 0}}};
     auto polylineD{std::vector<vertex>{vertex{0, 0}, vertex{1, 0}}};
     auto result{geometric_operations::computeDistanceFromPolylines(polylineA, polylineB)};
-    EXPECT_EQ(result[0], 1);
-    EXPECT_EQ(result[1], 2);
-    EXPECT_EQ(result[2], 1.5);
-    EXPECT_EQ(result[3], 1);
-    EXPECT_EQ(result[4], 1);
-    EXPECT_NEAR(result[5], 5.02494, 0.0001);
+    EXPECT_EQ(std::get<0>(result)[0], 1);
+    EXPECT_EQ(std::get<0>(result)[1], 2);
+    EXPECT_EQ(std::get<0>(result)[2], 1.5);
+    EXPECT_EQ(std::get<0>(result)[3], 1);
+    EXPECT_EQ(std::get<0>(result)[4], 1);
+    EXPECT_NEAR(std::get<0>(result)[5], 5.02494, 0.0001);
+    EXPECT_EQ(std::get<1>(result), 1);
 
     EXPECT_THROW(geometric_operations::computeDistanceFromPolylines(polylineA, polylineC), std::logic_error);
     EXPECT_THROW(geometric_operations::computeDistanceFromPolylines(polylineA, polylineD), std::logic_error);

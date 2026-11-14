@@ -1,84 +1,92 @@
 #pragma once
-
-#include <cassert>
 #include <optional>
+
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
+#include <commonroad_cpp/geometry/types.h>
 
 /**
  * SensorParameters includes information regarding obstacle sensors
- *
- * Note: The following assumptions about the quantites are enforced in the constructors:
- *   - \f$reactionTime \geq 0.0\f$
- *
  */
 class SensorParameters {
-    double fieldOfViewRear{250.0};  //**< length of field of view provided by rear sensors */
-    double fieldOfViewFront{250.0}; //**< length of field of view provided by front sensors */
-
-    /** reaction time of obstacle in [s] */
-    std::optional<double> reactionTime;
+    double fieldOfViewRear{100.0};                  //**< length of field of view provided by rear sensors */
+    double fieldOfViewFront{150.0};                 //**< length of field of view provided by front sensors */
+    std::optional<std::vector<vertex>> fovVertices; //**< field of view region */
+    std::optional<polygon_type> fovPolygon;         //**< field of view as boost polygon */
 
   public:
-    SensorParameters() = delete;
+    /**
+     * Default constructor.
+     */
+    SensorParameters() = default;
 
     /**
      * Complete constructor for SensorParameters.
      *
      * @param fieldOfViewRear length of field of view provided by rear sensors
      * @param fieldOfViewFront length of field of view provided by front sensors
-     * @param reactionTime reaction time of obstacle in [s]
      */
-    SensorParameters(double fieldOfViewRear, double fieldOfViewFront, std::optional<double> reactionTime = std::nullopt)
-        : fieldOfViewRear{fieldOfViewRear}, fieldOfViewFront{fieldOfViewFront}, reactionTime{reactionTime} {
-        // TODO These assertions might make more sense as a std::domain_error exception
-        assert(reactionTime.value_or(0.0) >= 0.0);
-    }
-
-    /**
-     * Simplified constructor for SensorParameters.
-     *
-     * @param reactionTime reaction time of obstacle in [s]
-     */
-    SensorParameters(std::optional<double> reactionTime = std::nullopt) : reactionTime{reactionTime} {
-        // TODO These assertions might make more sense as a std::domain_error exception
-        assert(reactionTime.value_or(0.0) >= 0.0);
-    }
+    SensorParameters(double fieldOfViewRear, double fieldOfViewFront);
 
     /**
      * Getter for rear field of view.
      *
      * @return Rear field of view.
      */
-    [[nodiscard]] double getFieldOfViewRear() const noexcept { return fieldOfViewRear; }
+    [[nodiscard]] double getFieldOfViewRear() const noexcept;
 
     /**
      * Getter for front field of view.
      *
      * @return Front field of view.
      */
-    [[nodiscard]] double getFieldOfViewFront() const noexcept { return fieldOfViewFront; }
+    [[nodiscard]] double getFieldOfViewFront() const noexcept;
 
     /**
-     * Getter for reaction time.
-     *
-     * @return Reaction time [s].
+     * Getter for field of view vertices.
+     * @return List of vertices spanning field of view.
      */
-    [[nodiscard]] std::optional<double> getReactionTime() const noexcept { return reactionTime; }
+    [[nodiscard]] std::vector<vertex> getFieldOfViewVertices() const noexcept;
 
     /**
-     * Default kinematic parameters for vehicles:
-     * fieldOfViewRear = fieldOfViewFront = 250,
-     * reaction time = 0.3 s.
+     * Getter for field of view polygon object.
      *
-     *
-     * @return Default vehicle kinematic parameters.
+     * @return Boost polygon.
      */
-    static SensorParameters dynamicDefaults() { return SensorParameters{250.0, 250.0, 0.3}; }
+    [[nodiscard]] polygon_type getFieldOfViewPolygon() const noexcept;
 
     /**
-     * Default kinematic parameters for static obstacles:
-     * vMax = 0.0 m/s, aMax = 0.0 m/s^2.
+     * Setter of field of fiew.
      *
-     * @return Default static obstacle kinematic parameters.
+     * @param vertices Vertices representing field of view.
      */
-    static SensorParameters staticDefaults() { return SensorParameters{0.0, 0.0, std::nullopt}; }
+    void setFov(const std::vector<vertex> &vertices);
+
+    /**
+     * Default sensor parameters for vehicles:
+     * fieldOfViewRear = 100m, fieldOfViewFront = 150m.
+     *
+     *
+     * @return Default dynamic obstacle sensor parameters.
+     */
+    static SensorParameters dynamicDefaults();
+
+    /**
+     * Default sensor parameters for static obstacles:
+     * fieldOfViewRear = fieldOfViewFront = 0.0 m.
+     *
+     * @return Default static obstacle sensor parameters.
+     */
+    static SensorParameters staticDefaults();
+
+    /**
+     * Setter for default field of view.
+     */
+    void setDefaultFov();
+
+    /**
+     * Creates a string representation of the sensor parameters.
+     *
+     * @return String representation of sensor parameters.
+     */
+    [[nodiscard]] std::string to_string() const;
 };

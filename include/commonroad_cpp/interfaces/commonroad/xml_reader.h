@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include <memory>
@@ -13,6 +6,7 @@
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/obstacle/signal_state.h"
+#include "commonroad_cpp/planning_problem.h"
 
 class Intersection;
 class Obstacle;
@@ -21,6 +15,7 @@ class World;
 class Lanelet;
 class TrafficSign;
 class TrafficLight;
+class Occupancy;
 
 namespace pugi {
 class xml_node;
@@ -96,6 +91,14 @@ std::vector<std::shared_ptr<Intersection>>
 createIntersectionFromXML(const std::string &xmlFile, const std::vector<std::shared_ptr<Lanelet>> &lanelets);
 
 /**
+ * Function for creating planning problems.
+ *
+ * @param xmlFile Loaded CommonRoad XML file.
+ * @return List of pointers to created planning problems.
+ */
+std::vector<std::shared_ptr<PlanningProblem>> createPlanningProblemFromXML(const std::string &xmlFile);
+
+/**
  * Extracts an initial state from a XML node element.
  *
  * @param child XML node element.
@@ -112,20 +115,22 @@ std::shared_ptr<State> extractInitialState(const pugi::xml_node &child);
 std::shared_ptr<SignalState> extractSignalState(const pugi::xml_node &child);
 
 /**
- * Extracts an state from a XML node element.
+ * Extracts a state from an XML node element.
  *
- * @param child XML node element.
+ * @param states XML node element.
  * @return Pointer to state.
  */
 std::shared_ptr<State> extractState(const pugi::xml_node &states);
 
+std::shared_ptr<Occupancy> extractOccupancy(const pugi::xml_node &child);
+
 /**
- * Extracts shape from a XML node and assigns it to obstacle.
+ * Extracts shape from an XML node and assigns it to obstacle.
  *
  * @param obstacle Obstacle for which state should be set.
  * @param child XML node element
  */
-void extractShape(const std::shared_ptr<Obstacle>& obstacle, pugi::xml_node child);
+void extractObstacleShape(const std::shared_ptr<Obstacle> &obstacle, pugi::xml_node child);
 
 /**
  * Creates a dynamic obstacle from a XML node element and adds the obstacle to provided vector.
@@ -186,4 +191,6 @@ void extractLaneletPreSuc(const std::vector<std::shared_ptr<Lanelet>> &tempLanel
 void extractLaneletAdjacency(const std::vector<std::shared_ptr<Lanelet>> &tempLaneletContainer, size_t arrayIndex,
                              const pugi::xml_node &child, const char *type);
 
+void extractPlanningProblem(std::vector<std::shared_ptr<PlanningProblem>> &planningProblemList,
+                            const pugi::xml_node &roadElements);
 } // namespace XMLReader

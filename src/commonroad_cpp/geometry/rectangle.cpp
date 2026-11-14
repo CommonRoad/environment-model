@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <iostream>
 
 #include <commonroad_cpp/geometry/rectangle.h>
@@ -34,3 +27,7 @@ void Rectangle::printParameters() {
 }
 
 ShapeType Rectangle::getType() { return ShapeType::rectangle; }
+
+std::string Rectangle::to_string() {
+    return "Rectangle: length: " + std::to_string(length) + ", width: " + std::to_string(width);
+}

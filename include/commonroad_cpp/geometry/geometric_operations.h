@@ -1,21 +1,15 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include <vector>
 
-#include "circle.h"
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 
 namespace geometric_operations {
 
 /**
- * Add the dimensions of the object (rectangle with length and width) to the polygon vertices q in the object's coordinate frame.
+ * Add the dimensions of the object (rectangle with length and width) to the polygon vertices q in the object's
+ * coordinate frame.
  *
  * @param qVertex Vertices for which the dimension should be adapted.
  * @param length Length to add.
@@ -25,7 +19,7 @@ namespace geometric_operations {
 std::vector<vertex> addObjectDimensionsRectangle(std::vector<vertex> qVertex, double length, double width);
 
 /**
- * Add the dimensions of the object (rectangle with radius) to the polygon vertices q in the object's coordinate frame.
+ * Add the dimensions of the object (circle with radius) to the polygon vertices q in the object's coordinate frame.
  * Note the polygon representation is just an approximation of the circle.
  *
  * @param qVertex Center vertex.
@@ -40,7 +34,8 @@ std::vector<vertex> addObjectDimensionsCircle(vertex qVertex, double radius);
  * @param yPos y-position of circle center.
  * @param aParam Parameter a specifying main primary axis of ellipse.
  * @param bParam Parameter b specifying secondary axis of ellipse.
- * @param resolution Resolution parameter for discretizing ellipse. Default value 64. Concrete discretization also depends on aParam and bParam.
+ * @param resolution Resolution parameter for discretizing ellipse. Default value 64. Concrete discretization also
+ * depends on aParam and bParam.
  * @return List of vertices representing circle.
  */
 std::vector<vertex> discretizeEllipse(double xPos, double yPos, double aParam, double bParam, size_t resolution = 64);
@@ -54,7 +49,7 @@ std::vector<vertex> discretizeEllipse(double xPos, double yPos, double aParam, d
  * @param refOrientation Rotation factor.
  * @return Vertices of shape.
  */
-std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, vertex refPosition,
+std::vector<vertex> rotateAndTranslateVertices(const std::vector<vertex> &vertices, vertex refPosition,
                                                double refOrientation);
 
 /**
@@ -63,7 +58,7 @@ std::vector<vertex> rotateAndTranslateVertices(std::vector<vertex> &vertices, ve
  * @param polyline Polyline for which orientation should be calculated.
  * @return List of orientations along polyline.
  */
-std::vector<double> computeOrientationFromPolyline(std::vector<vertex> polyline);
+std::vector<double> computeOrientationFromPolyline(const std::vector<vertex> &polyline);
 
 /**
  * Computes path length along polyline.
@@ -89,8 +84,8 @@ double euclideanDistance2Dim(const vertex &pointA, const vertex &pointB);
  * @param polylineB Second polyline.
  * @return Width along polylines.
  */
-std::vector<double> computeDistanceFromPolylines(const std::vector<vertex> &polylineA,
-                                                 const std::vector<vertex> &polylineB);
+std::tuple<std::vector<double>, double> computeDistanceFromPolylines(const std::vector<vertex> &polylineA,
+                                                                     const std::vector<vertex> &polylineB);
 
 /**
  * Interpolates value based on two polylines.
@@ -114,6 +109,14 @@ double interpolate(double value, const std::vector<double> &xValues, const std::
 double subtractOrientations(double lhs, double rhs);
 
 /**
+ * Constrains angle to ``[-math.pi, math.pi]``.
+ *
+ * @param angle Angle to constrain [rad]
+ * @return Constrained angle.
+ */
+double constrainAngle(double angle);
+
+/**
  * Computes scalar product between two vertices.
  * @param vertA First vertex.
  * @param vertB Second vertex.
@@ -130,5 +133,31 @@ double scalarProduct(const vertex &vertA, const vertex &vertB);
  * @return Equal or not
  */
 bool equalValues(double fstValue, double sndValue, double thresh = std::numeric_limits<double>::epsilon());
+
+/**
+ * Gets the orientation of the lanelet in degree
+ *
+ * @param lanelet Lanelet
+ * @return orientation in degree
+ */
+double getOrientationInDeg(std::shared_ptr<Lanelet> lanelet);
+
+/**
+ * Evaluates if two orientations in degree have a 90° to each other
+ *
+ * @param degree1 first orientation in degree
+ * @param degree2 second orientation in degree
+ * @return orientation in degree
+ */
+bool is90Deg(double degree1, double degree2);
+
+/**
+ * Evaluates if two orientations in degree have a 180° to each other
+ *
+ * @param degree1 first orientation in degree
+ * @param degree2 second orientation in degree
+ * @return orientation in degree
+ */
+bool is180Deg(double degree1, double degree2);
 
 } // namespace geometric_operations

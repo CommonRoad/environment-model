@@ -1,16 +1,12 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2022 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "dijkstra.h"
-#include "lanelet.h"
 #include <map>
+#include <memory>
+#include <unordered_map>
 #include <vector>
+
+class Lanelet;
 
 class LaneletGraph {
     std::unordered_map<size_t, size_t> verticesAdjSuc;
@@ -22,6 +18,6 @@ class LaneletGraph {
     std::map<std::array<size_t, 2>, std::vector<size_t>> queries;
 
   public:
-    LaneletGraph(const std::vector<std::shared_ptr<Lanelet>> &lanelets);
+    explicit LaneletGraph(const std::vector<std::shared_ptr<Lanelet>> &lanelets);
     std::vector<size_t> findPaths(size_t src, size_t dst, bool considerAdjacency);
 };

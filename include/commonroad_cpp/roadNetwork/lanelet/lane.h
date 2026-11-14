@@ -1,21 +1,10 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
-#include <memory> // for shared_ptr
-#include <optional>
+#include <memory>
+#include <mutex>
 #include <unordered_set>
-#include <vector> // for vector
+#include <vector>
 
-#include <omp.h>
-
-#include <geometry/curvilinear_coordinate_system.h>
-#include <commonroad_cpp/roadNetwork/road_network_config.h>
 #include "lanelet.h"
 
 namespace geometry {
@@ -47,8 +36,8 @@ class Lane : public Lanelet {
      */
     Lane(const std::vector<std::shared_ptr<Lanelet>> &containedLanelets, Lanelet lanelet);
 
-    Lane(const Lane&) = delete;
-    Lane(Lane&&) = default;
+    Lane(const Lane &) = delete;
+    Lane(Lane &&) = default;
 
     ~Lane();
 
@@ -105,6 +94,14 @@ class Lane : public Lanelet {
      */
     bool contains(std::vector<std::shared_ptr<Lanelet>> lanelets);
 
+    /**
+     * Checks whether provided lane is part of this lane.
+     *
+     * @param laneToCheck Lane to check if it is part of this lane
+     * @return Boolean indicating whether lane is part of this lane
+     */
+    bool isPartOf(const std::shared_ptr<Lane> &laneToCheck);
+
   private:
     mutable std::vector<std::shared_ptr<Lanelet>>
         containedLanelets; //**< list of pointers to lanelets constructing lane */
@@ -112,5 +109,5 @@ class Lane : public Lanelet {
         curvilinearCoordinateSystem;                //**< curvilinear coordinate system defined by lane */
     std::unordered_set<size_t> containedLaneletIds; //**< set of IDs of the lanelets constructing lane */
 
-    omp_lock_t ccs_lock;
+    std::mutex ccs_lock;
 };

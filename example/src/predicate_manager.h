@@ -1,13 +1,7 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
 #include <commonroad_cpp/predicates/commonroad_predicate.h>
-#include <commonroad_cpp/predicates/predicate_config.h>
+#include <commonroad_cpp/predicates/predicate_parameter_collection.h>
 #include <memory>
 #include <vector>
 
@@ -66,4 +60,11 @@ class PredicateManager {
      * Collects complete path to scenarios within configured directories.
      */
     void extractScenarios();
+
+    /**
+     * Extract benchmark ID from path.
+     * @param path File path.
+     * @return Benchmark/Scenario ID.
+     */
+    std::string extractBenchmarkIdFromPath(std::string path);
 };

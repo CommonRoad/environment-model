@@ -125,7 +125,7 @@ builder
         description = ''
           Classes and methods to represent the CommonRoad format in C++17
         '';
-        # license = lib.licenses.mit;
+        license = lib.licenses.bsd3;
         platforms = with lib.platforms; linux ++ darwin;
       };
     } // lib.optionalAttrs (!enablePython) {

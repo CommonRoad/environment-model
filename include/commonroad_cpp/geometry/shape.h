@@ -1,21 +1,12 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include <string>
 
 /**
  * Class representing a shape.
  */
 class Shape {
   public:
-
     virtual ~Shape() = default;
 
     /**
@@ -23,21 +14,21 @@ class Shape {
      *
      * @param l Length of shape [m].
      */
-    virtual void setLength(const double l){};
+    virtual void setLength(const double l) {}
 
     /**
      * Virtual setter for shape width. Function can only be used for rectangles.
      *
      * @param w Width of shape [m].
      */
-    virtual void setWidth(const double w){};
+    virtual void setWidth(const double w) {}
 
     /**
      * Virtual setter for shape radius. Function can only be used for circles.
      *
      * @param rad Radius of shape [m].
      */
-    virtual void setRadius(const double rad){};
+    virtual void setRadius(const double rad) {}
 
     /**
      * Virtual setter for shape center. Function can only be used for circles.
@@ -45,42 +36,42 @@ class Shape {
      * @param x x-coordinate of center [m].
      * @param y y-coordinate of center [m].
      */
-    virtual void setCenter(const double x, const double y){};
+    virtual void setCenter(const double x, const double y) {}
 
     /**
      * Virtual getter for shape length. Function cannot be used for circles.
      *
      * @return Shape length [m].
      */
-    [[nodiscard]] virtual double getLength() const { return 0.0; };
+    [[nodiscard]] virtual double getLength() const { return 0.0; }
 
     /**
      * Virtual getter for shape width. Function cannot be used for circles.
      *
      * @return Shape width [m].
      */
-    [[nodiscard]] virtual double getWidth() const { return 0.0; };
+    [[nodiscard]] virtual double getWidth() const { return 0.0; }
 
     /**
      * Virtual getter for shape radius. Function can only be used for circles.
      *
      * @return Shape radius [m].
      */
-    [[nodiscard]] virtual double getRadius() const { return 0.0; };
+    [[nodiscard]] virtual double getRadius() const { return 0.0; }
 
     /**
      * Virtual getter for shape circumradius (radius of circumscribed circle).
      *
      * @return Shape circumradius [m].
      */
-    [[nodiscard]] virtual double getCircumradius() const { return 0.0; };
+    [[nodiscard]] virtual double getCircumradius() const { return 0.0; }
 
     /**
      * Virtual getter for shape center. Function can only be used for circles.
      *
      * @return Shape center.
      */
-    [[nodiscard]] virtual vertex getCenter() const { return {0, 0}; };
+    [[nodiscard]] virtual vertex getCenter() const { return {0, 0}; }
 
     /**
      * Virtual getter for shape type.
@@ -94,10 +85,17 @@ class Shape {
      *
      * @param factor Scaling factor.
      */
-    virtual void scaleShape(double) {}
+    virtual void scaleShape(double factor) {}
 
     /**
      * Virtual print function. Prints general information about shape.
      */
-    virtual void printParameters(){};
+    virtual void printParameters() {}
+
+    /**
+     * Creates a string representation of a shape.
+     *
+     * @return String representation of shape.
+     */
+    virtual std::string to_string() { return "Shape"; }
 };

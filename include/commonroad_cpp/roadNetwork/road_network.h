@@ -1,19 +1,13 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
+#include "commonroad_cpp/roadNetwork/intersection/outgoing_group.h"
 #include "lanelet/lanelet_graph.h"
 #include <boost/container_hash/hash.hpp>
 #include <cstddef>
-#include <map>
 #include <memory>
 #include <set>
 #include <string>
+#include <tsl/robin_map.h>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -24,13 +18,12 @@
 
 #include <commonroad_cpp/roadNetwork/types.h>
 
-#include <boost/graph/adjacency_list.hpp>
-
+struct TrafficLightCycleElement;
 using value = std::pair<box, unsigned>;
 
 class Lanelet;
 class Lane;
-class Incoming;
+class IncomingGroup;
 class TrafficLight;
 class TrafficSign;
 class Intersection;
@@ -45,7 +38,11 @@ class RoadNetwork {
      * Additionally, creates and Rtree from the lanelets for faster access of lanelets and faster
      * occupancy computations of obstacles.
      *
-     * @param list of pointers to lanelets
+     * @param network List of pointers to lanelets.
+     * @param cou Country where road network is located.
+     * @param signs List of traffic signs.
+     * @param lights List of traffic lights.
+     * @param inters List of intersections.
      */
     explicit RoadNetwork(
         const std::vector<std::shared_ptr<Lanelet>> &network,
@@ -109,7 +106,7 @@ class RoadNetwork {
      *
      * @return list of pointers to lanes
      */
-    [[nodiscard]] std::vector<std::shared_ptr<Lane>> getLanes();
+    [[nodiscard]] std::vector<std::shared_ptr<Lane>> getLanes() const;
 
     /**
      * Getter for intersections.
@@ -117,6 +114,14 @@ class RoadNetwork {
      * @return list of pointers to intersections.
      */
     [[nodiscard]] const std::vector<std::shared_ptr<Intersection>> &getIntersections() const;
+
+    /**
+     * Getter for intersection via ID.
+     *
+     * @param intersectionID ID of intersection
+     * @return list of pointers to intersections.
+     */
+    [[nodiscard]] const std::shared_ptr<Intersection> &getIntersectionByID(size_t intersectionID) const;
 
     /**
      * Getter for country.
@@ -131,7 +136,7 @@ class RoadNetwork {
      * @param polygonShape boost polygon
      * @return list of lanelet pointers
      */
-    std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(const polygon_type &polygonShape);
+    std::vector<std::shared_ptr<Lanelet>> findOccupiedLaneletsByShape(const multi_polygon_type &polygonShape);
 
     /**
      * Given a position, finds the list of lanelets within the road network which contain the point.
@@ -145,10 +150,18 @@ class RoadNetwork {
     /**
      * Returns the lanelet which corresponds to a given lanelet ID.
      *
-     * @param id lanelet ID
+     * @param laneletID lanelet ID
      * @return pointer to lanelet
      */
     std::shared_ptr<Lanelet> findLaneletById(size_t laneletID);
+
+    /**
+     * Returns the traffic light which corresponds to a given traffic light ID.
+     *
+     * @param lightID traffic light ID
+     * @return pointer to lanelet
+     */
+    std::shared_ptr<TrafficLight> findTrafficLightById(size_t lightID);
 
     /**
      * Matches a string to country enum.
@@ -164,7 +177,7 @@ class RoadNetwork {
      * @param type Traffic sign type
      * @return Traffic sign ID string.
      */
-    std::string extractTrafficSignIDForCountry(TrafficSignTypes type);
+    std::string extractTrafficSignIDForCountry(TrafficSignTypes type) const;
 
     /**
      * Adds lanes to road network. It it is checked whether lane already exists.
@@ -195,9 +208,9 @@ class RoadNetwork {
     /**
      * Setter for idCounterRef.
      *
-     * @param idCounterRef Pointer to ID counter of world object
+     * @param idCounter Pointer to ID counter of world object
      */
-    void setIdCounterRef(const std::shared_ptr<size_t> &idCounterRef);
+    void setIdCounterRef(const std::shared_ptr<size_t> &idCounter);
 
     /**
      * Getter for idCounterRef.
@@ -212,7 +225,36 @@ class RoadNetwork {
      * @param lanelet Lanelet of interest.
      * @return Incoming object
      */
-    std::shared_ptr<Incoming> findIncomingByLanelet(const std::shared_ptr<Lanelet> &lanelet);
+    std::shared_ptr<IncomingGroup> findIncomingGroupByLanelet(const std::shared_ptr<Lanelet> &lanelet) const;
+
+    /**
+     * Finds incoming object to which outgoingGroup belongs. Returns empty pointer if outgoingGroup is part of incoming.
+     *
+     * @param outgoingGroup outgoingGroup of interest.
+     * @return IncomingGroup object
+     */
+    std::shared_ptr<IncomingGroup>
+    findIncomingGroupByOutgoingGroup(const std::shared_ptr<OutgoingGroup> &outgoingGroup) const;
+
+    /**
+     * Finds outgoingGroup to which lanelet belongs. Returns empty pointer if lanelet is part of outgoingGroup.
+     *
+     * @param lanelet Lanelet of interest.
+     * @return OutgoingGroup object
+     */
+    std::shared_ptr<OutgoingGroup> findOutgoingGroupByLanelet(const std::shared_ptr<Lanelet> &lanelet) const;
+
+    /**
+     * Returns intersections whose member lanelets contain the given lanelet ID.
+     * The result is built lazily on first call and cached for subsequent calls.
+     * Requires self (shared_ptr to this RoadNetwork) to trigger getMemberLanelets().
+     *
+     * @param laneletId Lanelet ID to look up.
+     * @param self Shared pointer to this RoadNetwork instance.
+     * @return Reference to the (possibly empty) list of matching intersections.
+     */
+    [[nodiscard]] const std::vector<std::shared_ptr<Intersection>> &
+    findIntersectionsByLaneletId(size_t laneletId, const std::shared_ptr<RoadNetwork> &self) const;
 
     /**
      * Getter for topological map of road network.
@@ -220,7 +262,6 @@ class RoadNetwork {
      * @return Lanelet graph.
      */
     const std::shared_ptr<LaneletGraph> &getTopologicalMap() const;
-
 
   private:
     std::vector<std::shared_ptr<Lanelet>> laneletNetwork;     //**< set of lanelets contained in road network */
@@ -237,15 +278,50 @@ class RoadNetwork {
     const std::unordered_map<TrafficSignTypes, std::string> *trafficSignIDLookupTable; //**< mapping of traffic signs*/
     std::shared_ptr<size_t> idCounterRef; //**< Pointer to ID counter of world object */
 
+    //**< Lazily populated O(1) ID lookup indices. mutable so they can be filled in const methods. */
+    mutable tsl::robin_map<size_t, std::shared_ptr<Lanelet>> laneletByIdIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<Intersection>> intersectionByIdIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<Lane>> laneByIdIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<TrafficLight>> trafficLightByIdIndex_;
+
+    //**< Lane reverse indices populated eagerly in addLanes(). */
+    mutable tsl::robin_map<size_t, std::vector<std::shared_ptr<Lane>>> lanesByContainedLaneletIndex_;
+    mutable tsl::robin_map<size_t, std::vector<std::shared_ptr<Lane>>> lanesByBaseLaneletIndex_;
+
+    //**< Incoming/outgoing group reverse indices populated lazily on first query. */
+    mutable tsl::robin_map<size_t, std::shared_ptr<IncomingGroup>> incomingByLaneletIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<OutgoingGroup>> outgoingByLaneletIndex_;
+    mutable tsl::robin_map<size_t, std::shared_ptr<IncomingGroup>> incomingByOutgoingGroupIndex_;
+
+    //**< Lanelet-to-intersection index populated lazily on first query. */
+    mutable tsl::robin_map<size_t, std::vector<std::shared_ptr<Intersection>>> intersectionsByLaneletIdIndex_;
+    mutable bool intersectionsByLaneletIdBuilt_ = false;
+
     //**< Struct for private fields including R-Tree */
     struct impl;
     std::unique_ptr<impl> pImpl;
 };
 
-// Required for lanes unordered_map in RoadNetwork class (unordered_set used as key)
+// Required for lanes unordered_map in RoadNetwork class (unordered_set used as key).
+// IMPORTANT: must use a commutative combiner because unordered_set iteration order
+// is implementation-defined; two equal sets must hash to the same value.
+// We hash each element with an avalanche mix, then XOR the results together: XOR is
+// commutative and associative, ensuring the same set always produces the same hash.
 namespace std {
 template <typename V, typename H, typename P, typename A>
 std::size_t hash_value(std::unordered_set<V, H, P, A> const &val) {
-    return boost::hash_range(val.begin(), val.end());
+    H hasher;
+    std::size_t result = 0;
+    for (auto const &elem : val) {
+        // splitmix64-style avalanche to spread bits before XOR-combining
+        std::size_t h = hasher(elem);
+        h ^= h >> 33;
+        h *= 0xff51afd7ed558ccdULL;
+        h ^= h >> 33;
+        h *= 0xc4ceb9fe1a85ec53ULL;
+        h ^= h >> 33;
+        result ^= h;
+    }
+    return result;
 }
 } // namespace std

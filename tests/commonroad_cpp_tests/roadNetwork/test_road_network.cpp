@@ -1,16 +1,10 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_road_network.h"
 #include "../interfaces/utility_functions.h"
+#include "commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h"
+
 #include <commonroad_cpp/interfaces/commonroad/input_utils.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane.h>
 #include <commonroad_cpp/roadNetwork/lanelet/lane_operations.h>
-#include <commonroad_cpp/roadNetwork/road_network.h>
 #include <geometry/curvilinear_coordinate_system.h>
 
 void RoadNetworkTestInitialization::setUpRoadNetwork() {
@@ -27,7 +21,6 @@ void RoadNetworkTestInitialization::setUpRoadNetwork() {
 void RoadNetworkTest::SetUp() {
     setUpLane();
     setUpIncoming();
-    setUpIntersection();
     setUpRoadNetwork();
 }
 
@@ -37,9 +30,9 @@ TEST_F(RoadNetworkTest, InitializationComplete) {
 }
 
 TEST_F(RoadNetworkTest, FindOccupiedLaneletsByShape) {
-    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonOne).size(), 3); // order can be random
-    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonTwo).at(0)->getId(), 1);
-    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape(polygonThree).size(), 0);
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape({polygonOne}).size(), 3); // order can be random
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape({polygonTwo}).at(0)->getId(), 1);
+    EXPECT_EQ(roadNetwork->findOccupiedLaneletsByShape({polygonThree}).size(), 0);
 }
 
 TEST_F(RoadNetworkTest, FindLaneletsByPosition) {
@@ -53,14 +46,14 @@ TEST_F(RoadNetworkTest, FindLaneletById) {
 }
 
 TEST_F(RoadNetworkTest, AddLanes) {
-    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/DEU_TrafficLightTest-1_1_T-1.xml"};
-    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize] =
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/predicates/ZAM_Test-2/ZAM_Test-2_1_T-1.pb"};
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
         InputUtils::getDataFromCommonRoad(pathToTestFile);
     size_t globalID{123456789};
     auto globalIdRef{std::make_shared<size_t>(globalID)};
     roadNetworkScenario->setIdCounterRef(globalIdRef);
-    auto lanes{
-        lane_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)}, roadNetworkScenario)};
+    auto lanes{lane_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(10)},
+                                                            roadNetworkScenario, 250, 250, 1, {})};
     auto updatedLanes{roadNetworkScenario->addLanes(lanes, 10)};
     EXPECT_EQ(lanes.size(), 3);
     EXPECT_EQ(lanes.size(), updatedLanes.size());
@@ -68,13 +61,13 @@ TEST_F(RoadNetworkTest, AddLanes) {
     EXPECT_EQ(lanes.at(1)->getId(), 123456789 + 2);
     EXPECT_EQ(lanes.at(2)->getId(), 123456789 + 3);
 
-    lanes =
-        lane_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, roadNetworkScenario);
+    lanes = lane_operations::createLanesBySingleLanelets({roadNetworkScenario->findLaneletById(4)}, roadNetworkScenario,
+                                                         250, 250, 1, {});
     Lanelet let{100000, lanes.at(0)->getLeftBorderVertices(), lanes.at(0)->getRightBorderVertices(),
                 lanes.at(0)->getLaneletTypes()};
     geometry::EigenPolyline reference_path;
     for (auto vert : let.getCenterVertices())
-        reference_path.push_back(Eigen::Vector2d(vert.x, vert.y));
+        reference_path.emplace_back(vert.x, vert.y);
     geometry::util::resample_polyline(reference_path, 2, reference_path);
     auto newLane{std::make_shared<Lane>(lanes.at(0)->getContainedLanelets(), let,
                                         std::make_shared<CurvilinearCoordinateSystem>(reference_path))};
@@ -85,8 +78,22 @@ TEST_F(RoadNetworkTest, AddLanes) {
     EXPECT_NE(testLanes.at(0)->getId(), updatedLanes.at(0)->getId());
 }
 
+TEST_F(RoadNetworkTest, FindTrafficLightById) {
+    std::string pathToTestFile{TestUtils::getTestScenarioDirectory() + "/USA_Lanker-1/USA_Lanker-1_1_T-1.pb"};
+    const auto &[obstaclesScenario, roadNetworkScenario, timeStepSize, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
+    size_t globalID{123456789};
+    auto globalIdRef{std::make_shared<size_t>(globalID)};
+    roadNetworkScenario->setIdCounterRef(globalIdRef);
+    const auto light{roadNetworkScenario->findTrafficLightById(3772)};
+    EXPECT_EQ(light->getId(), 3772);
+    const auto light2{roadNetworkScenario->findTrafficLightById(3775)};
+    EXPECT_EQ(light2->getId(), 3775);
+    EXPECT_THROW(roadNetworkScenario->findTrafficLightById(1), std::domain_error);
+}
+
 TEST_F(RoadNetworkTest, GetIntersections) {
     EXPECT_EQ(roadNetwork->getIntersections().size(), 2);
-    EXPECT_EQ(roadNetwork->getIntersections().at(0)->getId(), 1000);
-    EXPECT_EQ(roadNetwork->getIntersections().at(1)->getId(), 1001);
+    EXPECT_EQ(roadNetwork->getIntersections()[0]->getId(), 1000);
+    EXPECT_EQ(roadNetwork->getIntersections()[1]->getId(), 1001);
 }

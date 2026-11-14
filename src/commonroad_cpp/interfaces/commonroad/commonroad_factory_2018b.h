@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_factory.h"
@@ -64,9 +57,23 @@ class CommonRoadFactory2018b : public CommonRoadFactory {
     createIntersections(const std::vector<std::shared_ptr<Lanelet>> &lanelets) override;
 
     /**
+     * Function for creating planning problems.
+     *
+     * @return List of pointers to created planning problems.
+     */
+    std::vector<std::shared_ptr<PlanningProblem>> createPlanningProblems() override;
+
+    /**
      * Function for extracting the time step size.
      *
      * @return Time step size.
      */
     double getTimeStepSize() override;
+
+    /**
+     * Extracts CommonRoad benchmark/scenario ID:
+     *
+     * @return Benchmark/scenario as string.
+     */
+    std::string benchmarkID() override;
 };

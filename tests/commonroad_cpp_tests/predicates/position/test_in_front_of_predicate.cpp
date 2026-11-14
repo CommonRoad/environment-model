@@ -1,13 +1,15 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_in_front_of_predicate.h"
 #include "../utils_predicate_test.h"
 #include "commonroad_cpp/obstacle/state.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <commonroad_cpp/interfaces/commonroad/input_utils.h>
+
+#include "commonroad_cpp/obstacle/occupancy.h"
+#include <commonroad_cpp/predicates/position/in_front_of_may_predicate.h>
+#include <commonroad_cpp/predicates/position/in_front_of_must_predicate.h>
+#include <commonroad_cpp/roadNetwork/lanelet/lane.h>
+#include <geometry/curvilinear_coordinate_system.h>
 
 void TestInFrontOfPredicate::SetUp() {
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 8, 0, 10, -1, 0, 0, 8, 0);
@@ -25,33 +27,30 @@ void TestInFrontOfPredicate::SetUp() {
     std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 10, 0, 10, 0, 0, 0, 10, 0);
     std::shared_ptr<State> stateZeroObstacleThree = std::make_shared<State>(4, 29, 0, 5, -8, 0, 0, 29, 0);
 
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleTwo{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
+    state_map_t trajectoryPredictionObstacleTwo{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
 
-    Obstacle::state_map_t trajectoryPredictionObstacleThree{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleThree)};
+    state_map_t trajectoryPredictionObstacleThree{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleThree)};
 
-    obstacleOne = std::make_shared<Obstacle>(Obstacle(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2));
-    obstacleTwo = std::make_shared<Obstacle>(Obstacle(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car,
-                                                      50, 10, 3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2));
-    obstacleThree =
-        std::make_shared<Obstacle>(Obstacle(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2));
+    obstacleOne = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2);
+    obstacleTwo = std::make_shared<Obstacle>(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2);
+    obstacleThree = std::make_shared<Obstacle>(3, ObstacleRole::DYNAMIC, stateZeroObstacleThree, ObstacleType::car, 50,
+                                               10, 3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2);
     auto roadNetwork{utils_predicate_test::create_road_network()};
 
-    world = std::make_shared<World>(World(0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
-                                          std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
+    world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
+                                      std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
 }
 
 TEST_F(TestInFrontOfPredicate, BooleanEvaluationObjects) {
@@ -105,8 +104,72 @@ TEST_F(TestInFrontOfPredicate, RobustEvaluationValues) {
 }
 
 TEST_F(TestInFrontOfPredicate, StatisticBooleanEvaluation) {
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, obstacleTwo));
-    EXPECT_EQ(pred.getStatistics().numExecutions, 1);
-    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, obstacleTwo));
-    EXPECT_EQ(pred.getStatistics().numExecutions, 2);
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat, obstacleTwo));
+    EXPECT_EQ(stat->numExecutions, 1);
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat, obstacleTwo));
+    EXPECT_EQ(stat->numExecutions, 2);
+}
+
+TEST_F(TestInFrontOfPredicate, SetBasedPrediction) {
+    std::string scenarioName = "ZAM_Augmentation-1_1_S-3";
+    std::vector<std::string> pathSplit;
+    boost::split(pathSplit, scenarioName, boost::is_any_of("_"));
+    auto dirName{pathSplit[0] + "_" + pathSplit[1]};
+    std::string pathToTestXmlFile = TestUtils::getTestScenarioDirectory() + "/set_based/" + scenarioName + ".xml";
+    const auto &scenarioXml = InputUtils::getDataFromCommonRoad(pathToTestXmlFile);
+
+    std::shared_ptr<State> currentState = std::make_shared<State>(0, 100, 0, 10, 0, 0);
+    state_map_t trajectoryPrediction{std::pair<size_t, std::shared_ptr<State>>(0, currentState)};
+    std::shared_ptr<Obstacle> dynamicObstacle = std::make_shared<Obstacle>(
+        1, ObstacleRole::DYNAMIC, currentState, ObstacleType::car, 50, 10, 3, -10, 0.3, trajectoryPrediction, 5, 2);
+
+    auto obstacles{scenarioXml.obstacles};
+    obstacles.push_back(dynamicObstacle);
+
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, obstacles, {}, 0.1))};
+
+    auto ego{world->findObstacle(42)};
+    auto obs1{world->findObstacle(100)};
+    auto obs2{world->findObstacle(101)};
+
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs1, {}, true));
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, ego, obs2, {}, true));
+    EXPECT_FALSE(pred.booleanEvaluation(0, world, dynamicObstacle, obs1, {}, true));
+}
+
+TEST_F(TestInFrontOfPredicate, SetBasedMustMay) {
+    InFrontOfMustPredicate predMust;
+    InFrontOfMayPredicate predMay;
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_Augmentation-1_1_S-3.xml")};
+    auto world{std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+    auto ego{world->findObstacle(42)};
+    auto obs1{world->findObstacle(100)};
+
+    // at time step 30, the rear of the occupancy of obs1 is behind the ego front, but its front is in front of it:
+    // not all covered behaviors are in front of the ego vehicle (must), but some are (may)
+    const auto ccsEgo{ego->getReferenceLane(world->getRoadNetwork(), 30)->getCurvilinearCoordinateSystem()};
+    const double frontEgo{ego->frontS(world->getRoadNetwork(), 30)};
+    EXPECT_FALSE(predMust.booleanEvaluation(30, world, ego, obs1, {}, true));
+    EXPECT_TRUE(predMay.booleanEvaluation(30, world, ego, obs1, {}, true));
+    EXPECT_NEAR(predMust.robustEvaluation(30, world, ego, obs1, {}, true), obs1->rearS(30, ccsEgo, true) - frontEgo,
+                1e-9);
+    EXPECT_NEAR(predMay.robustEvaluation(30, world, ego, obs1, {}, true), obs1->frontS(30, ccsEgo, true) - frontEgo,
+                1e-9);
+
+    // the must-version holds only if the may-version holds; the set-based evaluation of in_front_of is the must-version
+    for (const size_t obsId : {100, 101, 102}) {
+        auto obs{world->findObstacle(obsId)};
+        for (size_t timeStep{1}; timeStep <= 30; ++timeStep) {
+            const double must{predMust.robustEvaluation(timeStep, world, ego, obs, {}, true)};
+            EXPECT_LE(must, predMay.robustEvaluation(timeStep, world, ego, obs, {}, true));
+            EXPECT_DOUBLE_EQ(must, pred.robustEvaluation(timeStep, world, ego, obs, {}, true));
+        }
+    }
+
+    // without set-based evaluation, the versions equal the state-based evaluation
+    EXPECT_DOUBLE_EQ(predMay.robustEvaluation(0, world, ego, obs1, {}, false),
+                     pred.robustEvaluation(0, world, ego, obs1, {}, false));
 }

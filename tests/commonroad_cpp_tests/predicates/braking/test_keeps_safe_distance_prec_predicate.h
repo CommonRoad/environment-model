@@ -1,12 +1,5 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
-#include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"

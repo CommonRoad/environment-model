@@ -1,11 +1,8 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_lanelet.h"
+#include "commonroad_cpp/auxiliaryDefs/structs.h"
+#include <commonroad_cpp/roadNetwork/regulatoryElements/stop_line.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_light.h>
+#include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
 namespace bg = boost::geometry;
 typedef boost::geometry::model::d2::point_xy<double> point_type;
@@ -114,7 +111,7 @@ void LaneletTestInitialization::setUpLanelets() {
     laneletSeven = std::make_shared<Lanelet>(Lanelet(idSeven, leftBorderSeven, rightBorderSeven, laneletTypeSeven));
 
     // traffic sign, traffic light, and stop line for middle lanelet
-    std::shared_ptr<TrafficSignElement> tsElem = std::make_shared<TrafficSignElement>("123");
+    std::shared_ptr<TrafficSignElement> tsElem = std::make_shared<TrafficSignElement>(TrafficSignTypes::STOP);
     std::shared_ptr<TrafficSign> sign = std::make_shared<TrafficSign>(TrafficSign());
     sign->addTrafficSignElement(tsElem);
     sign->setId(123);
@@ -122,7 +119,7 @@ void LaneletTestInitialization::setUpLanelets() {
     light->setId(456);
     light->setActive(true);
     light->setOffset(0.0);
-    light->setDirection(TurningDirection::straight);
+    light->setDirection(Direction::straight);
     light->setCycle(std::vector<TrafficLightCycleElement>{TrafficLightCycleElement{TrafficLightState::green, 1},
                                                           TrafficLightCycleElement{TrafficLightState::yellow, 1},
                                                           TrafficLightCycleElement{TrafficLightState::red, 1},
@@ -130,9 +127,7 @@ void LaneletTestInitialization::setUpLanelets() {
 
     StopLine sline = StopLine();
     sline.setLineMarking(LineMarking::broad_solid);
-    sline.setPoints(std::vector<vertex>{vertex{1, 2}, vertex{3, 4}});
-    sline.addTrafficSign(sign);
-    sline.addTrafficLight(light);
+    sline.setPoints({{1, 2}, {3, 4}});
 
     // add successors, predecessors, adjacent, traffic sign, traffic light, and stop line to lanelet one
     laneletOne->addSuccessor(laneletTwo);
@@ -143,10 +138,10 @@ void LaneletTestInitialization::setUpLanelets() {
     laneletThree->addSuccessor(laneletOne);
     laneletOne->addPredecessor(laneletSeven);
     laneletSeven->addSuccessor(laneletOne);
-    laneletOne->setLeftAdjacent(laneletFive, DrivingDirection::opposite);
-    laneletFive->setRightAdjacent(laneletOne, DrivingDirection::opposite);
-    laneletOne->setRightAdjacent(laneletFour, DrivingDirection::same);
-    laneletFour->setLeftAdjacent(laneletOne, DrivingDirection::same);
+    laneletOne->setLeftAdjacent(laneletFive, true);
+    laneletFive->setRightAdjacent(laneletOne, true);
+    laneletOne->setRightAdjacent(laneletFour, false);
+    laneletFour->setLeftAdjacent(laneletOne, false);
     laneletOne->addTrafficLight(light);
     laneletOne->addTrafficSign(sign);
     laneletOne->setStopLine(std::make_shared<StopLine>(sline));
@@ -175,7 +170,7 @@ TEST_F(LaneletTest, InitializationComplete) {
     EXPECT_EQ(laneletOne->getAdjacentRight().adj->getId(), 4);
     EXPECT_EQ(laneletOne->getTrafficSigns()[0]->getId(), 123);
     EXPECT_EQ(laneletOne->getTrafficLights()[0]->getId(), 456);
-    EXPECT_EQ(laneletOne->getStopLine()->getPoints()[0].x, 1);
+    EXPECT_EQ(laneletOne->getStopLine()->getPoints().first.x, 1);
 }
 
 TEST_F(LaneletTest, InitializationManual) {

@@ -1,13 +1,7 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/obstacle/obstacle.h"
+#include "commonroad_cpp/planning_problem.h"
 #include "commonroad_cpp/roadNetwork/intersection/intersection.h"
 #include "commonroad_cpp/roadNetwork/lanelet/lanelet.h"
 #include <pugixml.hpp>
@@ -71,11 +65,25 @@ class CommonRoadFactory {
     createIntersections(const std::vector<std::shared_ptr<Lanelet>> &lanelets) = 0;
 
     /**
+     * Function for creating planning problems.
+     *
+     * @return List of pointers to created planning problems.
+     */
+    virtual std::vector<std::shared_ptr<PlanningProblem>> createPlanningProblems() = 0;
+
+    /**
      * Virtual function for extracting the time step size.
      *
      * @return Time step size.
      */
     virtual double getTimeStepSize() = 0;
+
+    /**
+     * Extracts CommonRoad benchmark/scenario ID:
+     *
+     * @return Benchmark/scenario as string.
+     */
+    virtual std::string benchmarkID() = 0;
 
   protected:
     std::unique_ptr<pugi::xml_document> doc; //**< Pointer to loaded CommonRoad XML. */

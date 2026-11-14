@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "vector"
@@ -14,14 +7,6 @@
  * Collection of utility functions for test case execution.
  */
 namespace TestUtils {
-
-/**
- * Checks whether a given directory exists.
- *
- * @param path Directory path.
- * @return Boolean value indicating that directory path exists.
- */
-bool existsDirectory(const std::string &path);
 
 /**
  * Searches for path to directory where test scenarios are located.

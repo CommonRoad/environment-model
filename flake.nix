@@ -41,7 +41,7 @@
 
         environment-model = pkgs.callPackage ./default.nix {
           inherit (inputs) commonroad-cmake;
-          boost = pkgs.boost180;
+          boost = pkgs.boost187;
           # enableSanitizers = true;
 
           inherit commonroad_io;
@@ -61,6 +61,25 @@
       };
 
       devShells = {
+        default = pkgs.mkShell {
+          inputsFrom = [ packages.environment-model ];
+
+          packages = with pkgs; [
+            doxygen
+            python312Packages.pip
+            cmake
+            ninja
+
+            clang-tools
+
+            graphviz
+          ];
+        };
+
+        mkdoxy = pkgs.mkShell {
+          buildInputs = with pkgs; [ mkdoxy ];
+        };
+
         clangd = pkgs.mkShell {
           inputsFrom = [ packages.environment-model.override { stdenv = pkgs.clang14Stdenv; } ];
           packages = with pkgs; [ clang-tools_14 llvmPackages_14.openmp ];

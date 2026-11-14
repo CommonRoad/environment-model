@@ -1,12 +1,7 @@
 #pragma once
-
-#include <cmath>
-#include <cassert>
-#include <optional>
+#include <string>
 
 /*
- * TODO: Possible candidates for inclusion
-
  * orientation/acceleration/velocity error
  * vehicle-specific: wheelbase, max steering angle
  * comfortable acceleration limit
@@ -31,18 +26,21 @@
  */
 class ActuatorParameters {
     /** maximum velocity of obstacle in m/s */
-    double vMax;
+    double vMax{50.0};
     /** maximum absolute acceleration of obstacle in [m/s^2] */
-    double aMax;
+    double aMax{3.0};
     /** maximal longitudinal acceleration of obstacle in [m/s^2] */
-    double aMaxLong;
+    double aMaxLong{3.0};
     /** minimal longitudinal acceleration of obstacle in [m/s^2] */
-    double aMinLong;
+    double aMinLong{-10.0};
     /** minimal (longitudinal) braking acceleration of obstacle in [m/s^2] */
-    double aBraking;
+    double aBraking{-10.0};
 
   public:
-    ActuatorParameters() = delete;
+    /**
+     * Default constructor.
+     */
+    ActuatorParameters() = default;
 
     /**
      * Complete constructor for ActuatorParameters.
@@ -53,21 +51,7 @@ class ActuatorParameters {
      * @param aMinLong minimal longitudinal acceleration of obstacle in [m/s^2]
      * @param aBraking minimal (longitudinal) braking acceleration of obstacle in [m/s^2]
      */
-    ActuatorParameters(double vMax, double aMax, double aMaxLong, double aMinLong, double aBraking)
-        : vMax{vMax}, aMax{aMax}, aMaxLong{aMaxLong}, aMinLong{aMinLong}, aBraking{aBraking} {
-        // TODO These assertions might make more sense as a std::domain_error exception
-        assert(vMax >= 0.0);
-        assert(aMax >= 0.0);
-        assert(aMaxLong >= 0.0);
-        assert(aMinLong <= 0.0);
-        assert(aBraking <= 0.0);
-        assert(aMaxLong <= aMax);
-        assert(std::abs(aBraking) <= std::abs(aMinLong));
-
-        // Currently disabled, based on current assumptions
-        // assert(std::abs(aBraking) < aMax);
-        // assert(std::abs(aMinLong) < aMax);
-    }
+    ActuatorParameters(double vMax, double aMax, double aMaxLong, double aMinLong, double aBraking);
 
     /**
      * Simplified constructor for ActuatorParameters,
@@ -76,60 +60,69 @@ class ActuatorParameters {
      * @param vMax maximum velocity of obstacle in [m/s]
      * @param aMax maximum absolute acceleration of obstacle in [m/s^2]
      */
-    ActuatorParameters(double vMax, double aMax) : ActuatorParameters{vMax, aMax, aMax, -aMax, -aMax} {}
+    ActuatorParameters(double vMax, double aMax);
 
     /**
      * Getter for maximum velocity the vehicle can drive.
      *
      * @return Maximum velocity [m/s].
      */
-    [[nodiscard]] double getVmax() const noexcept { return vMax; }
+    [[nodiscard]] double getVmax() const noexcept;
 
     /**
      * Getter for maximum acceleration.
      *
      * @return Maximum acceleration [m/s^2].
      */
-    [[nodiscard]] double getAmax() const noexcept { return aMax; }
+    [[nodiscard]] double getAmax() const noexcept;
 
     /**
      * Getter for maximum acceleration in longitudinal direction.
      *
      * @return Maximum acceleration in longitudinal direction [m/s^2].
      */
-    [[nodiscard]] double getAmaxLong() const noexcept { return aMaxLong; }
+    [[nodiscard]] double getAmaxLong() const noexcept;
 
     /**
      * Getter for minimum acceleration in longitudinal direction.
      *
      * @return Minimum acceleration in longitudinal direction [m/s^2].
      */
-    [[nodiscard]] double getAminLong() const noexcept { return aMinLong; }
+    [[nodiscard]] double getAminLong() const noexcept;
 
     /**
      * Getter for minimum braking acceleration in longitudinal direction.
      *
      * @return Minimum acceleration in longitudinal direction [m/s^2].
      */
-    [[nodiscard]] double getAbraking() const noexcept { return aBraking; }
+    [[nodiscard]] double getAbraking() const noexcept;
 
     /**
-     * Default kinematic parameters for vehicles:
-     * vMax = 50.0 m/s, aMax = 3.0 m/s^2, aMaxLong = 3 m/s^2, aMinLong = -10.0 m/s^2, aBraking = -5.0 m/s^2
+     * Default kinematic parameters for obstacle vehicles:
+     * vMax = 50.0 m/s, aMax = 3.0 m/s^2, aMaxLong = 3 m/s^2, aMinLong = -10.5 m/s^2, aBraking = -10.5 m/s^2
      *
      *
-     * @return Default vehicle kinematic parameters.
+     * @return Default kinematic parameters.
      */
-    static ActuatorParameters vehicleDefaults() { return ActuatorParameters{50.0, 3.0, 3.0, -10.0, -5.0}; }
+    static ActuatorParameters vehicleDefaults();
+
+    /**
+     * Default kinematic parameters for ego vehicles:
+     * vMax = 50.0 m/s, aMax = 3.0 m/s^2, aMaxLong = 3 m/s^2, aMinLong = -10.0 m/s^2, aBraking = -10.0 m/s^2
+     *
+     *
+     * @return Default kinematic parameters.
+     */
+    static ActuatorParameters egoDefaults();
 
     /**
      * Default kinematic parameters for pedestrians:
      * vMax = 2.0 m/s, aMax = 0.6 m/s^2, other limits based on aMax,
      * reaction time = 0.3 s.
      *
-     * @return Default pedestrain kinematic parameters.
+     * @return Default pedestrian kinematic parameters.
      */
-    static ActuatorParameters pedestrianDefaults() { return ActuatorParameters{2.0, 0.6}; }
+    static ActuatorParameters pedestrianDefaults();
 
     /**
      * Default kinematic parameters for static obstacles:
@@ -137,5 +130,12 @@ class ActuatorParameters {
      *
      * @return Default static obstacle kinematic parameters.
      */
-    static ActuatorParameters staticDefaults() { return ActuatorParameters{0.0, 0.0}; }
+    static ActuatorParameters staticDefaults();
+
+    /**
+     * Creates a string representation of the actuator parameters.
+     *
+     * @return String representation of actuator parameters.
+     */
+    [[nodiscard]] std::string to_string() const;
 };

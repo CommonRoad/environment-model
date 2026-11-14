@@ -8,7 +8,7 @@ Simply insert the following snippet somewhere in your `CMakeLists.txt`:
 include(FetchContent)
 
 FetchContent_Declare(EnvironmentModel
-        GIT_REPOSITORY git@gitlab.lrz.de:commonroad-traffic-rules/environment-model.git
+        GIT_REPOSITORY https://github.com/CommonRoad/environment-model.git
         # You can specify any reference here, but prefer specifying a concrete commit if possible
         # as that will speed up the build since Git won't need to check whether branch moved in the meantime
         GIT_TAG <reference to commit, branch, tag...>
@@ -32,5 +32,3 @@ pathToExecutable/env_model_example_node --input-file pathToRepository/src/common
 where *--input-file* specifies the path to a configuration file based on the default configuration file and *--t* specifies the number of threads which should be used.
 **Attention**: The environment-model library is not developed for parallelization.
 Therefore, we recommend to use copies inside threads.
-
-

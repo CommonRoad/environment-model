@@ -1,5 +1,5 @@
 { lib
-, fetchFromGitLab
+, fetchFromGitHub
 , fetchPypi
 , python3Packages
 , graphviz-nox
@@ -58,10 +58,9 @@
         #  inherit pname version;
         #  hash = "sha256-Wu2aZo0sGHxfjeNABLfZjDFBrR0wdY1WR4rVY4r8SbI=";
         #};
-        src = fetchFromGitLab {
-          owner = "tum-cps";
-          repo = "commonroad_io";
-          domain = "gitlab.lrz.de";
+        src = fetchFromGitHub {
+          owner = "CommonRoad";
+          repo = "commonroad-io";
           rev = "release_${version}";
           hash = "sha256-hYlZ8Dkjpc/7c+jQXjzC6hdXp9dBM5JnXSIUfKxb+WM=";
         };

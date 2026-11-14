@@ -1,19 +1,28 @@
 set(COMMONROAD_PROTOS
-        commonroad.proto
-        dynamic_obstacle.proto
-        environment_obstacle.proto
-        intersection.proto
-        lanelet.proto
-        location.proto
-        obstacle.proto
-        phantom_obstacle.proto
-        planning_problem.proto
-        scenario_tags.proto
-        static_obstacle.proto
-        traffic_light.proto
-        traffic_sign.proto
-        util.proto
-        )
+        common/util.proto
+        common/state.proto
+        common/traffic_light_state.proto
+        common/traffic_sign_element.proto
+        common/scenario_meta_information.proto
+        scenario/commonroad_scenario.proto
+        scenario/scenario_tags.proto
+        scenario/planning_problem.proto
+        map/commonroad_map.proto
+        map/area.proto
+        map/intersection.proto
+        map/lanelet.proto
+        map/location.proto
+        map/traffic_light.proto
+        map/traffic_sign.proto
+        map/environment_obstacle.proto
+        dynamic/commonroad_dynamic.proto
+        dynamic/dynamic_obstacle.proto
+        dynamic/environment.proto
+        dynamic/obstacle.proto
+        dynamic/phantom_obstacle.proto
+        dynamic/static_obstacle.proto
+        dynamic/traffic_light_cycle.proto
+        dynamic/traffic_sign_value.proto)
 
 # CMP0116 (3.20) - Ninja generators transform DEPFILEs from add_custom_command().
 if(POLICY CMP0116)
@@ -58,11 +67,11 @@ foreach(proto ${COMMONROAD_PROTOS})
                 ARGS
                         --cpp_out=${gendir}
                         --proto_path=${proto_dir}
+                        --proto_path=${proto_dir}/../common
                         --dependency_out=${proto_dep_file_path}
                         ${proto}
                 DEPENDS
                         ${proto}
-                        # protobuf::protoc
                 DEPFILE
                         ${proto_dep_file_path}
                 VERBATIM

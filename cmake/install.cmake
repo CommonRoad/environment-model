@@ -30,6 +30,9 @@ else()
             FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 endif()
 
+install(FILES ${PROJECT_SOURCE_DIR}/LICENSE.txt ${PROJECT_SOURCE_DIR}/THIRD_PARTY_NOTICES.md
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/${PROJECT_NAME})
+
 # Define INSTALL_..._FROM_SYSTEM for each dependency depending on whether we're using
 # our own version (via FetchContent) or a system version (via find_package)
 # This information is used in the installed config file.
@@ -71,16 +74,75 @@ install(EXPORT ${export_name}
         DESTINATION ${env_model_install_cmakedir}
         )
 
+# Export is disabled by default because it can cause issues with FetchContent in surprising ways
+set(_enable_package_export FALSE)
 
-# Export target configuration (allows find_package to find local build tree without
-# first installing it)
-export(EXPORT ${export_name}
-        FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake
-        NAMESPACE ${PROJECT_NAME}::
-        )
+if(_enable_package_export)
+    # Export target configuration (allows find_package to find local build tree without
+    # first installing it)
+    export(EXPORT ${export_name}
+            FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake
+            NAMESPACE ${PROJECT_NAME}::
+            )
+endif()
+
+set(foreign_targets_base
+    spdlog::spdlog
+    yaml-cpp::yaml-cpp
+    protobuf::libprotobuf
+    Eigen3::Eigen
+    boost_headers
+    Boost::geometry
+    Boost::program_options
+)
+set(foreign_targets ${foreign_targets_base})
+set(checked)
+
+function(check_target target)
+    if(target IN_LIST checked)
+        return()
+    endif()
+    list(APPEND checked ${target})
+
+    if(NOT TARGET ${target})
+        list(REMOVE_ITEM foreign_targets ${target})
+        set(foreign_targets ${foreign_targets} PARENT_SCOPE)
+        message(STATUS "invalid target: ${target}")
+        return()
+    endif()
+
+    get_target_property(target_deps ${target} INTERFACE_LINK_LIBRARIES)
+    if(target_deps STREQUAL "target_deps-NOTFOUND")
+        return()
+    endif()
+    message(VERBOSE "${target} deps: ${target_deps}")
+
+    foreach(target ${target_deps})
+        string(REGEX REPLACE "\\$<LINK_ONLY:(.+)>" "\\1" target ${target})
+        list(APPEND foreign_targets ${target})
+        check_target(${target})
+    endforeach()
+
+    list(REMOVE_DUPLICATES foreign_targets)
+
+    set(foreign_targets ${foreign_targets} PARENT_SCOPE)
+    set(checked ${checked} PARENT_SCOPE)
+endfunction()
+
+foreach(foreign_target ${foreign_targets_base})
+    check_target(${foreign_target})
+endforeach()
+
+list(REMOVE_DUPLICATES foreign_targets)
+
+# We never build dl/backtrace ourselves
+list(REMOVE_ITEM foreign_targets dl)
+list(REMOVE_ITEM foreign_targets backtrace)
+
+message(STATUS "${foreign_targets}")
 
 # Required for export()
-foreach(foreign_target spdlog::spdlog yaml-cpp::yaml-cpp protobuf::libprotobuf)
+foreach(foreign_target ${foreign_targets})
     get_target_property(aliased_target ${foreign_target} ALIASED_TARGET)
     if(aliased_target)
         set(foreign_target ${aliased_target})

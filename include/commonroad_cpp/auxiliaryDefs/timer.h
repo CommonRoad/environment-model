@@ -1,14 +1,18 @@
+// Copyright (c) 2018, AutoPas development team
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #pragma once
 #include <chrono>
 /**
  * Taken from https://github.com/AutoPas/AutoPas/blob/ecbf799e8c1f828eb51e3507b76275afe98a8cb2/src/autopas/utils/Timer.h
  * RV-Monitor contains a similar class.
  */
-class Timer {
+class Timer final {
   public:
     Timer();
 
-    virtual ~Timer();
+    ~Timer();
 
     /**
      * Start the timer.
@@ -19,7 +23,8 @@ class Timer {
     /**
      * Stops the timer and returns the time elapsed in nanoseconds since the last call to start.
      * It also adds the duration to the total time.
-     * @param Start time as high resolution time point.
+     *
+     * @param startTime time as high resolution time point.
      * @return elapsed time in nanoseconds
      */
     long stop(std::chrono::high_resolution_clock::time_point startTime);
@@ -32,9 +37,14 @@ class Timer {
 
     /**
      * Get total accumulated time.
-     * @return Total time in nano seconds.
+     * @return Total time in nanoseconds.
      */
     [[nodiscard]] long getTotalTime() const { return totalTime; }
+
+    /**
+     * Resets timer.
+     */
+    void reset();
 
   private:
     /**

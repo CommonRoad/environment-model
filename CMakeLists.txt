@@ -6,12 +6,11 @@
 # The cmake_minimum_required(VERSION) command implicitly invokes the cmake_policy(VERSION)
 # command to specify that the current project code is written for the given range of CMake versions.
 # Source: https://cmake.org/cmake/help/v3.25/command/cmake_minimum_required.html
-cmake_minimum_required(VERSION 3.20..3.25)
+cmake_minimum_required(VERSION 3.20..4.0)
 
 project(EnvironmentModel
     LANGUAGES C CXX
-    # TODO: Find an automatic way to sync the version with setuptools_scm/Git tags
-    VERSION 2022.0
+    VERSION 0.1.0
     HOMEPAGE_URL "https://commonroad.in.tum.de/"
     DESCRIPTION "Classes and methods to represent the CommonRoad format in C++17")
 
@@ -19,9 +18,8 @@ project(EnvironmentModel
 # Relevant for Eigen3
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-# CMP0063 - Honor visibility properties for all target types
-# TODO: Probably not required anymore - check all configurations and remove if possible
-# cmake_policy(SET CMP0063 NEW)
+# Set the minimum CMake policy version to 3.5 - required for cmake >= 4.0
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 # CMP0126 (3.21) - Removal of normal variables by set(CACHE)
 if(POLICY CMP0126)
@@ -31,6 +29,11 @@ endif()
 # CMP0135 - URL download timestamp
 if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
+endif()
+
+# CMP0135 - FindBoost removed
+if(POLICY CMP0167)
+    cmake_policy(SET CMP0167 NEW)
 endif()
 
 # Adapted from Eigen3 - snippet to get a value for PROJECT_IS_TOP_LEVEL
@@ -44,25 +47,45 @@ if(CMAKE_VERSION VERSION_LESS 3.21.0)
   set(${PROJECT_NAME}_IS_TOP_LEVEL ${PROJECT_IS_TOP_LEVEL})
 endif()
 
-if(NOT SKBUILD)
-    set(CMAKE_VERIFY_INTERFACE_HEADER_SETS ON)
-endif()
+set(CMAKE_VERIFY_INTERFACE_HEADER_SETS ON)
+
 
 # Ugly hack to make CMake discover libomp from Homebrew on Github Actions
-if(APPLE AND DEFINED ENV{CIBUILDWHEEL})
-    list(APPEND CMAKE_PREFIX_PATH /usr/local/opt/libomp)
+if(APPLE)
 
-    foreach(_lang IN ITEMS C CXX)
-        if(CMAKE_${_lang}_COMPILER_ID MATCHES "AppleClang")
+    if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm64")
+        set(MAC_LIBOMP_PATH /opt/homebrew/opt/libomp)
+    else()
+        set(MAC_LIBOMP_PATH /usr/local/opt/libomp)
+    endif()
+
+    if(NOT EXISTS ${MAC_LIBOMP_PATH})
+        message(FATAL_ERROR "could not find OpenMP path!")
+    endif()
+
+    list(APPEND CMAKE_PREFIX_PATH ${MAC_LIBOMP_PATH})
+
+    message(STATUS "OpenMP prefix: ${MAC_LIBOMP_PATH}")
+
+    find_path(_omp_include_dir
+            NAMES omp.h
+            PATHS ${_omp_path}/include
+            REQUIRED
+    )
+    message(STATUS "OpenMP include dir: ${_omp_include_dir}")
+
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_${_lang}_COMPILER_ID MATCHES "AppleClang")
+        foreach(_lang IN ITEMS C CXX)
             set(OpenMP_${_lang}_LIB_NAMES "omp")
-            set(OpenMP_${_lang}_INCLUDE_DIR /usr/local/opt/libomp/include)
-        endif()
-    endforeach()
+            set(OpenMP_${_lang}_FLAGS "-Xclang -fopenmp")
+            set(OpenMP_${_lang}_INCLUDE_DIR ${MAC_LIBOMP_PATH}/include)
+        endforeach()
+    endif()
 
     find_library(OpenMP_omp_LIBRARY
         NAMES omp
-        PATHS /usr/local/opt/libomp/lib
-      )
+        PATHS ${MAC_LIBOMP_PATH}/lib
+    )
 
     set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
 endif()
@@ -72,6 +95,14 @@ if(NOT LINUX OR NOT (CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR DEFINED ENV{CIBU
     set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
 endif()
 
+if (APPLE)
+    # Disable shared libraries on apple --> Causes linker error with omp
+    message(STATUS "Setting BUILD_SHARED_LIBS=OFF on MacOS" )
+    set(BUILD_SHARED_LIBS OFF)
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE=1")
+endif()
+
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 if(CMAKE_EXPORT_COMPILE_COMMANDS)
@@ -79,26 +110,17 @@ if(CMAKE_EXPORT_COMPILE_COMMANDS)
 endif()
 
 
-# IMPORTANT: DO NOT MOVE this section, in particular the calls to find_package(Python)
-# and find_package(pybind11), without careful consideration
-if(SKBUILD)
-        # Scikit-Build does not add your site-packages to the search path
-        # automatically, so we need to add it _or_ the pybind11 specific directory
-        # here.
-        execute_process(
-            COMMAND "${PYTHON_EXECUTABLE}" -c
-                    "import pybind11; print(pybind11.get_cmake_dir())"
-            OUTPUT_VARIABLE _tmp_dir
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-        list(APPEND CMAKE_PREFIX_PATH "${_tmp_dir}")
+if (ENV_MODEL_BUILD_PYTHON_BINDINGS)
+    if(SKBUILD)
+        find_package(Python 3.8 COMPONENTS Interpreter Development.Module REQUIRED)
 
-        # set(Python_FIND_VIRTUALENV ONLY)
-
-        set(PYBIND11_FINDPYTHON ON)
-        find_package(Python 3.7 REQUIRED COMPONENTS Development.Module)
-
-        # Now we can find pybind11
-        find_package(pybind11 2.7.0 CONFIG REQUIRED)
+        if (NOT NB_DIR)
+            execute_process(
+                    COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+                    OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE NB_DIR)
+        endif ()
+        list(APPEND CMAKE_PREFIX_PATH "${NB_DIR}")
+        find_package(nanobind CONFIG REQUIRED)
 
         # SKBUILD_SELF_CONTAINED controls whether we try to build all dependencies
         # ourselves. This is used in order to build cross-platform wheels
@@ -119,11 +141,13 @@ if(SKBUILD)
         # Globally build static libraries (affects all calls to add_library
         # without an explicit library type)
         set(BUILD_SHARED_LIBS OFF)
+
         set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
         # Globally set visibility preset
         set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
         set(CMAKE_CXX_VISIBILITY_PRESET default)
+    endif()
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
@@ -224,6 +248,10 @@ cmake_dependent_option(ENV_MODEL_BUILD_EXECUTABLE
     "NOT SKBUILD"
     OFF)
 
+option(ENV_MODEL_BUILD_PYTHON_BINDINGS
+        "Build Python bindings"
+        ${ENV_MODEL_BUILD_EXTRAS_DEFAULT})
+
 set(CMAKE_SUPPORTS_TRY_FIND_PACKAGE OFF)
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24.0)
     set(CMAKE_SUPPORTS_TRY_FIND_PACKAGE ON)
@@ -276,15 +304,15 @@ endif()
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
 find_package(Threads REQUIRED)
-find_package(OpenMP REQUIRED)
+find_package(OpenMP)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/external)
 
 # We have custom logic to check for system Boost/Protobuf, therefore we include
 # ExternalBoost and ExternalProtobuf unconditionally
-include(ExternalBoost)
+include(external/ExternalBoost)
 
-include(ExternalProtobuf)
+include(external/ExternalProtobuf)
 
 if(CMAKE_SUPPORTS_TRY_FIND_PACKAGE)
     if(SKBUILD_SELF_CONTAINED)
@@ -324,27 +352,31 @@ else()
     # Normal path: We try to use find_package via FetchContent, otherwise we fall
     # back to normal FetchContent
 
-    include(ExternalEigen)
-    include(ExternalPugixml)
-    include(ExternalSpdlog)
-    include(ExternalGoogleTest)
-    include(ExternalYamlCpp)
-    include(ExternalRange)
+    include(external/ExternalEigen)
+    include(external/ExternalPugixml)
+    include(external/ExternalSpdlog)
+    include(external/ExternalGoogleTest)
+    include(external/ExternalYamlCpp)
+    include(external/ExternalRange)
 endif()
 
-include(ExternalTslRobinMap)
+include(external/ExternalTslRobinMap)
 
-include(ExternalDrivabilityChecker)
+include(ExternalCLCS)
 
 add_subdirectory(include/commonroad_cpp/interfaces/commonroad/protobufFormat)
 
 # Add Environment model node
 add_subdirectory(src)
 
-if(ENV_MODEL_BUILD_EXECUTABLE AND TARGET Boost::program_options)
-    add_subdirectory(example)
-elseif(NOT TARGET Boost::program_options)
-    message(WARNING "disabling example because Boost::program_options was not found")
+if(ENV_MODEL_BUILD_EXECUTABLE)
+    if(TARGET Boost::program_options AND TARGET OpenMP::OpenMP_CXX)
+        add_subdirectory(example)
+    elseif(NOT TARGET Boost::program_options)
+        message(WARNING "disabling example because Boost::program_options was not found")
+    elseif(NOT TARGET OpenMP::OpenMP_CXX)
+        message(WARNING "disabling example because OpenMP was not found")
+    endif()
 endif()
 
 ## Doxygen
@@ -353,11 +385,15 @@ if(ENV_MODEL_BUILD_DOXYGEN)
 endif()
 
 # add unit testing
-if(ENV_MODEL_BUILD_TESTS AND TARGET Boost::filesystem)
-    enable_testing()
-    add_subdirectory(tests)
-elseif(NOT TARGET Boost::filesystem)
-    message(WARNING "disabling tests because Boost::program_options was not found")
+if(ENV_MODEL_BUILD_TESTS)
+    if(TARGET Boost::filesystem AND TARGET OpenMP::OpenMP_CXX)
+        enable_testing()
+        add_subdirectory(tests)
+    elseif(NOT TARGET Boost::filesystem)
+        message(WARNING "disabling tests because Boost::program_options was not found")
+    elseif(NOT TARGET OpenMP::OpenMP_CXX)
+        message(WARNING "disabling tests because OpenMP was not found")
+    endif()
 endif()
 
 include(cmake/install.cmake)

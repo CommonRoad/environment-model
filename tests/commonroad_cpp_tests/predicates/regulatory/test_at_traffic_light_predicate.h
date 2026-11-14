@@ -1,12 +1,5 @@
-//
-// Created by Sebastian Maierhofer on 12.06.21.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
 #pragma once
 
-#include "../../interfaces/utility_functions.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/predicates/regulatory/at_traffic_light_predicate.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
@@ -19,4 +12,10 @@ class AtRedTrafficLightPredicateTest : public testing::Test {
     std::shared_ptr<Obstacle> obstacleTwo;
     std::shared_ptr<World> world;
     AtTrafficLightPredicate pred;
+    std::vector<std::shared_ptr<Obstacle>> obstacles;
+    std::shared_ptr<RoadNetwork> roadNetwork;
+    double timeStepSize;
+
+  private:
+    void SetUp() override;
 };

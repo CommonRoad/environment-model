@@ -1,0 +1,85 @@
+#include "test_is_of_type_predicate.h"
+#include "../../interfaces/utility_functions.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include "commonroad_cpp/world.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+
+void TestIsOfTypePredicate::SetUp() {
+    std::shared_ptr<State> stateZeroEgoVehicle = std::make_shared<State>(0, 0, 0, 10, 0, 0, 0, 0, 0);
+    egoVehicle = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroEgoVehicle, ObstacleType::pedestrian, 50,
+                                            10, 3, -10, 0.3, state_map_t{}, 5, 2);
+}
+
+TEST_F(TestIsOfTypePredicate, VRU) {
+    std::vector<std::string> opt{"vru"};
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::bicycle);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::motorcycle);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+}
+
+TEST_F(TestIsOfTypePredicate, NotVRU) {
+    std::vector<std::string> opt{"vru"};
+    egoVehicle->setObstacleType(ObstacleType::bus);
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::car);
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::taxi);
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::train);
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::truck);
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+}
+
+TEST_F(TestIsOfTypePredicate, SpecialPurposeVehicle) {
+    std::vector<std::string> opt{"special_purpose_vehicle"};
+    egoVehicle->setObstacleType(ObstacleType::bicycle);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::bus);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::taxi);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+}
+
+TEST_F(TestIsOfTypePredicate, NotSpecialPurposeVehicle) {
+    std::vector<std::string> opt{"special_purpose_vehicle"};
+    egoVehicle->setObstacleType(ObstacleType::car);
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::vehicle);
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::pedestrian);
+    EXPECT_FALSE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+}
+
+TEST_F(TestIsOfTypePredicate, Dynamic) {
+    std::vector<std::string> opt{"dynamic"};
+    egoVehicle->setObstacleType(ObstacleType::car);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::bus);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::taxi);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, egoVehicle, {}, opt));
+}
+
+TEST_F(TestIsOfTypePredicate, Static) {
+    std::shared_ptr<State> stateZeroObs = std::make_shared<State>(0, 0, 0, 10, 0, 0, 0, 0, 0);
+    auto obs = std::make_shared<Obstacle>(1, ObstacleRole::STATIC, stateZeroObs, ObstacleType::pillar, 50, 10, 3, -10,
+                                          0.3, state_map_t{}, 5, 2);
+    std::vector<std::string> opt{"static"};
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, obs, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::building);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, obs, {}, opt));
+    egoVehicle->setObstacleType(ObstacleType::construction_zone);
+    EXPECT_TRUE(pred.booleanEvaluation(0, nullptr, obs, {}, opt));
+}
+
+TEST_F(TestIsOfTypePredicate, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, {}, egoVehicle), std::runtime_error);
+}
+
+TEST_F(TestIsOfTypePredicate, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, {}, egoVehicle), std::runtime_error);
+}

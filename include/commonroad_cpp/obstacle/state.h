@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
@@ -123,44 +116,44 @@ class State {
     /**
      * Setter for x-position in Cartesian space.
      *
-     * @param xPosition x-position in Cartesian space.
+     * @param xPos x-position in Cartesian space.
      */
-    void setXPosition(double xPosition);
+    void setXPosition(double xPos);
 
     /**
      * Setter for y-position in Cartesian space.
      *
-     * @param yPosition y-position in Cartesian space.
+     * @param yPos y-position in Cartesian space.
      */
-    void setYPosition(double yPosition);
+    void setYPosition(double yPos);
 
     /**
      * Setter for velocity.
      *
-     * @param velocity velocity in [m/s].
+     * @param vel velocity in [m/s].
      */
-    void setVelocity(double velocity);
+    void setVelocity(double vel);
 
     /**
      * Setter for acceleration.
      *
-     * @param acceleration acceleration in [m/s^2].
+     * @param acc acceleration in [m/s^2].
      */
-    void setAcceleration(double acceleration);
+    void setAcceleration(double acc);
 
     /**
      * Setter for longitudinal position in Curvilinear domain.
      *
-     * @param lonPosition longitudinal position in Curvilinear domain.
+     * @param lonPos longitudinal position in Curvilinear domain.
      */
-    void setLonPosition(double lonPosition);
+    void setLonPosition(double lonPos);
 
     /**
      * Setter for lateral position in Curvilinear domain.
      *
-     * @param latPosition lateral position in Curvilinear domain.
+     * @param latPos lateral position in Curvilinear domain.
      */
-    void setLatPosition(double latPosition);
+    void setLatPosition(double latPos);
 
     /**
      * Setter for global orientation.
@@ -179,9 +172,23 @@ class State {
     /**
      * Setter for time step.
      *
-     * @param timeStep time step.
+     * @param time time step.
      */
-    void setTimeStep(size_t timeStep);
+    void setTimeStep(size_t time);
+
+    /**
+     * Getter for 2D vertex position.
+     *
+     * @return 2D Vertex.
+     */
+    vertex get2DVertex();
+
+    /**
+     * Creates a string representation of a state.
+     *
+     * @return String representation of state.
+     */
+    std::string to_string() const;
 
   private:
     double xPosition{0.0};                //**< x-coordinate in Cartesian space [m] */
@@ -194,5 +201,5 @@ class State {
     double curvilinearOrientation{0.0};   //**< orientation along reference path [rad] */
     ValidStates validStates{false, false, //**< set of states which are already set and therefore are valid */
                             false, false, false, false, false, false};
-    size_t timeStep{0}; //**< time step of the state variables */
+    time_step_t timeStep{0}; //**< time step of the state variables */
 };

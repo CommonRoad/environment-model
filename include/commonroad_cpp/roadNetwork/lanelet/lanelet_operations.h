@@ -1,16 +1,14 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
-#include "../road_network.h"
 #include "commonroad_cpp/auxiliaryDefs/types_and_definitions.h"
-#include "lane.h"
-#include "lanelet.h"
+#include <memory>
+#include <vector>
+class Lanelet;
+class Lane;
+class TrafficLight;
+enum class LaneletType;
+enum class LineMarking;
+class Obstacle;
 
 namespace lanelet_operations {
 /**
@@ -22,20 +20,20 @@ namespace lanelet_operations {
 LaneletType matchStringToLaneletType(const std::string &type);
 
 /**
- * Matches a string to driving direction.
- *
- * @param type driving direction encoded as string
- * @return driving direction which corresponds to string or invalid direction if string does not match
- */
-DrivingDirection matchStringToDrivingDirection(const std::string &type);
-
-/**
  * Matches a string to a line marking
  *
  * @param type for which line marking should be extracted
  * @return line marking which corresponds to string or unknown type if string does not match
  */
 LineMarking matchStringToLineMarking(const std::string &type);
+
+/**
+ * Matches a string to a list of line markings
+ *
+ * @param type for which line marking should be extracted
+ * @return list of line markings which corresponds to string or empty list if string does not match
+ */
+std::vector<LineMarking> matchStringToLineMarkingOptions(const std::string &type);
 
 /**
  * Extracts all lanelets right of a given lanelet in the same direction.
@@ -92,6 +90,7 @@ double roadWidth(const std::shared_ptr<Lanelet> &lanelet, double xPosition, doub
 /**
  * Extracts all active traffic lights from lanelet.
  *
+ * @param timeStep Time step of interest.
  * @param lanelet Lanelet of interest.
  * @return List of traffic lights.
  */
@@ -99,8 +98,43 @@ std::vector<std::shared_ptr<TrafficLight>> activeTlsByLanelet(size_t timeStep, c
 
 /**
  * Checks whether a bicycleLane is next to a road without a gap inbetween.
- * @param lanlet Lanelet of interest
+ * @param lanelet Lanelet of interest
  * @return bool
  */
 bool bicycleLaneNextToRoad(const std::shared_ptr<Lanelet> &lanelet);
+
+/**
+ * Checks whether two lanelets are adjacent to each other.
+ *
+ * @param laneletOne First lanelet.
+ * @param laneletTwo Second lanelet.
+ * @return Boolean indicating whether lanelets are adjacent.
+ */
+bool areLaneletsAdjacent(const std::shared_ptr<Lanelet> &laneletOne, const std::shared_ptr<Lanelet> &laneletTwo);
+
+/**
+ * Checks whether any lanelets contain a specific line marking type.
+ *
+ * @param lanelets List of lanelets to be checked.
+ * @param lineMarkingTypes List of line marking types to be checked.
+ * @param direction Side of lanelets to be checked.
+ * @return Boolean indicating whether any lanelet contains a specific line marking type.
+ */
+bool anyLaneletsContainLineMarkingType(const std::vector<std::shared_ptr<Lanelet>> &lanelets,
+                                       const std::vector<LineMarking> &lineMarkingTypes, const std::string &direction);
+
+/**
+ * Removes duplicate lanelets from a list of lanelets.
+ *
+ * @param lanelet Base lanelet.
+ * @param leftLanelets Lanelets left of base lanelet.
+ * @param rightLanelets Lanelets right of base lanelet.
+ *
+ * @return Updated list of lanelets.
+ */
+std::vector<std::shared_ptr<Lanelet>>
+removeDuplicateLanelets(const std::shared_ptr<Lanelet> &lanelet,
+                        const std::vector<std::shared_ptr<Lanelet>> &leftLanelets,
+                        const std::vector<std::shared_ptr<Lanelet>> &rightLanelets);
+
 } // namespace lanelet_operations

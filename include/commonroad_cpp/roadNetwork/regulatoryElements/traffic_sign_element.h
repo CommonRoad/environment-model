@@ -1,19 +1,9 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include <string>
 #include <vector>
 
-#include "commonroad_cpp/auxiliaryDefs/structs.h"
-#include <memory>
-#include <string>
-#include <vector>
+enum class TrafficSignTypes;
 
 /**
  * Class representing a CommonRoad traffic sign element.
@@ -23,10 +13,11 @@ class TrafficSignElement {
     /**
      * Constructor of traffic sign element.
      *
-     * @param trafficSignId ID of traffic sign element. Note this ID corresponds to the official national traffic sign
-     * ID of a country.
+     * @param trafficSignType Type of traffic sign element. Note this ID corresponds to the official national traffic
+     * sign ID of a country.
+     * @param values List of additional values, e.g., concrete speed limit.
      */
-    explicit TrafficSignElement(std::string trafficSignId, std::vector<std::string> values = {});
+    explicit TrafficSignElement(TrafficSignTypes trafficSignType, std::vector<std::string> values = {});
 
     /**
      * Default Constructor without parameters for a traffic sign element.
@@ -45,13 +36,13 @@ class TrafficSignElement {
      *
      * @return ID of traffic sign element.
      */
-    [[nodiscard]] std::string getId() const;
+    [[nodiscard]] TrafficSignTypes getTrafficSignType() const;
 
     /**
      * Adds ID of traffic sign element.
      *
      */
-    void setId(std::string trafficSignId);
+    void setTrafficSignType(TrafficSignTypes trafficSignType);
 
     /**
      * Getter for additional values of traffic sign element.
@@ -83,7 +74,7 @@ class TrafficSignElement {
     static std::string convertGermanTrafficSignIdToString(TrafficSignTypes signId);
 
   private:
-    std::string id; //**< official national traffic sign ID of a country */
+    TrafficSignTypes trafficSignType; //**< Type of traffic sign, e.g., stop, yield. */
     std::vector<std::string>
         additionalValues; //**< list of additional values classifying traffic sign, e.g., velocity, weight, time */
 };

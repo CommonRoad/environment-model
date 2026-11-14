@@ -1,11 +1,6 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
+
+#include <commonroad_cpp/geometry/rectangle.h>
 
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "test_signal_state.h"
@@ -20,12 +15,12 @@ class ObstacleTestInitialization : public StateTestInitialization, public Signal
     double aMaxObstacleOne;
     double aMaxLongObstacleOne;
     double aMinLongObstacleOne;
-    std::optional<double> reactionTimeObstacleOne;
+    double reactionTimeObstacleOne;
     double lengthObstacleOne;
     double widthObstacleOne;
     std::map<size_t, std::shared_ptr<Lane>> occupiedLaneObstacleOne{};
-    Obstacle::state_map_t trajectoryPredictionObstacleOne{};
-    Obstacle::state_map_t historyObstacleOne{};
+    state_map_t trajectoryPredictionObstacleOne{};
+    state_map_t historyObstacleOne{};
     Rectangle geoShapeObstacleOne;
     std::map<size_t, std::vector<std::shared_ptr<Lanelet>>> occupiedLaneletsObstacleOne{};
     std::shared_ptr<Obstacle> obstacleOne;
@@ -37,10 +32,10 @@ class ObstacleTestInitialization : public StateTestInitialization, public Signal
     double aMaxObstacleTwo;
     double aMaxLongObstacleTwo;
     double aMinLongObstacleTwo;
-    std::optional<double> reactionTimeObstacleTwo;
+    double reactionTimeObstacleTwo;
     double lengthObstacleTwo;
     double widthObstacleTwo;
-    Obstacle::state_map_t trajectoryPredictionObstacleTwo{};
+    state_map_t trajectoryPredictionObstacleTwo{};
     std::shared_ptr<Obstacle> obstacleTwo;
 
     std::shared_ptr<Obstacle> obstacleThree;

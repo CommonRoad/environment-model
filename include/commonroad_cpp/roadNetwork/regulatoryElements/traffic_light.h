@@ -1,17 +1,9 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
+#include <commonroad_cpp/auxiliaryDefs/structs.h>
 #include <cstddef>
 #include <string>
 #include <vector>
-
-#include <commonroad_cpp/auxiliaryDefs/structs.h>
 
 /**
  * Class representing a CommonRoad traffic light.
@@ -33,8 +25,8 @@ class TrafficLight {
      * @param active Indicator whether traffic light is currently active.
      * @param position Traffic light position.
      */
-    TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset,
-                 TurningDirection direction, bool active, const vertex &position);
+    TrafficLight(size_t trafficLightId, std::vector<TrafficLightCycleElement> cycle, size_t offset, Direction direction,
+                 bool active, const vertex &position);
 
     /**
      * Setter for traffic light ID.
@@ -46,9 +38,9 @@ class TrafficLight {
     /**
      * Setter for traffic light cycle.
      *
-     * @param light_cycle List of traffic light cycle elements.
+     * @param lightCycle List of traffic light cycle elements.
      */
-    void setCycle(const std::vector<TrafficLightCycleElement> &light_cycle);
+    void setCycle(const std::vector<TrafficLightCycleElement> &lightCycle);
 
     /**
      * Setter for traffic light offset.
@@ -62,7 +54,7 @@ class TrafficLight {
      *
      * @param dir Direction of the traffic light.
      */
-    void setDirection(TurningDirection dir);
+    void setDirection(Direction dir);
 
     /**
      * Setter for traffic light activity.
@@ -111,7 +103,7 @@ class TrafficLight {
      *
      * @return Direction of traffic light.
      */
-    [[nodiscard]] TurningDirection getDirection() const;
+    [[nodiscard]] Direction getDirection() const;
 
     /**
      * Getter for traffic light activity indicator.
@@ -133,15 +125,7 @@ class TrafficLight {
      * @param time Time step of interest.
      * @return Traffic light cycle element which is active at the provided time step.
      */
-    TrafficLightCycleElement getElementAtTime(size_t time);
-
-    /**
-     * Matches turning direction given as string to the corresponding enum value.
-     *
-     * @param dir String representing turning direction.
-     * @return Turning direction enum value.
-     */
-    [[nodiscard]] static TurningDirection matchTurningDirections(const std::string &dir);
+    [[nodiscard]] TrafficLightCycleElement getElementAtTime(size_t time) const;
 
     /**
      * Matches a traffic light state given as string to the corresponding enum value.
@@ -155,7 +139,7 @@ class TrafficLight {
     size_t id;                                   //**< unique ID of traffic light */
     std::vector<TrafficLightCycleElement> cycle; //**< cycle of traffic light */
     size_t offset;                               //**< time offset of traffic light */
-    TurningDirection direction;                  //**< direction for which traffic light is valid */
+    Direction direction;                         //**< direction for which traffic light is valid */
     bool active;                                 //**< boolean indicating whether traffic light is valid */
     vertex position;                             //**< position of traffic light */
 };

@@ -1,10 +1,3 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
@@ -58,7 +51,7 @@ class TrafficSign {
      *
      * @param trafficSignElement List of traffic sign elements.
      */
-    void setTrafficSignElement(const std::vector<std::shared_ptr<TrafficSignElement>> &trafficSignElement);
+    void setTrafficSignElements(const std::vector<std::shared_ptr<TrafficSignElement>> &trafficSignElement);
 
     /**
      * Setter for traffic sign position.
@@ -96,7 +89,15 @@ class TrafficSign {
     [[nodiscard]] vertex getPosition() const;
 
     [[nodiscard]] std::vector<std::shared_ptr<TrafficSignElement>>
-    getTrafficSignElementsOfType(const std::string &signId) const;
+    getTrafficSignElementsOfType(const TrafficSignTypes &signType) const;
+
+    /**
+     * Matches a traffic sign given as string to the corresponding enum value.
+     *
+     * @param trafficSignName String representing traffic sign.
+     * @return Traffic sign enum value.
+     */
+    [[nodiscard]] static TrafficSignTypes matchTrafficSign(const std::string &trafficSignName);
 
   private:
     size_t id; //**< unique ID of traffic sign */

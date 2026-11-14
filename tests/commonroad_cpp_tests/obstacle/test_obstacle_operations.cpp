@@ -1,13 +1,5 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include "test_obstacle_operations.h"
 #include "../interfaces/utility_functions.h"
-#include "commonroad_cpp/geometry/geometric_operations.h"
 #include "commonroad_cpp/obstacle/obstacle_operations.h"
 #include "commonroad_cpp/obstacle/state.h"
 #include "commonroad_cpp/world.h"
@@ -36,7 +28,6 @@ TEST_F(ObstacleOperationsTest, MatchObstacleTypeToString) {
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("pedestrian"), ObstacleType::pedestrian);
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("bus"), ObstacleType::bus);
     EXPECT_EQ(obstacle_operations::matchStringToObstacleType("unknown"), ObstacleType::unknown);
-    EXPECT_EQ(obstacle_operations::matchStringToObstacleType("vehicle"), ObstacleType::vehicle);
 }
 
 TEST_F(ObstacleOperationsTest, ObstacleDirectlyLeft) {
@@ -83,7 +74,7 @@ TEST_F(ObstacleOperationsTest, ObstaclesLeft) {
     //              0); // other vehicle in same lane in front
     //    EXPECT_EQ(obstacle_operations::obstaclesLeft(6, obstacleList, obstacleThree, roadNetwork).size(),
     //              0); // other vehicle in right lane but not adjacent
-    EXPECT_EQ(obstacle_operations::obstaclesLeft(7, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesLeft(7, obstacleList, obstacleThree).size(),
               2); // other vehicle exactly right of
     //    EXPECT_EQ(obstacle_operations::obstaclesLeft(7, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 2);
     //    EXPECT_EQ(obstacle_operations::obstaclesLeft(7, obstacleList, obstacleThree, roadNetwork).at(1)->getId(), 5);
@@ -96,38 +87,38 @@ TEST_F(ObstacleOperationsTest, ObstaclesLeft) {
 }
 
 TEST_F(ObstacleOperationsTest, ObstaclesAdjacent) {
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(0, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(0, obstacleList, obstacleThree).size(),
               1); // static obstacle adjacent
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(0, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 1);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(1, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(0, obstacleList, obstacleThree).at(0)->getId(), 1);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(1, obstacleList, obstacleThree).size(),
               1); // other vehicle exactly left of
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(1, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(2, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(1, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(2, obstacleList, obstacleThree).size(),
               1); // other vehicle partially left of in front
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(2, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(3, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(2, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(3, obstacleList, obstacleThree).size(),
               1); // other vehicle partially left of in behind
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(3, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(4, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(3, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(4, obstacleList, obstacleThree).size(),
               1); // other vehicle left of in front and behind
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(4, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 5);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(5, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(4, obstacleList, obstacleThree).at(0)->getId(), 5);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(5, obstacleList, obstacleThree).size(),
               0); // other vehicle in same lane in front
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(6, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(6, obstacleList, obstacleThree).size(),
               0); // other vehicle in right lane but not adjacent
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree, roadNetwork).size(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 2);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree, roadNetwork).at(1)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree, roadNetwork).at(2)->getId(), 5);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(8, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree).size(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree).at(0)->getId(), 2);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree).at(1)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(7, obstacleList, obstacleThree).at(2)->getId(), 5);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(8, obstacleList, obstacleThree).size(),
               1); // other vehicle partially right of in front
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(8, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(9, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(8, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(9, obstacleList, obstacleThree).size(),
               1); // other vehicle partially right of behind
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(9, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 4);
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(10, obstacleList, obstacleThree, roadNetwork).size(),
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(9, obstacleList, obstacleThree).at(0)->getId(), 4);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(10, obstacleList, obstacleThree).size(),
               1); // other vehicle partially right of in front and behind
-    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(10, obstacleList, obstacleThree, roadNetwork).at(0)->getId(), 5);
+    EXPECT_EQ(obstacle_operations::obstaclesAdjacent(10, obstacleList, obstacleThree).at(0)->getId(), 5);
 }
 
 TEST_F(ObstacleOperationsTest, ObstacleDirectlyRight) {
@@ -201,8 +192,10 @@ TEST_F(ObstacleOperationsTest, LaneletsLeftOfObstacle) {
 
 TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
     std::string pathToTestFile =
-        TestUtils::getTestScenarioDirectory() + "/DEU_two_lanes_with_different_orientation.xml";
-    const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+        TestUtils::getTestScenarioDirectory() +
+        "/DEU_TwoLanesWithDifferentOrientation-1/DEU_TwoLanesWithDifferentOrientation-1_1_T-1.pb";
+    const auto &[obstacles, roadNetwork, timeStepSize2, planningProblems] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
 
     std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 0, 0, 10, 0, 0);
     std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 10, 0, 10, 0, 0);
@@ -216,29 +209,28 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
     std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 10, 40, 10, 0, M_PI / 2);
     std::shared_ptr<State> stateFourObstacleTwo = std::make_shared<State>(4, 10, 50, 10, 0, M_PI / 2);
 
-    Obstacle::state_map_t trajectoryPredictionOneVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
+    state_map_t trajectoryPredictionOneVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
 
-    Obstacle::state_map_t trajectoryPredictionTwoVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleTwo)};
+    state_map_t trajectoryPredictionTwoVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleTwo)};
 
     std::shared_ptr<Obstacle> obstacleOne =
-        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionOneVehicle, 5, 2));
+        std::make_shared<Obstacle>(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
+                                   0.3, trajectoryPredictionOneVehicle, 5, 2);
 
     std::shared_ptr<Obstacle> obstacleTwo =
-        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::bus, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionTwoVehicle, 10, 2));
+        std::make_shared<Obstacle>(0, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::bus, 50, 10, 3, -10,
+                                   0.3, trajectoryPredictionTwoVehicle, 10, 2);
 
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
+    std::shared_ptr<World> world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
 
     // obstacle one drive horizontally
     ASSERT_EQ(obstacle_operations::drivingDistanceToCoordinatePoint(30, 0, roadNetwork, obstacleOne, 0),
@@ -258,8 +250,10 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePointStraights) {
 }
 
 TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
-    std::string pathToTestFile = TestUtils::getTestScenarioDirectory() + "/DEU_corner_with_180_degree.xml";
-    const auto &[obstacles, roadNetwork, timeStepSize2] = InputUtils::getDataFromCommonRoad(pathToTestFile);
+    std::string pathToTestFile =
+        TestUtils::getTestScenarioDirectory() + "/DEU_CornerWith180Degree-1/DEU_CornerWith180Degree-1_1_T-1.pb";
+    const auto &[obstacles, roadNetwork, timeStepSize2, planningProblems2] =
+        InputUtils::getDataFromCommonRoad(pathToTestFile);
     const double cornerRadius = 10.0;
     const double distanceToCover = M_PI * cornerRadius;
 
@@ -269,19 +263,19 @@ TEST_F(ObstacleOperationsTest, DrivingDistanceToCoordinatePoint180Corner) {
     std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 7, 17, 10, 0, M_PI * 3 / 4);
     std::shared_ptr<State> stateFourObstacleOne = std::make_shared<State>(4, 0, 20, 10, 0, M_PI);
 
-    Obstacle::state_map_t trajectoryPredictionOneVehicle{
-        std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
-        std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
+    state_map_t trajectoryPredictionOneVehicle{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne),
+                                               std::pair<int, std::shared_ptr<State>>(4, stateFourObstacleOne)};
     const double obstacle_length = 5.0;
 
     std::shared_ptr<Obstacle> obstacleOne =
-        std::make_shared<Obstacle>(Obstacle(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
-                                            3, -10, 0.3, trajectoryPredictionOneVehicle, 5, 2));
+        std::make_shared<Obstacle>(0, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10, 3, -10,
+                                   0.3, trajectoryPredictionOneVehicle, 5, 2);
 
-    std::shared_ptr<World> world = std::make_shared<World>(World(0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
+    std::shared_ptr<World> world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, {obstacleOne, obstacleTwo}, {}, 0.1));
 
     // Larger tolerances for the edges of the lanelet, because then the result depends on how we extrapolate its center
     // line

@@ -1,19 +1,12 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #pragma once
 
 #include "string"
 #include "types_and_definitions.h"
 #include "vector"
 #include <climits>
+#include <cmath>
 #include <cstddef>
 #include <utility>
-#include <cmath>
 
 struct TrafficLightCycleElement {
     TrafficLightState color;
@@ -71,11 +64,17 @@ struct ValidStates {
 };
 
 struct PredicateStatistics {
-    long maxComputationTime{LONG_MIN};
-    size_t minComputationTime{LONG_MAX};
-    size_t totalComputationTime{0};
+    std::vector<double> computationTime; // ms
+    size_t totalComputationTime{0};      // ns
     size_t numExecutions{0};
     size_t numSatisfaction{0};
+
+    void reset() {
+        computationTime.clear();
+        totalComputationTime = 0;
+        numExecutions = 0;
+        numSatisfaction = 0;
+    }
 };
 
 struct Constraint {
@@ -85,17 +84,24 @@ struct Constraint {
 struct SimulationParameters {
     SimulationParameters(std::vector<std::string> directoryPaths, size_t egoVehicleId, std::string benchmarkId,
                          EvaluationMode evaluationMode, bool performanceMeasurement, std::string outputDirectory,
-                         std::string outputFileName)
+                         std::string outputFileName, bool checkObstacleValid, bool removeVRU, bool checkEgoValid)
         : directoryPaths(std::move(directoryPaths)), egoVehicleId(egoVehicleId), benchmarkId(std::move(benchmarkId)),
           evaluationMode(evaluationMode), performanceMeasurement(performanceMeasurement),
-          outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)){};
+          checkObstacleValid(checkObstacleValid), removeVRU(removeVRU), checkEgoValid(checkEgoValid),
+          outputDirectory(std::move(outputDirectory)), outputFileName(std::move(outputFileName)) {};
     SimulationParameters() = default;
 
-    EvaluationMode evaluationMode{EvaluationMode::directory}; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
-    size_t egoVehicleId{0};                  //**< ID of ego vehicle */
-    std::string benchmarkId{"DEU_test_max_speed_limit"};                 //**< CommonRoad benchmark ID */
     std::vector<std::string> directoryPaths{}; //**< List of directories in which all scenarios should be evaluated */
-    bool performanceMeasurement{true};   //**< Flag indicating whether performance should me measured. */
+    size_t egoVehicleId{0};                    //**< ID of ego vehicle */
+    std::string benchmarkId{"DEU_test_max_speed_limit"}; //**< CommonRoad benchmark ID */
+    EvaluationMode evaluationMode{
+        EvaluationMode::directory}; //**< Evaluation mode which should be used, e.g., directory, single vehicle, ... */
+    bool performanceMeasurement{true}; //**< Flag indicating whether performance should be measured. */
+    bool checkObstacleValid{
+        true}; //**< Boolean indicating whether obstacles out of road network or always standing should be ignored. */
+    bool removeVRU{true};     //**< Boolean indicating whether VRU obstacles should be ignored. */
+    bool checkEgoValid{true}; //**< Boolean indicating whether ego vehicles out of road network or always standing
+                              // should be ignored. */
     std::string outputDirectory{"path/to/output/directory"};   //**< Path to output directory of file to generate. */
-    std::string outputFileName {"traffic_rule_evaluation.txt"};    //**< name and file type for to generate. */
+    std::string outputFileName{"traffic_rule_evaluation.txt"}; //**< name and file type for to generate. */
 };

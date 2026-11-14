@@ -1,0 +1,102 @@
+#include "test_lane_based_orientation_similar_predicate.h"
+#include "../utils_predicate_test.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
+#include "commonroad_cpp/obstacle/state.h"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <cmath>
+#include <commonroad_cpp/predicates/lane/lane_based_orientation_similar_may_predicate.h>
+#include <commonroad_cpp/predicates/lane/lane_based_orientation_similar_must_predicate.h>
+#include <commonroad_cpp/world.h>
+
+void LaneBasedOrientationSimilarPredicateTest::SetUp() {
+    std::shared_ptr<State> stateZeroObstacleOne = std::make_shared<State>(0, 10, 2, 10, 0, 0);
+    std::shared_ptr<State> stateZeroObstacleTwo = std::make_shared<State>(0, 0, 2, 10, 0, 0);
+
+    std::shared_ptr<State> stateOneObstacleOne = std::make_shared<State>(1, 20, 4, 10, 0, (1.0 / 5.0) * M_PI);
+    std::shared_ptr<State> stateOneObstacleTwo = std::make_shared<State>(1, 10, 4.01, 10, 0, 0);
+    std::shared_ptr<State> stateOneObstacleThree = std::make_shared<State>(1, 0, 12, 10, 0, 0);
+
+    std::shared_ptr<State> stateTwoObstacleOne = std::make_shared<State>(2, 30, 6, 10, 0, 0);
+    std::shared_ptr<State> stateTwoObstacleTwo = std::make_shared<State>(2, 20, 2, 10, 0, 0);
+
+    std::shared_ptr<State> stateThreeObstacleOne = std::make_shared<State>(3, 40, 4, 10, 0, -(1.0 / 5.0) * M_PI);
+    std::shared_ptr<State> stateThreeObstacleTwo = std::make_shared<State>(3, 30, 2, 10, -0, 0);
+
+    state_map_t trajectoryPredictionObstacleOne{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleOne),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleOne)};
+
+    state_map_t trajectoryPredictionObstacleTwo{std::pair<int, std::shared_ptr<State>>(0, stateZeroObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(2, stateTwoObstacleTwo),
+                                                std::pair<int, std::shared_ptr<State>>(3, stateThreeObstacleTwo)};
+
+    state_map_t trajectoryPredictionObstacleThree{std::pair<int, std::shared_ptr<State>>(1, stateOneObstacleThree)};
+
+    obstacleOne = std::make_shared<Obstacle>(1, ObstacleRole::DYNAMIC, stateZeroObstacleOne, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleOne, 5, 2);
+    obstacleTwo = std::make_shared<Obstacle>(2, ObstacleRole::DYNAMIC, stateZeroObstacleTwo, ObstacleType::car, 50, 10,
+                                             3, -10, 0.3, trajectoryPredictionObstacleTwo, 5, 2);
+    obstacleThree = std::make_shared<Obstacle>(3, ObstacleRole::DYNAMIC, stateOneObstacleThree, ObstacleType::car, 50,
+                                               10, 3, -10, 0.3, trajectoryPredictionObstacleThree, 5, 2);
+    auto roadNetwork{utils_predicate_test::create_road_network()};
+
+    world =
+        std::make_shared<World>(World("testWorld", 0, roadNetwork, std::vector<std::shared_ptr<Obstacle>>{obstacleOne},
+                                      std::vector<std::shared_ptr<Obstacle>>{obstacleTwo, obstacleThree}, 0.1));
+}
+
+TEST_F(LaneBasedOrientationSimilarPredicateTest, BooleanEvaluation) {
+    EXPECT_TRUE(pred.booleanEvaluation(0, world, obstacleOne,
+                                       obstacleTwo));                         // ego vehicle drives straight
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo)); // ego vehicle drives to other from left
+    EXPECT_TRUE(pred.booleanEvaluation(2, world, obstacleOne, obstacleTwo));  // both drive straight
+    EXPECT_FALSE(pred.booleanEvaluation(3, world, obstacleOne, obstacleTwo)); // ego vehicle drives to other from right
+    EXPECT_FALSE(pred.booleanEvaluation(1, world, obstacleOne,
+                                        obstacleThree)); // ego vehicle drives to other from right
+}
+
+TEST_F(LaneBasedOrientationSimilarPredicateTest, StatisticBooleanEvaluation) {
+    auto timer{std::make_shared<Timer>()};
+    auto stat{std::make_shared<PredicateStatistics>()};
+    EXPECT_TRUE(pred.statisticBooleanEvaluation(0, world, obstacleOne, timer, stat,
+                                                obstacleTwo)); // ego vehicle drives straight
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat,
+                                                 obstacleTwo)); // ego vehicle drives to other from left
+    EXPECT_TRUE(
+        pred.statisticBooleanEvaluation(2, world, obstacleOne, timer, stat, obstacleTwo)); // both drive straight
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(3, world, obstacleOne, timer, stat,
+                                                 obstacleTwo)); // ego vehicle drives to other from right
+    EXPECT_FALSE(pred.statisticBooleanEvaluation(1, world, obstacleOne, timer, stat,
+                                                 obstacleThree)); // ego vehicle drives to other from right
+}
+
+TEST_F(LaneBasedOrientationSimilarPredicateTest, RobustEvaluation) {
+    EXPECT_THROW(pred.robustEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(LaneBasedOrientationSimilarPredicateTest, ConstraintEvaluation) {
+    EXPECT_THROW(pred.constraintEvaluation(0, world, obstacleOne, obstacleTwo), std::runtime_error);
+}
+
+TEST_F(LaneBasedOrientationSimilarPredicateTest, SetBasedMustMay) {
+    LaneBasedOrientationSimilarMustPredicate predMust;
+    LaneBasedOrientationSimilarMayPredicate predMay;
+    const auto &scenarioXml{InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                                              "/set_based/ZAM_Augmentation-1_1_S-3.xml")};
+    auto worldSetBased{
+        std::make_shared<World>(World("testWorld", 0, scenarioXml.roadNetwork, scenarioXml.obstacles, {}, 0.1))};
+    auto ego{worldSetBased->findObstacle(42)};
+    auto obs1{worldSetBased->findObstacle(100)};
+
+    // set-based predictions contain no orientation, so every orientation is covered
+    for (const size_t timeStep : {25, 30}) {
+        EXPECT_FALSE(predMust.booleanEvaluation(timeStep, worldSetBased, ego, obs1, {}, true));
+        EXPECT_TRUE(predMay.booleanEvaluation(timeStep, worldSetBased, ego, obs1, {}, true));
+    }
+    // without set-based evaluation, the versions equal the state-based evaluation
+    EXPECT_EQ(predMust.booleanEvaluation(1, world, obstacleOne, obstacleTwo, {}, false),
+              pred.booleanEvaluation(1, world, obstacleOne, obstacleTwo, {}, false));
+}

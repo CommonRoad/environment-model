@@ -3,20 +3,8 @@
 ### Using nix
 For using nix, please visit [Nix Tutorial](./nix.md)
 
-### Common requirements
-These requirements apply to both the Python module and the C++ library.
-
-#### CommonRoad Drivability Checker
-The code depends on the Curvilinear Coordinate System (`crccosy`)
-which is part of the [CommonRoad Drivability Checker](https://gitlab.lrz.de/cps/commonroad-drivability-checker).
-While the Drivability Checker is installed automatically,
-we currently use an internal Git repository so you need to ensure
-you have access to the repository.
-Additionally, an SSH key in your Gitlab account is required.
-See [here](https://docs.gitlab.com/ee/ssh/) for instructions to add an SSH key.
-
-#### Compiler and Build System
-A recent C/C++ compiler is required in any case.
+### Compiler and Build System
+A recent C/C++ compiler is required in any case (we tested gcc11).
 CMake is required in order to build the C++ library.
 For the Python module, you don't need to have CMake installed as pip will
 automatically provide CMake to the build system.
@@ -121,7 +109,7 @@ We recommend Ubuntu 20.04 or newer.
 
 #### Ubuntu 20.04
 You need to install the following packages:
-`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev default-jdk`, 
+`build-essential git pkg-config wget libomp-dev libeigen3-dev libboost-all-dev uuid-dev libspdlog-dev default-jdk`,
 where  default-jdk is only needed for the CommonRoad Monitor or Runtime-Verification repository.
 All other required packages should be part of the standard Ubuntu installation.
 

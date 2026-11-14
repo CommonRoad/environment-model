@@ -1,12 +1,9 @@
-//
-// Created by Sebastian Maierhofer.
-// Technical University of Munich - Cyber-Physical Systems Group
-// Copyright (c) 2021 Sebastian Maierhofer - Technical University of Munich. All rights reserved.
-// Credits: BMW Car@TUM
-//
-
 #include <commonroad_cpp/roadNetwork/regulatoryElements/traffic_sign.h>
 
+#include "commonroad_cpp/auxiliaryDefs/regulatory_elements.h"
+#include <algorithm>
+#include <stdexcept>
+#include <unordered_map>
 #include <utility>
 
 void TrafficSign::setId(const size_t num) { id = num; }
@@ -17,7 +14,8 @@ void TrafficSign::addTrafficSignElement(const std::shared_ptr<TrafficSignElement
 
 size_t TrafficSign::getId() const { return id; }
 
-void TrafficSign::setTrafficSignElement(const std::vector<std::shared_ptr<TrafficSignElement>> &newTrafficSignElement) {
+void TrafficSign::setTrafficSignElements(
+    const std::vector<std::shared_ptr<TrafficSignElement>> &newTrafficSignElement) {
     trafficSignElement = newTrafficSignElement;
 }
 
@@ -39,11 +37,27 @@ TrafficSign::TrafficSign(size_t trafficSignId, std::vector<std::shared_ptr<Traff
       virtualElement(virtual_element) {}
 
 std::vector<std::shared_ptr<TrafficSignElement>>
-TrafficSign::getTrafficSignElementsOfType(const std::string &signId) const {
+TrafficSign::getTrafficSignElementsOfType(const TrafficSignTypes &signType) const {
     std::vector<std::shared_ptr<TrafficSignElement>> relevantTrafficSignElements;
     for (const auto &signElement : trafficSignElement) {
-        if (signElement->getId() == signId)
+        if (signElement->getTrafficSignType() == signType)
             relevantTrafficSignElements.push_back(signElement);
     }
     return relevantTrafficSignElements;
+}
+
+TrafficSignTypes TrafficSign::matchTrafficSign(const std::string &trafficSignName) {
+    static const std::unordered_map<std::string, TrafficSignTypes> cache = []() {
+        std::unordered_map<std::string, TrafficSignTypes> m;
+        for (const auto &[key, val] : TrafficSignNames) {
+            m.emplace(key, val);
+        }
+        return m;
+    }();
+    std::string str{trafficSignName};
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    const auto it = cache.find(str);
+    if (it != cache.end())
+        return it->second;
+    throw std::logic_error("TrafficSign::matchTrafficSign: Invalid traffic sign name '" + str + "'!");
 }
