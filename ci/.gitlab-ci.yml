@@ -162,14 +162,6 @@ build-coverage:
       - build
     expire_in: 30 minutes
 
-.common-rules:
-  rules:
-    # Rule to disable a job for merge request pipelines (imitate default job behaviour)
-    - &skip_non_protected_pipeline
-      if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_REF_PROTECTED != "true" || $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: &full_wheel_build_condition $CI_COMMIT_TAG || $CI_COMMIT_REF_PROTECTED == "true" || $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $CI_COMMIT_REF_NAME =~ /^(master|develop)$/
-
 build-sdist:
   stage: compile
   image:
@@ -188,69 +180,6 @@ build-sdist:
     paths:
       - dist/*.tar.gz
     expire_in: 360 minutes
-
-build-wheel:
-  stage: python
-  tags:
-    - dind
-  image:
-    name: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
-    <<: *pull_policy
-  # make a docker daemon available for cibuildwheel to use
-  services:
-    - name: docker:20.10-dind
-      entrypoint: ["env", "-u", "DOCKER_HOST"]
-      command: ["dockerd-entrypoint.sh"]
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    # See https://github.com/docker-library/docker/pull/166
-    DOCKER_TLS_CERTDIR: ""
-    CIBW_BEFORE_ALL: "git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de//\".insteadOf \"git@gitlab.lrz.de:\" && git config --global url.\"https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.lrz.de/\".insteadOf \"ssh://git@gitlab.lrz.de\""
-    CIBW_BUILD_VERBOSITY: 1
-    CIBW_TEST_SKIP: "*i686 *-musllinux*"
-    # We only use the artifacts (sdist/wheels) from previous jobs, so skip all Git operations
-    GIT_STRATEGY: none
-  script:
-    - pipx run 'cibuildwheel == 2.*' dist/*.tar.gz
-  needs:
-    - job: build-sdist
-      artifacts: true
-  artifacts:
-    paths:
-      - wheelhouse/*.whl
-    expire_in: 360 minutes
-  rules:
-    - *skip_non_protected_pipeline
-    - if: *full_wheel_build_condition
-      variables:
-        CIBW_BUILD: "*"
-    - when: on_success
-      variables:
-        CIBW_BUILD: "cp310-manylinux_x86_64"
-
-upload-wheel:
-  stage: publish
-  image:
-    name: $CI_REGISTRY/tum-cps/commonroad-docker/wheelenv:2025.2
-    <<: *pull_policy
-  variables:
-    TWINE_USERNAME: gitlab-ci-token
-    TWINE_PASSWORD: ${CI_JOB_TOKEN}
-    TWINE_REPOSITORY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
-    UPLOAD_WHEELS: "0"
-    # We only use the artifacts (sdist/wheels) from previous jobs, so skip all Git operations
-    GIT_STRATEGY: none
-  script:
-    - twine upload dist/*.tar.gz wheelhouse/*.whl
-  needs:
-    - job: build-sdist
-      artifacts: true
-    - job: build-wheel
-      artifacts: true
-  rules:
-    - *skip_non_protected_pipeline
-    - when: on_success
 
 ### tests ###
 test:
@@ -302,50 +231,6 @@ run-coverage:
     - python3 -m venv test-venv
     - source test-venv/bin/activate
     - python3 -m pip install pip-tools
-
-.test-python-common: &test-python-common
-  stage: test
-  image: python:${JOB_PYTHON_VERSION}-slim-bookworm
-  before_script:
-    - *install-python-venv
-    - SETUPTOOLS_SCM_PRETEND_VERSION_FOR_COMMONROAD_CPP=1
-    - python -m pip install --find-links=wheelhouse/ commonroad_cpp[test]
-  script:
-    - python -m pytest --junit-xml=pytest-report.xml tests/python
-  needs:
-    - job: build-wheel
-      artifacts: true
-  artifacts:
-    reports:
-      junit: pytest-report.xml
-    expire_in: 30 minutes
-
-.test-python-single: &test-python-single
-  variables:
-    JOB_PYTHON_VERSION: "3.10"
-  rules:
-    - *skip_non_protected_pipeline
-    - if: *full_wheel_build_condition
-      when: never
-    - when: on_success
-
-.test-python-matrix: &test-python-matrix
-  parallel:
-    matrix:
-      - JOB_PYTHON_VERSION: ["3.9", "3.10", "3.11"]
-  rules:
-    - *skip_non_protected_pipeline
-    - if: *full_wheel_build_condition
-      when: on_success
-    - when: never
-
-test-python-manylinux-single:
-  <<: [ *test-python-common, *test-python-single ]
-  variables:
-    JOB_PYTHON_VERSION: "3.10"
-
-test-python-manylinux:
-  <<: [ *test-python-common, *test-python-matrix ]
 
 test-python-general:
   stage: test
