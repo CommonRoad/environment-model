@@ -30,10 +30,8 @@ else()
             FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 endif()
 
-if(ENV_MODEL_USE_LOCAL_CRDC)
-    # Using bundled crdc
-    install(TARGETS crccosy EXPORT ${export_name})
-endif()
+install(FILES ${PROJECT_SOURCE_DIR}/LICENSE.txt ${PROJECT_SOURCE_DIR}/THIRD_PARTY_NOTICES.md
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/${PROJECT_NAME})
 
 # Define INSTALL_..._FROM_SYSTEM for each dependency depending on whether we're using
 # our own version (via FetchContent) or a system version (via find_package)

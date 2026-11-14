@@ -3,18 +3,34 @@ name = "commonroad_cpp"
 dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.9,<3.14"
-license = {file = "LICENSE"}
+license = "BSD-3-Clause"
+license-files = ["LICENSE.txt", "THIRD_PARTY_NOTICES.md"]
 authors = [
-  {email = "sebastian.maierhofer@tum.de"},
-  {name = "Sebastian Maierhofer"}
+  {name = "Cyber-Physical Systems Group, Technical University of Munich", email = "commonroad@lists.lrz.de"},
+]
+maintainers = [
+  {name = "Sebastian Maierhofer", email = "sebastian.maierhofer@tum.de"},
 ]
 description = "CommonRoad C++ Environment Model"
+keywords = ["autonomous driving", "commonroad", "traffic rules", "motion planning"]
+classifiers = [
+    "Programming Language :: C++",
+    "Programming Language :: Python :: 3",
+    "Operating System :: POSIX :: Linux",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+]
 dependencies = [
     "commonroad-io @ git+https://github.com/commonroad/commonroad-io@feature/new-format",
     "scipy<1.15",  # scipy>=1.15 dropped manylinux_2_17 wheels, causing source builds to fail in CI (missing OpenBLAS)
     "pillow<12",  # pillow>=12 dropped manylinux_2_17 wheels, causing source builds to fail in CI (missing libjpeg)
 
 ]
+
+[project.urls]
+Homepage = "https://commonroad.in.tum.de"
+Source = "https://github.com/CommonRoad/environment-model"
+Issues = "https://github.com/CommonRoad/environment-model/issues"
 
 [project.optional-dependencies]
 test = [

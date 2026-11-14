@@ -39,3 +39,7 @@ __pycache__/
 
 # mkdocs/mkdoxy
 /site/
+
+# Local tooling
+.venv/
+.ruff_cache/

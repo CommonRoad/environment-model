@@ -1,3 +1,7 @@
+// Copyright (c) 2018, AutoPas development team
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #pragma once
 #include <chrono>
 /**

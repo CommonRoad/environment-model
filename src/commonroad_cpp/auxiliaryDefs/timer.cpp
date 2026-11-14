@@ -1,3 +1,9 @@
+// Copyright (c) 2018, AutoPas development team
+// Adapted from
+// https://github.com/AutoPas/AutoPas/blob/ecbf799e8c1f828eb51e3507b76275afe98a8cb2/src/autopas/utils/Timer.h
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <commonroad_cpp/auxiliaryDefs/timer.h>
 #include <stdexcept>
 
