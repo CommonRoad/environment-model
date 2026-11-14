@@ -1,19 +1,10 @@
 ## Python Interface
 
-### Installing the Binary Wheels
-Wheels are pre-built binary Python packages that save you the time of building the Environment Model yourself.
-We automatically build these wheels for releases.
-
-At the time of writing, the wheels are not yet available on PyPI, so you'll have to instruct pip to download the
-packages from the Gitlab package repository.
-You'll probably need to set up a Gitlab personal access token first if you don't already have one.
-
-For each available package listed in the [package registry](https://gitlab.lrz.de/maierhofer/environment-model/-/packages),
-Gitlab provides instructions on how to install it.
-For example, the following command should automatically select and install the most recent Environment Model
-version (replace `<your_personal_token>` with your personal access token):
+### Installing the Python Package
+The package is not yet available on PyPI.
+Install it directly from the GitHub repository instead:
 ```
-pip install commonroad-cpp --extra-index-url https://__token__:<your_personal_token>@gitlab.lrz.de/api/v4/projects/63826/packages/pypi/simple
+pip install git+https://github.com/CommonRoad/environment-model.git
 ```
 
 #### Wheel Support Status

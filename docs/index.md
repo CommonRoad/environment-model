@@ -7,12 +7,9 @@ It contains an interface to Python and predicates for evaluating traffic rules.
 
 ### Dependencies to other repositories
 
-Inclusion of other internal repositoryis is automatically done via Git.
-An SSH key in your Gitlab account is required.
-See [here](https://docs.gitlab.com/ee/ssh/) for instructions to add an SSH key.
-
-For development, access to the following repositories is necessary:
-- [CommonRoad Drivability Checker (Curvilinear Coordinate System)](https://gitlab.lrz.de/cps/commonroad-drivability-checker)
+The following CommonRoad repositories are downloaded automatically during the build:
+- [CommonRoad Curvilinear Coordinate System (CLCS)](https://github.com/CommonRoad/commonroad-clcs)
+- [commonroad-io](https://github.com/CommonRoad/commonroad-io) (Python dependency)
 
 ### Detailed Instructions
 We extracted the relevant information in separate readmes depending on the way you want to use the environment-model:

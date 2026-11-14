@@ -1,39 +1,55 @@
 name: Build
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
+  test_cpp:
+    name: C++ build and tests
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            ninja-build libboost-filesystem-dev libboost-program-options-dev \
+            libprotobuf-dev protobuf-compiler libeigen3-dev libspdlog-dev \
+            libpugixml-dev libyaml-cpp-dev librange-v3-dev libgtest-dev
+
+      - name: Configure
+        run: cmake -G "Ninja Multi-Config" -S . -B build -DENV_MODEL_BUILD_PYTHON_BINDINGS=OFF
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
+
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ["self-hosted", "ubuntu-22.04", "windows-2022", "macos-12"]
+        # Only Linux wheels are supported at the moment (see docs/python.md)
+        os: ["ubuntu-24.04", "ubuntu-24.04-arm"]
       fail-fast: false
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history for setuptools_scm versioning
+          fetch-depth: 0
 
+      # Configuration is read from [tool.cibuildwheel] in pyproject.toml
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.5
-        env:
-          # Increase build verbosity
-          CIBW_BUILD_VERBOSITY: 1
-
-          CIBW_SKIP: "pp*"
-
-          # Apparently libomp is already installed on macos-12, so this is unnecessary
-          # CIBW_BEFORE_ALL_MACOS: brew install libomp
-          CIBW_BEFORE_ALL_MACOS: >
-            brew install boost protobuf eigen range-v3 yaml-cpp googletest
-
-          CIBW_BEFORE_BUILD_MACOS: >
-            brew fetch --force --bottle-tag=arm64_monterey libomp &&
-            brew reinstall libomp
-
-          # brew fetch --force --bottle-tag=arm64_monterey libomp &&
-          # brew reinstall $(brew --cache --bottle-tag=arm64_monterey libomp)
+        uses: pypa/cibuildwheel@v3.4.1
 
       - uses: actions/upload-artifact@v4
         with:
+          name: wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl

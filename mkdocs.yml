@@ -23,7 +23,6 @@ plugins:
 nav:
   - Home:
       - "index.md"
-      - "License": "LICENSE"
       - "cpp.md"
       - "cpp_dev.md"
       - "git.md"
