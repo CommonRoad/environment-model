@@ -2,6 +2,8 @@
 // a documented value instead of throwing if they are evaluated outside the guard. The rank-based reordering of
 // conjunctions and disjunctions relies on this.
 
+#include "../interfaces/utility_functions.h"
+#include "commonroad_cpp/interfaces/commonroad/input_utils.h"
 #include "commonroad_cpp/obstacle/obstacle.h"
 #include "commonroad_cpp/roadNetwork/road_network.h"
 #include "commonroad_cpp/world.h"
@@ -13,6 +15,7 @@
 #include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_must_predicate.h>
 #include <commonroad_cpp/predicates/braking/keeps_safe_distance_prec_predicate.h>
 #include <commonroad_cpp/predicates/general/orientation_towards_predicate.h>
+#include <commonroad_cpp/predicates/lane/close_to_lane_border_predicate.h>
 #include <commonroad_cpp/predicates/lane/in_neighboring_lane_predicate.h>
 #include <commonroad_cpp/predicates/lane/in_same_lane_may_predicate.h>
 #include <commonroad_cpp/predicates/lane/in_same_lane_must_predicate.h>
@@ -159,4 +162,19 @@ TEST_F(TotalPredicatesTest, LeftOfRightOfAreFalse) {
 TEST_F(TotalPredicatesTest, InSingleLaneDoesNotThrowOffRoad) {
     InSingleLanePredicate pred;
     EXPECT_NO_THROW(pred.booleanEvaluation(0, world, offRoad, ego));
+}
+
+TEST(TotalPredicatesScenarioTest, CloseToLaneBorderIsFalseWithoutStateOrProjection) {
+    // a vehicle that is not projectable onto one of its lanes (verified in commonroad-monitor, R_G8) or has no state
+    const auto scenario{
+        InputUtils::getDataFromCommonRoad(TestUtils::getTestScenarioDirectory() +
+                                          "/predicates/DEU_TestRightBeforeLeft-1/DEU_TestRightBeforeLeft-1_3_T-1.pb")};
+    const auto world{std::make_shared<World>("testWorld", 0, scenario.roadNetwork, scenario.obstacles,
+                                             std::vector<std::shared_ptr<Obstacle>>{}, scenario.timeStepSize)};
+    CloseToLaneBorderPredicate pred;
+    for (const auto &obstacle : scenario.obstacles)
+        for (const auto &side : {"left", "right"})
+            EXPECT_NO_THROW(pred.booleanEvaluation(0, world, obstacle, nullptr, {side}));
+    for (const auto &obstacle : scenario.obstacles)
+        EXPECT_NO_THROW(EXPECT_FALSE(pred.booleanEvaluation(1000, world, obstacle, nullptr, {"left"})));
 }

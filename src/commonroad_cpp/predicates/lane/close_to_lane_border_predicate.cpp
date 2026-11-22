@@ -12,26 +12,29 @@ bool CloseToLaneBorderPredicate::booleanEvaluation(size_t timeStep, const std::s
                                                    const std::shared_ptr<Obstacle> &obstacleP,
                                                    const std::vector<std::string> &additionalFunctionParameters,
                                                    bool setBased) {
-    std::vector<std::shared_ptr<Lane>> lanes{obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)};
-    const auto state = obstacleK->getStateByTimeStep(timeStep);
-    const auto direction = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
-    if (direction == Direction::left)
-        return std::all_of(lanes.begin(), lanes.end(),
-                           [obstacleK, state, this, timeStep](const std::shared_ptr<Lane> &lane) {
-                               return 0.5 * lane->getWidth(state->getXPosition(), state->getYPosition()) -
-                                          obstacleK->leftD(timeStep, lane->getCurvilinearCoordinateSystem()) <=
-                                      parameters.getParam("closeToLaneBorder");
-                           });
-    else if (direction == Direction::right) {
-        return std::all_of(lanes.begin(), lanes.end(),
-                           [obstacleK, state, this, timeStep](const std::shared_ptr<Lane> &lane) {
-                               return 0.5 * lane->getWidth(state->getXPosition(), state->getYPosition()) +
-                                          obstacleK->rightD(timeStep, lane->getCurvilinearCoordinateSystem()) <=
-                                      parameters.getParam("closeToLaneBorder");
-                           });
-    }
-    throw std::invalid_argument("CloseToLaneBorderPredicate::booleanEvaluation: Unknown side '" +
-                                additionalFunctionParameters.at(0) + "'!");
+    // not defined if a lane of the vehicle cannot be used to project it (outside the projection domain): not close
+    return predicate_utils::valueIfUndefined(false, [&] {
+        std::vector<std::shared_ptr<Lane>> lanes{obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)};
+        const auto state = obstacleK->getStateByTimeStep(timeStep);
+        const auto direction = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
+        if (direction == Direction::left)
+            return std::all_of(lanes.begin(), lanes.end(),
+                               [obstacleK, state, this, timeStep](const std::shared_ptr<Lane> &lane) {
+                                   return 0.5 * lane->getWidth(state->getXPosition(), state->getYPosition()) -
+                                              obstacleK->leftD(timeStep, lane->getCurvilinearCoordinateSystem()) <=
+                                          parameters.getParam("closeToLaneBorder");
+                               });
+        else if (direction == Direction::right) {
+            return std::all_of(lanes.begin(), lanes.end(),
+                               [obstacleK, state, this, timeStep](const std::shared_ptr<Lane> &lane) {
+                                   return 0.5 * lane->getWidth(state->getXPosition(), state->getYPosition()) +
+                                              obstacleK->rightD(timeStep, lane->getCurvilinearCoordinateSystem()) <=
+                                          parameters.getParam("closeToLaneBorder");
+                               });
+        }
+        throw std::invalid_argument("CloseToLaneBorderPredicate::booleanEvaluation: Unknown side '" +
+                                    additionalFunctionParameters.at(0) + "'!");
+    });
 }
 
 double CloseToLaneBorderPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

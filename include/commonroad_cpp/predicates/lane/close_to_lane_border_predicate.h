@@ -4,6 +4,9 @@
 
 /**
  *  Evaluates if a vehicle drives close to its lane border. The side (right/left) must be provided via parameter).
+ *
+ * Total: false if the vehicle cannot be projected onto one of its lanes (outside the projection domain) or has no state
+ * at the time step.
  */
 class CloseToLaneBorderPredicate final : public CommonRoadPredicate {
   public:
