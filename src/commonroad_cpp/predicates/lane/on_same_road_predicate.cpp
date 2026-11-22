@@ -11,7 +11,7 @@ bool OnSameRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::vector<std::string> &additionalFunctionParameters,
                                             bool setBased) {
     // not defined if a vehicle has no reference lane or no state: not on the same road
-    return predicate_utils::valueIfUndefined(false, [&] {
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
         // temporarily, we checked here for state as in larger scenarios/maps, obstacle might be at end of road and if
         // state is not part of road ccs computations might fail (when using shape alone, state might not be on road) we
         // changed it to shape again since this simplifies set-based eval and assume we perform pre-checks to prevent

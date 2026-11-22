@@ -1,5 +1,6 @@
 #pragma once
 
+#include <geometry/clcs_exceptions.h>
 #include <limits>
 #include <memory>
 #include <utility>
@@ -34,6 +35,8 @@ template <typename T, typename F> T valueIfUndefined(const T &fallback, F &&eval
     } catch (const CurvilinearProjectionError &) {
         return fallback;
     } catch (const MissingStateError &) {
+        return fallback;
+    } catch (const geometry::ProjectionDomainError &) {
         return fallback;
     }
 }
@@ -177,6 +180,24 @@ class CommonRoadPredicate {
      * @return Boolean indicating whether predicate is vehicle dependent.
      */
     [[nodiscard]] bool isVehicleDependent() const;
+
+    /**
+     * Value of the boolean evaluation if a quantity it relies on is undefined, e.g., a vehicle has no reference lane,
+     * is outside the projection domain, or has no state at the time step (see predicate_utils::valueIfUndefined).
+     * Rules use such predicates behind a guard, for which the value is irrelevant. Default: false. A may-version
+     * over-approximates, so it returns true; a must-version under-approximates, so it returns false.
+     *
+     * @return Boolean value of the predicate if it is undefined.
+     */
+    [[nodiscard]] virtual bool undefinedValue() const;
+
+    /**
+     * Value of the robustness (and constraint) evaluation if a quantity it relies on is undefined: +infinity if
+     * undefinedValue() is true, otherwise -infinity.
+     *
+     * @return Robustness if the predicate is undefined.
+     */
+    [[nodiscard]] double undefinedRobustness() const;
 
   protected:
     /**

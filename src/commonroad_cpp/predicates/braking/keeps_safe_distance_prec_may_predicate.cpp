@@ -10,7 +10,7 @@ double KeepsSafeDistancePrecMayPredicate::robustEvaluation(size_t timeStep, cons
                                                            bool setBased) {
     // not defined if the pth vehicle cannot be projected onto the reference lane of the kth vehicle: safe distance not
     // applicable (robustness +inf)
-    return predicate_utils::valueIfUndefined(std::numeric_limits<double>::infinity(), [&] {
+    return predicate_utils::valueIfUndefined(undefinedRobustness(), [&] {
         if (!evaluatesOccupancy(obstacleP, timeStep, setBased))
             return KeepsSafeDistancePrecPredicate::robustEvaluation(timeStep, world, obstacleK, obstacleP,
                                                                     additionalFunctionParameters, setBased);

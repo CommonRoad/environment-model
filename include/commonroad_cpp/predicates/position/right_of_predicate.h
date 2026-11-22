@@ -4,8 +4,10 @@
 
 /**
  * Predicate to evaluate if the k-th vehicle is right of the p-th vehicle
+
  *
- * Total: false if a vehicle has no state at the time step.
+ * Total: false if a vehicle has no state at the time step or cannot be projected onto the reference lane
+ * (projection errors are caught as well).
  */
 class RightOfPredicate : public CommonRoadPredicate {
   public:

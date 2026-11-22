@@ -10,7 +10,7 @@ bool LeftOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<W
                                         const std::shared_ptr<Obstacle> &obstacleP,
                                         const std::vector<std::string> &additionalFunctionParameters, bool setBased) {
     // not defined if a vehicle has no state at the time step: not left of
-    return predicate_utils::valueIfUndefined(false, [&] {
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
         auto leftObstacles{obstacle_operations::obstaclesLeft(timeStep, {obstacleK}, obstacleP)};
         return !leftObstacles.empty();
     });

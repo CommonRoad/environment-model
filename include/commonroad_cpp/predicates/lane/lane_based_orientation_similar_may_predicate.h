@@ -6,9 +6,14 @@
  * May-version of lane_based_orientation_similar for a set-based prediction of the kth vehicle. Set-based
  * predictions contain no orientation, so every orientation is covered: some covered orientation is similar, i.e., the
  * predicate is true.
+ *
+ * Total: true (over-approximation) if the vehicles cannot be projected onto a common reference lane or a vehicle has no
+ * state at the time step.
  */
 class LaneBasedOrientationSimilarMayPredicate : public LaneBasedOrientationSimilarPredicate {
   public:
+    [[nodiscard]] bool undefinedValue() const override;
+
     /**
      * Boolean evaluation of the predicate; for set-based predictions, the may-version is used.
      *

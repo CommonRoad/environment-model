@@ -11,7 +11,7 @@ bool InNeighboringLanePredicate::booleanEvaluation(size_t timeStep, const std::s
                                                    const std::vector<std::string> &additionalFunctionParameters,
                                                    bool setBased) {
     // not defined if a vehicle has no reference lane or no state: not in a neighboring lane
-    return predicate_utils::valueIfUndefined(false, [&] {
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
         auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
         std::unordered_set<size_t> laneletPIDs;
         for (const auto &la : laneletsP)

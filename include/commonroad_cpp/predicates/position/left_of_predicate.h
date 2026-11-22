@@ -4,6 +4,7 @@
 
 /**
  * Predicate to evaluate if the k-th vehicle is left of the p-th vehicle
+
  *
  * Total: false if a vehicle has no state at the time step.
  */

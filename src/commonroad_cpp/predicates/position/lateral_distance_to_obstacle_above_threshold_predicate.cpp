@@ -12,7 +12,7 @@ bool LateralDistanceToObstacleAboveThresholdPredicate::booleanEvaluation(
     const double threshold = std::stod(additionalFunctionParameters.at(0));
     // not defined if the pth vehicle cannot be projected onto the reference lane of the kth vehicle: no lateral
     // distance to keep, so the distance is above the threshold
-    return predicate_utils::valueIfUndefined(true, [&] {
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
         return obstacleK->getLateralDistanceToObstacle(timeStep, obstacleP, world->getRoadNetwork()) >= threshold;
     });
 }
@@ -31,3 +31,5 @@ Constraint LateralDistanceToObstacleAboveThresholdPredicate::constraintEvaluatio
     throw std::runtime_error(
         "LateralDistanceToObstacleAboveThresholdPredicate does not support constraint evaluation!");
 }
+
+bool LateralDistanceToObstacleAboveThresholdPredicate::undefinedValue() const { return true; }

@@ -4,6 +4,8 @@
 
 /**
  * Predicate for causing braking of a vehicle in an intersection.
+ *
+ * Total: false if a vehicle has no reference lane, cannot be projected, or has no state at the time step.
  */
 class CausesBrakingIntersectionPredicate : public CommonRoadPredicate {
   public:

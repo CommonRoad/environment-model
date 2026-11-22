@@ -7,9 +7,9 @@
  * covered by the occupancy keeps the safe distance. Covered behaviors behind the front of the kth vehicle satisfy the
  * predicate, so it holds if any part of the occupancy is behind it; otherwise, the front of the occupancy and the
  * highest velocity of the covered behaviors are used (the robustness increases with both).
+
  *
- * Total: true if the pth vehicle cannot be projected onto the reference lane of the kth vehicle (see
- * keeps_safe_distance_prec).
+ * Total: true (robustness +infinity) if the pth vehicle cannot be projected onto the reference lane of the kth vehicle.
  */
 class KeepsSafeDistancePrecMayPredicate : public KeepsSafeDistancePrecPredicate {
   public:

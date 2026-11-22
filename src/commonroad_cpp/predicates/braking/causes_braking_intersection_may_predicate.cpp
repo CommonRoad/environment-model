@@ -6,3 +6,5 @@ bool CausesBrakingIntersectionMayPredicate::booleanEvaluation(
     bool setBased) {
     return evaluateSetBased(timeStep, world, obstacleK, obstacleP, setBased, false);
 }
+
+bool CausesBrakingIntersectionMayPredicate::undefinedValue() const { return true; }

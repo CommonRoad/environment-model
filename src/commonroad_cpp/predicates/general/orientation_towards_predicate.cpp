@@ -11,7 +11,7 @@ bool OrientationTowardsPredicate::booleanEvaluation(size_t timeStep, const std::
                                                     bool setBased) {
     // not defined if the kth vehicle cannot be projected onto the reference lane of the pth vehicle: not oriented
     // towards
-    return predicate_utils::valueIfUndefined(false, [&] {
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
         auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
         const auto curvilinearOrientation{obstacleK->getCurvilinearOrientation(timeStep, ccsP)};
         const auto latPositionP{obstacleP->getLatPosition(world->getRoadNetwork(), timeStep)};

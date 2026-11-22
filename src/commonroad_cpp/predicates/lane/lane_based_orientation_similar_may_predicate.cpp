@@ -9,3 +9,5 @@ bool LaneBasedOrientationSimilarMayPredicate::booleanEvaluation(
     return LaneBasedOrientationSimilarPredicate::booleanEvaluation(timeStep, world, obstacleP, obstacleK,
                                                                    additionalFunctionParameters, setBased);
 }
+
+bool LaneBasedOrientationSimilarMayPredicate::undefinedValue() const { return true; }

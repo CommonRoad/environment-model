@@ -6,9 +6,14 @@
  * May-version of causes_braking_intersection for set-based predictions. For the pth vehicle: some covered behavior
  * brakes, and the longitudinal extent of the occupancy clipped to a lane overlaps the braking interval. For the kth
  * vehicle: the condition holds for some lane occupied by the kth vehicle.
+ *
+ * Total: true (over-approximation) if a vehicle has no reference lane, cannot be projected, or has no state at the time
+ * step.
  */
 class CausesBrakingIntersectionMayPredicate : public CausesBrakingIntersectionPredicate {
   public:
+    [[nodiscard]] bool undefinedValue() const override;
+
     /**
      * Boolean evaluation of the predicate; for set-based predictions, the may-version is used.
      *

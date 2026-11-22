@@ -34,7 +34,7 @@ Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(
     bool setBased) {
     // not defined if the pth vehicle cannot be projected onto the reference lane of the kth vehicle: safe distance not
     // applicable (constraint +inf)
-    return {predicate_utils::valueIfUndefined(std::numeric_limits<double>::infinity(), [&] {
+    return {predicate_utils::valueIfUndefined(undefinedRobustness(), [&] {
         double aMinK{obstacleK->getAminLong()};
         double aMinP{obstacleP->getAminLong()};
 
@@ -65,7 +65,7 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const s
                                                         bool setBased) {
     // not defined if the pth vehicle cannot be projected onto the reference lane of the kth vehicle: safe distance not
     // applicable (robustness +inf)
-    return predicate_utils::valueIfUndefined(std::numeric_limits<double>::infinity(), [&] {
+    return predicate_utils::valueIfUndefined(undefinedRobustness(), [&] {
         double aMinK{obstacleK->getAminLong()};
         double aMinP{obstacleP->getAminLong()};
 
@@ -103,3 +103,5 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(double lonPosK, double l
 }
 
 KeepsSafeDistancePrecPredicate::KeepsSafeDistancePrecPredicate() : CommonRoadPredicate(true) {}
+
+bool KeepsSafeDistancePrecPredicate::undefinedValue() const { return true; }

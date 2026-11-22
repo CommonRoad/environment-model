@@ -10,7 +10,7 @@ bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleK, const std::vector<std::string> &additionalFunctionParameters,
     bool setBased) {
     // not defined if the vehicles cannot be projected onto a common reference lane: orientations not similar
-    return predicate_utils::valueIfUndefined(false, [&] {
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
         auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
         return std::abs(geometric_operations::subtractOrientations(
                    obstacleK->getCurvilinearOrientation(timeStep, ccsP),

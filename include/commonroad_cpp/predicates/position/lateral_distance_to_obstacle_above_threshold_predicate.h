@@ -12,6 +12,8 @@
  */
 class LateralDistanceToObstacleAboveThresholdPredicate : public CommonRoadPredicate {
   public:
+    [[nodiscard]] bool undefinedValue() const override;
+
     /**
      * Constructor for LateralDistanceToObstacleAboveThresholdPredicate
      */

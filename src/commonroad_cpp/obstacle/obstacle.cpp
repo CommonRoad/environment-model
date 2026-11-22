@@ -196,9 +196,14 @@ std::shared_ptr<State> Obstacle::getStateByTimeStep(const size_t timeStep) const
         return recordedStates.currentState;
     if (recordedStates.trajectoryHistory.count(timeStep) == 1)
         return recordedStates.trajectoryHistory.at(timeStep);
-    throw MissingStateError("Time step does not exist. Obstacle ID: " + std::to_string(this->getId()) +
-                            " - Time step: " + std::to_string(timeStep) + " - First time step: " +
-                            std::to_string(firstTimeStep) + " - Final time step: " + std::to_string(finalTimeStep));
+    const std::string msg{"Time step does not exist. Obstacle ID: " + std::to_string(this->getId()) + " - Time step: " +
+                          std::to_string(timeStep) + " - First time step: " + std::to_string(firstTimeStep) +
+                          " - Final time step: " + std::to_string(finalTimeStep)};
+    // the vehicle does not exist at this time step; other missing states (gaps in the trajectory, future steps of
+    // set-based predictions) are not supported and fail with a plain logic_error
+    if (!timeStepExists(timeStep))
+        throw MissingStateError(msg);
+    throw std::logic_error(msg);
 }
 
 std::shared_ptr<SignalState> Obstacle::getSignalStateByTimeStep(size_t timeStep) const {
@@ -487,24 +492,32 @@ double Obstacle::frontS(const size_t timeStep, const std::shared_ptr<geometry::C
                         const bool setBased) {
     if (setBased and timeStep > recordedStates.currentState->getTimeStep()) {
         double frontS{std::numeric_limits<double>::lowest()};
+        const auto occupancyIt{setBasedPrediction.setBasedPrediction.find(timeStep)};
+        if (occupancyIt == setBasedPrediction.setBasedPrediction.end())
+            throw MissingStateError("Obstacle::frontS: No occupancy of obstacle " + std::to_string(obstacleId) +
+                                    " at time step " + std::to_string(timeStep));
+        const auto &occupancy{occupancyIt->second};
         std::vector<vertex> vertices;
-        if (setBasedPrediction.setBasedPrediction.at(timeStep)->getShape()->getType() == ShapeType::polygon)
-            vertices = dynamic_cast<const Polygon &>(*setBasedPrediction.setBasedPrediction.at(timeStep)->getShape())
-                           .getPolygonVertices();
-        else if (setBasedPrediction.setBasedPrediction.at(timeStep)->getShape()->getType() == ShapeType::shapeGroup) {
-            for (const auto &shape :
-                 dynamic_cast<ShapeGroup &>(*setBasedPrediction.setBasedPrediction.at(timeStep)->getShape())
-                     .getShapes())
+        if (occupancy->getShape()->getType() == ShapeType::polygon)
+            vertices = dynamic_cast<const Polygon &>(*occupancy->getShape()).getPolygonVertices();
+        else if (occupancy->getShape()->getType() == ShapeType::shapeGroup) {
+            for (const auto &shape : dynamic_cast<ShapeGroup &>(*occupancy->getShape()).getShapes())
                 if (shape->getType() == ShapeType::polygon)
                     for (vertex vert : dynamic_cast<const Polygon &>(*shape).getPolygonVertices())
                         vertices.push_back(vert);
         } else
             throw std::runtime_error("Obstacle::frontS: Only polygon shapes are supported for set-based predictions.");
 
-        for (const auto &vert : vertices) {
-            auto convertedPoint{ccs->convertToCurvilinearCoords(vert.x, vert.y)};
-            frontS =
-                std::max(frontS, convertedPoint.x() - RoadNetworkParameters::numAdditionalSegmentsCCS * ccs->eps2());
+        try {
+            for (const auto &vert : vertices) {
+                auto convertedPoint{ccs->convertToCurvilinearCoords(vert.x, vert.y)};
+                frontS = std::max(frontS,
+                                  convertedPoint.x() - RoadNetworkParameters::numAdditionalSegmentsCCS * ccs->eps2());
+            }
+        } catch (const geometry::ProjectionDomainError &) {
+            throw CurvilinearProjectionError(
+                "Obstacle::frontS: Occupancy outside the projection domain - Obstacle ID: " +
+                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep));
         }
         return frontS;
     }
@@ -513,7 +526,7 @@ double Obstacle::frontS(const size_t timeStep, const std::shared_ptr<geometry::C
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
-        } catch (...) {
+        } catch (const geometry::ProjectionDomainError &) {
             throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "frontS"));
         }
     }
@@ -540,23 +553,32 @@ double Obstacle::rearS(const size_t timeStep, const std::shared_ptr<geometry::Cu
                        const bool setBased) {
     double rearS{std::numeric_limits<double>::max()};
     if (setBased and !setBasedPrediction.setBasedPrediction.empty() and timeStep > getCurrentState()->getTimeStep()) {
+        const auto occupancyIt{setBasedPrediction.setBasedPrediction.find(timeStep)};
+        if (occupancyIt == setBasedPrediction.setBasedPrediction.end())
+            throw MissingStateError("Obstacle::rearS: No occupancy of obstacle " + std::to_string(obstacleId) +
+                                    " at time step " + std::to_string(timeStep));
+        const auto &occupancy{occupancyIt->second};
         std::vector<vertex> vertices;
-        if (setBasedPrediction.setBasedPrediction.at(timeStep)->getShape()->getType() == ShapeType::polygon)
-            vertices = dynamic_cast<const Polygon &>(*setBasedPrediction.setBasedPrediction.at(timeStep)->getShape())
-                           .getPolygonVertices();
-        else if (setBasedPrediction.setBasedPrediction.at(timeStep)->getShape()->getType() == ShapeType::shapeGroup) {
-            for (const auto &shape :
-                 dynamic_cast<ShapeGroup &>(*setBasedPrediction.setBasedPrediction.at(timeStep)->getShape())
-                     .getShapes())
+        if (occupancy->getShape()->getType() == ShapeType::polygon)
+            vertices = dynamic_cast<const Polygon &>(*occupancy->getShape()).getPolygonVertices();
+        else if (occupancy->getShape()->getType() == ShapeType::shapeGroup) {
+            for (const auto &shape : dynamic_cast<ShapeGroup &>(*occupancy->getShape()).getShapes())
                 if (shape->getType() == ShapeType::polygon)
                     for (vertex vert : dynamic_cast<const Polygon &>(*shape).getPolygonVertices())
                         vertices.push_back(vert);
         } else
             throw std::runtime_error("Obstacle::rearS: Only polygon shapes are supported for set-based predictions.");
 
-        for (const auto &vert : vertices) {
-            auto convertedPoint{ccs->convertToCurvilinearCoords(vert.x, vert.y)};
-            rearS = std::min(rearS, convertedPoint.x() - RoadNetworkParameters::numAdditionalSegmentsCCS * ccs->eps2());
+        try {
+            for (const auto &vert : vertices) {
+                auto convertedPoint{ccs->convertToCurvilinearCoords(vert.x, vert.y)};
+                rearS =
+                    std::min(rearS, convertedPoint.x() - RoadNetworkParameters::numAdditionalSegmentsCCS * ccs->eps2());
+            }
+        } catch (const geometry::ProjectionDomainError &) {
+            throw CurvilinearProjectionError(
+                "Obstacle::rearS: Occupancy outside the projection domain - Obstacle ID: " +
+                std::to_string(obstacleId) + " - Time Step: " + std::to_string(timeStep));
         }
         return rearS;
     }
@@ -565,7 +587,7 @@ double Obstacle::rearS(const size_t timeStep, const std::shared_ptr<geometry::Cu
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
-        } catch (...) {
+        } catch (const geometry::ProjectionDomainError &) {
             throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "rearS"));
         }
     }
@@ -595,7 +617,7 @@ double Obstacle::rightD(const size_t timeStep, const std::shared_ptr<geometry::C
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
-        } catch (...) {
+        } catch (const geometry::ProjectionDomainError &) {
             throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "rightD"));
         }
     }
@@ -640,7 +662,7 @@ double Obstacle::leftD(const size_t timeStep, const std::shared_ptr<geometry::Cu
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
-        } catch (...) {
+        } catch (const geometry::ProjectionDomainError &) {
             throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "leftD"));
         }
     }
@@ -673,7 +695,7 @@ double Obstacle::getLonPosition(const size_t timeStep,
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
-        } catch (...) {
+        } catch (const geometry::ProjectionDomainError &) {
             throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "getLonPosition"));
         }
     }
@@ -687,7 +709,7 @@ double Obstacle::getLatPosition(const size_t timeStep,
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
-        } catch (...) {
+        } catch (const geometry::ProjectionDomainError &) {
             std::string refInfo;
             for (const auto &ref : ccs->referencePath())
                 refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}; ";
@@ -711,7 +733,7 @@ double Obstacle::getCurvilinearOrientation(const size_t timeStep,
     if (convertedPositions.count(timeStep) != 1 || convertedPositions[timeStep].count(ccs) != 1) {
         try {
             convertPointToCurvilinear(timeStep, ccs);
-        } catch (...) {
+        } catch (const geometry::ProjectionDomainError &) {
             throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "getCurvilinearOrientation"));
         }
     }
@@ -733,7 +755,10 @@ std::shared_ptr<Lane> Obstacle::getReferenceLane(const std::shared_ptr<RoadNetwo
                                                  const size_t timeStep) {
     if (dynamicRef)
         return setReferenceLane(roadNetwork, timeStep);
-    return recordedStates.occupancyRecorded.referenceLane.at(0);
+    if (const auto &refLanes{recordedStates.occupancyRecorded.referenceLane}; refLanes.count(0) == 1 and refLanes.at(0))
+        return refLanes.at(0);
+    throw CurvilinearProjectionError("Obstacle::getReferenceLane: No reference lane! Obstacle ID " +
+                                     std::to_string(getId()));
 }
 
 time_step_map_t<std::shared_ptr<Lane>> &Obstacle::getReferenceLaneCache(const size_t timeStep,
@@ -778,7 +803,7 @@ void Obstacle::convertPointToCurvilinear(const std::shared_ptr<RoadNetwork> &roa
         getStateByTimeStep(timeStep)->setLonPosition(convertedPositions[timeStep][curRefLaneCCS][0]);
         getStateByTimeStep(timeStep)->setLatPosition(convertedPositions[timeStep][curRefLaneCCS][1]);
         getStateByTimeStep(timeStep)->setCurvilinearOrientation(convertedPositions[timeStep][curRefLaneCCS][2]);
-    } catch (...) {
+    } catch (const geometry::ProjectionDomainError &) {
         throw CurvilinearProjectionError(ccsErrorMsg(timeStep, curRefLaneCCS, "convertPointToCurvilinear"));
     }
 }

@@ -4,6 +4,8 @@
 
 /**
  *  Evaluates if the kth obstacle is in the conflict area of the pth obstacle
+ *
+ * Total: false if a vehicle has no reference lane, cannot be projected, or has no state at the time step.
  */
 class InIntersectionConflictAreaPredicate : public CommonRoadPredicate {
   public:

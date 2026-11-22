@@ -10,7 +10,7 @@ bool InSameLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::vector<std::string> &additionalFunctionParameters,
                                             bool setBased) {
     // not defined if a vehicle has no reference lane or no state: not in the same lane
-    return predicate_utils::valueIfUndefined(false, [&] {
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
         for (const auto &laneK : obstacleK->getOccupiedLanesDrivingDirection(world->getRoadNetwork(), timeStep)) {
             const auto &relevantIDs{laneK->getContainedLaneletIDs()};
             for (const auto &laneletP :

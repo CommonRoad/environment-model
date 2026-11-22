@@ -4,6 +4,8 @@
 
 /**
  * Evaluates if a vehicle the pth obstacle is on an incoming left of the kth vehicle
+ *
+ * Total: false if a vehicle has no reference lane or no state at the time step.
  */
 class OnIncomingLeftOfPredicate : public CommonRoadPredicate {
   public:

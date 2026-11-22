@@ -6,12 +6,15 @@
  * May-version of in_front_of for a set-based prediction of the kth vehicle: at least one behavior covered by the
  * occupancy is in front of the pth vehicle, i.e., the front of the occupancy is in front of the front of the pth
  * vehicle.
+
  *
- * Total: false (robustness -infinity) if the kth vehicle cannot be projected onto the reference lane of the pth
- * vehicle.
+ * Total: true (robustness +infinity) if the kth vehicle cannot be projected onto the reference lane of the pth vehicle
+ * (over-approximation, so a may-version returns true if undefined).
  */
 class InFrontOfMayPredicate : public InFrontOfPredicate {
   public:
+    [[nodiscard]] bool undefinedValue() const override;
+
     /**
      * Robustness evaluation of the predicate; for set-based predictions, the may-version is used.
      *

@@ -10,37 +10,40 @@ bool OnIncomingLeftOfPredicate::booleanEvaluation(const size_t timeStep, const s
                                                   const std::shared_ptr<Obstacle> &obstacleP,
                                                   const std::vector<std::string> &additionalFunctionParameters,
                                                   bool setBased) {
-    // check whether obstacles are on incoming lanelet
-    std::vector<std::shared_ptr<Lanelet>> laneletsK =
-        obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    if (!std::any_of(laneletsK.begin(), laneletsK.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
-            return lanelet->hasLaneletType(LaneletType::incoming);
-        }))
-        return false;
-    std::vector<std::shared_ptr<Lanelet>> laneletsP =
-        obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    if (!std::any_of(laneletsP.begin(), laneletsP.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
-            return lanelet->hasLaneletType(LaneletType::incoming);
-        }))
-        return false;
+    // not defined if a vehicle has no reference lane, cannot be projected, or has no state at the time step
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
+        // check whether obstacles are on incoming lanelet
+        std::vector<std::shared_ptr<Lanelet>> laneletsK =
+            obstacleK->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+        if (!std::any_of(laneletsK.begin(), laneletsK.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
+                return lanelet->hasLaneletType(LaneletType::incoming);
+            }))
+            return false;
+        std::vector<std::shared_ptr<Lanelet>> laneletsP =
+            obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+        if (!std::any_of(laneletsP.begin(), laneletsP.end(), [](const std::shared_ptr<Lanelet> &lanelet) {
+                return lanelet->hasLaneletType(LaneletType::incoming);
+            }))
+            return false;
 
-    const auto laneK = obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep);
-    const auto laneP = obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep);
-    for (const auto &letK : laneK->getContainedLanelets()) {
-        if (!letK->hasLaneletType(LaneletType::incoming))
-            continue;
-        const auto incomingK{world->getRoadNetwork()->findIncomingGroupByLanelet(letK)};
-        if (incomingK->getIsLeftOf() == nullptr)
-            return false; // e.g, T-intersection or intersection with single incoming group
-        for (const auto &letP : laneP->getContainedLanelets()) {
-            if (!letP->hasLaneletType(LaneletType::incoming))
+        const auto laneK = obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep);
+        const auto laneP = obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep);
+        for (const auto &letK : laneK->getContainedLanelets()) {
+            if (!letK->hasLaneletType(LaneletType::incoming))
                 continue;
-            if (const auto incomingP{world->getRoadNetwork()->findIncomingGroupByLanelet(letP)};
-                incomingK->getIsLeftOf()->getId() == incomingP->getId())
-                return true;
+            const auto incomingK{world->getRoadNetwork()->findIncomingGroupByLanelet(letK)};
+            if (incomingK->getIsLeftOf() == nullptr)
+                return false; // e.g, T-intersection or intersection with single incoming group
+            for (const auto &letP : laneP->getContainedLanelets()) {
+                if (!letP->hasLaneletType(LaneletType::incoming))
+                    continue;
+                if (const auto incomingP{world->getRoadNetwork()->findIncomingGroupByLanelet(letP)};
+                    incomingK->getIsLeftOf()->getId() == incomingP->getId())
+                    return true;
+            }
         }
-    }
-    return false;
+        return false;
+    });
 }
 
 double OnIncomingLeftOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

@@ -6,3 +6,5 @@ bool InIntersectionConflictAreaMayPredicate::booleanEvaluation(
     bool setBased) {
     return evaluateSetBased(timeStep, world, obstacleK, obstacleP, setBased, false);
 }
+
+bool InIntersectionConflictAreaMayPredicate::undefinedValue() const { return true; }

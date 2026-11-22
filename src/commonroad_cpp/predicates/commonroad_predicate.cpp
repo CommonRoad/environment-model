@@ -45,3 +45,9 @@ bool CommonRoadPredicate::evaluatesOccupancy(const std::shared_ptr<Obstacle> &ob
     return setBased and obstacle != nullptr and !obstacle->getSetBasedPrediction().empty() and
            timeStep > obstacle->getCurrentState()->getTimeStep();
 }
+
+bool CommonRoadPredicate::undefinedValue() const { return false; }
+
+double CommonRoadPredicate::undefinedRobustness() const {
+    return undefinedValue() ? std::numeric_limits<double>::infinity() : -std::numeric_limits<double>::infinity();
+}

@@ -6,9 +6,14 @@
  * May-version of in_intersection_conflict_area for set-based predictions. For the kth vehicle, lanelets in its
  * driving direction are not excluded, since set-based predictions contain no orientation. For the pth vehicle, the
  * lanelets of any occupied lane are used.
+ *
+ * Total: true (over-approximation) if a vehicle has no reference lane, cannot be projected, or has no state at the time
+ * step.
  */
 class InIntersectionConflictAreaMayPredicate : public InIntersectionConflictAreaPredicate {
   public:
+    [[nodiscard]] bool undefinedValue() const override;
+
     /**
      * Boolean evaluation of the predicate; for set-based predictions, the may-version is used.
      *

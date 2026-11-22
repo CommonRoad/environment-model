@@ -11,7 +11,7 @@ bool InSameLaneMustPredicate::booleanEvaluation(size_t timeStep, const std::shar
                                                 const std::vector<std::string> &additionalFunctionParameters,
                                                 bool setBased) {
     // not defined if a vehicle has no reference lane or no state: not in the same lane
-    return predicate_utils::valueIfUndefined(false, [&] {
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
         if (evaluatesOccupancy(obstacleK, timeStep, setBased))
             return false;
         if (!evaluatesOccupancy(obstacleP, timeStep, setBased))

@@ -12,6 +12,8 @@
  */
 class KeepsSafeDistancePrecPredicate : public CommonRoadPredicate {
   public:
+    [[nodiscard]] bool undefinedValue() const override;
+
     /**
      * Constructor for KeepsSafeDistancePrecPredicate.
      */

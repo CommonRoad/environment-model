@@ -13,7 +13,7 @@ bool CloseToLaneBorderPredicate::booleanEvaluation(size_t timeStep, const std::s
                                                    const std::vector<std::string> &additionalFunctionParameters,
                                                    bool setBased) {
     // not defined if a lane of the vehicle cannot be used to project it (outside the projection domain): not close
-    return predicate_utils::valueIfUndefined(false, [&] {
+    return predicate_utils::valueIfUndefined(undefinedValue(), [&] {
         std::vector<std::shared_ptr<Lane>> lanes{obstacleK->getOccupiedLanes(world->getRoadNetwork(), timeStep)};
         const auto state = obstacleK->getStateByTimeStep(timeStep);
         const auto direction = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
