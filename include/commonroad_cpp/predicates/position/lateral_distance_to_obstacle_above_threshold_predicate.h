@@ -6,6 +6,9 @@
 
 /**
  * Evaluates if the k-th vehicle's lateral distance is above a provided threshold.
+ *
+ * Total: true if the pth vehicle cannot be projected onto the reference lane of the kth vehicle (no reference lane,
+ * outside the projection domain) or a vehicle has no state at the time step.
  */
 class LateralDistanceToObstacleAboveThresholdPredicate : public CommonRoadPredicate {
   public:

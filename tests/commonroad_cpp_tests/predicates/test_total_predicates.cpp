@@ -29,6 +29,7 @@
 #include <commonroad_cpp/predicates/position/in_front_of_may_predicate.h>
 #include <commonroad_cpp/predicates/position/in_front_of_must_predicate.h>
 #include <commonroad_cpp/predicates/position/in_front_of_predicate.h>
+#include <commonroad_cpp/predicates/position/lateral_distance_to_obstacle_above_threshold_predicate.h>
 #include <commonroad_cpp/predicates/position/left_of_predicate.h>
 #include <commonroad_cpp/predicates/position/right_of_predicate.h>
 
@@ -157,6 +158,13 @@ TEST_F(TotalPredicatesTest, LeftOfRightOfAreFalse) {
     RightOfPredicate right;
     EXPECT_NO_THROW(EXPECT_FALSE(left.booleanEvaluation(noStateTimeStep, world, ego, ahead)));
     EXPECT_NO_THROW(EXPECT_FALSE(right.booleanEvaluation(noStateTimeStep, world, ego, ahead)));
+}
+
+TEST_F(TotalPredicatesTest, LateralDistanceToObstacleAboveThresholdIsTrue) {
+    LateralDistanceToObstacleAboveThresholdPredicate pred;
+    forEachUnguardedSituation([&](size_t timeStep, const auto &k, const auto &p) {
+        EXPECT_NO_THROW(EXPECT_TRUE(pred.booleanEvaluation(timeStep, world, k, p, {"100.0"})));
+    });
 }
 
 TEST_F(TotalPredicatesTest, InSingleLaneDoesNotThrowOffRoad) {

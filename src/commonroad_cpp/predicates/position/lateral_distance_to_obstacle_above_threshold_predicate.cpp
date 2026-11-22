@@ -10,7 +10,11 @@ bool LateralDistanceToObstacleAboveThresholdPredicate::booleanEvaluation(
     const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
     bool setBased) {
     const double threshold = std::stod(additionalFunctionParameters.at(0));
-    return obstacleK->getLateralDistanceToObstacle(timeStep, obstacleP, world->getRoadNetwork()) >= threshold;
+    // not defined if the pth vehicle cannot be projected onto the reference lane of the kth vehicle: no lateral
+    // distance to keep, so the distance is above the threshold
+    return predicate_utils::valueIfUndefined(true, [&] {
+        return obstacleK->getLateralDistanceToObstacle(timeStep, obstacleP, world->getRoadNetwork()) >= threshold;
+    });
 }
 
 double LateralDistanceToObstacleAboveThresholdPredicate::robustEvaluation(
