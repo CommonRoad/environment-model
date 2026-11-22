@@ -4,6 +4,8 @@
 
 /**
  * Evaluates whether the kth and pth vehicle occupy the same lane.
+ *
+ * Total: false if a vehicle has no reference lane or no state at the time step.
  */
 class InSameLanePredicate : public CommonRoadPredicate {
   public:

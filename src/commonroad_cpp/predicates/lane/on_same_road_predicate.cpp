@@ -10,22 +10,25 @@ bool OnSameRoadPredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::vector<std::string> &additionalFunctionParameters,
                                             bool setBased) {
-    // temporarily, we checked here for state as in larger scenarios/maps, obstacle might be at end of road and if state
-    // is not part of road ccs computations might fail (when using shape alone, state might not be on road) we changed
-    // it to shape again since this simplifies set-based eval and assume we perform pre-checks to prevent failing ccs in
-    // trajectory eval
-    const auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
-    std::unordered_set<size_t> laneletPIDs;
-    for (const auto &la : laneletsP)
-        laneletPIDs.insert(la->getId());
-    const auto refK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
-    for (const auto &la : refK->getContainedLanelets()) {
-        for (const auto &la2 : la->getAdjacentBothDir()) {
-            if (laneletPIDs.count(la2->getId()))
-                return true;
+    // not defined if a vehicle has no reference lane or no state: not on the same road
+    return predicate_utils::valueIfUndefined(false, [&] {
+        // temporarily, we checked here for state as in larger scenarios/maps, obstacle might be at end of road and if
+        // state is not part of road ccs computations might fail (when using shape alone, state might not be on road) we
+        // changed it to shape again since this simplifies set-based eval and assume we perform pre-checks to prevent
+        // failing ccs in trajectory eval
+        const auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased);
+        std::unordered_set<size_t> laneletPIDs;
+        for (const auto &la : laneletsP)
+            laneletPIDs.insert(la->getId());
+        const auto refK{obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)};
+        for (const auto &la : refK->getContainedLanelets()) {
+            for (const auto &la2 : la->getAdjacentBothDir()) {
+                if (laneletPIDs.count(la2->getId()))
+                    return true;
+            }
         }
-    }
-    return false;
+        return false;
+    });
 }
 
 double OnSameRoadPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

@@ -5,6 +5,8 @@
 /**
  * Evaluates whether the pth vehicle is in the lane to the left/right of the kth vehicle. The side is given as
  * parameter.
+ *
+ * Total: false if a vehicle has no reference lane or no state at the time step.
  */
 class InNeighboringLanePredicate final : public CommonRoadPredicate {
   public:

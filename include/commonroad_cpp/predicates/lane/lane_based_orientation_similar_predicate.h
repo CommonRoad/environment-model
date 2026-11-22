@@ -5,6 +5,9 @@
 /**
  * Evaluates whether the kth vehicle is in front of the pth vehicle, withing the same lane, and drives in the same
  * direction.
+ *
+ * Total: false if the vehicles cannot be projected onto a common reference lane or a vehicle has no state at the time
+ * step.
  */
 class LaneBasedOrientationSimilarPredicate : public CommonRoadPredicate {
   public:

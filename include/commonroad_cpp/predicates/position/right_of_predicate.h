@@ -4,6 +4,8 @@
 
 /**
  * Predicate to evaluate if the k-th vehicle is right of the p-th vehicle
+ *
+ * Total: false if a vehicle has no state at the time step.
  */
 class RightOfPredicate : public CommonRoadPredicate {
   public:

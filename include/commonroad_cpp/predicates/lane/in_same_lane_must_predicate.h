@@ -6,6 +6,8 @@
  * Must-version of in_same_lane for set-based predictions. For the pth vehicle: all behaviors covered by the occupancy
  * share a lane with the kth vehicle, i.e., all lanelets occupied by the occupancy belong to lanes of the kth vehicle.
  * For the kth vehicle, the predicate is false, since its lanes are not determined for all covered behaviors.
+ *
+ * Total: false if a vehicle has no reference lane or no state at the time step.
  */
 class InSameLaneMustPredicate : public InSameLanePredicate {
   public:

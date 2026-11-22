@@ -9,13 +9,17 @@ bool InSameLanePredicate::booleanEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleP,
                                             const std::vector<std::string> &additionalFunctionParameters,
                                             bool setBased) {
-    for (const auto &laneK : obstacleK->getOccupiedLanesDrivingDirection(world->getRoadNetwork(), timeStep)) {
-        const auto &relevantIDs{laneK->getContainedLaneletIDs()};
-        for (const auto &laneletP : obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased))
-            if (relevantIDs.find(laneletP->getId()) != relevantIDs.end())
-                return true;
-    }
-    return false;
+    // not defined if a vehicle has no reference lane or no state: not in the same lane
+    return predicate_utils::valueIfUndefined(false, [&] {
+        for (const auto &laneK : obstacleK->getOccupiedLanesDrivingDirection(world->getRoadNetwork(), timeStep)) {
+            const auto &relevantIDs{laneK->getContainedLaneletIDs()};
+            for (const auto &laneletP :
+                 obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep, setBased))
+                if (relevantIDs.find(laneletP->getId()) != relevantIDs.end())
+                    return true;
+        }
+        return false;
+    });
 }
 
 double InSameLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

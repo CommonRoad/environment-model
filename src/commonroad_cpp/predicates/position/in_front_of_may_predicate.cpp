@@ -11,6 +11,10 @@ double InFrontOfMayPredicate::robustEvaluation(size_t timeStep, const std::share
     if (!evaluatesOccupancy(obstacleK, timeStep, setBased))
         return InFrontOfPredicate::robustEvaluation(timeStep, world, obstacleP, obstacleK, additionalFunctionParameters,
                                                     setBased);
-    const auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
-    return obstacleK->frontS(timeStep, ccsP, true) - obstacleP->frontS(world->getRoadNetwork(), timeStep);
+    // not defined if the vehicles are not on a common reference lane: not in front (robustness -inf)
+    return predicate_utils::valueIfUndefined(-std::numeric_limits<double>::infinity(), [&] {
+        const auto ccsP{
+            obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
+        return obstacleK->frontS(timeStep, ccsP, true) - obstacleP->frontS(world->getRoadNetwork(), timeStep);
+    });
 }

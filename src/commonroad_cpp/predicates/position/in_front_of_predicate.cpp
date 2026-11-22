@@ -34,11 +34,14 @@ double InFrontOfPredicate::robustEvaluation(size_t timeStep, const std::shared_p
                                             const std::shared_ptr<Obstacle> &obstacleK,
                                             const std::vector<std::string> &additionalFunctionParameters,
                                             bool setBased) {
-    return obstacleK->rearS(
-               timeStep,
-               obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
-               setBased) -
-           obstacleP->frontS(world->getRoadNetwork(), timeStep);
+    // not defined if the vehicles are not on a common reference lane: not in front (robustness -inf)
+    return predicate_utils::valueIfUndefined(-std::numeric_limits<double>::infinity(), [&] {
+        return obstacleK->rearS(
+                   timeStep,
+                   obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
+                   setBased) -
+               obstacleP->frontS(world->getRoadNetwork(), timeStep);
+    });
 }
 
 double InFrontOfPredicate::robustEvaluation(double lonPositionP, double lonPositionK, double lengthP, double lengthK) {

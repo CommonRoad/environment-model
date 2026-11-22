@@ -196,9 +196,9 @@ std::shared_ptr<State> Obstacle::getStateByTimeStep(const size_t timeStep) const
         return recordedStates.currentState;
     if (recordedStates.trajectoryHistory.count(timeStep) == 1)
         return recordedStates.trajectoryHistory.at(timeStep);
-    throw std::logic_error("Time step does not exist. Obstacle ID: " + std::to_string(this->getId()) +
-                           " - Time step: " + std::to_string(timeStep) + " - First time step: " +
-                           std::to_string(firstTimeStep) + " - Final time step: " + std::to_string(finalTimeStep));
+    throw MissingStateError("Time step does not exist. Obstacle ID: " + std::to_string(this->getId()) +
+                            " - Time step: " + std::to_string(timeStep) + " - First time step: " +
+                            std::to_string(firstTimeStep) + " - Final time step: " + std::to_string(finalTimeStep));
 }
 
 std::shared_ptr<SignalState> Obstacle::getSignalStateByTimeStep(size_t timeStep) const {
@@ -514,7 +514,7 @@ double Obstacle::frontS(const size_t timeStep, const std::shared_ptr<geometry::C
         try {
             convertPointToCurvilinear(timeStep, ccs);
         } catch (...) {
-            throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "frontS"));
+            throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "frontS"));
         }
     }
     const double lonPosition = convertedPositions[timeStep][ccs][0];
@@ -566,7 +566,7 @@ double Obstacle::rearS(const size_t timeStep, const std::shared_ptr<geometry::Cu
         try {
             convertPointToCurvilinear(timeStep, ccs);
         } catch (...) {
-            throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "rearS"));
+            throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "rearS"));
         }
     }
     const double lonPosition = convertedPositions[timeStep][ccs][0];
@@ -596,7 +596,7 @@ double Obstacle::rightD(const size_t timeStep, const std::shared_ptr<geometry::C
         try {
             convertPointToCurvilinear(timeStep, ccs);
         } catch (...) {
-            throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "rightD"));
+            throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "rightD"));
         }
     }
     const double latPosition = convertedPositions[timeStep][ccs][1];
@@ -641,7 +641,7 @@ double Obstacle::leftD(const size_t timeStep, const std::shared_ptr<geometry::Cu
         try {
             convertPointToCurvilinear(timeStep, ccs);
         } catch (...) {
-            throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "leftD"));
+            throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "leftD"));
         }
     }
     const double latPosition = convertedPositions[timeStep][ccs][1];
@@ -674,7 +674,7 @@ double Obstacle::getLonPosition(const size_t timeStep,
         try {
             convertPointToCurvilinear(timeStep, ccs);
         } catch (...) {
-            throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "getLonPosition"));
+            throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "getLonPosition"));
         }
     }
     return convertedPositions[timeStep][ccs][0];
@@ -691,7 +691,7 @@ double Obstacle::getLatPosition(const size_t timeStep,
             std::string refInfo;
             for (const auto &ref : ccs->referencePath())
                 refInfo += "{" + std::to_string(ref.x()) + ", " + std::to_string(ref.y()) + "}; ";
-            throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "getLatPosition"));
+            throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "getLatPosition"));
         }
     }
     return convertedPositions[timeStep][ccs][1];
@@ -712,7 +712,7 @@ double Obstacle::getCurvilinearOrientation(const size_t timeStep,
         try {
             convertPointToCurvilinear(timeStep, ccs);
         } catch (...) {
-            throw std::runtime_error(ccsErrorMsg(timeStep, ccs, "getCurvilinearOrientation"));
+            throw CurvilinearProjectionError(ccsErrorMsg(timeStep, ccs, "getCurvilinearOrientation"));
         }
     }
     return geometric_operations::constrainAngle(convertedPositions[timeStep][ccs][2]);
@@ -755,8 +755,8 @@ std::shared_ptr<Lane> Obstacle::setReferenceLane(const std::shared_ptr<RoadNetwo
         referenceLane[timeStep] = refLaneTmp.at(0);
 
     if (referenceLane.count(timeStep) == 0 or referenceLane.at(timeStep) == nullptr)
-        throw std::runtime_error("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
-                                 std::to_string(getId()) + " at time step " + std::to_string(timeStep));
+        throw CurvilinearProjectionError("Obstacle::setReferenceLane: No matching referenceLane found! Obstacle ID " +
+                                         std::to_string(getId()) + " at time step " + std::to_string(timeStep));
     return referenceLane.at(timeStep);
 }
 
@@ -779,7 +779,7 @@ void Obstacle::convertPointToCurvilinear(const std::shared_ptr<RoadNetwork> &roa
         getStateByTimeStep(timeStep)->setLatPosition(convertedPositions[timeStep][curRefLaneCCS][1]);
         getStateByTimeStep(timeStep)->setCurvilinearOrientation(convertedPositions[timeStep][curRefLaneCCS][2]);
     } catch (...) {
-        throw std::runtime_error(ccsErrorMsg(timeStep, curRefLaneCCS, "convertPointToCurvilinear"));
+        throw CurvilinearProjectionError(ccsErrorMsg(timeStep, curRefLaneCCS, "convertPointToCurvilinear"));
     }
 }
 

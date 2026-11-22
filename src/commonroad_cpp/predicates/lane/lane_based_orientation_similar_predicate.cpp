@@ -9,11 +9,14 @@ bool LaneBasedOrientationSimilarPredicate::booleanEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleP,
     const std::shared_ptr<Obstacle> &obstacleK, const std::vector<std::string> &additionalFunctionParameters,
     bool setBased) {
-    auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
-    return std::abs(geometric_operations::subtractOrientations(
-               obstacleK->getCurvilinearOrientation(timeStep, ccsP),
-               obstacleP->getCurvilinearOrientation(world->getRoadNetwork(), timeStep))) <
-           parameters.getParam("laneMatchingOrientation");
+    // not defined if the vehicles cannot be projected onto a common reference lane: orientations not similar
+    return predicate_utils::valueIfUndefined(false, [&] {
+        auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
+        return std::abs(geometric_operations::subtractOrientations(
+                   obstacleK->getCurvilinearOrientation(timeStep, ccsP),
+                   obstacleP->getCurvilinearOrientation(world->getRoadNetwork(), timeStep))) <
+               parameters.getParam("laneMatchingOrientation");
+    });
 }
 
 Constraint LaneBasedOrientationSimilarPredicate::constraintEvaluation(

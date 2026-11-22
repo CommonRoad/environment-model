@@ -5,6 +5,8 @@
 /**
  * Evaluates whether the pth vehicle is on the same road as the kth vehicle.
  * The road is defined by the reference lane of the kth vehicle and its adjacent lanelets.
+ *
+ * Total: false if the kth vehicle has no reference lane or a vehicle has no state at the time step.
  */
 class OnSameRoadPredicate : public CommonRoadPredicate {
   public:

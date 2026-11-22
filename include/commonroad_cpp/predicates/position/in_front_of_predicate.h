@@ -4,6 +4,10 @@
 
 /**
  * Evaluates whether the kth vehicle is in front of the pth vehicle.
+ *
+ * Total: false (robustness -infinity) if the kth vehicle cannot be projected onto the reference lane of the pth vehicle
+ * (no reference lane, outside the projection domain) or a vehicle has no state at the time step. The constraint
+ * evaluation is not total.
  */
 class InFrontOfPredicate : public CommonRoadPredicate {
   public:

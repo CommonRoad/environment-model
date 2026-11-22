@@ -9,12 +9,16 @@ bool OrientationTowardsPredicate::booleanEvaluation(size_t timeStep, const std::
                                                     const std::shared_ptr<Obstacle> &obstacleP,
                                                     const std::vector<std::string> &additionalFunctionParameters,
                                                     bool setBased) {
-    auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
-    const auto curvilinearOrientation{obstacleK->getCurvilinearOrientation(timeStep, ccsP)};
-    const auto latPositionP{obstacleP->getLatPosition(world->getRoadNetwork(), timeStep)};
-    const auto latPositionK{obstacleK->getLatPosition(timeStep, ccsP)};
-    return (latPositionK > latPositionP and curvilinearOrientation < 0) or // k on left side
-           (latPositionK < latPositionP and curvilinearOrientation > 0);   // k on right side
+    // not defined if the kth vehicle cannot be projected onto the reference lane of the pth vehicle: not oriented
+    // towards
+    return predicate_utils::valueIfUndefined(false, [&] {
+        auto ccsP{obstacleP->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem()};
+        const auto curvilinearOrientation{obstacleK->getCurvilinearOrientation(timeStep, ccsP)};
+        const auto latPositionP{obstacleP->getLatPosition(world->getRoadNetwork(), timeStep)};
+        const auto latPositionK{obstacleK->getLatPosition(timeStep, ccsP)};
+        return (latPositionK > latPositionP and curvilinearOrientation < 0) or // k on left side
+               (latPositionK < latPositionP and curvilinearOrientation > 0);   // k on right side
+    });
 }
 
 double OrientationTowardsPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

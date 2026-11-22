@@ -2,6 +2,7 @@
 
 #include <map>
 #include <memory>
+#include <stdexcept>
 #include <vector>
 
 #include "state.h"
@@ -33,6 +34,24 @@ class Rectangle;
 namespace geometry {
 class CurvilinearCoordinateSystem;
 }
+
+/**
+ * Thrown if a curvilinear quantity of an obstacle is undefined, i.e., the obstacle has no reference lane or its
+ * position is outside the projection domain of the curvilinear coordinate system. Predicates that rely on such
+ * quantities catch it and return a documented value, so that they are total Boolean functions.
+ */
+class CurvilinearProjectionError : public std::runtime_error {
+  public:
+    using std::runtime_error::runtime_error;
+};
+
+/**
+ * Thrown if the state of an obstacle is requested for a time step at which the obstacle has no state.
+ */
+class MissingStateError : public std::logic_error {
+  public:
+    using std::logic_error::logic_error;
+};
 
 template <typename Value> using time_step_map_t = tsl::robin_map<time_step_t, Value>;
 //** type of history/trajectory prediction maps for physical states */

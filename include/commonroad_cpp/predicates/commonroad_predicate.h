@@ -1,14 +1,43 @@
 #pragma once
 
+#include <limits>
 #include <memory>
+#include <utility>
 
 #include "commonroad_cpp/auxiliaryDefs/structs.h"
 #include "commonroad_cpp/auxiliaryDefs/timer.h"
 
+#include "commonroad_cpp/obstacle/obstacle.h"
 #include "predicate_parameter_collection.h"
 
-class Obstacle;
 class World;
+
+namespace predicate_utils {
+/**
+ * Evaluates a predicate computation and returns a fixed value if an obstacle quantity it relies on is undefined.
+ *
+ * Several predicates are only meaningful behind a guard, e.g., keeps_safe_distance_prec(x_k, x_p) behind
+ * succeeds(x_k, x_p). In an unguarded situation, the curvilinear projection of an obstacle can be undefined (no
+ * reference lane, position outside the projection domain) or an obstacle has no state at the time step. Instead of
+ * throwing, such a predicate returns a documented value, so that it is a total Boolean function. This keeps the
+ * verdict independent of the order in which the operands of a conjunction or disjunction are evaluated.
+ *
+ * @tparam T Return type of the computation.
+ * @tparam F Callable returning T.
+ * @param fallback Value to return if a quantity is undefined.
+ * @param evaluation Computation to evaluate.
+ * @return Result of the computation, or fallback.
+ */
+template <typename T, typename F> T valueIfUndefined(const T &fallback, F &&evaluation) {
+    try {
+        return std::forward<F>(evaluation)();
+    } catch (const CurvilinearProjectionError &) {
+        return fallback;
+    } catch (const MissingStateError &) {
+        return fallback;
+    }
+}
+} // namespace predicate_utils
 
 /**
  * Interface for a predicate.

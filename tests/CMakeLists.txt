@@ -32,6 +32,7 @@ set(ENV_MODEL_TEST_SRC_FILES
         commonroad_cpp_tests/predicates/utils_predicate_test.cpp
 
         commonroad_cpp_tests/predicates/braking/test_keeps_safe_distance_prec_predicate.cpp
+        commonroad_cpp_tests/predicates/test_total_predicates.cpp
         commonroad_cpp_tests/predicates/braking/test_brakes_stronger_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_causes_braking_intersection_predicate.cpp
         commonroad_cpp_tests/predicates/braking/test_braking_at_intersection_possible_predicate.cpp

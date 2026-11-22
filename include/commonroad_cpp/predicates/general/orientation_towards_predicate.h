@@ -5,6 +5,9 @@
 /**
  * Predicate which checks if the kth vehicle drives towards the pth vehicle,
  * where the lane of the pth vehicle is used as reference.
+ *
+ * Total: false if the kth vehicle cannot be projected onto the reference lane of the pth vehicle (no reference lane,
+ * outside the projection domain) or a vehicle has no state at the time step.
  */
 class OrientationTowardsPredicate : public CommonRoadPredicate {
   public:

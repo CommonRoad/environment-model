@@ -4,6 +4,11 @@
 
 /**
  * Predicate for the safe distance between two vehicles.
+ *
+ * Total: if the pth vehicle cannot be projected onto the reference lane of the kth vehicle (no reference lane, outside
+ * the projection domain) or a vehicle has no state at the time step, the safe distance is not applicable and the
+ * predicate is true (robustness and constraint +infinity), like for a pth vehicle behind the kth vehicle. Rules use it
+ * behind a guard such as succeeds(x_k, x_p), for which this value is irrelevant.
  */
 class KeepsSafeDistancePrecPredicate : public CommonRoadPredicate {
   public:

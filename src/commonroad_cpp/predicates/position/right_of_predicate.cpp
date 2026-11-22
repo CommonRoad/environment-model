@@ -9,8 +9,12 @@ bool RightOfPredicate::booleanEvaluation(size_t timeStep, const std::shared_ptr<
                                          const std::shared_ptr<Obstacle> &obstacleK,
                                          const std::shared_ptr<Obstacle> &obstacleP,
                                          const std::vector<std::string> &additionalFunctionParameters, bool setBased) {
-    auto rightObstacles{obstacle_operations::obstaclesRight(timeStep, {obstacleK}, obstacleP, world->getRoadNetwork())};
-    return !rightObstacles.empty();
+    // not defined if a vehicle has no state at the time step: not right of
+    return predicate_utils::valueIfUndefined(false, [&] {
+        auto rightObstacles{
+            obstacle_operations::obstaclesRight(timeStep, {obstacleK}, obstacleP, world->getRoadNetwork())};
+        return !rightObstacles.empty();
+    });
 }
 
 double RightOfPredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,

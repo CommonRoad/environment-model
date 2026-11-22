@@ -32,10 +32,14 @@ Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(
     size_t timeStep, const std::shared_ptr<World> &world, const std::shared_ptr<Obstacle> &obstacleK,
     const std::shared_ptr<Obstacle> &obstacleP, const std::vector<std::string> &additionalFunctionParameters,
     bool setBased) {
-    double aMinK{obstacleK->getAminLong()};
-    double aMinP{obstacleP->getAminLong()};
+    // not defined if the pth vehicle cannot be projected onto the reference lane of the kth vehicle: safe distance not
+    // applicable (constraint +inf)
+    return {predicate_utils::valueIfUndefined(std::numeric_limits<double>::infinity(), [&] {
+        double aMinK{obstacleK->getAminLong()};
+        double aMinP{obstacleP->getAminLong()};
 
-    return {obstacleP->rearS(
+        const double constraint{
+            obstacleP->rearS(
                 timeStep,
                 obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
                 setBased) -
@@ -43,6 +47,8 @@ Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(
             computeSafeDistance(obstacleK->getVelocity(timeStep, setBased, true),
                                 obstacleP->getVelocity(timeStep, setBased, true), aMinK, aMinP,
                                 obstacleK->getReactionTime())};
+        return constraint;
+    })};
 }
 
 Constraint KeepsSafeDistancePrecPredicate::constraintEvaluation(double lonPosP, double velocityK, double velocityP,
@@ -57,26 +63,31 @@ double KeepsSafeDistancePrecPredicate::robustEvaluation(size_t timeStep, const s
                                                         const std::shared_ptr<Obstacle> &obstacleP,
                                                         const std::vector<std::string> &additionalFunctionParameters,
                                                         bool setBased) {
-    double aMinK{obstacleK->getAminLong()};
-    double aMinP{obstacleP->getAminLong()};
+    // not defined if the pth vehicle cannot be projected onto the reference lane of the kth vehicle: safe distance not
+    // applicable (robustness +inf)
+    return predicate_utils::valueIfUndefined(std::numeric_limits<double>::infinity(), [&] {
+        double aMinK{obstacleK->getAminLong()};
+        double aMinP{obstacleP->getAminLong()};
 
-    double dSafe{computeSafeDistance(obstacleK->getVelocity(timeStep, false),
-                                     obstacleP->getVelocity(timeStep, setBased, true), aMinK, aMinP,
-                                     obstacleK->getReactionTime())};
-    double deltaS{obstacleP->rearS(
-                      timeStep,
-                      obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
-                      setBased) -
-                  obstacleK->frontS(world->getRoadNetwork(), timeStep)};
+        double dSafe{computeSafeDistance(obstacleK->getVelocity(timeStep, false),
+                                         obstacleP->getVelocity(timeStep, setBased, true), aMinK, aMinP,
+                                         obstacleK->getReactionTime())};
+        double deltaS{
+            obstacleP->rearS(
+                timeStep,
+                obstacleK->getReferenceLane(world->getRoadNetwork(), timeStep)->getCurvilinearCoordinateSystem(),
+                setBased) -
+            obstacleK->frontS(world->getRoadNetwork(), timeStep)};
 
-    // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
-    // robustness; collision must be checked separately
-    if (deltaS < 0)
-        return std::abs(deltaS);
-    const double param0 = std::stod(additionalFunctionParameters.at(0));
-    if (deltaS - param0 < 0)
-        return std::min(deltaS - param0, deltaS - dSafe);
-    return (deltaS - dSafe);
+        // if pth vehicle is not in front of the kth vehicle, safe distance is not applicable -> return positive
+        // robustness; collision must be checked separately
+        if (deltaS < 0)
+            return std::abs(deltaS);
+        const double param0 = std::stod(additionalFunctionParameters.at(0));
+        if (deltaS - param0 < 0)
+            return std::min(deltaS - param0, deltaS - dSafe);
+        return (deltaS - dSafe);
+    });
 }
 
 double KeepsSafeDistancePrecPredicate::robustEvaluation(double lonPosK, double lonPosP, double velocityK,

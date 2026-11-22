@@ -10,20 +10,23 @@ bool InNeighboringLanePredicate::booleanEvaluation(size_t timeStep, const std::s
                                                    const std::shared_ptr<Obstacle> &obstacleP,
                                                    const std::vector<std::string> &additionalFunctionParameters,
                                                    bool setBased) {
-    auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
-    std::unordered_set<size_t> laneletPIDs;
-    for (const auto &la : laneletsP)
-        laneletPIDs.insert(la->getId());
-    const auto direction = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
-    for (const auto &laneK : obstacleK->getOccupiedRoadLanes(world->getRoadNetwork(), timeStep)) {
-        for (const auto &laneletK : laneK->getContainedLanelets()) {
-            auto adjacent{laneletK->getAdjacent(direction).adj};
-            if (adjacent and laneletPIDs.count(adjacent->getId())) {
-                return true;
+    // not defined if a vehicle has no reference lane or no state: not in a neighboring lane
+    return predicate_utils::valueIfUndefined(false, [&] {
+        auto laneletsP = obstacleP->getOccupiedLaneletsByShape(world->getRoadNetwork(), timeStep);
+        std::unordered_set<size_t> laneletPIDs;
+        for (const auto &la : laneletsP)
+            laneletPIDs.insert(la->getId());
+        const auto direction = regulatory_elements_utils::matchDirections(additionalFunctionParameters.at(0));
+        for (const auto &laneK : obstacleK->getOccupiedRoadLanes(world->getRoadNetwork(), timeStep)) {
+            for (const auto &laneletK : laneK->getContainedLanelets()) {
+                auto adjacent{laneletK->getAdjacent(direction).adj};
+                if (adjacent and laneletPIDs.count(adjacent->getId())) {
+                    return true;
+                }
             }
         }
-    }
-    return false;
+        return false;
+    });
 }
 
 double InNeighboringLanePredicate::robustEvaluation(size_t timeStep, const std::shared_ptr<World> &world,
