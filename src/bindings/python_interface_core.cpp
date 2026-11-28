@@ -342,7 +342,17 @@ void init_python_interface_core(nb::module_ &m) {
         .def_prop_rw("sensor_parameters", &Obstacle::getSensorParameters, &Obstacle::setSensorParameters)
         .def_prop_rw("time_parameters", &Obstacle::getTimeParameters, &Obstacle::setTimeParameters)
         .def("get_state_by_time_step", &Obstacle::getStateByTimeStep)
-        .def("reference_lane_by_time_step", &Obstacle::getReferenceLane)
+        .def(
+            "reference_lane_by_time_step",
+            [](Obstacle &obs, const std::shared_ptr<RoadNetwork> &roadNetwork,
+               const size_t timeStep) -> std::shared_ptr<Lane> {
+                // C++ throws if no manually set reference lane exists, Python returns None
+                try {
+                    return obs.getReferenceLane(roadNetwork, timeStep);
+                } catch (const CurvilinearProjectionError &) {
+                    return nullptr;
+                }
+            })
         .def("set_reference_lane_by_line", &setReferenceLaneByLine, "py_start", "py_end", "roadNetwork")
         .def("get_time_steps", &Obstacle::getTimeSteps)
         .def("update_trajectory", &updateTrajectory, "py_state_list")
